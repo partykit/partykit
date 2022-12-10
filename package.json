@@ -21,6 +21,7 @@
     "@vitest/coverage-c8": "^0.25.6",
     "concurrently": "^7.6.0",
     "esbuild-register": "^3.4.1",
+    "jsdom": "^20.0.3",
     "patch-package": "^6.5.0",
     "rome": "^11.0.0",
     "serve": "^14.1.2",

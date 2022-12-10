@@ -1,23 +1,10 @@
 <!DOCTYPE html>
 <html>
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎉</text></svg>"
+  />
   <body>
-    <script type="module">
-      const ws = new WebSocket(`ws://localhost:3141/party/theroom`);
-      ws.onclose = () => {
-        console.log("closed");
-      };
-      ws.onopen = () => {
-        console.log("sending ping");
-        ws.send("ping");
-      };
-      ws.onmessage = (event) => {
-        console.log(event.data);
-      };
-      ws.onerror = (event) => {
-        console.error("boo", event);
-      };
-      const res = await fetch("http://localhost:3141/party/theroom");
-      console.log(await res.text());
-    </script>
+    <script type="module" src="/dist/client.js"></script>
   </body>
 </html>

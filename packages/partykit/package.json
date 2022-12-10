@@ -4,14 +4,10 @@
   "description": "It's time to party.",
   "bin": "dist/bin.js",
   "main": "dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./server": "./dist/server.js",
-    "./client": "./dist/client.js"
-  },
   "dependencies": {
     "edge-runtime": "^2.0.2",
-    "esbuild": "^0.15.18"
+    "esbuild": "^0.15.18",
+    "reconnecting-websocket": "^4.4.0"
   },
   "devDependencies": {
     "@edge-runtime/types": "^2.0.2",
