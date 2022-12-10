@@ -1,0 +1,31 @@
+{
+  "name": "partykit",
+  "version": "0.0.0",
+  "description": "It's time to party.",
+  "bin": "dist/bin.js",
+  "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./server": "./dist/server.js",
+    "./client": "./dist/client.js"
+  },
+  "dependencies": {
+    "edge-runtime": "^2.0.2",
+    "esbuild": "^0.15.18"
+  },
+  "devDependencies": {
+    "@edge-runtime/types": "^2.0.2",
+    "@types/express": "^4.17.14",
+    "@types/http-proxy": "^1.17.9",
+    "@types/node": "^18.11.11",
+    "@types/ws": "^8.5.3",
+    "commander": "^9.4.1",
+    "express": "^4.18.2",
+    "http-proxy": "^1.18.1",
+    "ws": "^8.11.0"
+  },
+  "scripts": {
+    "dev": "node -r esbuild-register --watch --watch-path src --no-warnings scripts/build.ts",
+    "build": "node -r esbuild-register scripts/build.ts --minify"
+  }
+}

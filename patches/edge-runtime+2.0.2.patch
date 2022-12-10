@@ -1,0 +1,12 @@
+diff --git a/node_modules/edge-runtime/dist/server/run-server.js b/node_modules/edge-runtime/dist/server/run-server.js
+index 360d1b2..bd0d349 100644
+--- a/node_modules/edge-runtime/dist/server/run-server.js
++++ b/node_modules/edge-runtime/dist/server/run-server.js
+@@ -41,6 +41,7 @@ async function runServer(options) {
+                 });
+             });
+         },
++        __server: server,
+         waitUntil,
+     };
+ }

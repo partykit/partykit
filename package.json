@@ -1,0 +1,30 @@
+{
+  "name": "@partykit/repo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The monorepo for Partykit",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "test": "vitest",
+    "lint": "npx rome check packages/**/src/*.ts examples/**/src/*.ts",
+    "typecheck": "npm exec tsc --workspaces",
+    "coverage": "vitest run --coverage",
+    "postinstall": "patch-package"
+  },
+  "keywords": [],
+  "author": "Sunil Pai <sunil@coolcompuerclub.com>",
+  "license": "ISC",
+  "dependencies": {
+    "@vitest/coverage-c8": "^0.25.6",
+    "concurrently": "^7.6.0",
+    "esbuild-register": "^3.4.1",
+    "patch-package": "^6.5.0",
+    "rome": "^11.0.0",
+    "serve": "^14.1.2",
+    "typescript": "^4.9.4",
+    "vitest": "^0.25.6"
+  }
+}

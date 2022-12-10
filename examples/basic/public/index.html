@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <script type="module">
+      const ws = new WebSocket(`ws://localhost:3141/party/theroom`);
+      ws.onclose = () => {
+        console.log("closed");
+      };
+      ws.onopen = () => {
+        console.log("sending ping");
+        ws.send("ping");
+      };
+      ws.onmessage = (event) => {
+        console.log(event.data);
+      };
+      ws.onerror = (event) => {
+        console.error("boo", event);
+      };
+      const res = await fetch("http://localhost:3141/party/theroom");
+      console.log(await res.text());
+    </script>
+  </body>
+</html>
