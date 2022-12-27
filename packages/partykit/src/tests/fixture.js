@@ -1,7 +1,9 @@
 export function connect(ws) {
-  // console.log("connection");
   ws.onmessage = function incoming(evt) {
-    console.log(evt.data);
-    ws.send("pong");
+    if (evt.data === "ping") {
+      ws.send("pong");
+    } else {
+      ws.send("unknown");
+    }
   };
 }

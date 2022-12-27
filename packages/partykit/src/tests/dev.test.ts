@@ -1,22 +1,22 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { runPartykit } from "../cli";
+import { dev } from "../cli";
 import { WebSocket } from "ws";
 
 const fixture = `${__dirname}/fixture.js`;
 
-let dev: Awaited<ReturnType<typeof runPartykit>> | undefined;
+let devProc: Awaited<ReturnType<typeof dev>> | undefined;
 
-const runDev: typeof runPartykit = async (...args) => {
-  if (dev) {
+const runDev: typeof dev = async (...args) => {
+  if (devProc) {
     throw new Error("dev is already running");
   }
-  dev = await runPartykit(...args);
-  return dev;
+  devProc = await dev(...args);
+  return devProc;
 };
 
 afterEach(async () => {
-  await dev?.close();
-  dev = undefined;
+  await devProc?.close();
+  devProc = undefined;
 });
 
 describe("dev", () => {
@@ -26,8 +26,8 @@ describe("dev", () => {
   });
 
   it("should start a server for a given input script path", async () => {
-    await runDev(fixture);
-    const res = await fetch("http://localhost:3141/party/theroom");
+    await runDev(fixture, {});
+    const res = await fetch("http://localhost:1999/party/theroom");
     expect(await res.text()).toMatchInlineSnapshot(
       '"Hello world from the room"'
     );
@@ -42,8 +42,8 @@ describe("dev", () => {
   });
 
   it("should let you connect to a room with a websocket", async () => {
-    await runDev(fixture);
-    const ws = new WebSocket("ws://localhost:3141/party/theroom");
+    await runDev(fixture, {});
+    const ws = new WebSocket("ws://localhost:1999/party/theroom");
     try {
       await new Promise((resolve) => ws.on("open", resolve));
       expect(ws.readyState).toBe(WebSocket.OPEN);
@@ -53,8 +53,8 @@ describe("dev", () => {
   });
 
   it("cannot connect to non-room path", async () => {
-    await runDev(fixture);
-    const ws = new WebSocket("ws://localhost:3141/notaroom");
+    await runDev(fixture, {});
+    const ws = new WebSocket("ws://localhost:1999/notaroom");
     try {
       await new Promise((resolve) => ws.on("error", resolve));
       expect(ws.readyState).toBe(WebSocket.CLOSED);

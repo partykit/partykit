@@ -1,6 +1,6 @@
 export function connect(ws: WebSocket) {
   ws.onmessage = function incoming(evt) {
-    console.log(evt.data);
+    console.log("evt!", evt.data);
     ws.send("pong");
   };
 }

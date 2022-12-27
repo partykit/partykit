@@ -1,7 +1,9 @@
-import { Party } from "partykit/src/client";
+import { PartySocket } from "partykit/src/client";
 
-const party = new Party({ host: "localhost:3141" });
-const room = party.connect("some-room");
+const partySocket = new PartySocket({
+  host: "localhost:1999",
+  room: "some-room",
+});
 
-room.onopen = () => room.send("ping");
-room.onmessage = (evt) => console.log(evt.data); // "pong"
+partySocket.onopen = () => partySocket.send("ping");
+partySocket.onmessage = (evt) => console.log(evt.data); // "pong"

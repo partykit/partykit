@@ -1,13 +1,13 @@
 {
   "name": "partykit",
-  "version": "0.0.0",
-  "description": "It's time to party.",
+  "version": "0.0.1",
+  "description": "Everything's better with friends",
   "bin": "dist/bin.js",
   "main": "dist/index.js",
   "dependencies": {
+    "clipboardy": "^3.0.0",
     "edge-runtime": "^2.0.2",
-    "esbuild": "^0.15.18",
-    "reconnecting-websocket": "^4.4.0"
+    "esbuild": "^0.15.18"
   },
   "devDependencies": {
     "@edge-runtime/types": "^2.0.2",
@@ -15,13 +15,16 @@
     "@types/http-proxy": "^1.17.9",
     "@types/node": "^18.11.11",
     "@types/ws": "^8.5.3",
+    "chalk": "^5.2.0",
     "commander": "^9.4.1",
     "express": "^4.18.2",
     "http-proxy": "^1.18.1",
+    "open": "^8.4.0",
+    "reconnecting-websocket": "^4.4.0",
     "ws": "^8.11.0"
   },
   "scripts": {
-    "dev": "node -r esbuild-register --watch --watch-path src --no-warnings scripts/build.ts",
+    "dev": "node -r esbuild-register --watch --watch-path src scripts/build.ts",
     "build": "node -r esbuild-register scripts/build.ts --minify"
   }
 }

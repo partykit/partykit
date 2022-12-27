@@ -15,7 +15,7 @@ esbuild.buildSync({
   format: "cjs",
   outfile: "dist/bin.js",
   platform: "node",
-  external: ["esbuild", "edge-runtime"],
+  external: ["esbuild", "edge-runtime", "clipboardy"],
   sourcemap: true,
   minify,
 });

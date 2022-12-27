@@ -1,16 +1,125 @@
+import ReconnectingWebSocket, * as RWS from "reconnecting-websocket";
+import uniqueId from "./uniqueId";
+
+type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
+  host: string; // base url for the party
+  room: string; // the room to connect to
+  protocol?: string;
+  protocols?: string[];
+  // query
+  // headers
+};
+
 // things that nathanboktae/robust-websocket claims are better:
 // doesn't do anything in offline mode (?)
 // "natively aware of error codes"
 // can do custom reconnect strategies
 
-import ReconnectingWebSocket, * as RWS from "reconnecting-websocket";
+// extremely basic for now but we'll add more options later
+// TODO: incorporate the above notes
+export class PartySocket extends ReconnectingWebSocket {
+  constructor(readonly partySocketOptions: PartySocketOptions) {
+    const { host, room, protocol, protocols, ...socketOptions } =
+      partySocketOptions;
+    super(
+      `${
+        protocol ||
+        (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
+          ? "ws"
+          : "wss")
+      }://${host}/party/${room}`,
+      protocols,
+      socketOptions
+    );
+  }
+}
 
-type PartyOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
-  host: string; // base host for the party
-  protocols?: string[];
-  // query
-  // headers
-};
+type POJO =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | POJO[]
+  | { [key: string]: POJO };
+
+class Connection {
+  requests: Map<
+    string,
+    { resolve: (data: POJO) => void; reject: (err: Error) => void }
+  > = new Map();
+  subscriptions: Map<
+    string,
+    {
+      next: (data: POJO) => void;
+      return: () => void;
+      throw: (err: Error) => void;
+    }
+  > = new Map();
+  constructor(readonly partySocket: PartySocket) {
+    // start listening for messages
+  }
+  sendMessage(
+    type: string,
+    data: { id: string; name: string; payload?: POJO }
+  ) {
+    this.partySocket.send(JSON.stringify({ type, data }));
+  }
+  send(name: string, payload?: POJO): void {
+    this.sendMessage("send", { id: uniqueId(), name, payload });
+  }
+
+  async get(name: string, payload?: POJO) {
+    const id = uniqueId();
+    const promise = new Promise((resolve, reject) => {
+      this.requests.set(id, { resolve, reject });
+    });
+    this.sendMessage("get", { id, name, payload });
+    return promise;
+  }
+
+  subscribe(name: string, payload?: POJO): AsyncIterable<POJO> {
+    const id = uniqueId();
+    const connection = this.partySocket;
+    const iterator = async function* () {
+      // uh TODO
+    }.bind(this)();
+    return iterator;
+  }
+
+  close() {
+    this.partySocket.close();
+  }
+}
+
+export class Party {
+  constructor(
+    readonly host: string,
+    readonly partySocketOptions: Omit<PartySocketOptions, "host" | "room"> = {}
+  ) {}
+  join(room: string) {
+    const partySocket = new PartySocket({
+      ...this.partySocketOptions,
+      host: this.host,
+      room,
+    });
+    return new Connection(partySocket);
+  }
+}
+
+// const party = new Party("ws://localhost:1999");
+// const room = party.join("some-room");
+
+// // 1. send a one shot message
+// room.send("ping", { foo: "bar" });
+
+// // 2. send a message and wait for a response
+// const response = await room.get("ping");
+
+// // 3. subscribe to a stream of messages
+// for await (const data of room.subscribe("ping")) {
+//   console.log(data);
+// }
 
 // type ConnectionEvent =
 //   | "connect"
@@ -22,31 +131,43 @@ type PartyOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
 //   | "reconnect_error"
 //   | "reconnect_failed";
 
-export class Party {
-  //   #id: string = uniqueId();
-  // eventually, we want to to be able to have alternate transports
-  // (e.g. websockets, http polling, etc).
-  // But we'll do that after folks ask for it.
-  //   transport: "websocket" | "polling" = "websocket";
-  connections = new Set<ReconnectingWebSocket>();
-  constructor(readonly options: PartyOptions) {
-    if (!options?.host)
-      throw new Error("Party must be constructed with a host");
-  }
-  connect(roomId: string, overrides?: Partial<PartyOptions>) {
-    const { host, protocols, ...socketOptions } = {
-      ...this.options,
-      ...overrides,
-    };
-    const connection = new ReconnectingWebSocket(
-      `ws://${host}/party/${roomId}`,
-      protocols,
-      socketOptions
-    );
-    this.connections.add(connection);
-    return connection;
-  }
-}
+// export class Party {
+//   //   #id: string = uniqueId();
+//   // eventually, we want to to be able to have alternate transports
+//   // (e.g. websockets, http polling, etc).
+//   // But we'll do that after folks ask for it.
+//   //   transport: "websocket" | "polling" = "websocket";
+//   connections = new Set<ReconnectingWebSocket>();
+//   constructor(readonly options: PartyOptions) {
+//     if (!options?.host)
+//       throw new Error("Party must be constructed with a host");
+//   }
+//   connect(roomId: string, overrides?: Partial<PartyOptions>) {
+//     const { host, protocols, ...socketOptions } = {
+//       ...this.options,
+//       ...overrides,
+//     };
+//     const connection = new ReconnectingWebSocket(
+//       `ws://${host}/party/${roomId}`,
+//       protocols,
+//       socketOptions
+//     );
+//     this.connections.add(connection);
+//     return connection;
+//   }
+// }
+
+// class Connection{
+//   send(type: string, payload: any, callback?: (any) => void)
+//   send(type: string, callback?: (any) => void)
+//   send(type: string, payload?: any, callback?: (any) => void) {
+//     if (typeof payload === "function") {
+//       callback = payload;
+//       payload = undefined;
+//     }
+//     this.socket.send(JSON.stringify({ type, payload }), callback);
+//   }
+// }
 
 // // stealing from https://socket.io/docs/v4/client-api/
 
