@@ -34,9 +34,12 @@ export async function dev(
   options: { port?: number } = {}
 ): Promise<{ close: () => Promise<void> }> {
   if (!script) throw new Error("script path is missing");
-  // TODO: live reload the script on changes
+  // A map of room names to room servers.
+  const rooms: Rooms = new Map();
+
   const absoluteScriptPath = path.resolve(process.cwd(), script);
-  const initialCode = esbuild.buildSync({
+  let code: string;
+  const buildResult = await esbuild.build({
     stdin: {
       contents: `
       import * as Worker from "${absoluteScriptPath}"
@@ -48,15 +51,43 @@ export async function dev(
       resolveDir: process.cwd(),
       // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
     },
+    watch: {
+      onRebuild(error, result) {
+        if (error) {
+          console.log(chalk.red("Build failed: " + error.message));
+          return;
+        }
+        if (!result || !result.outputFiles) {
+          console.log(chalk.red("Build failed: no result"));
+          return;
+        }
+
+        console.log(chalk.green("Build succeeded, restarting rooms..."));
+
+        // shut down all rooms, and then reboot them
+        // with the new code
+
+        const closed = [...rooms.keys()];
+        rooms.forEach((room) => {
+          room.http.__server.close();
+          room.ws.clients.forEach((client) => client.close());
+          room.ws.close();
+        });
+        rooms.clear();
+        code = result.outputFiles[0].text;
+        closed.forEach((roomId) => {
+          getRoom(roomId);
+        });
+      },
+    },
     format: "esm",
     bundle: true,
     write: false,
     sourcemap: true,
     target: "esnext",
-  }).outputFiles[0].text;
+  });
 
-  // A map of room names to room servers.
-  const rooms: Rooms = new Map();
+  code = buildResult.outputFiles[0].text;
 
   // This is the function that gets/creates a room server.
   async function getRoom(roomId: string): Promise<Room> {
@@ -67,7 +98,7 @@ export async function dev(
     const wss = new WebSocketServer({ noServer: true });
 
     const runtime = new EdgeRuntime({
-      initialCode,
+      initialCode: code,
       extend: (context) =>
         Object.assign(context, {
           wss,
