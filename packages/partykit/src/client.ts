@@ -1,5 +1,4 @@
 import ReconnectingWebSocket, * as RWS from "reconnecting-websocket";
-import uniqueId from "./uniqueId";
 
 type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
   host: string; // base url for the party
@@ -66,11 +65,11 @@ class Connection {
     this.partySocket.send(JSON.stringify({ type, data }));
   }
   send(name: string, payload?: POJO): void {
-    this.sendMessage("send", { id: uniqueId(), name, payload });
+    this.sendMessage("send", { id: crypto.randomUUID(), name, payload });
   }
 
   async get(name: string, payload?: POJO) {
-    const id = uniqueId();
+    const id = crypto.randomUUID();
     const promise = new Promise((resolve, reject) => {
       this.requests.set(id, { resolve, reject });
     });
@@ -79,7 +78,7 @@ class Connection {
   }
 
   subscribe(name: string, payload?: POJO): AsyncIterable<POJO> {
-    const id = uniqueId();
+    const id = crypto.randomUUID();
     const connection = this.partySocket;
     const iterator = async function* () {
       // uh TODO
