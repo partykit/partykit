@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "test": "vitest",
-    "lint": "npx rome check packages/**/src/*.ts examples/**/src/*.ts",
     "typecheck": "npm exec tsc --workspaces",
     "coverage": "vitest run --coverage",
     "postinstall": "patch-package"
