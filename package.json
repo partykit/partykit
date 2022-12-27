@@ -17,6 +17,7 @@
   "author": "Sunil Pai <sunil@coolcompuerclub.com>",
   "license": "ISC",
   "dependencies": {
+    "@changesets/cli": "^2.26.0",
     "@vitest/coverage-c8": "^0.26.2",
     "concurrently": "^7.6.0",
     "esbuild-register": "^3.4.2",
