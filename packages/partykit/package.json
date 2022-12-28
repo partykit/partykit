@@ -9,10 +9,6 @@
     "clipboardy": "^3.0.0",
     "esbuild": "^0.15.18"
   },
-  "bundledDependencies": [
-    "clipboardy",
-    "@edge-runtime/primitives"
-  ],
   "devDependencies": {
     "@edge-runtime/types": "^2.0.2",
     "@types/express": "^4.17.14",
