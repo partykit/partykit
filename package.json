@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "test": "vitest",
+    "start": "npm start -w partykit",
+    "build": "npm run build -w partykit",
     "typecheck": "npm exec tsc --workspaces",
     "coverage": "vitest run --coverage",
     "postinstall": "patch-package"
