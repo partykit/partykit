@@ -2,14 +2,14 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { publish } from "../cli";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 
-const fixture = `${__dirname}/fixture.js`;
-
 vi.mock("../fetchResult", async () => {
   const { fetchResult } = await import("./fetchResult-mock");
   return {
     fetchResult,
   };
 });
+
+const fixture = `${__dirname}/fixture.js`;
 
 process.env.GITHUB_LOGIN = "test-user";
 process.env.GITHUB_TOKEN = "test-token";

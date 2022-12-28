@@ -25,7 +25,7 @@
     "ws": "^8.11.0"
   },
   "scripts": {
-    "start": "node -r esbuild-register --watch --watch-path src scripts/build.ts",
-    "build": "node -r esbuild-register scripts/build.ts --minify"
+    "start": "PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src scripts/build.ts",
+    "build": "PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts --minify"
   }
 }
