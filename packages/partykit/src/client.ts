@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import ReconnectingWebSocket, * as RWS from "reconnecting-websocket";
 
 type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {

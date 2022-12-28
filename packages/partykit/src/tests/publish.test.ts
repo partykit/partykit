@@ -59,7 +59,7 @@ describe("publish", () => {
     mockFetchResult(
       "POST",
       "/parties/test-user/test-script",
-      (url, options) => {
+      (_url, _options) => {
         throw new Error("Not OK");
       }
     );

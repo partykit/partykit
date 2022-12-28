@@ -13,7 +13,7 @@ process.on("SIGTERM", () => {
   process.exit(0);
 });
 
-process.on("exit", (code) => {
+process.on("exit", (_code) => {
   // console.log(`About to exit with code: ${code}`);
 });
 
@@ -22,7 +22,7 @@ process.on("uncaughtExceptionMonitor", function (err) {
   throw err;
 });
 
-process.on("unhandledRejection", function (reason, promise) {
+process.on("unhandledRejection", function (reason, _promise) {
   // console.error("Unhandled Rejection at:", promise, "reason:", reason);
   throw reason;
 });

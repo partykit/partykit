@@ -21,8 +21,7 @@ export async function fetchResult<T>(
       errorText = await res.text();
     } catch (e) {
       errorText = `${res.status} ${res.statusText}`;
-    } finally {
-      throw new Error(errorText);
     }
+    throw new Error(errorText);
   }
 }

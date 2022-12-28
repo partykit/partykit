@@ -21,13 +21,11 @@ jobs:
         with:
           path: |
             .eslintcache
-            tsconfig.tsbuildinfo
-          key: ${{ matrix.os }}-eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package.json', 'tsconfig.json') }}
+            **/*/tsconfig.tsbuildinfo
+          key: eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package-lock.json', 'tsconfig.json') }}
 
       - run: npm ci
 
       - run: npm run build
-        working-directory: packages/partykit
 
-      - run: npm run typecheck
-      - run: npm run test
+      - run: npm run check

@@ -21,13 +21,19 @@ jobs:
           node-version: 18
           cache: "npm"
 
+      - uses: actions/cache@v3
+        id: check-cache
+        with:
+          path: |
+            .eslintcache
+            **/*/tsconfig.tsbuildinfo
+          key: eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package-lock.json', 'tsconfig.json') }}
+
       - run: npm ci
 
       - run: npm run build
-        working-directory: packages/partykit
 
-      - run: npm run typecheck
-      - run: npm run test
+      - run: npm run check
 
       - id: changesets
         uses: changesets/action@v1

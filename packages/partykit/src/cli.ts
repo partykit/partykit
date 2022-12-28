@@ -92,7 +92,9 @@ export async function dev(
   // This is the function that gets/creates a room server.
   async function getRoom(roomId: string): Promise<Room> {
     if (rooms.has(roomId)) {
-      return rooms.get(roomId)!;
+      const room = rooms.get(roomId);
+      assert(room, "room is missing");
+      return room;
     }
 
     const wss = new WebSocketServer({ noServer: true });

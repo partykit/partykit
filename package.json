@@ -8,9 +8,12 @@
     "examples/*"
   ],
   "scripts": {
-    "test": "vitest",
     "start": "npm start -w partykit",
     "build": "npm run build -w partykit",
+    "check": "npm run lint && npm run repocheck && npm run typecheck && npx vitest --watch=false",
+    "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --cache",
+    "test": "vitest",
+    "repocheck": "manypkg check",
     "typecheck": "npm exec tsc --workspaces",
     "coverage": "vitest run --coverage",
     "postinstall": "patch-package"
@@ -21,9 +24,13 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "^2.26.0",
+    "@manypkg/cli": "^0.19.2",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
     "@vitest/coverage-c8": "^0.26.2",
     "concurrently": "^7.6.0",
     "esbuild-register": "^3.4.2",
+    "eslint": "^8.30.0",
     "jsdom": "^20.0.3",
     "patch-package": "^6.5.0",
     "serve": "^14.1.2",

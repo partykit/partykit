@@ -1,5 +1,7 @@
 /// <reference types="@edge-runtime/types" />
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 type POJO =
   | string
   | number
@@ -10,14 +12,18 @@ type POJO =
   | { [key: string]: POJO };
 
 class Server {
-  onSend(type: string, handler: (payload?: POJO) => void): void {}
+  onSend(type: string, handler: (payload?: POJO) => void): void {
+    return;
+  }
   onGet(type: string, handler: (payload?: POJO) => POJO | Promise<POJO>): void {
     return;
   }
   onSubscribe(
     data: string,
     handler: (payload?: POJO) => AsyncIterable<POJO>
-  ): void {}
+  ): void {
+    return;
+  }
 }
 
 // like socket.io, but good
