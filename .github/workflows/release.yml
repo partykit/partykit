@@ -1,0 +1,40 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    if: ${{ github.repository_owner == 'threepointone' }}
+    name: Release
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - run: npm ci
+
+      - run: npm run build
+        working-directory: packages/partykit
+
+      - run: npm run typecheck
+      - run: npm run test
+
+      - id: changesets
+        uses: changesets/action@v1
+        with:
+          version: node .github/changeset-version.js
+          publish: npx changeset publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NODE_ENV: "production"

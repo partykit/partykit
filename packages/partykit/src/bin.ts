@@ -4,12 +4,12 @@ import { version } from "../package.json";
 import { program } from "commander";
 
 process.on("SIGINT", () => {
-  console.log("Interrupted");
+  // console.log("Interrupted");
   process.exit(0);
 });
 
 process.on("SIGTERM", () => {
-  console.log("Terminated");
+  // console.log("Terminated");
   process.exit(0);
 });
 

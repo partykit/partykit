@@ -1,0 +1,48 @@
+name: Prerelease
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  prerelease:
+    if: ${{ github.repository_owner == 'threepointone' }}
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - uses: actions/cache@v3
+        id: check-cache
+        with:
+          path: |
+            .eslintcache
+            tsconfig.tsbuildinfo
+          key: ${{ matrix.os }}-eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package.json', 'tsconfig.json') }}
+
+      - run: npm ci
+
+      - name: Modify package.json version
+        run: node .github/version-script.js
+
+      - run: npm run build
+        working-directory: packages/partykit
+
+      - run: npm run typecheck
+      - run: npm run test
+
+      - run: npm publish --tag beta
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        working-directory: packages/partykit
+
+      - name: Get Package Version
+        run: echo "PARTYKIT_VERSION=$(npm view partykit@beta version)" >> $GITHUB_ENV
+        working-directory: packages/partykit

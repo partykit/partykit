@@ -1,0 +1,33 @@
+name: Pull Request
+
+on: pull_request
+
+jobs:
+  check:
+    name: "Checks"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - uses: actions/cache@v3
+        id: check-cache
+        with:
+          path: |
+            .eslintcache
+            tsconfig.tsbuildinfo
+          key: ${{ matrix.os }}-eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package.json', 'tsconfig.json') }}
+
+      - run: npm ci
+
+      - run: npm run build
+        working-directory: packages/partykit
+
+      - run: npm run typecheck
+      - run: npm run test
