@@ -1,4 +1,9 @@
-const API_BASE = process.env.API_BASE || "http://127.0.0.1:8787";
+import assert from "assert";
+
+declare const PARTYKIT_API_BASE: string | undefined;
+assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
+
+const API_BASE = process.env.PARTYKIT_BASE || PARTYKIT_API_BASE;
 
 export async function fetchResult<T>(
   api: string,

@@ -18,6 +18,9 @@ esbuild.buildSync({
   external: ["esbuild", "clipboardy", "@edge-runtime/primitives"],
   sourcemap: true,
   minify,
+  define: {
+    PARTYKIT_API_BASE: `"${process.env.PARTYKIT_API_BASE}"`,
+  },
 });
 
 fs.chmodSync("dist/bin.js", 0o755);
@@ -30,6 +33,7 @@ esbuild.buildSync({
   outfile: "dist/client.js",
   sourcemap: true,
   minify,
+
   // platform: "browser", // ?neutral?
 });
 
