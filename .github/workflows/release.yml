@@ -37,3 +37,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PARTYKIT_GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
