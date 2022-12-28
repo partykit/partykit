@@ -48,6 +48,10 @@ program
     cli.publish(scriptPath, { name: options.name });
   });
 
+program.command("list").action(() => {
+  cli.list();
+});
+
 program
   .command("delete")
   .option("-n, --name <name>", "name of the script")

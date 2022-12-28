@@ -256,6 +256,19 @@ export async function _delete(options: { name: string }) {
   console.log(`Deleted https://${options.name}.${user.login}.partykit.dev`);
 }
 
+export async function list() {
+  // get user details
+  const user = await getUser();
+
+  const res = await fetchResult(`/parties/${user.login}`, {
+    headers: {
+      Authorization: `Bearer ${user.access_token}`,
+    },
+  });
+
+  console.log(res);
+}
+
 export async function login(): Promise<void> {
   // see if we already have a code
   if (fs.existsSync(CONFIG_PATH)) {
