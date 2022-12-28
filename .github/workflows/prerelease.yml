@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+
 jobs:
   prerelease:
     if: ${{ github.repository_owner == 'threepointone' }}
+    timeout-minutes: 5
     runs-on: ubuntu-22.04
 
     steps:
@@ -39,8 +41,4 @@ jobs:
       - run: npm publish --tag beta
         env:
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        working-directory: packages/partykit
-
-      - name: Get Package Version
-        run: echo "PARTYKIT_VERSION=$(npm view partykit@beta version)" >> $GITHUB_ENV
         working-directory: packages/partykit
