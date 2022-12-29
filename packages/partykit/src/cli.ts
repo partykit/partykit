@@ -11,13 +11,14 @@ import * as os from "os";
 import * as fs from "fs";
 import chalk from "chalk";
 import { fetchResult } from "./fetchResult";
+import type { Server as HttpServer } from "http";
 
 // A "room" is a server that is running a script,
 // as well as a websocket server distinct to the room.
 type Room = {
   http: Awaited<ReturnType<typeof runServer>> & {
     // This... might not even be necessary??
-    __server: import("http").Server;
+    __server: HttpServer;
   };
   ws: WebSocketServer;
   runtime: EdgeRuntime;
@@ -78,7 +79,9 @@ export async function dev(
         rooms.clear();
         code = result.outputFiles[0].text;
         closed.forEach((roomId) => {
-          getRoom(roomId);
+          getRoom(roomId).catch((err) => {
+            console.error(`could not get room ${roomId}`, err);
+          });
         });
       },
     },
@@ -336,7 +339,7 @@ export async function login(): Promise<void> {
   const { default: clipboardy } = await import("clipboardy");
   clipboardy.writeSync(user_code);
 
-  open(verification_uri);
+  await open(verification_uri);
 
   const start = Date.now();
   while (Date.now() - start < expires_in * 1000) {

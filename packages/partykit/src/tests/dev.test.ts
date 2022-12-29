@@ -22,7 +22,7 @@ afterEach(async () => {
 describe("dev", () => {
   it("should error if no script path is provided", async () => {
     // @ts-expect-error we're purposely not passing a script path
-    expect(runDev()).rejects.toThrowError("script path is missing");
+    await expect(runDev()).rejects.toThrowError("script path is missing");
   });
 
   it("should start a server for a given input script path", async () => {

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import ReconnectingWebSocket, * as RWS from "reconnecting-websocket";
+import type * as RWS from "reconnecting-websocket";
+import ReconnectingWebSocket from "reconnecting-websocket";
 
 type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
   host: string; // base url for the party
