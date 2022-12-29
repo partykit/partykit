@@ -1,0 +1,13 @@
+// only used during builds to extract .d.ts files
+
+{
+  "extends": "../tsconfig.json",
+  "include": ["../src/client.ts", "../src/server.ts"],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "../dts" // we can't set this to '../' since that adds it to `exclude`, removing our included files as well 😖
+  }
+}

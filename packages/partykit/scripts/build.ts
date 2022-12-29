@@ -3,9 +3,6 @@ import * as fs from "fs";
 
 process.chdir(`${__dirname}/../`);
 
-// clean build folder
-fs.rmSync("dist", { recursive: true, force: true });
-
 const minify = process.argv.includes("--minify");
 
 // generate bin/index.js
@@ -33,7 +30,6 @@ esbuild.buildSync({
   outfile: "dist/client.js",
   sourcemap: true,
   minify,
-
   // platform: "browser", // ?neutral?
 });
 
@@ -47,11 +43,3 @@ esbuild.buildSync({
   minify,
   // platform: "node", // ?neutral?
 });
-
-// generate a barrel file for the dist folder
-// TODO: should probably add a log asking them to import
-// from the individual files instead of the barrel file
-fs.writeFileSync(
-  "dist/index.js",
-  `export * from './client.js'; export * from './server.js';`
-);

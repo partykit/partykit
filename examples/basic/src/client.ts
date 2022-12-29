@@ -1,6 +1,7 @@
-import { PartySocket } from "partykit/src/client";
+import { PartySocket } from "partykit/client";
 
 const partySocket = new PartySocket({
+  // host: "testy.threepointone.partykit.dev",
   host: "localhost:1999",
   room: "some-room",
 });
