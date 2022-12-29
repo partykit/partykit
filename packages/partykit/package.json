@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "Everything's better with friends",
   "bin": "dist/bin.js",
-  "main": "dist/index.js",
+  "exports": {
+    "./client": "./dist/client.js",
+    "./server": "./dist/server.js"
+  },
   "dependencies": {
     "@edge-runtime/primitives": "^2.0.2",
     "clipboardy": "^3.0.0",
@@ -24,8 +27,14 @@
     "reconnecting-websocket": "^4.4.0",
     "ws": "^8.11.0"
   },
+  "files": [
+    "dist",
+    "*.d.ts",
+    "*.d.ts.map"
+  ],
   "scripts": {
-    "start": "PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src scripts/build.ts",
-    "build": "PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts --minify"
+    "clean": "rm -rf dist && rm -rf dts && rm -rf *.d.ts && rm -rf *.d.ts.map && mkdir dts",
+    "start": "npm run clean && concurrently \"PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
+    "build": "npm run clean && PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts --minify && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
   }
 }
