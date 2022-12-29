@@ -20,16 +20,16 @@ describe("publish", () => {
   });
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
-    expect(publish()).rejects.toThrowErrorMatchingInlineSnapshot(
+    await expect(publish()).rejects.toThrowErrorMatchingInlineSnapshot(
       '"script path is missing"'
     );
   });
 
   it("should error without a name", async () => {
-    // @ts-expect-error we're purposely not passing a name
-    expect(publish(fixture, {})).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"name is missing"'
-    );
+    await expect(
+      // @ts-expect-error we're purposely not passing a name
+      publish(fixture, {})
+    ).rejects.toThrowErrorMatchingInlineSnapshot('"name is missing"');
   });
 
   it("should build and submit a script to the server", async () => {

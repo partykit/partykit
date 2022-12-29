@@ -25,6 +25,10 @@ module.exports = {
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
   ignorePatterns: ["node_modules", "dist", "lib", "coverage", ".eslintrc.js"],
   rules: {
+    "@typescript-eslint/consistent-type-imports": ["error"],
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/return-await": "error",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {

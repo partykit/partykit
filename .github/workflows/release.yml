@@ -27,7 +27,7 @@ jobs:
           path: |
             .eslintcache
             **/*/tsconfig.tsbuildinfo
-          key: eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package-lock.json', 'tsconfig.json') }}
+          key: eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package-lock.json', 'tsconfig.json', '**/*/tsconfig.json', '.eslintrc.js') }}
 
       - run: npm ci
 
