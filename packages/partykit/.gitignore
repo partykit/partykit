@@ -1,3 +1,4 @@
 *.d.ts
 *.d.ts.map
 dts
+facade/generated.js
