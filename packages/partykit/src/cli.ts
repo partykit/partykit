@@ -20,6 +20,7 @@ type Room = {
     __server: import("http").Server;
   };
   ws: WebSocketServer;
+  runtime: EdgeRuntime;
 };
 
 const CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
@@ -28,6 +29,11 @@ const CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
 type Rooms = Map<string, Room>;
 
 const GITHUB_APP_ID = "670a9f76d6be706f5209";
+
+const workerFacade = fs.readFileSync(
+  path.join(__dirname, "../facade/generated.js"),
+  "utf8"
+);
 
 export async function dev(
   script: string, // The path to the script that will be run in the room.
@@ -41,14 +47,9 @@ export async function dev(
   let code: string;
   const buildResult = await esbuild.build({
     stdin: {
-      contents: `
-      import * as Worker from "${absoluteScriptPath}"
-      addEventListener('fetch', event => {
-        return event.respondWith(new Response('Hello world from the room'));
-      })
-      wss.on("connection", Worker.connect);  
-    `,
+      contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
       resolveDir: process.cwd(),
+      // TODO: setting a sourcefile name crashes the whole thing???
       // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
     },
     watch: {
@@ -69,6 +70,7 @@ export async function dev(
 
         const closed = [...rooms.keys()];
         rooms.forEach((room) => {
+          // TODO: wait for all .close() calls to finish
           room.http.__server.close();
           room.ws.clients.forEach((client) => client.close());
           room.ws.close();
@@ -109,7 +111,7 @@ export async function dev(
 
     const roomHttpServer = (await runServer({ runtime })) as Room["http"];
 
-    const room = { http: roomHttpServer, ws: wss };
+    const room = { http: roomHttpServer, ws: wss, runtime };
     rooms.set(roomId, room);
     return room;
   }
@@ -142,6 +144,16 @@ export async function dev(
     if (pathname.startsWith("/party/")) {
       const roomId = pathname.split("/")[2];
       const room = await getRoom(roomId);
+
+      // TODO: implement onRequest
+      // const response = room.runtime.dispatchFetch(request.url, {
+      //   headers: request.rawHeaders.reduce((acc, cur, i) => {
+      //     if (i % 2 === 0) {
+      //       acc[cur] = request.rawHeaders[i + 1];
+      //     }
+      //     return acc;
+      //   }, {}),
+      // });
 
       room.ws.handleUpgrade(request, socket, head, function done(ws) {
         room.ws.emit("connection", ws, request);

@@ -30,11 +30,12 @@
   "files": [
     "dist",
     "*.d.ts",
-    "*.d.ts.map"
+    "*.d.ts.map",
+    "facade/generated.js"
   ],
   "scripts": {
-    "clean": "rm -rf dist && rm -rf dts && rm -rf *.d.ts && rm -rf *.d.ts.map && mkdir dts",
-    "start": "npm run clean && concurrently \"PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
+    "clean": "rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
+    "start": "npm run clean && concurrently \"PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src --watch-path facade scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
     "build": "npm run clean && PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts --minify && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
   }
 }

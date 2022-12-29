@@ -7,7 +7,7 @@ type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
   room: string; // the room to connect to
   protocol?: string;
   protocols?: string[];
-  // query
+  query?: Record<string, string>;
   // headers
 };
 
@@ -20,18 +20,19 @@ type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
 // TODO: incorporate the above notes
 export class PartySocket extends ReconnectingWebSocket {
   constructor(readonly partySocketOptions: PartySocketOptions) {
-    const { host, room, protocol, protocols, ...socketOptions } =
+    const { host, room, protocol, query, protocols, ...socketOptions } =
       partySocketOptions;
-    super(
-      `${
-        protocol ||
-        (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
-          ? "ws"
-          : "wss")
-      }://${host}/party/${room}`,
-      protocols,
-      socketOptions
-    );
+    let url = `${
+      protocol ||
+      (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
+        ? "ws"
+        : "wss")
+    }://${host}/party/${room}`;
+    if (query) {
+      url += `?${new URLSearchParams(query).toString()}`;
+    }
+
+    super(url, protocols, socketOptions);
   }
 }
 
