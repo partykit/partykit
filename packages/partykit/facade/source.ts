@@ -2,7 +2,7 @@
 // It will be compiled and imported by the CLI.
 
 // @ts-expect-error We'll be replacing __WORKER__ with the path to the input worker
-import * as Worker from "__WORKER__";
+import Worker from "__WORKER__";
 import type { WebSocketServer } from "ws";
 
 declare const wss: WebSocketServer;
