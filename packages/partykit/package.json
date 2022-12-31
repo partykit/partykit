@@ -10,14 +10,14 @@
   "dependencies": {
     "@edge-runtime/primitives": "^2.0.2",
     "clipboardy": "^3.0.0",
-    "esbuild": "^0.15.18"
+    "esbuild": "^0.16.12"
   },
   "devDependencies": {
     "@edge-runtime/types": "^2.0.2",
-    "@types/express": "^4.17.14",
+    "@types/express": "^4.17.15",
     "@types/http-proxy": "^1.17.9",
-    "@types/node": "^18.11.11",
-    "@types/ws": "^8.5.3",
+    "@types/node": "^18.11.18",
+    "@types/ws": "^8.5.4",
     "chalk": "^5.2.0",
     "commander": "^9.4.1",
     "edge-runtime": "^2.0.2",
