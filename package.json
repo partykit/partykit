@@ -30,7 +30,7 @@
     "@vitest/coverage-c8": "^0.26.2",
     "concurrently": "^7.6.0",
     "esbuild-register": "^3.4.2",
-    "eslint": "^8.30.0",
+    "eslint": "^8.31.0",
     "jsdom": "^20.0.3",
     "patch-package": "^6.5.0",
     "serve": "^14.1.2",
