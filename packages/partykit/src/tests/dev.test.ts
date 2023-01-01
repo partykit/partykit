@@ -43,7 +43,7 @@ describe("dev", () => {
 
   it("should let you connect to a room with a websocket", async () => {
     await runDev(fixture, {});
-    const ws = new WebSocket("ws://localhost:1999/party/theroom");
+    const ws = new WebSocket("ws://localhost:1999/party/theroom?_pk=123");
     try {
       await new Promise((resolve) => ws.on("open", resolve));
       expect(ws.readyState).toBe(WebSocket.OPEN);
@@ -54,7 +54,7 @@ describe("dev", () => {
 
   it("cannot connect to non-room path", async () => {
     await runDev(fixture, {});
-    const ws = new WebSocket("ws://localhost:1999/notaroom");
+    const ws = new WebSocket("ws://localhost:1999/notaroom?_pk=123");
     try {
       await new Promise((resolve) => ws.on("error", resolve));
       expect(ws.readyState).toBe(WebSocket.CLOSED);

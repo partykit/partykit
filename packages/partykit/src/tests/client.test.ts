@@ -5,6 +5,10 @@ import { describe, it, afterEach } from "vitest";
 import { dev } from "../cli";
 import { PartySocket } from "../client";
 
+// jsdom doesn't appear to have crypto.randomUUID
+import crypto from "crypto";
+globalThis.crypto.randomUUID = crypto.randomUUID;
+
 const fixture = `${__dirname}/fixture.js`;
 
 let devProc: Awaited<ReturnType<typeof dev>> | undefined;
