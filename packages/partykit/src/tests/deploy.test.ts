@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { publish } from "../cli";
+import { deploy } from "../cli";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 
 vi.mock("../fetchResult", async () => {
@@ -14,13 +14,13 @@ const fixture = `${__dirname}/fixture.js`;
 process.env.GITHUB_LOGIN = "test-user";
 process.env.GITHUB_TOKEN = "test-token";
 
-describe("publish", () => {
+describe("deploy", () => {
   beforeEach(() => {
     clearMocks();
   });
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
-    await expect(publish()).rejects.toThrowErrorMatchingInlineSnapshot(
+    await expect(deploy()).rejects.toThrowErrorMatchingInlineSnapshot(
       '"script path is missing"'
     );
   });
@@ -28,7 +28,7 @@ describe("publish", () => {
   it("should error without a name", async () => {
     await expect(
       // @ts-expect-error we're purposely not passing a name
-      publish(fixture, {})
+      deploy(fixture, {})
     ).rejects.toThrowErrorMatchingInlineSnapshot('"name is missing"');
   });
 
@@ -49,7 +49,7 @@ describe("publish", () => {
         return null;
       }
     );
-    await publish(fixture, {
+    await deploy(fixture, {
       name: "test-script",
     });
     expect(checkedResponse).toBe(true);
@@ -64,7 +64,7 @@ describe("publish", () => {
       }
     );
     await expect(
-      publish(fixture, {
+      deploy(fixture, {
         name: "test-script",
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');

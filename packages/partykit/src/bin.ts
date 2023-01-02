@@ -41,11 +41,11 @@ program
   });
 
 program
-  .command("publish")
-  .argument("<script>", "path to the script to publish")
+  .command("deploy")
+  .argument("<script>", "path to the script to deploy")
   .option("-n, --name <name>", "name of the script")
   .action(async (scriptPath, options) => {
-    await cli.publish(scriptPath, { name: options.name });
+    await cli.deploy(scriptPath, { name: options.name });
   });
 
 program.command("list").action(async () => {
