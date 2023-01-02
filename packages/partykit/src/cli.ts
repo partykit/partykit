@@ -153,15 +153,15 @@ export async function dev(
       const roomId = url.pathname.split("/")[2];
       const room = await getRoom(roomId);
 
-      // TODO: implement onRequest
-      // const response = room.runtime.dispatchFetch(request.url, {
-      //   headers: request.rawHeaders.reduce((acc, cur, i) => {
-      //     if (i % 2 === 0) {
-      //       acc[cur] = request.rawHeaders[i + 1];
-      //     }
-      //     return acc;
-      //   }, {}),
-      // });
+      const res = await room.runtime.dispatchFetch(
+        `http://${request.headers.host}${request.url}`,
+        // @ts-expect-error TODO: fix this, set-cookies may be a string[]
+        { headers: request.headers }
+      );
+
+      if (res.status === 401) {
+        socket.destroy();
+      }
 
       room.ws.handleUpgrade(request, socket, head, function done(ws) {
         room.ws.emit("connection", ws, request);

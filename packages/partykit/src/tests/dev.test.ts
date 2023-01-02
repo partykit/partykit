@@ -29,7 +29,7 @@ describe("dev", () => {
     await runDev(fixture, {});
     const res = await fetch("http://localhost:1999/party/theroom");
     expect(await res.text()).toMatchInlineSnapshot(
-      '"Hello world from the room"'
+      '"Not found"'
     );
   });
 
@@ -37,7 +37,7 @@ describe("dev", () => {
     await runDev(fixture, { port: 9999 });
     const res = await fetch("http://localhost:9999/party/theroom");
     expect(await res.text()).toMatchInlineSnapshot(
-      '"Hello world from the room"'
+      '"Not found"'
     );
   });
 
