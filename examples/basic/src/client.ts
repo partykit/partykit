@@ -6,5 +6,7 @@ const partySocket = new PartySocket({
   room: "some-room",
 });
 
+partySocket.onerror = (err) => console.error({ err });
+partySocket.onclose = (evt) => console.log("closed", evt);
 partySocket.onopen = () => partySocket.send("ping");
 partySocket.onmessage = (evt) => console.log(evt.data); // "pong"

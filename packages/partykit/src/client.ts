@@ -20,9 +20,11 @@ type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
 // extremely basic for now but we'll add more options later
 // TODO: incorporate the above notes
 export class PartySocket extends ReconnectingWebSocket {
+  _pk: string;
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const { host, room, protocol, query, protocols, ...socketOptions } =
       partySocketOptions;
+    const _pk = crypto.randomUUID();
     let url = `${
       protocol ||
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
@@ -30,10 +32,13 @@ export class PartySocket extends ReconnectingWebSocket {
         : "wss")
     }://${host}/party/${room}`;
     if (query) {
-      url += `?${new URLSearchParams(query).toString()}`;
+      url += `?${new URLSearchParams({ ...query, _pk }).toString()}`;
+    } else {
+      url += `?_pk=${_pk}`;
     }
 
     super(url, protocols, socketOptions);
+    this._pk = _pk;
   }
 }
 

@@ -140,12 +140,17 @@ export async function dev(
 
   server.on("upgrade", async function upgrade(request, socket, head) {
     assert(request.url, "request url is missing");
-    const { pathname } = parse(request.url);
-    assert(pathname, "pathname is missing!");
+    const url = parse(request.url, true);
+    assert(url.pathname, "pathname is missing!");
 
     // TODO: maybe we can just use urlpattern here
-    if (pathname.startsWith("/party/")) {
-      const roomId = pathname.split("/")[2];
+    // TODO: this doesn't send an error code, we should do that
+    if (url.pathname.startsWith("/party/")) {
+      if (!url.query._pk) {
+        request.destroy(new Error("oh no missing _pk"));
+        return;
+      }
+      const roomId = url.pathname.split("/")[2];
       const room = await getRoom(roomId);
 
       // TODO: implement onRequest
