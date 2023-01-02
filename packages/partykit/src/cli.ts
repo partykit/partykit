@@ -227,7 +227,7 @@ async function getUser(): Promise<User> {
   return config;
 }
 
-export async function publish(
+export async function deploy(
   scriptPath: string,
   options: { name: string }
 ): Promise<void> {
@@ -257,7 +257,7 @@ export async function publish(
   });
 
   console.log(
-    `Published ${scriptPath} as https://${options.name}.${user.login}.partykit.dev`
+    `Deployed ${scriptPath} as https://${options.name}.${user.login}.partykit.dev`
   );
 }
 
