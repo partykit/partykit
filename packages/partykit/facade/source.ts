@@ -7,16 +7,31 @@ import type { WebSocketServer } from "ws";
 
 declare const wss: WebSocketServer;
 
+async function handleRequest(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  if (url.pathname.startsWith("/party/")) {
+    if (
+      Worker.unstable_onValidate &&
+      typeof Worker.unstable_onValidate === "function"
+    ) {
+      const isValid = await Worker.unstable_onValidate(request);
+      if (typeof isValid !== "boolean") {
+        throw new Error(".onValidate() must return a boolean");
+      }
+      if (!isValid) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+    }
+  }
+  return new Response("Not found", { status: 404 });
+}
+
 addEventListener("fetch", (event) => {
-  return event.respondWith(new Response("Hello world from the room"));
+  event.respondWith(handleRequest(event.request));
 });
 
 if (typeof Worker.onConnect !== "function") {
   throw new Error("onConnect is not a function");
 }
-
-// if (Worker.onRequest && typeof Worker.onRequest !== "function") {
-//   throw new Error("onRequest is not a function");
-// }
 
 wss.on("connection", Worker.onConnect);

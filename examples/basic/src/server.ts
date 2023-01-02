@@ -1,12 +1,13 @@
 export default {
   onConnect(ws: WebSocket) {
+    // your business logic here
     ws.onmessage = function incoming(evt) {
-      console.log("evt!", evt.data);
-      ws.send("pong");
+      if (evt.data === "ping") {
+        ws.send("pong");
+      }
     };
   },
-  // this doesn't work just yet...
-  // onRequest(_req: Request) {
-  //   return new Response("Yoohoo from the room");
-  // }
+  async unstable_onValidate(_req: Request): Promise<boolean> {
+    return true;
+  },
 };
