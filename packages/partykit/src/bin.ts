@@ -1,7 +1,7 @@
 #!/usr/bin/env node --enable-source-maps
 import * as cli from "./cli";
 import { version } from "../package.json";
-import { program } from "commander";
+import { program, Option } from "commander";
 
 process.on("SIGINT", () => {
   // console.log("Interrupted");
@@ -27,13 +27,19 @@ process.on("unhandledRejection", function (reason, _promise) {
   throw reason;
 });
 
+const EnvironmentOption = new Option(
+  "-e, --env <env>",
+  "environment to use"
+).choices(["production", "development", "preview"]);
+
 program
   .name("partykit")
   .version(version, "-v, --version", "output the current version")
-  .description("Run a partykit script");
+  .description("Welcome to the party, pal!");
 
 program
   .command("dev")
+  .description("run a script in development mode")
   .argument("<script>", "path to the script to run")
   .option("-p, --port", "port to run the server on")
   .action(async (scriptPath, options) => {
@@ -42,21 +48,69 @@ program
 
 program
   .command("deploy")
+  .description("deploy a script to the internet")
   .argument("<script>", "path to the script to deploy")
-  .option("-n, --name <name>", "name of the script")
+  .requiredOption("-n, --name <name>", "name of the script")
   .action(async (scriptPath, options) => {
     await cli.deploy(scriptPath, { name: options.name });
   });
 
-program.command("list").action(async () => {
-  await cli.list();
-});
+program
+  .command("list")
+  .description("list all deployed scripts")
+  .action(async () => {
+    await cli.list();
+  });
 
 program
   .command("delete")
-  .option("-n, --name <name>", "name of the script")
+  .description("delete a deployed script")
+  .requiredOption("-n, --name <name>", "name of the script")
   .action(async (options) => {
     await cli._delete({ name: options.name });
+  });
+
+const envCommand = program.command("env");
+
+envCommand
+  .command("list")
+  .description("list all environment variables")
+  .requiredOption("-n, --name <name>", "name of the script")
+  .addOption(EnvironmentOption)
+  // -p preview id?
+  .action(async (options) => {
+    await cli.env.list(options);
+  });
+
+envCommand
+  .command("pull")
+  .description("pull environment variables to a file")
+  .argument("<file>", "file to pull development env vars to")
+  .requiredOption("-n, --name <name>", "name of the script")
+  // implies "development" environment
+  .action(async (fileName, options) => {
+    await cli.env.pull(fileName, options);
+  });
+
+envCommand
+  .command("add")
+  .description("add an environment variable")
+  .argument("<key>", "name of the environment variable")
+  .requiredOption("-n, --name <name>", "name of the script")
+  .addOption(EnvironmentOption)
+  // -p preview id?
+  .action(async (key, options) => {
+    await cli.env.add(key, options);
+  });
+
+envCommand
+  .command("remove")
+  .description("remove an environment variable")
+  .argument("<key>", "name of the environment variable")
+  .requiredOption("-n, --name <name>", "name of the script")
+  .addOption(EnvironmentOption)
+  .action(async (key, options) => {
+    await cli.env.remove(key, options);
   });
 
 program
@@ -68,7 +122,7 @@ program
 
 program
   .command("logout")
-  .description("logout of partykit")
+  .description("logout from partykit")
   .action(async () => {
     await cli.logout();
   });
