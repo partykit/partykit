@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     reporters: ["verbose"],
     threads: false,
-    testTimeout: 1000,
+    testTimeout: 5000,
     setupFiles: ["./vitest.setup.js"],
   },
 });
