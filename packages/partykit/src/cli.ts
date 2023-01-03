@@ -407,3 +407,83 @@ export async function logout() {
   // TODO: delete the token from github
   console.log("Logged out");
 }
+
+type EnvironmentChoice = "production" | "development" | "preview";
+
+export const env = {
+  async list(options: { name: string; env: EnvironmentChoice }) {
+    // get user details
+    const user = await getUser();
+
+    const res = await fetchResult(
+      `/parties/${user.login}/${options.name}/env?keys=true`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+
+    console.log(res);
+  },
+  async pull(fileName: string, options: { name: string }) {
+    // get user details
+    const user = await getUser();
+
+    const res = await fetchResult(
+      `/parties/${user.login}/${options.name}/env`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+
+    let fileContent = "";
+
+    // write the file in dotenv syntax
+    Object.entries(res as Record<string, string | number | boolean>).forEach(
+      ([key, value]) => {
+        fileContent += `${key}=${JSON.stringify(value)}\n`;
+      }
+    );
+
+    fs.writeFileSync(fileName, fileContent);
+  },
+  async add(key: string, options: { name: string; env: EnvironmentChoice }) {
+    // get user details
+    const user = await getUser();
+
+    // TODO: get the value from the user
+    const value = "test";
+
+    const res = await fetchResult(
+      `/parties/${user.login}/${options.name}/env/${key}`,
+      {
+        method: "POST",
+        body: value,
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+
+    console.log(res);
+  },
+  async remove(key: string, options: { name: string; env: EnvironmentChoice }) {
+    // get user details
+    const user = await getUser();
+
+    const res = await fetchResult(
+      `/parties/${user.login}/${options.name}/env/${key}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+
+    console.log(res);
+  },
+};
