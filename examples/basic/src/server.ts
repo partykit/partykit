@@ -1,5 +1,7 @@
+import type { PartyKitServer } from "partykit/server";
+
 export default {
-  onConnect(ws: WebSocket) {
+  onConnect(room, ws: WebSocket) {
     // your business logic here
     ws.onmessage = function incoming(evt) {
       if (evt.data === "ping") {
@@ -10,4 +12,4 @@ export default {
   async unstable_onValidate(_req: Request): Promise<boolean> {
     return true;
   },
-};
+} satisfies PartyKitServer;

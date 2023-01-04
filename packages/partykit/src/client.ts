@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 import type * as RWS from "reconnecting-websocket";
 import ReconnectingWebSocket from "reconnecting-websocket";
 
@@ -42,78 +40,78 @@ export class PartySocket extends ReconnectingWebSocket {
   }
 }
 
-type POJO =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | POJO[]
-  | { [key: string]: POJO };
+// type POJO =
+//   | string
+//   | number
+//   | boolean
+//   | null
+//   | undefined
+//   | POJO[]
+//   | { [key: string]: POJO };
 
-class Connection {
-  requests: Map<
-    string,
-    { resolve: (data: POJO) => void; reject: (err: Error) => void }
-  > = new Map();
-  subscriptions: Map<
-    string,
-    {
-      next: (data: POJO) => void;
-      return: () => void;
-      throw: (err: Error) => void;
-    }
-  > = new Map();
-  constructor(readonly partySocket: PartySocket) {
-    // start listening for messages
-  }
-  sendMessage(
-    type: string,
-    data: { id: string; name: string; payload?: POJO }
-  ) {
-    this.partySocket.send(JSON.stringify({ type, data }));
-  }
-  send(name: string, payload?: POJO): void {
-    this.sendMessage("send", { id: crypto.randomUUID(), name, payload });
-  }
+// class Connection {
+//   requests: Map<
+//     string,
+//     { resolve: (data: POJO) => void; reject: (err: Error) => void }
+//   > = new Map();
+//   subscriptions: Map<
+//     string,
+//     {
+//       next: (data: POJO) => void;
+//       return: () => void;
+//       throw: (err: Error) => void;
+//     }
+//   > = new Map();
+//   constructor(readonly partySocket: PartySocket) {
+//     // start listening for messages
+//   }
+//   sendMessage(
+//     type: string,
+//     data: { id: string; name: string; payload?: POJO }
+//   ) {
+//     this.partySocket.send(JSON.stringify({ type, data }));
+//   }
+//   send(name: string, payload?: POJO): void {
+//     this.sendMessage("send", { id: crypto.randomUUID(), name, payload });
+//   }
 
-  async get(name: string, payload?: POJO) {
-    const id = crypto.randomUUID();
-    const promise = new Promise((resolve, reject) => {
-      this.requests.set(id, { resolve, reject });
-    });
-    this.sendMessage("get", { id, name, payload });
-    return promise;
-  }
+//   async get(name: string, payload?: POJO) {
+//     const id = crypto.randomUUID();
+//     const promise = new Promise((resolve, reject) => {
+//       this.requests.set(id, { resolve, reject });
+//     });
+//     this.sendMessage("get", { id, name, payload });
+//     return promise;
+//   }
 
-  subscribe(name: string, payload?: POJO): AsyncIterable<POJO> {
-    const id = crypto.randomUUID();
-    const connection = this.partySocket;
-    const iterator = async function* () {
-      // uh TODO
-    }.bind(this)();
-    return iterator;
-  }
+//   subscribe(name: string, payload?: POJO): AsyncIterable<POJO> {
+//     const id = crypto.randomUUID();
+//     const connection = this.partySocket;
+//     const iterator = async function* () {
+//       // uh TODO
+//     }.bind(this)();
+//     return iterator;
+//   }
 
-  close() {
-    this.partySocket.close();
-  }
-}
+//   close() {
+//     this.partySocket.close();
+//   }
+// }
 
-export class Party {
-  constructor(
-    readonly host: string,
-    readonly partySocketOptions: Omit<PartySocketOptions, "host" | "room"> = {}
-  ) {}
-  join(room: string) {
-    const partySocket = new PartySocket({
-      ...this.partySocketOptions,
-      host: this.host,
-      room,
-    });
-    return new Connection(partySocket);
-  }
-}
+// export class Party {
+//   constructor(
+//     readonly host: string,
+//     readonly partySocketOptions: Omit<PartySocketOptions, "host" | "room"> = {}
+//   ) {}
+//   join(room: string) {
+//     const partySocket = new PartySocket({
+//       ...this.partySocketOptions,
+//       host: this.host,
+//       room,
+//     });
+//     return new Connection(partySocket);
+//   }
+// }
 
 // const party = new Party("ws://localhost:1999");
 // const room = party.join("some-room");
