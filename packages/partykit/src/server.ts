@@ -1,16 +1,16 @@
 /// <reference types="@edge-runtime/types" />
 
-type Connection = {
+export type PartyKitConnection = {
   id: string;
   socket: WebSocket;
 };
 
-type Room = {
+export type PartyKitRoom = {
   id: string;
-  connections: Map<string, Connection>;
+  connections: Map<string, PartyKitConnection>;
 };
 
 export type PartyKitServer = {
-  onConnect: (room: Room, ws: WebSocket) => void;
+  onConnect: (ws: WebSocket, room: PartyKitRoom) => void;
   unstable_onValidate: (req: Request) => Promise<boolean>;
 };
