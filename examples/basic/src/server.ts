@@ -1,11 +1,11 @@
 import type { PartyKitServer } from "partykit/server";
 
 export default {
-  onConnect(room, ws: WebSocket) {
+  onConnect(ws, room) {
     // your business logic here
     ws.onmessage = function incoming(evt) {
       if (evt.data === "ping") {
-        ws.send("pong");
+        ws.send(`pong:${room.connections.size}`);
       }
     };
   },

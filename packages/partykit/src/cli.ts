@@ -104,11 +104,20 @@ export async function dev(
 
     const wss = new WebSocketServer({ noServer: true });
 
+    const partyRoom: {
+      id: string;
+      connections: Map<string, { id: string; socket: WebSocket }>;
+    } = {
+      id: roomId,
+      connections: new Map(),
+    };
+
     const runtime = new EdgeRuntime({
       initialCode: code,
       extend: (context) =>
         Object.assign(context, {
           wss,
+          partyRoom,
         }),
     });
 
