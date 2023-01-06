@@ -12,6 +12,14 @@ import * as fs from "fs";
 import chalk from "chalk";
 import { fetchResult } from "./fetchResult";
 import type { Server as HttpServer } from "http";
+import * as dotenv from "dotenv";
+import findConfig from "find-config";
+
+const envPath = findConfig(".env");
+let envVars = {};
+if (envPath) {
+  envVars = dotenv.parse(fs.readFileSync(envPath, "utf8"));
+}
 
 // A "room" is a server that is running a script,
 // as well as a websocket server distinct to the room.
@@ -107,9 +115,11 @@ export async function dev(
     const partyRoom: {
       id: string;
       connections: Map<string, { id: string; socket: WebSocket }>;
+      env: Record<string, string>;
     } = {
       id: roomId,
       connections: new Map(),
+      env: envVars,
     };
 
     const runtime = new EdgeRuntime({
