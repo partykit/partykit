@@ -8,6 +8,7 @@ export type PartyKitConnection = {
 export type PartyKitRoom = {
   id: string;
   connections: Map<string, PartyKitConnection>;
+  env: Record<string, string>;
 };
 
 export type PartyKitServer = {
