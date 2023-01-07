@@ -1,0 +1,13 @@
+// only used during builds to extract .d.ts files
+
+{
+  "extends": "./tsconfig.json",
+  "include": ["./src/ylibs.ts"],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./vendor"
+  }
+}

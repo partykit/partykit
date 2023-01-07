@@ -3,20 +3,33 @@
   "version": "0.0.0",
   "description": "y.js on partykit!",
   "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "//": "build the server (for now)",
-    "build": "npx esbuild src/index.ts --outdir=dist && tsc --project tsconfig.extract.json",
-    "vendor": "npx esbuild y-websocket/bin/utils --bundle --outfile=vendor/y-websocket-utils.js --external:http --define:process.env.CALLBACK_URL=undefined --define:process.env.CALLBACK_DEBOUNCE_WAIT=2000 --define:process.env.CALLBACK_DEBOUNCE_MAXWAIT=10000 --define:process.env.CALLBACK_TIMEOUT=5000 --define:process.env.CALLBACK_OBJECTS=undefined --define:process.env.GC=undefined --define:process.env.YPERSISTENCE=undefined --alias:http=./http-alias/index.ts --format=cjs --minify --sourcemap"
+    "build:vendor": "rm -rf vendor && npx esbuild src/ylibs.ts --bundle --outfile=vendor/ylibs.js --format=cjs --minify --sourcemap & tsc --project tsconfig.vendor.json",
+    "build:package": "rm -rf dist && npx esbuild src/index.ts --outdir=dist && tsc --project tsconfig.extract.json && mv dist/index.d.ts* .",
+    "build": "npm run build:vendor && npm run build:package"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "y-websocket": "^1.4.5"
+    "@types/lodash.debounce": "^4.0.7",
+    "lib0": "^0.2.58",
+    "lodash.debounce": "^4.0.8",
+    "y-protocols": "^1.0.5",
+    "yjs": "^13.5.44"
   },
   "files": [
-    "dist",
-    "vendor"
+    "dist/*.js",
+    "dist/*.js.map",
+    "vendor/*.js",
+    "vendor/*.js.map",
+    "vendor/*.d.ts",
+    "vendor/*.d.ts.map",
+    "*.d.ts",
+    "*.d.ts.map"
   ]
 }
