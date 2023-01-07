@@ -1,3 +1,3 @@
 export function request() {
-  console.error("request() is not implemented yet");
+  throw new Error("request() is not implemented yet");
 }

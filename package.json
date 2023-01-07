@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "npm start -w partykit",
-    "build": "npm run build -w partykit",
+    "build": "npm run build -w partykit -w y-partykit",
     "check": "npm run lint && npm run repocheck && npm run typecheck && npx vitest --watch=false",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --cache",
     "test": "vitest",
