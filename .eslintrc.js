@@ -30,6 +30,7 @@ module.exports = {
     "coverage",
     ".eslintrc.js",
     "vendor",
+    "*.d.ts",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": ["error"],
