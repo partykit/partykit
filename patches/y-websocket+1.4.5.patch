@@ -26,7 +26,7 @@ index 4da8163..2bc33ff 100644
      console.warn('Callback request timed out.')
      req.abort()
 diff --git a/node_modules/y-websocket/bin/utils.js b/node_modules/y-websocket/bin/utils.js
-index 311f905..a9b4638 100644
+index 311f905..b840d44 100644
 --- a/node_modules/y-websocket/bin/utils.js
 +++ b/node_modules/y-websocket/bin/utils.js
 @@ -26,25 +26,26 @@ const persistenceDir = process.env.YPERSISTENCE
@@ -84,15 +84,22 @@ index 311f905..a9b4638 100644
      switch (messageType) {
        case messageSync:
          encoding.writeVarUint(encoder, messageSync)
-@@ -182,7 +185,6 @@ const messageListener = (conn, doc, message) => {
-       }
+@@ -208,7 +211,13 @@ const closeConn = (doc, conn) => {
+       docs.delete(doc.name)
      }
-   } catch (err) {
--    console.error(err)
-     doc.emit('error', [err])
    }
+-  conn.close()
++  try{
++    conn.close()
++  }
++  catch(e){
++    console.error('closeConn error', e)
++  }
++  
  }
-@@ -217,11 +219,11 @@ const closeConn = (doc, conn) => {
+ 
+ /**
+@@ -217,11 +226,11 @@ const closeConn = (doc, conn) => {
   * @param {Uint8Array} m
   */
  const send = (doc, conn, m) => {
@@ -106,7 +113,7 @@ index 311f905..a9b4638 100644
    } catch (e) {
      closeConn(doc, conn)
    }
-@@ -235,7 +237,7 @@ const pingTimeout = 30000
+@@ -235,12 +244,12 @@ const pingTimeout = 30000
   * @param {any} opts
   */
  exports.setupWSConnection = (conn, req, { docName = req.url.slice(1).split('?')[0], gc = true } = {}) => {
@@ -115,3 +122,27 @@ index 311f905..a9b4638 100644
    // get doc, initialize if it does not exist yet
    const doc = getYDoc(docName, gc)
    doc.conns.set(conn, new Set())
+   // listen and reply to events
+-  conn.on('message', /** @param {ArrayBuffer} message */ message => messageListener(conn, doc, new Uint8Array(message)))
++  conn.addEventListener('message', /** @param {ArrayBuffer} message */ message => typeof message.data !== 'string' && messageListener(conn, doc, new Uint8Array(message.data)))  
+ 
+   // Check if connection is still alive
+   let pongReceived = true
+@@ -260,12 +269,14 @@ exports.setupWSConnection = (conn, req, { docName = req.url.slice(1).split('?')[
+       }
+     }
+   }, pingTimeout)
+-  conn.on('close', () => {
++  conn.addEventListener('close', () => {
+     closeConn(doc, conn)
+     clearInterval(pingInterval)
+   })
+-  conn.on('pong', () => {
+-    pongReceived = true
++  conn.addEventListener('message', (message) => {
++    if(message.data === 'pong') {
++      pongReceived = true
++    }    
+   })
+   // put the following in a variables in a block so the interval handlers don't keep in in
+   // scope

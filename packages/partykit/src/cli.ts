@@ -32,6 +32,13 @@ type Room = {
   runtime: EdgeRuntime;
 };
 
+const esbuildOptions = {
+  format: "esm",
+  bundle: true,
+  write: false,
+  target: "esnext",
+} as const;
+
 const CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
 
 // A map of room names to room servers.
@@ -93,11 +100,8 @@ export async function dev(
         });
       },
     },
-    format: "esm",
-    bundle: true,
-    write: false,
+    ...esbuildOptions,
     sourcemap: true,
-    target: "esnext",
   });
 
   code = buildResult.outputFiles[0].text;
@@ -259,11 +263,7 @@ export async function deploy(
   const absoluteScriptPath = path.resolve(process.cwd(), scriptPath);
   const code = esbuild.buildSync({
     entryPoints: [absoluteScriptPath],
-    format: "esm",
-    bundle: true,
-    write: false,
-    // sourcemap: true,
-    target: "esnext",
+    ...esbuildOptions,
   }).outputFiles[0].text;
 
   await fetchResult(`/parties/${user.login}/${options.name}`, {
