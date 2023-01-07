@@ -13,5 +13,5 @@ export type PartyKitRoom = {
 
 export type PartyKitServer = {
   onConnect: (ws: WebSocket, room: PartyKitRoom) => void;
-  unstable_onValidate: (req: Request) => Promise<boolean>;
+  unstable_onValidate?: (req: Request) => Promise<boolean>;
 };

@@ -1,0 +1,17 @@
+{
+  "name": "y-partykit",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "//": "build the server (for now)",
+    "vendor": "npx esbuild y-websocket/bin/utils --bundle --outfile=vendor/y-websocket-utils.js --external:http --define:process.env.CALLBACK_URL=undefined --define:process.env.CALLBACK_DEBOUNCE_WAIT=2000 --define:process.env.CALLBACK_DEBOUNCE_MAXWAIT=10000 --define:process.env.CALLBACK_TIMEOUT=5000 --define:process.env.CALLBACK_OBJECTS=undefined --define:process.env.GC=undefined --define:process.env.YPERSISTENCE=undefined --alias:http=./http-alias/index.ts --format=cjs --minify --sourcemap"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "y-websocket": "^1.4.5"
+  }
+}

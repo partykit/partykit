@@ -1,0 +1,117 @@
+diff --git a/node_modules/y-websocket/bin/callback.js b/node_modules/y-websocket/bin/callback.js
+index 4da8163..2bc33ff 100644
+--- a/node_modules/y-websocket/bin/callback.js
++++ b/node_modules/y-websocket/bin/callback.js
+@@ -1,4 +1,4 @@
+-const http = require('http')
++
+ 
+ const CALLBACK_URL = process.env.CALLBACK_URL ? new URL(process.env.CALLBACK_URL) : null
+ const CALLBACK_TIMEOUT = process.env.CALLBACK_TIMEOUT || 5000
+@@ -12,6 +12,7 @@ exports.isCallbackSet = !!CALLBACK_URL
+  * @param {WSSharedDoc} doc
+  */
+ exports.callbackHandler = (update, origin, doc) => {
++  
+   const room = doc.name
+   const dataToSend = {
+     room,
+@@ -46,7 +47,7 @@ const callbackRequest = (url, timeout, data) => {
+       'Content-Length': data.length
+     }
+   }
+-  const req = http.request(options)
++  const req = require('http').request(options)
+   req.on('timeout', () => {
+     console.warn('Callback request timed out.')
+     req.abort()
+diff --git a/node_modules/y-websocket/bin/utils.js b/node_modules/y-websocket/bin/utils.js
+index 311f905..a9b4638 100644
+--- a/node_modules/y-websocket/bin/utils.js
++++ b/node_modules/y-websocket/bin/utils.js
+@@ -26,25 +26,26 @@ const persistenceDir = process.env.YPERSISTENCE
+  * @type {{bindState: function(string,WSSharedDoc):void, writeState:function(string,WSSharedDoc):Promise<any>, provider: any}|null}
+  */
+ let persistence = null
+-if (typeof persistenceDir === 'string') {
+-  console.info('Persisting documents to "' + persistenceDir + '"')
+-  // @ts-ignore
+-  const LeveldbPersistence = require('y-leveldb').LeveldbPersistence
+-  const ldb = new LeveldbPersistence(persistenceDir)
+-  persistence = {
+-    provider: ldb,
+-    bindState: async (docName, ydoc) => {
+-      const persistedYdoc = await ldb.getYDoc(docName)
+-      const newUpdates = Y.encodeStateAsUpdate(ydoc)
+-      ldb.storeUpdate(docName, newUpdates)
+-      Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
+-      ydoc.on('update', update => {
+-        ldb.storeUpdate(docName, update)
+-      })
+-    },
+-    writeState: async (docName, ydoc) => {}
+-  }
+-}
++// commenting out this section because it is not used
++// if (typeof persistenceDir === 'string') {
++//   console.info('Persisting documents to "' + persistenceDir + '"')
++//   // @ts-ignore
++//   const LeveldbPersistence = require('y-leveldb').LeveldbPersistence
++//   const ldb = new LeveldbPersistence(persistenceDir)
++//   persistence = {
++//     provider: ldb,
++//     bindState: async (docName, ydoc) => {
++//       const persistedYdoc = await ldb.getYDoc(docName)
++//       const newUpdates = Y.encodeStateAsUpdate(ydoc)
++//       ldb.storeUpdate(docName, newUpdates)
++//       Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
++//       ydoc.on('update', update => {
++//         ldb.storeUpdate(docName, update)
++//       })
++//     },
++//     writeState: async (docName, ydoc) => {}
++//   }
++// }
+ 
+ /**
+  * @param {{bindState: function(string,WSSharedDoc):void,
+@@ -164,6 +165,8 @@ const messageListener = (conn, doc, message) => {
+     const encoder = encoding.createEncoder()    
+     const decoder = decoding.createDecoder(message)    
+     const messageType = decoding.readVarUint(decoder)
++    
++    
+     switch (messageType) {
+       case messageSync:
+         encoding.writeVarUint(encoder, messageSync)
+@@ -182,7 +185,6 @@ const messageListener = (conn, doc, message) => {
+       }
+     }
+   } catch (err) {
+-    console.error(err)
+     doc.emit('error', [err])
+   }
+ }
+@@ -217,11 +219,11 @@ const closeConn = (doc, conn) => {
+  * @param {Uint8Array} m
+  */
+ const send = (doc, conn, m) => {
+-  if (conn.readyState !== wsReadyStateConnecting && conn.readyState !== wsReadyStateOpen) {
++  if (conn.readyState !== undefined && conn.readyState !== wsReadyStateConnecting && conn.readyState !== wsReadyStateOpen) {
+     closeConn(doc, conn)
+   }
+   try {
+-    conn.send(m, /** @param {any} err */ err => { err != null && closeConn(doc, conn) })
++    conn.send(m)
+   } catch (e) {
+     closeConn(doc, conn)
+   }
+@@ -235,7 +237,7 @@ const pingTimeout = 30000
+  * @param {any} opts
+  */
+ exports.setupWSConnection = (conn, req, { docName = req.url.slice(1).split('?')[0], gc = true } = {}) => {
+-  conn.binaryType = 'arraybuffer'
++  // conn.binaryType = 'arraybuffer'
+   // get doc, initialize if it does not exist yet
+   const doc = getYDoc(docName, gc)
+   doc.conns.set(conn, new Set())

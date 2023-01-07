@@ -23,7 +23,14 @@ module.exports = {
   },
   plugins: ["@typescript-eslint"],
   extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
-  ignorePatterns: ["node_modules", "dist", "lib", "coverage", ".eslintrc.js"],
+  ignorePatterns: [
+    "node_modules",
+    "dist",
+    "lib",
+    "coverage",
+    ".eslintrc.js",
+    "vendor",
+  ],
   rules: {
     "@typescript-eslint/consistent-type-imports": ["error"],
     "@typescript-eslint/no-explicit-any": "error",

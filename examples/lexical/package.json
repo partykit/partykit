@@ -1,0 +1,21 @@
+{
+  "name": "@partykit/examples-lexical",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --watch --sourcemap\" \"npx partykit dev src/server.ts\" \"npx serve public\" --kill-others"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@lexical/react": "^0.7.5",
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.10",
+    "lexical": "^0.7.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "y-websocket": "^1.4.5"
+  }
+}
