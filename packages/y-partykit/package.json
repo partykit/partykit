@@ -4,13 +4,17 @@
   "description": "y.js on partykit!",
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/index.js",
+    "./provider": "./dist/provider.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:vendor": "rm -rf vendor && npx esbuild src/ylibs.ts --bundle --outfile=vendor/ylibs.js --format=cjs --minify --sourcemap & tsc --project tsconfig.vendor.json",
-    "build:package": "rm -rf dist && npx esbuild src/index.ts --outdir=dist && tsc --project tsconfig.extract.json && mv dist/index.d.ts* .",
-    "build": "npm run build:vendor && npm run build:package"
+    "clean": "rm -rf dist && rm -rf vendor && rm -rf *.d.ts*",
+    "build:vendor": "npx esbuild src/ylibs.ts --bundle --outfile=vendor/ylibs.js --format=cjs --minify --sourcemap & tsc --project tsconfig.vendor.json",
+    "build:server": "npx esbuild src/index.ts --outfile=dist/index.js --format=esm --sourcemap",
+    "build:provider": "npx esbuild src/provider.ts --outfile=dist/provider.js --format=esm --sourcemap",
+    "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
+    "build": "npm run clean && npm run build:vendor && npm run build:server && npm run build:provider && npm run build:package-types"
   },
   "keywords": [],
   "author": "",
@@ -31,5 +35,8 @@
     "vendor/*.d.ts.map",
     "*.d.ts",
     "*.d.ts.map"
-  ]
+  ],
+  "dependencies": {
+    "y-websocket": "^1.4.5"
+  }
 }

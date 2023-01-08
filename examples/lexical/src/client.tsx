@@ -7,11 +7,9 @@ import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
+import YPartyKitProvider from "y-partykit/provider";
 
 import { createRoot } from "react-dom/client";
-
-const connectionId = crypto.randomUUID();
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(document.getElementById("root")!);
@@ -40,16 +38,7 @@ function Editor() {
           const doc = new Y.Doc();
           yjsDocMap.set(id, doc);
 
-          const provider = new WebsocketProvider(
-            "ws://localhost:1999/party",
-            id,
-            doc,
-            {
-              params: {
-                _pk: connectionId,
-              },
-            }
-          );
+          const provider = new YPartyKitProvider("localhost:1999", id, doc);
 
           return provider;
         }}
