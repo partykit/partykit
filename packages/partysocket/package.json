@@ -1,7 +1,6 @@
 {
   "name": "partysocket",
   "version": "0.0.1",
-  "private": true,
   "description": "party hotline",
   "main": "dist/index.js",
   "scripts": {
