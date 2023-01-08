@@ -1,7 +1,10 @@
-import type * as RWS from "reconnecting-websocket";
-import ReconnectingWebSocket from "reconnecting-websocket";
+import type * as RWS from "./reconnecting-websocket";
+import ReconnectingWebSocket from "./reconnecting-websocket";
 
-type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
+export type PartySocketOptions = Omit<
+  RWS.Options,
+  "WebSocket" | "constructor"
+> & {
   host: string; // base url for the party
   room: string; // the room to connect to
   protocol?: string;
@@ -17,7 +20,7 @@ type PartySocketOptions = Omit<RWS.Options, "WebSocket" | "constructor"> & {
 
 // extremely basic for now but we'll add more options later
 // TODO: incorporate the above notes
-export class PartySocket extends ReconnectingWebSocket {
+export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const { host, room, protocol, query, protocols, ...socketOptions } =

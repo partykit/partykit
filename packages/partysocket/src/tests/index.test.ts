@@ -2,8 +2,8 @@
  * @vitest-environment jsdom
  */
 import { describe, it, afterEach } from "vitest";
-import { dev } from "../cli";
-import { PartySocket } from "../client";
+import { dev } from "partykit/src/cli";
+import PartySocket from "..";
 
 // jsdom doesn't appear to have crypto.randomUUID
 import crypto from "crypto";

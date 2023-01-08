@@ -33,17 +33,6 @@ esbuild.buildSync({
 
 fs.chmodSync("dist/bin.js", 0o755);
 
-// generate dist/client.js
-esbuild.buildSync({
-  entryPoints: ["src/client.ts"],
-  bundle: true,
-  format: "esm",
-  outfile: "dist/client.js",
-  sourcemap: true,
-  minify,
-  // platform: "browser", // ?neutral?
-});
-
 // generate dist/server.js
 esbuild.buildSync({
   entryPoints: ["src/server.ts"],

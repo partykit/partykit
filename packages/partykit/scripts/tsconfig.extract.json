@@ -2,7 +2,7 @@
 
 {
   "extends": "../tsconfig.json",
-  "include": ["../src/client.ts", "../src/server.ts"],
+  "include": ["../src/server.ts"],
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,

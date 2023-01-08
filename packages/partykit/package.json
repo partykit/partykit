@@ -4,8 +4,8 @@
   "description": "Everything's better with friends",
   "bin": "dist/bin.js",
   "exports": {
-    "./client": "./dist/client.js",
-    "./server": "./dist/server.js"
+    "./server": "./dist/server.js",
+    "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
     "@edge-runtime/primitives": "^2.0.2",
@@ -27,7 +27,6 @@
     "find-config": "^1.0.0",
     "http-proxy": "^1.18.1",
     "open": "^8.4.0",
-    "reconnecting-websocket": "^4.4.0",
     "ws": "^8.11.0"
   },
   "files": [
