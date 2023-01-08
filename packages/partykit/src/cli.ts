@@ -1,10 +1,7 @@
-import { runServer, EdgeRuntime } from "edge-runtime";
 import { parse } from "url";
-import { WebSocketServer } from "ws";
 import httpProxy from "http-proxy";
 import express from "express";
 import path from "path";
-import * as esbuild from "esbuild";
 import assert from "assert";
 import open from "open";
 import * as os from "os";
@@ -24,12 +21,15 @@ if (envPath) {
 // A "room" is a server that is running a script,
 // as well as a websocket server distinct to the room.
 type Room = {
-  http: Awaited<ReturnType<typeof runServer>> & {
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  http: Awaited<ReturnType<typeof import("edge-runtime").runServer>> & {
     // This... might not even be necessary??
     __server: HttpServer;
   };
-  ws: WebSocketServer;
-  runtime: EdgeRuntime;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  ws: import("ws").WebSocketServer;
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
+  runtime: import("edge-runtime").EdgeRuntime;
 };
 
 const esbuildOptions = {
@@ -61,6 +61,8 @@ export async function dev(
 
   const absoluteScriptPath = path.resolve(process.cwd(), script);
   let code: string;
+
+  const esbuild = await import("esbuild");
   const buildResult = await esbuild.build({
     stdin: {
       contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
@@ -114,6 +116,8 @@ export async function dev(
       return room;
     }
 
+    const { WebSocketServer } = await import("ws");
+
     const wss = new WebSocketServer({ noServer: true });
 
     const partyRoom: {
@@ -125,6 +129,8 @@ export async function dev(
       connections: new Map(),
       env: envVars,
     };
+
+    const { runServer, EdgeRuntime } = await import("edge-runtime");
 
     const runtime = new EdgeRuntime({
       initialCode: code,
@@ -261,6 +267,7 @@ export async function deploy(
   const user = await getUser();
 
   const absoluteScriptPath = path.resolve(process.cwd(), scriptPath);
+  const esbuild = await import("esbuild");
   const code = esbuild.buildSync({
     entryPoints: [absoluteScriptPath],
     ...esbuildOptions,
