@@ -31,15 +31,18 @@ jobs:
 
       - run: npm ci
 
+      - name: Modify package.json version
+        run: node .github/version-script.js
+
       - run: npm run build
       - run: npm run check
 
-      - id: changesets
-        uses: changesets/action@v1
-        with:
-          version: node .github/changeset-version.js --snapshot
-          publish: npx changeset publish --no-git-tag --tag beta
+      - run: npm publish --tag beta
         env:
-          GITHUB_TOKEN: ${{ secrets.PARTYKIT_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        working-directory: packages/partykit
+
+      - run: npm publish --tag beta
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        working-directory: packages/y-partykit
