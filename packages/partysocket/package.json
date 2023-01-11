@@ -3,10 +3,19 @@
   "version": "0.0.1",
   "description": "party hotline",
   "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/react.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && tsc --project tsconfig.extract.json"
+    "build": "npx esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && npx esbuild src/react.ts --format=esm --outfile=dist/react.js && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
   },
+  "files": [
+    "dist/*.js",
+    "*.d.ts",
+    "*.d.ts.map"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC"
