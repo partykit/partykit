@@ -182,14 +182,16 @@ export async function dev(
       const roomId = url.pathname.split("/")[2];
       const room = await getRoom(roomId);
 
-      const res = await room.runtime.dispatchFetch(
+      const initialRes = await room.runtime.dispatchFetch(
         `http://${request.headers.host}${request.url}`,
         // @ts-expect-error TODO: fix this, set-cookies may be a string[]
         { headers: request.headers }
       );
 
-      if (res.status === 401) {
+      if (initialRes.status === 401) {
         socket.destroy();
+      } else if (initialRes.status === 200) {
+        request.headers["x-pk-initial"] = await initialRes.text();
       }
 
       room.ws.handleUpgrade(request, socket, head, function done(ws) {

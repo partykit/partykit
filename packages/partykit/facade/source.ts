@@ -15,6 +15,7 @@ declare const partyRoom: {
     {
       id: string;
       socket: WebSocket;
+      unstable_initial: unknown;
     }
   >;
 };
@@ -36,16 +37,21 @@ function getRoomIdFromPathname(pathname: string) {
 async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
   if (url.pathname.startsWith("/party/")) {
-    if (
-      Worker.unstable_onValidate &&
-      typeof Worker.unstable_onValidate === "function"
-    ) {
-      const isValid = await Worker.unstable_onValidate(request);
-      if (typeof isValid !== "boolean") {
-        throw new Error(".onValidate() must return a boolean");
+    if (Worker.onBeforeConnect) {
+      let initialRes: unknown;
+      try {
+        initialRes = await Worker.onBeforeConnect(request);
+      } catch (e) {
+        return new Response((e as Error).message || `${e}` || "Unauthorized", {
+          status: 401,
+        });
       }
-      if (!isValid) {
-        return new Response("Unauthorized", { status: 401 });
+      if (initialRes !== undefined) {
+        return new Response(JSON.stringify(initialRes), {
+          headers: {
+            "content-type": "application/json",
+          },
+        });
       }
     }
   }
@@ -60,6 +66,10 @@ if (typeof Worker.onConnect !== "function") {
   throw new Error("onConnect is not a function");
 }
 
+if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
+  throw new Error(".onBeforeConnect should be a function");
+}
+
 wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
   const url = new URL(`http://${request.headers.host}${request.url}`);
 
@@ -69,9 +79,13 @@ wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
   assert(roomId, "roomId is required");
   assert(connectionId, "_pk is required");
 
+  const rawInitial = request.headers["x-pk-initial"];
+  const unstable_initial = rawInitial ? JSON.parse(`${rawInitial}`) : undefined;
+
   partyRoom.connections.set(connectionId, {
     id: connectionId,
     socket: ws,
+    unstable_initial,
   });
 
   function closeOrErrorListener() {
