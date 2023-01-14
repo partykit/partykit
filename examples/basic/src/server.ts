@@ -9,7 +9,7 @@ export default {
       }
     };
   },
-  async unstable_onValidate(_req: Request): Promise<boolean> {
-    return true;
+  async onBeforeConnect(_req: Request) {
+    return { x: 1 };
   },
 } satisfies PartyKitServer;

@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npx esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && npx esbuild src/react.ts --format=esm --outfile=dist/react.js && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
+    "build": "rm -rf dist && npx esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && npx esbuild src/react.ts --format=esm --outfile=dist/react.js && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
   },
   "files": [
     "dist/*.js",

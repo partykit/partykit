@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --watch --sourcemap\" \"npx partykit dev src/server.ts\" \"npx serve public\" --kill-others"
+    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
   },
   "keywords": [],
   "author": "",
