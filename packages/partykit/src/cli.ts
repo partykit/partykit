@@ -11,11 +11,102 @@ import { fetchResult } from "./fetchResult";
 import type { Server as HttpServer } from "http";
 import * as dotenv from "dotenv";
 import findConfig from "find-config";
+import type { PartyKitStorage } from "./server";
+
+import { serialize, deserialize } from "v8";
 
 const envPath = findConfig(".env");
 let envVars = {};
 if (envPath) {
   envVars = dotenv.parse(fs.readFileSync(envPath, "utf8"));
+}
+
+// TODO: this should probably persist across hot reloads
+class RoomStorage implements PartyKitStorage {
+  storage = new Map<string, Buffer>();
+
+  async get<T = unknown>(key: string): Promise<T | undefined>;
+  async get<T = unknown>(keys: string[]): Promise<Map<string, T>>;
+  async get<T = unknown>(
+    key: string | string[]
+  ): Promise<T | undefined | Map<string, T>> {
+    if (typeof key === "string") {
+      return deserialize(this.storage.get(key) ?? serialize(undefined)) as
+        | T
+        | undefined;
+    } else {
+      const result = new Map<string, T>();
+      for (const k of key) {
+        result.set(
+          k,
+          deserialize(this.storage.get(k) ?? serialize(undefined)) as T
+        );
+      }
+      return result;
+    }
+  }
+
+  async list<T = unknown>(options?: {
+    start?: string;
+    startAfter?: string;
+    end?: string;
+    prefix?: string;
+    reverse?: boolean;
+    limit?: number;
+  }): Promise<Map<string, T>> {
+    const result = new Map<string, T>();
+
+    const keys = Array.from(this.storage.keys());
+    keys.sort();
+    if (options?.reverse) keys.reverse();
+
+    for (const key of keys) {
+      if (options?.prefix && !key.startsWith(options.prefix)) continue;
+      if (options?.start && key < options.start) continue;
+      if (options?.startAfter && key <= options.startAfter) continue;
+      if (options?.end && key > options.end) continue;
+      const rawValue = this.storage.get(key);
+      assert(rawValue, "missing value for key");
+      result.set(key, deserialize(rawValue) as T);
+      if (options?.limit && result.size >= options.limit) break;
+    }
+
+    return result;
+  }
+
+  async put<T>(key: string, value: T): Promise<void>;
+  async put<T>(entries: Record<string, T>): Promise<void>;
+  async put<T>(key: string | Record<string, T>, value?: T): Promise<void> {
+    if (typeof key === "string") {
+      this.storage.set(key, serialize(value));
+    } else {
+      for (const [k, v] of Object.entries(key)) {
+        this.storage.set(k, serialize(v));
+      }
+    }
+  }
+
+  async delete(key: string): Promise<boolean>;
+  async delete(keys: string[]): Promise<number>;
+  async delete(key: string | string[]): Promise<boolean | number> {
+    if (typeof key === "string") {
+      return this.storage.delete(key);
+    } else {
+      let count = 0;
+      for (const k of key) {
+        if (this.storage.delete(k)) count++;
+      }
+      return count;
+    }
+  }
+
+  async deleteAll(): Promise<void> {
+    this.storage.clear();
+    return;
+  }
+  // getAlarm(): Promise<number | null>;
+  // setAlarm(scheduledTime: number | Date): Promise<void>;
+  // deleteAlarm(): Promise<void>;
 }
 
 // A "room" is a server that is running a script,
@@ -124,10 +215,12 @@ export async function dev(
       id: string;
       connections: Map<string, { id: string; socket: WebSocket }>;
       env: Record<string, string>;
+      storage: RoomStorage;
     } = {
       id: roomId,
       connections: new Map(),
       env: envVars,
+      storage: new RoomStorage(),
     };
 
     const { runServer, EdgeRuntime } = await import("edge-runtime");

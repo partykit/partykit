@@ -7,18 +7,11 @@ import type { WebSocketServer } from "ws";
 // this is a node type, careful
 import type { IncomingMessage } from "http";
 
+import type { PartyKitServer, PartyKitRoom } from "../src/server";
+
+declare const Worker: PartyKitServer;
 declare const wss: WebSocketServer;
-declare const partyRoom: {
-  id: string;
-  connections: Map<
-    string,
-    {
-      id: string;
-      socket: WebSocket;
-      unstable_initial: unknown;
-    }
-  >;
-};
+declare const partyRoom: PartyKitRoom;
 
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
