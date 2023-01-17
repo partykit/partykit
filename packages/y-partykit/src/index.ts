@@ -1,3 +1,5 @@
+// Our dev environment has a problem where yjs doesn't
+// "work", so we use a special build
 import {
   Y,
   syncProtocol,
@@ -7,49 +9,23 @@ import {
   map,
 } from "../vendor/ylibs";
 
+// Let's also export it all for anyone else to use
+export * from "../vendor/ylibs";
+
 import debounce from "lodash.debounce";
 import type { PartyKitRoom } from "partykit/server";
+import { YPartyKitStorage } from "./storage";
+
+function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new Error(message);
+  }
+}
 
 const wsReadyStateConnecting = 0;
 const wsReadyStateOpen = 1;
 const wsReadyStateClosing = 2; // eslint-disable-line
 const wsReadyStateClosed = 3; // eslint-disable-line
-
-type Persistence = {
-  bindState: (arg0: string, arg1: WSSharedDoc) => void;
-  writeState: (arg0: string, arg1: WSSharedDoc) => Promise<void>;
-};
-
-// const persistenceDir = process.env.YPERSISTENCE;
-
-// const persistence: Persistence = null;
-// if (typeof persistenceDir === 'string') {
-//   console.info('Persisting documents to "' + persistenceDir + '"')
-//   // @ts-ignore
-//   const LeveldbPersistence = require('y-leveldb').LeveldbPersistence
-//   const ldb = new LeveldbPersistence(persistenceDir)
-//   persistence = {
-//     provider: ldb,
-//     bindState: async (docName, ydoc) => {
-//       const persistedYdoc = await ldb.getYDoc(docName)
-//       const newUpdates = Y.encodeStateAsUpdate(ydoc)
-//       ldb.storeUpdate(docName, newUpdates)
-//       Y.applyUpdate(ydoc, Y.encodeStateAsUpdate(persistedYdoc))
-//       ydoc.on('update', update => {
-//         ldb.storeUpdate(docName, update)
-//       })
-//     },
-//     writeState: async (docName, ydoc) => {}
-//   }
-// }
-
-// export function setPersistence(persistence_: Persistence) {
-//   persistence = persistence_;
-// }
-
-// export function getPersistence(): Persistence {
-//   return persistence;
-// }
 
 const docs: Map<string, WSSharedDoc> = new Map();
 
@@ -69,12 +45,17 @@ class WSSharedDoc extends Y.Doc {
   name: string;
   conns: Map<WebSocket, Set<number>>;
   awareness: awarenessProtocol.Awareness;
-  persistence: Persistence | undefined;
+  storage: YPartyKitStorage | undefined;
+  persist: boolean;
 
-  constructor(name: string, options: YPartyKitOptions) {
+  constructor(room: PartyKitRoom, options: YPartyKitOptions) {
     super({ gc: options.gc || false });
-    this.name = name;
-    this.persistence = options.persistence;
+    this.name = room.id;
+    this.persist = options.persist || false;
+
+    if (options.persist) {
+      this.storage = new YPartyKitStorage(room.storage);
+    }
     /**
      * Maps from conn to set of controlled user ids. Delete all user ids from awareness when this conn is closed
      */
@@ -123,6 +104,24 @@ class WSSharedDoc extends Y.Doc {
     this.awareness.on("update", awarenessChangeHandler);
     this.on("update", updateHandler);
   }
+
+  async bindState() {
+    assert(this.storage, "Storage not set");
+    const persistedYdoc = await this.storage.getYDoc(this.name);
+    const newUpdates = Y.encodeStateAsUpdate(this);
+    await this.storage.storeUpdate(this.name, newUpdates);
+    Y.applyUpdate(this, Y.encodeStateAsUpdate(persistedYdoc));
+    this.on("update", (update) => {
+      assert(this.storage, "Storage not set");
+      this.storage.storeUpdate(this.name, update).catch((e) => {
+        console.error("Error storing update", e);
+      });
+    });
+  }
+  async writeState() {
+    assert(this.storage, "Storage not set");
+    // TODO: what should we put here ?
+  }
 }
 
 const CALLBACK_DEFAULTS = {
@@ -154,21 +153,21 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
  * Gets a Y.Doc by name, whether in memory or on disk
  */
 function getYDoc(
-  docname: string, // the name of the Y.Doc to find or create
+  // docname: string, // the name of the Y.Doc to find or create
+  room: PartyKitRoom,
   options: YPartyKitOptions
 ): WSSharedDoc {
-  return map.setIfUndefined(docs, docname, () => {
+  return map.setIfUndefined(docs, room.id, () => {
     const { callback } = options;
-    const doc = new WSSharedDoc(docname, options);
+    const doc = new WSSharedDoc(room, options);
     doc.gc = options.gc || false; // TODO: is this necessary?
     if (callback !== undefined) {
       doc.on(
         "update",
         debounce(
           (update: Uint8Array, origin: WebSocket, doc: WSSharedDoc) => {
-            const room = doc.name;
             const dataToSend = {
-              room,
+              room: doc.name,
               data: {},
             };
 
@@ -212,8 +211,13 @@ function getYDoc(
       );
     }
 
-    doc.persistence?.bindState(docname, doc);
-    docs.set(docname, doc);
+    if (doc.persist) {
+      doc.bindState().catch((e) => {
+        console.error("Error binding state", e);
+      });
+    }
+
+    docs.set(room.id, doc);
     return doc;
   });
 }
@@ -263,9 +267,9 @@ function closeConn(doc: WSSharedDoc, conn: WebSocket): void {
       Array.from(controlledIds),
       null
     );
-    if (doc.conns.size === 0 && doc.persistence !== undefined) {
+    if (doc.conns.size === 0 && doc.persist) {
       // if persisted, we store state and destroy ydocument
-      doc.persistence.writeState(doc.name, doc).then(
+      doc.writeState().then(
         () => {
           doc.destroy();
         },
@@ -307,12 +311,11 @@ function send(doc: WSSharedDoc, conn: WebSocket, m: Uint8Array) {
 const pingTimeout = 30000;
 
 export type YPartyKitOptions = {
-  // room: PartyKitRoom;
   /**
    * disable gc when using snapshots!
    * */
   gc?: boolean;
-  persistence?: Persistence;
+  persist?: boolean;
   callback?: {
     url: string;
     debounceWait?: number;
@@ -330,7 +333,7 @@ export function onConnect(
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
 
   // get doc, initialize if it does not exist yet
-  const doc = getYDoc(room.id, options);
+  const doc = getYDoc(room, options);
   doc.conns.set(conn, new Set());
   // listen and reply to events
   conn.addEventListener("message", (message) => {
