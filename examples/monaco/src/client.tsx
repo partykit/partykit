@@ -29,9 +29,18 @@ self.MonacoEnvironment = {
   },
 };
 
+declare const PARTYKIT_HOST: string | undefined;
+
+const partykitHost =
+  typeof PARTYKIT_HOST === "undefined" ? "localhost:1999" : PARTYKIT_HOST;
+
 window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
-  const provider = new YPartyKitProvider("localhost:1999", "monaco", ydoc);
+  const provider = new YPartyKitProvider(
+    partykitHost || "localhost:1999",
+    "monaco-demo",
+    ydoc
+  );
   const type = ydoc.getText("monaco");
 
   const editor = monaco.editor.create(

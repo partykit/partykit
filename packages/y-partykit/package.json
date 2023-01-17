@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist && rm -rf vendor && rm -rf *.d.ts*",
     "build:vendor": "npx esbuild src/ylibs.ts --bundle --outfile=vendor/ylibs.js --format=cjs --minify --sourcemap & tsc --project tsconfig.vendor.json",
-    "build:server": "npx esbuild src/index.ts --outfile=dist/index.js --format=esm --sourcemap",
+    "build:server": "npx esbuild src/index.ts src/storage.ts --outdir=dist --format=esm --sourcemap",
     "build:provider": "npx esbuild src/provider.ts --outfile=dist/provider.js --format=esm --sourcemap",
     "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
     "build": "npm run clean && npm run build:vendor && npm run build:server && npm run build:provider && npm run build:package-types"
