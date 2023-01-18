@@ -6,7 +6,7 @@ const PREFERRED_TRIM_SIZE = 300;
 
 const BINARY_BITS_32 = 0xffffffff;
 
-type StorageKey = Array<string | number>;
+type StorageKey = DocumentStateVectorKey | DocumentUpdateKey;
 
 /**
  * Keys are arrays of strings + numbers, so we keep a
@@ -17,6 +17,7 @@ const keyEncoding = {
     const resultArr = [];
     for (const item of arr) {
       resultArr.push(
+        // TODO: This is a bit hacky, but it works
         typeof item === "string" ? `"${item}"` : `${item}`.padStart(9, "0")
       );
     }
@@ -25,7 +26,9 @@ const keyEncoding = {
   decode(str: string): StorageKey {
     return str
       .split("#")
-      .map((el) => (el.startsWith('"') ? JSON.parse(el) : parseInt(el, 10)));
+      .map((el) =>
+        el.startsWith('"') ? JSON.parse(el) : parseInt(el, 10)
+      ) as StorageKey;
   },
 };
 
@@ -33,7 +36,7 @@ const keyEncoding = {
  * A key + value pair.
  */
 type Datum = {
-  key: (string | number)[];
+  key: StorageKey;
   value: Uint8Array;
 };
 
@@ -42,7 +45,7 @@ type Datum = {
  */
 async function levelGet(
   db: PartyKitStorage,
-  key: (string | number)[]
+  key: StorageKey
 ): Promise<Uint8Array | null> {
   const res = await db.get(keyEncoding.encode(key));
   if (res === undefined) {
@@ -57,7 +60,7 @@ async function levelGet(
  */
 async function levelPut(
   db: PartyKitStorage,
-  key: (string | number)[],
+  key: StorageKey,
   val: Uint8Array
 ): Promise<void> {
   return db.put(keyEncoding.encode(key), val);
@@ -69,8 +72,8 @@ async function levelPut(
 async function getLevelBulkData(
   db: PartyKitStorage,
   opts: {
-    gte: Array<string | number>;
-    lt: Array<string | number>;
+    gte: StorageKey;
+    lt: StorageKey;
     keys: boolean;
     values: boolean;
     reverse?: boolean;
@@ -149,8 +152,8 @@ async function getCurrentUpdateClock(
 
 async function clearRange(
   db: PartyKitStorage,
-  gte: Array<string | number>, // Greater than or equal
-  lt: Array<string | number> // lower than (not equal)
+  gte: StorageKey, // Greater than or equal
+  lt: StorageKey // lower than (not equal)
 ): Promise<void> {
   const datums = await getLevelBulkData(db, {
     values: false,
@@ -160,6 +163,7 @@ async function clearRange(
   });
   if (datums.length > 128) {
     throw new Error("Too many keys to clear");
+    // TODO: We should probably do this in batches
   } else {
     await db.delete(datums.map((d) => keyEncoding.encode(d.key)));
   }
@@ -182,10 +186,13 @@ async function clearUpdatesRange(
  * Create a unique key for a update message.
  * We encode the result using `keyEncoding` which expects an array.
  */
+type DocumentUpdateKey = ["v1", string, "update", number];
+type DocumentStateVectorKey = ["v1_sv", string];
+
 function createDocumentUpdateKey(
   docName: string,
   clock: number
-): Array<string | number> {
+): DocumentUpdateKey {
   return ["v1", docName, "update", clock];
 }
 
@@ -210,7 +217,7 @@ function createDocumentUpdateKey(
  * (This might make more sense for level db style databases, but not so much for DOs)
  * @param {string} docName
  */
-function createDocumentStateVectorKey(docName: string) {
+function createDocumentStateVectorKey(docName: string): DocumentStateVectorKey {
   return ["v1_sv", docName];
 }
 
