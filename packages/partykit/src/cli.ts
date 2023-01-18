@@ -1,6 +1,4 @@
 import { parse } from "url";
-import httpProxy from "http-proxy";
-import express from "express";
 import path from "path";
 import assert from "assert";
 import open from "open";
@@ -8,18 +6,42 @@ import * as os from "os";
 import * as fs from "fs";
 import chalk from "chalk";
 import { fetchResult } from "./fetchResult";
-import type { Server as HttpServer } from "http";
+import { serialize, deserialize } from "v8";
 import * as dotenv from "dotenv";
 import findConfig from "find-config";
 import type { PartyKitStorage } from "./server";
+import type { Server as HttpServer } from "http";
 
-import { serialize, deserialize } from "v8";
+const MAX_KEYS = 128;
+const MAX_KEY_SIZE = 2048; /* 2KiB */
+const MAX_VALUE_SIZE = 128 * 1024; /* 128KiB */
+// As V8 serialisation adds some tagging information, Workers actually allows
+// values to be 32 bytes greater than the advertised limit. This allows 128KiB
+// byte arrays to be stored for example.
+const ENFORCED_MAX_VALUE_SIZE = MAX_VALUE_SIZE + 32;
+
+function assertKeySize(key: string, many = false) {
+  if (Buffer.byteLength(key) <= MAX_KEY_SIZE) return;
+  if (many) {
+    throw new RangeError(
+      `Key "${key}" is larger than the limit of ${MAX_KEY_SIZE} bytes.`
+    );
+  }
+  throw new RangeError(`Keys cannot be larger than ${MAX_KEY_SIZE} bytes.`);
+}
+
+function assertValueSize(value: Buffer, key?: string) {
+  if (value.byteLength <= ENFORCED_MAX_VALUE_SIZE) return;
+  if (key !== undefined) {
+    throw new RangeError(
+      `Value for key "${key}" is above the limit of ${MAX_VALUE_SIZE} bytes.`
+    );
+  }
+  throw new RangeError(`Values cannot be larger than ${MAX_VALUE_SIZE} bytes.`);
+}
 
 const envPath = findConfig(".env");
-let envVars = {};
-if (envPath) {
-  envVars = dotenv.parse(fs.readFileSync(envPath, "utf8"));
-}
+const envVars = envPath ? dotenv.parse(fs.readFileSync(envPath, "utf8")) : {};
 
 // TODO: this should probably persist across hot reloads
 class RoomStorage implements PartyKitStorage {
@@ -31,12 +53,17 @@ class RoomStorage implements PartyKitStorage {
     key: string | string[]
   ): Promise<T | undefined | Map<string, T>> {
     if (typeof key === "string") {
+      assertKeySize(key);
       return deserialize(this.storage.get(key) ?? serialize(undefined)) as
         | T
         | undefined;
     } else {
+      if (key.length > MAX_KEYS) {
+        throw new RangeError(`Maximum number of keys is ${MAX_KEYS}.`);
+      }
       const result = new Map<string, T>();
       for (const k of key) {
+        assertKeySize(k, true);
         result.set(
           k,
           deserialize(this.storage.get(k) ?? serialize(undefined)) as T
@@ -78,10 +105,19 @@ class RoomStorage implements PartyKitStorage {
   async put<T>(entries: Record<string, T>): Promise<void>;
   async put<T>(key: string | Record<string, T>, value?: T): Promise<void> {
     if (typeof key === "string") {
-      this.storage.set(key, serialize(value));
+      assertKeySize(key);
+      const serialised = serialize(value);
+      assertValueSize(serialised, key);
+      this.storage.set(key, serialised);
     } else {
+      if (Object.keys(key).length > MAX_KEYS) {
+        throw new RangeError(`Maximum number of pairs is ${MAX_KEYS}.`);
+      }
       for (const [k, v] of Object.entries(key)) {
-        this.storage.set(k, serialize(v));
+        assertKeySize(k, true);
+        const serialised = serialize(v);
+        assertValueSize(serialised, k);
+        this.storage.set(k, serialised);
       }
     }
   }
@@ -90,10 +126,15 @@ class RoomStorage implements PartyKitStorage {
   async delete(keys: string[]): Promise<number>;
   async delete(key: string | string[]): Promise<boolean | number> {
     if (typeof key === "string") {
+      assertKeySize(key);
       return this.storage.delete(key);
     } else {
+      if (key.length > MAX_KEYS) {
+        throw new RangeError(`Maximum number of pairs is ${MAX_KEYS}.`);
+      }
       let count = 0;
       for (const k of key) {
+        assertKeySize(k, true);
         if (this.storage.delete(k)) count++;
       }
       return count;
@@ -241,10 +282,13 @@ export async function dev(
     return room;
   }
 
-  const app = express();
+  const express = await import("express");
+  const httpProxy = await import("http-proxy");
+
+  const app = express.default();
 
   // what we use to proxy requests to the room server
-  const proxy = httpProxy.createProxyServer();
+  const proxy = httpProxy.default.createProxyServer();
 
   // TODO: maybe we can just use urlpattern here
   app.get("/party/:roomId", async (req, res) => {
