@@ -191,55 +191,6 @@ export async function dev(
   // A map of room names to room servers.
   const rooms: Rooms = new Map();
 
-  const absoluteScriptPath = path.resolve(process.cwd(), script);
-  let code: string;
-
-  const esbuild = await import("esbuild");
-  const buildResult = await esbuild.build({
-    stdin: {
-      contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
-      resolveDir: process.cwd(),
-      // TODO: setting a sourcefile name crashes the whole thing???
-      // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
-    },
-    watch: {
-      onRebuild(error, result) {
-        if (error) {
-          console.log(chalk.red("Build failed: " + error.message));
-          return;
-        }
-        if (!result || !result.outputFiles) {
-          console.log(chalk.red("Build failed: no result"));
-          return;
-        }
-
-        console.log(chalk.green("Build succeeded, restarting rooms..."));
-
-        // shut down all rooms, and then reboot them
-        // with the new code
-
-        const closed = [...rooms.keys()];
-        rooms.forEach((room) => {
-          // TODO: wait for all .close() calls to finish
-          room.http.__server.close();
-          room.ws.clients.forEach((client) => client.close());
-          room.ws.close();
-        });
-        rooms.clear();
-        code = result.outputFiles[0].text;
-        closed.forEach((roomId) => {
-          getRoom(roomId).catch((err) => {
-            console.error(`could not get room ${roomId}`, err);
-          });
-        });
-      },
-    },
-    ...esbuildOptions,
-    sourcemap: true,
-  });
-
-  code = buildResult.outputFiles[0].text;
-
   // This is the function that gets/creates a room server.
   async function getRoom(roomId: string): Promise<Room> {
     if (rooms.has(roomId)) {
@@ -281,6 +232,66 @@ export async function dev(
     rooms.set(roomId, room);
     return room;
   }
+
+  const absoluteScriptPath = path.resolve(process.cwd(), script);
+  let code = `
+    addEventListener("fetch", (event) => {
+      console.warn('Server not built yet');
+      event.respondWith(new Response('Server not built yet', { status: 500 }));
+    })
+  `;
+
+  const esbuild = await import("esbuild");
+
+  let isFirstBuild = true;
+
+  const ctx = await esbuild.context({
+    stdin: {
+      contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
+      resolveDir: process.cwd(),
+      // TODO: setting a sourcefile name crashes the whole thing???
+      // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
+    },
+    ...esbuildOptions,
+    sourcemap: true,
+    plugins: [
+      {
+        name: "partykit",
+        setup(build) {
+          build.onEnd((result) => {
+            if (result.errors.length > 0) return;
+            if (!result || !result.outputFiles) {
+              console.error(chalk.red("Build failed: no result"));
+              return;
+            }
+
+            if (isFirstBuild) {
+              isFirstBuild = false;
+              console.log(chalk.green("Build succeeded, starting rooms..."));
+            } else {
+              console.log(chalk.green("Build succeeded, restarting rooms..."));
+            }
+            code = result.outputFiles[0].text;
+            const closed = [...rooms.keys()];
+            rooms.forEach((room) => {
+              // TODO: wait for all .close() calls to finish
+              room.http.__server.close();
+              room.ws.clients.forEach((client) => client.close());
+              room.ws.close();
+            });
+            rooms.clear();
+            closed.forEach((roomId) => {
+              getRoom(roomId).catch((err) => {
+                console.error(`could not get room ${roomId}`, err);
+              });
+            });
+          });
+        },
+      },
+    ],
+  });
+
+  await ctx.watch(); // turn on watch mode
 
   const express = await import("express");
   const httpProxy = await import("http-proxy");
