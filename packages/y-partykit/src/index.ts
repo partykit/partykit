@@ -120,7 +120,8 @@ class WSSharedDoc extends Y.Doc {
   }
   async writeState() {
     assert(this.storage, "Storage not set");
-    // TODO: what should we put here ?
+    const newUpdates = Y.encodeStateAsUpdate(this);
+    await this.storage.storeUpdate(this.name, newUpdates);
   }
 }
 
