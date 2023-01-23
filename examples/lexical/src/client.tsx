@@ -11,9 +11,10 @@ import YPartyKitProvider from "y-partykit/provider";
 
 import { createRoot } from "react-dom/client";
 
-// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-const root = createRoot(document.getElementById("root")!);
-root.render(<Editor />);
+declare const PARTYKIT_HOST: string | undefined;
+
+const partykitHost =
+  typeof PARTYKIT_HOST === "undefined" ? "localhost:1999" : PARTYKIT_HOST;
 
 function Editor() {
   const initialConfig = {
@@ -38,7 +39,11 @@ function Editor() {
           const doc = new Y.Doc();
           yjsDocMap.set(id, doc);
 
-          const provider = new YPartyKitProvider("localhost:1999", id, doc);
+          const provider = new YPartyKitProvider(
+            partykitHost || "localhost:1999",
+            id,
+            doc
+          );
 
           return provider;
         }}
@@ -47,3 +52,7 @@ function Editor() {
     </LexicalComposer>
   );
 }
+
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const root = createRoot(document.getElementById("root")!);
+root.render(<Editor />);

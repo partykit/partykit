@@ -43,33 +43,73 @@ type Datum = {
 /**
  * This helper method returns `null` if the key is not found.
  */
-async function levelGet(
+export async function levelGet(
   db: PartyKitStorage,
   key: StorageKey
 ): Promise<Uint8Array | null> {
-  const res = await db.get(keyEncoding.encode(key));
-  if (res === undefined) {
+  const prefix = keyEncoding.encode(key);
+
+  const res = (await db.list({
+    start: prefix,
+    end: `${prefix}#zzzzz`,
+  })) as Map<string, Uint8Array>;
+
+  if (res.size === 0) {
     return null;
   }
 
-  return res as Uint8Array;
+  // combine all the values into one
+  const finalArrayLength = Array.from(res.values()).reduce(
+    (acc, val) => acc + val.length,
+    0
+  );
+
+  const finalArray = new Uint8Array(finalArrayLength);
+  let offset = 0;
+  for (const val of res.values()) {
+    finalArray.set(val, offset);
+    offset += val.length;
+  }
+
+  return finalArray;
 }
 
 /**
  * Set a key + value in storage
  */
-async function levelPut(
+export async function levelPut(
   db: PartyKitStorage,
   key: StorageKey,
   val: Uint8Array
 ): Promise<void> {
-  return db.put(keyEncoding.encode(key), val);
+  // split the val into 128kb chunks
+  const chunks = [];
+  for (let i = 0; i < val.length; i += 128 * 1024) {
+    chunks.push(val.slice(i, i + 128 * 1024));
+  }
+
+  const keyPrefix = keyEncoding.encode(key);
+  for (let i = 0; i < chunks.length; i++) {
+    await db.put(`${keyPrefix}#${i}`, chunks[i]);
+  }
+}
+
+function groupBy<T>(arr: T[], fn: (el: T) => string): Map<string, T[]> {
+  const map = new Map();
+  for (const el of arr) {
+    const key = fn(el);
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key).push(el);
+  }
+  return map;
 }
 
 /**
  * A "bulkier" implementation of getting keys and/or values.
  */
-async function getLevelBulkData(
+export async function getLevelBulkData(
   db: PartyKitStorage,
   opts: {
     gte: StorageKey;
@@ -80,26 +120,38 @@ async function getLevelBulkData(
     limit?: number;
   }
 ): Promise<Datum[]> {
-  const res = await db.list({
+  const res = await db.list<Uint8Array>({
     start: keyEncoding.encode(opts.gte),
     end: keyEncoding.encode(opts.lt),
     reverse: opts.reverse,
     limit: opts.limit,
   });
 
-  const arr = [];
-  for (const [key, value] of res.entries()) {
-    const ret = {} as Datum;
-    if (opts.keys) {
-      ret.key = keyEncoding.decode(key);
-    }
-    if (opts.values) {
-      ret.value = value as Uint8Array;
+  const grouped = groupBy(Array.from(res.entries()), ([key]) =>
+    key.split("#").slice(0, -1).join("#")
+  );
+
+  const result = [];
+  for (const [key, values] of grouped.entries()) {
+    const finalArrayLength = values.reduce(
+      (acc, val) => acc + val[1].length,
+      0
+    );
+
+    const finalArray = new Uint8Array(finalArrayLength);
+    let offset = 0;
+    for (const [, val] of values) {
+      finalArray.set(val, offset);
+      offset += val.length;
     }
 
-    arr.push(ret);
+    result.push({
+      key: keyEncoding.decode(key),
+      value: finalArray,
+    });
   }
-  return arr;
+
+  return result;
 }
 
 /**
@@ -150,7 +202,7 @@ async function getCurrentUpdateClock(
   });
 }
 
-async function clearRange(
+export async function clearRange(
   db: PartyKitStorage,
   gte: StorageKey, // Greater than or equal
   lt: StorageKey // lower than (not equal)
@@ -161,11 +213,15 @@ async function clearRange(
     gte,
     lt,
   });
-  if (datums.length > 128) {
-    throw new Error("Too many keys to clear");
-    // TODO: We should probably do this in batches
-  } else {
-    await db.delete(datums.map((d) => keyEncoding.encode(d.key)));
+
+  // We delete in batches of 128
+  const arr = [];
+  for (const [index, datum] of datums.entries()) {
+    arr.push(keyEncoding.encode(datum.key));
+    if (arr.length === 128 || index === datums.length - 1) {
+      await db.delete(arr);
+      arr.length = 0;
+    }
   }
 }
 

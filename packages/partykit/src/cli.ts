@@ -44,7 +44,7 @@ const envPath = findConfig(".env");
 const envVars = envPath ? dotenv.parse(fs.readFileSync(envPath, "utf8")) : {};
 
 // TODO: this should probably persist across hot reloads
-class RoomStorage implements PartyKitStorage {
+export class RoomStorage implements PartyKitStorage {
   storage = new Map<string, Buffer>();
 
   async get<T = unknown>(key: string): Promise<T | undefined>;
