@@ -6,6 +6,8 @@ export default {
     ws.onmessage = function incoming(evt) {
       if (evt.data === "ping") {
         ws.send(`pong:${room.connections.size}`);
+      } else if (evt.data.startsWith("latency")) {
+        ws.send(evt.data);
       }
     };
   },
