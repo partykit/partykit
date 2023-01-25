@@ -1,16 +1,11 @@
 // Our dev environment has a problem where yjs doesn't
 // "work", so we use a special build
-import {
-  Y,
-  syncProtocol,
-  awarenessProtocol,
-  encoding,
-  decoding,
-  map,
-} from "../vendor/ylibs";
-
-// Let's also export it all for anyone else to use
-export * from "../vendor/ylibs";
+import * as Y from "yjs";
+import * as syncProtocol from "y-protocols/sync";
+import * as awarenessProtocol from "y-protocols/awareness";
+import * as encoding from "lib0/encoding";
+import * as decoding from "lib0/decoding";
+import * as map from "lib0/map";
 
 import debounce from "lodash.debounce";
 import type { PartyKitRoom } from "partykit/server";
