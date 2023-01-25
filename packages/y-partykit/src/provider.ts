@@ -1,5 +1,5 @@
 import { WebsocketProvider } from "y-websocket";
-import type { Y } from "./ylibs";
+import type * as Y from "yjs";
 
 export default class YPartyKitProvider extends WebsocketProvider {
   constructor(

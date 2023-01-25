@@ -29,7 +29,6 @@ module.exports = {
     "lib",
     "coverage",
     ".eslintrc.js",
-    "vendor",
     "*.d.ts",
   ],
   rules: {
