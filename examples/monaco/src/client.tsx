@@ -6,6 +6,8 @@ import YPartyKitProvider from "y-partykit/provider";
 import { MonacoBinding } from "y-monaco";
 import * as monaco from "monaco-editor";
 
+import BetterWebSocket from "partysocket/ws";
+
 self.MonacoEnvironment = {
   getWorkerUrl: function (moduleId, label) {
     if (label === "json") {
@@ -39,8 +41,15 @@ window.addEventListener("load", () => {
   const provider = new YPartyKitProvider(
     partykitHost || "localhost:1999",
     "monaco-demo",
-    ydoc
+    ydoc,
+    {
+      // @ts-expect-error TODO: fix this
+      WebSocketPolyfill: BetterWebSocket,
+    }
   );
+
+  provider.ws?.send("do-the-thing");
+
   const type = ydoc.getText("monaco");
 
   const editor = monaco.editor.create(

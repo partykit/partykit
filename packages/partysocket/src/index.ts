@@ -1,5 +1,5 @@
-import type * as RWS from "./reconnecting-websocket";
-import ReconnectingWebSocket from "./reconnecting-websocket";
+import type * as RWS from "./ws";
+import ReconnectingWebSocket from "./ws";
 
 export type PartySocketOptions = Omit<
   RWS.Options,

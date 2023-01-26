@@ -5,8 +5,8 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
 import { beforeEach, afterEach, test, expect, vitest } from "vitest";
 import WebSocket from "ws";
-import type { ErrorEvent } from "../reconnecting-websocket";
-import ReconnectingWebSocket from "../reconnecting-websocket";
+import type { ErrorEvent } from "../ws";
+import ReconnectingWebSocket from "../ws";
 import { spawn } from "child_process";
 const WebSocketServer = WebSocket.Server;
 

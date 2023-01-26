@@ -5,11 +5,13 @@
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
+    "./ws": "./dist/ws.js",
     "./react": "./dist/react.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && npx esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && npx esbuild src/react.ts --format=esm --outfile=dist/react.js && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
+    "clean": "rm -rf dist && rm -rf *.d.ts*",
+    "build": "npm run clean && npx esbuild src/index.ts src/react.ts src/ws.ts --format=esm --outdir=dist && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
   },
   "files": [
     "dist/*.js",
