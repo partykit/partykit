@@ -25,7 +25,7 @@ export default {
 };
 ```
 
-Then run `npx partykit dev server.ts` to start the server for local development. You can later deploy it to the cloud with `npx partykit publish server.ts --name my-party`.
+Then run `npx partykit dev server.ts` to start the server for local development. You can later deploy it to the cloud with `npx partykit deploy server.ts --name my-party`.
 
 Then, in your application, you can connect to this server with a simple client:
 
