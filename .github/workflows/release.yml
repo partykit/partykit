@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    if: ${{ github.repository_owner == 'threepointone' }}
+    if: ${{ github.repository_owner == 'threepointone' || github.repository_owner == 'partykit' }}
     timeout-minutes: 5
     runs-on: ubuntu-22.04
 
