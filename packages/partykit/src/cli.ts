@@ -11,6 +11,7 @@ import * as dotenv from "dotenv";
 import findConfig from "find-config";
 import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
+import type { BuildOptions } from "esbuild";
 
 const MAX_KEYS = 128;
 const MAX_KEY_SIZE = 2048; /* 2KiB */
@@ -164,7 +165,7 @@ type Room = {
   runtime: import("edge-runtime").EdgeRuntime;
 };
 
-const esbuildOptions = {
+const esbuildOptions: BuildOptions = {
   format: "esm",
   bundle: true,
   write: false,
@@ -419,10 +420,11 @@ export async function deploy(
 
   const absoluteScriptPath = path.resolve(process.cwd(), scriptPath);
   const esbuild = await import("esbuild");
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const code = esbuild.buildSync({
     entryPoints: [absoluteScriptPath],
     ...esbuildOptions,
-  }).outputFiles[0].text;
+  }).outputFiles![0].text;
 
   await fetchResult(`/parties/${user.login}/${options.name}`, {
     method: "POST",
