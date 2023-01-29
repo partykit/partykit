@@ -92,5 +92,7 @@ wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
   ws.addEventListener("close", closeOrErrorListener);
   ws.addEventListener("error", closeOrErrorListener);
 
-  Worker.onConnect(ws, partyRoom);
+  Worker.onConnect(ws, partyRoom)?.catch((err) => {
+    console.error("failed to connect", err);
+  });
 });
