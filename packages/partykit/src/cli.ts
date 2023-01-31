@@ -633,8 +633,38 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    // TODO: get the value from the user
-    const value = "test";
+    const inquirer = await import("inquirer");
+
+    const prompt = inquirer.createPromptModule();
+
+    const { value } = !process.stdin.isTTY
+      ? // the value is being piped in
+        await new Promise<{ value: string }>((resolve, reject) => {
+          const stdin = process.openStdin();
+
+          let data = "";
+
+          stdin.on("data", function (chunk) {
+            data += chunk;
+          });
+
+          stdin.on("end", function () {
+            resolve({ value: data });
+          });
+
+          stdin.on("error", function (err) {
+            reject(err);
+          });
+        })
+      : // the value is being entered manually
+        await prompt({
+          type: "input",
+          name: "value",
+          message: `Enter the value for ${key}`,
+          transformer: (input) => {
+            return "*".repeat(input.length);
+          },
+        });
 
     const res = await fetchResult(
       `/parties/${user.login}/${options.name}/env/${key}`,
