@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
   },
