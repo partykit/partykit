@@ -12,7 +12,9 @@ export async function fetchResult<T>(
   const res = await fetch(`${API_BASE}${api}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      ...(typeof options.body === "string"
+        ? { "Content-Type": "application/json" }
+        : {}),
       Accept: "application/json",
       ...options.headers,
     },

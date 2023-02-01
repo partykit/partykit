@@ -11,7 +11,11 @@ import * as dotenv from "dotenv";
 import findConfig from "find-config";
 import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
-import type { BuildOptions } from "esbuild";
+import type { BuildOptions, OnLoadArgs } from "esbuild";
+import * as crypto from "crypto";
+
+// @ts-expect-error File is an experimental feature
+import { File } from "buffer";
 
 const MAX_KEYS = 128;
 const MAX_KEY_SIZE = 2048; /* 2KiB */
@@ -225,6 +229,7 @@ export async function dev(
         Object.assign(context, {
           wss,
           partyRoom,
+          ...wasmModules,
         }),
     });
 
@@ -247,6 +252,8 @@ export async function dev(
 
   let isFirstBuild = true;
 
+  let wasmModules: Record<string, WebAssembly.Module> = {};
+
   const ctx = await esbuild.context({
     stdin: {
       contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
@@ -255,7 +262,9 @@ export async function dev(
       // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
     },
     ...esbuildOptions,
+    format: "cjs",
     sourcemap: true,
+
     plugins: [
       {
         name: "partykit",
@@ -287,6 +296,59 @@ export async function dev(
                 console.error(`could not get room ${roomId}`, err);
               });
             });
+          });
+        },
+      },
+      {
+        name: "partykit-wasm-dev",
+        setup(build) {
+          build.onStart(() => {
+            wasmModules = {};
+          });
+
+          build.onResolve({ filter: /\.wasm$/ }, (args) => {
+            throw new Error(
+              `Cannot import .wasm files directly. Use import "${args.path}?module" instead.`
+            );
+          });
+
+          build.onResolve({ filter: /\.wasm\?module$/ }, (args) => {
+            const filePath = path.join(
+              args.resolveDir,
+              args.path.replace(/\?module$/, "")
+            );
+            const fileContent = fs.readFileSync(filePath);
+            const fileHash = crypto
+              .createHash("sha1")
+              .update(fileContent)
+              .digest("hex");
+            const fileName = `./${fileHash}-${path
+              .basename(args.path)
+              .replace(/\?module$/, "")}`;
+
+            wasmModules[fileName.replace(/[^a-zA-Z0-9_$]/g, "_")] =
+              new WebAssembly.Module(fs.readFileSync(filePath));
+
+            return {
+              path: fileName, // change the reference to the changed module
+              external: false, // mark it as external in the bundle
+              namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
+              watchFiles: [filePath], // we also add the file to esbuild's watch list
+            };
+          });
+
+          build.onLoad({ filter: /\.wasm$/ }, async (args: OnLoadArgs) => {
+            return {
+              // We replace the the module with an identifier
+              // that we'll separately add to the form upload
+              // as part of [wasm_modules]/[text_blobs]/[data_blobs]. This identifier has to be a valid
+              // JS identifier, so we replace all non alphanumeric characters
+              // with an underscore.
+              contents: `export default ${args.path.replace(
+                /[^a-zA-Z0-9_$]/g,
+                "_"
+              )};`,
+            };
           });
         },
       },
@@ -418,17 +480,67 @@ export async function deploy(
   // get user details
   const user = await getUser();
 
+  const wasmModules: Record<string, Buffer> = {};
+
   const absoluteScriptPath = path.resolve(process.cwd(), scriptPath);
   const esbuild = await import("esbuild");
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const code = esbuild.buildSync({
-    entryPoints: [absoluteScriptPath],
-    ...esbuildOptions,
-  }).outputFiles![0].text;
+  const code = (
+    await esbuild.build({
+      entryPoints: [absoluteScriptPath],
+      ...esbuildOptions,
+      plugins: [
+        {
+          name: "partykit-wasm-publish",
+          setup(build) {
+            build.onResolve({ filter: /\.wasm$/ }, (args) => {
+              throw new Error(
+                `Cannot import .wasm files directly. Use import "${args.path}?module" instead.`
+              );
+            });
+
+            build.onResolve({ filter: /\.wasm\?module$/ }, (args) => {
+              const filePath = path.join(
+                args.resolveDir,
+                args.path.replace(/\?module$/, "")
+              );
+              const fileContent = fs.readFileSync(filePath);
+              const fileHash = crypto
+                .createHash("sha1")
+                .update(fileContent)
+                .digest("hex");
+              const fileName = `${fileHash}-${path.basename(
+                args.path,
+                ".wasm?module"
+              )}`;
+
+              wasmModules[fileName] = fs.readFileSync(filePath);
+
+              return {
+                path: fileName, // change the reference to the changed module
+                external: true, // mark it as external in the bundle
+                namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
+              };
+            });
+          },
+        },
+      ],
+    })
+  ).outputFiles![0].text;
+
+  const form = new FormData();
+
+  form.set("code", code);
+  for (const [fileName, buffer] of Object.entries(wasmModules)) {
+    form.set(
+      `upload/${fileName}`,
+      new File([buffer], `upload/${fileName}`, { type: "application/wasm" })
+    );
+  }
 
   await fetchResult(`/parties/${user.login}/${options.name}`, {
     method: "POST",
-    body: code,
+    body: form,
     headers: {
       Authorization: `Bearer ${user.access_token}`,
       "X-PartyKit-User-Type": user.type,

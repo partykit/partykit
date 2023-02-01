@@ -1,0 +1,16 @@
+{
+  "name": "@partykit/examples-wasm",
+  "private": true,
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"asc src/fib.asc.ts --outFile src/fib.wasm --optimize\" \"esbuild src/client.ts --bundle --outdir=public/dist --format=esm --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assemblyscript": "^0.26.7"
+  }
+}
