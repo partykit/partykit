@@ -366,7 +366,7 @@ export async function dev(
   const proxy = httpProxy.default.createProxyServer();
 
   // TODO: maybe we can just use urlpattern here
-  app.get("/party/:roomId", async (req, res) => {
+  app.all("/party/:roomId", async (req, res) => {
     const room = await getRoom(req.params.roomId);
 
     proxy.web(req, res, {
