@@ -30,21 +30,34 @@ function getRoomIdFromPathname(pathname: string) {
 async function handleRequest(request: Request): Promise<Response> {
   const url = new URL(request.url);
   if (url.pathname.startsWith("/party/")) {
-    if (Worker.onBeforeConnect) {
-      let initialRes: unknown;
-      try {
-        initialRes = await Worker.onBeforeConnect(request);
-      } catch (e) {
-        return new Response((e as Error).message || `${e}` || "Unauthorized", {
-          status: 401,
-        });
+    if (request.headers.get("upgrade")?.toLowerCase() === "websocket") {
+      if (Worker.onBeforeConnect) {
+        let initialRes: unknown;
+        try {
+          initialRes = await Worker.onBeforeConnect(request);
+        } catch (e) {
+          return new Response(
+            (e as Error).message || `${e}` || "Unauthorized",
+            {
+              status: 401,
+            }
+          );
+        }
+        if (initialRes !== undefined) {
+          return new Response(JSON.stringify(initialRes), {
+            headers: {
+              "content-type": "application/json",
+            },
+          });
+        }
       }
-      if (initialRes !== undefined) {
-        return new Response(JSON.stringify(initialRes), {
-          headers: {
-            "content-type": "application/json",
-          },
-        });
+    } else {
+      let req: Request = request;
+      if (Worker.onBeforeRequest) {
+        req = await Worker.onBeforeRequest(request);
+      }
+      if (Worker.onRequest) {
+        return Worker.onRequest(req, partyRoom);
       }
     }
   }
@@ -55,12 +68,20 @@ addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
 });
 
-if (typeof Worker.onConnect !== "function") {
-  throw new Error("onConnect is not a function");
+if (Worker.onConnect && typeof Worker.onConnect !== "function") {
+  throw new Error(".onConnect is not a function");
 }
 
 if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
   throw new Error(".onBeforeConnect should be a function");
+}
+
+if (Worker.onRequest && typeof Worker.onRequest !== "function") {
+  throw new Error(".onRequest is not a function");
+}
+
+if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
+  throw new Error(".onBeforeRequest should be a function");
 }
 
 wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
@@ -92,7 +113,7 @@ wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
   ws.addEventListener("close", closeOrErrorListener);
   ws.addEventListener("error", closeOrErrorListener);
 
-  Worker.onConnect(ws, partyRoom)?.catch((err) => {
+  Worker.onConnect?.(ws, partyRoom)?.catch((err) => {
     console.error("failed to connect", err);
   });
 });

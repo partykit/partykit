@@ -14,4 +14,16 @@ export default {
   async onBeforeConnect(_req: Request) {
     return { x: 1 };
   },
+  async onBeforeRequest(req: Request) {
+    return new Request(req.url, {
+      headers: {
+        "x-foo": "bar",
+      },
+    });
+  },
+  async onRequest(req: Request, room) {
+    return new Response(
+      "Hello world:" + req.headers.get("x-foo") + " " + room.id
+    );
+  },
 } satisfies PartyKitServer;
