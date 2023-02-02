@@ -311,7 +311,6 @@ export type YPartyKitOptions = {
    * disable gc when using snapshots!
    * */
   gc?: boolean;
-  onCommand?: (command: string, doc: WSSharedDoc) => void | Promise<void>;
   persist?: boolean;
   callback?: {
     url: string;
@@ -336,10 +335,8 @@ export function onConnect(
   conn.addEventListener("message", async (message) => {
     if (typeof message.data !== "string") {
       return messageListener(conn, doc, new Uint8Array(message.data));
-    } else if (options.onCommand) {
-      await options.onCommand(message.data, doc);
     } else {
-      console.warn("unhandled message", message.data);
+      // silently ignore anything else
     }
   });
 
