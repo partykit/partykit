@@ -152,7 +152,7 @@ function semiver(aStr: string, bStr: string, bool?: boolean) {
   );
 }
 
-const MIN_NODE_VERSION = "16";
+const MIN_NODE_VERSION = "16.0.0";
 
 if (semiver(process.versions.node, MIN_NODE_VERSION) < 0) {
   // Note Volta and nvm are also recommended in the official docs:
