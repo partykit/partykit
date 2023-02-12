@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { dev } from "../cli";
 import { WebSocket } from "ws";
+import { fetch } from "undici";
 
 const fixture = `${__dirname}/fixture.js`;
 
@@ -28,17 +29,13 @@ describe("dev", () => {
   it("should start a server for a given input script path", async () => {
     await runDev(fixture, {});
     const res = await fetch("http://localhost:1999/party/theroom");
-    expect(await res.text()).toMatchInlineSnapshot(
-      '"Not found"'
-    );
+    expect(await res.text()).toMatchInlineSnapshot('"Not found"');
   });
 
   it("should start a server on a given port", async () => {
     await runDev(fixture, { port: 9999 });
     const res = await fetch("http://localhost:9999/party/theroom");
-    expect(await res.text()).toMatchInlineSnapshot(
-      '"Not found"'
-    );
+    expect(await res.text()).toMatchInlineSnapshot('"Not found"');
   });
 
   it("should let you connect to a room with a websocket", async () => {

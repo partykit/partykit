@@ -13,6 +13,7 @@ import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
 import type { BuildOptions, OnLoadArgs } from "esbuild";
 import * as crypto from "crypto";
+import { fetch, FormData } from "undici";
 
 // @ts-expect-error File is an experimental feature
 import { File } from "buffer";
@@ -590,7 +591,11 @@ export async function login(): Promise<void> {
         Authorization: `Bearer ${user.access_token}`,
       },
     });
-    if (res.ok && user.login && (await res.json()).login === user.login) {
+    if (
+      res.ok &&
+      user.login &&
+      ((await res.json()) as { login: string }).login === user.login
+    ) {
       console.log(`Logged in as ${user.login}`);
       return;
     } else {
@@ -620,7 +625,13 @@ export async function login(): Promise<void> {
   }
 
   const { device_code, user_code, verification_uri, expires_in, interval } =
-    await res.json();
+    (await res.json()) as {
+      device_code: string;
+      user_code: string;
+      verification_uri: string;
+      expires_in: number;
+      interval: number;
+    };
 
   console.log(
     `Please visit ${chalk.bold(
@@ -658,7 +669,10 @@ export async function login(): Promise<void> {
       );
     }
 
-    const { access_token, error } = await res.json();
+    const { access_token, error } = (await res.json()) as {
+      access_token?: string;
+      error?: string;
+    };
 
     // now get the username
     const githubUserDetails = (await (

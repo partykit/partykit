@@ -1,4 +1,6 @@
 import assert from "assert";
+import type { RequestInit } from "undici";
+import { fetch } from "undici";
 
 declare const PARTYKIT_API_BASE: string | undefined;
 assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
@@ -20,7 +22,7 @@ export async function fetchResult<T>(
     },
   });
   if (res.ok) {
-    const resJson = await res.json();
+    const resJson = (await res.json()) as T;
     return resJson; // TODO: check json success/error response
   } else {
     let errorText;
