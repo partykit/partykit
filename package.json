@@ -16,7 +16,7 @@
     "repocheck": "manypkg check",
     "typecheck": "npm exec tsc --workspaces",
     "coverage": "vitest run --coverage",
-    "postinstall": "patch-package"
+    "postinstall": "npx patch-package"
   },
   "keywords": [],
   "author": "Sunil Pai <sunil@coolcompuerclub.com>",

@@ -745,9 +745,7 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const inquirer = await import("inquirer");
-
-    const prompt = inquirer.createPromptModule();
+    const { default: prompt } = await import("prompts");
 
     const { value } = !process.stdin.isTTY
       ? // the value is being piped in
@@ -770,12 +768,9 @@ export const env = {
         })
       : // the value is being entered manually
         await prompt({
-          type: "input",
+          type: "password",
           name: "value",
           message: `Enter the value for ${key}`,
-          transformer: (input) => {
-            return "*".repeat(input.length);
-          },
         });
 
     const res = await fetchResult(
