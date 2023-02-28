@@ -11,7 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist && rm -rf *.d.ts*",
-    "build": "npm run clean && npx esbuild src/index.ts src/react.ts src/ws.ts --format=esm --outdir=dist && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
+    "build": "npm run clean && npx esbuild src/index.ts src/react.ts src/ws.ts --format=cjs --outdir=dist && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
   },
   "files": [
     "dist/*.js",
