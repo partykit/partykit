@@ -34,7 +34,7 @@ async function handleRequest(request: Request): Promise<Response> {
       if (Worker.onBeforeConnect) {
         let initialRes: unknown;
         try {
-          initialRes = await Worker.onBeforeConnect(request);
+          initialRes = await Worker.onBeforeConnect(request, partyRoom);
         } catch (e) {
           return new Response(
             (e as Error).message || `${e}` || "Unauthorized",
