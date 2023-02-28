@@ -184,19 +184,25 @@ function getYDoc(
               };
             });
 
-            // POST to the callback URL
-            fetch(callback.url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(dataToSend),
-              signal: AbortSignal.timeout(
-                callback.timeout || CALLBACK_DEFAULTS.timeout
-              ),
-            }).catch((err) => {
-              console.error("failed to persisr", err);
-            });
+            if (callback.url) {
+              // POST to the callback URL
+              fetch(callback.url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
+                signal: AbortSignal.timeout(
+                  callback.timeout || CALLBACK_DEFAULTS.timeout
+                ),
+              }).catch((err) => {
+                console.error("failed to persist", err);
+              });
+            }
+
+            if (callback.handler) {
+              callback.handler(doc);
+            }
           },
           callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
           {
@@ -313,7 +319,8 @@ export type YPartyKitOptions = {
   gc?: boolean;
   persist?: boolean;
   callback?: {
-    url: string;
+    handler?: (doc: Y.Doc) => void;
+    url?: string;
     debounceWait?: number;
     debounceMaxWait?: number;
     timeout?: number;
