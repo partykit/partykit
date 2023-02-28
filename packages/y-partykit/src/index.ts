@@ -8,6 +8,7 @@ import * as decoding from "lib0/decoding";
 import * as map from "lib0/map";
 
 import debounce from "lodash.debounce";
+import { fetch } from "undici";
 import type { PartyKitRoom } from "partykit/server";
 import { YPartyKitStorage } from "./storage";
 
