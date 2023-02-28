@@ -1,8 +1,8 @@
 // import React from "react";
 // import PartySocket from ".";
-import type { PartySocketOptions } from ".";
-import PartySocket from ".";
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from 'react';
+import type { PartySocketOptions } from '.';
+import PartySocket from '.';
 
 // A React hook that wraps PartySocket
 export default function usePartySocket(options: PartySocketOptions) {
@@ -18,4 +18,5 @@ export default function usePartySocket(options: PartySocketOptions) {
       socketRef.current.close();
     };
   }, []);
+  return socketRef.current;
 }
