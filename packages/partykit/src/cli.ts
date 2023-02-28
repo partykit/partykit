@@ -585,7 +585,13 @@ export async function login(): Promise<void> {
         Authorization: `Bearer ${user.access_token}`,
       },
     });
-    if (res.ok && user.login && (await res.json()).login === user.login) {
+
+    if (
+      res.ok &&
+      user.login &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((await res.json()) as any).login === user.login
+    ) {
       console.log(`Logged in as ${user.login}`);
       return;
     } else {
@@ -615,7 +621,8 @@ export async function login(): Promise<void> {
   }
 
   const { device_code, user_code, verification_uri, expires_in, interval } =
-    await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (await res.json()) as any;
 
   console.log(
     `Please visit ${chalk.bold(
@@ -653,7 +660,8 @@ export async function login(): Promise<void> {
       );
     }
 
-    const { access_token, error } = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { access_token, error } = (await res.json()) as any;
 
     // now get the username
     const githubUserDetails = (await (
