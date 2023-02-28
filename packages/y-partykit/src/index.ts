@@ -164,8 +164,8 @@ async function getYDoc(
   const { callback, load } = options;
 
   // allow caller to provide initial document state
-  if (options.load) {
-    const src = await options.load();
+  if (load) {
+    const src = await load();
     const state = Y.encodeStateAsUpdate(src);
     Y.applyUpdate(doc, state);
   }
