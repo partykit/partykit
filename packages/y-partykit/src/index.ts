@@ -5,7 +5,6 @@ import * as syncProtocol from "y-protocols/sync";
 import * as awarenessProtocol from "y-protocols/awareness";
 import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
-import * as map from "lib0/map";
 
 import debounce from "lodash.debounce";
 import type { PartyKitRoom } from "partykit/server";
