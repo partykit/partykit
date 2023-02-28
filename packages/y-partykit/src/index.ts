@@ -73,9 +73,8 @@ class WSSharedDoc extends Y.Doc {
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
-        const connControlledIDs = /** @type {Set<number>} */ this.conns.get(
-          conn
-        );
+        const connControlledIDs =
+          /** @type {Set<number>} */ this.conns.get(conn);
         if (connControlledIDs !== undefined) {
           added.forEach((clientID) => {
             connControlledIDs.add(clientID);
