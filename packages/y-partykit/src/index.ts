@@ -73,8 +73,9 @@ class WSSharedDoc extends Y.Doc {
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
-        const connControlledIDs =
-          /** @type {Set<number>} */ this.conns.get(conn);
+        const connControlledIDs = /** @type {Set<number>} */ this.conns.get(
+          conn
+        );
         if (connControlledIDs !== undefined) {
           added.forEach((clientID) => {
             connControlledIDs.add(clientID);
@@ -320,6 +321,7 @@ interface CallbackOptions {
 }
 
 // Either handler or url needs to be defined, but not both
+// TODO: Add a runtime check for this
 
 interface HandlerCallbackOptions extends CallbackOptions {
   handler: (doc: Y.Doc) => void;
