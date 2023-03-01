@@ -73,8 +73,9 @@ class WSSharedDoc extends Y.Doc {
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
-        const connControlledIDs =
-          /** @type {Set<number>} */ this.conns.get(conn);
+        const connControlledIDs = /** @type {Set<number>} */ this.conns.get(
+          conn
+        );
         if (connControlledIDs !== undefined) {
           added.forEach((clientID) => {
             connControlledIDs.add(clientID);
@@ -184,19 +185,25 @@ function getYDoc(
               };
             });
 
-            // POST to the callback URL
-            fetch(callback.url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(dataToSend),
-              signal: AbortSignal.timeout(
-                callback.timeout || CALLBACK_DEFAULTS.timeout
-              ),
-            }).catch((err) => {
-              console.error("failed to persisr", err);
-            });
+            if (callback.url) {
+              // POST to the callback URL
+              fetch(callback.url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataToSend),
+                signal: AbortSignal.timeout(
+                  callback.timeout || CALLBACK_DEFAULTS.timeout
+                ),
+              }).catch((err) => {
+                console.error("failed to persist", err);
+              });
+            }
+
+            if (callback.handler) {
+              callback.handler(doc);
+            }
           },
           callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
           {
@@ -306,19 +313,35 @@ function send(doc: WSSharedDoc, conn: WebSocket, m: Uint8Array) {
 
 const pingTimeout = 30000;
 
+interface CallbackOptions {
+  debounceWait?: number;
+  debounceMaxWait?: number;
+  timeout?: number;
+  objects?: Record<string, string>;
+}
+
+// Either handler or url needs to be defined, but not both
+// TODO: Add a runtime check for this
+
+interface HandlerCallbackOptions extends CallbackOptions {
+  handler: (doc: Y.Doc) => void;
+  url?: never;
+}
+
+interface UrlCallbackOptions extends CallbackOptions {
+  handler?: never;
+  url: string;
+}
+
+type YPartyKitCallbackOptions = HandlerCallbackOptions | UrlCallbackOptions;
+
 export type YPartyKitOptions = {
   /**
    * disable gc when using snapshots!
    * */
   gc?: boolean;
   persist?: boolean;
-  callback?: {
-    url: string;
-    debounceWait?: number;
-    debounceMaxWait?: number;
-    timeout?: number;
-    objects?: Record<string, string>;
-  };
+  callback?: YPartyKitCallbackOptions;
 };
 
 export function onConnect(
