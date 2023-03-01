@@ -312,20 +312,34 @@ function send(doc: WSSharedDoc, conn: WebSocket, m: Uint8Array) {
 
 const pingTimeout = 30000;
 
+interface CallbackOptions {
+  debounceWait?: number;
+  debounceMaxWait?: number;
+  timeout?: number;
+  objects?: Record<string, string>;
+}
+
+// Either handler or url needs to be defined, but not both
+
+interface HandlerCallbackOptions extends CallbackOptions {
+  handler: (doc: Y.Doc) => void;
+  url?: never;
+}
+
+interface UrlCallbackOptions extends CallbackOptions {
+  handler?: never;
+  url: string;
+}
+
+type YPartyKitCallbackOptions = HandlerCallbackOptions | UrlCallbackOptions;
+
 export type YPartyKitOptions = {
   /**
    * disable gc when using snapshots!
    * */
   gc?: boolean;
   persist?: boolean;
-  callback?: {
-    handler?: (doc: Y.Doc) => void;
-    url?: string;
-    debounceWait?: number;
-    debounceMaxWait?: number;
-    timeout?: number;
-    objects?: Record<string, string>;
-  };
+  callback?: YPartyKitCallbackOptions;
 };
 
 export function onConnect(
