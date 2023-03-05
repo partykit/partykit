@@ -1,0 +1,13 @@
+{
+  "name": "@partykit/examples-yjs",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"esbuild src/client.ts --bundle --outdir=public/dist --format=esm --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
