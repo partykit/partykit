@@ -26,7 +26,7 @@
     "build": "npm run clean && npm run build:cjs && npm run build:esm && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
   },
   "files": [
-    "dist/*.js",
+    "dist/**/*.js",
     "*.d.ts",
     "*.d.ts.map"
   ],
