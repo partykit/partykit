@@ -5,7 +5,6 @@ import * as syncProtocol from "y-protocols/sync";
 import * as awarenessProtocol from "y-protocols/awareness";
 import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
-import * as map from "lib0/map";
 
 import debounce from "lodash.debounce";
 import type { PartyKitRoom } from "partykit/server";
@@ -149,80 +148,92 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
 /**
  * Gets a Y.Doc by name, whether in memory or on disk
  */
-function getYDoc(
+async function getYDoc(
   // docname: string, // the name of the Y.Doc to find or create
   room: PartyKitRoom,
   options: YPartyKitOptions
-): WSSharedDoc {
-  return map.setIfUndefined(docs, room.id, () => {
-    const { callback } = options;
-    const doc = new WSSharedDoc(room, options);
-    doc.gc = options.gc || false; // TODO: is this necessary?
-    if (callback !== undefined) {
-      doc.on(
-        "update",
-        debounce(
-          (update: Uint8Array, origin: WebSocket, doc: WSSharedDoc) => {
-            const dataToSend = {
-              room: doc.name,
-              data: {},
-            };
-
-            const callbackObjects: Record<string, string> =
-              callback.objects || CALLBACK_DEFAULTS.objects;
-
-            const sharedObjectList = Object.keys(callbackObjects);
-            sharedObjectList.forEach((sharedObjectName) => {
-              const sharedObjectType = callbackObjects[sharedObjectName];
-              // @ts-expect-error - TODO: fix this
-              dataToSend.data[sharedObjectName] = {
-                type: sharedObjectType,
-                content: getContent(
-                  sharedObjectName,
-                  sharedObjectType,
-                  doc
-                ).toJSON(),
-              };
-            });
-
-            if (callback.url) {
-              // POST to the callback URL
-              fetch(callback.url, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(dataToSend),
-                signal: AbortSignal.timeout(
-                  callback.timeout || CALLBACK_DEFAULTS.timeout
-                ),
-              }).catch((err) => {
-                console.error("failed to persist", err);
-              });
-            }
-
-            if (callback.handler) {
-              callback.handler(doc);
-            }
-          },
-          callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
-          {
-            maxWait:
-              callback.debounceMaxWait || CALLBACK_DEFAULTS.debounceMaxWait,
-          }
-        )
-      );
-    }
-
-    if (doc.persist) {
-      doc.bindState().catch((e) => {
-        console.error("Error binding state", e);
-      });
-    }
-
-    docs.set(room.id, doc);
+): Promise<WSSharedDoc> {
+  let doc = docs.get(room.id);
+  if (doc) {
     return doc;
-  });
+  }
+
+  doc = new WSSharedDoc(room, options);
+
+  const { callback, load } = options;
+
+  // allow caller to provide initial document state
+  if (load) {
+    const src = await load();
+    const state = Y.encodeStateAsUpdate(src);
+    Y.applyUpdate(doc, state);
+  }
+
+  doc.gc = options.gc || false; // TODO: is this necessary?
+  if (callback !== undefined) {
+    doc.on(
+      "update",
+      debounce(
+        (update: Uint8Array, origin: WebSocket, doc: WSSharedDoc) => {
+          const dataToSend = {
+            room: doc.name,
+            data: {},
+          };
+
+          const callbackObjects: Record<string, string> =
+            callback.objects || CALLBACK_DEFAULTS.objects;
+
+          const sharedObjectList = Object.keys(callbackObjects);
+          sharedObjectList.forEach((sharedObjectName) => {
+            const sharedObjectType = callbackObjects[sharedObjectName];
+            // @ts-expect-error - TODO: fix this
+            dataToSend.data[sharedObjectName] = {
+              type: sharedObjectType,
+              content: getContent(
+                sharedObjectName,
+                sharedObjectType,
+                doc
+              ).toJSON(),
+            };
+          });
+
+          if (callback.url) {
+            // POST to the callback URL
+            fetch(callback.url, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dataToSend),
+              signal: AbortSignal.timeout(
+                callback.timeout || CALLBACK_DEFAULTS.timeout
+              ),
+            }).catch((err) => {
+              console.error("failed to persist", err);
+            });
+          }
+
+          if (callback.handler) {
+            callback.handler(doc);
+          }
+        },
+        callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
+        {
+          maxWait:
+            callback.debounceMaxWait || CALLBACK_DEFAULTS.debounceMaxWait,
+        }
+      )
+    );
+  }
+
+  if (doc.persist) {
+    doc.bindState().catch((e) => {
+      console.error("Error binding state", e);
+    });
+  }
+
+  docs.set(room.id, doc);
+  return doc;
 }
 
 function messageListener(
@@ -342,9 +353,10 @@ export type YPartyKitOptions = {
   gc?: boolean;
   persist?: boolean;
   callback?: YPartyKitCallbackOptions;
+  load?: () => Promise<Y.Doc>;
 };
 
-export function onConnect(
+export async function onConnect(
   conn: WebSocket,
   room: PartyKitRoom,
   options: YPartyKitOptions = {}
@@ -352,7 +364,7 @@ export function onConnect(
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
 
   // get doc, initialize if it does not exist yet
-  const doc = getYDoc(room, options);
+  const doc = await getYDoc(room, options);
   doc.conns.set(conn, new Set());
   // listen and reply to events
   conn.addEventListener("message", async (message) => {
