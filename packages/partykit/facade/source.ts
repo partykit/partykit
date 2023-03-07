@@ -34,7 +34,10 @@ async function handleRequest(request: Request): Promise<Response> {
       if (Worker.onBeforeConnect) {
         let initialRes: unknown;
         try {
-          initialRes = await Worker.onBeforeConnect(request);
+          initialRes = await Worker.onBeforeConnect(request, {
+            id: partyRoom.id,
+            env: partyRoom.env,
+          });
         } catch (e) {
           return new Response(
             (e as Error).message || `${e}` || "Unauthorized",
@@ -54,7 +57,10 @@ async function handleRequest(request: Request): Promise<Response> {
     } else {
       let req: Request = request;
       if (Worker.onBeforeRequest) {
-        req = await Worker.onBeforeRequest(request);
+        req = await Worker.onBeforeRequest(request, {
+          id: partyRoom.id,
+          env: partyRoom.env,
+        });
       }
       if (Worker.onRequest) {
         return Worker.onRequest(req, partyRoom);

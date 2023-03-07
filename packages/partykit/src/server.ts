@@ -36,9 +36,15 @@ export type PartyKitRoom = {
 
 export type PartyKitServer<Initial = unknown> = {
   onConnect?: (ws: WebSocket, room: PartyKitRoom) => void | Promise<void>;
-  onBeforeConnect?: (req: Request) => Initial | Promise<Initial>;
+  onBeforeConnect?: (
+    req: Request,
+    room: { id: string; env: Record<string, string> }
+  ) => Initial | Promise<Initial>;
 
-  onBeforeRequest?: (req: Request) => Request | Promise<Request>;
+  onBeforeRequest?: (
+    req: Request,
+    room: { id: string; env: Record<string, string> }
+  ) => Request | Promise<Request>;
   onRequest?: (
     req: Request,
     room: PartyKitRoom
