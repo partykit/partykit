@@ -72,9 +72,8 @@ class WSSharedDoc extends Y.Doc {
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
-        const connControlledIDs = /** @type {Set<number>} */ this.conns.get(
-          conn
-        );
+        const connControlledIDs =
+          /** @type {Set<number>} */ this.conns.get(conn);
         if (connControlledIDs !== undefined) {
           added.forEach((clientID) => {
             connControlledIDs.add(clientID);
@@ -248,7 +247,7 @@ function messageListener(
     switch (messageType) {
       case messageSync:
         encoding.writeVarUint(encoder, messageSync);
-        syncProtocol.readSyncMessage(decoder, encoder, doc, null);
+        syncProtocol.readSyncMessage(decoder, encoder, doc, conn);
 
         // If the `encoder` only contains the type of reply message and no
         // message, there is no need to send the message. When `encoder` only
