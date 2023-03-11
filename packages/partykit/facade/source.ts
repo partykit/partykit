@@ -63,6 +63,7 @@ async function handleRequest(request: Request): Promise<Response> {
         });
       }
       if (reqOrRes instanceof Response) {
+        // TODO: check perf here, we could maybe be faster
         return reqOrRes;
       }
       if (Worker.onRequest) {
