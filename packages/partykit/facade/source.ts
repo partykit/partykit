@@ -55,15 +55,18 @@ async function handleRequest(request: Request): Promise<Response> {
         }
       }
     } else {
-      let req: Request = request;
+      let reqOrRes: Request | Response = request;
       if (Worker.onBeforeRequest) {
-        req = await Worker.onBeforeRequest(request, {
+        reqOrRes = await Worker.onBeforeRequest(request, {
           id: partyRoom.id,
           env: partyRoom.env,
         });
       }
+      if (reqOrRes instanceof Response) {
+        return reqOrRes;
+      }
       if (Worker.onRequest) {
-        return Worker.onRequest(req, partyRoom);
+        return Worker.onRequest(reqOrRes, partyRoom);
       }
     }
   }

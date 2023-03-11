@@ -44,7 +44,7 @@ export type PartyKitServer<Initial = unknown> = {
   onBeforeRequest?: (
     req: Request,
     room: { id: string; env: Record<string, string> }
-  ) => Request | Promise<Request>;
+  ) => Request | Promise<Request> | Response | Promise<Response>;
   onRequest?: (
     req: Request,
     room: PartyKitRoom
