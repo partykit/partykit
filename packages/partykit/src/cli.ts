@@ -9,13 +9,11 @@ import { fetchResult } from "./fetchResult";
 import { serialize, deserialize } from "v8";
 import * as dotenv from "dotenv";
 import findConfig from "find-config";
+import { fetch, File, FormData } from "undici";
 import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
 import type { BuildOptions, OnLoadArgs } from "esbuild";
 import * as crypto from "crypto";
-
-// @ts-expect-error File is an experimental feature
-import { File } from "buffer";
 
 const MAX_KEYS = 128;
 const MAX_KEY_SIZE = 2048; /* 2KiB */
@@ -519,7 +517,7 @@ export async function deploy(
               return {
                 path: fileName, // change the reference to the changed module
                 external: true, // mark it as external in the bundle
-                namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
+                namespace: "partykit-module-wasm-dev", // just a tag, this isn't strictly necessary
               };
             });
           },
@@ -527,9 +525,7 @@ export async function deploy(
       ],
     })
   ).outputFiles![0].text;
-
   const form = new FormData();
-
   form.set("code", code);
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
     form.set(
@@ -537,7 +533,6 @@ export async function deploy(
       new File([buffer], `upload/${fileName}`, { type: "application/wasm" })
     );
   }
-
   await fetchResult(`/parties/${user.login}/${options.name}`, {
     method: "POST",
     body: form,
@@ -590,7 +585,13 @@ export async function login(): Promise<void> {
         Authorization: `Bearer ${user.access_token}`,
       },
     });
-    if (res.ok && user.login && (await res.json()).login === user.login) {
+
+    if (
+      res.ok &&
+      user.login &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ((await res.json()) as any).login === user.login
+    ) {
       console.log(`Logged in as ${user.login}`);
       return;
     } else {
@@ -620,7 +621,8 @@ export async function login(): Promise<void> {
   }
 
   const { device_code, user_code, verification_uri, expires_in, interval } =
-    await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (await res.json()) as any;
 
   console.log(
     `Please visit ${chalk.bold(
@@ -658,7 +660,8 @@ export async function login(): Promise<void> {
       );
     }
 
-    const { access_token, error } = await res.json();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { access_token, error } = (await res.json()) as any;
 
     // now get the username
     const githubUserDetails = (await (

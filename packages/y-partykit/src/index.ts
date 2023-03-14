@@ -7,6 +7,7 @@ import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
 
 import debounce from "lodash.debounce";
+import { fetch } from "undici";
 import type { PartyKitRoom } from "partykit/server";
 import { YPartyKitStorage } from "./storage";
 
