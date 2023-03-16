@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "concurrently \"esbuild src/client.ts --bundle --outdir=public/dist --format=esm --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+    "start": "concurrently \"esbuild src/client.ts --bundle --outdir=public/dist --format=esm --servedir=public\" \"npx partykit dev  --var A=456 B=789=123 --define SOME_GLOBAL=88888 \" --kill-others"
   },
   "keywords": [],
   "author": "",

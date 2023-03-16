@@ -28,7 +28,9 @@ afterEach(async () => {
 
 describe("socket", () => {
   it("uh, connects?", async () => {
-    await runDev(fixture);
+    await runDev({
+      main: fixture,
+    });
 
     const partySocket = new PartySocket({
       host: "localhost:1999",

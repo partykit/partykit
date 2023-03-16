@@ -1,5 +1,6 @@
 #!/usr/bin/env node --enable-source-maps
 import * as cli from "./cli";
+import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
 import { program, Option } from "commander";
 
@@ -40,34 +41,95 @@ program
 program
   .command("dev")
   .description("run a script in development mode")
-  .argument("<script>", "path to the script to run")
+  .argument("[script]", "path to the script to run")
   .option("-p, --port", "port to run the server on")
+  // .option("--assets", "path to assets directory")
+  .option("-c, --config <path>", "path to config file")
+  // .option("-e, --env", "environment to use")
+  .option(
+    "-v, --var [vars...]",
+    "A key-value pair to be injected into the script as a variable"
+  )
+  .option(
+    "-d, --define [defines...]",
+    "A key-value pair to be substituted in the project"
+  )
   .action(async (scriptPath, options) => {
-    await cli.dev(scriptPath, { port: options.port });
+    const varsArr = (options.var as string[]) || [];
+    const vars = varsArr.reduce((acc, curr) => {
+      const [key, ...value] = curr.split("=");
+      acc[key] = value.join("=");
+      return acc;
+    }, {} as Record<string, string>);
+    const definesArr = (options.define as string[]) || [];
+    const defines = definesArr.reduce((acc, curr) => {
+      const [key, ...value] = curr.split("=");
+      acc[key] = value.join("=");
+      return acc;
+    }, {} as Record<string, string>);
+    await cli.dev({
+      main: scriptPath,
+      port: options.port,
+      config: options.config,
+      // assets: options.assets,
+      vars,
+      define: defines,
+    });
   });
 
 program
   .command("deploy")
+  .alias("publish")
   .description("deploy a script to the internet")
-  .argument("<script>", "path to the script to deploy")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .argument("[script]", "path to the script to deploy")
+  // .option("--assets", "path to assets directory")
+  .option("-c, --config <path>", "path to config file")
+  // .option("-e, --env", "environment to use")
+  .option(
+    "-v, --var [vars...]",
+    "A key-value pair to be injected into the script as a variable"
+  )
+  .option(
+    "-d, --define [defines...]",
+    "A key-value pair to be substituted in the script"
+  )
+  .option("-n, --name <name>", "name of the project")
   .action(async (scriptPath, options) => {
-    await cli.deploy(scriptPath, { name: options.name });
+    const varsArr = (options.var as string[]) || [];
+    const vars = varsArr.reduce((acc, curr) => {
+      const [key, ...value] = curr.split("=");
+      acc[key] = value.join("=");
+      return acc;
+    }, {} as Record<string, string>);
+    const definesArr = (options.define as string[]) || [];
+    const defines = definesArr.reduce((acc, curr) => {
+      const [key, ...value] = curr.split("=");
+      acc[key] = value.join("=");
+      return acc;
+    }, {} as Record<string, string>);
+    await cli.deploy({
+      main: scriptPath,
+      name: options.name,
+      config: options.config,
+      vars,
+      define: defines,
+    });
   });
 
 program
   .command("list")
-  .description("list all deployed scripts")
+  .description("list all deployed projects")
   .action(async () => {
     await cli.list();
   });
 
 program
   .command("delete")
-  .description("delete a deployed script")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .description("delete a deployed project")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
   .action(async (options) => {
-    await cli._delete({ name: options.name });
+    await cli._delete(options);
   });
 
 const envCommand = program.command("env");
@@ -75,7 +137,8 @@ const envCommand = program.command("env");
 envCommand
   .command("list")
   .description("list all environment variables")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
   .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (options) => {
@@ -85,18 +148,30 @@ envCommand
 envCommand
   .command("pull")
   .description("pull environment variables to a file")
-  .argument("<file>", "file to pull development env vars to")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .argument("[file]", "file to pull development env vars to")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
   // implies "development" environment
   .action(async (fileName, options) => {
-    await cli.env.pull(fileName, options);
+    await cli.env.pull(fileName || ".env", options);
+  });
+
+envCommand
+  .command("push")
+  .description("push environment variables from config file(s)")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
+  // implies "development" environment
+  .action(async (options) => {
+    await cli.env.push(options);
   });
 
 envCommand
   .command("add")
   .description("add an environment variable")
   .argument("<key>", "name of the environment variable")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
   .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (key, options) => {
@@ -107,7 +182,8 @@ envCommand
   .command("remove")
   .description("remove an environment variable")
   .argument("<key>", "name of the environment variable")
-  .requiredOption("-n, --name <name>", "name of the script")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
   .addOption(EnvironmentOption)
   .action(async (key, options) => {
     await cli.env.remove(key, options);
@@ -117,14 +193,14 @@ program
   .command("login")
   .description("login to partykit")
   .action(async () => {
-    await cli.login();
+    await fetchUserConfig();
   });
 
 program
   .command("logout")
   .description("logout from partykit")
   .action(async () => {
-    await cli.logout();
+    await logout();
   });
 
 // semiver implementation via https://github.com/lukeed/semiver/blob/ae7eebe6053c96be63032b14fb0b68e2553fcac4/src/index.js
