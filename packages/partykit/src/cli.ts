@@ -200,11 +200,15 @@ export async function dev(options: {
   vars?: Record<string, unknown> | undefined;
   define?: Record<string, string> | undefined;
 }): Promise<{ close: () => Promise<void> }> {
-  const config = getConfig(options.config, {
-    main: options.main,
-    vars: options.vars,
-    define: options.define,
-  });
+  const config = getConfig(
+    options.config,
+    {
+      main: options.main,
+      vars: options.vars,
+      define: options.define,
+    },
+    { readEnvLocal: true }
+  );
 
   if (!config.main) throw new Error("script path is missing");
 
