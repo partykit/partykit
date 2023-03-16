@@ -27,15 +27,15 @@
     "@manypkg/cli": "^0.19.2",
     "@typescript-eslint/eslint-plugin": "^5.48.2",
     "@typescript-eslint/parser": "^5.48.2",
-    "@vitest/coverage-c8": "^0.27.2",
+    "@vitest/coverage-c8": "^0.29.3",
     "concurrently": "^7.6.0",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.32.0",
-    "jsdom": "^21.0.0",
+    "jsdom": "^21.1.1",
     "patch-package": "^6.5.1",
     "typescript": "^4.9.4",
     "undici": "^5.21.0",
-    "vitest": "^0.27.2"
+    "vitest": "^0.29.3"
   },
   "engines": {
     "node": ">=16.8.0"

@@ -1,0 +1,17 @@
+{
+  "main": "src/server.ts",
+  "vars": {
+    "$a": 1,
+    "$b": 2,
+    "$c": 3,
+    "$d": {
+      "a": 1,
+      "b": 2,
+      "c": 3
+    }
+  },
+  "define": {
+    "SOME_GLOBAL": "456666",
+    "process.env.WHATUP": "\"what's up\""
+  }
+}

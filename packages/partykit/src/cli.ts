@@ -1,19 +1,22 @@
 import { parse } from "url";
 import path from "path";
 import assert from "assert";
-import open from "open";
-import * as os from "os";
 import * as fs from "fs";
 import chalk from "chalk";
 import { fetchResult } from "./fetchResult";
 import { serialize, deserialize } from "v8";
-import * as dotenv from "dotenv";
-import findConfig from "find-config";
-import { fetch, File, FormData } from "undici";
+import { File, FormData } from "undici";
 import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
 import type { BuildOptions, OnLoadArgs } from "esbuild";
 import * as crypto from "crypto";
+
+import {
+  fetchUserConfig,
+  getConfig,
+  getUserConfig,
+  validateUserConfig,
+} from "./config";
 
 const MAX_KEYS = 128;
 const MAX_KEY_SIZE = 2048; /* 2KiB */
@@ -22,6 +25,20 @@ const MAX_VALUE_SIZE = 128 * 1024; /* 128KiB */
 // values to be 32 bytes greater than the advertised limit. This allows 128KiB
 // byte arrays to be stored for example.
 const ENFORCED_MAX_VALUE_SIZE = MAX_VALUE_SIZE + 32;
+
+async function getUser() {
+  let userConfig;
+  try {
+    userConfig = getUserConfig();
+    if (!validateUserConfig(userConfig)) {
+      throw new Error("Invalid user config");
+    }
+  } catch (e) {
+    await fetchUserConfig();
+    userConfig = getUserConfig();
+  }
+  return userConfig;
+}
 
 function assertKeySize(key: string, many = false) {
   if (Buffer.byteLength(key) <= MAX_KEY_SIZE) return;
@@ -42,9 +59,6 @@ function assertValueSize(value: Buffer, key?: string) {
   }
   throw new RangeError(`Values cannot be larger than ${MAX_VALUE_SIZE} bytes.`);
 }
-
-const envPath = findConfig(".env");
-const envVars = envPath ? dotenv.parse(fs.readFileSync(envPath, "utf8")) : {};
 
 // TODO: this should probably persist across hot reloads
 export class RoomStorage implements PartyKitStorage {
@@ -175,23 +189,25 @@ const esbuildOptions: BuildOptions = {
   minify: true, // TODO: remove this once https://github.com/vercel/edge-runtime/issues/243 is fixed
 } as const;
 
-const CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
-
 // A map of room names to room servers.
 type Rooms = Map<string, Room>;
 
-const GITHUB_APP_ID = "670a9f76d6be706f5209";
+export async function dev(options: {
+  main?: string | undefined; // The path to the script that will be run in the room.
+  port?: number | undefined;
+  // assets: string | undefined;
+  config?: string | undefined;
+  vars?: Record<string, unknown> | undefined;
+  define?: Record<string, string> | undefined;
+}): Promise<{ close: () => Promise<void> }> {
+  const config = getConfig(options.config, {
+    main: options.main,
+    vars: options.vars,
+    define: options.define,
+  });
 
-const workerFacade = fs.readFileSync(
-  path.join(__dirname, "../facade/generated.js"),
-  "utf8"
-);
+  if (!config.main) throw new Error("script path is missing");
 
-export async function dev(
-  script: string, // The path to the script that will be run in the room.
-  options: { port?: number } = {}
-): Promise<{ close: () => Promise<void> }> {
-  if (!script) throw new Error("script path is missing");
   // A map of room names to room servers.
   const rooms: Rooms = new Map();
 
@@ -210,12 +226,12 @@ export async function dev(
     const partyRoom: {
       id: string;
       connections: Map<string, { id: string; socket: WebSocket }>;
-      env: Record<string, string>;
+      env: Record<string, unknown>;
       storage: RoomStorage;
     } = {
       id: roomId,
       connections: new Map(),
-      env: envVars,
+      env: config.vars || {},
       storage: new RoomStorage(),
     };
 
@@ -238,7 +254,7 @@ export async function dev(
     return room;
   }
 
-  const absoluteScriptPath = path.resolve(process.cwd(), script);
+  const absoluteScriptPath = path.join(process.cwd(), config.main);
   let code = `
     addEventListener("fetch", (event) => {
       console.warn('Server not built yet');
@@ -252,6 +268,11 @@ export async function dev(
 
   let wasmModules: Record<string, WebAssembly.Module> = {};
 
+  const workerFacade = fs.readFileSync(
+    path.join(__dirname, "../facade/generated.js"),
+    "utf8"
+  );
+
   const ctx = await esbuild.context({
     stdin: {
       contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
@@ -262,7 +283,10 @@ export async function dev(
     ...esbuildOptions,
     format: "cjs",
     sourcemap: true,
-
+    define: {
+      ...esbuildOptions.define,
+      ...config.define,
+    },
     plugins: [
       {
         name: "partykit",
@@ -360,6 +384,10 @@ export async function dev(
 
   const app = express.default();
 
+  // if (options.assets) {
+  //   app.use(express.static(options.assets));
+  // }
+
   // what we use to proxy requests to the room server
   const proxy = httpProxy.default.createProxyServer();
 
@@ -442,51 +470,40 @@ export async function dev(
   };
 }
 
-type User = {
-  login: string;
-  access_token: string;
-  type: "github";
-};
+export async function deploy(options: {
+  main: string | undefined;
+  name: string;
+  config: string | undefined;
+  vars: Record<string, unknown> | undefined;
+  define: Record<string, string> | undefined;
+}): Promise<void> {
+  const config = getConfig(options.config, options);
 
-async function getUser(): Promise<User> {
-  if (process.env.GITHUB_TOKEN && process.env.GITHUB_LOGIN) {
-    return {
-      login: process.env.GITHUB_LOGIN,
-      access_token: process.env.GITHUB_TOKEN,
-      type: "github",
-    };
-  }
+  const configName = config.name;
+  assert(
+    configName,
+    'Missing project name, please specify "name" in your config'
+  );
 
-  if (!fs.existsSync(CONFIG_PATH)) {
-    await login();
-  }
-  if (!fs.existsSync(CONFIG_PATH)) {
-    throw new Error("login failed");
-  }
-  // TODO: zod
-  const config = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf-8")) as User;
-  return config;
-}
+  assert(config.main, "invariant: main script is missing");
 
-export async function deploy(
-  scriptPath: string,
-  options: { name: string }
-): Promise<void> {
-  if (!scriptPath) throw new Error("script path is missing");
-  if (!options.name) throw new Error("name is missing");
+  const absoluteScriptPath = path.join(process.cwd(), config.main);
 
   // get user details
   const user = await getUser();
 
   const wasmModules: Record<string, Buffer> = {};
 
-  const absoluteScriptPath = path.resolve(process.cwd(), scriptPath);
   const esbuild = await import("esbuild");
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const code = (
     await esbuild.build({
       entryPoints: [absoluteScriptPath],
       ...esbuildOptions,
+      define: {
+        ...esbuildOptions.define,
+        ...config.define,
+      },
       plugins: [
         {
           name: "partykit-wasm-publish",
@@ -527,13 +544,15 @@ export async function deploy(
   ).outputFiles![0].text;
   const form = new FormData();
   form.set("code", code);
+
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
     form.set(
       `upload/${fileName}`,
       new File([buffer], `upload/${fileName}`, { type: "application/wasm" })
     );
   }
-  await fetchResult(`/parties/${user.login}/${options.name}`, {
+
+  await fetchResult(`/parties/${user.login}/${config.name}`, {
     method: "POST",
     body: form,
     headers: {
@@ -543,23 +562,29 @@ export async function deploy(
   });
 
   console.log(
-    `Deployed ${scriptPath} as https://${options.name}.${user.login}.partykit.dev`
+    `Deployed ${config.main} as https://${config.name}.${user.login}.partykit.dev`
   );
 }
 
-export async function _delete(options: { name: string }) {
-  if (!options.name) throw new Error("name is missing");
+export async function _delete(options: {
+  name: string;
+  config: string | undefined;
+}) {
+  const config = getConfig(options.config, options);
+  if (!config.name) {
+    throw new Error("project name is missing");
+  }
   // get user details
   const user = await getUser();
 
-  await fetchResult(`/parties/${user.login}/${options.name}`, {
+  await fetchResult(`/parties/${user.login}/${config.name}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${user.access_token}`,
     },
   });
 
-  console.log(`Deleted https://${options.name}.${user.login}.partykit.dev`);
+  console.log(`Deleted https://${config.name}.${user.login}.partykit.dev`);
 }
 
 export async function list() {
@@ -575,142 +600,24 @@ export async function list() {
   console.log(res);
 }
 
-export async function login(): Promise<void> {
-  // see if we already have a code
-  if (fs.existsSync(CONFIG_PATH)) {
-    const user = JSON.parse(fs.readFileSync(CONFIG_PATH, "utf-8")) as User;
-    // test if code is valid
-    const res = await fetch(`https://api.github.com/user`, {
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
-    });
-
-    if (
-      res.ok &&
-      user.login &&
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ((await res.json()) as any).login === user.login
-    ) {
-      console.log(`Logged in as ${user.login}`);
-      return;
-    } else {
-      console.warn("invalid token detected, logging in again");
-      // delete the existing config file
-      fs.rmSync(CONFIG_PATH);
-    }
-  }
-
-  // run github's oauth device flow
-  // https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow
-  const res = await fetch("https://github.com/login/device/code", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      client_id: GITHUB_APP_ID,
-    }),
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      `Failed to get device code: ${res.status} ${res.statusText}`
-    );
-  }
-
-  const { device_code, user_code, verification_uri, expires_in, interval } =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (await res.json()) as any;
-
-  console.log(
-    `Please visit ${chalk.bold(
-      verification_uri
-    )} and paste the code ${chalk.bold(user_code)}`
-  );
-  console.log(`This code will expire in ${expires_in} seconds`);
-  console.log(`Waiting for you to authorize...`);
-
-  // we do this because for some reason the clipboardy package doesn't work
-  // with a direct import up top
-  const { default: clipboardy } = await import("clipboardy");
-  clipboardy.writeSync(user_code);
-
-  await open(verification_uri);
-
-  const start = Date.now();
-  while (Date.now() - start < expires_in * 1000) {
-    const res = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_APP_ID,
-        device_code,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(
-        `Failed to get access token: ${res.status} ${res.statusText}`
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { access_token, error } = (await res.json()) as any;
-
-    // now get the username
-    const githubUserDetails = (await (
-      await fetch("https://api.github.com/user", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      })
-    ).json()) as { login: string };
-
-    if (access_token) {
-      // now write the token to the config file at ~/.partykit/config.json
-      fs.mkdirSync(path.join(os.homedir(), ".partykit"), { recursive: true });
-      fs.writeFileSync(
-        CONFIG_PATH,
-        JSON.stringify(
-          { access_token, login: githubUserDetails.login, type: "github" },
-          null,
-          2
-        )
-      );
-      console.log(`Logged in as ${chalk.bold(githubUserDetails.login)}`);
-      return;
-    }
-    if (error === "authorization_pending") {
-      await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-      continue;
-    }
-    throw new Error(`Unexpected error: ${error}`);
-  }
-}
-
-export async function logout() {
-  if (fs.existsSync(CONFIG_PATH)) {
-    fs.rmSync(CONFIG_PATH);
-  }
-  // TODO: delete the token from github
-  console.log("Logged out");
-}
-
 type EnvironmentChoice = "production" | "development" | "preview";
 
 export const env = {
-  async list(options: { name: string; env: EnvironmentChoice }) {
+  async list(options: {
+    name: string;
+    env: EnvironmentChoice;
+    config: string | undefined;
+  }) {
     // get user details
     const user = await getUser();
 
+    const config = getConfig(options.config, options);
+    if (!config.name) {
+      throw new Error("project name is missing");
+    }
+
     const res = await fetchResult(
-      `/parties/${user.login}/${options.name}/env?keys=true`,
+      `/parties/${user.login}/${config.name}/env?keys=true`,
       {
         headers: {
           Authorization: `Bearer ${user.access_token}`,
@@ -720,18 +627,23 @@ export const env = {
 
     console.log(res);
   },
-  async pull(fileName: string, options: { name: string }) {
+  async pull(
+    fileName: string,
+    options: { name: string; config: string | undefined }
+  ) {
     // get user details
     const user = await getUser();
 
-    const res = await fetchResult(
-      `/parties/${user.login}/${options.name}/env`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
-    );
+    const config = getConfig(options.config, options);
+    if (!config.name) {
+      throw new Error("project name is missing");
+    }
+
+    const res = await fetchResult(`/parties/${user.login}/${config.name}/env`, {
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+      },
+    });
 
     let fileContent = "";
 
@@ -744,9 +656,47 @@ export const env = {
 
     fs.writeFileSync(fileName, fileContent);
   },
-  async add(key: string, options: { name: string; env: EnvironmentChoice }) {
+  async push(
+    // fileName: string,
+    options: {
+      name: string | undefined;
+      config: string | undefined;
+    }
+  ) {
     // get user details
     const user = await getUser();
+
+    const config = getConfig(options.config, options);
+    if (!config.name) {
+      throw new Error("project name is missing");
+    }
+
+    await fetchResult(`/parties/${user.login}/${config.name}/env`, {
+      method: "POST",
+      body: JSON.stringify(config.vars || {}),
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("Pushed environment variables");
+  },
+  async add(
+    key: string,
+    options: {
+      name: string;
+      env: EnvironmentChoice;
+      config: string | undefined;
+    }
+  ) {
+    // get user details
+    const user = await getUser();
+
+    const config = getConfig(options.config, options);
+    if (!config.name) {
+      throw new Error("project name is missing");
+    }
 
     const { default: prompt } = await import("prompts");
 
@@ -777,7 +727,7 @@ export const env = {
         });
 
     const res = await fetchResult(
-      `/parties/${user.login}/${options.name}/env/${key}`,
+      `/parties/${user.login}/${config.name}/env/${key}`,
       {
         method: "POST",
         body: value,
@@ -789,12 +739,24 @@ export const env = {
 
     console.log(res);
   },
-  async remove(key: string, options: { name: string; env: EnvironmentChoice }) {
+  async remove(
+    key: string,
+    options: {
+      name: string;
+      env: EnvironmentChoice;
+      config: string | undefined;
+    }
+  ) {
     // get user details
     const user = await getUser();
 
+    const config = getConfig(options.config, options);
+    if (!config.name) {
+      throw new Error("project name is missing");
+    }
+
     const res = await fetchResult(
-      `/parties/${user.login}/${options.name}/env/${key}`,
+      `/parties/${user.login}/${config.name}/env/${key}`,
       {
         method: "DELETE",
         headers: {

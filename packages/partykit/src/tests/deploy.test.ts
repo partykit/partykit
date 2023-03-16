@@ -20,16 +20,18 @@ describe("deploy", () => {
   });
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
-    await expect(deploy()).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"script path is missing"'
+    await expect(deploy({})).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Missing entry point, please specify \\"main\\" in your config"'
     );
   });
 
   it("should error without a name", async () => {
     await expect(
       // @ts-expect-error we're purposely not passing a name
-      deploy(fixture, {})
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"name is missing"');
+      deploy({ main: fixture })
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Missing project name, please specify \\"name\\" in your config"'
+    );
   });
 
   it("should build and submit a script to the server", async () => {
@@ -49,8 +51,12 @@ describe("deploy", () => {
         return null;
       }
     );
-    await deploy(fixture, {
+    await deploy({
+      main: fixture,
       name: "test-script",
+      config: undefined,
+      vars: undefined,
+      define: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -64,8 +70,12 @@ describe("deploy", () => {
       }
     );
     await expect(
-      deploy(fixture, {
+      deploy({
+        main: fixture,
         name: "test-script",
+        config: undefined,
+        vars: undefined,
+        define: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });

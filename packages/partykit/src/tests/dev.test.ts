@@ -22,24 +22,23 @@ afterEach(async () => {
 
 describe("dev", () => {
   it("should error if no script path is provided", async () => {
-    // @ts-expect-error we're purposely not passing a script path
-    await expect(runDev()).rejects.toThrowError("script path is missing");
+    await expect(runDev({})).rejects.toThrowErrorMatchingInlineSnapshot('"Missing entry point, please specify \\"main\\" in your config"');
   });
 
   it("should start a server for a given input script path", async () => {
-    await runDev(fixture, {});
+    await runDev({ main: fixture });
     const res = await fetch("http://localhost:1999/party/theroom");
     expect(await res.text()).toMatchInlineSnapshot('"Not found"');
   });
 
   it("should start a server on a given port", async () => {
-    await runDev(fixture, { port: 9999 });
+    await runDev({ main: fixture, port: 9999 });
     const res = await fetch("http://localhost:9999/party/theroom");
     expect(await res.text()).toMatchInlineSnapshot('"Not found"');
   });
 
   it("should let you connect to a room with a websocket", async () => {
-    await runDev(fixture, {});
+    await runDev({ main: fixture });
     const ws = new WebSocket("ws://localhost:1999/party/theroom?_pk=123");
     try {
       await new Promise((resolve) => ws.on("open", resolve));
@@ -50,7 +49,7 @@ describe("dev", () => {
   });
 
   it("cannot connect to non-room path", async () => {
-    await runDev(fixture, {});
+    await runDev({ main: fixture });
     const ws = new WebSocket("ws://localhost:1999/notaroom?_pk=123");
     try {
       await new Promise((resolve) => ws.on("error", resolve));

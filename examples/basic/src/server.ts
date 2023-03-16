@@ -2,6 +2,11 @@ import type { PartyKitServer } from "partykit/server";
 
 export default {
   onConnect(ws, room) {
+    console.log(room.env);
+
+    console.log(process.env.WHATUP);
+    // @ts-expect-error purposely
+    console.log(SOME_GLOBAL);
     // your business logic here
     ws.onmessage = function incoming(evt) {
       if (evt.data === "ping") {
