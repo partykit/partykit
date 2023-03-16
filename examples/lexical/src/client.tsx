@@ -35,6 +35,8 @@ function Editor() {
       />
       <CollaborationPlugin
         id="yjs"
+        // @ts-expect-error lexical's types clash with yjs,
+        // TODO: we should fix it sometime
         providerFactory={(id, yjsDocMap) => {
           const doc = new Y.Doc();
           yjsDocMap.set(id, doc);

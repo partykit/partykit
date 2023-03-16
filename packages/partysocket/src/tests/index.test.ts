@@ -7,6 +7,7 @@ import PartySocket from "..";
 
 // jsdom doesn't appear to have crypto.randomUUID
 import crypto from "crypto";
+// @ts-expect-error node's types need to be updated
 globalThis.crypto.randomUUID = crypto.randomUUID;
 
 const fixture = `${__dirname}/fixture.js`;
