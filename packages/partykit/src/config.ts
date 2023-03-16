@@ -219,12 +219,33 @@ export function getConfig(
       console.warn('configuration field "account" is not yet operational');
     }
 
+    let packageJsonConfig = {} as ConfigOverrides;
+    const packageJsonPath = findConfig("package.json", { home: false });
+    if (packageJsonPath) {
+      packageJsonConfig =
+        JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).partykit || {};
+      if (packageJsonConfig) {
+        console.log(
+          `Loading config from ${path.relative(
+            process.cwd(),
+            packageJsonPath
+          )}#partykit`
+        );
+      }
+    }
+
     const config = configSchema.parse({
       // defaults?
+      ...packageJsonConfig,
       ...overrides,
       vars: {
+        ...packageJsonConfig.vars,
         ...envVars,
         ...overrides.vars,
+      },
+      define: {
+        ...packageJsonConfig.define,
+        ...overrides.define,
       },
     });
 

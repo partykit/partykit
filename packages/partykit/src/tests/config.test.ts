@@ -25,6 +25,7 @@ describe("config", () => {
     const config = getConfig(undefined, { main: "script.js" });
     expect(config).toMatchInlineSnapshot(`
       {
+        "define": {},
         "main": "./script.js",
         "vars": {},
       }
@@ -40,6 +41,7 @@ describe("config", () => {
     });
     expect(config).toMatchInlineSnapshot(`
       {
+        "define": {},
         "main": "./script.js",
         "vars": {
           "test": "test",
@@ -53,6 +55,7 @@ describe("config", () => {
     const config = getConfig(undefined, { main: "script.js" });
     expect(config).toMatchInlineSnapshot(`
       {
+        "define": {},
         "main": "./script.js",
         "vars": {
           "test": "test",
@@ -71,6 +74,7 @@ describe("config", () => {
     });
     expect(config).toMatchInlineSnapshot(`
       {
+        "define": {},
         "main": "./script.js",
         "vars": {
           "test": "test2",
@@ -119,6 +123,63 @@ describe("config", () => {
         "main": "./script.js",
         "vars": {
           "test": "test2",
+        },
+      }
+    `);
+  });
+
+  it("should read values from package.json", () => {
+    fs.writeFileSync(
+      "package.json",
+      JSON.stringify({
+        partykit: {
+          main: "script.js",
+          vars: {
+            test: "test",
+          },
+        },
+      })
+    );
+    const config = getConfig(undefined, undefined);
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "define": {},
+        "main": "./script.js",
+        "vars": {
+          "test": "test",
+        },
+      }
+    `);
+  });
+
+  it("should not read from package.json if a config file is present", () => {
+    fs.writeFileSync(
+      "package.json",
+      JSON.stringify({
+        partykit: {
+          main: "script.js",
+          vars: {
+            test: "test",
+          },
+        },
+      })
+    );
+    fs.writeFileSync(
+      "partykit.json",
+      JSON.stringify({
+        main: "script.js",
+        vars: {
+          anotherTest: "test",
+        },
+      })
+    );
+    const config = getConfig(undefined, undefined);
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "define": {},
+        "main": "./script.js",
+        "vars": {
+          "anotherTest": "test",
         },
       }
     `);
