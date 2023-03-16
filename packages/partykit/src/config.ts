@@ -188,10 +188,12 @@ export type ConfigOverrides = Config; // Partial? what of .env?
 
 export function getConfig(
   configPath: string | undefined | null,
-  overrides: ConfigOverrides = {}
+  overrides: ConfigOverrides = {},
+  options?: { readEnvLocal?: boolean }
 ): Config {
   const envPath = findConfig(".env");
-  let envVars = {};
+  const envLocalPath = findConfig(".env.local");
+  let envVars: Record<string, string> = {};
   if (envPath) {
     console.log(
       `Loading environment variables from ${path.relative(
@@ -200,6 +202,18 @@ export function getConfig(
       )}`
     );
     envVars = dotenv.parse(fs.readFileSync(envPath, "utf8"));
+  }
+  if (envLocalPath && options?.readEnvLocal) {
+    console.log(
+      `Loading environment variables from ${path.relative(
+        process.cwd(),
+        envLocalPath
+      )}`
+    );
+    envVars = {
+      ...envVars,
+      ...dotenv.parse(fs.readFileSync(envLocalPath, "utf8")),
+    };
   }
   if (!configPath) {
     configPath = findConfig("partykit.json", { home: false });

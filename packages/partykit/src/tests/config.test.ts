@@ -83,6 +83,32 @@ describe("config", () => {
     `);
   });
 
+  it("can read from .env.local when asked", () => {
+    fs.writeFileSync(".env", "test=test\ntest2=test2");
+    fs.writeFileSync(".env.local", "test=test3");
+    const config = getConfig(
+      undefined,
+      {
+        main: "script.js",
+        vars: {
+          test4: "test4",
+        },
+      },
+      { readEnvLocal: true }
+    );
+    expect(config).toMatchInlineSnapshot(`
+      {
+        "define": {},
+        "main": "./script.js",
+        "vars": {
+          "test": "test3",
+          "test2": "test2",
+          "test4": "test4",
+        },
+      }
+    `);
+  });
+
   it("should read values from a config file", () => {
     fs.writeFileSync(
       "partykit.json",
