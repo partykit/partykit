@@ -4,6 +4,20 @@ import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
 import { program, Option } from "commander";
 
+import packageJson from "../package.json";
+
+import("update-notifier").then(
+  ({ default: updateNotifier }) => {
+    // Checks for available update and returns an instance
+    const notifier = updateNotifier({ pkg: packageJson, distTag: "beta" });
+    // Notify using the built-in convenience method
+    notifier.notify();
+  },
+  (err) => {
+    console.error("Error loading update-notifier", err);
+  }
+);
+
 process.on("SIGINT", () => {
   // console.log("Interrupted");
   process.exit(0);
