@@ -10,7 +10,8 @@
   "dependencies": {
     "@edge-runtime/primitives": "^2.1.2",
     "clipboardy": "^3.0.0",
-    "esbuild": "^0.17.11"
+    "esbuild": "^0.17.11",
+    "update-notifier": "^6.0.2"
   },
   "devDependencies": {
     "@edge-runtime/types": "^2.0.8",
@@ -19,6 +20,7 @@
     "@types/http-proxy": "^1.17.10",
     "@types/node": "^18.15.3",
     "@types/prompts": "^2.4.3",
+    "@types/update-notifier": "^6.0.2",
     "@types/ws": "^8.5.4",
     "chalk": "^5.2.0",
     "commander": "^10.0.0",

@@ -23,7 +23,12 @@ esbuild.buildSync({
   format: "cjs",
   outfile: "dist/bin.js",
   platform: "node",
-  external: ["esbuild", "clipboardy", "@edge-runtime/primitives"],
+  external: [
+    "esbuild",
+    "clipboardy",
+    "@edge-runtime/primitives",
+    "update-notifier",
+  ],
   sourcemap: true,
   minify,
   define: {
