@@ -357,7 +357,7 @@ export async function dev(options: {
 
             return {
               path: fileName, // change the reference to the changed module
-              external: false, // mark it as external in the bundle
+              external: false, // not an external in dev, we swap it with an identifier
               namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
               watchFiles: [filePath], // we also add the file to esbuild's watch list
             };
@@ -538,7 +538,7 @@ export async function deploy(options: {
               return {
                 path: fileName, // change the reference to the changed module
                 external: true, // mark it as external in the bundle
-                namespace: "partykit-module-wasm-dev", // just a tag, this isn't strictly necessary
+                namespace: "partykit-module-wasm-publish", // just a tag, this isn't strictly necessary
               };
             });
           },
