@@ -226,9 +226,7 @@ async function getYDoc(
   }
 
   if (doc.persist) {
-    doc.bindState().catch((e) => {
-      console.error("Error binding state", e);
-    });
+    await doc.bindState();
   }
 
   docs.set(room.id, doc);
