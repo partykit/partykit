@@ -42,6 +42,14 @@ process.on("unhandledRejection", function (reason, _promise) {
   throw reason;
 });
 
+function getArrayKVOption(val: string[] = []) {
+  return val.reduce((acc, curr) => {
+    const [key, ...value] = curr.split("=");
+    acc[key] = value.join("=");
+    return acc;
+  }, {} as Record<string, string>);
+}
+
 const EnvironmentOption = new Option(
   "-e, --env <env>",
   "environment to use"
@@ -69,25 +77,13 @@ program
     "A key-value pair to be substituted in the project"
   )
   .action(async (scriptPath, options) => {
-    const varsArr = (options.var as string[]) || [];
-    const vars = varsArr.reduce((acc, curr) => {
-      const [key, ...value] = curr.split("=");
-      acc[key] = value.join("=");
-      return acc;
-    }, {} as Record<string, string>);
-    const definesArr = (options.define as string[]) || [];
-    const defines = definesArr.reduce((acc, curr) => {
-      const [key, ...value] = curr.split("=");
-      acc[key] = value.join("=");
-      return acc;
-    }, {} as Record<string, string>);
     await cli.dev({
       main: scriptPath,
       port: options.port,
       config: options.config,
       // assets: options.assets,
-      vars,
-      define: defines,
+      vars: getArrayKVOption(options.var),
+      define: getArrayKVOption(options.define),
     });
   });
 
@@ -108,25 +104,15 @@ program
     "A key-value pair to be substituted in the script"
   )
   .option("-n, --name <name>", "name of the project")
+  .option("--preview [name]", "deploy to preview environment")
   .action(async (scriptPath, options) => {
-    const varsArr = (options.var as string[]) || [];
-    const vars = varsArr.reduce((acc, curr) => {
-      const [key, ...value] = curr.split("=");
-      acc[key] = value.join("=");
-      return acc;
-    }, {} as Record<string, string>);
-    const definesArr = (options.define as string[]) || [];
-    const defines = definesArr.reduce((acc, curr) => {
-      const [key, ...value] = curr.split("=");
-      acc[key] = value.join("=");
-      return acc;
-    }, {} as Record<string, string>);
     await cli.deploy({
       main: scriptPath,
       name: options.name,
       config: options.config,
-      vars,
-      define: defines,
+      vars: getArrayKVOption(options.var),
+      define: getArrayKVOption(options.define),
+      preview: options.preview,
     });
   });
 
@@ -142,6 +128,7 @@ program
   .description("delete a deployed project")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
+  .option("--preview [name]", "delete preview")
   .action(async (options) => {
     await cli._delete(options);
   });
@@ -165,7 +152,7 @@ envCommand
   .argument("[file]", "file to pull development env vars to")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
-  // implies "development" environment
+  .option("--preview [name]", "pull from preview")
   .action(async (fileName, options) => {
     await cli.env.pull(fileName || ".env", options);
   });
@@ -175,7 +162,7 @@ envCommand
   .description("push environment variables from config file(s)")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
-  // implies "development" environment
+  .option("--preview [name]", "push to preview")
   .action(async (options) => {
     await cli.env.push(options);
   });
@@ -186,6 +173,7 @@ envCommand
   .argument("<key>", "name of the environment variable")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
+  .option("--preview [name]", "add to preview")
   .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (key, options) => {
@@ -198,6 +186,7 @@ envCommand
   .argument("<key>", "name of the environment variable")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
+  .option("--preview [name]", "remove from preview")
   .addOption(EnvironmentOption)
   .action(async (key, options) => {
     await cli.env.remove(key, options);

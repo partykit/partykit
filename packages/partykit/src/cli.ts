@@ -480,6 +480,7 @@ export async function deploy(options: {
   config: string | undefined;
   vars: Record<string, unknown> | undefined;
   define: Record<string, string> | undefined;
+  preview: string | undefined;
 }): Promise<void> {
   const config = getConfig(options.config, options);
 
@@ -556,14 +557,24 @@ export async function deploy(options: {
     );
   }
 
-  await fetchResult(`/parties/${user.login}/${config.name}`, {
-    method: "POST",
-    body: form,
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-      "X-PartyKit-User-Type": user.type,
-    },
-  });
+  const urlSearchParams = new URLSearchParams();
+  if (options.preview) {
+    urlSearchParams.set("preview", options.preview);
+  }
+
+  await fetchResult(
+    `/parties/${user.login}/${config.name}${
+      options.preview ? `?${urlSearchParams.toString()}` : ""
+    }`,
+    {
+      method: "POST",
+      body: form,
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+        "X-PartyKit-User-Type": user.type,
+      },
+    }
+  );
 
   console.log(
     `Deployed ${config.main} as https://${config.name}.${user.login}.partykit.dev`
@@ -573,6 +584,7 @@ export async function deploy(options: {
 export async function _delete(options: {
   name: string;
   config: string | undefined;
+  preview: string | undefined;
 }) {
   const config = getConfig(options.config, options);
   if (!config.name) {
@@ -581,12 +593,22 @@ export async function _delete(options: {
   // get user details
   const user = await getUser();
 
-  await fetchResult(`/parties/${user.login}/${config.name}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-    },
-  });
+  const urlSearchParams = new URLSearchParams();
+  if (options.preview) {
+    urlSearchParams.set("preview", options.preview);
+  }
+
+  await fetchResult(
+    `/parties/${user.login}/${config.name}${
+      options.preview ? `?${urlSearchParams.toString()}` : ""
+    }`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+      },
+    }
+  );
 
   console.log(`Deleted https://${config.name}.${user.login}.partykit.dev`);
 }
@@ -611,6 +633,7 @@ export const env = {
     name: string;
     env: EnvironmentChoice;
     config: string | undefined;
+    preview: string | undefined;
   }) {
     // get user details
     const user = await getUser();
@@ -620,8 +643,14 @@ export const env = {
       throw new Error("project name is missing");
     }
 
+    const urlSearchParams = new URLSearchParams();
+    urlSearchParams.set("keys", "true");
+    if (options.preview) {
+      urlSearchParams.set("preview", options.preview);
+    }
+
     const res = await fetchResult(
-      `/parties/${user.login}/${config.name}/env?keys=true`,
+      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
       {
         headers: {
           Authorization: `Bearer ${user.access_token}`,
@@ -633,7 +662,11 @@ export const env = {
   },
   async pull(
     fileName: string,
-    options: { name: string; config: string | undefined }
+    options: {
+      name: string;
+      config: string | undefined;
+      preview: string | undefined;
+    }
   ) {
     // get user details
     const user = await getUser();
@@ -643,11 +676,21 @@ export const env = {
       throw new Error("project name is missing");
     }
 
-    const res = await fetchResult(`/parties/${user.login}/${config.name}/env`, {
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
-    });
+    const urlSearchParams = new URLSearchParams();
+    if (options.preview) {
+      urlSearchParams.set("preview", options.preview);
+    }
+
+    const res = await fetchResult(
+      `/parties/${user.login}/${config.name}/env${
+        options.preview ? `?${urlSearchParams.toString()}` : ""
+      }`,
+      {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
 
     let fileContent = "";
 
@@ -665,6 +708,7 @@ export const env = {
     options: {
       name: string | undefined;
       config: string | undefined;
+      preview: string | undefined;
     }
   ) {
     // get user details
@@ -675,14 +719,24 @@ export const env = {
       throw new Error("project name is missing");
     }
 
-    await fetchResult(`/parties/${user.login}/${config.name}/env`, {
-      method: "POST",
-      body: JSON.stringify(config.vars || {}),
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const urlSearchParams = new URLSearchParams();
+    if (options.preview) {
+      urlSearchParams.set("preview", options.preview);
+    }
+
+    await fetchResult(
+      `/parties/${user.login}/${config.name}/env${
+        options.preview ? `?${urlSearchParams.toString()}` : ""
+      }`,
+      {
+        method: "POST",
+        body: JSON.stringify(config.vars || {}),
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     console.log("Pushed environment variables");
   },
@@ -692,6 +746,7 @@ export const env = {
       name: string;
       env: EnvironmentChoice;
       config: string | undefined;
+      preview: string | undefined;
     }
   ) {
     // get user details
@@ -730,8 +785,15 @@ export const env = {
           message: `Enter the value for ${key}`,
         });
 
+    const urlSearchParams = new URLSearchParams();
+    if (options.preview) {
+      urlSearchParams.set("preview", options.preview);
+    }
+
     const res = await fetchResult(
-      `/parties/${user.login}/${config.name}/env/${key}`,
+      `/parties/${user.login}/${config.name}/env/${key}${
+        options.preview ? `?${urlSearchParams.toString()}` : ""
+      }`,
       {
         method: "POST",
         body: value,
@@ -749,6 +811,7 @@ export const env = {
       name: string;
       env: EnvironmentChoice;
       config: string | undefined;
+      preview: string | undefined;
     }
   ) {
     // get user details
@@ -759,8 +822,15 @@ export const env = {
       throw new Error("project name is missing");
     }
 
+    const urlSearchParams = new URLSearchParams();
+    if (options.preview) {
+      urlSearchParams.set("preview", options.preview);
+    }
+
     const res = await fetchResult(
-      `/parties/${user.login}/${config.name}/env/${key}`,
+      `/parties/${user.login}/${config.name}/env/${key}${
+        options.preview ? `?${urlSearchParams.toString()}` : ""
+      }`,
       {
         method: "DELETE",
         headers: {
