@@ -197,7 +197,7 @@ export async function dev(options: {
   port?: number | undefined;
   // assets: string | undefined;
   config?: string | undefined;
-  vars?: Record<string, unknown> | undefined;
+  vars?: Record<string, string> | undefined;
   define?: Record<string, string> | undefined;
 }): Promise<{ close: () => Promise<void> }> {
   const config = getConfig(
@@ -478,7 +478,7 @@ export async function deploy(options: {
   main: string | undefined;
   name: string;
   config: string | undefined;
-  vars: Record<string, unknown> | undefined;
+  vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
 }): Promise<void> {
@@ -549,6 +549,11 @@ export async function deploy(options: {
   ).outputFiles![0].text;
   const form = new FormData();
   form.set("code", code);
+
+  // only set vars passed in via cli with --var, not from .env/partykit.json/etc
+  if (options.vars && Object.keys(options.vars).length > 0) {
+    form.set("vars", JSON.stringify(options.vars));
+  }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
     form.set(
