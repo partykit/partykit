@@ -57,6 +57,7 @@ describe("deploy", () => {
       config: undefined,
       vars: undefined,
       define: undefined,
+      preview: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -76,6 +77,7 @@ describe("deploy", () => {
         config: undefined,
         vars: undefined,
         define: undefined,
+        preview: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });
