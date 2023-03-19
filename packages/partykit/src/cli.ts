@@ -811,7 +811,7 @@ export const env = {
     console.log(res);
   },
   async remove(
-    key: string,
+    key: string | undefined,
     options: {
       name: string;
       env: EnvironmentChoice;
@@ -830,6 +830,36 @@ export const env = {
     const urlSearchParams = new URLSearchParams();
     if (options.preview) {
       urlSearchParams.set("preview", options.preview);
+    }
+
+    if (!key) {
+      const { default: prompt } = await import("prompts");
+
+      const { value } = await prompt({
+        type: "confirm",
+        name: "value",
+        message: `Are you sure you want to delete all environment variables?`,
+        initial: true,
+      });
+
+      if (!value) {
+        console.log("Aborted");
+        return;
+      } else {
+        const res = await fetchResult(
+          `/parties/${user.login}/${config.name}/env${
+            options.preview ? `?${urlSearchParams.toString()}` : ""
+          }`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${user.access_token}`,
+            },
+          }
+        );
+        console.log(res);
+        return;
+      }
     }
 
     const res = await fetchResult(
