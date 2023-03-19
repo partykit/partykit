@@ -183,7 +183,7 @@ envCommand
 envCommand
   .command("remove")
   .description("remove an environment variable")
-  .argument("<key>", "name of the environment variable")
+  .argument("[key]", "name of the environment variable")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "remove from preview")
