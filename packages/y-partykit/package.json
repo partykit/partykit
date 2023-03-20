@@ -31,7 +31,6 @@
     "lib0": "^0.2.60",
     "lodash.debounce": "^4.0.8",
     "y-protocols": "^1.0.5",
-    "y-websocket": "^1.5.0",
     "yjs": "^13.5.44"
   }
 }
