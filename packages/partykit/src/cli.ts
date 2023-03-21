@@ -592,7 +592,7 @@ export async function deploy(options: {
   );
 
   console.log(
-    `Deployed ${config.main} as https://${config.name}.${user.login}.partykit.dev`
+    `Deployed ${config.main} as ${config.name}.${user.login}.partykit.dev`
   );
 }
 
@@ -625,7 +625,7 @@ export async function _delete(options: {
     }
   );
 
-  console.log(`Deleted https://${config.name}.${user.login}.partykit.dev`);
+  console.log(`Deleted ${config.name}.${user.login}.partykit.dev`);
 }
 
 export async function list() {
