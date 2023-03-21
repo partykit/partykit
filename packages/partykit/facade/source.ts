@@ -94,36 +94,53 @@ if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
   throw new Error(".onBeforeRequest should be a function");
 }
 
-wss.on("connection", (ws: WebSocket, request: IncomingMessage) => {
-  const url = new URL(`http://${request.headers.host}${request.url}`);
+wss.on(
+  "onConnect",
+  async (
+    ws: WebSocket,
+    request: IncomingMessage,
+    done: (err: Error | undefined) => void
+  ) => {
+    const url = new URL(`http://${request.headers.host}${request.url}`);
 
-  const connectionId = url.searchParams.get("_pk");
-  const roomId = getRoomIdFromPathname(url.pathname);
+    const connectionId = url.searchParams.get("_pk");
+    const roomId = getRoomIdFromPathname(url.pathname);
 
-  assert(roomId, "roomId is required");
-  assert(connectionId, "_pk is required");
-
-  const rawInitial = request.headers["x-pk-initial"];
-  const unstable_initial = rawInitial ? JSON.parse(`${rawInitial}`) : undefined;
-
-  partyRoom.connections.set(connectionId, {
-    id: connectionId,
-    socket: ws,
-    unstable_initial,
-  });
-
-  function closeOrErrorListener() {
     assert(roomId, "roomId is required");
     assert(connectionId, "_pk is required");
-    ws.removeEventListener("close", closeOrErrorListener);
-    ws.removeEventListener("error", closeOrErrorListener);
-    partyRoom.connections.delete(connectionId);
+
+    const rawInitial = request.headers["x-pk-initial"];
+    const unstable_initial = rawInitial
+      ? JSON.parse(`${rawInitial}`)
+      : undefined;
+
+    partyRoom.connections.set(connectionId, {
+      id: connectionId,
+      socket: ws,
+      unstable_initial,
+    });
+
+    function closeOrErrorListener() {
+      assert(roomId, "roomId is required");
+      assert(connectionId, "_pk is required");
+      ws.removeEventListener("close", closeOrErrorListener);
+      ws.removeEventListener("error", closeOrErrorListener);
+      partyRoom.connections.delete(connectionId);
+    }
+
+    ws.addEventListener("close", closeOrErrorListener);
+    ws.addEventListener("error", closeOrErrorListener);
+
+    if (Worker.onConnect) {
+      try {
+        await Worker.onConnect(ws, partyRoom);
+        done(undefined);
+      } catch (e) {
+        console.error("failed to connect", e);
+        return done(e as Error);
+      }
+    } else {
+      done(undefined);
+    }
   }
-
-  ws.addEventListener("close", closeOrErrorListener);
-  ws.addEventListener("error", closeOrErrorListener);
-
-  Worker.onConnect?.(ws, partyRoom)?.catch((err) => {
-    console.error("failed to connect", err);
-  });
-});
+);
