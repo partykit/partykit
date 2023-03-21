@@ -5,7 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others",
+    "build:assets": "esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --define:PARTYKIT_HOST=\\\"lexical-demo.threepointone.partykit.dev\\\""
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "@types/react-dom": "^18.0.11",
     "lexical": "^0.9.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "wrangler": "^2.13.0"
   }
 }

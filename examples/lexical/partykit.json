@@ -1,0 +1,4 @@
+{
+  "name": "lexical-demo",
+  "main": "src/server.ts"
+}

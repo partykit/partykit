@@ -436,8 +436,18 @@ export async function dev(options: {
         request.headers["x-pk-initial"] = await initialRes.text();
       }
 
+      socket.pause();
+
       room.ws.handleUpgrade(request, socket, head, function done(ws) {
-        room.ws.emit("connection", ws, request);
+        room.ws.emit("onConnect", ws, request, (err?: Error) => {
+          if (err) {
+            console.error(err);
+            socket.destroy();
+          } else {
+            console.log("resuming");
+            socket.resume();
+          }
+        });
       });
     } else {
       socket.destroy();
@@ -587,7 +597,7 @@ export async function deploy(options: {
 }
 
 export async function _delete(options: {
-  name: string;
+  name: string | undefined;
   config: string | undefined;
   preview: string | undefined;
 }) {
