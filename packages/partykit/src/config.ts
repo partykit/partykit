@@ -186,6 +186,14 @@ export type Config = z.infer<typeof configSchema>;
 
 export type ConfigOverrides = Config; // Partial? what of .env?
 
+export function getConfigPath() {
+  return (
+    findConfig("partykit.json", { home: false }) ||
+    findConfig("partykit.json5", { home: false }) ||
+    findConfig("partykit.jsonc", { home: false })
+  );
+}
+
 export function getConfig(
   configPath: string | undefined | null,
   overrides: ConfigOverrides = {},
@@ -215,15 +223,8 @@ export function getConfig(
       ...dotenv.parse(fs.readFileSync(envLocalPath, "utf8")),
     };
   }
-  if (!configPath) {
-    configPath = findConfig("partykit.json", { home: false });
-  }
-  if (!configPath) {
-    configPath = findConfig("partykit.json5", { home: false });
-  }
-  if (!configPath) {
-    configPath = findConfig("partykit.jsonc", { home: false });
-  }
+
+  configPath ||= getConfigPath();
 
   // do a quick check of the overrides
   configSchema.parse(overrides);
@@ -238,7 +239,8 @@ export function getConfig(
     if (packageJsonPath) {
       packageJsonConfig =
         JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).partykit || {};
-      if (packageJsonConfig) {
+      // @ts-expect-error partykit is our special field in package.json
+      if (packageJsonConfig.partykit) {
         console.log(
           `Loading config from ${path.relative(
             process.cwd(),
@@ -263,21 +265,17 @@ export function getConfig(
       },
     });
 
-    if (!config.main) {
-      throw new Error(
-        'Missing entry point, please specify "main" in your config'
-      );
-    }
+    if (config.main) {
+      // make the path absolute
+      const absoluteMainPath = path.isAbsolute(config.main)
+        ? config.main
+        : path.join(process.cwd(), config.main);
 
-    // make the path absolute
-    const absoluteMainPath = path.isAbsolute(config.main)
-      ? config.main
-      : path.join(process.cwd(), config.main);
-
-    if (!fs.existsSync(absoluteMainPath)) {
-      throw new Error(`Could not find main: ${config.main}`);
-    } else {
-      config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+      if (!fs.existsSync(absoluteMainPath)) {
+        throw new Error(`Could not find main: ${config.main}`);
+      } else {
+        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+      }
     }
 
     return config;
@@ -309,30 +307,27 @@ export function getConfig(
     console.warn('configuration field "account" is not yet operational');
   }
 
-  if (!config.main) {
-    throw new Error(
-      'Missing entry point, please specify "main" in your config'
-    );
+  if (config.main) {
+    if (overrides.main) {
+      const absoluteMainPath = path.isAbsolute(overrides.main)
+        ? overrides.main
+        : path.join(process.cwd(), overrides.main);
+      if (!fs.existsSync(absoluteMainPath)) {
+        throw new Error(`Could not find main: ${overrides.main}`);
+      } else {
+        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+      }
+    } else if (parsedConfig.main) {
+      const absoluteMainPath = path.isAbsolute(parsedConfig.main)
+        ? parsedConfig.main
+        : path.join(path.dirname(configPath), parsedConfig.main);
+      if (!fs.existsSync(absoluteMainPath)) {
+        throw new Error(`Could not find main: ${parsedConfig.main}`);
+      } else {
+        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+      }
+    }
   }
 
-  if (overrides.main) {
-    const absoluteMainPath = path.isAbsolute(overrides.main)
-      ? overrides.main
-      : path.join(process.cwd(), overrides.main);
-    if (!fs.existsSync(absoluteMainPath)) {
-      throw new Error(`Could not find main: ${overrides.main}`);
-    } else {
-      config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
-    }
-  } else if (parsedConfig.main) {
-    const absoluteMainPath = path.isAbsolute(parsedConfig.main)
-      ? parsedConfig.main
-      : path.join(path.dirname(configPath), parsedConfig.main);
-    if (!fs.existsSync(absoluteMainPath)) {
-      throw new Error(`Could not find main: ${parsedConfig.main}`);
-    } else {
-      config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
-    }
-  }
   return config;
 }

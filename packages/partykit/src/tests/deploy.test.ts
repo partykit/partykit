@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import fs from "fs";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { deploy } from "../cli";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 
@@ -14,10 +15,25 @@ const fixture = `${__dirname}/fixture.js`;
 process.env.GITHUB_LOGIN = "test-user";
 process.env.GITHUB_TOKEN = "test-token";
 
+const currDir = process.cwd();
+
+beforeEach(() => {
+  clearMocks();
+  // create a tmp dir
+  const dirPath = fs.mkdtempSync("pk-test-env");
+  // set the cwd to the tmp dir
+  process.chdir(dirPath);
+});
+
+afterEach(() => {
+  // switch back to the original dir
+  const tmpDir = process.cwd();
+  process.chdir(currDir);
+  // remove the tmp dir
+  fs.rmdirSync(tmpDir, { recursive: true });
+});
+
 describe("deploy", () => {
-  beforeEach(() => {
-    clearMocks();
-  });
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
     await expect(deploy({})).rejects.toThrowErrorMatchingInlineSnapshot(
@@ -58,6 +74,105 @@ describe("deploy", () => {
       vars: undefined,
       define: undefined,
       preview: undefined,
+      withVars: undefined,
+    });
+    expect(checkedResponse).toBe(true);
+  });
+
+  it("should send cli vars without others from config", async () => {
+    fs.writeFileSync(
+      "partykit.json",
+      JSON.stringify({
+        name: "test-script",
+        vars: {
+          a: "a1",
+          b: "b2",
+          c: "c3",
+          d: "d4",
+        },
+      })
+    );
+
+    let checkedResponse = false;
+    mockFetchResult<null>(
+      "POST",
+      "/parties/test-user/test-script",
+      (url, options) => {
+        expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
+        expect(options?.headers).toMatchInlineSnapshot(`
+          {
+            "Authorization": "Bearer test-token",
+            "X-PartyKit-User-Type": "github",
+          }
+        `);
+        const form = options?.body as FormData;
+        expect(form.get("vars")).toMatchInlineSnapshot(
+          '"{\\"a\\":\\"b\\",\\"c\\":\\"d\\"}"'
+        );
+        checkedResponse = true;
+        return null;
+      }
+    );
+    await deploy({
+      main: fixture,
+      name: "test-script",
+      config: undefined,
+      vars: {
+        a: "b",
+        c: "d",
+      },
+      define: undefined,
+      preview: undefined,
+      withVars: undefined,
+    });
+    expect(checkedResponse).toBe(true);
+  });
+
+  it("should send cli vars with config when specified", async () => {
+    fs.writeFileSync(
+      "partykit.json",
+      JSON.stringify({
+        name: "test-script",
+        vars: {
+          a: "a1",
+          b: "b2",
+          c: "c3",
+          d: "d4",
+        },
+      })
+    );
+
+    let checkedResponse = false;
+    mockFetchResult<null>(
+      "POST",
+      "/parties/test-user/test-script",
+      (url, options) => {
+        expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
+        expect(options?.headers).toMatchInlineSnapshot(`
+          {
+            "Authorization": "Bearer test-token",
+            "X-PartyKit-User-Type": "github",
+          }
+        `);
+        const form = options?.body as FormData;
+        expect(form.get("vars")).toMatchInlineSnapshot(
+          '"{\\"a\\":\\"b\\",\\"b\\":\\"b2\\",\\"c\\":\\"d\\",\\"d\\":\\"d4\\"}"'
+        );
+        checkedResponse = true;
+        return null;
+      }
+    );
+    await deploy({
+      main: fixture,
+      name: "test-script",
+      config: undefined,
+      vars: {
+        a: "b",
+        c: "d",
+      },
+      define: undefined,
+      preview: undefined,
+      withVars: true,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -78,6 +193,7 @@ describe("deploy", () => {
         vars: undefined,
         define: undefined,
         preview: undefined,
+        withVars: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });

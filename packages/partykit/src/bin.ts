@@ -2,7 +2,7 @@
 import * as cli from "./cli";
 import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
-import { program, Option } from "commander";
+import { program /*, Option*/ } from "commander";
 
 import packageJson from "../package.json";
 
@@ -50,10 +50,10 @@ function getArrayKVOption(val: string[] = []) {
   }, {} as Record<string, string>);
 }
 
-const EnvironmentOption = new Option(
-  "-e, --env <env>",
-  "environment to use"
-).choices(["production", "development", "preview"]);
+// const EnvironmentOption = new Option(
+//   "-e, --env <env>",
+//   "environment to use"
+// ).choices(["production", "development", "preview"]);
 
 program
   .name("partykit")
@@ -103,9 +103,13 @@ program
     "-d, --define [defines...]",
     "A key-value pair to be substituted in the script"
   )
+  .option("--with-vars", "include all variables in the deployment")
   .option("-n, --name <name>", "name of the project")
   .option("--preview [name]", "deploy to preview environment")
   .action(async (scriptPath, options) => {
+    if (options.withVars) {
+      console.warn("--with-vars is not yet implemented");
+    }
     await cli.deploy({
       main: scriptPath,
       name: options.name,
@@ -113,6 +117,7 @@ program
       vars: getArrayKVOption(options.var),
       define: getArrayKVOption(options.define),
       preview: options.preview,
+      withVars: options.withVars,
     });
   });
 
@@ -140,7 +145,7 @@ envCommand
   .description("list all environment variables")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
-  .addOption(EnvironmentOption)
+  // .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (options) => {
     await cli.env.list(options);
@@ -154,7 +159,7 @@ envCommand
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "pull from preview")
   .action(async (fileName, options) => {
-    await cli.env.pull(fileName || ".env", options);
+    await cli.env.pull(fileName, options);
   });
 
 envCommand
@@ -174,7 +179,7 @@ envCommand
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "add to preview")
-  .addOption(EnvironmentOption)
+  // .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (key, options) => {
     await cli.env.add(key, options);
@@ -187,7 +192,7 @@ envCommand
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "remove from preview")
-  .addOption(EnvironmentOption)
+  // .addOption(EnvironmentOption)
   .action(async (key, options) => {
     await cli.env.remove(key, options);
   });
