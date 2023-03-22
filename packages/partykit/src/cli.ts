@@ -14,6 +14,7 @@ import * as crypto from "crypto";
 import {
   fetchUserConfig,
   getConfig,
+  getConfigPath,
   getUserConfig,
   validateUserConfig,
 } from "./config";
@@ -210,7 +211,11 @@ export async function dev(options: {
     { readEnvLocal: true }
   );
 
-  if (!config.main) throw new Error("script path is missing");
+  if (!config.main) {
+    throw new Error(
+      'Missing entry point, please specify "main" in your config'
+    );
+  }
 
   // A map of room names to room servers.
   const rooms: Rooms = new Map();
@@ -491,16 +496,21 @@ export async function deploy(options: {
   vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
+  withVars: boolean | undefined;
 }): Promise<void> {
   const config = getConfig(options.config, options);
+
+  if (!config.main) {
+    throw new Error(
+      'Missing entry point, please specify "main" in your config'
+    );
+  }
 
   const configName = config.name;
   assert(
     configName,
     'Missing project name, please specify "name" in your config'
   );
-
-  assert(config.main, "invariant: main script is missing");
 
   const absoluteScriptPath = path.join(process.cwd(), config.main);
 
@@ -560,9 +570,14 @@ export async function deploy(options: {
   const form = new FormData();
   form.set("code", code);
 
-  // only set vars passed in via cli with --var, not from .env/partykit.json/etc
-  if (options.vars && Object.keys(options.vars).length > 0) {
-    form.set("vars", JSON.stringify(options.vars));
+  const vars = options.withVars
+    ? config.vars
+    : // only set vars passed in via cli with --var,
+      // not from .env/partykit.json/etc
+      options.vars;
+  if (vars && Object.keys(vars).length > 0) {
+    // TODO: need some good messaging here to explain what's going on
+    form.set("vars", JSON.stringify(vars));
   }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
@@ -641,12 +656,12 @@ export async function list() {
   console.log(res);
 }
 
-type EnvironmentChoice = "production" | "development" | "preview";
+// type EnvironmentChoice = "production" | "development" | "preview";
 
 export const env = {
   async list(options: {
-    name: string;
-    env: EnvironmentChoice;
+    name: string | undefined;
+    // env: EnvironmentChoice;
     config: string | undefined;
     preview: string | undefined;
   }) {
@@ -676,9 +691,9 @@ export const env = {
     console.log(res);
   },
   async pull(
-    fileName: string,
+    fileName: string | undefined,
     options: {
-      name: string;
+      name: string | undefined;
       config: string | undefined;
       preview: string | undefined;
     }
@@ -707,25 +722,33 @@ export const env = {
       }
     );
 
-    let fileContent = "";
-
-    // write the file in dotenv syntax
-    Object.entries(res as Record<string, string | number | boolean>).forEach(
-      ([key, value]) => {
-        fileContent += `${key}=${JSON.stringify(value)}\n`;
-      }
-    );
-
-    fs.writeFileSync(fileName, fileContent);
-  },
-  async push(
-    // fileName: string,
-    options: {
-      name: string | undefined;
-      config: string | undefined;
-      preview: string | undefined;
+    const targetFileName =
+      fileName || options.config || getConfigPath() || "partykit.json";
+    if (!fs.existsSync(targetFileName)) {
+      console.log(`Creating ${targetFileName}...`);
+      fs.writeFileSync(targetFileName, "{}");
+    } else {
+      console.log(`Updating ${targetFileName}...`);
     }
-  ) {
+
+    fs.writeFileSync(
+      targetFileName,
+      JSON.stringify(
+        {
+          ...JSON.parse(fs.readFileSync(targetFileName, "utf8")),
+          name: config.name,
+          vars: res,
+        },
+        null,
+        2
+      ) + "\n"
+    );
+  },
+  async push(options: {
+    name: string | undefined;
+    config: string | undefined;
+    preview: string | undefined;
+  }) {
     // get user details
     const user = await getUser();
 
@@ -737,6 +760,11 @@ export const env = {
     const urlSearchParams = new URLSearchParams();
     if (options.preview) {
       urlSearchParams.set("preview", options.preview);
+    }
+
+    if (Object.keys(config.vars || {}).length === 0) {
+      console.warn("No environment variables to push, exiting...");
+      return;
     }
 
     await fetchResult(
@@ -758,8 +786,8 @@ export const env = {
   async add(
     key: string,
     options: {
-      name: string;
-      env: EnvironmentChoice;
+      name: string | undefined;
+      // env: EnvironmentChoice;
       config: string | undefined;
       preview: string | undefined;
     }
@@ -823,8 +851,8 @@ export const env = {
   async remove(
     key: string | undefined,
     options: {
-      name: string;
-      env: EnvironmentChoice;
+      name: string | undefined;
+      // env: EnvironmentChoice;
       config: string | undefined;
       preview: string | undefined;
     }

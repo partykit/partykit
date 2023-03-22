@@ -22,11 +22,10 @@ afterEach(() => {
 
 describe("config", () => {
   it("should return a default config", () => {
-    const config = getConfig(undefined, { main: "script.js" });
+    const config = getConfig(undefined, undefined);
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {},
       }
     `);
@@ -34,7 +33,6 @@ describe("config", () => {
 
   it("should return a config with overrides", () => {
     const config = getConfig(undefined, {
-      main: "script.js",
       vars: {
         test: "test",
       },
@@ -42,7 +40,6 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {
           "test": "test",
         },
@@ -52,11 +49,10 @@ describe("config", () => {
 
   it("should read values from a .env file", () => {
     fs.writeFileSync(".env", "test=test");
-    const config = getConfig(undefined, { main: "script.js" });
+    const config = getConfig(undefined, undefined);
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {
           "test": "test",
         },
@@ -67,7 +63,6 @@ describe("config", () => {
   it("should read values from a .env file and override with overrides", () => {
     fs.writeFileSync(".env", "test=test");
     const config = getConfig(undefined, {
-      main: "script.js",
       vars: {
         test: "test2",
       },
@@ -75,7 +70,6 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {
           "test": "test2",
         },
@@ -89,7 +83,6 @@ describe("config", () => {
     const config = getConfig(
       undefined,
       {
-        main: "script.js",
         vars: {
           test4: "test4",
         },
@@ -99,7 +92,6 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {
           "test": "test3",
           "test2": "test2",
@@ -113,7 +105,6 @@ describe("config", () => {
     fs.writeFileSync(
       "partykit.json",
       JSON.stringify({
-        main: "script.js",
         vars: {
           test: "test",
         },
@@ -123,7 +114,6 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {},
-        "main": "./script.js",
         "vars": {
           "test": "test",
         },
@@ -393,15 +383,6 @@ describe("config", () => {
               }
             ]"
           `);
-    });
-
-    it("should error when main is not provided", () => {
-      fs.writeFileSync("partykit.json", JSON.stringify({}));
-      expect(() =>
-        getConfig(undefined, undefined)
-      ).toThrowErrorMatchingInlineSnapshot(
-        '"Missing entry point, please specify \\"main\\" in your config"'
-      );
     });
 
     it("should error on a path that doesn't exist", () => {

@@ -23,10 +23,10 @@ export async function fetchResult<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const mock = mocks.find(([method, mockUrl]) => {
-    return mockUrl === url && method === options.method;
+    return mockUrl === url && method === (options.method || "GET");
   });
   if (mock) {
     return mock[2](url, options) as T;
   }
-  throw new Error(`No mock for ${url} ${options.method}`);
+  throw new Error(`No mock for ${url} ${options.method || "GET"}`);
 }
