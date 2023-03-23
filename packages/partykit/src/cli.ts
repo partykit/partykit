@@ -449,7 +449,6 @@ export async function dev(options: {
             console.error(err);
             socket.destroy();
           } else {
-            console.log("resuming");
             socket.resume();
           }
         });
