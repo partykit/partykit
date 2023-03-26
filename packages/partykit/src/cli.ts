@@ -409,7 +409,7 @@ export async function dev(options: {
     });
   });
 
-  const port = options.port || 1999;
+  const port = options.port ?? config.port ?? 1999;
 
   const server = app.listen(port);
   await new Promise((resolve) => server.once("listening", resolve));
