@@ -64,7 +64,7 @@ program
   .command("dev")
   .description("run a script in development mode")
   .argument("[script]", "path to the script to run")
-  .option("-p, --port", "port to run the server on")
+  .option("-p, --port <number>", "port to run the server on")
   // .option("--assets", "path to assets directory")
   .option("-c, --config <path>", "path to config file")
   // .option("-e, --env", "environment to use")
