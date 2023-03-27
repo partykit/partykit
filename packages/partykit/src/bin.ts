@@ -2,7 +2,7 @@
 import * as cli from "./cli";
 import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
-import { program /*, Option*/ } from "commander";
+import { Option, program /*, Option*/ } from "commander";
 
 import packageJson from "../package.json";
 
@@ -136,6 +136,37 @@ program
   .option("--preview [name]", "delete preview")
   .action(async (options) => {
     await cli._delete(options);
+  });
+
+program
+  .command("tail")
+  .description("tail logs from a deployed project")
+  .option("-n, --name <name>", "name of the project")
+  .option("-c, --config <path>", "path to config file")
+  .option("--preview [name]", "tail logs from preview")
+  .addOption(
+    new Option("-f, --format", "format of the logs")
+      .choices(["json", "pretty"])
+      .default("pretty")
+  )
+  .option("--debug", "show debug logs", false)
+  .addOption(
+    new Option("--status", "filter by invocation status").choices([
+      "ok",
+      "error",
+      "canceled",
+    ])
+  )
+  .option("--header", "filter by HTTP header")
+  .option("--method <...methods>", "filter by HTTP method(s)")
+  .option("--sampling-rate <number>", "sampling rate of logs")
+  .option("--search <string>", "search for a string in the logs")
+  .option(
+    "--ip <..ips>",
+    'filter by the IP address the request originates from (use "self" to filter for your own IP)'
+  )
+  .action(async (options) => {
+    await cli.tail(options);
   });
 
 const envCommand = program.command("env");

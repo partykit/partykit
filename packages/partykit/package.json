@@ -20,6 +20,7 @@
     "@types/http-proxy": "^1.17.10",
     "@types/node": "^18.15.3",
     "@types/prompts": "^2.4.3",
+    "@types/signal-exit": "^3.0.1",
     "@types/update-notifier": "^6.0.2",
     "@types/ws": "^8.5.4",
     "chalk": "^5.2.0",
@@ -32,6 +33,7 @@
     "json5": "^2.2.3",
     "open": "^8.4.2",
     "prompts": "^2.4.2",
+    "signal-exit": "^3.0.7",
     "ws": "^8.13.0",
     "zod": "^3.21.4"
   },

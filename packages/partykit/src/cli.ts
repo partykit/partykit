@@ -10,6 +10,10 @@ import type { PartyKitStorage } from "./server";
 import type { Server as HttpServer } from "http";
 import type { BuildOptions, OnLoadArgs } from "esbuild";
 import * as crypto from "crypto";
+import WebSocket from "ws";
+import type { RawData } from "ws";
+import onExit from "signal-exit";
+import { version as packageVersion } from "../package.json";
 
 import {
   fetchUserConfig,
@@ -18,6 +22,13 @@ import {
   getUserConfig,
   validateUserConfig,
 } from "./config";
+import type { TailFilterMessage } from "./tail/filters";
+import { translateCLICommandToFilterMessage } from "./tail/filters";
+import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const MAX_KEYS = 128;
 const MAX_KEY_SIZE = 2048; /* 2KiB */
@@ -640,6 +651,146 @@ export async function _delete(options: {
   );
 
   console.log(`Deleted ${config.name}.${user.login}.partykit.dev`);
+}
+
+type TailCreationApiResponse = {
+  result: {
+    id: string;
+    url: string;
+    expires_at: Date;
+  };
+};
+
+const TRACE_VERSION = "trace-v1";
+
+export async function tail(options: {
+  name: string | undefined;
+  config: string | undefined;
+  preview: string | undefined;
+  status: ("ok" | "canceled" | "error")[];
+  ip: string[] | undefined;
+  header: string | undefined;
+  samplingRate: number | undefined;
+  method: string[] | undefined;
+  format: "json" | "pretty";
+  search: string | undefined;
+  debug: boolean;
+}) {
+  // get user details
+  const user = await getUser();
+
+  const config = getConfig(options.config, options);
+  if (!config.name) {
+    throw new Error("project name is missing");
+  }
+
+  let scriptDisplayName = config.name;
+  if (options.preview) {
+    scriptDisplayName = `${scriptDisplayName} (preview: ${options.preview})`;
+  }
+
+  const filters: TailFilterMessage = translateCLICommandToFilterMessage({
+    status: options.status,
+    header: options.header,
+    method: options.method,
+    search: options.search,
+    samplingRate: options.samplingRate,
+    clientIp: options.ip,
+  });
+
+  const urlSearchParams = new URLSearchParams();
+  if (options.preview) {
+    urlSearchParams.set("preview", options.preview);
+  }
+  const {
+    result: { id: tailId, url: websocketUrl, expires_at: expiration },
+  } = await fetchResult<TailCreationApiResponse>(
+    `/parties/${user.login}/${config.name}/tail${
+      options.preview ? `?${urlSearchParams.toString()}` : ""
+    }`,
+    {
+      method: "POST",
+      body: JSON.stringify(filters),
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+      },
+    }
+  );
+
+  if (options.format === "pretty") {
+    console.log(
+      `Successfully created tail, expires at ${expiration.toLocaleString()}`
+    );
+  }
+
+  async function deleteTail() {
+    await fetchResult(
+      `/parties/${user.login}/${config.name}/tail/${tailId}${
+        options.preview ? `?${urlSearchParams.toString()}` : ""
+      }`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        },
+      }
+    );
+  }
+
+  // connect to the tail
+  const tailSocket = new WebSocket(websocketUrl, TRACE_VERSION, {
+    headers: {
+      "Sec-WebSocket-Protocol": TRACE_VERSION, // needs to be `trace-v1` to be accepted
+      "User-Agent": `partykit/${packageVersion}`,
+    },
+  });
+
+  // send filters when we open up
+  tailSocket.on("open", function () {
+    tailSocket.send(
+      JSON.stringify({ debug: options.debug || false }),
+      { binary: false, compress: false, mask: false, fin: true },
+      (err) => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+  });
+
+  onExit(async () => {
+    tailSocket.terminate();
+    await deleteTail();
+  });
+
+  const printLog: (data: RawData) => void =
+    options.format === "pretty" ? prettyPrintLogs : jsonPrintLogs;
+
+  tailSocket.on("message", printLog);
+
+  while (tailSocket.readyState !== tailSocket.OPEN) {
+    switch (tailSocket.readyState) {
+      case tailSocket.CONNECTING:
+        await sleep(100);
+        break;
+      case tailSocket.CLOSING:
+        await sleep(100);
+        break;
+      case tailSocket.CLOSED:
+        throw new Error(
+          `Connection to ${scriptDisplayName} closed unexpectedly.`
+        );
+    }
+  }
+
+  if (options.format === "pretty") {
+    console.log(`Connected to ${scriptDisplayName}, waiting for logs...`);
+  }
+
+  tailSocket.on("close", async () => {
+    tailSocket.terminate();
+    await deleteTail();
+  });
 }
 
 export async function list() {
