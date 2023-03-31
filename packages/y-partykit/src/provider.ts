@@ -131,6 +131,10 @@ function setupWS(provider: WebsocketProvider) {
     provider.synced = false;
 
     websocket.onmessage = (event) => {
+      if (event.data === "ping") {
+        websocket.send("pong");
+        return;
+      }
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(provider, new Uint8Array(event.data), true);
       if (encoding.length(encoder) > 1) {
