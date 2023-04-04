@@ -27,7 +27,7 @@ esbuild.buildSync({
     "esbuild",
     "clipboardy",
     "@edge-runtime/primitives",
-    "update-notifier",
+    // "update-notifier",
   ],
   sourcemap: true,
   minify,
