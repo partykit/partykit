@@ -2,7 +2,9 @@
 
 Hello! You're probably seeing this because you're sponsoring my work, and qualify to be in this repo! It's still a bit early; we don't have furniture, the wifi guy is coming next month, that sort of thing. But.. it sorta works already. If you're qualified for the platform, you can even deploy your servers!
 
-I've also setup a discord! (i.e., I made a discord, and added a logo.) You can find me there and if I'm near a laptop I'll be happy to help you with setting anything up, or even just talking you through the whole thing; setting up, running it, deploying it, whatever. Here, come join me: https://discord.gg/D6ZyBvXF
+I've also setup a discord! (i.e., I made a discord, and added a logo.) You can find me there and if I'm near a laptop I'll be happy to help you with setting anything up, or even just talking you through the whole thing; setting up, running it, deploying it, whatever. Here, come join me: https://discord.gg/KDZb7J4uxJ
+
+Another thing: All commits get published to npm with a `beta` tag, so use that when calling `npm install` or `npx`. Example: `npm install partykit@beta y-partykit@beta`.
 
 Ok, back to the actual README.
 
