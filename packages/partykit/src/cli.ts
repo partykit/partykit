@@ -20,7 +20,7 @@ import {
   getConfig,
   getConfigPath,
   getUserConfig,
-  validateUserConfig,
+  // validateUserConfig,
 } from "./config";
 import type { TailFilterMessage } from "./tail/filters";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
@@ -42,10 +42,13 @@ async function getUser() {
   let userConfig;
   try {
     userConfig = getUserConfig();
-    if (!validateUserConfig(userConfig)) {
-      throw new Error("Invalid user config");
-    }
+    // this isn't super useful since we're validating on the server
+    // if (!(await validateUserConfig(userConfig))) {
+    //   console.log("failed");
+    //   throw new Error("Invalid user config");
+    // }
   } catch (e) {
+    console.log("could not get user details, attempting to login");
     await fetchUserConfig();
     userConfig = getUserConfig();
   }

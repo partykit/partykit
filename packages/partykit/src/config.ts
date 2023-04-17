@@ -35,22 +35,23 @@ export function getUserConfig(): UserConfig {
   return userConfigSchema.parse(config);
 }
 
-export async function validateUserConfig(config: UserConfig): Promise<boolean> {
-  const res = await fetch(`https://api.github.com/user`, {
-    headers: {
-      Authorization: `Bearer ${config.access_token}`,
-    },
-  });
-  if (
-    res.ok &&
-    config.login &&
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ((await res.json()) as any).login === config.login
-  ) {
-    return true;
-  }
-  return false;
-}
+// this isn't super useful since we're validating on the server
+// export async function validateUserConfig(config: UserConfig): Promise<boolean> {
+//   const res = await fetch(`https://api.github.com/user`, {
+//     headers: {
+//       Authorization: `Bearer ${config.access_token}`,
+//     },
+//   });
+//   if (
+//     res.ok &&
+//     config.login &&
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     ((await res.json()) as any).login === config.login
+//   ) {
+//     return true;
+//   }
+//   return false;
+// }
 
 const GITHUB_APP_ID = "670a9f76d6be706f5209";
 
