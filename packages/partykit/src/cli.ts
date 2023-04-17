@@ -461,6 +461,10 @@ export async function dev(options: {
         room.ws.emit("onConnect", ws, request, (err?: Error) => {
           if (err) {
             console.error(err);
+            ws.close(
+              1011,
+              err.message || "Uncaught exception during session setup"
+            );
             socket.destroy();
           } else {
             socket.resume();
