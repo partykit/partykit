@@ -29,7 +29,7 @@ const keyEncoding = {
     return str
       .split("#")
       .map((el) =>
-        el.startsWith('"') ? JSON.parse(el) : parseInt(el, 10)
+        el.startsWith('"') ? (JSON.parse(el) as StorageKey) : parseInt(el, 10)
       ) as StorageKey;
   },
 };
@@ -51,10 +51,10 @@ export async function levelGet(
 ): Promise<Uint8Array | null> {
   const prefix = keyEncoding.encode(key);
 
-  const res = (await db.list({
+  const res = await db.list<Uint8Array>({
     start: prefix,
     end: `${prefix}#zzzzz`,
-  })) as Map<string, Uint8Array>;
+  });
 
   if (res.size === 0) {
     return null;
@@ -97,13 +97,14 @@ export async function levelPut(
 }
 
 function groupBy<T>(arr: T[], fn: (el: T) => string): Map<string, T[]> {
-  const map = new Map();
+  const map = new Map<string, T[]>();
   for (const el of arr) {
     const key = fn(el);
     if (!map.has(key)) {
       map.set(key, []);
     }
-    map.get(key).push(el);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    map.get(key)!.push(el);
   }
   return map;
 }

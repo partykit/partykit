@@ -138,6 +138,7 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
       return doc.getXmlFragment(objName);
     case "XmlElement":
       // @ts-expect-error - XmlElement is not exported from yjs?
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return doc.getXmlElement(objName);
     default:
       return {};
