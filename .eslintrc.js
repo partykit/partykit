@@ -1,28 +1,16 @@
-const fs = require("fs");
-const path = require("path");
-
-function* walkTsConfigs(root) {
-  const entries = fs.readdirSync(root, { withFileTypes: true });
-  for (const entry of entries) {
-    if (entry.name === "node_modules") continue; // Ignore `node_modules`s
-    const entryPath = path.join(root, entry.name);
-    if (entry.isDirectory()) {
-      yield* walkTsConfigs(entryPath);
-    } else if (entry.name === "tsconfig.json") {
-      yield entryPath;
-    }
-  }
-}
-
 module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2020,
-    project: ["tsconfig.base.json", ...Array.from(walkTsConfigs(__dirname))],
+    project: [true, "tsconfig.base.json"],
     sourceType: "module",
   },
   plugins: ["@typescript-eslint"],
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  extends: [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+  ],
   ignorePatterns: [
     "node_modules",
     "dist",
@@ -32,9 +20,7 @@ module.exports = {
     "*.d.ts",
   ],
   rules: {
-    "@typescript-eslint/consistent-type-imports": ["error"],
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-floating-promises": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/return-await": "error",
     "@typescript-eslint/no-unused-vars": [
       "warn",
@@ -45,6 +31,16 @@ module.exports = {
         argsIgnorePattern: "^_",
       },
     ],
+
+    // Todo: consider investigating, for each of these, whether they should be enabled
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/require-await": "off",
+    "@typescript-eslint/restrict-plus-operands": "off",
+    "@typescript-eslint/restrict-template-expressions": "off",
   },
   root: true,
 };
