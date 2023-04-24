@@ -7,7 +7,7 @@ import { fetchResult } from "./fetchResult";
 import { serialize, deserialize } from "v8";
 import { File, FormData } from "undici";
 import type { PartyKitStorage } from "./server";
-import type { Server as HttpServer } from "http";
+import { type Server as HttpServer, createServer } from "http";
 import type { BuildOptions, OnLoadArgs } from "esbuild";
 import * as crypto from "crypto";
 import WebSocket from "ws";
@@ -402,21 +402,30 @@ export async function dev(options: {
 
   await ctx.watch(); // turn on watch mode
 
-  const express = await import("express");
   const httpProxy = await import("http-proxy");
-
-  const app = express.default();
-
-  // if (options.assets) {
-  //   app.use(express.static(options.assets));
-  // }
 
   // what we use to proxy requests to the room server
   const proxy = httpProxy.default.createProxyServer();
 
-  // TODO: maybe we can just use urlpattern here
-  app.all("/party/:roomId", async (req, res) => {
-    const room = await getRoom(req.params.roomId);
+  // The roomId is /party/[roomId]
+  function getRoomIdFromPathname(pathname: string) {
+    // TODO: use a URLPattern here instead
+    // TODO: might want to introduce a real router too
+    const getRoomId = new RegExp(/\/party\/(.*)/g);
+    return getRoomId.exec(pathname)?.[1];
+  }
+
+  const app = createServer(async (req, res) => {
+    const roomId = getRoomIdFromPathname(req.url ?? "");
+    if (roomId === undefined) {
+      // if (options.assets) {
+      //  sirv(options.assets)(req, res)
+      // }
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+    const room = await getRoom(roomId);
 
     proxy.web(req, res, {
       target: room.http.url,
