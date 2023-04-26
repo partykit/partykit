@@ -633,7 +633,9 @@ export async function deploy(options: {
   );
 
   console.log(
-    `Deployed ${config.main} as ${config.name}.${user.login}.partykit.dev`
+    `Deployed ${config.main} as ${
+      options.preview ? `${options.preview}.` : ""
+    }${config.name}.${user.login}.partykit.dev`
   );
 }
 
