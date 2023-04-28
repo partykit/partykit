@@ -231,6 +231,15 @@ export async function dev(options: {
     );
   }
 
+  // Since we run the userspace code in this node process, we need to avoid
+  // unhandled exceptions crashing the dev server.
+  process.on("uncaughtException", function (err) {
+    console.error("uncaught exception", err);
+    rooms.forEach((room) => {
+      room.ws.clients.forEach((client) => client.close());
+    });
+  });
+
   // A map of room names to room servers.
   const rooms: Rooms = new Map();
 

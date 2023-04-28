@@ -33,8 +33,7 @@ process.on("exit", (_code) => {
 });
 
 process.on("uncaughtExceptionMonitor", function (err) {
-  // console.error("uncaught exception", err);
-  throw err;
+  console.error("uncaught exception", err);
 });
 
 process.on("unhandledRejection", function (reason, _promise) {
