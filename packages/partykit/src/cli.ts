@@ -416,7 +416,9 @@ export async function dev(options: {
   }
 
   const app = createServer(async (req, res) => {
-    const roomId = getRoomIdFromPathname(req.url ?? "");
+    const url = new URL(req.url ?? "", `http://${req.headers.host}`);
+
+    const roomId = getRoomIdFromPathname(url.pathname);
     if (roomId === undefined) {
       // if (options.assets) {
       //  sirv(options.assets)(req, res)
