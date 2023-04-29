@@ -1,4 +1,4 @@
-(All commits get published to npm with a `beta` tag, so use that when calling `npm install` or `npx`. Example: `npm install partykit@beta y-partykit@beta`. Join us at our discord https://discord.gg/vx4BmTfd)
+(All commits get published to npm with a `beta` tag, so use that when calling `npm install` or `npx`. Example: `npm install partykit@beta y-partykit@beta`. Join us in our discord https://discord.gg/KDZb7J4uxJ)
 
 ## partykit
 
