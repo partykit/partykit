@@ -94,6 +94,8 @@ if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
   throw new Error(".onBeforeRequest should be a function");
 }
 
+let didWarnAboutMissingConnectionId = false;
+
 wss.on(
   "onConnect",
   async (
@@ -103,11 +105,17 @@ wss.on(
   ) => {
     const url = new URL(`http://${request.headers.host}${request.url}`);
 
-    const connectionId = url.searchParams.get("_pk");
+    let connectionId = url.searchParams.get("_pk");
+    if (!connectionId) {
+      if (!didWarnAboutMissingConnectionId) {
+        didWarnAboutMissingConnectionId = true;
+        console.warn("No connection id found in request url, generating one");
+      }
+      connectionId = crypto.randomUUID();
+    }
     const roomId = getRoomIdFromPathname(url.pathname);
 
     assert(roomId, "roomId is required");
-    assert(connectionId, "_pk is required");
 
     const rawInitial = request.headers["x-pk-initial"];
     const unstable_initial = rawInitial
@@ -122,7 +130,7 @@ wss.on(
 
     function closeOrErrorListener() {
       assert(roomId, "roomId is required");
-      assert(connectionId, "_pk is required");
+      assert(connectionId, "missing connection id, this should never happen");
       ws.removeEventListener("close", closeOrErrorListener);
       ws.removeEventListener("error", closeOrErrorListener);
       partyRoom.connections.delete(connectionId);
