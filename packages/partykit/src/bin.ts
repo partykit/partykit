@@ -1,4 +1,4 @@
-#!/usr/bin/env node --enable-source-maps
+#!/usr/bin/env node
 import * as cli from "./cli";
 import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
