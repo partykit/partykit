@@ -2,18 +2,27 @@
   "name": "y-partykit",
   "version": "0.0.0",
   "description": "y.js on partykit!",
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./provider": "./dist/provider.js"
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./provider": {
+      "import": "./dist/esm/provider.js",
+      "require": "./dist/cjs/provider.js"
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist && rm -rf *.d.ts*",
-    "build:server": "npx esbuild src/index.ts src/storage.ts --outdir=dist --format=esm --sourcemap",
-    "build:provider": "npx esbuild src/provider.ts --outfile=dist/provider.js --format=esm --sourcemap",
+    "build:server:cjs": "npx esbuild src/index.ts src/storage.ts --outdir=dist/cjs --format=cjs",
+    "build:server:esm": "npx esbuild src/index.ts src/storage.ts --outdir=dist/esm --format=esm",
+    "build:provider:cjs": "npx esbuild src/provider.ts --outfile=dist/cjs/provider.js --format=cjs",
+    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.js --format=esm",
     "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
-    "build": "npm run clean && npm run build:server && npm run build:provider && npm run build:package-types"
+    "build": "npm run clean && npm run build:server:cjs && npm run build:server:esm && npm run build:provider:cjs && npm run build:provider:esm && npm run build:package-types"
   },
   "keywords": [],
   "author": "",
