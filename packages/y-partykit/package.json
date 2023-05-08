@@ -31,8 +31,7 @@
     "@types/lodash.debounce": "^4.0.7"
   },
   "files": [
-    "dist/*.js",
-    "dist/*.js.map",
+    "dist/**/*.js",
     "*.d.ts",
     "*.d.ts.map"
   ],
