@@ -33,14 +33,12 @@
     "eslint": "^8.36.0",
     "jsdom": "^21.1.1",
     "patch-package": "^6.5.1",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.2",
     "undici": "^5.21.0",
     "vitest": "^0.29.3"
   },
   "engines": {
     "node": ">=16.8.0"
-  },
-  "devDependencies": {
-    "tsup": "^6.7.0"
   }
 }
