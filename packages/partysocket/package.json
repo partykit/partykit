@@ -30,6 +30,7 @@
   },
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "*.d.ts",
     "*.d.ts.map"
   ],
