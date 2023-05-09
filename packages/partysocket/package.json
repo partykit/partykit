@@ -2,21 +2,22 @@
   "name": "partysocket",
   "version": "0.0.1",
   "description": "party hotline",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./ws": {
-      "types": "./ws.d.ts",
+      "types": "./dist/ws.d.ts",
       "import": "./dist/ws.mjs",
       "require": "./dist/ws.js"
     },
     "./react": {
-      "types": "./react.d.ts",
+      "types": "./dist/react.d.ts",
       "import": "./dist/react.mjs",
       "require": "./dist/react.js"
     }
@@ -39,10 +40,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup"
+    "build": "tsup && ./createSymlinks.sh"
   },
   "files": [
-    "dist"
+    "dist",
+    "*.d.ts"
   ],
   "keywords": [],
   "author": "",

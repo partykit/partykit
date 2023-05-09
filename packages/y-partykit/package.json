@@ -2,18 +2,24 @@
   "name": "y-partykit",
   "version": "0.0.0",
   "description": "y.js on partykit!",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./provider": {
-      "types": "./provider.d.ts",
+      "types": "./dist/provider.d.ts",
       "import": "./dist/provider.mjs",
       "require": "./dist/provider.js"
+    },
+    "./storage": {
+      "types": "./dist/storage.d.ts",
+      "import": "./dist/storage.mjs",
+      "require": "./dist/storage.js"
     }
   },
   "tsup": {
@@ -31,10 +37,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup"
+    "build": "tsup && ./createSymlinks.sh"
   },
   "files": [
-    "dist"
+    "dist",
+    "*.d.ts"
   ],
   "keywords": [],
   "author": "",
