@@ -6,11 +6,13 @@
   "module": "dist/esm/index.js",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.js",
+      "types": "./index.d.ts",
+      "import": "./dist/esm/index.mjs",
       "require": "./dist/cjs/index.js"
     },
     "./provider": {
-      "import": "./dist/esm/provider.js",
+      "types": "./provider.d.ts",
+      "import": "./dist/esm/provider.mjs",
       "require": "./dist/cjs/provider.js"
     }
   },
@@ -18,9 +20,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm -rf dist && rm -rf *.d.ts*",
     "build:server:cjs": "npx esbuild src/index.ts src/storage.ts --outdir=dist/cjs --format=cjs",
-    "build:server:esm": "npx esbuild src/index.ts src/storage.ts --outdir=dist/esm --format=esm",
+    "build:server:esm": "npx esbuild src/index.ts src/storage.ts --outdir=dist/esm --format=esm --out-extension:.js=.mjs",
     "build:provider:cjs": "npx esbuild src/provider.ts --outfile=dist/cjs/provider.js --format=cjs",
-    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.js --format=esm",
+    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.js --format=esm --out-extension:.js=.mjs",
     "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
     "build": "npm run clean && npm run build:server:cjs && npm run build:server:esm && npm run build:provider:cjs && npm run build:provider:esm && npm run build:package-types"
   },
@@ -32,6 +34,7 @@
   },
   "files": [
     "dist/**/*.js",
+    "dist/**/*.mjs",
     "*.d.ts",
     "*.d.ts.map"
   ],
