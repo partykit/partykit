@@ -39,5 +39,8 @@
   },
   "engines": {
     "node": ">=16.8.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
   }
 }
