@@ -22,7 +22,7 @@
     "build:server:cjs": "npx esbuild src/index.ts src/storage.ts --outdir=dist/cjs --format=cjs",
     "build:server:esm": "npx esbuild src/index.ts src/storage.ts --outdir=dist/esm --format=esm --out-extension:.js=.mjs",
     "build:provider:cjs": "npx esbuild src/provider.ts --outfile=dist/cjs/provider.js --format=cjs",
-    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.js --format=esm --out-extension:.js=.mjs",
+    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.mjs --format=esm",
     "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
     "build": "npm run clean && npm run build:server:cjs && npm run build:server:esm && npm run build:provider:cjs && npm run build:provider:esm && npm run build:package-types"
   },
