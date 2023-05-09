@@ -4,20 +4,19 @@
   "description": "party hotline",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./ws": {
-      "types": "./dist/ws.d.ts",
+      "types": "./ws.d.ts",
       "import": "./dist/ws.mjs",
       "require": "./dist/ws.js"
     },
     "./react": {
-      "types": "./dist/react.d.ts",
+      "types": "./react.d.ts",
       "import": "./dist/react.mjs",
       "require": "./dist/react.js"
     }
@@ -32,15 +31,16 @@
       "esm",
       "cjs"
     ],
-    "clean": true,
     "dts": true
   },
   "dependencies": {
     "react": "^18.2.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup && ./createSymlinks.sh"
+    "clean": "rm -rf dist *.d.ts",
+    "post-build": "mv dist/*.d.ts* .",
+    "build": "npm run clean && tsup && npm run post-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
     "dist",
