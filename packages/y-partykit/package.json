@@ -2,42 +2,53 @@
   "name": "y-partykit",
   "version": "0.0.0",
   "description": "y.js on partykit!",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./provider": {
       "types": "./provider.d.ts",
-      "import": "./dist/esm/provider.mjs",
-      "require": "./dist/cjs/provider.js"
+      "import": "./dist/provider.mjs",
+      "require": "./dist/provider.js"
+    },
+    "./storage": {
+      "types": "./storage.d.ts",
+      "import": "./dist/storage.mjs",
+      "require": "./dist/storage.js"
     }
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf dist && rm -rf *.d.ts*",
-    "build:server:cjs": "npx esbuild src/index.ts src/storage.ts --outdir=dist/cjs --format=cjs",
-    "build:server:esm": "npx esbuild src/index.ts src/storage.ts --outdir=dist/esm --format=esm --out-extension:.js=.mjs",
-    "build:provider:cjs": "npx esbuild src/provider.ts --outfile=dist/cjs/provider.js --format=cjs",
-    "build:provider:esm": "npx esbuild src/provider.ts --outfile=dist/esm/provider.mjs --format=esm",
-    "build:package-types": "tsc --project tsconfig.extract.json && mv dist/*.d.ts* .",
-    "build": "npm run clean && npm run build:server:cjs && npm run build:server:esm && npm run build:provider:cjs && npm run build:provider:esm && npm run build:package-types"
+  "tsup": {
+    "entry": [
+      "src/index.ts",
+      "src/storage.ts",
+      "src/provider.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true
   },
+  "scripts": {
+    "clean": "rm -rf dist *.d.ts",
+    "post-build": "mv dist/*.d.ts* .",
+    "build": "npm run clean && tsup && npm run post-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.7"
   },
-  "files": [
-    "dist/**/*.js",
-    "dist/**/*.mjs",
-    "*.d.ts",
-    "*.d.ts.map"
-  ],
   "dependencies": {
     "lib0": "^0.2.60",
     "lodash.debounce": "^4.0.8",

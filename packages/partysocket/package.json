@@ -2,37 +2,49 @@
   "name": "partysocket",
   "version": "0.0.1",
   "description": "party hotline",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "exports": {
     ".": {
       "types": "./index.d.ts",
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./ws": {
       "types": "./ws.d.ts",
-      "import": "./dist/esm/ws.mjs",
-      "require": "./dist/cjs/ws.js"
+      "import": "./dist/ws.mjs",
+      "require": "./dist/ws.js"
     },
     "./react": {
       "types": "./react.d.ts",
-      "import": "./dist/esm/react.mjs",
-      "require": "./dist/cjs/react.js"
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
     }
   },
+  "tsup": {
+    "entry": [
+      "src/index.ts",
+      "src/react.ts",
+      "src/ws.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true
+  },
+  "dependencies": {
+    "react": "^18.2.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf dist && rm -rf *.d.ts*",
-    "build:cjs": "npx esbuild src/index.ts src/react.ts src/ws.ts --format=cjs --outdir=dist/cjs",
-    "build:esm": "npx esbuild src/index.ts src/react.ts src/ws.ts --format=esm --outdir=dist/esm --out-extension:.js=.mjs",
-    "build": "npm run clean && npm run build:cjs && npm run build:esm && tsc --project tsconfig.extract.json && mv dist/*.d.ts* ."
+    "clean": "rm -rf dist *.d.ts",
+    "post-build": "mv dist/*.d.ts* .",
+    "build": "npm run clean && tsup && npm run post-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.mjs",
-    "*.d.ts",
-    "*.d.ts.map"
+    "dist",
+    "*.d.ts"
   ],
   "keywords": [],
   "author": "",
