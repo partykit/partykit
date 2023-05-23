@@ -1,0 +1,6 @@
+name = "blocknote-demo"
+compatibility_date = "2023-03-21"
+assets = "./public"
+
+[build]
+command = "npm run build:assets"

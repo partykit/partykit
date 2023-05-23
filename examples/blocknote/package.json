@@ -1,0 +1,21 @@
+{
+  "name": "@partykit/examples-blocknote",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others",
+    "build:assets": "esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --define:PARTYKIT_HOST=\\\"blocknote-demo.threepointone.partykit.dev\\\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@blocknote/react": "^0.7.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
