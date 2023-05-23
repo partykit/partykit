@@ -1,0 +1,4 @@
+{
+  "name": "blocknote-demo",
+  "main": "src/server.ts"
+}
