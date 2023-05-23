@@ -9,12 +9,14 @@
   },
   "dependencies": {
     "@edge-runtime/primitives": "^2.1.2",
+    "chokidar": "^3.5.3",
     "clipboardy": "^3.0.0",
     "esbuild": "^0.17.11",
     "update-notifier": "^6.0.2"
   },
   "devDependencies": {
     "@edge-runtime/types": "^2.0.8",
+    "@types/execa": "^2.0.0",
     "@types/find-config": "^1.0.1",
     "@types/http-proxy": "^1.17.10",
     "@types/node": "^18.15.3",
@@ -26,12 +28,14 @@
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",
     "edge-runtime": "^2.1.2",
+    "execa": "^7.1.1",
     "find-config": "^1.0.0",
     "http-proxy": "^1.18.1",
     "json5": "^2.2.3",
     "open": "^8.4.2",
     "prompts": "^2.4.2",
     "signal-exit": "^3.0.7",
+    "sirv": "^2.0.3",
     "ws": "^8.13.0",
     "zod": "^3.21.4"
   },

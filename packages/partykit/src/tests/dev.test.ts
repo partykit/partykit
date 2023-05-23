@@ -4,6 +4,7 @@ import { fetch } from "undici";
 import { WebSocket } from "ws";
 
 const fixture = `${__dirname}/fixture.js`;
+const publicFixture = `${__dirname}/public-fixture`;
 
 let devProc: Awaited<ReturnType<typeof dev>> | undefined = undefined;
 
@@ -59,5 +60,24 @@ describe("dev", () => {
     } finally {
       ws.close();
     }
+  });
+
+  it("should serve static assets in dev", async () => {
+    await runDev({ main: fixture, assets: publicFixture });
+    const res = await fetch("http://localhost:1999");
+    expect(res.status).toBe(200);
+    expect(await res.text()).toMatchInlineSnapshot(`
+      "<!DOCTYPE html>
+      <html>
+        <head>
+          <title>Partykit Public Fixture</title>
+        </head>
+        <body>
+          <h1>Partykit Public Fixture</h1>
+          <p>Path: packages/partykit/src/tests/public-fixture/index.html</p>
+        </body>
+      </html>
+      "
+    `);
   });
 });

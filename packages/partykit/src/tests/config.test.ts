@@ -616,4 +616,50 @@ describe("config", () => {
         `);
     });
   });
+
+  describe("assets", () => {
+    it("should not error on a string assets", () => {
+      fs.writeFileSync(
+        "partykit.json",
+        JSON.stringify({
+          main: "script.js",
+          assets: "public",
+        })
+      );
+      const config = getConfig(undefined, undefined);
+      expect(config).toMatchInlineSnapshot(`
+        {
+          "assets": "public",
+          "define": {},
+          "main": "./script.js",
+          "vars": {},
+        }
+      `);
+    });
+
+    it("should error on a non-string assets", () => {
+      fs.writeFileSync(
+        "partykit.json",
+        JSON.stringify({
+          main: "script.js",
+          assets: 123,
+        })
+      );
+      expect(() => {
+        getConfig(undefined, undefined);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "[
+          {
+            \\"code\\": \\"invalid_type\\",
+            \\"expected\\": \\"string\\",
+            \\"received\\": \\"number\\",
+            \\"path\\": [
+              \\"assets\\"
+            ],
+            \\"message\\": \\"Expected string, received number\\"
+          }
+        ]"
+      `);
+    });
+  });
 });

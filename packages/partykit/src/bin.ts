@@ -65,7 +65,7 @@ program
   .description("run a script in development mode")
   .argument("[script]", "path to the script to run")
   .option("-p, --port <number>", "port to run the server on")
-  // .option("--assets", "path to assets directory")
+  .option("--assets <path>", "path to assets directory")
   .option("-c, --config <path>", "path to config file")
   // .option("-e, --env", "environment to use")
   .option(
@@ -81,7 +81,7 @@ program
       main: scriptPath,
       port: options.port,
       config: options.config,
-      // assets: options.assets,
+      assets: options.assets,
       vars: getArrayKVOption(options.var),
       define: getArrayKVOption(options.define),
     });
@@ -92,7 +92,7 @@ program
   .alias("publish")
   .description("deploy a script to the internet")
   .argument("[script]", "path to the script to deploy")
-  // .option("--assets", "path to assets directory")
+  .option("--assets <path>", "path to assets directory")
   .option("-c, --config <path>", "path to config file")
   // .option("-e, --env", "environment to use")
   .option(
@@ -118,6 +118,7 @@ program
       define: getArrayKVOption(options.define),
       preview: options.preview,
       withVars: options.withVars,
+      assets: options.assets,
     });
   });
 

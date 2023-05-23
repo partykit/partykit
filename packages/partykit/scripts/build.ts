@@ -27,6 +27,7 @@ esbuild.buildSync({
     "esbuild",
     "clipboardy",
     "@edge-runtime/primitives",
+    "chokidar",
     // "update-notifier",
   ],
   sourcemap: true,
