@@ -13,7 +13,10 @@ import * as crypto from "crypto";
 import WebSocket from "ws";
 import type { RawData } from "ws";
 import onExit from "signal-exit";
+import chokidar from "chokidar";
+import { execaCommand } from "execa";
 import { version as packageVersion } from "../package.json";
+import sirv from "sirv";
 
 import {
   fetchUserConfig,
@@ -210,7 +213,7 @@ type Rooms = Map<string, Room>;
 export async function dev(options: {
   main?: string | undefined; // The path to the script that will be run in the room.
   port?: number | undefined;
-  // assets: string | undefined;
+  assets?: string | undefined;
   config?: string | undefined;
   vars?: Record<string, string> | undefined;
   define?: Record<string, string> | undefined;
@@ -221,6 +224,7 @@ export async function dev(options: {
       main: options.main,
       vars: options.vars,
       define: options.define,
+      assets: options.assets,
     },
     { readEnvLocal: true }
   );
@@ -400,6 +404,43 @@ export async function dev(options: {
     ],
   });
 
+  if (config.build?.command) {
+    const buildCommand = config.build.command;
+    const buildCwd = config.build.cwd;
+    // run a build
+    // start a watcher
+    // on change, run a build
+
+    await execaCommand(buildCommand, {
+      shell: true,
+      // we keep these two as "inherit" so that
+      // logs are still visible.
+      stdout: "inherit",
+      stderr: "inherit",
+      ...(buildCwd && { cwd: buildCwd }),
+    });
+
+    const _watcher = chokidar
+      .watch(config.build.watch || path.join(process.cwd(), "./src"), {
+        persistent: true,
+        ignoreInitial: true,
+      })
+      .on("all", async (_event, _path) => {
+        execaCommand(buildCommand, {
+          shell: true,
+          // we keep these two as "inherit" so that
+          // logs are still visible.
+          stdout: "inherit",
+          stderr: "inherit",
+          ...(buildCwd && { cwd: buildCwd }),
+        }).catch((err) => {
+          console.error(chalk.red("Custom build failed"), err);
+        });
+      });
+  }
+
+  // should we call watcher.close() on exit?
+
   await ctx.watch(); // turn on watch mode
 
   const httpProxy = await import("http-proxy");
@@ -420,11 +461,12 @@ export async function dev(options: {
 
     const roomId = getRoomIdFromPathname(url.pathname);
     if (roomId === undefined) {
-      // if (options.assets) {
-      //  sirv(options.assets)(req, res)
-      // }
-      res.writeHead(404);
-      res.end();
+      if (config.assets) {
+        sirv(config.assets)(req, res);
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
       return;
     }
     const room = await getRoom(roomId);
@@ -521,12 +563,19 @@ export async function deploy(options: {
   main: string | undefined;
   name: string;
   config: string | undefined;
+  assets: string | undefined;
   vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
   withVars: boolean | undefined;
 }): Promise<void> {
-  const config = getConfig(options.config, options);
+  const config = getConfig(options.config, {
+    main: options.main,
+    name: options.name,
+    assets: options.assets,
+    vars: options.vars,
+    define: options.define,
+  });
 
   if (!config.main) {
     throw new Error(
@@ -539,6 +588,27 @@ export async function deploy(options: {
     configName,
     'Missing project name, please specify "name" in your config'
   );
+
+  if (config.build?.command) {
+    const buildCommand = config.build.command;
+    const buildCwd = config.build.cwd;
+    // run a build
+
+    await execaCommand(buildCommand, {
+      shell: true,
+      // we keep these two as "inherit" so that
+      // logs are still visible.
+      stdout: "inherit",
+      stderr: "inherit",
+      ...(buildCwd && { cwd: buildCwd }),
+    });
+  }
+
+  if (config.assets) {
+    console.warn(
+      "Warning: uploading assets are not yet supported in deploy mode"
+    );
+  }
 
   const absoluteScriptPath = path.join(process.cwd(), config.main);
 
@@ -699,7 +769,9 @@ export async function tail(options: {
   // get user details
   const user = await getUser();
 
-  const config = getConfig(options.config, options);
+  const config = getConfig(options.config, {
+    name: options.name,
+  });
   if (!config.name) {
     throw new Error("project name is missing");
   }
@@ -838,7 +910,9 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const config = getConfig(options.config, options);
+    const config = getConfig(options.config, {
+      name: options.name,
+    });
     if (!config.name) {
       throw new Error("project name is missing");
     }
@@ -871,7 +945,9 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const config = getConfig(options.config, options);
+    const config = getConfig(options.config, {
+      name: options.name,
+    });
     if (!config.name) {
       throw new Error("project name is missing");
     }
@@ -922,7 +998,9 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const config = getConfig(options.config, options);
+    const config = getConfig(options.config, {
+      name: options.name,
+    });
     if (!config.name) {
       throw new Error("project name is missing");
     }
@@ -965,7 +1043,9 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const config = getConfig(options.config, options);
+    const config = getConfig(options.config, {
+      name: options.name,
+    });
     if (!config.name) {
       throw new Error("project name is missing");
     }
@@ -1030,7 +1110,9 @@ export const env = {
     // get user details
     const user = await getUser();
 
-    const config = getConfig(options.config, options);
+    const config = getConfig(options.config, {
+      name: options.name,
+    });
     if (!config.name) {
       throw new Error("project name is missing");
     }

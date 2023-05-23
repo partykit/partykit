@@ -2,6 +2,9 @@ import fs from "fs";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { deploy } from "../cli";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
+import { mockConsoleMethods } from "./mock-console";
+
+const std = mockConsoleMethods();
 
 vi.mock("../fetchResult", async () => {
   const { fetchResult } = await import("./fetchResult-mock");
@@ -75,6 +78,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
+      assets: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -124,6 +128,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
+      assets: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -173,6 +178,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: true,
+      assets: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -194,7 +200,59 @@ describe("deploy", () => {
         define: undefined,
         preview: undefined,
         withVars: undefined,
+        assets: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
+  });
+
+  it('should warn if using "assets" in the config', async () => {
+    let checkedResponse = false;
+    mockFetchResult<null>(
+      "POST",
+      "/parties/test-user/test-script",
+      (url, options) => {
+        expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
+        expect(options?.headers).toMatchInlineSnapshot(`
+          {
+            "Authorization": "Bearer test-token",
+            "X-PartyKit-User-Type": "github",
+          }
+        `);
+        checkedResponse = true;
+        return null;
+      }
+    );
+
+    fs.writeFileSync(
+      "partykit.json",
+      JSON.stringify({
+        name: "test-script",
+        assets: "./public",
+      })
+    );
+
+    await deploy({
+      main: fixture,
+      name: "test-script",
+      config: undefined,
+      vars: undefined,
+      define: undefined,
+      preview: undefined,
+      withVars: undefined,
+      assets: undefined,
+    });
+
+    expect(checkedResponse).toBe(true);
+
+    expect(std).toMatchInlineSnapshot(`
+      {
+        "debug": "",
+        "err": "",
+        "info": "",
+        "out": "Loading config from partykit.json
+      Deployed ./../packages/partykit/src/tests/fixture.js as test-script.test-user.partykit.dev",
+        "warn": "Warning: uploading assets are not yet supported in deploy mode",
+      }
+    `);
   });
 });

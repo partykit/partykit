@@ -166,22 +166,32 @@ export async function logout() {
   console.log("Logged out");
 }
 
-const configSchema = z.object({
-  account: z.string().optional(),
-  name: z.string().optional(),
-  main: z.string().optional(),
-  port: z.number().optional(),
-  // assets: z.string().optional(),
-  vars: z.record(z.unknown()).optional(),
-  define: z.record(z.string()).optional(),
-  // env: z
-  //   .record(
-  //     z.object({
-  //       vars: z.record(z.unknown()).optional(),
-  //     })
-  //   )
-  //   .optional(),
-});
+const configSchema = z
+  .object({
+    account: z.string().optional(),
+    name: z.string().optional(),
+    main: z.string().optional(),
+    port: z.number().optional(),
+    assets: z.string().optional(),
+    vars: z.record(z.unknown()).optional(),
+    define: z.record(z.string()).optional(),
+    build: z
+      .object({
+        command: z.string().optional(),
+        cwd: z.string().optional(),
+        watch: z.string().optional(),
+      })
+      .strict()
+      .optional(),
+    // env: z
+    //   .record(
+    //     z.object({
+    //       vars: z.record(z.unknown()).optional(),
+    //     })
+    //   )
+    //   .optional(),
+  })
+  .strict();
 
 export type Config = z.infer<typeof configSchema>;
 
