@@ -1,4 +1,4 @@
-import { parse } from "url";
+import { fileURLToPath, parse } from "url";
 import path from "path";
 import assert from "assert";
 import * as fs from "fs";
@@ -279,7 +279,9 @@ export async function dev(options: {
   let wasmModules: Record<string, WebAssembly.Module> = {};
 
   const workerFacade = fs.readFileSync(
-    path.join(__dirname, "../facade/generated.js"),
+    fileURLToPath(
+      path.join(path.dirname(import.meta.url), "../facade/generated.js")
+    ),
     "utf8"
   );
 
