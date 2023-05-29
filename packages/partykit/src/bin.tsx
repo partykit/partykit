@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 import * as cli from "./cli";
-import { fetchUserConfig, logout } from "./config";
 import { version } from "../package.json";
 import { Option, program /*, Option*/ } from "commander";
+import React, { Suspense } from "react";
+
+import Login from "./commands/login";
+import Logout from "./commands/logout";
+
+import { render } from "ink";
 
 // import packageJson from "../package.json";
 
@@ -233,14 +238,22 @@ program
   .command("login")
   .description("login to partykit")
   .action(async () => {
-    await fetchUserConfig();
+    render(
+      <Suspense>
+        <Login />
+      </Suspense>
+    );
   });
 
 program
   .command("logout")
   .description("logout from partykit")
   .action(async () => {
-    await logout();
+    render(
+      <Suspense>
+        <Logout />
+      </Suspense>
+    );
   });
 
 // semiver implementation via https://github.com/lukeed/semiver/blob/ae7eebe6053c96be63032b14fb0b68e2553fcac4/src/index.js

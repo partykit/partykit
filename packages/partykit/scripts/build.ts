@@ -18,18 +18,12 @@ esbuild.buildSync({
 
 // generate bin/index.js
 esbuild.buildSync({
-  entryPoints: ["src/bin.ts"],
+  entryPoints: ["src/bin.tsx"],
   bundle: true,
-  format: "cjs",
-  outfile: "dist/bin.js",
+  format: "esm",
+  outfile: "dist/bin.mjs",
   platform: "node",
-  external: [
-    "esbuild",
-    "clipboardy",
-    "@edge-runtime/primitives",
-    "chokidar",
-    // "update-notifier",
-  ],
+  packages: "external",
   sourcemap: true,
   minify,
   define: {
@@ -37,7 +31,7 @@ esbuild.buildSync({
   },
 });
 
-fs.chmodSync("dist/bin.js", 0o755);
+fs.chmodSync("dist/bin.mjs", 0o755);
 
 // generate dist/server.js
 esbuild.buildSync({

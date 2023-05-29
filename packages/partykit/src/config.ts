@@ -19,6 +19,23 @@ export type UserConfig = z.infer<typeof userConfigSchema>;
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
 
+export async function getUser(): Promise<UserConfig> {
+  let userConfig;
+  try {
+    userConfig = getUserConfig();
+    // this isn't super useful since we're validating on the server
+    // if (!(await validateUserConfig(userConfig))) {
+    //   console.log("failed");
+    //   throw new Error("Invalid user config");
+    // }
+  } catch (e) {
+    console.log("could not get user details, attempting to login");
+    await fetchUserConfig();
+    userConfig = getUserConfig();
+  }
+  return userConfig;
+}
+
 export function getUserConfig(): UserConfig {
   if (process.env.GITHUB_TOKEN && process.env.GITHUB_LOGIN) {
     return {
@@ -89,6 +106,8 @@ export async function fetchUserConfig(): Promise<void> {
 
   // we do this because for some reason the clipboardy package doesn't work
   // with a direct import up top
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore kill me, bring me sweet release of death please
   const { default: clipboardy } = await import("clipboardy");
   clipboardy.writeSync(user_code);
 
@@ -146,7 +165,6 @@ export async function fetchUserConfig(): Promise<void> {
           2
         )
       );
-      console.log(`Logged in as ${chalk.bold(githubUserDetails.login)}`);
       return;
     }
     if (error === "authorization_pending") {
@@ -163,7 +181,6 @@ export async function logout() {
     fs.rmSync(USER_CONFIG_PATH);
   }
   // TODO: delete the token from github
-  console.log("Logged out");
 }
 
 const configSchema = z
