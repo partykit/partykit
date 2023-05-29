@@ -19,10 +19,10 @@ import { version as packageVersion } from "../package.json";
 import sirv from "sirv";
 
 import {
-  fetchUserConfig,
   getConfig,
   getConfigPath,
-  getUserConfig,
+  getUser,
+
   // validateUserConfig,
 } from "./config";
 import type { TailFilterMessage } from "./tail/filters";
@@ -40,23 +40,6 @@ const MAX_VALUE_SIZE = 128 * 1024; /* 128KiB */
 // values to be 32 bytes greater than the advertised limit. This allows 128KiB
 // byte arrays to be stored for example.
 const ENFORCED_MAX_VALUE_SIZE = MAX_VALUE_SIZE + 32;
-
-async function getUser() {
-  let userConfig;
-  try {
-    userConfig = getUserConfig();
-    // this isn't super useful since we're validating on the server
-    // if (!(await validateUserConfig(userConfig))) {
-    //   console.log("failed");
-    //   throw new Error("Invalid user config");
-    // }
-  } catch (e) {
-    console.log("could not get user details, attempting to login");
-    await fetchUserConfig();
-    userConfig = getUserConfig();
-  }
-  return userConfig;
-}
 
 function assertKeySize(key: string, many = false) {
   if (Buffer.byteLength(key) <= MAX_KEY_SIZE) return;
