@@ -1,3 +1,6 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom"/>
+
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-env browser */
 
@@ -8,7 +11,9 @@ import * as monaco from "monaco-editor";
 
 import BetterWebSocket from "partysocket/ws";
 
-self.MonacoEnvironment = {
+// @ts-expect-error TODO: fix this
+window.MonacoEnvironment = {
+  // @ts-expect-error TODO: fix this
   getWorkerUrl: function (moduleId, label) {
     if (label === "json") {
       // return "/dist/json.worker.bundle.js";
@@ -36,6 +41,7 @@ declare const PARTYKIT_HOST: string | undefined;
 const partykitHost =
   typeof PARTYKIT_HOST === "undefined" ? "localhost:1999" : PARTYKIT_HOST;
 
+// @ts-expect-error TODO: fix this
 window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
   const provider = new YPartyKitProvider(
@@ -53,6 +59,7 @@ window.addEventListener("load", () => {
   const type = ydoc.getText("monaco");
 
   const editor = monaco.editor.create(
+    // @ts-expect-error TODO: fix this
     /** @type {HTMLElement} */ document.getElementById("monaco-editor")!,
     {
       value: "",
@@ -68,6 +75,7 @@ window.addEventListener("load", () => {
   );
 
   const connectBtn =
+    // @ts-expect-error TODO: fix this
     /** @type {HTMLElement} */ document.getElementById("y-connect-btn")!;
   connectBtn.addEventListener("click", () => {
     if (provider.shouldConnect) {

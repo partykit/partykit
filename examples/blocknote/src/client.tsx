@@ -1,4 +1,5 @@
-/** @jsx React.createElement */
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom"/>
 
 import * as React from "react";
 import YPartyKitProvider from "y-partykit/provider";

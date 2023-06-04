@@ -1,6 +1,7 @@
 /** Calculates the n-th Fibonacci number. */
+/// <reference no-default-lib="true"/>
+/// <reference types="assemblyscript" />
 
-// @ts-expect-error we should type these modules via https://www.assemblyscript.org/
 export function fib(n: i32): i32 {
   let a = 0,
     b = 1;

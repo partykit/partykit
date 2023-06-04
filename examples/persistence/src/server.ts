@@ -1,3 +1,6 @@
+/// <reference no-default-lib="true"/>
+/// <reference types="@cloudflare/workers-types" />
+
 import type { PartyKitRoom, PartyKitServer } from "partykit/server";
 
 function broadcast(room: PartyKitRoom, msg: string) {
@@ -11,7 +14,7 @@ export default {
     // your business logic here
     ws.send(`count:${(await room.storage.get("count")) || "0"}`);
 
-    ws.onmessage = async function incoming(evt) {
+    ws.addEventListener("message", async function incoming(evt) {
       if (evt.data === "increment") {
         await room.storage.put(
           "count",
@@ -24,9 +27,9 @@ export default {
           (parseInt(`${await room.storage.get("count")}`) || 0) - 1
         );
         broadcast(room, `count:${(await room.storage.get("count")) || "0"}`);
-      } else if (evt.data.startsWith("latency")) {
+      } else if ((evt.data as string).startsWith("latency")) {
         ws.send(evt.data);
       }
-    };
+    });
   },
 } satisfies PartyKitServer;
