@@ -8,6 +8,7 @@ import Login from "./commands/login";
 import Logout from "./commands/logout";
 
 import { render } from "ink";
+import { Dev } from "./dev";
 
 // import packageJson from "../package.json";
 
@@ -82,14 +83,15 @@ program
     "A key-value pair to be substituted in the project"
   )
   .action(async (scriptPath, options) => {
-    await cli.dev({
-      main: scriptPath,
-      port: options.port,
-      config: options.config,
-      assets: options.assets,
-      vars: getArrayKVOption(options.var),
-      define: getArrayKVOption(options.define),
-    });
+    render(
+      <Dev
+        main={scriptPath}
+        port={options.port}
+        config={options.config}
+        vars={getArrayKVOption(options.var)}
+        define={getArrayKVOption(options.define)}
+      />
+    );
   });
 
 program

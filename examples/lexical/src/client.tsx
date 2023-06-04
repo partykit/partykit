@@ -1,4 +1,5 @@
-/** @jsx React.createElement */
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom"/>
 
 import * as React from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
@@ -35,7 +36,6 @@ function Editor() {
       />
       <CollaborationPlugin
         id="yjs"
-        // @ts-expect-error lexical's types clash with yjs,
         // TODO: we should fix it sometime
         providerFactory={(id, yjsDocMap) => {
           const doc = new Y.Doc();

@@ -1,3 +1,6 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom"/>
+
 import PartySocket from "partysocket";
 
 const partySocket = new PartySocket({
@@ -12,13 +15,14 @@ partySocket.onerror = (err) => console.error({ err });
 partySocket.onclose = (evt) => console.log("closed", evt);
 partySocket.onopen = () => partySocket.send("ping");
 partySocket.onmessage = (evt) => {
-  if (evt.data.startsWith("latency:")) {
-    const id = evt.data.split(":")[1];
+  const data = evt.data as string;
+  if (data.startsWith("latency:")) {
+    const id = data.split(":")[1];
     const latency = Date.now() - latencyPingStarts.get(id);
     latencyPingStarts.delete(id);
     latencyMonitor.innerText = `${latency / 2}ms`;
-  } else if (evt.data.startsWith("count:")) {
-    const count = parseInt(evt.data.split(":")[1]);
+  } else if (data.startsWith("count:")) {
+    const count = parseInt(data.split(":")[1]);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.getElementById("count")!.innerText = `${count}`;
   }

@@ -70,7 +70,7 @@ export function mockConsoleMethods() {
  * Windows gets a different character.
  */
 function normalizeErrorMarkers(str: string): string {
-  return str.replaceAll("✘", "X");
+  return str.replaceAll("✘", "X") as string;
 }
 
 /**
@@ -100,12 +100,12 @@ export function stripTrailingWhitespace(str: string): string {
  * variation causing every few tests the value to change by ± .01
  */
 function replaceByte(stdout: string): string {
-  return stdout.replaceAll(/\d+\.\d+ KiB/g, "xx KiB");
+  return stdout.replaceAll(/\d+\.\d+ KiB/g, "xx KiB") as string;
 }
 
 /**
  * Temp directories are created with random names, so we replace all comments temp dirs in them
  */
 export function normalizeTempDirs(stdout: string): string {
-  return stdout.replaceAll(/\/\/.+\/tmp.+/g, "//tmpdir");
+  return stdout.replaceAll(/\/\/.+\/tmp.+/g, "//tmpdir") as string;
 }

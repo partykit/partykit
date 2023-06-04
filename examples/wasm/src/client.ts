@@ -1,3 +1,6 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="dom"/>
+
 import PartySocket from "partysocket";
 
 const partySocket = new PartySocket({

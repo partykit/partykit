@@ -365,7 +365,7 @@ export async function onConnect(
   const doc = await getYDoc(room, options);
   doc.conns.set(conn, new Set());
   // listen and reply to events
-  conn.addEventListener("message", async (message) => {
+  conn.addEventListener("message", (message) => {
     if (typeof message.data !== "string") {
       return messageListener(conn, doc, new Uint8Array(message.data));
     } else {
