@@ -8,6 +8,7 @@ import type { PartyKitServer, PartyKitRoom } from "../src/server";
 import type {
   DurableObjectNamespace,
   DurableObjectState,
+  ExecutionContext,
 } from "@cloudflare/workers-types";
 
 declare const Worker: PartyKitServer;
@@ -53,7 +54,7 @@ type PartyKitConnection = {
   unstable_initial: unknown;
 };
 
-export class MainDO {
+export class MainDO implements DurableObject {
   controller: DurableObjectState;
   room: PartyKitRoom;
 
@@ -198,7 +199,11 @@ type Env = {
 };
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(
+    request: Request,
+    env: Env,
+    ctx: ExecutionContext
+  ): Promise<Response> {
     try {
       const url = new URL(request.url);
       const roomId = getRoomIdFromPathname(url.pathname);
@@ -225,7 +230,8 @@ export default {
                   {
                     id: roomId,
                     env,
-                  }
+                  },
+                  ctx
                 );
               } catch (e) {
                 return new Response(
@@ -266,7 +272,8 @@ export default {
                   {
                     id: roomId,
                     env,
-                  }
+                  },
+                  ctx
                 );
               } catch (e) {
                 return new Response(

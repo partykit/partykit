@@ -1,5 +1,6 @@
 import type {
   DurableObjectStorage,
+  ExecutionContext,
   Request,
   Response,
   WebSocket,
@@ -24,12 +25,14 @@ export type PartyKitServer<Initial = unknown> = {
   onConnect?: (ws: WebSocket, room: PartyKitRoom) => void | Promise<void>;
   onBeforeConnect?: (
     req: Request,
-    room: { id: string; env: Record<string, unknown> }
+    room: { id: string; env: Record<string, unknown> },
+    ctx: ExecutionContext
   ) => Initial | Promise<Initial>;
 
   onBeforeRequest?: (
     req: Request,
-    room: { id: string; env: Record<string, unknown> }
+    room: { id: string; env: Record<string, unknown> },
+    ctx: ExecutionContext
   ) => Request | Promise<Request> | Response | Promise<Response>;
   onRequest?: (
     req: Request,
