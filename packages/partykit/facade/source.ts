@@ -43,6 +43,10 @@ if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
   throw new Error(".onBeforeRequest should be a function");
 }
 
+if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
+  throw new Error(".onAlarm should be a function");
+}
+
 let didWarnAboutMissingConnectionId = false;
 
 const MAX_CONNECTIONS = 100; // TODO: make this configurable
@@ -65,6 +69,7 @@ export class MainDO implements DurableObject {
       id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
       // TODO: probably want to rename this to something else
       // "sockets"? "connections"? "clients"?
+      internalID: this.controller.id.toString(),
       connections: new Map(),
       env: env,
       storage: this.controller.storage,
@@ -189,9 +194,11 @@ export class MainDO implements DurableObject {
     return Worker.onConnect(connection.socket, room);
   }
 
-  // async alarm() {
-  //   // TODO: implement this
-  // }
+  async alarm() {
+    if (Worker.onAlarm) {
+      return Worker.onAlarm(this.room);
+    }
+  }
 }
 
 type Env = {
