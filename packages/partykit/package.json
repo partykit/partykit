@@ -7,7 +7,6 @@
     "./server": "./dist/server.js",
     "./src/cli": "./src/cli.ts"
   },
-  "types": "./types.d.ts",
   "dependencies": {
     "chalk": "^5.2.0",
     "chokidar": "^3.5.3",
