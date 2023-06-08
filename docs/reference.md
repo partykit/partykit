@@ -1,10 +1,12 @@
 ## API
 
-The PartyKit runtime is a modern standards-based JavaScript runtime based on the []`workerd`](https://github.com/cloudflare/workerd) runtime by Cloudflare that powers [Cloudflare Workers](https://workers.cloudflare.com/) In addition to running modern JavaScript, it also supports [typescript](https://www.typescriptlang.org/), thousands of modules from [the npm registry](https://www.npmjs.com/), and [WebAssembly modules](https://webassembly.org/).
+The PartyKit runtime is a modern standards-based JavaScript runtime based on the [`workerd`](https://github.com/cloudflare/workerd) runtime by Cloudflare that powers [Cloudflare Workers](https://workers.cloudflare.com/) In addition to running modern JavaScript, it also supports [TypeScript](https://www.typescriptlang.org/), thousands of modules from [the npm registry](https://www.npmjs.com/), and [WebAssembly modules](https://webassembly.org/).
 
 You can write a PartyKit entrypoint that looks like this:
 
 ```ts
+import { PartyKitServer, PartyKitRoom } from "partykit/server";
+
 export default {
   async onConnect(ws: WebSocket, room: PartyKitRoom) {
     ws.send("Hello, world!"); // Send a message to the client
@@ -15,7 +17,7 @@ export default {
   async onRequest(request: Request, room: PartyKitRoom) {
     // ...
   },
-};
+} satisfies PartyKitServer;
 ```
 
 **_onConnect_**: This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `ws` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client. The `room` argument is an object that contains information about the room that the client is in. It has the following properties:
