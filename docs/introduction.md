@@ -14,7 +14,8 @@ Enough talk, let's get started!
 
 To get started:
 
-- check out some apps using with PartyKit in the [examples folder](https://github.com/partykit/partykit/tree/main/examples)
+- see the ["Quickstart" page](https://github.com/partykit/partykit/blob/main/docs/quickstart.md)
+- explore the ["Examples" directory](https://github.com/partykit/partykit/tree/main/examples)
 - read the [API reference page](https://github.com/partykit/partykit/blob/main/docs/reference.md)
 
 ## Technology
@@ -35,7 +36,7 @@ PartyKit is a technology for realtime multiplayer collaborative applications. Ex
 
 - game development
 - AI-assisted tech
-- collaboration app wuch as whiteboards, code editors, text editors, music co-creation
+- collaboration app wuch as whiteboards, code editors, text editors, music co-creation, and others
 
 **Are you using PartyKit?** We want to hear from you!
 Reach out on [Discord](https://discord.gg/KDZb7J4uxJ) or [Twitter](https://twitter.com/partykit_io)!
