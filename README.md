@@ -94,47 +94,6 @@ const provider = new YPartyKitProvider("localhost:1999", "my-room", doc);
 
 Refer to the [official Yjs documentation](https://docs.yjs.dev/ecosystem/editor-bindings) for more information. Examples provided in the Yjs documentation should work seamlessly with `y-partykit` (ensure to replace `y-websocket` with `y-partykit/provider`).
 
-### party.io
-
-Currently under development, `party.io` is a high-level library inspired by [socket.io](https://socket.io). It abstracts `partysocket` and simplifies the construction of real-time applications. Below is an example of how you can use it on the client:
-
-```ts
-import Party from "party.io";
-
-const io = new Party({
-  // for local development
-  host: "localhost:1999",
-  // for production
-  // host: "my-party.username.partykit.dev",
-});
-
-const socket = io.join("my-room");
-
-socket.emit("hello
-
-", "world"); // named events
-// ...and more
-```
-
-And on the server:
-
-```ts
-import { onConnect } from "party.io";
-
-export default {
-  onConnect(ws, room) {
-    onConnect(ws, room, (socket) => {
-      socket.on("hello", (arg1, arg2, callback) => {
-        // subscribe to events
-      });
-
-      socket.emit("hello", "world"); // named events
-      // ...and so on
-    });
-  },
-};
-```
-
 ## Contributing
 
 We encourage contributions to `partykit`. If you're interested in contributing or need help or have questions, please join us in our [Discord](https://discord.gg/KDZb7J4uxJ).
