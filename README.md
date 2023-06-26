@@ -1,38 +1,68 @@
-(All commits get published to npm with a `beta` tag, so use that when calling `npm install` or `npx`. Example: `npm install partykit@beta y-partykit@beta`. Join us in our discord https://discord.gg/KDZb7J4uxJ)
+# PartyKit
 
-## partykit
+![npm beta](https://img.shields.io/npm/v/partykit/beta)
+[![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/KDZb7J4uxJ)
+![License](https://img.shields.io/github/license/partykit/partykit)
 
-Everything's better with friends.
+`partykit` is an SDK designed for creating real-time collaborative applications. 
 
-`partykit` is a software development kit for building realtime collaborative applications. You can use it with your existing web applications, or build new ones from scratch.
+Whether you wish to augment your existing web applications or construct new ones from scratch, `partykit` makes the task easier with minimal coding effort.
 
-You can create a server with very little code:
+:warning: Please note, all updates to partykit are currently published directly to npm using the beta tag.
+
+## Installation
+
+Install `partykit` through npm:
+
+```sh
+npm install partykit@beta y-partykit@beta
+```
+
+For yarn users:
+
+```sh
+yarn add partykit@beta y-partykit@beta
+```
+
+## Quick Start
+
+The fundamental components of a partykit application are the server and the client. The server is a simple JavaScript module exporting an object that defines how your server behaves, primarily in response to WebSocket events. The client connects to this server and listens for these events.
+
+For a quick demonstration, we will create a server that sends a welcome message to the client upon connection to a room. Then, we will set up a client to listen for this message.
+
+First, let's create our server:
 
 ```ts
 // server.ts
-
 export default {
   onConnect(websocket, room) {
-    // called whenever a user join a room
+    // This is invoked whenever a user joins a room
     websocket.send("hello from room: " + room.id);
   },
 };
 ```
 
-Then run `npx partykit dev server.ts` to start the server for local development. You can later deploy it to the cloud with `npx partykit deploy server.ts --name my-party`.
+To start the server for local development, run:
 
-Then, in your application, you can connect to this server with a simple client:
+```sh
+npx partykit dev server.ts
+```
+
+When you're ready to go live, deploy your application to the cloud using:
+
+```sh
+npx partykit deploy server.ts --name my-party
+```
+
+Next, connect your application to this server with a simple client:
 
 ```ts
-// PartySocket is a small abstraction over
-// WebSocket that adds reconnection logic, etc.
+// Import PartySocket - a lightweight abstraction over WebSocket 
 import PartySocket from "partysocket";
 
 const socket = new PartySocket({
-  // for local development
-  host: "localhost:1999",
-  // for production
-  // host: "my-party.username.partykit.dev",
+  host: "localhost:1999", // for local development
+  // host: "my-party.username.partykit.dev", // for production
   room: "my-room",
 });
 
@@ -41,11 +71,11 @@ socket.on("message", (message) => {
 });
 ```
 
-This way, you can add realtime collaboration to your existing web application with very little code. It runs alongside your existing application, and you can use it to build realtime features like collaborative text editors, multiplayer games, and more.
+## Libraries
 
 ### y-partykit
 
-[Yjs](https://yjs.dev) is a library of data structures for building collaborative applications. `y-partykit` is a library that makes it easy to host backends for [Yjs](https://yjs.dev) on partykit. You can create a yjs backend with as little code as this:
+`y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software. You can set up a Yjs backend with just a few lines of code:
 
 ```ts
 // server.ts
@@ -54,7 +84,7 @@ import { onConnect } from "y-partykit";
 export default { onConnect };
 ```
 
-Then, you can use the provider to connect to this server:
+Then, use the provider to connect to this server:
 
 ```ts
 import YPartyKitProvider from "y-partykit/provider";
@@ -62,13 +92,11 @@ import YPartyKitProvider from "y-partykit/provider";
 const provider = new YPartyKitProvider("localhost:1999", "my-room", doc);
 ```
 
-Have a look at [the official documentation](https://docs.yjs.dev/ecosystem/editor-bindings), their examples should just work with y-partykit (replacing `y-websocket` with `y-partykit/provider` like above)
+Refer to the [official Yjs documentation](https://docs.yjs.dev/ecosystem/editor-bindings) for more information. Examples provided in the Yjs documentation should work seamlessly with `y-partykit` (ensure to replace `y-websocket` with `y-partykit/provider`).
 
 ### party.io
 
-(NB: THIS DOES NOT EXIST YET)
-
-`party.io` is a library heavily influenced by [socket.io](https://socket.io). It's an abstraction over `partysocket` that makes it easy to build realtime applications. You might use it on the client:
+Currently under development, `party.io` is a high-level library inspired by [socket.io](https://socket.io). It abstracts `partysocket` and simplifies the construction of real-time applications. Below is an example of how you can use it on the client:
 
 ```ts
 import Party from "party.io";
@@ -82,17 +110,10 @@ const io = new Party({
 
 const socket = io.join("my-room");
 
-socket.emit("hello", "world"); // named events
+socket.emit("hello
 
-socket.emit("hello", { nested: { object: "world" } }, ["some", "array"]); // nested objects and arrays
-
-socket.emit("hello", [1, 2, 3], (...args) => {
-  // callbacks
-});
-
-socket.on("hello", (arg1, arg2, callback) => {
-  // subscribe to events
-});
+", "world"); // named events
+// ...and more
 ```
 
 And on the server:
@@ -113,3 +134,11 @@ export default {
   },
 };
 ```
+
+## Contributing
+
+We encourage contributions to `partykit`. If you're interested in contributing or need help or have questions, please join us in our [Discord](https://discord.gg/KDZb7J4uxJ).
+
+## License
+
+`partykit` is [MIT licensed](./LICENSE).
