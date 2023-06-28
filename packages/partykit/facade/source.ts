@@ -31,24 +31,49 @@ function getRoomIdFromPathname(pathname: string) {
   return getRoomId.exec(pathname)?.[1];
 }
 
-if (Worker.onConnect && typeof Worker.onConnect !== "function") {
+if ("onConnect" in Worker && typeof Worker.onConnect !== "function") {
   throw new Error(".onConnect is not a function");
 }
 
-if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
+if (
+  "onBeforeConnect" in Worker &&
+  typeof Worker.onBeforeConnect !== "function"
+) {
   throw new Error(".onBeforeConnect should be a function");
 }
 
-if (Worker.onRequest && typeof Worker.onRequest !== "function") {
+if ("onRequest" in Worker && typeof Worker.onRequest !== "function") {
   throw new Error(".onRequest is not a function");
 }
 
-if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
+if (
+  "onBeforeRequest" in Worker &&
+  typeof Worker.onBeforeRequest !== "function"
+) {
   throw new Error(".onBeforeRequest should be a function");
 }
 
-if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
+if ("onAlarm" in Worker && typeof Worker.onAlarm !== "function") {
   throw new Error(".onAlarm should be a function");
+}
+
+if ("onMessage" in Worker && typeof Worker.onMessage !== "function") {
+  throw new Error(".onMessage should be a function");
+}
+
+if ("onClose" in Worker && typeof Worker.onClose !== "function") {
+  throw new Error(".onClose should be a function");
+}
+
+if ("onError" in Worker && typeof Worker.onError !== "function") {
+  throw new Error(".onError should be a function");
+}
+
+if (
+  "onConnect" in Worker &&
+  ("onMessage" in Worker || "onClose" in Worker || "onError" in Worker)
+) {
+  throw new Error("Cannot have both onConnect and onMessage handlers");
 }
 
 let didWarnAboutMissingConnectionId = false;
@@ -62,15 +87,20 @@ export class MainDO implements DurableObject {
   constructor(controller: DurableObjectState, env: Env) {
     this.controller = controller;
 
+    const { MAIN_DO: _MAIN_DO, ...envWithoutMainDO } = env;
+
     this.room = {
       id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
       // TODO: probably want to rename this to something else
       // "sockets"? "connections"? "clients"?
       internalID: this.controller.id.toString(),
       connections: new Map(),
-      env: env,
+      env: envWithoutMainDO,
       storage: this.controller.storage,
       broadcast: this.broadcast,
+      getWebSockets() {
+        return controller.getWebSockets();
+      },
     };
   }
 
@@ -101,7 +131,7 @@ export class MainDO implements DurableObject {
       this.room.id = roomId;
 
       if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-        if (Worker.onRequest) {
+        if ("onRequest" in Worker) {
           if (typeof Worker.onRequest === "function") {
             return await Worker.onRequest(request, this.room);
           } else {
@@ -123,7 +153,7 @@ export class MainDO implements DurableObject {
       );
     }
     try {
-      if (!Worker.onConnect) {
+      if (!("onConnect" in Worker) || typeof Worker.onConnect !== "function") {
         throw new Error("No onConnect handler");
       }
 
@@ -145,11 +175,24 @@ export class MainDO implements DurableObject {
         id: connectionId,
         socket: serverWebSocket,
         unstable_initial,
+        room: {
+          id: this.room.id,
+          internalID: this.room.internalID,
+          env: this.room.env,
+        },
       });
       this.room.connections.set(connectionId, connection);
 
       // Accept the websocket connection
-      serverWebSocket.accept();
+      if ("onMessage" in Worker) {
+        this.controller.acceptWebSocket(serverWebSocket);
+      } else {
+        serverWebSocket.accept();
+        connection.serializeAttachment({
+          id: connectionId,
+          unstable_initial,
+        });
+      }
 
       await this.handleConnection(this.room, connection);
 
@@ -194,8 +237,38 @@ export class MainDO implements DurableObject {
     return Worker.onConnect(connection, room);
   }
 
+  async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
+    const connection: PartyKitConnection = Object.assign(ws, {
+      ...ws.deserializeAttachment(),
+      socket: ws,
+    });
+    if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
+      return Worker.onMessage(connection, msg, this.room);
+    }
+  }
+
+  async webSocketClose(ws: WebSocket) {
+    const connection: PartyKitConnection = Object.assign(ws, {
+      ...ws.deserializeAttachment(),
+      socket: ws,
+    });
+    if ("onClose" in Worker && typeof Worker.onClose === "function") {
+      return Worker.onClose(connection, this.room);
+    }
+  }
+
+  async webSocketError(ws: WebSocket, err: Error) {
+    const connection: PartyKitConnection = Object.assign(ws, {
+      ...ws.deserializeAttachment(),
+      socket: ws,
+    });
+    if ("onError" in Worker && typeof Worker.onError === "function") {
+      return Worker.onError(connection, err, this.room);
+    }
+  }
+
   async alarm() {
-    if (Worker.onAlarm) {
+    if ("onAlarm" in Worker && typeof Worker.onAlarm === "function") {
       return Worker.onAlarm(this.room);
     }
   }
@@ -212,6 +285,7 @@ export default {
     ctx: ExecutionContext
   ): Promise<Response> {
     try {
+      const { MAIN_DO: _MAIN_DO, ...envWithoutMainDo } = env;
       const url = new URL(request.url);
       const roomId = getRoomIdFromPathname(url.pathname);
       // TODO: throw if room is longer than x characters
@@ -229,14 +303,14 @@ export default {
           // isValidRequest?
           // onAuth?
           let onBeforeConnectResponse: unknown;
-          if (Worker.onBeforeConnect) {
+          if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
               try {
                 onBeforeConnectResponse = await Worker.onBeforeConnect(
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: envWithoutMainDo,
                   },
                   ctx
                 );
@@ -271,14 +345,14 @@ export default {
           return await env.MAIN_DO.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
-          if (Worker.onBeforeRequest) {
+          if ("onBeforeRequest" in Worker) {
             if (typeof Worker.onBeforeRequest === "function") {
               try {
                 onBeforeRequestResponse = await Worker.onBeforeRequest(
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: envWithoutMainDo,
                   },
                   ctx
                 );
@@ -299,7 +373,7 @@ export default {
           if (onBeforeRequestResponse instanceof Response) {
             return onBeforeRequestResponse;
           }
-          if (!Worker.onRequest) {
+          if (!("onRequest" && Worker)) {
             throw new Error("No onRequest handler");
           }
 

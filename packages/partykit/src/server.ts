@@ -15,6 +15,7 @@ export type PartyKitRoom = {
   env: Record<string, unknown>; // use a .env file, or --var
   storage: PartyKitStorage;
   broadcast: (msg: string, without: string[]) => void;
+  getWebSockets: () => WebSocket[];
 };
 
 export type PartyKitConnection = WebSocket & {
@@ -22,31 +23,50 @@ export type PartyKitConnection = WebSocket & {
   /**
    * @deprecated
    */
+  room: {
+    id: string;
+    internalID: string;
+    env: Record<string, unknown>;
+  };
   socket: WebSocket;
   unstable_initial: unknown;
 };
 
-export type PartyKitServer<Initial = unknown> = {
-  onConnect?: (
-    ws: PartyKitConnection,
-    room: PartyKitRoom
-  ) => void | Promise<void>;
+export type PartyKitServer<Initial = unknown> =
+  | {
+      onConnect?: (
+        ws: PartyKitConnection,
+        room: PartyKitRoom
+      ) => void | Promise<void>;
 
-  onBeforeConnect?: (
-    req: Request,
-    room: { id: string; env: Record<string, unknown> },
-    ctx: ExecutionContext
-  ) => Initial | Promise<Initial>;
+      onBeforeConnect?: (
+        req: Request,
+        room: { id: string; env: Record<string, unknown> },
+        ctx: ExecutionContext
+      ) => Initial | Promise<Initial>;
 
-  onBeforeRequest?: (
-    req: Request,
-    room: { id: string; env: Record<string, unknown> },
-    ctx: ExecutionContext
-  ) => Request | Promise<Request> | Response | Promise<Response>;
+      onBeforeRequest?: (
+        req: Request,
+        room: { id: string; env: Record<string, unknown> },
+        ctx: ExecutionContext
+      ) => Request | Promise<Request> | Response | Promise<Response>;
 
-  onRequest?: (
-    req: Request,
-    room: PartyKitRoom
-  ) => Response | Promise<Response>;
-  onAlarm?: (room: Omit<PartyKitRoom, "id">) => void | Promise<void>;
-};
+      onRequest?: (
+        req: Request,
+        room: PartyKitRoom
+      ) => Response | Promise<Response>;
+      onAlarm?: (room: Omit<PartyKitRoom, "id">) => void | Promise<void>;
+    }
+  | {
+      onMessage?: (
+        ws: PartyKitConnection,
+        message: string | ArrayBuffer,
+        room: PartyKitRoom
+      ) => void | Promise<void>;
+      onClose?: (ws: WebSocket, room: PartyKitRoom) => void | Promise<void>;
+      onError?: (
+        ws: PartyKitConnection,
+        err: Error,
+        room: PartyKitRoom
+      ) => void | Promise<void>;
+    };
