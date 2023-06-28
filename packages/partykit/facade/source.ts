@@ -4,7 +4,11 @@
 // @ts-expect-error We'll be replacing __WORKER__ with the path to the input worker
 import Worker from "__WORKER__";
 
-import type { PartyKitServer, PartyKitRoom } from "../src/server";
+import type {
+  PartyKitServer,
+  PartyKitRoom,
+  PartyKitConnection,
+} from "../src/server";
 import type {
   DurableObjectNamespace,
   DurableObjectState,
@@ -51,13 +55,6 @@ let didWarnAboutMissingConnectionId = false;
 
 const MAX_CONNECTIONS = 100; // TODO: make this configurable
 
-// TODO: get this from the 'partykit' package
-type PartyKitConnection = {
-  id: string;
-  socket: WebSocket;
-  unstable_initial: unknown;
-};
-
 export class MainDO implements DurableObject {
   controller: DurableObjectState;
   room: PartyKitRoom;
@@ -73,8 +70,17 @@ export class MainDO implements DurableObject {
       connections: new Map(),
       env: env,
       storage: this.controller.storage,
+      broadcast: this.broadcast,
     };
   }
+
+  broadcast = (msg: string | Uint8Array, without: string[] = []) => {
+    this.room.connections.forEach((connection) => {
+      if (!without.includes(connection.id)) {
+        connection.send(msg);
+      }
+    });
+  };
 
   async fetch(request: Request) {
     const url = new URL(request.url);
@@ -135,11 +141,11 @@ export class MainDO implements DurableObject {
       const unstable_initial = rawInitial ? JSON.parse(rawInitial) : undefined;
 
       // TODO: Object.freeze / mark as readonly!
-      const connection: PartyKitConnection = {
+      const connection = Object.assign(serverWebSocket, {
         id: connectionId,
         socket: serverWebSocket,
         unstable_initial,
-      };
+      });
       this.room.connections.set(connectionId, connection);
 
       // Accept the websocket connection
@@ -172,26 +178,20 @@ export class MainDO implements DurableObject {
       // Remove the client from the room and delete associated user data.
       this.room.connections.delete(connection.id);
 
-      connection.socket.removeEventListener(
-        "close",
-        handleCloseOrErrorFromClient
-      );
-      connection.socket.removeEventListener(
-        "error",
-        handleCloseOrErrorFromClient
-      );
+      connection.removeEventListener("close", handleCloseOrErrorFromClient);
+      connection.removeEventListener("error", handleCloseOrErrorFromClient);
 
       if (room.connections.size === 0) {
         // TODO: implement this
       }
     };
 
-    connection.socket.addEventListener("close", handleCloseOrErrorFromClient);
-    connection.socket.addEventListener("error", handleCloseOrErrorFromClient);
+    connection.addEventListener("close", handleCloseOrErrorFromClient);
+    connection.addEventListener("error", handleCloseOrErrorFromClient);
 
     // and finally, connect the client to the worker
     // TODO: pass room id here? and other meta
-    return Worker.onConnect(connection.socket, room);
+    return Worker.onConnect(connection, room);
   }
 
   async alarm() {

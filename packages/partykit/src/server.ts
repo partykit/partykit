@@ -6,12 +6,6 @@ import type {
   WebSocket,
 } from "@cloudflare/workers-types";
 
-export type PartyKitConnection = {
-  id: string;
-  socket: WebSocket;
-  unstable_initial: unknown;
-};
-
 export type PartyKitStorage = DurableObjectStorage;
 
 export type PartyKitRoom = {
@@ -20,10 +14,23 @@ export type PartyKitRoom = {
   connections: Map<string, PartyKitConnection>;
   env: Record<string, unknown>; // use a .env file, or --var
   storage: PartyKitStorage;
+  broadcast: (msg: string, without: string[]) => void;
+};
+
+export type PartyKitConnection = WebSocket & {
+  id: string;
+  /**
+   * @deprecated
+   */
+  socket: WebSocket;
+  unstable_initial: unknown;
 };
 
 export type PartyKitServer<Initial = unknown> = {
-  onConnect?: (ws: WebSocket, room: PartyKitRoom) => void | Promise<void>;
+  onConnect?: (
+    ws: PartyKitConnection,
+    room: PartyKitRoom
+  ) => void | Promise<void>;
 
   onBeforeConnect?: (
     req: Request,
