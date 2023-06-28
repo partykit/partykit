@@ -8,9 +8,11 @@ You can write a PartyKit entrypoint that looks like this:
 import { PartyKitServer, PartyKitRoom } from "partykit/server";
 
 export default {
-  async onConnect(ws: WebSocket, room: PartyKitRoom) {
-    ws.send("Hello, world!"); // Send a message to the client
-    ws.addEventListener("message", (event) => {
+  async onConnect(connection, room: PartyKitRoom) {
+    // `connection` is a WebSocket object, but with a few extra properties
+    // and methods. See the PartyKitConnection type for more details.
+    connection.send("Hello, world!"); // Send a message to the client
+    connection.addEventListener("message", (event) => {
       console.log(event.data); // Log a message from the client
     });
   },
@@ -20,13 +22,13 @@ export default {
 } satisfies PartyKitServer;
 ```
 
-**_onConnect_**: This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `ws` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client. The `room` argument is an object that contains information about the room that the client is in. It has the following properties:
+**_onConnect_**: This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `connection` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client (with a couple of additional properties). The `room` argument is an object that contains information about the room that the client is in. It has the following properties:
 
 **_id:_** _string_
 
 A string that uniquely identifies the room. This is usually associated with a single document, drawing, game session, or other collaborative experience. For example, if you're building a collaborative drawing app, this would be the id of the drawing that the client is currently viewing.
 
-**_connections_**: Map<string, {id: string, socket: WebSocket}>
+**_connections_**: Map<string, {id: string, socket: PartyKitConnection}>
 
 A Map of connection IDs to all the connections in the room. The ID is usually associated with a single client. For example, if you're building a collaborative drawing app, this would be the id of the user that's currently viewing the drawing. You can either specify this id yourself by passing a `_pk` query param in the WebSocket connection, or let PartyKit generate one for you.
 
@@ -125,7 +127,7 @@ With a configuration like that, you could then access the variable in your code 
 
 ```ts
 export default {
-  onConnect(ws, room) {
+  onConnect(connection, room) {
     console.log(room.env.MY_VAR); // "my value"
     console.log(room.env["some-nested-object"].a); // 123
   },
@@ -146,7 +148,7 @@ With a configuration like that, you could then access the variable in your code 
 
 ```ts
 export default {
-  onConnect(ws, room) {
+  onConnect(connection, room) {
     console.log(MY_CONSTANT); // "my value"
   },
 };
