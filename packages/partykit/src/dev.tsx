@@ -207,7 +207,17 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
 
       const ctx = await esbuild.context({
         stdin: {
-          contents: workerFacade.replace("__WORKER__", absoluteScriptPath),
+          contents: workerFacade
+            .replace("__WORKER__", absoluteScriptPath)
+            .replace(
+              "__PARTIES__",
+              Object.entries(config.parties || {})
+                .map(
+                  ([name, party]) =>
+                    `import ${name} from '${party}'; export const ${name}DO = createDurable(${name});`
+                )
+                .join("\n")
+            ),
           resolveDir: process.cwd(),
           // TODO: setting a sourcefile name crashes the whole thing???
           // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
@@ -258,6 +268,12 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     port: config.port || 1999,
                     durableObjects: {
                       MAIN_DO: "MainDO",
+                      ...Object.entries(config.parties || {}).reduce<
+                        Record<string, string>
+                      >((obj, [name, _]) => {
+                        obj[name] = `${name}DO`;
+                        return obj;
+                      }, {}),
                     },
                     // @ts-expect-error miniflare's types are wrong
                     modules: [

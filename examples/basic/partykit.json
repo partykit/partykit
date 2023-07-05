@@ -10,6 +10,9 @@
       "c": 3
     }
   },
+  "parties": {
+    "xyz": "./src/xyz.ts"
+  },
   "define": {
     "SOME_GLOBAL": "456666",
     "process.env.WHATUP": "\"what's up\""

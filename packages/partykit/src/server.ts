@@ -14,6 +14,15 @@ export type PartyKitRoom = {
   connections: Map<string, PartyKitConnection>;
   env: Record<string, unknown>; // use a .env file, or --var
   storage: PartyKitStorage;
+  parties: Record<
+    string,
+    {
+      get(id: string): {
+        connect: () => WebSocket;
+        fetch: () => Promise<Response>;
+      };
+    }
+  >;
   broadcast: (msg: string, without: string[]) => void;
 };
 
