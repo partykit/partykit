@@ -3,6 +3,7 @@
 
 // @ts-expect-error We'll be replacing __WORKER__ with the path to the input worker
 import Worker from "__WORKER__";
+declare const Worker: PartyKitServer;
 
 import type {
   PartyKitServer,
@@ -15,194 +16,242 @@ import type {
   ExecutionContext,
 } from "@cloudflare/workers-types";
 
-declare const Worker: PartyKitServer;
-
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
     throw new Error(msg);
   }
 }
 
-// The roomId is /party/[roomId]
+// The roomId is /party/[roomId] or /parties/[partyName]/[roomId]
 function getRoomIdFromPathname(pathname: string) {
   // TODO: use a URLPattern here instead
   // TODO: might want to introduce a real router too
-  const getRoomId = new RegExp(/\/party\/(.*)/g);
-  return getRoomId.exec(pathname)?.[1];
-}
-
-if (Worker.onConnect && typeof Worker.onConnect !== "function") {
-  throw new Error(".onConnect is not a function");
-}
-
-if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
-  throw new Error(".onBeforeConnect should be a function");
-}
-
-if (Worker.onRequest && typeof Worker.onRequest !== "function") {
-  throw new Error(".onRequest is not a function");
-}
-
-if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
-  throw new Error(".onBeforeRequest should be a function");
-}
-
-if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
-  throw new Error(".onAlarm should be a function");
+  if (pathname.startsWith("/party/")) {
+    const [_, roomId] = pathname.split("/party/");
+    return roomId;
+  } else if (pathname.startsWith("/parties/")) {
+    const [_, __, _partyName, roomId] = pathname.split("/");
+    return roomId;
+  }
 }
 
 let didWarnAboutMissingConnectionId = false;
 
 const MAX_CONNECTIONS = 100; // TODO: make this configurable
 
-export class MainDO implements DurableObject {
-  controller: DurableObjectState;
-  room: PartyKitRoom;
+class PartyDurable {}
 
-  constructor(controller: DurableObjectState, env: Env) {
-    this.controller = controller;
-
-    this.room = {
-      id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
-      // TODO: probably want to rename this to something else
-      // "sockets"? "connections"? "clients"?
-      internalID: this.controller.id.toString(),
-      connections: new Map(),
-      env: env,
-      storage: this.controller.storage,
-      broadcast: this.broadcast,
-    };
+function createDurable(Worker: PartyKitServer) {
+  if (Worker.onConnect && typeof Worker.onConnect !== "function") {
+    throw new Error(".onConnect is not a function");
   }
 
-  broadcast = (msg: string | Uint8Array, without: string[] = []) => {
-    this.room.connections.forEach((connection) => {
-      if (!without.includes(connection.id)) {
-        connection.send(msg);
-      }
-    });
-  };
+  if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
+    throw new Error(".onBeforeConnect should be a function");
+  }
 
-  async fetch(request: Request) {
-    const url = new URL(request.url);
-    try {
-      // Don't connect if we're already at max connections
+  if (Worker.onRequest && typeof Worker.onRequest !== "function") {
+    throw new Error(".onRequest is not a function");
+  }
 
-      if (this.room.connections.size >= MAX_CONNECTIONS) {
-        return new Response("Room is full", {
-          status: 503,
-        });
-      }
+  if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
+    throw new Error(".onBeforeRequest should be a function");
+  }
 
-      // populate the room id/slug if not previously done so
+  if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
+    throw new Error(".onAlarm should be a function");
+  }
 
-      const roomId = getRoomIdFromPathname(url.pathname);
+  return class extends PartyDurable implements DurableObject {
+    controller: DurableObjectState;
+    room: PartyKitRoom;
+    parties: PartyKitRoom["parties"] = {};
 
-      assert(roomId, "No room id found in request url");
-      this.room.id = roomId;
+    constructor(controller: DurableObjectState, env: Env) {
+      super();
+      this.controller = controller;
 
-      if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-        if (Worker.onRequest) {
-          if (typeof Worker.onRequest === "function") {
-            return await Worker.onRequest(request, this.room);
-          } else {
-            return new Response("Invalid onRequest handler", {
-              status: 500,
-            });
+      this.room = {
+        id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
+        // TODO: probably want to rename this to something else
+        // "sockets"? "connections"? "clients"?
+        internalID: this.controller.id.toString(),
+        connections: new Map(),
+        env: env,
+        storage: this.controller.storage,
+        parties: {},
+        broadcast: this.broadcast,
+      };
+    }
+
+    broadcast = (msg: string | Uint8Array, without: string[] = []) => {
+      this.room.connections.forEach((connection) => {
+        if (!without.includes(connection.id)) {
+          connection.send(msg);
+        }
+      });
+    };
+
+    async fetch(request: Request) {
+      const url = new URL(request.url);
+      try {
+        // Don't connect if we're already at max connections
+
+        if (this.room.connections.size >= MAX_CONNECTIONS) {
+          return new Response("Room is full", {
+            status: 503,
+          });
+        }
+
+        // const parties: Record<string, PartyDurable> = {};
+        // const roomEnv:  Record<string, unknown> = {}
+        this.room.parties = this.parties;
+
+        for (const [key, v] of Object.entries(this.room.env)) {
+          const value = v as DurableObjectNamespace;
+          if (typeof value.idFromName === "function") {
+            this.parties[key] = {
+              get: (name: string) => {
+                const docId = value.idFromName(name).toString();
+                const id = value.idFromString(docId);
+                const stub = value.get(id);
+                return {
+                  fetch(init?: RequestInit) {
+                    return stub.fetch(
+                      `http://${url.host}/parties/${key}/${name}`,
+                      init
+                    );
+                  },
+                  connect: () => {
+                    // wish there was a way to create a websocket from a durable object
+                    return new WebSocket(
+                      `ws://${url.host}/parties/${key}/${name}`
+                    );
+                  },
+                };
+              },
+            };
           }
         }
-      }
-    } catch (e) {
-      const errMessage = e instanceof Error ? e.message : `${e}`;
-      // @ts-expect-error - code is not a property on Error
-      const errCode = "code" in e ? (e.code as number) : 500;
-      return new Response(
-        errMessage || "Uncaught exception when making a request",
-        {
-          status: errCode,
+
+        // populate the room id/slug if not previously done so
+
+        const roomId = getRoomIdFromPathname(url.pathname);
+
+        assert(roomId, "No room id found in request url");
+        this.room.id = roomId;
+
+        if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
+          if (Worker.onRequest) {
+            if (typeof Worker.onRequest === "function") {
+              return await Worker.onRequest(request, this.room);
+            } else {
+              return new Response("Invalid onRequest handler", {
+                status: 500,
+              });
+            }
+          }
         }
+      } catch (e) {
+        const errMessage = e instanceof Error ? e.message : `${e}`;
+        // @ts-expect-error - code is not a property on Error
+        const errCode = "code" in e ? (e.code as number) : 500;
+        return new Response(
+          errMessage || "Uncaught exception when making a request",
+          {
+            status: errCode,
+          }
+        );
+      }
+      try {
+        if (!Worker.onConnect) {
+          throw new Error("No onConnect handler");
+        }
+
+        // Create the websocket pair for the client
+        const { 0: clientWebSocket, 1: serverWebSocket } = new WebSocketPair();
+
+        let connectionId = url.searchParams.get("_pk");
+        if (!connectionId) {
+          if (!didWarnAboutMissingConnectionId) {
+            didWarnAboutMissingConnectionId = true;
+          }
+          connectionId = crypto.randomUUID();
+        }
+        const rawInitial = request.headers.get("x-pk-initial");
+        const unstable_initial = rawInitial
+          ? JSON.parse(rawInitial)
+          : undefined;
+
+        // TODO: Object.freeze / mark as readonly!
+        const connection: PartyKitConnection = Object.assign(serverWebSocket, {
+          id: connectionId,
+          socket: serverWebSocket,
+          unstable_initial,
+        });
+        this.room.connections.set(connectionId, connection);
+
+        // Accept the websocket connection
+        serverWebSocket.accept();
+
+        await this.handleConnection(this.room, connection);
+
+        return new Response(null, { status: 101, webSocket: clientWebSocket });
+      } catch (e) {
+        // Annoyingly, if we return an HTTP error
+        // in response to a WebSocket request, Chrome devtools
+        // won't show us the response body! So...
+        // let's send a WebSocket response with an error frame instead.
+
+        const errMessage = e instanceof Error ? e.message : `${e}`;
+        const pair = new WebSocketPair();
+        pair[1].accept();
+        pair[1].close(1011, errMessage || "Uncaught exception when connecting");
+        return new Response(null, { status: 101, webSocket: pair[0] });
+      }
+    }
+
+    async handleConnection(room: PartyKitRoom, connection: PartyKitConnection) {
+      assert(
+        "onConnect" in Worker && typeof Worker.onConnect === "function",
+        "No onConnect handler"
       );
-    }
-    try {
-      if (!Worker.onConnect) {
-        throw new Error("No onConnect handler");
-      }
 
-      // Create the websocket pair for the client
-      const { 0: clientWebSocket, 1: serverWebSocket } = new WebSocketPair();
+      const handleCloseOrErrorFromClient = () => {
+        // Remove the client from the room and delete associated user data.
+        this.room.connections.delete(connection.id);
 
-      let connectionId = url.searchParams.get("_pk");
-      if (!connectionId) {
-        if (!didWarnAboutMissingConnectionId) {
-          didWarnAboutMissingConnectionId = true;
+        connection.removeEventListener("close", handleCloseOrErrorFromClient);
+        connection.removeEventListener("error", handleCloseOrErrorFromClient);
+
+        if (room.connections.size === 0) {
+          // TODO: implement this
         }
-        connectionId = crypto.randomUUID();
-      }
-      const rawInitial = request.headers.get("x-pk-initial");
-      const unstable_initial = rawInitial ? JSON.parse(rawInitial) : undefined;
+      };
 
-      // TODO: Object.freeze / mark as readonly!
-      const connection = Object.assign(serverWebSocket, {
-        id: connectionId,
-        socket: serverWebSocket,
-        unstable_initial,
-      });
-      this.room.connections.set(connectionId, connection);
+      connection.addEventListener("close", handleCloseOrErrorFromClient);
+      connection.addEventListener("error", handleCloseOrErrorFromClient);
 
-      // Accept the websocket connection
-      serverWebSocket.accept();
-
-      await this.handleConnection(this.room, connection);
-
-      return new Response(null, { status: 101, webSocket: clientWebSocket });
-    } catch (e) {
-      // Annoyingly, if we return an HTTP error
-      // in response to a WebSocket request, Chrome devtools
-      // won't show us the response body! So...
-      // let's send a WebSocket response with an error frame instead.
-
-      const errMessage = e instanceof Error ? e.message : `${e}`;
-      const pair = new WebSocketPair();
-      pair[1].accept();
-      pair[1].close(1011, errMessage || "Uncaught exception when connecting");
-      return new Response(null, { status: 101, webSocket: pair[0] });
+      // and finally, connect the client to the worker
+      // TODO: pass room id here? and other meta
+      return Worker.onConnect(connection, room);
     }
-  }
 
-  async handleConnection(room: PartyKitRoom, connection: PartyKitConnection) {
-    assert(
-      "onConnect" in Worker && typeof Worker.onConnect === "function",
-      "No onConnect handler"
-    );
-
-    const handleCloseOrErrorFromClient = () => {
-      // Remove the client from the room and delete associated user data.
-      this.room.connections.delete(connection.id);
-
-      connection.removeEventListener("close", handleCloseOrErrorFromClient);
-      connection.removeEventListener("error", handleCloseOrErrorFromClient);
-
-      if (room.connections.size === 0) {
-        // TODO: implement this
+    async alarm() {
+      if (Worker.onAlarm) {
+        return Worker.onAlarm(this.room);
       }
-    };
-
-    connection.addEventListener("close", handleCloseOrErrorFromClient);
-    connection.addEventListener("error", handleCloseOrErrorFromClient);
-
-    // and finally, connect the client to the worker
-    // TODO: pass room id here? and other meta
-    return Worker.onConnect(connection, room);
-  }
-
-  async alarm() {
-    if (Worker.onAlarm) {
-      return Worker.onAlarm(this.room);
     }
-  }
+  };
 }
 
+export const MainDO = createDurable(Worker);
+
+__PARTIES__;
+declare const __PARTIES__: Record<string, string>;
+
 type Env = {
-  MAIN_DO: DurableObjectNamespace;
+  [key: string]: DurableObjectNamespace;
 };
 
 export default {
@@ -213,6 +262,19 @@ export default {
   ): Promise<Response> {
     try {
       const url = new URL(request.url);
+
+      if (url.pathname.startsWith("/parties/")) {
+        const [_, __, partyName, docName] = url.pathname.split("/");
+        const partyDO = env[partyName];
+        if (!partyDO) {
+          return new Response(`Party ${partyName} not found`, { status: 404 });
+        }
+        const docId = partyDO.idFromName(docName).toString();
+        const id = partyDO.idFromString(docId);
+        const ns = partyDO.get(id);
+        return await ns.fetch(request);
+      }
+
       const roomId = getRoomIdFromPathname(url.pathname);
       // TODO: throw if room is longer than x characters
       if (roomId) {

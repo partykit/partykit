@@ -192,6 +192,7 @@ const configSchema = z
     assets: z.string().optional(),
     vars: z.record(z.unknown()).optional(),
     define: z.record(z.string()).optional(),
+    parties: z.record(z.string()).optional(),
     build: z
       .object({
         command: z.string().optional(),
@@ -353,6 +354,19 @@ export function getConfig(
         throw new Error(`Could not find main: ${parsedConfig.main}`);
       } else {
         config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+      }
+    }
+  }
+  if (config.parties) {
+    for (const [name, party] of Object.entries(config.parties)) {
+      const absolutePartyPath = path.isAbsolute(party)
+        ? party
+        : path.join(path.dirname(configPath), party);
+      if (!fs.existsSync(absolutePartyPath)) {
+        throw new Error(`Could not find party: ${party}`);
+      } else {
+        config.parties[name] =
+          "./" + path.relative(process.cwd(), absolutePartyPath);
       }
     }
   }

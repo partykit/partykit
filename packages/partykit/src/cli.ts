@@ -72,6 +72,10 @@ export async function deploy(options: {
     'Missing project name, please specify "name" in your config'
   );
 
+  if (config.parties && Object.keys(config.parties).length > 0) {
+    throw new Error("Deploying with parties is not yet supported");
+  }
+
   if (config.build?.command) {
     const buildCommand = config.build.command;
     const buildCwd = config.build.cwd;
@@ -105,6 +109,21 @@ export async function deploy(options: {
   const code = (
     await esbuild.build({
       entryPoints: [absoluteScriptPath],
+      // stdin: {
+      //   contents: `
+      //     import WorkerSpec from '${absoluteScriptPath}'; export default Worker = WorkerSpec;
+      //     ${Object.entries(config.parties || {})
+      //       .map(
+      //         ([name, party]) =>
+      //           `import ${name} from '${party}'; export const ${name}DO = ${name};`
+      //       )
+      //       .join("\n")}
+      //   `,
+
+      //   resolveDir: process.cwd(),
+      //   // TODO: setting a sourcefile name crashes the whole thing???
+      //   // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
+      // },
       ...esbuildOptions,
       define: {
         ...esbuildOptions.define,
@@ -148,6 +167,7 @@ export async function deploy(options: {
       ],
     })
   ).outputFiles![0].text;
+
   const form = new FormData();
   form.set("code", code);
 
@@ -160,6 +180,9 @@ export async function deploy(options: {
     // TODO: need some good messaging here to explain what's going on
     form.set("vars", JSON.stringify(vars));
   }
+  // if (config.parties) {
+  //   form.set("parties", JSON.stringify([...Object.keys(config.parties)]));
+  // }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
     form.set(
