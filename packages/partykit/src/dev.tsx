@@ -203,7 +203,10 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       );
 
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const absoluteScriptPath = path.join(process.cwd(), config.main!);
+      const absoluteScriptPath = path.join(process.cwd(), config.main!).replace(
+        /\\/g, // windows
+        "/"
+      );
 
       const ctx = await esbuild.context({
         stdin: {
