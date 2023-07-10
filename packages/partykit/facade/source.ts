@@ -39,10 +39,6 @@ let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
 
-// injected by esbuild in dev mode
-const envVars = __ENV_VARS__;
-declare const __ENV_VARS__: Record<string, unknown>;
-
 function createDurable(Worker: PartyKitServer) {
   if (Worker.onConnect && typeof Worker.onConnect !== "function") {
     throw new Error(".onConnect is not a function");
@@ -67,19 +63,17 @@ function createDurable(Worker: PartyKitServer) {
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
     room: PartyKitRoom;
-    env: Env;
 
     constructor(controller: DurableObjectState, env: Env) {
       super();
       this.controller = controller;
-      this.env = env;
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
         // TODO: probably want to rename this to something else
         // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
-        env: envVars,
+        env,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
@@ -97,7 +91,7 @@ function createDurable(Worker: PartyKitServer) {
     async fetch(request: Request) {
       const url = new URL(request.url);
       try {
-        for (const [key, v] of Object.entries(this.env)) {
+        for (const [key, v] of Object.entries(this.room.env)) {
           const value = v as DurableObjectNamespace;
           if (typeof value.idFromName === "function") {
             this.room.parties[key] ||= {
