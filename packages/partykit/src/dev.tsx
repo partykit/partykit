@@ -221,10 +221,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                 )
                 .join("\n")
             )
-            .replace(
-              "__ENV_VARS__",
-              `const __ENV_VARS__ = ${JSON.stringify(config.vars ?? {})}`
-            ),
+            .replace("__ENV_VARS__", JSON.stringify(config.vars ?? {})),
           resolveDir: process.cwd(),
           // TODO: setting a sourcefile name crashes the whole thing???
           // sourcefile: "./" + path.relative(process.cwd(), scriptPath),

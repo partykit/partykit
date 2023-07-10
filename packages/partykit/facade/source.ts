@@ -40,9 +40,8 @@ let didWarnAboutMissingConnectionId = false;
 class PartyDurable {}
 
 // injected by esbuild in dev mode
-__ENV_VARS__;
-// vars can only be non-nullable json scalars
-declare const __ENV_VARS__: Record<string, string | number | boolean>;
+const envVars = __ENV_VARS__;
+declare const __ENV_VARS__: Record<string, unknown>;
 
 function createDurable(Worker: PartyKitServer) {
   if (Worker.onConnect && typeof Worker.onConnect !== "function") {
@@ -80,7 +79,7 @@ function createDurable(Worker: PartyKitServer) {
         // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
-        env: __ENV_VARS__,
+        env: envVars,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
