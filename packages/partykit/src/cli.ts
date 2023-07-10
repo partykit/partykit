@@ -72,10 +72,6 @@ export async function deploy(options: {
     'Missing project name, please specify "name" in your config'
   );
 
-  if (config.parties && Object.keys(config.parties).length > 0) {
-    throw new Error("Deploying with parties is not yet supported");
-  }
-
   if (config.build?.command) {
     const buildCommand = config.build.command;
     const buildCwd = config.build.cwd;
@@ -97,7 +93,10 @@ export async function deploy(options: {
     );
   }
 
-  const absoluteScriptPath = path.join(process.cwd(), config.main);
+  const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
+    /\\/g, // windows
+    "/"
+  );
 
   // get user details
   const user = await getUser();
@@ -108,22 +107,21 @@ export async function deploy(options: {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const code = (
     await esbuild.build({
-      entryPoints: [absoluteScriptPath],
-      // stdin: {
-      //   contents: `
-      //     import WorkerSpec from '${absoluteScriptPath}'; export default Worker = WorkerSpec;
-      //     ${Object.entries(config.parties || {})
-      //       .map(
-      //         ([name, party]) =>
-      //           `import ${name} from '${party}'; export const ${name}DO = ${name};`
-      //       )
-      //       .join("\n")}
-      //   `,
+      stdin: {
+        contents: `
+          import WorkerSpec from '${absoluteScriptPath}'; export default WorkerSpec;
+          ${Object.entries(config.parties || {})
+            .map(
+              ([name, party]) =>
+                `import ${name}Party from '${party}'; export const ${name} = ${name}Party;`
+            )
+            .join("\n")}
+        `,
 
-      //   resolveDir: process.cwd(),
-      //   // TODO: setting a sourcefile name crashes the whole thing???
-      //   // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
-      // },
+        resolveDir: process.cwd(),
+        // TODO: setting a sourcefile name crashes the whole thing???
+        // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
+      },
       ...esbuildOptions,
       define: {
         ...esbuildOptions.define,
@@ -180,9 +178,9 @@ export async function deploy(options: {
     // TODO: need some good messaging here to explain what's going on
     form.set("vars", JSON.stringify(vars));
   }
-  // if (config.parties) {
-  //   form.set("parties", JSON.stringify([...Object.keys(config.parties)]));
-  // }
+  if (config.parties) {
+    form.set("parties", JSON.stringify([...Object.keys(config.parties)]));
+  }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
     form.set(
