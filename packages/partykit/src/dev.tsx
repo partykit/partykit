@@ -220,6 +220,10 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     `import ${name} from '${party}'; export const ${name}DO = createDurable(${name});`
                 )
                 .join("\n")
+            )
+            .replace(
+              "__ENV_VARS__",
+              `const __ENV_VARS__ = ${JSON.stringify(config.vars ?? {})}`
             ),
           resolveDir: process.cwd(),
           // TODO: setting a sourcefile name crashes the whole thing???
