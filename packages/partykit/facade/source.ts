@@ -67,13 +67,14 @@ function createDurable(Worker: PartyKitServer) {
     constructor(controller: DurableObjectState, env: Env) {
       super();
       this.controller = controller;
+
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
         // TODO: probably want to rename this to something else
         // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
-        env,
+        env: env,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
