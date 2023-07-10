@@ -114,9 +114,6 @@ program
   .option("-n, --name <name>", "name of the project")
   .option("--preview [name]", "deploy to preview environment")
   .action(async (scriptPath, options) => {
-    if (options.withVars) {
-      console.warn("--with-vars is not yet implemented");
-    }
     await cli.deploy({
       main: scriptPath,
       name: options.name,
