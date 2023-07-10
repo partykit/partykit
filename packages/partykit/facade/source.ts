@@ -46,20 +46,45 @@ type Env = {
 };
 
 function createDurable(Worker: PartyKitServer) {
-  if (Worker.onConnect && typeof Worker.onConnect !== "function") {
+  if ("onConnect" in Worker && typeof Worker.onConnect !== "function") {
     throw new Error(".onConnect is not a function");
   }
 
-  if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
+  if (
+    "onBeforeConnect" in Worker &&
+    typeof Worker.onBeforeConnect !== "function"
+  ) {
     throw new Error(".onBeforeConnect should be a function");
   }
 
-  if (Worker.onRequest && typeof Worker.onRequest !== "function") {
+  if ("onRequest" in Worker && typeof Worker.onRequest !== "function") {
     throw new Error(".onRequest is not a function");
   }
 
-  if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
+  if (
+    "onBeforeRequest" in Worker &&
+    typeof Worker.onBeforeRequest !== "function"
+  ) {
     throw new Error(".onBeforeRequest should be a function");
+  }
+
+  if ("onMessage" in Worker && typeof Worker.onMessage !== "function") {
+    throw new Error(".onMessage should be a function");
+  }
+
+  if ("onClose" in Worker && typeof Worker.onClose !== "function") {
+    throw new Error(".onClose should be a function");
+  }
+
+  if ("onError" in Worker && typeof Worker.onError !== "function") {
+    throw new Error(".onError should be a function");
+  }
+
+  if (
+    "onConnect" in Worker &&
+    ("onMessage" in Worker || "onClose" in Worker || "onError" in Worker)
+  ) {
+    throw new Error("Cannot have both onConnect and onMessage handlers");
   }
 
   if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
@@ -87,6 +112,9 @@ function createDurable(Worker: PartyKitServer) {
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
+        getWebSockets() {
+          return controller.getWebSockets();
+        },
       };
     }
 
@@ -135,7 +163,7 @@ function createDurable(Worker: PartyKitServer) {
         this.room.id = roomId;
 
         if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-          if (Worker.onRequest) {
+          if ("onRequest" in Worker) {
             if (typeof Worker.onRequest === "function") {
               return await Worker.onRequest(request, this.room);
             } else {
@@ -157,8 +185,13 @@ function createDurable(Worker: PartyKitServer) {
         );
       }
       try {
-        if (!Worker.onConnect) {
-          throw new Error("No onConnect handler");
+        if (
+          !(
+            ("onConnect" in Worker && typeof Worker.onConnect === "function") ||
+            ("onMessage" in Worker && typeof Worker.onMessage === "function")
+          )
+        ) {
+          throw new Error("No onConnect or onMessage handler");
         }
 
         // Create the websocket pair for the client
@@ -179,15 +212,34 @@ function createDurable(Worker: PartyKitServer) {
         // TODO: Object.freeze / mark as readonly!
         const connection: PartyKitConnection = Object.assign(serverWebSocket, {
           id: connectionId,
+          room: {
+            id: this.room.id,
+            internalID: this.room.internalID,
+            // TODO
+            // env: this.room.env,
+          },
           socket: serverWebSocket,
           unstable_initial,
         });
         this.room.connections.set(connectionId, connection);
 
         // Accept the websocket connection
-        serverWebSocket.accept();
-
-        await this.handleConnection(this.room, connection);
+        if ("onMessage" in Worker) {
+          this.controller.acceptWebSocket(serverWebSocket);
+          connection.serializeAttachment({
+            id: connectionId,
+            unstable_initial,
+            room: {
+              id: this.room.id,
+              internalID: this.room.internalID,
+              // TODO
+              // env: this.room.env,
+            },
+          });
+        } else {
+          serverWebSocket.accept();
+          await this.handleConnection(this.room, connection);
+        }
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
@@ -224,10 +276,40 @@ function createDurable(Worker: PartyKitServer) {
 
       connection.addEventListener("close", handleCloseOrErrorFromClient);
       connection.addEventListener("error", handleCloseOrErrorFromClient);
-
       // and finally, connect the client to the worker
-      // TODO: pass room id here? and other meta
       return Worker.onConnect(connection, room);
+    }
+
+    async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
+      const connection: PartyKitConnection = Object.assign(ws, {
+        ...ws.deserializeAttachment(),
+        socket: ws,
+      });
+      if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
+        return Worker.onMessage(connection, msg, this.room);
+      }
+    }
+
+    async webSocketClose(ws: WebSocket) {
+      const connection: PartyKitConnection = Object.assign(ws, {
+        ...ws.deserializeAttachment(),
+        socket: ws,
+      });
+      if ("onClose" in Worker && typeof Worker.onClose === "function") {
+        return Worker.onClose(connection, this.room);
+      }
+      this.room.connections.delete(connection.id);
+    }
+
+    async webSocketError(ws: WebSocket, err: Error) {
+      const connection: PartyKitConnection = Object.assign(ws, {
+        ...ws.deserializeAttachment(),
+        socket: ws,
+      });
+      if ("onError" in Worker && typeof Worker.onError === "function") {
+        return Worker.onError(connection, err, this.room);
+      }
+      this.room.connections.delete(connection.id);
     }
 
     async alarm() {
@@ -280,7 +362,7 @@ export default {
           // isValidRequest?
           // onAuth?
           let onBeforeConnectResponse: unknown;
-          if (Worker.onBeforeConnect) {
+          if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
               try {
                 onBeforeConnectResponse = await Worker.onBeforeConnect(
@@ -322,7 +404,7 @@ export default {
           return await env.MAIN_DO.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
-          if (Worker.onBeforeRequest) {
+          if ("onBeforeRequest" in Worker) {
             if (typeof Worker.onBeforeRequest === "function") {
               try {
                 onBeforeRequestResponse = await Worker.onBeforeRequest(
@@ -350,7 +432,7 @@ export default {
           if (onBeforeRequestResponse instanceof Response) {
             return onBeforeRequestResponse;
           }
-          if (!Worker.onRequest) {
+          if (!("onRequest" && Worker)) {
             throw new Error("No onRequest handler");
           }
 
