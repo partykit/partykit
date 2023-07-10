@@ -37,8 +37,6 @@ function getRoomIdFromPathname(pathname: string) {
 
 let didWarnAboutMissingConnectionId = false;
 
-const MAX_CONNECTIONS = 100; // TODO: make this configurable
-
 class PartyDurable {}
 
 function createDurable(Worker: PartyKitServer) {
@@ -65,7 +63,6 @@ function createDurable(Worker: PartyKitServer) {
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
     room: PartyKitRoom;
-    parties: PartyKitRoom["parties"] = {};
 
     constructor(controller: DurableObjectState, env: Env) {
       super();
@@ -95,22 +92,10 @@ function createDurable(Worker: PartyKitServer) {
     async fetch(request: Request) {
       const url = new URL(request.url);
       try {
-        // Don't connect if we're already at max connections
-
-        if (this.room.connections.size >= MAX_CONNECTIONS) {
-          return new Response("Room is full", {
-            status: 503,
-          });
-        }
-
-        // const parties: Record<string, PartyDurable> = {};
-        // const roomEnv:  Record<string, unknown> = {}
-        this.room.parties = this.parties;
-
         for (const [key, v] of Object.entries(this.room.env)) {
           const value = v as DurableObjectNamespace;
           if (typeof value.idFromName === "function") {
-            this.parties[key] = {
+            this.room.parties[key] ||= {
               get: (name: string) => {
                 const docId = value.idFromName(name).toString();
                 const id = value.idFromString(docId);
