@@ -19,6 +19,15 @@ export default {
       }
     });
   },
+
+  // onMessage(conn, msg, room) {
+  //   if (msg === "ping") {
+  //     conn.send(`pong:${room.connections.size}`);
+  //   } else if ((msg as string).startsWith("latency")) {
+  //     conn.send(msg);
+  //   }
+  // },
+
   async onBeforeConnect(_req: Request) {
     return { x: 1 };
   },
