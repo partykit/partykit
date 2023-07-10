@@ -41,7 +41,8 @@ class PartyDurable {}
 
 // injected by esbuild in dev mode
 __ENV_VARS__;
-declare const __ENV_VARS__: Record<string, any>;
+// vars can only be non-nullable json scalars
+declare const __ENV_VARS__: Record<string, string | number | boolean>;
 
 function createDurable(Worker: PartyKitServer) {
   if (Worker.onConnect && typeof Worker.onConnect !== "function") {
