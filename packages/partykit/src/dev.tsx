@@ -269,6 +269,9 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     compatibilityDate: "2021-05-26",
                     compatibilityFlags: ["nodejs_compat"],
                     port: config.port || 1999,
+                    bindings: {
+                      PARTYKIT_VARS: config.vars,
+                    },
                     durableObjects: {
                       MAIN_DO: "MainDO",
                       ...Object.entries(config.parties || {}).reduce<

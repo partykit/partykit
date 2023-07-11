@@ -39,6 +39,12 @@ let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
 
+type Env = {
+  [key: string]: DurableObjectNamespace;
+} & {
+  PARTYKIT_VARS: Record<string, unknown>;
+};
+
 function createDurable(Worker: PartyKitServer) {
   if (Worker.onConnect && typeof Worker.onConnect !== "function") {
     throw new Error(".onConnect is not a function");
@@ -63,18 +69,21 @@ function createDurable(Worker: PartyKitServer) {
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
     room: PartyKitRoom;
-
+    namespaces: Record<string, DurableObjectNamespace>;
     constructor(controller: DurableObjectState, env: Env) {
       super();
-      this.controller = controller;
 
+      const { PARTYKIT_VARS, ...namespaces } = env;
+
+      this.controller = controller;
+      this.namespaces = namespaces;
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
         // TODO: probably want to rename this to something else
         // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
-        env: env,
+        env: PARTYKIT_VARS,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
@@ -92,8 +101,7 @@ function createDurable(Worker: PartyKitServer) {
     async fetch(request: Request) {
       const url = new URL(request.url);
       try {
-        for (const [key, v] of Object.entries(this.room.env)) {
-          const value = v as DurableObjectNamespace;
+        for (const [key, value] of Object.entries(this.namespaces)) {
           if (typeof value.idFromName === "function") {
             this.room.parties[key] ||= {
               get: (name: string) => {
@@ -235,10 +243,6 @@ export const MainDO = createDurable(Worker);
 __PARTIES__;
 declare const __PARTIES__: Record<string, string>;
 
-type Env = {
-  [key: string]: DurableObjectNamespace;
-};
-
 export default {
   async fetch(
     request: Request,
@@ -283,7 +287,7 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: env.PARTYKIT_VARS,
                   },
                   ctx
                 );
@@ -325,7 +329,7 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: env.PARTYKIT_VARS,
                   },
                   ctx
                 );
