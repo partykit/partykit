@@ -36,12 +36,6 @@ export type PartyKitConnection = WebSocket & {
   /**
    * @deprecated
    */
-  room: {
-    id: string;
-    internalID: string;
-    // TODO
-    // env: Record<string, unknown>;
-  };
   socket: WebSocket;
   unstable_initial: unknown;
 };
