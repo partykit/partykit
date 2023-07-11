@@ -41,10 +41,8 @@ class PartyDurable {}
 
 type Env = {
   [key: string]: DurableObjectNamespace;
-};
-
-type EnvWithVars = Env & {
-  vars: Record<string, unknown>;
+} & {
+  PARTYKIT_VARS: Record<string, unknown>;
 };
 
 function createDurable(Worker: PartyKitServer) {
@@ -72,10 +70,10 @@ function createDurable(Worker: PartyKitServer) {
     controller: DurableObjectState;
     room: PartyKitRoom;
     namespaces: Record<string, DurableObjectNamespace>;
-    constructor(controller: DurableObjectState, env: EnvWithVars) {
+    constructor(controller: DurableObjectState, env: Env) {
       super();
 
-      const { vars, ...namespaces } = env;
+      const { PARTYKIT_VARS, ...namespaces } = env;
 
       this.controller = controller;
       this.namespaces = namespaces;
@@ -85,7 +83,7 @@ function createDurable(Worker: PartyKitServer) {
         // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
-        env: vars,
+        env: PARTYKIT_VARS,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
@@ -289,7 +287,7 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: env.PARTYKIT_VARS,
                   },
                   ctx
                 );
@@ -331,7 +329,7 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env,
+                    env: env.PARTYKIT_VARS,
                   },
                   ctx
                 );

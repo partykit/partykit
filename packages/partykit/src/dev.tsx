@@ -270,7 +270,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     compatibilityFlags: ["nodejs_compat"],
                     port: config.port || 1999,
                     bindings: {
-                      vars: config.vars,
+                      PARTYKIT_VARS: config.vars,
                     },
                     durableObjects: {
                       MAIN_DO: "MainDO",
