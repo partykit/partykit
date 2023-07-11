@@ -213,12 +213,7 @@ function createDurable(Worker: PartyKitServer) {
         // TODO: Object.freeze / mark as readonly!
         const connection: PartyKitConnection = Object.assign(serverWebSocket, {
           id: connectionId,
-          room: {
-            id: this.room.id,
-            internalID: this.room.internalID,
-            // TODO
-            // env: this.room.env,
-          },
+          roomId: this.room.id,
           socket: serverWebSocket,
           unstable_initial,
         });
