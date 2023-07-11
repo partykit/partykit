@@ -24,7 +24,6 @@ export type PartyKitRoom = {
     }
   >;
   broadcast: (msg: string, without: string[]) => void;
-  getWebSockets: () => WebSocket[];
 };
 
 export type PartyKitConnection = WebSocket & {

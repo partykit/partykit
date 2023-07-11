@@ -35,6 +35,13 @@ function getRoomIdFromPathname(pathname: string) {
   }
 }
 
+function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
+  return Object.assign(ws, {
+    ...(ws.deserializeAttachment() as PartyKitConnection),
+    socket: ws,
+  });
+}
+
 let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
@@ -102,20 +109,40 @@ function createDurable(Worker: PartyKitServer) {
 
       this.controller = controller;
       this.namespaces = namespaces;
+
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
-        // TODO: probably want to rename this to something else
-        // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
         env: PARTYKIT_VARS,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
-        getWebSockets() {
-          return controller.getWebSockets();
-        },
       };
+
+      // when using the Hibernation API, we cannot track active connections manually, so we'll lazily
+      // construct the connections map by deserializing the sockets tracked by the platform
+      if ("onMessage" in Worker) {
+        let connections: Map<string, PartyKitConnection> | null = null;
+        this.room = {
+          ...this.room,
+          get connections() {
+            // initialize connections map the first time the getter is called
+            // TODO: figure out if this is safe (i.e. will not be cached between connects/disconnects),
+            // or if we need to recreate this manually before every onMessage invocation
+            if (connections === null) {
+              const sockets = controller.getWebSockets();
+              connections = new Map(
+                sockets.map((socket) => {
+                  const connection = rehydrateHibernatedConnection(socket);
+                  return [connection.id, connection];
+                })
+              );
+            }
+            return connections;
+          },
+        };
+      }
     }
 
     broadcast = (msg: string | Uint8Array, without: string[] = []) => {
@@ -271,10 +298,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
         if (this.room.id) {
           return Worker.onMessage(connection, msg, this.room);
@@ -291,10 +315,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketClose(ws: WebSocket) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onClose" in Worker && typeof Worker.onClose === "function") {
         return Worker.onClose(connection, this.room);
       }
@@ -302,10 +323,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketError(ws: WebSocket, err: Error) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onError" in Worker && typeof Worker.onError === "function") {
         return Worker.onError(connection, err, this.room);
       }
