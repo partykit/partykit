@@ -229,12 +229,7 @@ function createDurable(Worker: PartyKitServer) {
           connection.serializeAttachment({
             id: connectionId,
             unstable_initial,
-            room: {
-              id: this.room.id,
-              internalID: this.room.internalID,
-              // TODO
-              // env: this.room.env,
-            },
+            roomId: this.room.id,
           });
         } else {
           serverWebSocket.accept();
@@ -286,7 +281,17 @@ function createDurable(Worker: PartyKitServer) {
         socket: ws,
       });
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
-        return Worker.onMessage(connection, msg, this.room);
+        if (this.room.id) {
+          return Worker.onMessage(connection, msg, this.room);
+        } else {
+          // the object should never hibernate in dev mode, so room.id should always be defined,
+          // but if it isn't, let's read it from the serialized websocket state like we do in prod
+          const { roomId } = connection as unknown as { roomId: string };
+          return Worker.onMessage(connection, msg, {
+            ...this.room,
+            id: roomId,
+          });
+        }
       }
     }
 
