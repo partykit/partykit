@@ -5,6 +5,7 @@ export type PartySocketOptions = Omit<
   RWS.Options,
   "WebSocket" | "constructor"
 > & {
+  id?: string; // the id of the client
   host: string; // base url for the party
   room: string; // the room to connect to
   protocol?: string;
@@ -51,7 +52,7 @@ export default class PartySocket extends ReconnectingWebSocket {
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const { host, room, protocol, query, protocols, ...socketOptions } =
       partySocketOptions;
-    const _pk = generateUUID();
+    const _pk = partySocketOptions.id || generateUUID();
     let url = `${
       protocol ||
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
