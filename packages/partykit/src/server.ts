@@ -8,6 +8,10 @@ import type {
 
 export type PartyKitStorage = DurableObjectStorage;
 
+export type PartyKitContext = {
+  request: Request;
+};
+
 export type PartyKitRoom = {
   id: string; // room id, usually a slug
   internalID: string; // internal id
@@ -38,7 +42,8 @@ export type PartyKitConnection = WebSocket & {
 export type PartyKitServer<Initial = unknown> = {
   onConnect?: (
     ws: PartyKitConnection,
-    room: PartyKitRoom
+    room: PartyKitRoom,
+    ctx: PartyKitContext
   ) => void | Promise<void>;
 
   onBeforeConnect?: (

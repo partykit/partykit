@@ -9,6 +9,7 @@ import type {
   PartyKitServer,
   PartyKitRoom,
   PartyKitConnection,
+  PartyKitContext,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
@@ -187,7 +188,7 @@ function createDurable(Worker: PartyKitServer) {
         // Accept the websocket connection
         serverWebSocket.accept();
 
-        await this.handleConnection(this.room, connection);
+        await this.handleConnection(this.room, connection, { request });
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
@@ -204,7 +205,11 @@ function createDurable(Worker: PartyKitServer) {
       }
     }
 
-    async handleConnection(room: PartyKitRoom, connection: PartyKitConnection) {
+    async handleConnection(
+      room: PartyKitRoom,
+      connection: PartyKitConnection,
+      context: PartyKitContext
+    ) {
       assert(
         "onConnect" in Worker && typeof Worker.onConnect === "function",
         "No onConnect handler"
@@ -227,7 +232,7 @@ function createDurable(Worker: PartyKitServer) {
 
       // and finally, connect the client to the worker
       // TODO: pass room id here? and other meta
-      return Worker.onConnect(connection, room);
+      return Worker.onConnect(connection, room, context);
     }
 
     async alarm() {
