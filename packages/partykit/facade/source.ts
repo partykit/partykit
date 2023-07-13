@@ -36,6 +36,13 @@ function getRoomIdFromPathname(pathname: string) {
   }
 }
 
+function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
+  return Object.assign(ws, {
+    ...(ws.deserializeAttachment() as PartyKitConnection),
+    socket: ws,
+  });
+}
+
 let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
@@ -103,20 +110,28 @@ function createDurable(Worker: PartyKitServer) {
 
       this.controller = controller;
       this.namespaces = namespaces;
+
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
-        // TODO: probably want to rename this to something else
-        // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
         env: PARTYKIT_VARS,
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
-        getWebSockets() {
-          return controller.getWebSockets();
-        },
       };
+
+      if ("onMessage" in Worker) {
+        // when using the Hibernation API, we'll initialize the connections map by deserializing
+        // the sockets tracked by the platform. after this point, the connections map is kept up
+        // to date as sockets connect/disconnect, until next hibernation
+        this.room.connections = new Map(
+          controller.getWebSockets().map((socket) => {
+            const connection = rehydrateHibernatedConnection(socket);
+            return [connection.id, connection];
+          })
+        );
+      }
     }
 
     broadcast = (msg: string | Uint8Array, without: string[] = []) => {
@@ -272,19 +287,12 @@ function createDurable(Worker: PartyKitServer) {
       connection.addEventListener("close", handleCloseOrErrorFromClient);
       connection.addEventListener("error", handleCloseOrErrorFromClient);
       // and finally, connect the client to the worker
-<<<<<<< HEAD
       // TODO: pass room id here? and other meta
       return Worker.onConnect(connection, room, context);
-=======
-      return Worker.onConnect(connection, room);
->>>>>>> 75c9e57 (feat: optional hibernation api)
     }
 
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
         if (this.room.id) {
           return Worker.onMessage(connection, msg, this.room);
@@ -301,10 +309,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketClose(ws: WebSocket) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onClose" in Worker && typeof Worker.onClose === "function") {
         return Worker.onClose(connection, this.room);
       }
@@ -312,10 +317,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketError(ws: WebSocket, err: Error) {
-      const connection: PartyKitConnection = Object.assign(ws, {
-        ...ws.deserializeAttachment(),
-        socket: ws,
-      });
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onError" in Worker && typeof Worker.onError === "function") {
         return Worker.onError(connection, err, this.room);
       }
