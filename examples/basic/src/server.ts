@@ -20,7 +20,7 @@ export default {
     });
   },
 
-  // onMessage(conn, msg, room) {
+  // onMessage(msg, conn, room) {
   //   if (msg === "ping") {
   //     conn.send(`pong:${room.connections.size}`);
   //   } else if ((msg as string).startsWith("latency")) {

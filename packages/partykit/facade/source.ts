@@ -295,12 +295,12 @@ function createDurable(Worker: PartyKitServer) {
       const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
         if (this.room.id) {
-          return Worker.onMessage(connection, msg, this.room);
+          return Worker.onMessage(msg, connection, this.room);
         } else {
           // the object should never hibernate in dev mode, so room.id should always be defined,
           // but if it isn't, let's read it from the serialized websocket state like we do in prod
           const { roomId } = connection as unknown as { roomId: string };
-          return Worker.onMessage(connection, msg, {
+          return Worker.onMessage(msg, connection, {
             ...this.room,
             id: roomId,
           });
