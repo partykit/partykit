@@ -5,10 +5,10 @@ The PartyKit runtime is a modern standards-based JavaScript runtime based on the
 You can write a PartyKit entrypoint that looks like this:
 
 ```ts
-import { PartyKitServer, PartyKitRoom } from "partykit/server";
+import { PartyKitServer, PartyKitRoom, PartyKitContext } from "partykit/server";
 
 export default {
-  async onConnect(connection, room: PartyKitRoom) {
+  async onConnect(connection, room: PartyKitRoom, ctx: PartyKitContext) {
     // `connection` is a WebSocket object, but with a few extra properties
     // and methods. See the PartyKitConnection type for more details.
     connection.send("Hello, world!"); // Send a message to the client
@@ -22,7 +22,9 @@ export default {
 } satisfies PartyKitServer;
 ```
 
-**_onConnect_**: This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `connection` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client (with a couple of additional properties). The `room` argument is an object that contains information about the room that the client is in. It has the following properties:
+**_onConnect_**: This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `connection` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client (with a couple of additional properties).
+
+The `room` argument is an object that contains information about the room that the client is in. It has the following properties:
 
 **_id:_** _string_
 
@@ -41,6 +43,12 @@ A map of all the environment variables that you've set for your project. See the
 **_internalID_**: _string_
 
 This too is a string that uniquely identifies the room, but it's not meant to be directly used by your application. It's used internally by the PartyKit platform to identify the room.
+
+The `ctx` argument is an object that contains information about the runtime environment. It has the following properties:
+
+**_request_**: _Request_
+
+A [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) object that contains information about the HTTP request that initiated the WebSocket connection. This is useful if you want to get information about the client that's connecting to your project. For example, you can get the IP address of the client like this: `ctx.request.headers.get('cf-connecting-ip')`
 
 From a client (like your browser app), you can connect to the server like this:
 
