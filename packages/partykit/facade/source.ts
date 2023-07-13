@@ -36,6 +36,13 @@ function getRoomIdFromPathname(pathname: string) {
   }
 }
 
+function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
+  return Object.assign(ws, {
+    ...(ws.deserializeAttachment() as PartyKitConnection),
+    socket: ws,
+  });
+}
+
 let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
@@ -47,20 +54,45 @@ type Env = {
 };
 
 function createDurable(Worker: PartyKitServer) {
-  if (Worker.onConnect && typeof Worker.onConnect !== "function") {
+  if ("onConnect" in Worker && typeof Worker.onConnect !== "function") {
     throw new Error(".onConnect is not a function");
   }
 
-  if (Worker.onBeforeConnect && typeof Worker.onBeforeConnect !== "function") {
+  if (
+    "onBeforeConnect" in Worker &&
+    typeof Worker.onBeforeConnect !== "function"
+  ) {
     throw new Error(".onBeforeConnect should be a function");
   }
 
-  if (Worker.onRequest && typeof Worker.onRequest !== "function") {
+  if ("onRequest" in Worker && typeof Worker.onRequest !== "function") {
     throw new Error(".onRequest is not a function");
   }
 
-  if (Worker.onBeforeRequest && typeof Worker.onBeforeRequest !== "function") {
+  if (
+    "onBeforeRequest" in Worker &&
+    typeof Worker.onBeforeRequest !== "function"
+  ) {
     throw new Error(".onBeforeRequest should be a function");
+  }
+
+  if ("onMessage" in Worker && typeof Worker.onMessage !== "function") {
+    throw new Error(".onMessage should be a function");
+  }
+
+  if ("onClose" in Worker && typeof Worker.onClose !== "function") {
+    throw new Error(".onClose should be a function");
+  }
+
+  if ("onError" in Worker && typeof Worker.onError !== "function") {
+    throw new Error(".onError should be a function");
+  }
+
+  if (
+    "onConnect" in Worker &&
+    ("onMessage" in Worker || "onClose" in Worker || "onError" in Worker)
+  ) {
+    throw new Error("Cannot have both onConnect and onMessage handlers");
   }
 
   if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
@@ -78,10 +110,9 @@ function createDurable(Worker: PartyKitServer) {
 
       this.controller = controller;
       this.namespaces = namespaces;
+
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
-        // TODO: probably want to rename this to something else
-        // "sockets"? "connections"? "clients"?
         internalID: this.controller.id.toString(),
         connections: new Map(),
         env: PARTYKIT_VARS,
@@ -89,6 +120,18 @@ function createDurable(Worker: PartyKitServer) {
         parties: {},
         broadcast: this.broadcast,
       };
+
+      if ("onMessage" in Worker) {
+        // when using the Hibernation API, we'll initialize the connections map by deserializing
+        // the sockets tracked by the platform. after this point, the connections map is kept up
+        // to date as sockets connect/disconnect, until next hibernation
+        this.room.connections = new Map(
+          controller.getWebSockets().map((socket) => {
+            const connection = rehydrateHibernatedConnection(socket);
+            return [connection.id, connection];
+          })
+        );
+      }
     }
 
     broadcast = (msg: string | Uint8Array, without: string[] = []) => {
@@ -136,7 +179,7 @@ function createDurable(Worker: PartyKitServer) {
         this.room.id = roomId;
 
         if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-          if (Worker.onRequest) {
+          if ("onRequest" in Worker) {
             if (typeof Worker.onRequest === "function") {
               return await Worker.onRequest(request, this.room);
             } else {
@@ -158,8 +201,13 @@ function createDurable(Worker: PartyKitServer) {
         );
       }
       try {
-        if (!Worker.onConnect) {
-          throw new Error("No onConnect handler");
+        if (
+          !(
+            ("onConnect" in Worker && typeof Worker.onConnect === "function") ||
+            ("onMessage" in Worker && typeof Worker.onMessage === "function")
+          )
+        ) {
+          throw new Error("No onConnect or onMessage handler");
         }
 
         // Create the websocket pair for the client
@@ -180,15 +228,24 @@ function createDurable(Worker: PartyKitServer) {
         // TODO: Object.freeze / mark as readonly!
         const connection: PartyKitConnection = Object.assign(serverWebSocket, {
           id: connectionId,
+          roomId: this.room.id,
           socket: serverWebSocket,
           unstable_initial,
         });
         this.room.connections.set(connectionId, connection);
 
         // Accept the websocket connection
-        serverWebSocket.accept();
-
-        await this.handleConnection(this.room, connection, { request });
+        if ("onMessage" in Worker) {
+          this.controller.acceptWebSocket(serverWebSocket);
+          connection.serializeAttachment({
+            id: connectionId,
+            unstable_initial,
+            roomId: this.room.id,
+          });
+        } else {
+          serverWebSocket.accept();
+          await this.handleConnection(this.room, connection, { request });
+        }
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
@@ -229,10 +286,42 @@ function createDurable(Worker: PartyKitServer) {
 
       connection.addEventListener("close", handleCloseOrErrorFromClient);
       connection.addEventListener("error", handleCloseOrErrorFromClient);
-
       // and finally, connect the client to the worker
       // TODO: pass room id here? and other meta
       return Worker.onConnect(connection, room, context);
+    }
+
+    async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
+        if (this.room.id) {
+          return Worker.onMessage(msg, connection, this.room);
+        } else {
+          // the object should never hibernate in dev mode, so room.id should always be defined,
+          // but if it isn't, let's read it from the serialized websocket state like we do in prod
+          const { roomId } = connection as unknown as { roomId: string };
+          return Worker.onMessage(msg, connection, {
+            ...this.room,
+            id: roomId,
+          });
+        }
+      }
+    }
+
+    async webSocketClose(ws: WebSocket) {
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      if ("onClose" in Worker && typeof Worker.onClose === "function") {
+        return Worker.onClose(connection, this.room);
+      }
+      this.room.connections.delete(connection.id);
+    }
+
+    async webSocketError(ws: WebSocket, err: Error) {
+      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      if ("onError" in Worker && typeof Worker.onError === "function") {
+        return Worker.onError(connection, err, this.room);
+      }
+      this.room.connections.delete(connection.id);
     }
 
     async alarm() {
@@ -285,7 +374,7 @@ export default {
           // isValidRequest?
           // onAuth?
           let onBeforeConnectResponse: unknown;
-          if (Worker.onBeforeConnect) {
+          if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
               try {
                 onBeforeConnectResponse = await Worker.onBeforeConnect(
@@ -327,7 +416,7 @@ export default {
           return await env.MAIN_DO.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
-          if (Worker.onBeforeRequest) {
+          if ("onBeforeRequest" in Worker) {
             if (typeof Worker.onBeforeRequest === "function") {
               try {
                 onBeforeRequestResponse = await Worker.onBeforeRequest(
@@ -355,7 +444,7 @@ export default {
           if (onBeforeRequestResponse instanceof Response) {
             return onBeforeRequestResponse;
           }
-          if (!Worker.onRequest) {
+          if (!("onRequest" && Worker)) {
             throw new Error("No onRequest handler");
           }
 

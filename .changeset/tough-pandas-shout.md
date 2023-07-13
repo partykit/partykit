@@ -30,7 +30,7 @@ export default {
     connection.serializeAttachment({ ip });
     // do something with the ip
   },
-  onMessage(connection, message, room) {
+  onMessage(message, connection, room) {
     const { ip } = connection.deserializeAttachment();
     // do something with the ip
   },
