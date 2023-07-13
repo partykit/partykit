@@ -120,28 +120,16 @@ function createDurable(Worker: PartyKitServer) {
         broadcast: this.broadcast,
       };
 
-      // when using the Hibernation API, we cannot track active connections manually, so we'll lazily
-      // construct the connections map by deserializing the sockets tracked by the platform
       if ("onMessage" in Worker) {
-        let connections: Map<string, PartyKitConnection> | null = null;
-        this.room = {
-          ...this.room,
-          get connections() {
-            // initialize connections map the first time the getter is called
-            // TODO: figure out if this is safe (i.e. will not be cached between connects/disconnects),
-            // or if we need to recreate this manually before every onMessage invocation
-            if (connections === null) {
-              const sockets = controller.getWebSockets();
-              connections = new Map(
-                sockets.map((socket) => {
-                  const connection = rehydrateHibernatedConnection(socket);
-                  return [connection.id, connection];
-                })
-              );
-            }
-            return connections;
-          },
-        };
+        // when using the Hibernation API, we'll initialize the connections map by deserializing
+        // the sockets tracked by the platform. after this point, the connections map is kept up
+        // to date as sockets connect/disconnect, until next hibernation
+        this.room.connections = new Map(
+          controller.getWebSockets().map((socket) => {
+            const connection = rehydrateHibernatedConnection(socket);
+            return [connection.id, connection];
+          })
+        );
       }
     }
 
