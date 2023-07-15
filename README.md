@@ -4,7 +4,7 @@
 [![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/KDZb7J4uxJ)
 ![License](https://img.shields.io/github/license/partykit/partykit)
 
-`partykit` is an SDK designed for creating real-time collaborative applications. 
+`partykit` is an SDK designed for creating real-time collaborative applications.
 
 Whether you wish to augment your existing web applications or construct new ones from scratch, `partykit` makes the task easier with minimal coding effort.
 
@@ -15,13 +15,13 @@ Whether you wish to augment your existing web applications or construct new ones
 Install `partykit` through npm:
 
 ```sh
-npm install partykit@beta y-partykit@beta
+npm install partykit@beta partysocket@beta
 ```
 
 For yarn users:
 
 ```sh
-yarn add partykit@beta y-partykit@beta
+yarn add partykit@beta partysocket@beta
 ```
 
 ## Quick Start
@@ -57,7 +57,7 @@ npx partykit deploy server.ts --name my-party
 Next, connect your application to this server with a simple client:
 
 ```ts
-// Import PartySocket - a lightweight abstraction over WebSocket 
+// Import PartySocket - a lightweight abstraction over WebSocket
 import PartySocket from "partysocket";
 
 const socket = new PartySocket({
@@ -66,7 +66,7 @@ const socket = new PartySocket({
   room: "my-room",
 });
 
-socket.on("message", (message) => {
+socket.addEventListener("message", (message) => {
   console.log(message); // "hello from room: my-room"
 });
 ```
