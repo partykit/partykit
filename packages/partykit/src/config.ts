@@ -194,6 +194,7 @@ const configSchema = z
     main: z.string().optional(),
     port: z.number().optional(),
     assets: z.string().optional(),
+    persist: z.union([z.boolean(), z.string()]).optional(),
     vars: z.record(z.unknown()).optional(),
     define: z.record(z.string()).optional(),
     parties: z.record(z.string()).optional(),

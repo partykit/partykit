@@ -73,6 +73,9 @@ program
   .option("-p, --port <number>", "port to run the server on")
   .option("--assets <path>", "path to assets directory")
   .option("-c, --config <path>", "path to config file")
+  .addOption(
+    new Option("--persist [path]", "persist local state").default(true)
+  )
   // .option("-e, --env", "environment to use")
   .option(
     "-v, --var [vars...]",
@@ -87,6 +90,7 @@ program
       <Dev
         main={scriptPath}
         port={options.port}
+        persist={options.persist}
         config={options.config}
         vars={getArrayKVOption(options.var)}
         define={getArrayKVOption(options.define)}
