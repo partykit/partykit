@@ -37,8 +37,8 @@
     "react": "^18.2.0"
   },
   "scripts": {
-    "clean": "rm -rf dist *.d.ts",
-    "post-build": "mv dist/*.d.ts* .",
+    "clean": "shx rm -rf dist *.d.ts",
+    "post-build": "shx mv dist/*.d.ts* .",
     "build": "npm run clean && tsup && npm run post-build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

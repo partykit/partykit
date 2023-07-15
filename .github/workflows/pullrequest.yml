@@ -5,7 +5,14 @@ on: pull_request
 jobs:
   check:
     timeout-minutes: 5
-    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        os: [
+            ubuntu-latest,
+            # windows-latest,
+            macos-latest,
+          ]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
         with:
