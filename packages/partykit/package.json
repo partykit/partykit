@@ -4,7 +4,11 @@
   "description": "Everything's better with friends",
   "bin": "dist/bin.mjs",
   "exports": {
-    "./server": "./dist/server.js",
+    "./server": {
+      "types": "./server.d.ts",
+      "module": "./dist/server.js",
+      "import": "./dist/server.js"
+    },
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
