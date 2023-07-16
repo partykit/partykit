@@ -4,15 +4,15 @@
 [![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/KDZb7J4uxJ)
 ![License](https://img.shields.io/github/license/partykit/partykit)
 
-`partykit` is an SDK designed for creating real-time collaborative applications.
+[PartyKit](https://partykit.io/) is an SDK designed for creating real-time collaborative applications.
 
-Whether you wish to augment your existing web applications or construct new ones from scratch, `partykit` makes the task easier with minimal coding effort.
+Whether you wish to augment your existing web applications or construct new ones from scratch, PartyKit makes the task easier with minimal coding effort.
 
-:warning: Please note, all updates to partykit are currently published directly to npm using the beta tag.
+:warning: Please note, all updates to `partykit` are currently published directly to npm using the `beta`` tag.
 
 ## Installation
 
-Install `partykit` through npm:
+Install PartyKit through npm:
 
 ```sh
 npm install partykit@beta partysocket@beta
@@ -38,6 +38,10 @@ export default {
   onConnect(websocket, room) {
     // This is invoked whenever a user joins a room
     websocket.send("hello from room: " + room.id);
+  },
+  // optionally, you can respond to HTTP requests as well
+  onRequest(request, room) {
+    return new Response("hello from room: " + room.id);
   },
 };
 ```
@@ -75,7 +79,7 @@ socket.addEventListener("message", (message) => {
 
 ### y-partykit
 
-`y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software. You can set up a Yjs backend with just a few lines of code:
+`y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software (and particularly for text editors). You can set up a Yjs backend with just a few lines of code:
 
 ```ts
 // server.ts
@@ -96,8 +100,8 @@ Refer to the [official Yjs documentation](https://docs.yjs.dev/ecosystem/editor-
 
 ## Contributing
 
-We encourage contributions to `partykit`. If you're interested in contributing or need help or have questions, please join us in our [Discord](https://discord.gg/KDZb7J4uxJ).
+We encourage contributions to PartyKit. If you're interested in contributing or need help or have questions, please join us in our [Discord](https://discord.gg/KDZb7J4uxJ).
 
 ## License
 
-`partykit` is [MIT licensed](./LICENSE).
+PartyKit is [MIT licensed](./LICENSE).
