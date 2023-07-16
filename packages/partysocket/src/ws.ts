@@ -43,11 +43,6 @@ export interface WebSocketEventMap {
   open: Event;
 }
 
-export interface AddEventListenerOptions {
-  once?: boolean;
-  signal?: AbortSignal;
-}
-
 const Events = {
   Event,
   ErrorEvent,
