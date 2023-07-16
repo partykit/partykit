@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"rm -rf public/dist && esbuild src/client.tsx  monaco-editor/esm/vs/language/typescript/ts.worker monaco-editor/esm/vs/editor/editor.worker.js monaco-editor/esm/vs/language/json/json.worker monaco-editor/esm/vs/language/css/css.worker monaco-editor/esm/vs/language/html/html.worker --bundle --outdir=public/dist --sourcemap --loader:.ttf=file --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+    "start": "concurrently \"shx rm -rf public/dist && esbuild src/client.tsx  monaco-editor/esm/vs/language/typescript/ts.worker monaco-editor/esm/vs/editor/editor.worker.js monaco-editor/esm/vs/language/json/json.worker monaco-editor/esm/vs/language/css/css.worker monaco-editor/esm/vs/language/html/html.worker --bundle --outdir=public/dist --sourcemap --loader:.ttf=file --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
   },
   "keywords": [],
   "author": "",

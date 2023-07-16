@@ -183,6 +183,10 @@ export async function logout() {
   // TODO: delete the token from github
 }
 
+function replacePathSlashes(str: string) {
+  return str.replace(/\\/g, "/");
+}
+
 const configSchema = z
   .object({
     account: z.string().optional(),
@@ -344,7 +348,9 @@ export function getConfig(
       if (!fs.existsSync(absoluteMainPath)) {
         throw new Error(`Could not find main: ${overrides.main}`);
       } else {
-        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+        config.main =
+          "./" +
+          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
       }
     } else if (parsedConfig.main) {
       const absoluteMainPath = path.isAbsolute(parsedConfig.main)
@@ -353,7 +359,9 @@ export function getConfig(
       if (!fs.existsSync(absoluteMainPath)) {
         throw new Error(`Could not find main: ${parsedConfig.main}`);
       } else {
-        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+        config.main =
+          "./" +
+          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
       }
     }
   }
@@ -366,7 +374,8 @@ export function getConfig(
         throw new Error(`Could not find party: ${party}`);
       } else {
         config.parties[name] =
-          "./" + path.relative(process.cwd(), absolutePartyPath);
+          "./" +
+          replacePathSlashes(path.relative(process.cwd(), absolutePartyPath));
       }
     }
   }
