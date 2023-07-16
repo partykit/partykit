@@ -630,6 +630,7 @@ testDone("immediately-failed connection should not timeout", (done, fail) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
     maxRetries: 2,
     connectionTimeout: 500,
+    maxReconnectionDelay: 600,
   });
 
   ws.addEventListener("error", (err: ErrorEvent) => {
@@ -841,13 +842,13 @@ testDone(
 
 testDone("reconnection delay grow factor", (done) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, [], {
-    minReconnectionDelay: 100,
-    maxReconnectionDelay: 1000,
+    minReconnectionDelay: 50,
+    maxReconnectionDelay: 500,
     reconnectionDelayGrowFactor: 2,
   });
   // @ts-ignore - accessing private field
   expect(ws._getNextDelay()).toBe(0);
-  const expected = [100, 200, 400, 800, 1000, 1000];
+  const expected = [50, 100, 200, 400, 500, 500];
   let retry = 0;
   ws.addEventListener("error", () => {
     // @ts-ignore - accessing private field
@@ -857,19 +858,19 @@ testDone("reconnection delay grow factor", (done) => {
       ws.close();
       setTimeout(() => {
         done();
-      }, 2000);
+      }, 500);
     }
   });
 });
 
 testDone("minUptime", (done) => {
   const ws = new ReconnectingWebSocket(URL, [], {
-    minReconnectionDelay: 100,
-    maxReconnectionDelay: 2000,
+    minReconnectionDelay: 50,
+    maxReconnectionDelay: 1000,
     reconnectionDelayGrowFactor: 2,
-    minUptime: 500,
+    minUptime: 250,
   });
-  const expectedDelays = [100, 200, 400, 800, 100, 100];
+  const expectedDelays = [50, 100, 200, 400, 50, 50];
   const expectedRetryCount = [1, 2, 3, 4, 1, 1];
   let connectionCount = 0;
 
@@ -878,7 +879,7 @@ testDone("minUptime", (done) => {
     if (connectionCount <= expectedDelays.length) {
       setTimeout(() => {
         client.close();
-      }, connectionCount * 100);
+      }, connectionCount * 50);
     }
   }
 
