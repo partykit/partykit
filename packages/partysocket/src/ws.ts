@@ -143,8 +143,9 @@ export default class ReconnectingWebSocket {
   private readonly _url: UrlProvider;
   private readonly _protocols?: ProtocolsProvider;
   private readonly _options: Options;
-  private _onceListeners = new WeakSet<
-    WebSocketEventListenerMap[keyof WebSocketEventListenerMap]
+  private _onceListeners = new WeakMap<
+    WebSocketEventListenerMap[keyof WebSocketEventListenerMap],
+    number
   >();
 
   constructor(
@@ -360,7 +361,8 @@ export default class ReconnectingWebSocket {
         { once: true }
       );
       if (once) {
-        this._onceListeners.add(listener);
+        const currentCount = this._onceListeners.get(listener) || 0;
+        this._onceListeners.set(listener, currentCount + 1);
       }
     }
   }
@@ -371,7 +373,7 @@ export default class ReconnectingWebSocket {
     if (listeners) {
       for (const listener of listeners) {
         this._callEventListener(event, listener);
-        if (this._onceListeners.has(listener)) {
+        if (this._onceListeners.get(listener) === 1) {
           this.removeEventListener(
             event.type as keyof WebSocketEventListenerMap,
             listener
