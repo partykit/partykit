@@ -61,6 +61,10 @@ function isWebSocket(w: unknown): w is WebSocket {
   );
 }
 
+function cloneEvent(e: Event) {
+  return new (e as any).constructor(e.type, e) as Event;
+}
+
 export type Options = {
   // WebSocket?: any;
   maxReconnectionDelay?: number;
@@ -487,7 +491,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     if (this.onopen) {
       this.onopen(event);
     }
-    this.dispatchEvent(event);
+    this.dispatchEvent(cloneEvent(event));
   };
 
   private _handleMessage = (event: MessageEvent) => {
@@ -496,7 +500,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     if (this.onmessage) {
       this.onmessage(event);
     }
-    this.dispatchEvent(event);
+    this.dispatchEvent(cloneEvent(event));
   };
 
   private _handleError = (event: ErrorEvent) => {
@@ -510,7 +514,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
       this.onerror(event);
     }
     this._debug("exec error listeners");
-    this.dispatchEvent(event);
+    this.dispatchEvent(cloneEvent(event));
 
     this._connect();
   };
@@ -526,7 +530,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     if (this.onclose) {
       this.onclose(event);
     }
-    this.dispatchEvent(event);
+    this.dispatchEvent(cloneEvent(event));
   };
 
   private _removeListeners() {
