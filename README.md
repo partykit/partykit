@@ -8,7 +8,7 @@
 
 Whether you wish to augment your existing web applications or construct new ones from scratch, PartyKit makes the task easier with minimal coding effort.
 
-:warning: Please note, all updates to `partykit` are currently published directly to npm using the `beta`` tag.
+:warning: Please note, all updates to `partykit` are currently published directly to npm using the `@beta` tag.
 
 ## Installation
 
