@@ -61,6 +61,21 @@ type MiniflareServerEventMap = {
   error: ErrorEvent;
 };
 
+function getLocalPersistencePath(
+  persistTo: string | undefined,
+  configPath: string | undefined
+) {
+  return persistTo
+    ? // If path specified, always treat it as relative to cwd()
+      path.resolve(process.cwd(), persistTo)
+    : // Otherwise, treat it as relative to wrangler.toml,
+      // if one can be found, otherwise cwd()
+      path.resolve(
+        configPath ? path.dirname(configPath) : process.cwd(),
+        ".partykit/state"
+      );
+}
+
 export class MiniflareServer extends TypedEventTarget<MiniflareServerEventMap> {
   #log = console.log;
   #mf?: Miniflare;
@@ -120,6 +135,7 @@ export type DevProps = {
   port?: number;
   assets?: string;
   config?: string;
+  persist?: boolean | string;
   vars?: Record<string, string>;
   define?: Record<string, string>;
   onReady?: (host: string, port: number) => void;
@@ -169,6 +185,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         define: options.define,
         assets: options.assets,
         port: options.port,
+        persist: options.persist,
       },
       { readEnvLocal: true }
     )
@@ -261,6 +278,26 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     once: true,
                   });
 
+                  console.log(config.persist, options.persist);
+
+                  const localPersistencePath =
+                    config.persist === "true"
+                      ? undefined
+                      : config.persist === true
+                      ? undefined
+                      : config.persist === "false"
+                      ? false
+                      : config.persist === false
+                      ? false
+                      : config.persist;
+                  const persistencePath =
+                    localPersistencePath !== false
+                      ? getLocalPersistencePath(
+                          localPersistencePath,
+                          options.config
+                        )
+                      : undefined;
+
                   void server.onBundleUpdate({
                     log: new Log(5, { prefix: "pk" }),
                     // verbose: true,
@@ -281,6 +318,16 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                         return obj;
                       }, {}),
                     },
+                    ...(persistencePath && {
+                      cachePersist: path.join(persistencePath, "cache"),
+                      durableObjectsPersist: path.join(
+                        persistencePath,
+                        "party"
+                      ),
+                      kvPersist: path.join(persistencePath, "kv"),
+                      r2Persist: path.join(persistencePath, "r2"),
+                      d1Persist: path.join(persistencePath, "d1"),
+                    }),
                     // @ts-expect-error miniflare's types are wrong
                     modules: [
                       {
@@ -379,7 +426,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       console.error(error);
       process.exit(1);
     });
-  }, [config, server]);
+  }, [config, server, options.config, options.persist]);
 
   useEffect(() => {
     server.addEventListener("reloaded", async (event) => {
