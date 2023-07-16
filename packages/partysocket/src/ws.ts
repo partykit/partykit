@@ -43,6 +43,11 @@ export interface WebSocketEventMap {
   open: Event;
 }
 
+export interface AddEventListenerOptions {
+  once?: boolean;
+  signal?: AbortSignal;
+}
+
 const Events = {
   Event,
   ErrorEvent,
@@ -143,6 +148,9 @@ export default class ReconnectingWebSocket {
   private readonly _url: UrlProvider;
   private readonly _protocols?: ProtocolsProvider;
   private readonly _options: Options;
+  private _onceListeners = new WeakSet<
+    WebSocketEventListenerMap[keyof WebSocketEventListenerMap]
+  >();
 
   constructor(
     url: UrlProvider,
@@ -343,11 +351,22 @@ export default class ReconnectingWebSocket {
    */
   public addEventListener<T extends keyof WebSocketEventListenerMap>(
     type: T,
-    listener: WebSocketEventListenerMap[T]
+    listener: WebSocketEventListenerMap[T],
+    { signal, once }: AddEventListenerOptions
   ): void {
     if (this._listeners[type]) {
       // @ts-expect-error we need to fix event/listerner types
       this._listeners[type].push(listener);
+      signal?.addEventListener(
+        "abort",
+        () => {
+          this.removeEventListener(type, listener);
+        },
+        { once: true }
+      );
+      if (once) {
+        this._onceListeners.add(listener);
+      }
     }
   }
 
@@ -357,6 +376,12 @@ export default class ReconnectingWebSocket {
     if (listeners) {
       for (const listener of listeners) {
         this._callEventListener(event, listener);
+        if (this._onceListeners.has(listener)) {
+          this.removeEventListener(
+            event.type as keyof WebSocketEventListenerMap,
+            listener
+          );
+        }
       }
     }
     return true;
