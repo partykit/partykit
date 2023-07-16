@@ -7,6 +7,9 @@ on:
 
 jobs:
   release:
+    permissions:
+      contents: write
+
     if: ${{ github.repository_owner == 'partykit' }}
     timeout-minutes: 5
     runs-on: ubuntu-22.04
