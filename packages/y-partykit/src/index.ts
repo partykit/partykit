@@ -234,10 +234,36 @@ async function getYDoc(
   return doc;
 }
 
+function readSyncMessage(
+  decoder: decoding.Decoder,
+  encoder: encoding.Encoder,
+  doc: Y.Doc,
+  transactionOrigin: WebSocket,
+  readOnly = false
+) {
+  const messageType = decoding.readVarUint(decoder);
+  switch (messageType) {
+    case syncProtocol.messageYjsSyncStep1:
+      syncProtocol.readSyncStep1(decoder, encoder, doc);
+      break;
+    case syncProtocol.messageYjsSyncStep2:
+      if (!readOnly)
+        syncProtocol.readSyncStep2(decoder, doc, transactionOrigin);
+      break;
+    case syncProtocol.messageYjsUpdate:
+      if (!readOnly) syncProtocol.readUpdate(decoder, doc, transactionOrigin);
+      break;
+    default:
+      throw new Error("Unknown message type");
+  }
+  return messageType;
+}
+
 function messageListener(
   conn: WebSocket,
   doc: WSSharedDoc,
-  message: Uint8Array
+  message: Uint8Array,
+  readOnly: boolean
 ): void {
   try {
     const encoder = encoding.createEncoder();
@@ -246,7 +272,7 @@ function messageListener(
     switch (messageType) {
       case messageSync:
         encoding.writeVarUint(encoder, messageSync);
-        syncProtocol.readSyncMessage(decoder, encoder, doc, conn);
+        readSyncMessage(decoder, encoder, doc, conn, readOnly);
 
         // If the `encoder` only contains the type of reply message and no
         // message, there is no need to send the message. When `encoder` only
@@ -352,6 +378,7 @@ export type YPartyKitOptions = {
   persist?: boolean;
   callback?: YPartyKitCallbackOptions;
   load?: () => Promise<Y.Doc>;
+  readOnly?: boolean;
 };
 
 export async function onConnect(
@@ -367,7 +394,12 @@ export async function onConnect(
   // listen and reply to events
   conn.addEventListener("message", (message) => {
     if (typeof message.data !== "string") {
-      return messageListener(conn, doc, new Uint8Array(message.data));
+      return messageListener(
+        conn,
+        doc,
+        new Uint8Array(message.data),
+        options.readOnly ?? false
+      );
     } else {
       // silently ignore anything else
     }
