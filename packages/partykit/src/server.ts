@@ -1,7 +1,7 @@
 import type {
   DurableObjectStorage,
   ExecutionContext,
-  Request,
+  Request as PartyKitRequest,
   Response as PartyKitResponse,
   WebSocket,
 } from "@cloudflare/workers-types";
@@ -9,7 +9,9 @@ import type {
 // Because when you construct a `new Response()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
 // This is fine by us, let user return whichever response type.
+type FetchRequest = Request;
 type FetchResponse = Response;
+type UserDefinedRequest = FetchRequest | PartyKitRequest;
 type UserDefinedResponse = FetchResponse | PartyKitResponse;
 
 export type PartyKitStorage = DurableObjectStorage;
@@ -42,7 +44,6 @@ export type PartyKitConnection = WebSocket & {
    * @deprecated
    */
   socket: WebSocket;
-  unstable_initial: unknown;
 };
 
 /**
@@ -55,8 +56,8 @@ type RequestHandler = {
     room: { id: string; env: Record<string, unknown> },
     ctx: ExecutionContext
   ) =>
-    | Request
-    | Promise<Request>
+    | UserDefinedRequest
+    | Promise<UserDefinedRequest>
     | UserDefinedResponse
     | Promise<UserDefinedResponse>;
   onRequest?: (
@@ -72,7 +73,7 @@ type RequestHandler = {
  * This makes it easier to maintain state between messages,
  * but scales to fewer connections.
  */
-type ConnectionHandler<Initial = unknown> = RequestHandler & {
+type ConnectionHandler = RequestHandler & {
   onConnect?: (
     ws: PartyKitConnection,
     room: PartyKitRoom,
@@ -82,7 +83,11 @@ type ConnectionHandler<Initial = unknown> = RequestHandler & {
     req: Request,
     room: { id: string; env: Record<string, unknown> },
     ctx: ExecutionContext
-  ) => Initial | Promise<Initial>;
+  ) =>
+    | UserDefinedRequest
+    | Promise<UserDefinedRequest>
+    | UserDefinedResponse
+    | Promise<UserDefinedResponse>;
   /**
    * PartyKitServer may opt into being hibernated between WebSocket
    * messages, which enables a single server to handle more connections.
@@ -103,4 +108,4 @@ type ConnectionHandler<Initial = unknown> = RequestHandler & {
   ) => void | Promise<void>;
 };
 
-export type PartyKitServer<Initial = unknown> = ConnectionHandler<Initial>;
+export type PartyKitServer = ConnectionHandler;

@@ -198,17 +198,12 @@ function createDurable(Worker: PartyKitServer) {
           }
           connectionId = crypto.randomUUID();
         }
-        const rawInitial = request.headers.get("x-pk-initial");
-        const unstable_initial = rawInitial
-          ? JSON.parse(rawInitial)
-          : undefined;
 
         // TODO: Object.freeze / mark as readonly!
         const connection: PartyKitConnection = Object.assign(serverWebSocket, {
           id: connectionId,
           roomId: this.room.id,
           socket: serverWebSocket,
-          unstable_initial,
         });
         this.room.connections.set(connectionId, connection);
 
@@ -219,7 +214,6 @@ function createDurable(Worker: PartyKitServer) {
           this.controller.acceptWebSocket(serverWebSocket);
           connection.serializeAttachment({
             id: connectionId,
-            unstable_initial,
             roomId: this.room.id,
           });
 
@@ -359,7 +353,8 @@ export default {
           // we should make this work, once we decide behaviour
           // isValidRequest?
           // onAuth?
-          let onBeforeConnectResponse: unknown;
+          let onBeforeConnectResponse: Request | Response | undefined =
+            undefined;
           if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
               try {
@@ -389,14 +384,13 @@ export default {
           const id = env.PARTYKIT_DURABLE.idFromString(docId);
 
           if (onBeforeConnectResponse) {
-            return await env.PARTYKIT_DURABLE.get(id).fetch(
-              new Request(request, {
-                headers: {
-                  ...Object.fromEntries(request.headers.entries()),
-                  "x-pk-initial": JSON.stringify(onBeforeConnectResponse),
-                },
-              })
-            );
+            if (onBeforeConnectResponse instanceof Response) {
+              return onBeforeConnectResponse;
+            } else if (onBeforeConnectResponse instanceof Request) {
+              return await env.PARTYKIT_DURABLE.get(id).fetch(
+                onBeforeConnectResponse
+              );
+            }
           }
 
           return await env.PARTYKIT_DURABLE.get(id).fetch(request);
