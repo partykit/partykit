@@ -12,6 +12,7 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
+    "@cloudflare/workers-types": "^4.20230628.0",
     "chalk": "^5.2.0",
     "chokidar": "^3.5.3",
     "clipboardy": "^3.0.0",
@@ -38,7 +39,6 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20230628.0",
     "@types/execa": "^2.0.0",
     "@types/find-config": "^1.0.1",
     "@types/http-proxy": "^1.17.10",
