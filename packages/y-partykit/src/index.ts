@@ -203,6 +203,8 @@ async function getYDoc(
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
+                ...(callback.headers 
+                    && Object.fromEntries(callback.headers)),
               },
               body: JSON.stringify(dataToSend),
               signal: AbortSignal.timeout(
@@ -366,6 +368,7 @@ interface HandlerCallbackOptions extends CallbackOptions {
 interface UrlCallbackOptions extends CallbackOptions {
   handler?: never;
   url: string;
+  headers?: Headers;
 }
 
 type YPartyKitCallbackOptions = HandlerCallbackOptions | UrlCallbackOptions;
