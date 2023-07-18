@@ -2,9 +2,15 @@ import type {
   DurableObjectStorage,
   ExecutionContext,
   Request,
-  Response,
+  Response as PartyKitResponse,
   WebSocket,
 } from "@cloudflare/workers-types";
+
+// Because when you construct a `new Response()` in a user script,
+// it's assumed to be a standards-based Fetch API Response, unless overridden.
+// This is fine by us, let user return whichever response type.
+type FetchResponse = Response;
+type UserDefinedResponse = FetchResponse | PartyKitResponse;
 
 export type PartyKitStorage = DurableObjectStorage;
 
@@ -23,7 +29,7 @@ export type PartyKitRoom = {
     {
       get(id: string): {
         connect: () => WebSocket;
-        fetch: (init: RequestInit) => Promise<Response>;
+        fetch: (init: RequestInit) => Promise<PartyKitResponse>;
       };
     }
   >;
@@ -48,11 +54,15 @@ type RequestHandler = {
     req: Request,
     room: { id: string; env: Record<string, unknown> },
     ctx: ExecutionContext
-  ) => Request | Promise<Request> | Response | Promise<Response>;
+  ) =>
+    | Request
+    | Promise<Request>
+    | UserDefinedResponse
+    | Promise<UserDefinedResponse>;
   onRequest?: (
     req: Request,
     room: PartyKitRoom
-  ) => Response | Promise<Response>;
+  ) => UserDefinedResponse | Promise<UserDefinedResponse>;
   onAlarm?: (room: Omit<PartyKitRoom, "id">) => void | Promise<void>;
 };
 
