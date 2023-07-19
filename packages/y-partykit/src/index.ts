@@ -7,7 +7,7 @@ import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
 
 import debounce from "lodash.debounce";
-import type { PartyKitRoom } from "partykit/server";
+import type { PartyKitRoom, PartyKitConnection } from "partykit/server";
 import { YPartyKitStorage } from "./storage";
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -37,7 +37,7 @@ function updateHandler(update: Uint8Array, origin: unknown, doc: WSSharedDoc) {
 
 class WSSharedDoc extends Y.Doc {
   name: string;
-  conns: Map<WebSocket, Set<number>>;
+  conns: Map<PartyKitConnection, Set<number>>;
   awareness: awarenessProtocol.Awareness;
   storage: YPartyKitStorage | undefined;
   persist: boolean;
@@ -68,7 +68,7 @@ class WSSharedDoc extends Y.Doc {
         updated: Array<number>;
         removed: Array<number>;
       },
-      conn: WebSocket | null // Origin is the connection that made the change
+      conn: PartyKitConnection | null // Origin is the connection that made the change
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
@@ -174,7 +174,7 @@ async function getYDoc(
     doc.on(
       "update",
       debounce(
-        (update: Uint8Array, origin: WebSocket, doc: WSSharedDoc) => {
+        (update: Uint8Array, origin: PartyKitConnection, doc: WSSharedDoc) => {
           const dataToSend = {
             room: doc.name,
             data: {},
@@ -203,8 +203,7 @@ async function getYDoc(
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                ...(callback.headers 
-                    && Object.fromEntries(callback.headers)),
+                ...(callback.headers && Object.fromEntries(callback.headers)),
               },
               body: JSON.stringify(dataToSend),
               signal: AbortSignal.timeout(
@@ -240,7 +239,7 @@ function readSyncMessage(
   decoder: decoding.Decoder,
   encoder: encoding.Encoder,
   doc: Y.Doc,
-  transactionOrigin: WebSocket,
+  transactionOrigin: PartyKitConnection,
   readOnly = false
 ) {
   const messageType = decoding.readVarUint(decoder);
@@ -262,7 +261,7 @@ function readSyncMessage(
 }
 
 function messageListener(
-  conn: WebSocket,
+  conn: PartyKitConnection,
   doc: WSSharedDoc,
   message: Uint8Array,
   readOnly: boolean
@@ -298,7 +297,7 @@ function messageListener(
   }
 }
 
-function closeConn(doc: WSSharedDoc, conn: WebSocket): void {
+function closeConn(doc: WSSharedDoc, conn: PartyKitConnection): void {
   if (doc.conns.has(conn)) {
     const controlledIds: Set<number> = doc.conns.get(conn) as Set<number>;
     doc.conns.delete(conn);
@@ -328,7 +327,7 @@ function closeConn(doc: WSSharedDoc, conn: WebSocket): void {
   }
 }
 
-function send(doc: WSSharedDoc, conn: WebSocket, m: Uint8Array) {
+function send(doc: WSSharedDoc, conn: PartyKitConnection, m: Uint8Array) {
   if (
     conn.readyState !== undefined &&
     conn.readyState !== wsReadyStateConnecting &&
@@ -385,7 +384,7 @@ export type YPartyKitOptions = {
 };
 
 export async function onConnect(
-  conn: WebSocket,
+  conn: PartyKitConnection,
   room: PartyKitRoom,
   options: YPartyKitOptions = {}
 ) {
