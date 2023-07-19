@@ -310,7 +310,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                       PARTYKIT_VARS: config.vars,
                     },
                     durableObjects: {
-                      MAIN_DO: "MainDO",
+                      PARTYKIT_DURABLE: "PartyKitDurable",
                       ...Object.entries(config.parties || {}).reduce<
                         Record<string, string>
                       >((obj, [name, _]) => {
