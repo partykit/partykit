@@ -20,7 +20,7 @@ WebSocket that will automatically reconnect if the connection is closed.
 ## Install
 
 ```bash
-npm install partysocket
+npm install partysocket@beta
 ```
 
 ## Usage
