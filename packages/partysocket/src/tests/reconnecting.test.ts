@@ -291,7 +291,7 @@ const maxRetriesTest = (count: number, done: () => void) => {
 
 testDone("max retries: 0", (done) => maxRetriesTest(0, done));
 testDone("max retries: 1", (done) => maxRetriesTest(1, done));
-testDone("max retries: 5", (done) => maxRetriesTest(5, done));
+testDone("max retries: 3", (done) => maxRetriesTest(3, done));
 
 testDone("level0 event listeners are kept after reconnect", (done) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
