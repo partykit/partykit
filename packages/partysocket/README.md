@@ -4,6 +4,12 @@ _(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalne
 
 WebSocket that will automatically reconnect if the connection is closed.
 
+## Install
+
+```bash
+npm install partysocket@beta
+```
+
 ## Features
 
 - WebSocket API compatible (same interface, Level0 and Level2 event model)
@@ -16,12 +22,6 @@ WebSocket that will automatically reconnect if the connection is closed.
 - Multiple builds available (see dist folder)
 - Debug mode
 - Works everywhere, not just with PartyKit!
-
-## Install
-
-```bash
-npm install partysocket@beta
-```
 
 ## Usage
 
