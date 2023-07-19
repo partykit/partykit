@@ -129,6 +129,6 @@ dist
 
 # More stuff 
 .DS_Store
-TODO.md
+/TODO.md
 .partykit
 

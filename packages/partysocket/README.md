@@ -1,16 +1,6 @@
-- https://github.com/pladaria/reconnecting-websocket/pull/166 Fix: handle error if getNextUrl throws (TODO: add test for this one )
-- https://github.com/pladaria/reconnecting-websocket/pull/132 feat: make protocols updatable
-- https://github.com/pladaria/reconnecting-websocket/pull/141 [Fix] Socket doesn't connect again after closing while connecting
+# PartySocket
 
-(TODO: more)
-
-- https://github.com/pladaria/reconnecting-websocket/pull/163 Support for Dynamic Protocols
-- https://github.com/pladaria/reconnecting-websocket/pull/47 reconnecting and reconnectscheduled custom events
-
-# Reconnecting WebSocket
-
-[![Build Status](https://travis-ci.org/pladaria/reconnecting-websocket.svg?branch=master&v=1)](https://travis-ci.org/pladaria/reconnecting-websocket)
-[![Coverage Status](https://coveralls.io/repos/github/pladaria/reconnecting-websocket/badge.svg?branch=master&v=3)](https://coveralls.io/github/pladaria/reconnecting-websocket?branch=master)
+_(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes)_
 
 WebSocket that will automatically reconnect if the connection is closed.
 
@@ -25,32 +15,43 @@ WebSocket that will automatically reconnect if the connection is closed.
 - Buffering. Will send accumulated messages on open
 - Multiple builds available (see dist folder)
 - Debug mode
+- Works everywhere, not just with PartyKit!
 
 ## Install
 
 ```bash
-npm install --save reconnecting-websocket
+npm install --save partysocket
 ```
 
 ## Usage
 
 ### Compatible with WebSocket Browser API
 
-So this documentation should be valid:
 [MDN WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
-
-Ping me if you find any problems. Or, even better, write a test for your case and make a pull
-request :)
 
 ### Simple usage
 
 ```javascript
-import ReconnectingWebSocket from "reconnecting-websocket";
+import { WebSocket } from "partysocket";
 
-const rws = new ReconnectingWebSocket("ws://my.site.com");
+const ws = new WebSocket("ws://my.site.com");
 
-rws.addEventListener("open", () => {
-  rws.send("hello!");
+ws.addEventListener("open", () => {
+  ws.send("hello!");
+});
+```
+
+### Usage with PartyKit
+
+```javascript
+import PartySocket from "partysocket";
+
+const ws = new PartySocket({
+  host: "project.name.partykit.dev", // or localhost:1999 in dev
+  room: "my-room",
+  // add an optional id to identify the client,
+  // if not provided, a random id will be generated
+  id: "some-connection-id",
 });
 ```
 
@@ -63,7 +64,7 @@ The `url` parameter will be resolved before connecting, possible types:
 - `() => Promise<string>`
 
 ```javascript
-import ReconnectingWebSocket from "reconnecting-websocket";
+import { WebSocket } from "partysocket";
 
 const urls = ["ws://my.site.com", "ws://your.site.com", "ws://their.site.com"];
 let urlIndex = 0;
@@ -71,11 +72,11 @@ let urlIndex = 0;
 // round robin url provider
 const urlProvider = () => urls[urlIndex++ % urls.length];
 
-const rws = new ReconnectingWebSocket(urlProvider);
+const ws = new WebSocket(urlProvider);
 ```
 
 ```javascript
-import ReconnectingWebSocket from "reconnecting-websocket";
+import { WebSocket } from "partysocket";
 
 // async url provider
 const urlProvider = async () => {
@@ -83,7 +84,7 @@ const urlProvider = async () => {
   return `wss://my.site.com/${token}`;
 };
 
-const rws = new ReconnectingWebSocket(urlProvider);
+const ws = new WebSocket(urlProvider);
 ```
 
 ### Update Protocols
@@ -97,12 +98,12 @@ The `protocols` parameter will be resolved before connecting, possible types:
 - `() => Promise<string | string[] | null>`
 
 ```javascript
-import ReconnectingWebSocket from 'reconnecting-websocket`;
-const rws = new ReconnectingWebSocket('ws://your.site.com', 'your protocol');
+import { WebSocket } from "partysocket";
+const ws = new WebSocket("ws://your.site.com", "your protocol");
 ```
 
 ```javascript
-import ReconnectingWebSocket from 'reconnecting-websocket`;
+import WebSocket from 'partysocket`;
 
 const protocols = ['p1', 'p2', ['p3.1', 'p3.2']];
 let protocolsIndex = 0;
@@ -110,7 +111,7 @@ let protocolsIndex = 0;
 // round robin protocols provider
 const protocolsProvider = () => protocols[protocolsIndex++ % protocols.length];
 
-const rws = new ReconnectingWebSocket('ws://your.site.com', protocolsProvider);
+const ws = new WebSocket('ws://your.site.com', protocolsProvider);
 ```
 
 ### Options
@@ -118,7 +119,7 @@ const rws = new ReconnectingWebSocket('ws://your.site.com', protocolsProvider);
 #### Sample with custom options
 
 ```javascript
-import ReconnectingWebSocket from "reconnecting-websocket";
+import { WebSocket } from "partysocket";
 import WS from "ws";
 
 const options = {
@@ -126,7 +127,7 @@ const options = {
   connectionTimeout: 1000,
   maxRetries: 10,
 };
-const rws = new ReconnectingWebSocket("ws://my.site.com", [], options);
+const ws = new WebSocket("ws://my.site.com", [], options);
 ```
 
 #### Available options
@@ -203,10 +204,6 @@ OPEN       1 The connection is open and ready to communicate.
 CLOSING    2 The connection is in the process of closing.
 CLOSED     3 The connection is closed or couldn't be opened.
 ```
-
-## Contributing
-
-[Read here](./CONTRIBUTING.md)
 
 ## License
 
