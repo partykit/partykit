@@ -1,4 +1,4 @@
-# PartyKit
+<img width="870" alt="image" src="https://github.com/partykit/partykit/assets/18808/485d32ff-cbee-4b03-8673-c594200774a2">
 
 ![npm beta](https://img.shields.io/npm/v/partykit/beta)
 [![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/g5uqHQJc3z)
