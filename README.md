@@ -1,7 +1,7 @@
 # PartyKit
 
 ![npm beta](https://img.shields.io/npm/v/partykit/beta)
-[![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/KDZb7J4uxJ)
+[![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/g5uqHQJc3z)
 ![License](https://img.shields.io/github/license/partykit/partykit)
 
 [PartyKit](https://partykit.io/) is an SDK designed for creating real-time collaborative applications.
