@@ -381,5 +381,9 @@ export function getConfig(
     }
   }
 
+  if (config.parties?.main) {
+    throw new Error(`Cannot have a party named "main"`);
+  }
+
   return config;
 }

@@ -106,10 +106,14 @@ function createDurable(Worker: PartyKitServer) {
     constructor(controller: DurableObjectState, env: Env) {
       super();
 
-      const { PARTYKIT_VARS, ...namespaces } = env;
+      const { PARTYKIT_VARS, PARTYKIT_DURABLE, ...namespaces } = env;
 
       this.controller = controller;
       this.namespaces = namespaces;
+
+      Object.assign(this.namespaces, {
+        main: PARTYKIT_DURABLE,
+      });
 
       this.room = {
         id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
@@ -155,14 +159,18 @@ function createDurable(Worker: PartyKitServer) {
                 return {
                   fetch(init?: RequestInit) {
                     return stub.fetch(
-                      `http://${url.host}/parties/${key}/${name}`,
+                      key === "main"
+                        ? `http://${url.host}/party/${name}`
+                        : `http://${url.host}/parties/${key}/${name}`,
                       init
                     );
                   },
                   connect: () => {
                     // wish there was a way to create a websocket from a durable object
                     return new WebSocket(
-                      `ws://${url.host}/parties/${key}/${name}`
+                      key === "main"
+                        ? `ws://${url.host}/party/${name}`
+                        : `ws://${url.host}/parties/${key}/${name}`
                     );
                   },
                 };
@@ -332,7 +340,7 @@ function createDurable(Worker: PartyKitServer) {
   };
 }
 
-export const MainDO = createDurable(Worker);
+export const PartyKitDurable = createDurable(Worker);
 
 __PARTIES__;
 declare const __PARTIES__: Record<string, string>;
@@ -399,11 +407,11 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = env.MAIN_DO.idFromName(roomId).toString();
-          const id = env.MAIN_DO.idFromString(docId);
+          const docId = env.PARTYKIT_DURABLE.idFromName(roomId).toString();
+          const id = env.PARTYKIT_DURABLE.idFromString(docId);
 
           if (onBeforeConnectResponse) {
-            return await env.MAIN_DO.get(id).fetch(
+            return await env.PARTYKIT_DURABLE.get(id).fetch(
               new Request(request, {
                 headers: {
                   ...Object.fromEntries(request.headers.entries()),
@@ -413,7 +421,7 @@ export default {
             );
           }
 
-          return await env.MAIN_DO.get(id).fetch(request);
+          return await env.PARTYKIT_DURABLE.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
           if ("onBeforeRequest" in Worker) {
@@ -449,10 +457,12 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = env.MAIN_DO.idFromName(roomId).toString();
-          const id = env.MAIN_DO.idFromString(docId);
+          const docId = env.PARTYKIT_DURABLE.idFromName(roomId).toString();
+          const id = env.PARTYKIT_DURABLE.idFromString(docId);
 
-          return await env.MAIN_DO.get(id).fetch(onBeforeRequestResponse);
+          return await env.PARTYKIT_DURABLE.get(id).fetch(
+            onBeforeRequestResponse
+          );
         }
       }
 
