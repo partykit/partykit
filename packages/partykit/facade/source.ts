@@ -54,49 +54,19 @@ type Env = {
 };
 
 function createDurable(Worker: PartyKitServer) {
-  if ("onConnect" in Worker && typeof Worker.onConnect !== "function") {
-    throw new Error(".onConnect is not a function");
-  }
-
-  if (
-    "onBeforeConnect" in Worker &&
-    typeof Worker.onBeforeConnect !== "function"
-  ) {
-    throw new Error(".onBeforeConnect should be a function");
-  }
-
-  if ("onRequest" in Worker && typeof Worker.onRequest !== "function") {
-    throw new Error(".onRequest is not a function");
-  }
-
-  if (
-    "onBeforeRequest" in Worker &&
-    typeof Worker.onBeforeRequest !== "function"
-  ) {
-    throw new Error(".onBeforeRequest should be a function");
-  }
-
-  if ("onMessage" in Worker && typeof Worker.onMessage !== "function") {
-    throw new Error(".onMessage should be a function");
-  }
-
-  if ("onClose" in Worker && typeof Worker.onClose !== "function") {
-    throw new Error(".onClose should be a function");
-  }
-
-  if ("onError" in Worker && typeof Worker.onError !== "function") {
-    throw new Error(".onError should be a function");
-  }
-
-  if (
-    "onConnect" in Worker &&
-    ("onMessage" in Worker || "onClose" in Worker || "onError" in Worker)
-  ) {
-    throw new Error("Cannot have both onConnect and onMessage handlers");
-  }
-
-  if (Worker.onAlarm && typeof Worker.onAlarm !== "function") {
-    throw new Error(".onAlarm should be a function");
+  for (const handler of [
+    "onConnect",
+    "onBeforeConnect",
+    "onRequest",
+    "onBeforeRequest",
+    "onMessage",
+    "onClose",
+    "onError",
+    "onAlarm",
+  ] satisfies (keyof PartyKitServer)[]) {
+    if (handler in Worker && typeof Worker[handler] !== "function") {
+      throw new Error(`.${handler} should be a function`);
+    }
   }
 
   return class extends PartyDurable implements DurableObject {
@@ -242,6 +212,8 @@ function createDurable(Worker: PartyKitServer) {
         });
         this.room.connections.set(connectionId, connection);
 
+        const context = { request };
+
         // Accept the websocket connection
         if ("onMessage" in Worker) {
           this.controller.acceptWebSocket(serverWebSocket);
@@ -250,9 +222,13 @@ function createDurable(Worker: PartyKitServer) {
             unstable_initial,
             roomId: this.room.id,
           });
+
+          if ("onConnect" in Worker && typeof Worker.onConnect === "function") {
+            await Worker.onConnect(connection, this.room, context);
+          }
         } else {
           serverWebSocket.accept();
-          await this.handleConnection(this.room, connection, { request });
+          await this.handleConnection(this.room, connection, context);
         }
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
