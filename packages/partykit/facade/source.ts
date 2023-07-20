@@ -294,18 +294,20 @@ function createDurable(Worker: PartyKitServer) {
 
     async webSocketClose(ws: WebSocket) {
       const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      this.room.connections.delete(connection.id);
+
       if ("onClose" in Worker && typeof Worker.onClose === "function") {
         return Worker.onClose(connection, this.room);
       }
-      this.room.connections.delete(connection.id);
     }
 
     async webSocketError(ws: WebSocket, err: Error) {
       const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      this.room.connections.delete(connection.id);
+
       if ("onError" in Worker && typeof Worker.onError === "function") {
         return Worker.onError(connection, err, this.room);
       }
-      this.room.connections.delete(connection.id);
     }
 
     async alarm() {
