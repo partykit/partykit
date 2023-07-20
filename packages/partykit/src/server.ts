@@ -51,6 +51,14 @@ export type PartyKitConnection = WebSocket & {
  * This is available to all PartyKitServer variants.
  */
 type RequestHandler = {
+  unstable_onFetch?: (
+    req: Request,
+    lobby: {
+      env: Record<string, unknown>;
+      parties: PartyKitRoom["parties"];
+    },
+    ctx: ExecutionContext
+  ) => UserDefinedResponse | Promise<UserDefinedResponse>;
   onBeforeRequest?: (
     req: Request,
     room: {
