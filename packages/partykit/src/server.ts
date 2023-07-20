@@ -92,7 +92,10 @@ type ConnectionHandler<Initial = unknown> = RequestHandler & {
     ws: PartyKitConnection,
     room: PartyKitRoom
   ) => void | Promise<void>;
-  onClose?: (ws: WebSocket, room: PartyKitRoom) => void | Promise<void>;
+  onClose?: (
+    ws: PartyKitConnection,
+    room: PartyKitRoom
+  ) => void | Promise<void>;
   onError?: (
     ws: PartyKitConnection,
     err: Error,
