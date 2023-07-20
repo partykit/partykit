@@ -278,8 +278,6 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     once: true,
                   });
 
-                  console.log(config.persist, options.persist);
-
                   const localPersistencePath =
                     config.persist === "true"
                       ? undefined

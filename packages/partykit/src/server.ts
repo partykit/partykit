@@ -67,13 +67,13 @@ type RequestHandler = {
 };
 
 /**
- * PartyKitServer may manage its own WebSocket connections, in which case the server is kept in memory
- * between messages. This makes it easier to maintain state between messages, but scales to fewer connections.
- *
- * In this case, the server should handle messages with `ws.addEventListener` in `onConnect`, so `onMessage` is not allowed.
+ * PartyKitServer may manage its own WebSocket connections,
+ * in which case the server is kept in memory between messages.
+ * This makes it easier to maintain state between messages,
+ * but scales to fewer connections.
  */
 type ConnectionHandler<Initial = unknown> = RequestHandler & {
-  onConnect: (
+  onConnect?: (
     ws: PartyKitConnection,
     room: PartyKitRoom,
     ctx: PartyKitContext
@@ -83,19 +83,11 @@ type ConnectionHandler<Initial = unknown> = RequestHandler & {
     room: { id: string; env: Record<string, unknown> },
     ctx: ExecutionContext
   ) => Initial | Promise<Initial>;
-
-  /** onMessage may not be used when onConnect is defined */
-  onMessage?: never;
-};
-
-/**
- * PartyKitServer may opt into being hibernated between WebSocket messages, which enables a single
- * server to handle more connections.
- *
- * In this case, the server can not track its own connections, so onConnect is not allowed.
- */
-type MessageHandler = RequestHandler & {
-  onMessage: (
+  /**
+   * PartyKitServer may opt into being hibernated between WebSocket
+   * messages, which enables a single server to handle more connections.
+   */
+  onMessage?: (
     message: string | ArrayBuffer,
     ws: PartyKitConnection,
     room: PartyKitRoom
@@ -106,12 +98,6 @@ type MessageHandler = RequestHandler & {
     err: Error,
     room: PartyKitRoom
   ) => void | Promise<void>;
-
-  /** onConnect may not be used when onMessage is defined */
-  onConnect?: never;
 };
 
-export type PartyKitServer<Initial = unknown> =
-  | RequestHandler
-  | ConnectionHandler<Initial>
-  | MessageHandler;
+export type PartyKitServer<Initial = unknown> = ConnectionHandler<Initial>;
