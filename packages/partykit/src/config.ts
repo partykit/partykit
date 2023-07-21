@@ -29,7 +29,7 @@ export async function getUser(): Promise<UserConfig> {
     //   throw new Error("Invalid user config");
     // }
   } catch (e) {
-    console.log("could not get user details, attempting to login");
+    console.log("Attempting to login...");
     await fetchUserConfig();
     userConfig = getUserConfig();
   }

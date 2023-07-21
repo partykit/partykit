@@ -10,19 +10,15 @@ import Logout from "./commands/logout";
 import { render } from "ink";
 import { Dev } from "./dev";
 
-// import packageJson from "../package.json";
+import gradient from "gradient-string";
 
-// import("update-notifier").then(
-//   ({ default: updateNotifier }) => {
-//     // Checks for available update and returns an instance
-//     const notifier = updateNotifier({ pkg: packageJson, distTag: "beta" });
-//     // Notify using the built-in convenience method
-//     notifier.notify();
-//   },
-//   (err) => {
-//     console.error("Error loading update-notifier", err);
-//   }
-// );
+import packageJson from "../package.json";
+
+async function printBanner() {
+  const string = `🎈 PartyKit v${packageJson.version}`;
+  console.log(gradient.fruit(string));
+  console.log(gradient.passion(`-`.repeat(string.length + 1)));
+}
 
 process.on("SIGINT", () => {
   // console.log("Interrupted");
@@ -86,6 +82,7 @@ program
     "A key-value pair to be substituted in the project"
   )
   .action(async (scriptPath, options) => {
+    await printBanner();
     render(
       <Dev
         main={scriptPath}
@@ -118,6 +115,7 @@ program
   .option("-n, --name <name>", "name of the project")
   .option("--preview [name]", "deploy to preview environment")
   .action(async (scriptPath, options) => {
+    await printBanner();
     await cli.deploy({
       main: scriptPath,
       name: options.name,
@@ -133,7 +131,13 @@ program
 program
   .command("list")
   .description("list all deployed projects")
-  .action(async () => {
+  .addOption(
+    new Option("-f, --format").choices(["json", "pretty"]).default("pretty")
+  )
+  .action(async (options) => {
+    if (options.format !== "json") {
+      await printBanner();
+    }
     await cli.list();
   });
 
@@ -144,6 +148,7 @@ program
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "delete preview")
   .action(async (options) => {
+    await printBanner();
     await cli._delete(options);
   });
 
@@ -175,6 +180,9 @@ program
     'filter by the IP address the request originates from (use "self" to filter for your own IP)'
   )
   .action(async (options) => {
+    if (options.format !== "json") {
+      await printBanner();
+    }
     await cli.tail(options);
   });
 
@@ -185,9 +193,17 @@ envCommand
   .description("list all environment variables")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
+  .addOption(
+    new Option("-f, --format", "format of the logs")
+      .choices(["json", "pretty"])
+      .default("pretty")
+  )
   // .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (options) => {
+    if (options.format !== "json") {
+      await printBanner();
+    }
     await cli.env.list(options);
   });
 
@@ -199,6 +215,7 @@ envCommand
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "pull from preview")
   .action(async (fileName, options) => {
+    await printBanner();
     await cli.env.pull(fileName, options);
   });
 
@@ -209,6 +226,7 @@ envCommand
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "push to preview")
   .action(async (options) => {
+    await printBanner();
     await cli.env.push(options);
   });
 
@@ -222,6 +240,7 @@ envCommand
   // .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (key, options) => {
+    await printBanner();
     await cli.env.add(key, options);
   });
 
@@ -234,6 +253,7 @@ envCommand
   .option("--preview [name]", "remove from preview")
   // .addOption(EnvironmentOption)
   .action(async (key, options) => {
+    await printBanner();
     await cli.env.remove(key, options);
   });
 
@@ -241,6 +261,7 @@ program
   .command("login")
   .description("login to partykit")
   .action(async () => {
+    await printBanner();
     render(
       <Suspense>
         <Login />
@@ -252,6 +273,7 @@ program
   .command("logout")
   .description("logout from partykit")
   .action(async () => {
+    await printBanner();
     render(
       <Suspense>
         <Logout />
