@@ -53,6 +53,8 @@ type Env = {
   PARTYKIT_VARS: Record<string, unknown>;
 };
 
+let parties: PartyKitRoom["parties"];
+
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
   namespaces: Record<string, DurableObjectNamespace>,
@@ -60,36 +62,39 @@ function createMultiParties(
     host: string;
   }
 ) {
-  const parties: PartyKitRoom["parties"] = {};
-  for (const [key, value] of Object.entries(namespaces)) {
-    if (typeof value.idFromName === "function") {
-      parties[key] ||= {
-        get: (name: string) => {
-          const docId = value.idFromName(name).toString();
-          const id = value.idFromString(docId);
-          const stub = value.get(id);
-          return {
-            fetch(init?: RequestInit) {
-              return stub.fetch(
-                key === "main"
-                  ? `http://${options.host}/party/${name}`
-                  : `http://${options.host}/parties/${key}/${name}`,
-                init
-              );
-            },
-            connect: () => {
-              // wish there was a way to create a websocket from a durable object
-              return new WebSocket(
-                key === "main"
-                  ? `ws://${options.host}/party/${name}`
-                  : `ws://${options.host}/parties/${key}/${name}`
-              );
-            },
-          };
-        },
-      };
+  if (!parties) {
+    parties = {};
+    for (const [key, value] of Object.entries(namespaces)) {
+      if (typeof value.idFromName === "function") {
+        parties[key] ||= {
+          get: (name: string) => {
+            const docId = value.idFromName(name).toString();
+            const id = value.idFromString(docId);
+            const stub = value.get(id);
+            return {
+              fetch(init?: RequestInit) {
+                return stub.fetch(
+                  key === "main"
+                    ? `http://${options.host}/party/${name}`
+                    : `http://${options.host}/parties/${key}/${name}`,
+                  init
+                );
+              },
+              connect: () => {
+                // wish there was a way to create a websocket from a durable object
+                return new WebSocket(
+                  key === "main"
+                    ? `ws://${options.host}/party/${name}`
+                    : `ws://${options.host}/parties/${key}/${name}`
+                );
+              },
+            };
+          },
+        };
+      }
     }
   }
+
   return parties;
 }
 
