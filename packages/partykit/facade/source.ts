@@ -105,6 +105,10 @@ function createMultiParties(
   return parties;
 }
 
+// we use a symbol as a sigil value to indicate
+// that the room id hasn't been set yet
+const UNDEFINED = Symbol("UNDEFINED");
+
 function createDurable(Worker: PartyKitServer) {
   for (const handler of [
     "unstable_onFetch",
@@ -139,7 +143,8 @@ function createDurable(Worker: PartyKitServer) {
       });
 
       this.room = {
-        id: "UNDEFINED", // using a string here because we're guaranteed to have set it before we use it
+        // @ts-expect-error - id is a symbol when we start
+        id: UNDEFINED, // using a string here because we're guaranteed to have set it before we use it
         internalID: this.controller.id.toString(),
         connections: new Map(),
         env: PARTYKIT_VARS,
@@ -229,8 +234,8 @@ function createDurable(Worker: PartyKitServer) {
         // TODO: Object.freeze / mark as readonly!
         const connection: PartyKitConnection = Object.assign(serverWebSocket, {
           id: connectionId,
-          roomId: this.room.id,
           socket: serverWebSocket,
+          uri: request.url,
         });
         this.room.connections.set(connectionId, connection);
 
@@ -241,7 +246,7 @@ function createDurable(Worker: PartyKitServer) {
           this.controller.acceptWebSocket(serverWebSocket);
           connection.serializeAttachment({
             id: connectionId,
-            roomId: this.room.id,
+            uri: request.url,
           });
 
           if ("onConnect" in Worker && typeof Worker.onConnect === "function") {
@@ -297,24 +302,31 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      const connection = rehydrateHibernatedConnection(ws);
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
-        if (this.room.id) {
-          return Worker.onMessage(msg, connection, this.room);
-        } else {
-          // the object should never hibernate in dev mode, so room.id should always be defined,
-          // but if it isn't, let's read it from the serialized websocket state like we do in prod
-          const { roomId } = connection as unknown as { roomId: string };
-          return Worker.onMessage(msg, connection, {
-            ...this.room,
-            id: roomId,
+        // @ts-expect-error - it may be a symbol before initialised
+        if (this.room.id === UNDEFINED) {
+          // This means the room "woke up" after hibernation
+          // so we need to hydrate this.room again
+          const { uri } = connection;
+          assert(uri, "No uri found in connection");
+
+          const url = new URL(uri);
+          const roomId = getRoomIdFromPathname(url.pathname);
+          assert(roomId, "No room id found in request url");
+
+          this.room.id = roomId;
+          this.room.parties = createMultiParties(this.namespaces, {
+            host: url.host,
           });
         }
+
+        return Worker.onMessage(msg, connection, this.room);
       }
     }
 
     async webSocketClose(ws: WebSocket) {
-      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      const connection = rehydrateHibernatedConnection(ws);
       this.room.connections.delete(connection.id);
 
       if ("onClose" in Worker && typeof Worker.onClose === "function") {
@@ -323,7 +335,7 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketError(ws: WebSocket, err: Error) {
-      const connection: PartyKitConnection = rehydrateHibernatedConnection(ws);
+      const connection = rehydrateHibernatedConnection(ws);
       this.room.connections.delete(connection.id);
 
       if ("onError" in Worker && typeof Worker.onError === "function") {

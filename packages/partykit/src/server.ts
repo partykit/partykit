@@ -44,6 +44,12 @@ export type PartyKitConnection = WebSocket & {
    * @deprecated
    */
   socket: WebSocket;
+  // We would have been able to use Websocket::url
+  // but it's not available in the Workers runtime
+  // (rather, url is `null` when using WebSocketPair)
+  // It's also set as readonly, so we can't set it ourselves.
+  // Instead, we'll use the `uri` property.
+  uri: string;
 };
 
 /**
