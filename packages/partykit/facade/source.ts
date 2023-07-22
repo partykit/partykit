@@ -53,6 +53,46 @@ type Env = {
   PARTYKIT_VARS: Record<string, unknown>;
 };
 
+// create a "multi-party" object that can be used to connect to other parties
+function createMultiParties(
+  namespaces: Record<string, DurableObjectNamespace>,
+  options: {
+    host: string;
+  }
+) {
+  const parties: PartyKitRoom["parties"] = {};
+  for (const [key, value] of Object.entries(namespaces)) {
+    if (typeof value.idFromName === "function") {
+      parties[key] ||= {
+        get: (name: string) => {
+          const docId = value.idFromName(name).toString();
+          const id = value.idFromString(docId);
+          const stub = value.get(id);
+          return {
+            fetch(init?: RequestInit) {
+              return stub.fetch(
+                key === "main"
+                  ? `http://${options.host}/party/${name}`
+                  : `http://${options.host}/parties/${key}/${name}`,
+                init
+              );
+            },
+            connect: () => {
+              // wish there was a way to create a websocket from a durable object
+              return new WebSocket(
+                key === "main"
+                  ? `ws://${options.host}/party/${name}`
+                  : `ws://${options.host}/parties/${key}/${name}`
+              );
+            },
+          };
+        },
+      };
+    }
+  }
+  return parties;
+}
+
 function createDurable(Worker: PartyKitServer) {
   for (const handler of [
     "onConnect",
@@ -119,35 +159,9 @@ function createDurable(Worker: PartyKitServer) {
     async fetch(request: Request) {
       const url = new URL(request.url);
       try {
-        for (const [key, value] of Object.entries(this.namespaces)) {
-          if (typeof value.idFromName === "function") {
-            this.room.parties[key] ||= {
-              get: (name: string) => {
-                const docId = value.idFromName(name).toString();
-                const id = value.idFromString(docId);
-                const stub = value.get(id);
-                return {
-                  fetch(init?: RequestInit) {
-                    return stub.fetch(
-                      key === "main"
-                        ? `http://${url.host}/party/${name}`
-                        : `http://${url.host}/parties/${key}/${name}`,
-                      init
-                    );
-                  },
-                  connect: () => {
-                    // wish there was a way to create a websocket from a durable object
-                    return new WebSocket(
-                      key === "main"
-                        ? `ws://${url.host}/party/${name}`
-                        : `ws://${url.host}/parties/${key}/${name}`
-                    );
-                  },
-                };
-              },
-            };
-          }
-        }
+        this.room.parties = createMultiParties(this.namespaces, {
+          host: url.host,
+        });
 
         // populate the room id/slug if not previously done so
 
@@ -340,6 +354,17 @@ export default {
 
       const roomId = getRoomIdFromPathname(url.pathname);
       // TODO: throw if room is longer than x characters
+
+      const { PARTYKIT_VARS, PARTYKIT_DURABLE, ...namespaces } = env;
+
+      Object.assign(namespaces, {
+        main: PARTYKIT_DURABLE,
+      });
+
+      const parties: PartyKitRoom["parties"] = createMultiParties(namespaces, {
+        host: url.host,
+      });
+
       if (roomId) {
         if (request.headers.get("upgrade")?.toLowerCase() === "websocket") {
           let connectionId = url.searchParams.get("_pk");
@@ -362,7 +387,8 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env: env.PARTYKIT_VARS,
+                    env: PARTYKIT_VARS,
+                    parties,
                   },
                   ctx
                 );
@@ -380,20 +406,20 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = env.PARTYKIT_DURABLE.idFromName(roomId).toString();
-          const id = env.PARTYKIT_DURABLE.idFromString(docId);
+          const docId = PARTYKIT_DURABLE.idFromName(roomId).toString();
+          const id = PARTYKIT_DURABLE.idFromString(docId);
 
           if (onBeforeConnectResponse) {
             if (onBeforeConnectResponse instanceof Response) {
               return onBeforeConnectResponse;
             } else if (onBeforeConnectResponse instanceof Request) {
-              return await env.PARTYKIT_DURABLE.get(id).fetch(
+              return await PARTYKIT_DURABLE.get(id).fetch(
                 onBeforeConnectResponse
               );
             }
           }
 
-          return await env.PARTYKIT_DURABLE.get(id).fetch(request);
+          return await PARTYKIT_DURABLE.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
           if ("onBeforeRequest" in Worker) {
@@ -403,7 +429,8 @@ export default {
                   request,
                   {
                     id: roomId,
-                    env: env.PARTYKIT_VARS,
+                    env: PARTYKIT_VARS,
+                    parties,
                   },
                   ctx
                 );
@@ -429,12 +456,10 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = env.PARTYKIT_DURABLE.idFromName(roomId).toString();
-          const id = env.PARTYKIT_DURABLE.idFromString(docId);
+          const docId = PARTYKIT_DURABLE.idFromName(roomId).toString();
+          const id = PARTYKIT_DURABLE.idFromString(docId);
 
-          return await env.PARTYKIT_DURABLE.get(id).fetch(
-            onBeforeRequestResponse
-          );
+          return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
         }
       }
 

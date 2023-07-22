@@ -53,7 +53,11 @@ export type PartyKitConnection = WebSocket & {
 type RequestHandler = {
   onBeforeRequest?: (
     req: Request,
-    room: { id: string; env: Record<string, unknown> },
+    room: {
+      id: string;
+      env: Record<string, unknown>;
+      parties: PartyKitRoom["parties"];
+    },
     ctx: ExecutionContext
   ) =>
     | UserDefinedRequest
@@ -81,7 +85,11 @@ type ConnectionHandler = RequestHandler & {
   ) => void | Promise<void>;
   onBeforeConnect?: (
     req: Request,
-    room: { id: string; env: Record<string, unknown> },
+    room: {
+      id: string;
+      env: Record<string, unknown>;
+      parties: PartyKitRoom["parties"];
+    },
     ctx: ExecutionContext
   ) =>
     | UserDefinedRequest
