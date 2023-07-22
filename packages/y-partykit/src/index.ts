@@ -41,11 +41,13 @@ class WSSharedDoc extends Y.Doc {
   awareness: awarenessProtocol.Awareness;
   storage: YPartyKitStorage | undefined;
   persist: boolean;
+  gc: boolean;
 
   constructor(room: PartyKitRoom, options: YPartyKitOptions) {
-    super({ gc: options.gc || false });
+    super({ gc: options.gc ?? !options.persist });
+    this.gc = options.gc ?? !options.persist;
     this.name = room.id;
-    this.persist = options.persist || false;
+    this.persist = options.persist ?? false;
 
     if (options.persist) {
       this.storage = new YPartyKitStorage(room.storage);
@@ -169,7 +171,6 @@ async function getYDoc(
     Y.applyUpdate(doc, state);
   }
 
-  doc.gc = options.gc || false; // TODO: is this necessary?
   if (callback !== undefined) {
     doc.on(
       "update",
@@ -386,9 +387,27 @@ export type YPartyKitOptions = {
 export async function onConnect(
   conn: PartyKitConnection,
   room: PartyKitRoom,
-  options: YPartyKitOptions = {}
+  opts: YPartyKitOptions = {}
 ) {
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
+
+  const options = { ...opts };
+
+  if (options.gc && options.persist) {
+    throw new Error("Cannot use gc and persist at the same time");
+  }
+
+  if (
+    options.gc === undefined &&
+    (options.persist === undefined || options.persist === false)
+  ) {
+    options.gc = true;
+    options.persist = false;
+  }
+
+  if (options.gc === undefined && options.persist === true) {
+    options.gc = false;
+  }
 
   // get doc, initialize if it does not exist yet
   const doc = await getYDoc(room, options);
