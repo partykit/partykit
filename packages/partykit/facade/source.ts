@@ -36,13 +36,20 @@ function getRoomIdFromPathname(pathname: string) {
   }
 }
 
-function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
-  return Object.assign(ws, {
-    ...(ws.deserializeAttachment() as PartyKitConnection),
-    socket: ws,
-  });
-}
+const rehydratedConnections = new WeakMap<WebSocket, PartyKitConnection>();
 
+function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
+  if (rehydratedConnections.has(ws)) {
+    return rehydratedConnections.get(ws) as PartyKitConnection;
+  }
+  const connection = Object.assign(ws, {
+    ...ws.deserializeAttachment(),
+    socket: ws,
+  }) as PartyKitConnection;
+
+  rehydratedConnections.set(ws, connection);
+  return connection;
+}
 let didWarnAboutMissingConnectionId = false;
 
 class PartyDurable {}
