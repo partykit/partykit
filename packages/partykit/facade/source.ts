@@ -107,6 +107,7 @@ function createMultiParties(
 
 function createDurable(Worker: PartyKitServer) {
   for (const handler of [
+    "unstable_onFetch",
     "onConnect",
     "onBeforeConnect",
     "onRequest",
@@ -472,6 +473,19 @@ export default {
           const id = PARTYKIT_DURABLE.idFromString(docId);
 
           return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
+        }
+      } else if ("unstable_onFetch" in Worker) {
+        if (typeof Worker.unstable_onFetch === "function") {
+          return await Worker.unstable_onFetch(
+            request,
+            {
+              env: PARTYKIT_VARS,
+              parties,
+            },
+            ctx
+          );
+        } else {
+          throw new Error(".unstable_onFetch must be a function");
         }
       }
 
