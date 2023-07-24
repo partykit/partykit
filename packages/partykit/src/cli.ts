@@ -166,8 +166,26 @@ export async function deploy(options: {
     })
   ).outputFiles![0].text;
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const metaCode = esbuild.buildSync({
+    entryPoints: [
+      path.join(
+        path.dirname(import.meta.url.replace("file://", "")),
+        "../facade/source.ts"
+      ),
+    ],
+    ...esbuildOptions,
+    external: ["__WORKER__"],
+    define: {
+      ...esbuildOptions.define,
+      ...config.define,
+    },
+  }).outputFiles![0].text;
+
   const form = new FormData();
+
   form.set("code", code);
+  form.set("meta-code", metaCode);
 
   const vars = options.withVars
     ? config.vars
