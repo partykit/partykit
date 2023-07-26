@@ -8,6 +8,7 @@ import chalk from "chalk";
 import findConfig from "find-config";
 import { fetch } from "undici";
 import open from "open";
+import { version as packageVersion } from "../package.json";
 
 const userConfigSchema = z.object({
   login: z.string(),
@@ -80,6 +81,7 @@ export async function fetchUserConfig(): Promise<void> {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "User-Agent": `partykit/${packageVersion}`,
     },
     body: JSON.stringify({
       client_id: GITHUB_APP_ID,
@@ -124,6 +126,7 @@ export async function fetchUserConfig(): Promise<void> {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "User-Agent": `partykit/${packageVersion}`,
       },
       body: JSON.stringify({
         client_id: GITHUB_APP_ID,
@@ -146,6 +149,7 @@ export async function fetchUserConfig(): Promise<void> {
       await fetch("https://api.github.com/user", {
         headers: {
           Authorization: `Bearer ${access_token}`,
+          "User-Agent": `partykit/${packageVersion}`,
         },
       })
     ).json()) as { login: string };
