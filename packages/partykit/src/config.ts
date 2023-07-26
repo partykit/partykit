@@ -1,3 +1,5 @@
+import log from "why-is-node-running";
+
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -17,6 +19,8 @@ import * as ConfigSchema from "./config-schema";
 export const configSchema = ConfigSchema.schema;
 
 export type Config = ConfigSchema.Config;
+import { fetchClerkSessionToken } from "./auth/clerk";
+import { signInWithBrowser } from "./auth/device";
 
 const userConfigSchema = z.object({
   login: z.string(),
@@ -41,6 +45,14 @@ export async function getUser(): Promise<UserConfig> {
 }
 
 export function getUserConfig(): UserConfig {
+  if (process.env.PARTYKIT_TOKEN) {
+    return {
+      login: null, // TODO
+      access_token: process.env.PARTYKIT_TOKEN,
+      type: "partykit",
+    };
+  }
+
   if (process.env.GITHUB_TOKEN && process.env.GITHUB_LOGIN) {
     return {
       login: process.env.GITHUB_LOGIN,
@@ -80,118 +92,38 @@ export function getUserConfig(): UserConfig {
 
 const GITHUB_APP_ID = "670a9f76d6be706f5209";
 
+import process from "process";
+
 export async function fetchUserConfig(): Promise<void> {
-  // run github's oauth device flow
-  // https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow
-  const res = await fetch("https://github.com/login/device/code", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "User-Agent": `partykit/${packageVersion}`,
-      "X-PartyKit-Version": packageVersion,
-    },
-    body: JSON.stringify({
-      client_id: GITHUB_APP_ID,
-    }),
-  });
+  const signInToken = await signInWithBrowser();
 
-  if (!res.ok) {
-    throw new Error(
-      `Failed to get device code: ${res.status} ${res.statusText}`
+  // console.log("signInToken", signInToken);
+  // const signInToken =
+  //   "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaXMiOjYwMCwiZXhwIjoxNjkwMzc2MDAzLCJpaWQiOiJpbnNfMlBORzJoS0tQTlRtWXdCRkdsRk0xWlNCMDZCIiwic2lkIjoic2l0XzJUNnRZQzQ3Y1pqZnpvbFd1Q213ZWRGc2sxeSIsInN0Ijoic2lnbl9pbl90b2tlbiJ9.ojPn-lbxxqIRMe-4fHTcJUUoXKq8Iwo2skAqBAa3L52xKMOfUAJxDTUxtceZGF_8DfsamucZ5NHLtt-8iLTMxWAotP_grGT-nAgu85Ro3KMF7JVADv3gzyN1-pe_6Q0lxu_1aRfxTX8YZ8e1hIuKK6SSyfj46RtAqsM2I8FpYPgQmFvTtu-frB9SxBTJA8-tjQJGRyjtRhTPPfomxvpT0xOScnaJQqpfovidHhqRj0Vf_8RgxPyuwQjc7VOVrAbuIUEkpHilvaBk55rK79gNuvJa_7E3LGCj11MnJ_1W89y5Y2UeSpz7dkCsh7Q4Oixc5oKkJ8JM1qXQC6oUIGqzlw";
+  // console.log("signInToken", signInToken);
+
+  const accessToken = await fetchClerkSessionToken(signInToken);
+  //const accessToken =
+  //  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsaWVudF8yVDZlTDZFd3NjOXVISFBnN3JNNUg1RGRsWXciLCJyb3RhdGluZ190b2tlbiI6IjV6MTBrODA1YmY3Y3JxaXozNjlqZjdvcTczdHJoeGJuN2gwZWVubWIifQ.R-bqSR8fGV7_b9_-N4SCtHJq3tfHCLPqDc0r19p3MwwQupXPWl8KhYxUMQrJNAwQ4MNhKOLcLjlmKvhtsxxm-bBeDV59iikO_oYkkQU8PpIME9u_xSx9McIH-l0tOxG0MohtA2J5j_BkaMoqcx10mfwfDLchCt3dvsiTSe3Ouk-iTDPWCOS_M5MuMbCSU1m6zon6LL08iMRv73J4EqdBtyyma21Y63HOM6jG4S6t3l2GeqsXP-Fg54hfgVpSaNKOo-qga-jzoDzTbHzZK4Wmh3Fezfo7pR_uD9vmxXs1vOXu5qyZe8i8mb-CpWn_51XOpvg5JTZeR4KTFacdWoIQoQ";
+  // console.log("accessToken", accessToken);
+
+  // log();
+
+  if (accessToken) {
+    // now write the token to the config file at ~/.partykit/config.json
+    fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
+    fs.writeFileSync(
+      USER_CONFIG_PATH,
+      JSON.stringify(
+        userConfigSchema.parse({
+          access_token: accessToken,
+          login: "jevakallio", // todo
+          type: "partykit",
+        }),
+        null,
+        2
+      )
     );
-  }
-
-  const { device_code, user_code, verification_uri, expires_in, interval } =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (await res.json()) as any;
-
-  console.log(
-    `We will now open your browser to ${chalk.bold(
-      verification_uri
-    )}\nPlease paste the code ${chalk.bold(
-      user_code
-    )} (copied to your clipboard) and authorize the app.`
-  );
-
-  await countdown("Opening browser", 5);
-
-  console.log(`Waiting for you to authorize...`);
-
-  // we do this because for some reason the clipboardy package doesn't work
-  // with a direct import up top
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore kill me, bring me sweet release of death please
-  const { default: clipboardy } = await import("clipboardy");
-  clipboardy.writeSync(user_code);
-
-  open(verification_uri).catch(() => {
-    console.error(
-      `Failed to open ${verification_uri}, please copy the code ${user_code} to your clipboard`
-    );
-  });
-
-  const start = Date.now();
-  while (Date.now() - start < expires_in * 1000) {
-    const res = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "User-Agent": `partykit/${packageVersion}`,
-        "X-PartyKit-Version": packageVersion,
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_APP_ID,
-        device_code,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-      }),
-    });
-
-    if (!res.ok) {
-      throw new Error(
-        `Failed to get access token: ${res.status} ${res.statusText}`
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { access_token, error } = (await res.json()) as any;
-
-    // now get the username
-    const githubUserDetails = (await (
-      await fetch("https://api.github.com/user", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "User-Agent": `partykit/${packageVersion}`,
-          "X-PartyKit-Version": packageVersion,
-        },
-      })
-    ).json()) as { login: string };
-
-    if (access_token) {
-      // now write the token to the config file at ~/.partykit/config.json
-      fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
-      fs.writeFileSync(
-        USER_CONFIG_PATH,
-        JSON.stringify(
-          userConfigSchema.parse({
-            access_token,
-            login: githubUserDetails.login,
-            type: "github",
-          }),
-          null,
-          2
-        )
-      );
-      console.log(`Logged in as ${chalk.bold(githubUserDetails.login)}`);
-      return;
-    }
-    if (error === "authorization_pending") {
-      // try again in a bit
-      await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-      continue;
-    }
-    throw new Error(`Unexpected error: ${error}`);
   }
 }
 

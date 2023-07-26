@@ -12,6 +12,7 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^4.54.2",
     "@cloudflare/workers-types": "^4.20230724.0",
     "chalk": "^5.3.0",
     "chokidar": "^3.5.3",
@@ -21,6 +22,7 @@
     "esbuild": "^0.18.17",
     "execa": "^7.2.0",
     "find-config": "^1.0.0",
+    "get-port": "^7.0.0",
     "gradient-string": "^2.0.2",
     "http-terminator": "^3.2.0",
     "ink": "^4.3.0",
