@@ -338,6 +338,7 @@ export async function tail(options: {
     headers: {
       "Sec-WebSocket-Protocol": TRACE_VERSION, // needs to be `trace-v1` to be accepted
       "User-Agent": `partykit/${packageVersion}`,
+      "X-PartyKit-Version": packageVersion,
     },
   });
 

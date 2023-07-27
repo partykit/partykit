@@ -20,6 +20,7 @@ export async function fetchResult<T>(
         : {}),
       Accept: "application/json",
       "User-Agent": `partykit/${packageVersion}`,
+      "X-PartyKit-Version": packageVersion,
       ...options.headers,
     },
   });

@@ -82,6 +82,7 @@ export async function fetchUserConfig(): Promise<void> {
       Accept: "application/json",
       "Content-Type": "application/json",
       "User-Agent": `partykit/${packageVersion}`,
+      "X-PartyKit-Version": packageVersion,
     },
     body: JSON.stringify({
       client_id: GITHUB_APP_ID,
@@ -127,6 +128,7 @@ export async function fetchUserConfig(): Promise<void> {
         Accept: "application/json",
         "Content-Type": "application/json",
         "User-Agent": `partykit/${packageVersion}`,
+        "X-PartyKit-Version": packageVersion,
       },
       body: JSON.stringify({
         client_id: GITHUB_APP_ID,
@@ -150,6 +152,7 @@ export async function fetchUserConfig(): Promise<void> {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "User-Agent": `partykit/${packageVersion}`,
+          "X-PartyKit-Version": packageVersion,
         },
       })
     ).json()) as { login: string };
