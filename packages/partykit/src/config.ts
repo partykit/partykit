@@ -1,5 +1,3 @@
-import log from "why-is-node-running";
-
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -97,32 +95,15 @@ import process from "process";
 export async function fetchUserConfig(): Promise<void> {
   const signInToken = await signInWithBrowser();
 
-  // console.log("signInToken", signInToken);
-  // const signInToken =
-  //   "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlaXMiOjYwMCwiZXhwIjoxNjkwMzc2MDAzLCJpaWQiOiJpbnNfMlBORzJoS0tQTlRtWXdCRkdsRk0xWlNCMDZCIiwic2lkIjoic2l0XzJUNnRZQzQ3Y1pqZnpvbFd1Q213ZWRGc2sxeSIsInN0Ijoic2lnbl9pbl90b2tlbiJ9.ojPn-lbxxqIRMe-4fHTcJUUoXKq8Iwo2skAqBAa3L52xKMOfUAJxDTUxtceZGF_8DfsamucZ5NHLtt-8iLTMxWAotP_grGT-nAgu85Ro3KMF7JVADv3gzyN1-pe_6Q0lxu_1aRfxTX8YZ8e1hIuKK6SSyfj46RtAqsM2I8FpYPgQmFvTtu-frB9SxBTJA8-tjQJGRyjtRhTPPfomxvpT0xOScnaJQqpfovidHhqRj0Vf_8RgxPyuwQjc7VOVrAbuIUEkpHilvaBk55rK79gNuvJa_7E3LGCj11MnJ_1W89y5Y2UeSpz7dkCsh7Q4Oixc5oKkJ8JM1qXQC6oUIGqzlw";
-  // console.log("signInToken", signInToken);
+  const session = await fetchClerkSessionToken(signInToken);
 
-  const accessToken = await fetchClerkSessionToken(signInToken);
-  //const accessToken =
-  //  "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNsaWVudF8yVDZlTDZFd3NjOXVISFBnN3JNNUg1RGRsWXciLCJyb3RhdGluZ190b2tlbiI6IjV6MTBrODA1YmY3Y3JxaXozNjlqZjdvcTczdHJoeGJuN2gwZWVubWIifQ.R-bqSR8fGV7_b9_-N4SCtHJq3tfHCLPqDc0r19p3MwwQupXPWl8KhYxUMQrJNAwQ4MNhKOLcLjlmKvhtsxxm-bBeDV59iikO_oYkkQU8PpIME9u_xSx9McIH-l0tOxG0MohtA2J5j_BkaMoqcx10mfwfDLchCt3dvsiTSe3Ouk-iTDPWCOS_M5MuMbCSU1m6zon6LL08iMRv73J4EqdBtyyma21Y63HOM6jG4S6t3l2GeqsXP-Fg54hfgVpSaNKOo-qga-jzoDzTbHzZK4Wmh3Fezfo7pR_uD9vmxXs1vOXu5qyZe8i8mb-CpWn_51XOpvg5JTZeR4KTFacdWoIQoQ";
-  // console.log("accessToken", accessToken);
-
-  // log();
-
-  if (accessToken) {
+  console.log(session);
+  if (session) {
     // now write the token to the config file at ~/.partykit/config.json
     fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
     fs.writeFileSync(
       USER_CONFIG_PATH,
-      JSON.stringify(
-        userConfigSchema.parse({
-          access_token: accessToken,
-          login: "jevakallio", // todo
-          type: "partykit",
-        }),
-        null,
-        2
-      )
+      JSON.stringify(userConfigSchema.parse(session), null, 2)
     );
   }
 }

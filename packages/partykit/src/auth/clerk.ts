@@ -1,6 +1,6 @@
 import type Clerk from "@clerk/clerk-js";
 import clerk from "@clerk/clerk-js/headless/index.js";
-import process from "process";
+
 const ClerkConstructor = clerk.default;
 
 global.window = global.window || {};
@@ -44,11 +44,7 @@ export const fetchClerkSessionToken = async (signInToken: string) => {
     token: undefined,
   };
 
-  console.log("before clerk", process._getActiveHandles().length);
-
   const clerk = await createClerkClient({ tokenStore });
-
-  console.log("after clerk", process._getActiveHandles().length);
 
   const res = await clerk.client?.signIn.create({
     strategy: "ticket",
@@ -63,7 +59,9 @@ export const fetchClerkSessionToken = async (signInToken: string) => {
     throw new Error("No session token received");
   }
 
-  console.log("after clerk request", process._getActiveHandles().length);
-
-  return tokenStore.token;
+  return {
+    access_token: tokenStore.token,
+    login: "jevakallio", // res?.identifier,
+    type: "clerk",
+  };
 };
