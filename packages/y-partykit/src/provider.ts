@@ -535,6 +535,7 @@ function generateUUID(): string {
 }
 
 export default class YPartyKitProvider extends WebsocketProvider {
+  id: string;
   constructor(
     host: string,
     room: string,
@@ -546,13 +547,15 @@ export default class YPartyKitProvider extends WebsocketProvider {
         ? "ws"
         : "wss"
     }://${host}/party`;
+    const id = generateUUID();
     if (options.params === undefined) {
       options.params = {
-        _pk: generateUUID(),
+        _pk: id,
       };
     } else {
-      options.params._pk = generateUUID();
+      options.params._pk = id;
     }
     super(serverUrl, room, doc, options);
+    this.id = id;
   }
 }
