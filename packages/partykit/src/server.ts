@@ -17,7 +17,7 @@ type UserDefinedResponse = FetchResponse | PartyKitResponse;
 export type PartyKitStorage = DurableObjectStorage;
 
 export type PartyKitContext = {
-  request: Request;
+  request: PartyKitRequest;
 };
 
 export type PartyKitRoom = {
