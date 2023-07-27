@@ -9,7 +9,7 @@ import findConfig from "find-config";
 import { fetch } from "undici";
 import open from "open";
 import { version as packageVersion } from "../package.json";
-import { ConfigurationError } from "./logger";
+import { ConfigurationError, logger } from "./logger";
 
 const userConfigSchema = z.object({
   login: z.string(),
@@ -213,6 +213,8 @@ const configSchema = z
       })
       .strict()
       .optional(),
+    compatibilityDate: z.string().optional(),
+    compatibilityFlags: z.array(z.string()).optional(),
     // env: z
     //   .record(
     //     z.object({
@@ -282,7 +284,7 @@ export function getConfig(
         JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).partykit || {};
       // @ts-expect-error partykit is our special field in package.json
       if (packageJsonConfig.partykit) {
-        console.log(
+        logger.debug(
           `Loading config from ${path.relative(
             process.cwd(),
             packageJsonPath
@@ -323,7 +325,7 @@ export function getConfig(
 
     return config;
   }
-  console.log(
+  logger.debug(
     `Loading config from ${path.relative(process.cwd(), configPath)}`
   );
 

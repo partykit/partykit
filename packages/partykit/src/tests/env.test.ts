@@ -175,8 +175,7 @@ describe("env", () => {
           "debug": "",
           "err": "",
           "info": "",
-          "out": "Loading config from partykit.json
-        Pushed environment variables",
+          "out": "Pushed environment variables",
           "warn": "",
         }
       `);
