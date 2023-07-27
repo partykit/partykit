@@ -8,6 +8,7 @@ export type PartySocketOptions = Omit<
   id?: string; // the id of the client
   host: string; // base url for the party
   room: string; // the room to connect to
+  party?: string; // the party to connect to (defaults to main)
   protocol?: string;
   protocols?: string[];
   query?: Record<string, string>;
@@ -50,7 +51,7 @@ function generateUUID(): string {
 export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
   constructor(readonly partySocketOptions: PartySocketOptions) {
-    const { host, room, protocol, query, protocols, ...socketOptions } =
+    const { host, room, party, protocol, query, protocols, ...socketOptions } =
       partySocketOptions;
     const _pk = partySocketOptions.id || generateUUID();
     let url = `${
@@ -58,7 +59,7 @@ export default class PartySocket extends ReconnectingWebSocket {
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss")
-    }://${host}/party/${room}`;
+    }://${host}/${party ? `parties/${party}` : "party"}/${room}`;
     if (query) {
       url += `?${new URLSearchParams({ ...query, _pk }).toString()}`;
     } else {
