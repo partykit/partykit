@@ -2,7 +2,7 @@
 
 _(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes)_
 
-WebSocket that will automatically reconnect if the connection is closed.
+A better WebSocket that Just Works™   
 
 ## Install
 
@@ -13,13 +13,13 @@ npm install partysocket@beta
 ## Features
 
 - WebSocket API compatible (same interface, Level0 and Level2 event model)
-- Fully configurable
-- Multi-platform (Web, ServiceWorkers, Node.js, React Native)
-- Dependency free (does not depend on Window, DOM or any EventEmitter library)
+- Reconnects when a connection drops
+- Buffers messages when not connected, and sends accumulated messages when open  
 - Handle connection timeouts
 - Allows changing server URL between reconnections
-- Buffering. Will send accumulated messages on open
-- Multiple builds available (see dist folder)
+- Fully configurable
+- Multi-platform (Web, ServiceWorkers, Node.js, React Native, Cloudflare Workers, Deno, Bun)
+- Dependency free (does not depend on Window, DOM or any EventEmitter library)
 - Debug mode
 - Works everywhere, not just with PartyKit!
 
