@@ -1,6 +1,3 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom"/>
-
 import YProvider from "y-partykit/provider";
 import * as Y from "yjs";
 

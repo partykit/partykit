@@ -1,7 +1,3 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["esnext"],
-    "skipDefaultLibCheck": true
-  }
+  "extends": "../../tsconfig.base.json"
 }

@@ -1,7 +1,8 @@
-/// <reference no-default-lib="true"/>
-/// <reference types="@cloudflare/workers-types" />
-
 import type { PartyKitServer } from "partykit/server";
+
+declare global {
+  const SOME_GLOBAL: string;
+}
 
 export default {
   onConnect(ws, room) {
@@ -28,9 +29,10 @@ export default {
   //   }
   // },
 
-  async onBeforeConnect(_req: Request) {
-    return { x: 1 };
-  },
+  // async onBeforeConnect(_req: Request) {
+  //   return { x: 1 };
+  // },
+
   async onBeforeRequest(req: Request) {
     return new Request(req.url, {
       headers: {
