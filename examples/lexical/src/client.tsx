@@ -1,6 +1,3 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="dom"/>
-
 import * as React from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -37,6 +34,7 @@ function Editor() {
       <CollaborationPlugin
         id="yjs"
         // TODO: we should fix it sometime
+        // @ts-expect-error TODO: we need to align with lexical's definitions here
         providerFactory={(id, yjsDocMap) => {
           const doc = new Y.Doc();
           yjsDocMap.set(id, doc);

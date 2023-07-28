@@ -1,8 +1,11 @@
-/// <reference no-default-lib="true"/>
-/// <reference types="@cloudflare/workers-types" />
-
+// @ts-expect-error we should fix this but I don't know how
 import fibonacci from "./fib.wasm";
 import type { PartyKitServer } from "partykit/server";
+
+// declare module "./fib.wasm" {
+//   const fibonacci: WebAssembly.Module;
+//   export default fibonacci;
+// }
 
 const fib = new WebAssembly.Instance(fibonacci).exports.fib as (
   n: number
