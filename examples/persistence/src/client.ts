@@ -20,7 +20,6 @@ partySocket.onmessage = (evt) => {
     latencyMonitor.innerText = `${latency / 2}ms`;
   } else if (data.startsWith("count:")) {
     const count = parseInt(data.split(":")[1]);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     document.getElementById("count")!.innerText = `${count}`;
   }
 };

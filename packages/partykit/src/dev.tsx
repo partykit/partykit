@@ -1,7 +1,7 @@
 import type { Json, MiniflareOptions } from "miniflare";
 import { Log, Miniflare, TypedEventTarget } from "miniflare";
 import { fileURLToPath } from "url";
-import onExit from "signal-exit";
+import { onExit } from "signal-exit";
 import type { Config } from "./config";
 import { getConfig } from "./config";
 import fs from "fs";
@@ -219,7 +219,6 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         "utf8"
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const absoluteScriptPath = path.join(process.cwd(), config.main!).replace(
         /\\/g, // windows
         "/"

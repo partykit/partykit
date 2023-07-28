@@ -21,7 +21,7 @@ const PORT = 50123;
 const URL = `ws://localhost:${PORT}/`;
 const ERROR_URL = "ws://255.255.255.255";
 
-let wss: NodeWebSocket.Server<NodeWebSocket.WebSocket>;
+let wss: NodeWebSocket.Server<typeof NodeWebSocket.WebSocket>;
 const originalWebSocket = global.WebSocket;
 
 beforeAll(() => {
@@ -481,7 +481,7 @@ testDone("start closed", (done, fail) => {
   const anyProtocol = "foobar";
 
   wss.once("connection", (ws) => {
-    ws.once("message", (msg) => {
+    void ws.once("message", (msg) => {
       ws.send(msg);
     });
   });
@@ -532,7 +532,7 @@ testDone("connect, send, receive, close", (done, fail) => {
   const anyProtocol = "foobar";
 
   wss.once("connection", (ws) => {
-    ws.once("message", (msg) => {
+    void ws.once("message", (msg) => {
       ws.send(msg);
     });
   });
@@ -744,10 +744,12 @@ testDone(
     let i = 0;
     wss.once("connection", (client) => {
       client.on("message", (data) => {
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         if (data.toString() === "ok") {
           expect(i).toBe(messages.length);
           ws.close();
         } else {
+          // eslint-disable-next-line @typescript-eslint/no-base-to-string
           expect(data.toString()).toBe(messages[i]);
           i++;
         }

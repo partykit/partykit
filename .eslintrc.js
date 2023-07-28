@@ -1,4 +1,5 @@
 module.exports = {
+  reportUnusedDisableDirectives: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
     ecmaVersion: 2020,

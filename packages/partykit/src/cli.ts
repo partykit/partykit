@@ -7,7 +7,7 @@ import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
 import WebSocket from "ws";
 import type { RawData } from "ws";
-import onExit from "signal-exit";
+import { onExit } from "signal-exit";
 
 import { Dev } from "./dev";
 import type { DevProps } from "./dev";
@@ -104,7 +104,7 @@ export async function deploy(options: {
   const wasmModules: Record<string, Buffer> = {};
 
   const esbuild = await import("esbuild");
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const code = (
     await esbuild.build({
       stdin: {

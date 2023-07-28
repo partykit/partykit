@@ -103,7 +103,6 @@ function groupBy<T>(arr: T[], fn: (el: T) => string): Map<string, T[]> {
     if (!map.has(key)) {
       map.set(key, []);
     }
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     map.get(key)!.push(el);
   }
   return map;
