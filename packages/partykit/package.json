@@ -33,6 +33,7 @@
     "signal-exit": "^4.0.2",
     "source-map": "^0.7.4",
     "undici": "^5.22.1",
+    "update-notifier": "^6.0.2",
     "ws": "^8.13.0",
     "zod": "^3.21.4"
   },
@@ -42,6 +43,7 @@
     "@types/gradient-string": "^1.1.2",
     "@types/node": "^20.4.5",
     "@types/prompts": "^2.4.4",
+    "@types/update-notifier": "^6.0.4",
     "@types/ws": "^8.5.5",
     "devtools-protocol": "^0.0.1173815",
     "eslint-plugin-react-hooks": "^4.6.0"
@@ -55,6 +57,6 @@
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
     "start": "npm run clean && concurrently \"cross-env PARTYKIT_API_BASE=http://127.0.0.1:8787 node -r esbuild-register --watch --watch-path src --watch-path facade scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
-    "build": "npm run clean && cross-env PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
+    "build": "npm run clean && cross-env PARTYKIT_API_BASE=https://api.partykit.dev node -r esbuild-register scripts/build.ts --production && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
   }
 }

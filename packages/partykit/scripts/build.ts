@@ -4,6 +4,7 @@ import * as fs from "fs";
 process.chdir(`${__dirname}/../`);
 
 const minify = process.argv.includes("--minify");
+const isProd = process.argv.includes("--production");
 
 // generate facade/generated.js
 esbuild.buildSync({
@@ -28,6 +29,7 @@ esbuild.buildSync({
   minify,
   define: {
     PARTYKIT_API_BASE: `"${process.env.PARTYKIT_API_BASE}"`,
+    "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
   },
 });
 
