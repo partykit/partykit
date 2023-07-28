@@ -6,6 +6,7 @@ import os from "node:os";
 import { URL } from "node:url";
 import path from "path";
 import open from "open";
+import { apps as openApps } from "open";
 import { useEffect, useRef, useState } from "react";
 import { SourceMapConsumer } from "source-map";
 import WebSocket, { WebSocketServer } from "ws";
@@ -918,16 +919,16 @@ export const openInspector = async (
   const childProcess = await open(url, {
     app: [
       {
-        name: open.apps.chrome,
+        name: openApps.chrome,
       },
       {
         name: braveBrowser,
       },
       {
-        name: open.apps.edge,
+        name: openApps.edge,
       },
       {
-        name: open.apps.firefox,
+        name: openApps.firefox,
       },
     ],
   });

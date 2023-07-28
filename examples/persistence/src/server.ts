@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 import type { PartyKitServer } from "partykit/server";
 
 export default {

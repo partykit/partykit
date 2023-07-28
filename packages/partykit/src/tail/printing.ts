@@ -9,6 +9,7 @@ import type { Outcome } from "./filters";
 import type WebSocket from "ws";
 
 export function prettyPrintLogs(data: WebSocket.RawData): void {
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   const eventMessage: TailEventMessage = JSON.parse(data.toString());
 
   if (isScheduledEvent(eventMessage.event)) {
@@ -69,6 +70,7 @@ export function prettyPrintLogs(data: WebSocket.RawData): void {
 }
 
 export function jsonPrintLogs(data: WebSocket.RawData): void {
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   console.log(JSON.stringify(JSON.parse(data.toString()), null, 2));
 }
 
