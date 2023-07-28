@@ -3,6 +3,7 @@ import * as cli from "./cli";
 import { version } from "../package.json";
 import { Option, program /*, Option*/ } from "commander";
 import React, { Suspense } from "react";
+import updateNotifier from "update-notifier";
 
 import Login from "./commands/login";
 import Logout from "./commands/logout";
@@ -15,7 +16,19 @@ import gradient from "gradient-string";
 import packageJson from "../package.json";
 
 async function printBanner() {
-  const string = `🎈 PartyKit v${packageJson.version}`;
+  const notifier = updateNotifier({
+    pkg: {
+      name: packageJson.name,
+      version: packageJson.version,
+    },
+    distTag: "beta",
+    updateCheckInterval:
+      process.env.NODE_ENV !== "production" ? 0 : 1000 * 60 * 60 * 24,
+  });
+
+  const string =
+    `🎈 PartyKit v${packageJson.version}` +
+    (notifier.update ? ` (update available: ${notifier.update.latest})` : "");
   console.log(gradient.fruit(string));
   console.log(gradient.passion(`-`.repeat(string.length + 1)));
 }
@@ -59,12 +72,16 @@ function getArrayKVOption(val: string[] = []) {
 
 program
   .name("partykit")
-  .version(version, "-v, --version", "output the current version")
-  .description("Welcome to the party, pal!");
+  .version(version, "-v, --version", "Output the current version")
+  .description("Welcome to the party, pal!")
+  .action(async () => {
+    await printBanner();
+    program.help();
+  });
 
 program
   .command("dev")
-  .description("run a script in development mode")
+  .description("Run a script in development mode")
   .argument("[script]", "path to the script to run")
   .option("-p, --port <number>", "port to run the server on")
   .option("--assets <path>", "path to assets directory")
@@ -98,7 +115,7 @@ program
 program
   .command("deploy")
   .alias("publish")
-  .description("deploy a script to the internet")
+  .description("Deploy a script to the internet")
   .argument("[script]", "path to the script to deploy")
   .option("--assets <path>", "path to assets directory")
   .option("-c, --config <path>", "path to config file")
@@ -130,7 +147,7 @@ program
 
 program
   .command("list")
-  .description("list all deployed projects")
+  .description("List all deployed projects")
   .addOption(
     new Option("-f, --format").choices(["json", "pretty"]).default("pretty")
   )
@@ -143,7 +160,7 @@ program
 
 program
   .command("delete")
-  .description("delete a deployed project")
+  .description("Delete a deployed project")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "delete preview")
@@ -154,7 +171,7 @@ program
 
 program
   .command("tail")
-  .description("tail logs from a deployed project")
+  .description("Stream live logs from a deployed project")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "tail logs from preview")
@@ -186,11 +203,13 @@ program
     await cli.tail(options);
   });
 
-const envCommand = program.command("env");
+const envCommand = program
+  .command("env")
+  .description("Manage environment variables");
 
 envCommand
   .command("list")
-  .description("list all environment variables")
+  .description("List all environment variables")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .addOption(
@@ -209,7 +228,7 @@ envCommand
 
 envCommand
   .command("pull")
-  .description("pull environment variables to a file")
+  .description("Pull environment variables to a file")
   .argument("[file]", "file to pull development env vars to")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
@@ -221,7 +240,7 @@ envCommand
 
 envCommand
   .command("push")
-  .description("push environment variables from config file(s)")
+  .description("Push environment variables from config file(s)")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "push to preview")
@@ -232,7 +251,7 @@ envCommand
 
 envCommand
   .command("add")
-  .description("add an environment variable")
+  .description("Add an environment variable")
   .argument("<key>", "name of the environment variable")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
@@ -246,7 +265,7 @@ envCommand
 
 envCommand
   .command("remove")
-  .description("remove an environment variable")
+  .description("Remove an environment variable")
   .argument("[key]", "name of the environment variable")
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
@@ -259,7 +278,7 @@ envCommand
 
 program
   .command("login")
-  .description("login to partykit")
+  .description("Login to PartyKit")
   .action(async () => {
     await printBanner();
     render(
@@ -271,7 +290,7 @@ program
 
 program
   .command("logout")
-  .description("logout from partykit")
+  .description("Logout from PartyKit")
   .action(async () => {
     await printBanner();
     render(
