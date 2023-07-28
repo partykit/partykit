@@ -1,4 +1,4 @@
-import type { MiniflareOptions } from "miniflare";
+import type { Json, MiniflareOptions } from "miniflare";
 import { Log, Miniflare, TypedEventTarget } from "miniflare";
 import { fileURLToPath } from "url";
 import onExit from "signal-exit";
@@ -305,7 +305,9 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     compatibilityFlags: ["nodejs_compat"],
                     port: config.port || 1999,
                     bindings: {
-                      PARTYKIT_VARS: config.vars,
+                      ...(config.vars
+                        ? { PARTYKIT_VARS: config.vars as Json }
+                        : {}),
                     },
                     durableObjects: {
                       PARTYKIT_DURABLE: "PartyKitDurable",
