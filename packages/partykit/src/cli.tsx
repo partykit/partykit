@@ -48,8 +48,6 @@ const esbuildOptions: BuildOptions = {
   // minify: true,
 } as const;
 
-// A map of room names to room servers.
-
 export async function deploy(options: {
   main: string | undefined;
   name: string;
@@ -59,6 +57,8 @@ export async function deploy(options: {
   define: Record<string, string> | undefined;
   preview: string | undefined;
   withVars: boolean | undefined;
+  compatibilityDate: string | undefined;
+  compatibilityFlags: string[] | undefined;
 }): Promise<void> {
   const config = getConfig(options.config, {
     main: options.main,
@@ -66,6 +66,8 @@ export async function deploy(options: {
     assets: options.assets,
     vars: options.vars,
     define: options.define,
+    compatibilityDate: options.compatibilityDate,
+    compatibilityFlags: options.compatibilityFlags,
   });
 
   if (!config.main) {
