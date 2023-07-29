@@ -149,13 +149,15 @@ program
   .command("list")
   .description("List all deployed projects")
   .addOption(
-    new Option("-f, --format").choices(["json", "pretty"]).default("pretty")
+    new Option("-f, --format <format>")
+      .choices(["json", "pretty"])
+      .default("pretty")
   )
   .action(async (options) => {
     if (options.format !== "json") {
       await printBanner();
     }
-    await cli.list();
+    await cli.list(options);
   });
 
 program
@@ -176,13 +178,13 @@ program
   .option("-c, --config <path>", "path to config file")
   .option("--preview [name]", "tail logs from preview")
   .addOption(
-    new Option("-f, --format", "format of the logs")
+    new Option("-f, --format <format>", "format of the logs")
       .choices(["json", "pretty"])
       .default("pretty")
   )
   .option("--debug", "show debug logs", false)
   .addOption(
-    new Option("--status", "filter by invocation status").choices([
+    new Option("--status <status>", "filter by invocation status").choices([
       "ok",
       "error",
       "canceled",
@@ -213,7 +215,7 @@ envCommand
   .option("-n, --name <name>", "name of the project")
   .option("-c, --config <path>", "path to config file")
   .addOption(
-    new Option("-f, --format", "format of the logs")
+    new Option("-f, --format <format>", "format of the logs")
       .choices(["json", "pretty"])
       .default("pretty")
   )

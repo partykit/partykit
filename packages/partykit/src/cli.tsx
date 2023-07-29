@@ -9,6 +9,8 @@ import WebSocket from "ws";
 import type { RawData } from "ws";
 import { onExit } from "signal-exit";
 
+import InkTable from "./ink-table";
+
 import { Dev } from "./dev";
 import type { DevProps } from "./dev";
 
@@ -27,6 +29,8 @@ import {
 import type { TailFilterMessage } from "./tail/filters";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
+import { render } from "ink";
+import React from "react";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -390,17 +394,24 @@ export async function tail(options: {
   });
 }
 
-export async function list() {
+export async function list(options: { format: "json" | "pretty" }) {
   // get user details
   const user = await getUser();
 
-  const res = await fetchResult(`/parties/${user.login}`, {
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-    },
-  });
+  const res = await fetchResult<{ name: string; url: string }[]>(
+    `/parties/${user.login}`,
+    {
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+      },
+    }
+  );
 
-  console.log(res);
+  if (options.format === "json") {
+    console.log(res);
+  } else {
+    render(<InkTable data={res} />);
+  }
 }
 
 // type EnvironmentChoice = "production" | "development" | "preview";
