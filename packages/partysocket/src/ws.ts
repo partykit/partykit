@@ -49,19 +49,6 @@ function assert(condition: unknown, msg?: string): asserts condition {
   }
 }
 
-/**
- * Returns true if given argument looks like a WebSocket class
- */
-function isWebSocket(w: unknown): w is WebSocket {
-  return (
-    typeof w !== "undefined" &&
-    !!w &&
-    typeof w === "function" &&
-    "CLOSING" in w &&
-    w.CLOSING === 2
-  );
-}
-
 function cloneEvent(e: Event) {
   return new (e as any).constructor(e.type, e) as Event;
 }
@@ -413,9 +400,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
 
     this._debug("connect", this._retryCount);
     this._removeListeners();
-    if (!isWebSocket(WebSocket)) {
-      throw Error("No valid WebSocket class provided");
-    }
+
     this._wait()
       .then(() =>
         Promise.all([
