@@ -25,6 +25,9 @@ esbuild.buildSync({
   outfile: "dist/bin.mjs",
   platform: "node",
   packages: "external",
+  banner: isProd
+    ? { js: "#!/usr/bin/env node" }
+    : { js: "#!/usr/bin/env node --enable-source-maps" },
   sourcemap: true,
   minify,
   define: {

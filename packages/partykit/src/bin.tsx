@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+// A shebang will be inserted by the build script
 import * as cli from "./cli";
 import { version } from "../package.json";
 import { Option, program /*, Option*/ } from "commander";
@@ -14,6 +14,7 @@ import { Dev } from "./dev";
 import gradient from "gradient-string";
 
 import packageJson from "../package.json";
+import { ConfigurationError, logger } from "./logger";
 
 async function printBanner() {
   const notifier = updateNotifier({
@@ -48,8 +49,12 @@ process.on("exit", (_code) => {
 });
 
 process.on("uncaughtExceptionMonitor", function (err) {
-  // console.error("uncaught exception", err);
-  throw err;
+  if (err instanceof ConfigurationError) {
+    logger.error(err.message);
+    process.exit(1);
+  } else {
+    throw err;
+  }
 });
 
 process.on("unhandledRejection", function (reason, _promise) {

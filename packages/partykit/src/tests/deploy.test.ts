@@ -40,7 +40,7 @@ describe("deploy", () => {
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
     await expect(deploy({})).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing entry point, please specify \\"main\\" in your config"'
+      '"Missing entry point, please specify \\"main\\" in your config, or pass it in via the CLI"'
     );
   });
 

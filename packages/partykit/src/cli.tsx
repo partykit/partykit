@@ -31,10 +31,15 @@ import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
 import { render } from "ink";
 import React from "react";
+import chalk from "chalk";
+import { ConfigurationError, logger } from "./logger";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+const MissingProjectNameError = `Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>`;
+const MissingEntryPointError = `Missing entry point, please specify "main" in your config, or pass it in via the CLI`;
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -65,9 +70,7 @@ export async function deploy(options: {
   });
 
   if (!config.main) {
-    throw new Error(
-      'Missing entry point, please specify "main" in your config'
-    );
+    throw new ConfigurationError(MissingEntryPointError);
   }
 
   const configName = config.name;
@@ -226,7 +229,7 @@ export async function _delete(options: {
 }) {
   const config = getConfig(options.config, options);
   if (!config.name) {
-    throw new Error("project name is missing");
+    throw new ConfigurationError(MissingProjectNameError);
   }
   // get user details
   const user = await getUser();
@@ -281,7 +284,7 @@ export async function tail(options: {
     name: options.name,
   });
   if (!config.name) {
-    throw new Error("project name is missing");
+    throw new ConfigurationError(MissingProjectNameError);
   }
 
   let scriptDisplayName = config.name;
@@ -385,7 +388,9 @@ export async function tail(options: {
   }
 
   if (options.format === "pretty") {
-    console.log(`Connected to ${scriptDisplayName}, waiting for logs...`);
+    logger.info(
+      `Connected to ${chalk.bold(scriptDisplayName)}, waiting for logs...`
+    );
   }
 
   tailSocket.on("close", async () => {
@@ -430,7 +435,7 @@ export const env = {
       name: options.name,
     });
     if (!config.name) {
-      throw new Error("project name is missing");
+      throw new ConfigurationError(MissingProjectNameError);
     }
 
     const urlSearchParams = new URLSearchParams();
@@ -465,7 +470,7 @@ export const env = {
       name: options.name,
     });
     if (!config.name) {
-      throw new Error("project name is missing");
+      throw new ConfigurationError(MissingProjectNameError);
     }
 
     const urlSearchParams = new URLSearchParams();
@@ -518,7 +523,7 @@ export const env = {
       name: options.name,
     });
     if (!config.name) {
-      throw new Error("project name is missing");
+      throw new ConfigurationError(MissingProjectNameError);
     }
 
     const urlSearchParams = new URLSearchParams();
@@ -563,7 +568,7 @@ export const env = {
       name: options.name,
     });
     if (!config.name) {
-      throw new Error("project name is missing");
+      throw new ConfigurationError(MissingProjectNameError);
     }
 
     const { default: prompt } = await import("prompts");
@@ -630,7 +635,7 @@ export const env = {
       name: options.name,
     });
     if (!config.name) {
-      throw new Error("project name is missing");
+      throw new ConfigurationError(MissingProjectNameError);
     }
 
     const urlSearchParams = new URLSearchParams();
