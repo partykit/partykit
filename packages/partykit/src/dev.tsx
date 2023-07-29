@@ -18,6 +18,7 @@ import React from "react";
 import { render } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
+import { logger } from "./logger";
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -255,7 +256,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
               build.onEnd(async (result) => {
                 if (result.errors.length > 0) return;
                 if (!result || !result.outputFiles) {
-                  console.error(chalk.red("Build failed: no result"));
+                  logger.error("Build failed: no result");
                   return;
                 }
 

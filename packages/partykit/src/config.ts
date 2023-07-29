@@ -9,6 +9,7 @@ import findConfig from "find-config";
 import { fetch } from "undici";
 import open from "open";
 import { version as packageVersion } from "../package.json";
+import { ConfigurationError } from "./logger";
 
 const userConfigSchema = z.object({
   login: z.string(),
@@ -24,11 +25,6 @@ export async function getUser(): Promise<UserConfig> {
   let userConfig;
   try {
     userConfig = getUserConfig();
-    // this isn't super useful since we're validating on the server
-    // if (!(await validateUserConfig(userConfig))) {
-    //   console.log("failed");
-    //   throw new Error("Invalid user config");
-    // }
   } catch (e) {
     console.log("Attempting to login...");
     await fetchUserConfig();
@@ -47,7 +43,11 @@ export function getUserConfig(): UserConfig {
   }
 
   if (!fs.existsSync(USER_CONFIG_PATH)) {
-    throw new Error("user config not available");
+    throw new Error(
+      `No User configuration was found, please run ${chalk.bold(
+        "npx partykit login"
+      )}.`
+    );
   }
   const config = JSON5.parse(fs.readFileSync(USER_CONFIG_PATH, "utf8"));
   return userConfigSchema.parse(config);
@@ -313,9 +313,11 @@ export function getConfig(
         : path.join(process.cwd(), config.main);
 
       if (!fs.existsSync(absoluteMainPath)) {
-        throw new Error(`Could not find main: ${config.main}`);
+        throw new ConfigurationError(`Could not find main: ${config.main}`);
       } else {
-        config.main = "./" + path.relative(process.cwd(), absoluteMainPath);
+        config.main =
+          "./" +
+          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
       }
     }
 
@@ -345,7 +347,7 @@ export function getConfig(
   });
 
   if (config.account) {
-    console.warn('configuration field "account" is not yet operational');
+    console.warn('Configuration field "account" is not yet operational');
   }
 
   if (config.main) {
@@ -354,7 +356,7 @@ export function getConfig(
         ? overrides.main
         : path.join(process.cwd(), overrides.main);
       if (!fs.existsSync(absoluteMainPath)) {
-        throw new Error(`Could not find main: ${overrides.main}`);
+        throw new ConfigurationError(`Could not find main: ${overrides.main}`);
       } else {
         config.main =
           "./" +
@@ -365,7 +367,9 @@ export function getConfig(
         ? parsedConfig.main
         : path.join(path.dirname(configPath), parsedConfig.main);
       if (!fs.existsSync(absoluteMainPath)) {
-        throw new Error(`Could not find main: ${parsedConfig.main}`);
+        throw new ConfigurationError(
+          `Could not find main: ${parsedConfig.main}`
+        );
       } else {
         config.main =
           "./" +
@@ -379,7 +383,7 @@ export function getConfig(
         ? party
         : path.join(path.dirname(configPath), party);
       if (!fs.existsSync(absolutePartyPath)) {
-        throw new Error(`Could not find party: ${party}`);
+        throw new ConfigurationError(`Could not find party: ${party}`);
       } else {
         config.parties[name] =
           "./" +
@@ -389,7 +393,7 @@ export function getConfig(
   }
 
   if (config.parties?.main) {
-    throw new Error(`Cannot have a party named "main"`);
+    throw new ConfigurationError(`Cannot have a party named "main"`);
   }
 
   return config;

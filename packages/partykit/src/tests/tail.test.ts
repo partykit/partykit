@@ -47,7 +47,7 @@ describe("tail", () => {
         ip: [],
         search: undefined,
       })
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"project name is missing"');
+    ).rejects.toThrowErrorMatchingInlineSnapshot('"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"');
   });
 
   // TODO: test websocket stuff? maybe overkill for now.
