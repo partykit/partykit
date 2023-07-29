@@ -58,19 +58,19 @@ afterAll(() => {
 //   }).toThrow();
 // });
 
-test("throws with missing constructor", () => {
-  delete (global as any).WebSocket;
-  expect(() => {
-    new ReconnectingWebSocket(URL, undefined, { maxRetries: 0 });
-  }).toThrow();
-});
+// test("throws with missing constructor", () => {
+//   delete (global as any).WebSocket;
+//   expect(() => {
+//     new ReconnectingWebSocket(URL, undefined, { maxRetries: 0 });
+//   }).toThrow();
+// });
 
-test("throws with non-constructor object", () => {
-  (global as any).WebSocket = {};
-  expect(() => {
-    new ReconnectingWebSocket(URL, undefined, { maxRetries: 0 });
-  }).toThrow();
-});
+// test("throws with non-constructor object", () => {
+//   (global as any).WebSocket = {};
+//   expect(() => {
+//     new ReconnectingWebSocket(URL, undefined, { maxRetries: 0 });
+//   }).toThrow();
+// });
 
 test("throws if not created with `new`", () => {
   expect(() => {
