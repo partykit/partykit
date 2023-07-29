@@ -1,5 +1,4 @@
 import path from "path";
-import assert from "assert";
 import * as fs from "fs";
 import { fetchResult } from "./fetchResult";
 import { File, FormData } from "undici";
@@ -74,10 +73,9 @@ export async function deploy(options: {
   }
 
   const configName = config.name;
-  assert(
-    configName,
-    'Missing project name, please specify "name" in your config'
-  );
+  if (!configName) {
+    throw new ConfigurationError(MissingProjectNameError);
+  }
 
   if (config.build?.command) {
     const buildCommand = config.build.command;
@@ -194,6 +192,13 @@ export async function deploy(options: {
       `upload/${fileName}`,
       new File([buffer], `upload/${fileName}`, { type: "application/wasm" })
     );
+  }
+
+  if (config.compatibilityDate) {
+    form.set("compatibilityDate", config.compatibilityDate);
+  }
+  if (config.compatibilityFlags) {
+    form.set("compatibilityFlags", JSON.stringify(config.compatibilityFlags));
   }
 
   const urlSearchParams = new URLSearchParams();

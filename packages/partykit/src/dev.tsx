@@ -301,8 +301,11 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                     // verbose: true,
                     inspectorPort: 9229,
 
-                    compatibilityDate: "2023-04-11",
-                    compatibilityFlags: ["nodejs_compat"],
+                    compatibilityDate: config.compatibilityDate || "2023-04-11",
+                    compatibilityFlags: [
+                      "nodejs_compat",
+                      ...(config.compatibilityFlags || []),
+                    ],
                     port: config.port || 1999,
                     bindings: {
                       ...(config.vars

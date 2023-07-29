@@ -49,7 +49,7 @@ describe("deploy", () => {
       // @ts-expect-error we're purposely not passing a name
       deploy({ main: fixture })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing project name, please specify \\"name\\" in your config"'
+      '"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"'
     );
   });
 
@@ -249,8 +249,7 @@ describe("deploy", () => {
         "debug": "",
         "err": "",
         "info": "",
-        "out": "Loading config from partykit.json
-      Deployed ./../packages/partykit/src/tests/fixture.js as test-script.test-user.partykit.dev",
+        "out": "Deployed ./../packages/partykit/src/tests/fixture.js as test-script.test-user.partykit.dev",
         "warn": "Warning: uploading assets are not yet supported in deploy mode",
       }
     `);
