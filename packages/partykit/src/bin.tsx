@@ -87,12 +87,12 @@ program
 program
   .command("dev")
   .description("Run a script in development mode")
-  .argument("[script]", "path to the script to run")
-  .option("-p, --port <number>", "port to run the server on")
-  .option("--assets <path>", "path to assets directory")
-  .option("-c, --config <path>", "path to config file")
+  .argument("[script]", "Path to the script to run")
+  .option("-p, --port <number>", "Port to run the server on")
+  .option("--assets <path>", "Path to assets directory")
+  .option("-c, --config <path>", "Path to config file")
   .addOption(
-    new Option("--persist [path]", "persist local state").default(true)
+    new Option("--persist [path]", "Persist local state").default(true)
   )
   // .option("-e, --env", "environment to use")
   .option(
@@ -103,6 +103,8 @@ program
     "-d, --define [defines...]",
     "A key-value pair to be substituted in the project"
   )
+  .option("--compatibility-date <date>", "Set a compatibility date")
+  .option("--compatibility-flags [flags...]", "Set compatibility flags")
   .action(async (scriptPath, options) => {
     await printBanner();
     render(
@@ -113,6 +115,8 @@ program
         config={options.config}
         vars={getArrayKVOption(options.var)}
         define={getArrayKVOption(options.define)}
+        compatibilityDate={options.compatibilityDate}
+        compatibilityFlags={options.compatibilityFlags}
       />
     );
   });
@@ -121,9 +125,9 @@ program
   .command("deploy")
   .alias("publish")
   .description("Deploy a script to the internet")
-  .argument("[script]", "path to the script to deploy")
-  .option("--assets <path>", "path to assets directory")
-  .option("-c, --config <path>", "path to config file")
+  .argument("[script]", "Path to the script to deploy")
+  .option("--assets <path>", "Path to assets directory")
+  .option("-c, --config <path>", "Path to config file")
   // .option("-e, --env", "environment to use")
   .option(
     "-v, --var [vars...]",
@@ -133,9 +137,11 @@ program
     "-d, --define [defines...]",
     "A key-value pair to be substituted in the script"
   )
-  .option("--with-vars", "include all variables in the deployment")
-  .option("-n, --name <name>", "name of the project")
-  .option("--preview [name]", "deploy to preview environment")
+  .option("--compatibility-date <date>", "Set a compatibility date")
+  .option("--compatibility-flags [flags...]", "Set compatibility flags")
+  .option("--with-vars", "Include all variables in the deployment")
+  .option("-n, --name <name>", "Name of the project")
+  .option("--preview [name]", "Deploy to preview environment")
   .action(async (scriptPath, options) => {
     await printBanner();
     await cli.deploy({
@@ -147,6 +153,8 @@ program
       preview: options.preview,
       withVars: options.withVars,
       assets: options.assets,
+      compatibilityDate: options.compatibilityDate,
+      compatibilityFlags: options.compatibilityFlags,
     });
   });
 
@@ -168,9 +176,9 @@ program
 program
   .command("delete")
   .description("Delete a deployed project")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "delete preview")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Delete preview")
   .action(async (options) => {
     await printBanner();
     await cli._delete(options);
@@ -179,29 +187,29 @@ program
 program
   .command("tail")
   .description("Stream live logs from a deployed project")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "tail logs from preview")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Tail logs from preview")
   .addOption(
-    new Option("-f, --format <format>", "format of the logs")
+    new Option("-f, --format <format>", "Format of the logs")
       .choices(["json", "pretty"])
       .default("pretty")
   )
-  .option("--debug", "show debug logs", false)
+  .option("--debug", "Show debug logs", false)
   .addOption(
-    new Option("--status <status>", "filter by invocation status").choices([
+    new Option("--status <status>", "Filter by invocation status").choices([
       "ok",
       "error",
       "canceled",
     ])
   )
-  .option("--header", "filter by HTTP header")
-  .option("--method <...methods>", "filter by HTTP method(s)")
-  .option("--sampling-rate <number>", "sampling rate of logs")
-  .option("--search <string>", "search for a string in the logs")
+  .option("--header", "Filter by HTTP header")
+  .option("--method <...methods>", "Filter by HTTP method(s)")
+  .option("--sampling-rate <number>", "Sampling rate of logs")
+  .option("--search <string>", "Search for a string in the logs")
   .option(
     "--ip <..ips>",
-    'filter by the IP address the request originates from (use "self" to filter for your own IP)'
+    'Filter by the IP address the request originates from (use "self" to filter for your own IP)'
   )
   .action(async (options) => {
     if (options.format !== "json") {
@@ -217,10 +225,10 @@ const envCommand = program
 envCommand
   .command("list")
   .description("List all environment variables")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
   .addOption(
-    new Option("-f, --format <format>", "format of the logs")
+    new Option("-f, --format <format>")
       .choices(["json", "pretty"])
       .default("pretty")
   )
@@ -236,10 +244,10 @@ envCommand
 envCommand
   .command("pull")
   .description("Pull environment variables to a file")
-  .argument("[file]", "file to pull development env vars to")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "pull from preview")
+  .argument("[file]", "File to save environment variables to")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Pull from preview")
   .action(async (fileName, options) => {
     await printBanner();
     await cli.env.pull(fileName, options);
@@ -248,9 +256,9 @@ envCommand
 envCommand
   .command("push")
   .description("Push environment variables from config file(s)")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "push to preview")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Push to preview")
   .action(async (options) => {
     await printBanner();
     await cli.env.push(options);
@@ -259,10 +267,10 @@ envCommand
 envCommand
   .command("add")
   .description("Add an environment variable")
-  .argument("<key>", "name of the environment variable")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "add to preview")
+  .argument("<key>", "Name of the environment variable")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Add to preview")
   // .addOption(EnvironmentOption)
   // -p preview id?
   .action(async (key, options) => {
@@ -273,10 +281,10 @@ envCommand
 envCommand
   .command("remove")
   .description("Remove an environment variable")
-  .argument("[key]", "name of the environment variable")
-  .option("-n, --name <name>", "name of the project")
-  .option("-c, --config <path>", "path to config file")
-  .option("--preview [name]", "remove from preview")
+  .argument("[key]", "Name of the environment variable")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Remove from preview")
   // .addOption(EnvironmentOption)
   .action(async (key, options) => {
     await printBanner();

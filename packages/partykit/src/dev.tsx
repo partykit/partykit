@@ -140,6 +140,8 @@ export type DevProps = {
   vars?: Record<string, string>;
   define?: Record<string, string>;
   onReady?: (host: string, port: number) => void;
+  compatibilityDate?: string;
+  compatibilityFlags?: string[] | undefined;
 };
 
 export function Dev(props: DevProps) {
@@ -187,6 +189,8 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         assets: options.assets,
         port: options.port,
         persist: options.persist,
+        compatibilityDate: options.compatibilityDate,
+        compatibilityFlags: options.compatibilityFlags,
       },
       { readEnvLocal: true }
     )
