@@ -142,6 +142,7 @@ export type DevProps = {
   onReady?: (host: string, port: number) => void;
   compatibilityDate?: string;
   compatibilityFlags?: string[] | undefined;
+  minify?: boolean | undefined;
 };
 
 export function Dev(props: DevProps) {
@@ -247,6 +248,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
           // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
         },
         ...esbuildOptions,
+        minify: options.minify,
         format: "esm",
         sourcemap: true,
         define: {
@@ -433,7 +435,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       console.error(error);
       process.exit(1);
     });
-  }, [config, server, options.config, options.persist]);
+  }, [config, server, options.config, options.persist, options.minify]);
 
   useEffect(() => {
     server.addEventListener("reloaded", async (event) => {

@@ -18,13 +18,7 @@ export { Dev, DevProps };
 import { execaCommand } from "execa";
 import { version as packageVersion } from "../package.json";
 
-import {
-  getConfig,
-  getConfigPath,
-  getUser,
-
-  // validateUserConfig,
-} from "./config";
+import { getConfig, getConfigPath, getUser, getUserConfig } from "./config";
 import type { TailFilterMessage } from "./tail/filters";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
@@ -59,6 +53,7 @@ export async function deploy(options: {
   withVars: boolean | undefined;
   compatibilityDate: string | undefined;
   compatibilityFlags: string[] | undefined;
+  minify: boolean | undefined;
 }): Promise<void> {
   const config = getConfig(options.config, {
     main: options.main,
@@ -130,6 +125,7 @@ export async function deploy(options: {
         // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
       },
       ...esbuildOptions,
+      minify: options.minify,
       define: {
         ...esbuildOptions.define,
         ...config.define,
@@ -426,12 +422,23 @@ export async function list(options: { format: "json" | "pretty" }) {
   }
 }
 
-// type EnvironmentChoice = "production" | "development" | "preview";
+export async function whoami() {
+  // get user details
+  try {
+    const user = getUserConfig();
+    console.log(`Logged in as ${chalk.bold(user.login)} (${user.type})`);
+  } catch (e) {
+    console.log(
+      `Not logged in, run ${chalk.bold(
+        "npx partykit login"
+      )} to get user details`
+    );
+  }
+}
 
 export const env = {
   async list(options: {
     name: string | undefined;
-    // env: EnvironmentChoice;
     config: string | undefined;
     preview: string | undefined;
   }) {
@@ -563,7 +570,6 @@ export const env = {
     key: string,
     options: {
       name: string | undefined;
-      // env: EnvironmentChoice;
       config: string | undefined;
       preview: string | undefined;
     }
@@ -630,7 +636,6 @@ export const env = {
     key: string | undefined,
     options: {
       name: string | undefined;
-      // env: EnvironmentChoice;
       config: string | undefined;
       preview: string | undefined;
     }
