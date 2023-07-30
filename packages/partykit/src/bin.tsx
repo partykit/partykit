@@ -217,7 +217,11 @@ program
 
 const envCommand = program
   .command("env")
-  .description("Manage environment variables");
+  .description("Manage environment variables")
+  .action(async () => {
+    await printBanner();
+    envCommand.outputHelp();
+  });
 
 envCommand
   .command("list")
@@ -229,8 +233,6 @@ envCommand
       .choices(["json", "pretty"])
       .default("pretty")
   )
-  // .addOption(EnvironmentOption)
-  // -p preview id?
   .action(async (options) => {
     if (options.format !== "json") {
       await printBanner();
@@ -268,8 +270,6 @@ envCommand
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
   .option("--preview [name]", "Add to preview")
-  // .addOption(EnvironmentOption)
-  // -p preview id?
   .action(async (key, options) => {
     await printBanner();
     await cli.env.add(key, options);
@@ -282,7 +282,6 @@ envCommand
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
   .option("--preview [name]", "Remove from preview")
-  // .addOption(EnvironmentOption)
   .action(async (key, options) => {
     await printBanner();
     await cli.env.remove(key, options);
