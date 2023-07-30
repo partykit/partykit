@@ -39,7 +39,6 @@ const esbuildOptions: BuildOptions = {
   bundle: true,
   write: false,
   target: "esnext",
-  // minify: true,
 } as const;
 
 export async function deploy(options: {
@@ -90,9 +89,7 @@ export async function deploy(options: {
   }
 
   if (config.assets) {
-    console.warn(
-      "Warning: uploading assets are not yet supported in deploy mode"
-    );
+    logger.warn("Uploading assets are not yet supported in deploy mode");
   }
 
   const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
@@ -218,10 +215,10 @@ export async function deploy(options: {
     }
   );
 
-  console.log(
-    `Deployed ${config.main} as ${
+  logger.log(
+    `Deployed ${config.main} to ${`${
       options.preview ? `${options.preview}.` : ""
-    }${config.name}.${user.login.toLowerCase()}.partykit.dev`
+    }${config.name}.${user.login.toLowerCase()}.partykit.dev`}`
   );
 }
 
@@ -254,7 +251,9 @@ export async function _delete(options: {
     }
   );
 
-  console.log(`Deleted ${config.name}.${user.login}.partykit.dev`);
+  logger.log(
+    `Deleted ${chalk.bold(`${config.name}.${user.login}.partykit.dev`)}`
+  );
 }
 
 type TailCreationApiResponse = {
@@ -324,7 +323,7 @@ export async function tail(options: {
   );
 
   if (options.format === "pretty") {
-    console.log(
+    logger.log(
       `Successfully created tail, expires at ${expiration.toLocaleString()}`
     );
   }
@@ -458,7 +457,7 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResult(
+    const res = await fetchResult<string[]>(
       `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
       {
         headers: {
@@ -467,7 +466,7 @@ export const env = {
       }
     );
 
-    console.log(res);
+    console.log(`Deployed variables: ${res.join(", ")}`);
   },
   async pull(
     fileName: string | undefined,
@@ -506,10 +505,10 @@ export const env = {
     const targetFileName =
       fileName || options.config || getConfigPath() || "partykit.json";
     if (!fs.existsSync(targetFileName)) {
-      console.log(`Creating ${targetFileName}...`);
+      logger.log(`Creating ${targetFileName}...`);
       fs.writeFileSync(targetFileName, "{}");
     } else {
-      console.log(`Updating ${targetFileName}...`);
+      logger.log(`Updating ${targetFileName}...`);
     }
 
     fs.writeFileSync(
@@ -546,7 +545,7 @@ export const env = {
     }
 
     if (Object.keys(config.vars || {}).length === 0) {
-      console.warn("No environment variables to push, exiting...");
+      logger.warn("No environment variables to push, exiting...");
       return;
     }
 
@@ -564,7 +563,10 @@ export const env = {
       }
     );
 
-    console.log("Pushed environment variables");
+    logger.log(
+      "Pushed environment variables:",
+      Object.keys(config.vars || {}).join(", ")
+    );
   },
   async add(
     key: string,
@@ -617,7 +619,7 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResult(
+    await fetchResult(
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
@@ -630,7 +632,7 @@ export const env = {
       }
     );
 
-    console.log(res);
+    logger.log(`Deployed environment variable: ${key}`);
   },
   async remove(
     key: string | undefined,
@@ -669,7 +671,7 @@ export const env = {
         console.log("Aborted");
         return;
       } else {
-        const res = await fetchResult(
+        await fetchResult(
           `/parties/${user.login}/${config.name}/env${
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
@@ -680,12 +682,12 @@ export const env = {
             },
           }
         );
-        console.log(res);
+        logger.log(`Deleted all deployed environment variables`);
         return;
       }
     }
 
-    const res = await fetchResult(
+    await fetchResult(
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
@@ -697,6 +699,6 @@ export const env = {
       }
     );
 
-    console.log(res);
+    logger.log(`Deleted deployed environment variable: ${key}`);
   },
 };

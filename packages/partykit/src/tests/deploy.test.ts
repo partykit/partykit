@@ -264,8 +264,10 @@ describe("deploy", () => {
         "debug": "",
         "err": "",
         "info": "",
-        "out": "Deployed ./../packages/partykit/src/tests/fixture.js as test-script.test-user.partykit.dev",
-        "warn": "Warning: uploading assets are not yet supported in deploy mode",
+        "out": "Deployed ./../packages/partykit/src/tests/fixture.js to test-script.test-user.partykit.dev",
+        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUploading assets are not yet supported in deploy mode[0m
+
+      ",
       }
     `);
   });

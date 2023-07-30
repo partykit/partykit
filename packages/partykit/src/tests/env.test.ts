@@ -53,14 +53,14 @@ describe("env", () => {
     });
     expect(checkedResponse).toBe(true);
     expect(std).toMatchInlineSnapshot(`
-        {
-          "debug": "",
-          "err": "",
-          "info": "",
-          "out": "[ 'a', 'b', 'c', 'd' ]",
-          "warn": "",
-        }
-      `);
+      {
+        "debug": "",
+        "err": "",
+        "info": "",
+        "out": "Deployed variables: a, b, c, d",
+        "warn": "",
+      }
+    `);
   });
 
   test("pull", async () => {
@@ -124,7 +124,9 @@ describe("env", () => {
           "err": "",
           "info": "",
           "out": "",
-          "warn": "No environment variables to push, exiting...",
+          "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mNo environment variables to push, exiting...[0m
+
+        ",
         }
       `);
     });
@@ -175,7 +177,7 @@ describe("env", () => {
           "debug": "",
           "err": "",
           "info": "",
-          "out": "Pushed environment variables",
+          "out": "Pushed environment variables: a, b, c, d",
           "warn": "",
         }
       `);
@@ -231,7 +233,7 @@ describe("env", () => {
         "debug": "",
         "err": "",
         "info": "",
-        "out": "{ success: true }",
+        "out": "Deleted deployed environment variable: some-key",
         "warn": "",
       }
     `);
