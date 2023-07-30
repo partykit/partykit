@@ -81,6 +81,7 @@ describe("deploy", () => {
       assets: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
+      minify: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -133,6 +134,7 @@ describe("deploy", () => {
       assets: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
+      minify: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -185,6 +187,7 @@ describe("deploy", () => {
       assets: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
+      minify: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -209,6 +212,7 @@ describe("deploy", () => {
         assets: undefined,
         compatibilityDate: undefined,
         compatibilityFlags: undefined,
+        minify: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });
@@ -250,6 +254,7 @@ describe("deploy", () => {
       assets: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
+      minify: undefined,
     });
 
     expect(checkedResponse).toBe(true);

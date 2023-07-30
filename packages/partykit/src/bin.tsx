@@ -70,11 +70,6 @@ function getArrayKVOption(val: string[] = []) {
   }, {} as Record<string, string>);
 }
 
-// const EnvironmentOption = new Option(
-//   "-e, --env <env>",
-//   "environment to use"
-// ).choices(["production", "development", "preview"]);
-
 program
   .name("partykit")
   .version(version, "-v, --version", "Output the current version")
@@ -94,7 +89,6 @@ program
   .addOption(
     new Option("--persist [path]", "Persist local state").default(true)
   )
-  // .option("-e, --env", "environment to use")
   .option(
     "-v, --var [vars...]",
     "A key-value pair to be injected into the script as a variable"
@@ -105,6 +99,7 @@ program
   )
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
+  .option("--minify", "Minify the script")
   .action(async (scriptPath, options) => {
     await printBanner();
     render(
@@ -117,6 +112,7 @@ program
         define={getArrayKVOption(options.define)}
         compatibilityDate={options.compatibilityDate}
         compatibilityFlags={options.compatibilityFlags}
+        minify={options.minify}
       />
     );
   });
@@ -128,7 +124,6 @@ program
   .argument("[script]", "Path to the script to deploy")
   .option("--assets <path>", "Path to assets directory")
   .option("-c, --config <path>", "Path to config file")
-  // .option("-e, --env", "environment to use")
   .option(
     "-v, --var [vars...]",
     "A key-value pair to be injected into the script as a variable"
@@ -139,6 +134,7 @@ program
   )
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
+  .option("--minify", "Minify the script")
   .option("--with-vars", "Include all variables in the deployment")
   .option("-n, --name <name>", "Name of the project")
   .option("--preview [name]", "Deploy to preview environment")
@@ -155,6 +151,7 @@ program
       assets: options.assets,
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
+      minify: options.minify,
     });
   });
 
@@ -313,6 +310,14 @@ program
         <Logout />
       </Suspense>
     );
+  });
+
+program
+  .command("whoami")
+  .description("Show the currently logged in user")
+  .action(async () => {
+    await printBanner();
+    await cli.whoami();
   });
 
 // semiver implementation via https://github.com/lukeed/semiver/blob/ae7eebe6053c96be63032b14fb0b68e2553fcac4/src/index.js

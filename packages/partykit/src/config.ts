@@ -215,13 +215,7 @@ const configSchema = z
       .optional(),
     compatibilityDate: z.string().optional(),
     compatibilityFlags: z.array(z.string()).optional(),
-    // env: z
-    //   .record(
-    //     z.object({
-    //       vars: z.record(z.unknown()).optional(),
-    //     })
-    //   )
-    //   .optional(),
+    minify: z.boolean().optional(),
   })
   .strict();
 
