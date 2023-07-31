@@ -56,7 +56,7 @@ export const fetchClerkSessionToken = async (signInToken: string) => {
   }
 
   if (!tokenStore.token) {
-    throw new Error("No session token received");
+    throw new Error("No client token received");
   }
 
   return {

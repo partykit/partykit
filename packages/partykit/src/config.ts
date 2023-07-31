@@ -4,20 +4,17 @@ import path from "path";
 import * as dotenv from "dotenv";
 import { z } from "zod";
 import JSON5 from "json5";
-import chalk from "chalk";
 import findConfig from "find-config";
-import { fetch } from "undici";
-import open from "open";
-import { version as packageVersion } from "../package.json";
 import { ConfigurationError, logger } from "./logger";
-import countdown from "./countdown";
+import chalk from "chalk";
 
 import * as ConfigSchema from "./config-schema";
 
 export const configSchema = ConfigSchema.schema;
 
 export type Config = ConfigSchema.Config;
-import { fetchClerkSessionToken } from "./auth/clerk";
+
+import { createClerkClient, fetchClerkSessionToken } from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
 
 const userConfigSchema = z.object({
@@ -31,6 +28,7 @@ export type UserConfig = z.infer<typeof userConfigSchema>;
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
 
 export async function getUser(): Promise<UserConfig> {
+  // load persisted config, or create a new session if valid session doesn't exist
   let userConfig;
   try {
     userConfig = getUserConfig();
@@ -39,15 +37,36 @@ export async function getUser(): Promise<UserConfig> {
     await fetchUserConfig();
     userConfig = getUserConfig();
   }
+
+  // for clerk tokens, we need to exchange the client token for a session token,
+  // which are only valid for 1 minute at a time
+  if (userConfig.type === "clerk") {
+    const clerk = await createClerkClient({
+      tokenStore: {
+        token: userConfig.access_token,
+      },
+    });
+
+    const sessionToken = await clerk?.session?.getToken();
+    if (!sessionToken) {
+      throw new Error("Session expired. Please log in again.");
+    }
+
+    userConfig = {
+      ...userConfig,
+      access_token: sessionToken,
+    };
+  }
+
   return userConfig;
 }
 
 export function getUserConfig(): UserConfig {
-  if (process.env.PARTYKIT_TOKEN) {
+  if (process.env.PARTYKIT_TOKEN && process.env.PARTYKIT_LOGIN) {
     return {
-      login: null, // TODO
+      login: process.env.PARTYKIT_LOGIN,
       access_token: process.env.PARTYKIT_TOKEN,
-      type: "partykit",
+      type: "clerk",
     };
   }
 
@@ -87,8 +106,6 @@ export function getUserConfig(): UserConfig {
 //   }
 //   return false;
 // }
-
-const GITHUB_APP_ID = "670a9f76d6be706f5209";
 
 import process from "process";
 
