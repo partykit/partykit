@@ -27,6 +27,7 @@ async function runDev(props: DevProps) {
         }}
       >
         <Dev
+          enableInspector={false}
           {...props}
           onReady={() => {
             resolve();
@@ -53,7 +54,7 @@ describe("dev", () => {
     );
   });
 
-  it.skip("should error if trying to make a request without an onRequest handler", async () => {
+  it("should error if trying to make a request without an onRequest handler", async () => {
     await runDev({ main: onConnectFixture });
 
     await expect(() =>
