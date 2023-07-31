@@ -3,6 +3,15 @@ import http from "http";
 import getPort from "get-port";
 import type { Socket } from "net";
 
+declare const PARTYKIT_DASHBOARD_BASE: string | undefined;
+
+const DASHBOARD_BASE =
+  process.env.PARTYKIT_DASHBOARD_BASE || PARTYKIT_DASHBOARD_BASE;
+
+if (!DASHBOARD_BASE) {
+  throw new Error("PARTYKIT_DASHBOARD_BASE not defined");
+}
+
 export async function signInWithBrowser(): Promise<string> {
   const port = await getPort({ port: [1998, 1997, 1996] });
 
@@ -17,7 +26,8 @@ export async function signInWithBrowser(): Promise<string> {
             return;
           }
 
-          const url = new URL(`http://localhost${req.url}`);
+          // "host" is arbitrary here, added just so we can parse the url
+          const url = new URL(`http://host${req.url}`);
           const token = url.searchParams.get("token");
 
           if (token) {
@@ -32,16 +42,17 @@ export async function signInWithBrowser(): Promise<string> {
         } catch (e) {
           reject(e);
         } finally {
-          server.close(); // TODO: Autoclose server after delay
+          // ensure all connections are closed to allow process to exit cleanly
+          server.close();
           server.unref();
           sockets.forEach((s) => s.destroy());
           sockets = [];
         }
       })
-      .listen(port); // static local port
+      .listen(port);
 
     server.on("connection", function (socket) {
-      // Add a newly connected socket
+      // track live connections
       sockets.push(socket);
       socket.on("close", () => {
         sockets = sockets.filter((s) => s !== socket);
@@ -49,8 +60,11 @@ export async function signInWithBrowser(): Promise<string> {
       });
     });
 
+    // the local server url the login flow will redirect back to
     const redirectUrl = `http://localhost:${port}/device/callback`;
-    const loginUrl = `http://localhost:3000/login/device?redirectUrl=${encodeURIComponent(
+
+    // the remote server url that will handle the login flow
+    const loginUrl = `${DASHBOARD_BASE}/login/device?redirectUrl=${encodeURIComponent(
       redirectUrl
     )}`;
 
