@@ -17,7 +17,7 @@ export async function fetchResultAsUser(
   return fetchResult(api, {
     ...options,
     headers: {
-      Authorization: user.access_token,
+      Authorization: `Bearer ${user.access_token}`,
       "X-PartyKit-User-Type": user.type,
       ...(options.headers ?? {}),
     },

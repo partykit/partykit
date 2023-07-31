@@ -4,9 +4,10 @@ import { clearMocks } from "./fetchResult-mock";
 import { tail } from "../cli";
 
 vi.mock("../fetchResult", async () => {
-  const { fetchResult } = await import("./fetchResult-mock");
+  const { fetchResult, fetchResultAsUser } = await import("./fetchResult-mock");
   return {
     fetchResult,
+    fetchResultAsUser,
   };
 });
 
@@ -47,7 +48,9 @@ describe("tail", () => {
         ip: [],
         search: undefined,
       })
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"');
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
+      '"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"'
+    );
   });
 
   // TODO: test websocket stuff? maybe overkill for now.
