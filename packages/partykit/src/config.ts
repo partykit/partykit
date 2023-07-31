@@ -14,7 +14,7 @@ export const configSchema = ConfigSchema.schema;
 
 export type Config = ConfigSchema.Config;
 
-import { createClerkClient, fetchClerkSessionToken } from "./auth/clerk";
+import { createClerkClient, fetchClerkClientToken } from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
 
 const userConfigSchema = z.object({
@@ -111,16 +111,14 @@ import process from "process";
 
 export async function fetchUserConfig(): Promise<void> {
   const signInToken = await signInWithBrowser();
+  const user = await fetchClerkClientToken(signInToken);
 
-  const session = await fetchClerkSessionToken(signInToken);
-
-  console.log(session);
-  if (session) {
+  if (user) {
     // now write the token to the config file at ~/.partykit/config.json
     fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
     fs.writeFileSync(
       USER_CONFIG_PATH,
-      JSON.stringify(userConfigSchema.parse(session), null, 2)
+      JSON.stringify(userConfigSchema.parse(user), null, 2)
     );
   }
 }
