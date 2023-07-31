@@ -1,6 +1,6 @@
 import path from "path";
 import * as fs from "fs";
-import { fetchResult } from "./fetchResult";
+import { fetchResult, fetchResultAsUser } from "./fetchResult";
 import { File, FormData } from "undici";
 import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
@@ -509,17 +509,14 @@ export async function deploy(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResult(
+  await fetchResultAsUser(
+    user,
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
       method: "POST",
       body: form,
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-        "X-PartyKit-User-Type": user.type,
-      },
     }
   );
 
@@ -547,15 +544,13 @@ export async function _delete(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResult(
+  await fetchResultAsUser(
+    user,
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
     }
   );
 
@@ -624,9 +619,6 @@ export async function tail(options: {
     {
       method: "POST",
       body: JSON.stringify(filters),
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
     }
   );
 
@@ -637,15 +629,13 @@ export async function tail(options: {
   }
 
   async function deleteTail() {
-    await fetchResult(
+    await fetchResultAsUser(
+      user,
       `/parties/${user.login}/${config.name}/tail/${tailId}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
   }
@@ -715,14 +705,7 @@ export async function list(options: { format: "json" | "pretty" }) {
   // get user details
   const user = await getUser();
 
-  const res = await fetchResult<{ name: string; url: string }[]>(
-    `/parties/${user.login}`,
-    {
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
-    }
-  );
+  const res = await fetchResultAsUser(user, `/parties/${user.login}`);
 
   if (options.format === "json") {
     console.log(res);
@@ -767,13 +750,9 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResult<string[]>(
-      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
+    const res = await fetchResultAsUser(
+      user,
+      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`
     );
 
     console.log(`Deployed variables: ${res.join(", ")}`);
@@ -801,15 +780,11 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResult(
+    const res = await fetchResultAsUser(
+      user,
       `/parties/${user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
-      }`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
+      }`
     );
 
     const targetFileName =
@@ -859,7 +834,8 @@ export const env = {
       return;
     }
 
-    await fetchResult(
+    await fetchResultAsUser(
+      user,
       `/parties/${user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
@@ -867,7 +843,6 @@ export const env = {
         method: "POST",
         body: JSON.stringify(config.vars || {}),
         headers: {
-          Authorization: `Bearer ${user.access_token}`,
           "Content-Type": "application/json",
         },
       }
@@ -929,16 +904,14 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    await fetchResult(
+    await fetchResultAsUser(
+      user,
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         method: "POST",
         body: value,
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
 
@@ -981,15 +954,13 @@ export const env = {
         console.log("Aborted");
         return;
       } else {
-        await fetchResult(
+        await fetchResultAsUser(
+          user,
           `/parties/${user.login}/${config.name}/env${
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
           {
             method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${user.access_token}`,
-            },
           }
         );
         logger.log(`Deleted all deployed environment variables`);
@@ -997,15 +968,13 @@ export const env = {
       }
     }
 
-    await fetchResult(
+    await fetchResultAsUser(
+      user,
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
 
