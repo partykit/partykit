@@ -39,13 +39,12 @@ export const createClerkClient = clerkFactory({
   publishableKey: "pk_test_b2JsaWdpbmctc25pcGUtMzcuY2xlcmsuYWNjb3VudHMuZGV2JA",
 });
 
-export const fetchClerkSessionToken = async (signInToken: string) => {
+export const fetchClerkClientToken = async (signInToken: string) => {
   const tokenStore = {
     token: undefined,
   };
 
   const clerk = await createClerkClient({ tokenStore });
-
   const res = await clerk.client?.signIn.create({
     strategy: "ticket",
     ticket: signInToken,
@@ -59,9 +58,15 @@ export const fetchClerkSessionToken = async (signInToken: string) => {
     throw new Error("No client token received");
   }
 
+  // `clerk.session` won't be populated on device, but session should exist
+  const session = clerk.client?.activeSessions?.[0];
+  if (!session || !session.user) {
+    throw new Error("No session created");
+  }
+
   return {
     access_token: tokenStore.token,
-    login: "jevakallio", // res?.identifier,
+    login: session.user.username,
     type: "clerk",
   };
 };
