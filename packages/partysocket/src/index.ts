@@ -50,6 +50,7 @@ function generateUUID(): string {
 // TODO: incorporate the above notes
 export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
+
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const { host, room, party, protocol, query, protocols, ...socketOptions } =
       partySocketOptions;
@@ -68,6 +69,9 @@ export default class PartySocket extends ReconnectingWebSocket {
 
     super(url, protocols, socketOptions);
     this._pk = _pk;
+  }
+  get id() {
+    return this._pk;
   }
 }
 
