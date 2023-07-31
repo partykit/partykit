@@ -143,6 +143,7 @@ export type DevProps = {
   compatibilityDate?: string;
   compatibilityFlags?: string[] | undefined;
   minify?: boolean | undefined;
+  enableInspector?: boolean | undefined;
 };
 
 export function Dev(props: DevProps) {
@@ -156,9 +157,15 @@ export function Dev(props: DevProps) {
 function DevImpl(props: DevProps) {
   const { inspectorUrl } = useDev(props);
 
+  return props.enableInspector ? (
+    <Inspector inspectorUrl={inspectorUrl} />
+  ) : null;
+}
+
+function Inspector(props: { inspectorUrl: string | undefined }) {
   useInspector({
     port: 9230,
-    inspectorUrl,
+    inspectorUrl: props.inspectorUrl,
     logToTerminal: true,
     sourceMapPath: undefined,
     sourceMapMetadata: undefined,
