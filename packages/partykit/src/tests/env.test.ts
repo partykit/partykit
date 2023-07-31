@@ -5,9 +5,10 @@ import { mockConsoleMethods } from "./mock-console";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 
 vi.mock("../fetchResult", async () => {
-  const { fetchResult } = await import("./fetchResult-mock");
+  const { fetchResult, fetchResultAsUser } = await import("./fetchResult-mock");
   return {
     fetchResult,
+    fetchResultAsUser,
   };
 });
 

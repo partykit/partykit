@@ -1,3 +1,5 @@
+import type { UserConfig } from "../config";
+
 type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 const mocks: [
@@ -16,6 +18,21 @@ export function mockFetchResult<T>(
 
 export function clearMocks() {
   mocks.splice(0);
+}
+
+export async function fetchResultAsUser<T>(
+  user: UserConfig,
+  url: string,
+  options: RequestInit = {}
+): Promise<T> {
+  return fetchResult<T>(url, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${user.access_token}`,
+      "X-PartyKit-User-Type": user.type,
+      ...(options.headers ?? {}),
+    },
+  });
 }
 
 export async function fetchResult<T>(

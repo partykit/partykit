@@ -8,9 +8,10 @@ import type { StaticAssetsManifestType } from "../server";
 const std = mockConsoleMethods();
 
 vi.mock("../fetchResult", async () => {
-  const { fetchResult } = await import("./fetchResult-mock");
+  const { fetchResult, fetchResultAsUser } = await import("./fetchResult-mock");
   return {
     fetchResult,
+    fetchResultAsUser,
   };
 });
 
