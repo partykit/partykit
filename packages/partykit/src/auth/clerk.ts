@@ -9,6 +9,9 @@ type TokenStore = {
   token?: string;
 };
 
+const CLERK_PUBLISHABLE_KEY =
+  "pk_test_b2JsaWdpbmctc25pcGUtMzcuY2xlcmsuYWNjb3VudHMuZGV2JA";
+
 const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
   return async ({ tokenStore }: { tokenStore: TokenStore }): Promise<Clerk> => {
     const clerk: Clerk = new ClerkConstructor(publishableKey);
@@ -36,7 +39,7 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
 };
 
 export const createClerkClient = clerkFactory({
-  publishableKey: "pk_test_b2JsaWdpbmctc25pcGUtMzcuY2xlcmsuYWNjb3VudHMuZGV2JA",
+  publishableKey: CLERK_PUBLISHABLE_KEY,
 });
 
 export const fetchClerkClientToken = async (signInToken: string) => {
