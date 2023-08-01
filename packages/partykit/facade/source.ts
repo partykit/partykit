@@ -17,6 +17,8 @@ import type {
   ExecutionContext,
 } from "@cloudflare/workers-types";
 
+import PartySocket from "partysocket";
+
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
     throw new Error(msg);
@@ -89,11 +91,11 @@ function createMultiParties(
               },
               connect: () => {
                 // wish there was a way to create a websocket from a durable object
-                return new WebSocket(
-                  key === "main"
-                    ? `ws://${options.host}/party/${name}`
-                    : `ws://${options.host}/parties/${key}/${name}`
-                );
+                return new PartySocket({
+                  host: options.host,
+                  room: name,
+                  ...(key !== "main" ? { party: key } : {}),
+                });
               },
             };
           },

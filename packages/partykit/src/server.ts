@@ -6,6 +6,8 @@ import type {
   WebSocket,
 } from "@cloudflare/workers-types";
 
+import type PartySocket from "partysocket";
+
 // Because when you construct a `new Response()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
 // This is fine by us, let user return whichever response type.
@@ -30,7 +32,7 @@ export type PartyKitRoom = {
     string,
     {
       get(id: string): {
-        connect: () => WebSocket;
+        connect: () => PartySocket;
         fetch: (init: RequestInit) => Promise<PartyKitResponse>;
       };
     }
