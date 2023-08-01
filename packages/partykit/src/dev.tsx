@@ -157,7 +157,7 @@ export function Dev(props: DevProps) {
 function DevImpl(props: DevProps) {
   const { inspectorUrl } = useDev(props);
 
-  return props.enableInspector ? (
+  return props.enableInspector ?? true ? (
     <Inspector inspectorUrl={inspectorUrl} />
   ) : null;
 }
