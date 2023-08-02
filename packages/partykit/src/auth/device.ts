@@ -21,32 +21,41 @@ export async function signInWithBrowser(): Promise<string> {
     // create a minimal web server to handle the callback from the browser
     const server = http
       .createServer((req, res) => {
-        try {
-          if (!req.url?.startsWith("/device/callback?")) {
-            return;
-          }
+        if (!req.url?.startsWith("/device/callback?")) {
+          return;
+        }
 
-          // "host" is arbitrary here, added just so we can parse the url
-          const url = new URL(`http://host${req.url}`);
-          const token = url.searchParams.get("token");
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Headers", "Authorization");
 
-          if (token) {
-            res.statusCode = 200;
-            res.end("OK");
-            resolve(token);
-          } else {
-            res.statusCode = 400;
-            res.end("Missing token");
-            reject();
+        if (req.method === "OPTIONS") {
+          res.statusCode = 204;
+          res.end();
+        }
+
+        if (req.method === "POST") {
+          try {
+            // "host" is arbitrary here, added just so we can parse the url
+            const url = new URL(`http://host${req.url}`);
+            const token = url.searchParams.get("token");
+            if (token) {
+              res.statusCode = 200;
+              res.end("OK");
+              resolve(token);
+            } else {
+              res.statusCode = 400;
+              res.end("Missing token");
+              reject();
+            }
+          } catch (e) {
+            reject(e);
+          } finally {
+            // ensure all connections are closed to allow process to exit cleanly
+            server.close();
+            server.unref();
+            sockets.forEach((s) => s.destroy());
+            sockets = [];
           }
-        } catch (e) {
-          reject(e);
-        } finally {
-          // ensure all connections are closed to allow process to exit cleanly
-          server.close();
-          server.unref();
-          sockets.forEach((s) => s.destroy());
-          sockets = [];
         }
       })
       .listen(port);
