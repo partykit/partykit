@@ -92,7 +92,7 @@ export async function levelPut(
 
   const keyPrefix = keyEncoding.encode(key);
   for (let i = 0; i < chunks.length; i++) {
-    await db.put(`${keyPrefix}#${i}`, chunks[i]);
+    await db.put(`${keyPrefix}#${i.toString().padStart(3, "0")}`, chunks[i]);
   }
 }
 
