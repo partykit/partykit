@@ -540,13 +540,15 @@ export default class YPartyKitProvider extends WebsocketProvider {
     host: string,
     room: string,
     doc: Y.Doc,
-    options: ConstructorParameters<typeof WebsocketProvider>[3] = {}
+    options: ConstructorParameters<typeof WebsocketProvider>[3] & {
+      party?: string;
+    } = {}
   ) {
     const serverUrl = `${
       host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss"
-    }://${host}/party`;
+    }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
     const id = generateUUID();
     if (options.params === undefined) {
       options.params = {
