@@ -476,7 +476,7 @@ export default {
           if (onBeforeRequestResponse instanceof Response) {
             return onBeforeRequestResponse;
           }
-          if (!("onRequest" && Worker)) {
+          if (!("onRequest" in Worker)) {
             throw new Error("No onRequest handler");
           }
 

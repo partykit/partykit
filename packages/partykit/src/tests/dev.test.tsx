@@ -57,9 +57,10 @@ describe("dev", () => {
   it("should error if trying to make a request without an onRequest handler", async () => {
     await runDev({ main: onConnectFixture });
 
-    await expect(() =>
-      fetch("http://localhost:1999/party/theroom")
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"fetch failed"'); // TODO: we should catch the 500?
+    const res = await fetch("http://127.0.0.1:1999/party/theroom");
+
+    expect(res.status).toBe(500);
+    expect(await res.text()).toMatchInlineSnapshot('"No onRequest handler"');
   });
 
   it("should start a server for a given input script path", async () => {
