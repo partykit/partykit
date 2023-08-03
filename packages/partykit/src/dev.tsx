@@ -25,7 +25,6 @@ const esbuildOptions: BuildOptions = {
   bundle: true,
   write: false,
   target: "esnext",
-  minify: true, // TODO: remove this once https://github.com/vercel/edge-runtime/issues/243 is fixed
 } as const;
 
 interface ReloadedEventOptions {
