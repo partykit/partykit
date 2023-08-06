@@ -70,8 +70,8 @@ const socket = new PartySocket({
   room: "my-room",
 });
 
-socket.addEventListener("message", (message) => {
-  console.log(message); // "hello from room: my-room"
+socket.addEventListener("message", (evt) => {
+  console.log(evt.data); // "hello from room: my-room"
 });
 ```
 
