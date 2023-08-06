@@ -115,6 +115,7 @@ program
         compatibilityFlags={options.compatibilityFlags}
         minify={options.minify}
         verbose={options.verbose}
+        assets={options.assets}
       />
     );
   });

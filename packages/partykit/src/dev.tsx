@@ -19,6 +19,9 @@ import { render } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
 import { logger } from "./logger";
+import polka from "polka";
+import sirv from "sirv";
+import type { StaticAssetsManifestType } from "./server";
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -186,6 +189,95 @@ interface InspectorWebSocketTarget {
   url: string;
 }
 
+// duplicate cli.tsx
+function* findAllFiles(root: string) {
+  const dirs = [root];
+  while (dirs.length > 0) {
+    const dir = dirs.pop()!;
+    const files = fs.readdirSync(dir);
+    for (const file of files) {
+      const filePath = path.join(dir, file);
+      const stat = fs.statSync(filePath);
+      if (stat.isDirectory()) {
+        dirs.push(filePath);
+      } else {
+        yield path.relative(root, filePath);
+      }
+    }
+  }
+}
+
+function useAssetServer(options: Config["assets"]) {
+  const theOptions: Config["assets"] =
+    typeof options === "string" ? { path: options } : options || {};
+
+  const assetsServerPort = 3141; // TODO: just find a free port
+
+  const assetsPath = !options
+    ? undefined
+    : typeof options === "string"
+    ? options
+    : options.path;
+
+  const unsupportedKeys = (
+    ["include", "exclude", "serveSinglePageApp"] as const
+  ).filter((key) => theOptions[key] !== undefined);
+  if (unsupportedKeys.length > 0) {
+    throw new Error(
+      `Not implemented keys in assets: ${unsupportedKeys.join(", ")}`
+    );
+  }
+
+  const [assetsMap] = useState<{ assets: Record<string, string> }>(() => {
+    const assetsMap: StaticAssetsManifestType = {
+      devServer: `http://127.0.0.1:${assetsServerPort}`,
+      browserTTL: theOptions.browserTTL,
+      edgeTTL: theOptions.edgeTTL,
+      serveSinglePageApp: theOptions.serveSinglePageApp,
+      assets: {},
+    };
+    if (!assetsPath) return assetsMap;
+
+    for (const file of findAllFiles(assetsPath)) {
+      // in dev it's just the same file
+      assetsMap.assets[file] = file;
+    }
+    return assetsMap;
+  });
+
+  useEffect(() => {
+    if (!assetsPath) return;
+    const assets = sirv(assetsPath, {
+      dev: true,
+      etag: true,
+    });
+
+    const app = polka();
+
+    app.use(assets).listen(assetsServerPort, (err: Error) => {
+      if (err) {
+        console.error(
+          `Failed to start asset server at port ${assetsServerPort}`,
+          err
+        );
+      }
+    });
+
+    return () => {
+      try {
+        app.server!.close();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  }, [assetsPath, assetsServerPort]);
+
+  return {
+    assetsMap,
+    assetsServerPort,
+  };
+}
+
 function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   const [config] = useState<Config>(() =>
     getConfig(
@@ -209,6 +301,8 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     undefined
   );
 
+  const { assetsMap } = useAssetServer(config.assets);
+
   if (!config.main) {
     throw new Error(
       'Missing entry point, please specify "main" in your config'
@@ -217,7 +311,9 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
 
   useEffect(() => {
     if (config.assets) {
-      console.warn("Warning: serving assets are not yet supported in dev mode");
+      logger.warn(
+        "Serving assets in dev mode is experimental and may change any time"
+      );
     }
 
     async function runBuild() {
@@ -258,6 +354,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         minify: options.minify,
         format: "esm",
         sourcemap: true,
+        external: ["__STATIC_ASSETS_MANIFEST__"],
         define: {
           ...esbuildOptions.define,
           ...config.define,
@@ -350,6 +447,16 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                         type: "ESModule",
                         path: absoluteScriptPath,
                         contents: code,
+                      },
+                      {
+                        type: "ESModule",
+                        path: path.join(
+                          path.dirname(absoluteScriptPath),
+                          "__STATIC_ASSETS_MANIFEST__"
+                        ),
+                        contents: `export default ${JSON.stringify(
+                          assetsMap
+                        )};`,
                       },
                       ...Object.entries(wasmModules).map(([name, p]) => ({
                         type: "CompiledWasm",
@@ -449,6 +556,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     options.persist,
     options.minify,
     options.verbose,
+    assetsMap,
   ]);
 
   useEffect(() => {

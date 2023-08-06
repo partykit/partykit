@@ -17,7 +17,41 @@
       "type": "number"
     },
     "assets": {
-      "type": "string"
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "browserTTL": {
+              "type": "number"
+            },
+            "edgeTTL": {
+              "type": "number"
+            },
+            "serveSinglePageApp": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
     },
     "persist": {
       "type": [

@@ -11,7 +11,19 @@ export const schema = z
     name: z.string().optional(),
     main: z.string().optional(),
     port: z.number().optional(),
-    assets: z.string().optional(),
+    assets: z
+      .union([
+        z.string(),
+        z.object({
+          path: z.string().optional(),
+          include: z.array(z.string()).optional(),
+          exclude: z.array(z.string()).optional(),
+          browserTTL: z.number().optional(),
+          edgeTTL: z.number().optional(),
+          serveSinglePageApp: z.boolean().optional(),
+        }),
+      ])
+      .optional(),
     persist: z.union([z.boolean(), z.string()]).optional(),
     vars: z.record(z.unknown()).optional(),
     define: z.record(z.string()).optional(),

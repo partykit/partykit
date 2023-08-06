@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { deploy } from "../cli";
 import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 import { mockConsoleMethods } from "./mock-console";
+import type { StaticAssetsManifestType } from "../server";
 
 const std = mockConsoleMethods();
 
@@ -235,6 +236,49 @@ describe("deploy", () => {
       }
     );
 
+    mockFetchResult<StaticAssetsManifestType>(
+      "GET",
+      "/parties/test-user/test-script/assets",
+      (url, options) => {
+        expect(url).toMatchInlineSnapshot(
+          '"/parties/test-user/test-script/assets"'
+        );
+        expect(options?.headers).toMatchInlineSnapshot(`
+          {
+            "Authorization": "Bearer test-token",
+            "Content-Type": "application/json",
+          }
+        `);
+        return {
+          devServer: "",
+          browserTTL: undefined,
+          edgeTTL: undefined,
+          serveSinglePageApp: false,
+          assets: {},
+        };
+      }
+    );
+
+    mockFetchResult<null>(
+      "POST",
+      "/parties/test-user/test-script/assets",
+      (url, options) => {
+        expect(url).toMatchInlineSnapshot(
+          '"/parties/test-user/test-script/assets"'
+        );
+        expect(options?.headers).toMatchInlineSnapshot(`
+          {
+            "Authorization": "Bearer test-token",
+            "Content-Type": "application/json",
+          }
+        `);
+        expect(options?.body).toMatchInlineSnapshot(
+          '"{\\"devServer\\":\\"\\",\\"assets\\":{}}"'
+        );
+        return null;
+      }
+    );
+
     fs.writeFileSync(
       "partykit.json",
       JSON.stringify({
@@ -242,6 +286,8 @@ describe("deploy", () => {
         assets: "./public",
       })
     );
+
+    fs.mkdirSync("public");
 
     await deploy({
       main: fixture,
@@ -265,7 +311,7 @@ describe("deploy", () => {
         "err": "",
         "info": "",
         "out": "Deployed ./../packages/partykit/src/tests/fixture.js to test-script.test-user.partykit.dev",
-        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUploading assets are not yet supported in deploy mode[0m
+        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDeploying assets is experimental and may change any time[0m
 
       ",
       }
