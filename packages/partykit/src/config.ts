@@ -10,6 +10,7 @@ import { fetch } from "undici";
 import open from "open";
 import { version as packageVersion } from "../package.json";
 import { ConfigurationError, logger } from "./logger";
+import countdown from "./countdown";
 
 const userConfigSchema = z.object({
   login: z.string(),
@@ -100,11 +101,15 @@ export async function fetchUserConfig(): Promise<void> {
     (await res.json()) as any;
 
   console.log(
-    `Please visit ${chalk.bold(
+    `We will now open your browser to ${chalk.bold(
       verification_uri
-    )} and paste the code ${chalk.bold(user_code)}`
+    )}\nPlease paste the code ${chalk.bold(
+      user_code
+    )} (copied to your clipboard) and authorize the app.`
   );
-  console.log(`This code will expire in ${expires_in} seconds`);
+
+  await countdown("Opening browser", 5);
+
   console.log(`Waiting for you to authorize...`);
 
   // we do this because for some reason the clipboardy package doesn't work
@@ -172,6 +177,7 @@ export async function fetchUserConfig(): Promise<void> {
           2
         )
       );
+      console.log(`Logged in as ${chalk.bold(githubUserDetails.login)}`);
       return;
     }
     if (error === "authorization_pending") {
