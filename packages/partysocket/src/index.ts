@@ -17,7 +17,7 @@ export type PartySocketOptions = Omit<
 
 function generateUUID(): string {
   // Public Domain/MIT
-  if (crypto.randomUUID) {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
     return crypto.randomUUID();
   }
   let d = new Date().getTime(); //Timestamp
