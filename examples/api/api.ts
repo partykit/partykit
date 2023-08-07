@@ -14,10 +14,6 @@ export type Options = {
 };
 
 abstract class PartyKitServerImpl {
-  options: Options = {
-    hibernate: false,
-  };
-
   protected id: string;
   protected connections: Map<string, Connection> = new Map();
   private _storage: PartyKitStorage;
