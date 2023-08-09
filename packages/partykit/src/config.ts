@@ -24,8 +24,8 @@ const userConfigSchema = z.object({
   type: z.enum(["clerk", "github"]),
 
   // TODO: make fields non-nullable when GitHub logins are deprecated
-  username: z.string().nullable(),
-  team: z.string().nullable(),
+  username: z.string().optional(),
+  team: z.string().optional(),
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
@@ -116,6 +116,14 @@ import process from "process";
 
 export async function fetchUserConfig(): Promise<void> {
   const signInResult = await signInWithBrowser();
+
+  // if the user aborts the login flow, there's nowhere to go,
+  // so exit gracefully
+  if ("aborted" in signInResult) {
+    logger.info("User aborted login flow in the browser.");
+    process.exit(0);
+  }
+
   const user = await fetchClerkClientToken(signInResult.token);
 
   if (user) {
