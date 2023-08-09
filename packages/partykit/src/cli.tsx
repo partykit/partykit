@@ -612,7 +612,8 @@ export async function tail(options: {
   }
   const {
     result: { id: tailId, url: websocketUrl, expires_at: expiration },
-  } = await fetchResult<TailCreationApiResponse>(
+  } = await fetchResultAsUser<TailCreationApiResponse>(
+    user,
     `/parties/${user.login}/${config.name}/tail${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
@@ -705,7 +706,10 @@ export async function list(options: { format: "json" | "pretty" }) {
   // get user details
   const user = await getUser();
 
-  const res = await fetchResultAsUser(user, `/parties/${user.login}`);
+  const res = await fetchResultAsUser<{ name: string; url: string }[]>(
+    user,
+    `/parties/${user.login}`
+  );
 
   if (options.format === "json") {
     console.log(res);
