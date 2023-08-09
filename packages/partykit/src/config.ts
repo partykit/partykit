@@ -18,9 +18,14 @@ import { createClerkClient, fetchClerkClientToken } from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
 
 const userConfigSchema = z.object({
+  /** @deprecated use team and username instead */
   login: z.string(),
   access_token: z.string(),
-  type: z.string(),
+  type: z.enum(["clerk", "github"]),
+
+  // TODO: make fields non-nullable when GitHub logins are deprecated
+  username: z.string().nullable(),
+  team: z.string().nullable(),
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
@@ -110,16 +115,24 @@ export function getUserConfig(): UserConfig {
 import process from "process";
 
 export async function fetchUserConfig(): Promise<void> {
-  const signInToken = await signInWithBrowser();
-  const user = await fetchClerkClientToken(signInToken);
+  const signInResult = await signInWithBrowser();
+  const user = await fetchClerkClientToken(signInResult.token);
 
   if (user) {
+    const config = userConfigSchema.parse({
+      type: "clerk",
+      team: signInResult.teamId,
+      username: user.username,
+      access_token: user.access_token,
+
+      // `login` is used for backwards compatibility with old github config.
+      // going forward, we should use team and username explicitly
+      login: signInResult.teamId,
+    });
+
     // now write the token to the config file at ~/.partykit/config.json
     fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
-    fs.writeFileSync(
-      USER_CONFIG_PATH,
-      JSON.stringify(userConfigSchema.parse(user), null, 2)
-    );
+    fs.writeFileSync(USER_CONFIG_PATH, JSON.stringify(config, null, 2));
   }
 }
 

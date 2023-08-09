@@ -12,7 +12,10 @@ if (!DASHBOARD_BASE) {
   throw new Error("PARTYKIT_DASHBOARD_BASE not defined");
 }
 
-export async function signInWithBrowser(): Promise<string> {
+export async function signInWithBrowser(): Promise<{
+  token: string;
+  teamId: string;
+}> {
   const port = await getPort({ port: [1998, 1997, 1996] });
 
   let sockets: Socket[] = [];
@@ -38,13 +41,14 @@ export async function signInWithBrowser(): Promise<string> {
             // "host" is arbitrary here, added just so we can parse the url
             const url = new URL(`http://host${req.url}`);
             const token = url.searchParams.get("token");
-            if (token) {
+            const teamId = url.searchParams.get("teamId");
+            if (token && teamId) {
               res.statusCode = 200;
               res.end("OK");
-              resolve(token);
+              resolve({ token, teamId });
             } else {
               res.statusCode = 400;
-              res.end("Missing token");
+              res.end("Invalid parameters");
               reject();
             }
           } catch (e) {

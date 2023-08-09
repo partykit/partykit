@@ -69,7 +69,6 @@ export const fetchClerkClientToken = async (signInToken: string) => {
 
   return {
     access_token: tokenStore.token,
-    login: session.user.username,
-    type: "clerk",
+    username: session.user.username,
   };
 };
