@@ -137,6 +137,7 @@ export type DevProps = {
   config?: string;
   persist?: boolean | string;
   vars?: Record<string, string>;
+  verbose?: boolean;
   define?: Record<string, string>;
   onReady?: (host: string, port: number) => void;
   compatibilityDate?: string;
@@ -310,7 +311,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
 
                   void server.onBundleUpdate({
                     log: new Log(5, { prefix: "pk" }),
-                    // verbose: true,
+                    verbose: options.verbose,
                     inspectorPort: 9229,
 
                     compatibilityDate: config.compatibilityDate || "2023-04-11",
@@ -441,7 +442,14 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       console.error(error);
       process.exit(1);
     });
-  }, [config, server, options.config, options.persist, options.minify]);
+  }, [
+    config,
+    server,
+    options.config,
+    options.persist,
+    options.minify,
+    options.verbose,
+  ]);
 
   useEffect(() => {
     server.addEventListener("reloaded", async (event) => {
