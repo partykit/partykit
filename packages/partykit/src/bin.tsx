@@ -100,6 +100,7 @@ program
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
   .option("--minify", "Minify the script")
+  .option("--verbose", "Verbose debugging output")
   .action(async (scriptPath, options) => {
     await printBanner();
     render(
@@ -113,6 +114,7 @@ program
         compatibilityDate={options.compatibilityDate}
         compatibilityFlags={options.compatibilityFlags}
         minify={options.minify}
+        verbose={options.verbose}
       />
     );
   });
