@@ -18,7 +18,7 @@
     "coverage": "vitest run --coverage"
   },
   "keywords": [],
-  "author": "Sunil Pai <sunil@coolcompuerclub.com>",
+  "author": "PartyKit, Inc. <team@partykit.io>",
   "license": "ISC",
   "dependencies": {
     "@changesets/changelog-github": "^0.4.8",
