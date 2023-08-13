@@ -1,6 +1,10 @@
 import * as esbuild from "esbuild";
 import * as fs from "fs";
 
+import { zodToJsonSchema } from "zod-to-json-schema";
+
+import * as ConfigSchema from "../src/config-schema";
+
 process.chdir(`${__dirname}/../`);
 
 const minify = process.argv.includes("--minify");
@@ -48,3 +52,9 @@ esbuild.buildSync({
   minify,
   // platform: "node", // ?neutral?
 });
+
+// generate json schema for the config
+
+const jsonSchema = zodToJsonSchema(ConfigSchema.schema);
+// write to file
+fs.writeFileSync("schema.json", JSON.stringify(jsonSchema, null, 2) + "\n");

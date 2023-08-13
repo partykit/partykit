@@ -1,0 +1,74 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "account": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "main": {
+      "type": "string"
+    },
+    "port": {
+      "type": "number"
+    },
+    "assets": {
+      "type": "string"
+    },
+    "persist": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "vars": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "define": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "parties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "build": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "watch": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibilityDate": {
+      "type": "string"
+    },
+    "compatibilityFlags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "minify": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

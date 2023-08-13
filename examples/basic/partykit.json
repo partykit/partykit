@@ -1,4 +1,5 @@
 {
+  "$schema": "../../packages/partykit/schema.json",
   "main": "src/server.ts",
   "vars": {
     "$a": 1,

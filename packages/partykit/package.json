@@ -48,13 +48,15 @@
     "@types/update-notifier": "^6.0.4",
     "@types/ws": "^8.5.5",
     "devtools-protocol": "^0.0.1173815",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "zod-to-json-schema": "^3.21.4"
   },
   "files": [
     "dist",
     "*.d.ts",
     "*.d.ts.map",
-    "facade/generated.js"
+    "facade/generated.js",
+    "schema.json"
   ],
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
