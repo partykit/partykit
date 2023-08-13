@@ -242,7 +242,7 @@ function createDurable(Worker: PartyKitServer) {
         const context = { request };
 
         // Accept the websocket connection
-        if ("onMessage" in Worker) {
+        if ("onMessage" in Worker || !(`onConnect` in Worker)) {
           this.controller.acceptWebSocket(serverWebSocket);
           connection.serializeAttachment({
             id: connectionId,
@@ -302,8 +302,8 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      const connection = rehydrateHibernatedConnection(ws);
       if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
+        const connection = rehydrateHibernatedConnection(ws);
         // @ts-expect-error - it may be a symbol before initialised
         if (this.room.id === UNDEFINED) {
           // This means the room "woke up" after hibernation
