@@ -12,6 +12,12 @@ import { version as packageVersion } from "../package.json";
 import { ConfigurationError, logger } from "./logger";
 import countdown from "./countdown";
 
+import * as ConfigSchema from "./config-schema";
+
+export const configSchema = ConfigSchema.schema;
+
+export type Config = ConfigSchema.Config;
+
 const userConfigSchema = z.object({
   login: z.string(),
   access_token: z.string(),
@@ -199,33 +205,6 @@ export async function logout() {
 function replacePathSlashes(str: string) {
   return str.replace(/\\/g, "/");
 }
-
-const configSchema = z
-  .object({
-    account: z.string().optional(),
-    name: z.string().optional(),
-    main: z.string().optional(),
-    port: z.number().optional(),
-    assets: z.string().optional(),
-    persist: z.union([z.boolean(), z.string()]).optional(),
-    vars: z.record(z.unknown()).optional(),
-    define: z.record(z.string()).optional(),
-    parties: z.record(z.string()).optional(),
-    build: z
-      .object({
-        command: z.string().optional(),
-        cwd: z.string().optional(),
-        watch: z.string().optional(),
-      })
-      .strict()
-      .optional(),
-    compatibilityDate: z.string().optional(),
-    compatibilityFlags: z.array(z.string()).optional(),
-    minify: z.boolean().optional(),
-  })
-  .strict();
-
-export type Config = z.infer<typeof configSchema>;
 
 export type ConfigOverrides = Config; // Partial? what of .env?
 
