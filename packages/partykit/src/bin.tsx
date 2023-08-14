@@ -84,7 +84,7 @@ program
   .description("Run a script in development mode")
   .argument("[script]", "Path to the script to run")
   .option("-p, --port <number>", "Port to run the server on")
-  .option("--assets <path>", "Path to assets directory")
+  .option("--serve <path>", "Serve this directory of static assets")
   .option("-c, --config <path>", "Path to config file")
   .addOption(
     new Option("--persist [path]", "Persist local state").default(true)
@@ -115,7 +115,7 @@ program
         compatibilityFlags={options.compatibilityFlags}
         minify={options.minify}
         verbose={options.verbose}
-        assets={options.assets}
+        serve={options.serve}
       />
     );
   });
@@ -125,7 +125,7 @@ program
   .alias("publish")
   .description("Deploy a script to the internet")
   .argument("[script]", "Path to the script to deploy")
-  .option("--assets <path>", "Path to assets directory")
+  .option("--serve <path>", "Serve this directory of static assets")
   .option("-c, --config <path>", "Path to config file")
   .option(
     "-v, --var [vars...]",
@@ -151,7 +151,7 @@ program
       define: getArrayKVOption(options.define),
       preview: options.preview,
       withVars: options.withVars,
-      assets: options.assets,
+      serve: options.serve,
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
       minify: options.minify,

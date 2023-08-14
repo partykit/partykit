@@ -69,7 +69,7 @@ function getLocalPersistencePath(
   return persistTo
     ? // If path specified, always treat it as relative to cwd()
       path.resolve(process.cwd(), persistTo)
-    : // Otherwise, treat it as relative to wrangler.toml,
+    : // Otherwise, treat it as relative to partykit.json,
       // if one can be found, otherwise cwd()
       path.resolve(
         configPath ? path.dirname(configPath) : process.cwd(),
@@ -134,7 +134,7 @@ export async function devTest(props: DevProps) {
 export type DevProps = {
   main?: string;
   port?: number;
-  assets?: string;
+  serve?: string;
   config?: string;
   persist?: boolean | string;
   vars?: Record<string, string>;
@@ -206,10 +206,10 @@ function* findAllFiles(root: string) {
 }
 
 function useAssetServer(
-  options: Config["assets"],
+  options: Config["serve"],
   defines: Record<string, string> | undefined
 ) {
-  const theOptions: Config["assets"] =
+  const theOptions: Config["serve"] =
     typeof options === "string" ? { path: options } : options || {};
 
   const assetsServerPort = 3141; // TODO: just find a free port
@@ -256,7 +256,7 @@ function useAssetServer(
   ).filter((key) => theOptions[key] !== undefined);
   if (unsupportedKeys.length > 0) {
     throw new Error(
-      `Not implemented keys in assets: ${unsupportedKeys.join(", ")}`
+      `Not implemented keys in config.serve: ${unsupportedKeys.join(", ")}`
     );
   }
 
@@ -321,7 +321,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         main: options.main,
         vars: options.vars,
         define: options.define,
-        assets: options.assets,
+        serve: options.serve,
         port: options.port,
         persist: options.persist,
         compatibilityDate: options.compatibilityDate,
@@ -336,7 +336,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     undefined
   );
 
-  const { assetsMap } = useAssetServer(config.assets, config.define);
+  const { assetsMap } = useAssetServer(config.serve, config.define);
 
   if (!config.main) {
     throw new Error(
@@ -345,9 +345,9 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   }
 
   useEffect(() => {
-    if (config.assets) {
+    if (config.serve) {
       logger.warn(
-        "Serving assets in dev mode is experimental and may change any time"
+        "Serving static assets in dev mode is experimental and may change any time"
       );
     }
 

@@ -19,7 +19,7 @@
     "SOME_GLOBAL": "456666",
     "process.env.WHATUP": "\"what's up\""
   },
-  "assets": {
+  "serve": {
     "path": "public",
     "build": "src/client.ts"
   }

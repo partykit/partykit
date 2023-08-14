@@ -87,9 +87,9 @@ export async function waitForPortToBeAvailable(
 
 /**
  * `useInspector` is a hook for debugging Workers applications
- *  when using `wrangler dev`.
+ *  when using `partykit dev`.
  *
- * When we start a session with `wrangler dev`, the Workers platform
+ * When we start a session with `partykit dev`, the Workers platform
  * also exposes a debugging websocket that implements the DevTools
  * Protocol. While we could just start up DevTools and connect to this
  * URL, that URL changes every time we make a change to the
@@ -109,7 +109,7 @@ export async function waitForPortToBeAvailable(
  * - handle more methods from console
  */
 
-// Information about Wrangler's bundling process that needs passsed through
+// Information about partykit's bundling process that needs passsed through
 // for DevTools sourcemap transformation
 export interface SourceMapMetadata {
   tmpDir: string;
@@ -167,7 +167,7 @@ export default function useInspector(props: InspectorProps) {
             res.setHeader("Content-Type", "application/json");
             res.end(
               JSON.stringify({
-                Browser: `wrangler/v${version}`,
+                Browser: `partykit/v${version}`,
                 // TODO: (someday): The DevTools protocol should match that of Edge Worker.
                 // This could be exposed by the preview API.
                 "Protocol-Version": "1.3",
@@ -231,7 +231,7 @@ export default function useInspector(props: InspectorProps) {
       );
       ws.close(1013, "Too many clients; only one can be connected at a time");
     } else {
-      // Since Wrangler proxies the inspector, reloading Chrome DevTools won't trigger debugger initialisation events (because it's connecting to an extant session).
+      // Since partykit proxies the inspector, reloading Chrome DevTools won't trigger debugger initialisation events (because it's connecting to an extant session).
       // This sends a `Debugger.disable` message to the remote when a new WebSocket connection is initialised,
       // with the assumption that the new connection will shortly send a `Debugger.enable` event and trigger re-initialisation.
       // The key initialisation messages that are needed are the `Debugger.scriptParsed events`.
@@ -581,12 +581,12 @@ export default function useInspector(props: InspectorProps) {
 
           // See https://docs.google.com/document/d/1U1RGAehQwRypUTovF1KRlpiOFze0b-_2gc6fAH0KY0k/edit#heading=h.mt2g20loc2ct
           // The above link documents the x_google_ignoreList property, which is intended to mark code that shouldn't be visible in DevTools
-          // Here we use it to indicate specifically Wrangler-injected code (facades & middleware)
+          // Here we use it to indicate specifically partykit-injected code (facades & middleware)
           sourceMap.x_google_ignoreList = sourceMap.sources
-            // Filter anything in the generated tmpDir, and anything from Wrangler's templates
+            // Filter anything in the generated tmpDir, and anything from partykit's templates
             // This should cover facades and middleware, but intentionally doesn't include all non-user code e.g. node_modules
             .map((s: string, idx: number) =>
-              s.includes(tmpDir) || s.includes("wrangler/templates")
+              s.includes(tmpDir) || s.includes("partykit/templates")
                 ? idx
                 : null
             )
@@ -596,7 +596,7 @@ export default function useInspector(props: InspectorProps) {
 
           sourceMap.sources = sourceMap.sources.map(
             (s: string) =>
-              // These are never loaded by Wrangler or DevTools. However, the presence of a scheme is required for DevTools to show the path as folders in the Sources view
+              // These are never loaded by partykit or DevTools. However, the presence of a scheme is required for DevTools to show the path as folders in the Sources view
               // The scheme is intentially not the same as for the sourceMappingURL
               // Without this difference in scheme, DevTools will not strip prefix `../` path elements from top level folders (../node_modules -> node_modules, for instance)
               `worker://${props.name}/${path.relative(entryDirectory, s)}`

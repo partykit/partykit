@@ -79,7 +79,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
-      assets: undefined,
+      serve: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
       minify: undefined,
@@ -132,7 +132,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
-      assets: undefined,
+      serve: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
       minify: undefined,
@@ -185,7 +185,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: true,
-      assets: undefined,
+      serve: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
       minify: undefined,
@@ -210,7 +210,7 @@ describe("deploy", () => {
         define: undefined,
         preview: undefined,
         withVars: undefined,
-        assets: undefined,
+        serve: undefined,
         compatibilityDate: undefined,
         compatibilityFlags: undefined,
         minify: undefined,
@@ -218,7 +218,7 @@ describe("deploy", () => {
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });
 
-  it('should warn if using "assets" in the config', async () => {
+  it('should warn if using "serve" in the config', async () => {
     let checkedResponse = false;
     mockFetchResult<null>(
       "POST",
@@ -283,7 +283,7 @@ describe("deploy", () => {
       "partykit.json",
       JSON.stringify({
         name: "test-script",
-        assets: "./public",
+        serve: "./public",
       })
     );
 
@@ -297,7 +297,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
-      assets: undefined,
+      serve: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
       minify: undefined,
@@ -311,7 +311,7 @@ describe("deploy", () => {
         "err": "",
         "info": "",
         "out": "Deployed ./../packages/partykit/src/tests/fixture.js to test-script.test-user.partykit.dev",
-        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDeploying assets is experimental and may change any time[0m
+        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDeploying static assets is experimental and may change any time[0m
 
       ",
       }

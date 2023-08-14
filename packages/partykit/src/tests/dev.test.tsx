@@ -103,7 +103,7 @@ describe("dev", () => {
   });
 
   it("should serve static assets in dev", async () => {
-    await runDev({ main: onConnectFixture, assets: publicFixture });
+    await runDev({ main: onConnectFixture, serve: publicFixture });
     const res = await fetch("http://127.0.0.1:1999");
     expect(res.status).toBe(200);
     expect(await res.text()).toMatchInlineSnapshot(`

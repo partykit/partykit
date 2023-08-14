@@ -16,7 +16,7 @@
     "port": {
       "type": "number"
     },
-    "assets": {
+    "serve": {
       "anyOf": [
         {
           "type": "string"

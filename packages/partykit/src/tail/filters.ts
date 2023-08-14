@@ -101,7 +101,7 @@ type HeaderFilter = {
 /**
  * Filters on the IP address the request came from that triggered
  * the worker. A value of "self" will be replaced with the IP
- * address that is running `wrangler tail`
+ * address that is running `partykit tail`
  */
 type ClientIPFilter = {
   client_ip: string[];
@@ -109,7 +109,7 @@ type ClientIPFilter = {
 
 /**
  * Filters logs by a query string. This means only logs that
- * contain the given string will be sent to wrangler, and any
+ * contain the given string will be sent to partykit, and any
  * that don't will be discarded by the tail worker.
  */
 type QueryFilter = {
@@ -125,7 +125,7 @@ export type TailFilterMessage = {
 };
 
 /**
- * Translate the flags passed in via a CLI invokation of wrangler
+ * Translate the flags passed in via a CLI invokation of partykit
  * into a message that we can send to the tail worker.
  *
  * @param cliFilters An object containing all the filters passed in from the CLI
@@ -255,7 +255,7 @@ function parseHeader(header: string): HeaderFilter {
  * A list of IPs can be passed in to filter for messages that come from
  * a worker triggered by a request originating from one of those IPs.
  * You can also pass in the string "self" to filter for the IP of the
- * machine running `wrangler tail`.
+ * machine running `partykit tail`.
  *
  * @param client_ip an array of IP addresses to filter
  * @returns a ClientIPFilter for use with the API
