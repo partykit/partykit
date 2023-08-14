@@ -33,7 +33,6 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
 
     await clerk.load({ standardBrowser: false });
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return clerk;
   };
 };
