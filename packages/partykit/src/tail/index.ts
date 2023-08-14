@@ -2,7 +2,7 @@ import type { Outcome } from "./filters";
 
 /**
  * Everything captured by the trace worker and sent to us via
- * `wrangler tail` is structured JSON that deserializes to this type.
+ * `partykit tail` is structured JSON that deserializes to this type.
  */
 export type TailEventMessage = {
   /**

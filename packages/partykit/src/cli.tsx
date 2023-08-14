@@ -75,7 +75,7 @@ export async function deploy(options: {
   main: string | undefined;
   name: string;
   config: string | undefined;
-  assets: string | undefined;
+  serve: string | undefined;
   vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
@@ -87,7 +87,7 @@ export async function deploy(options: {
   const config = getConfig(options.config, {
     main: options.main,
     name: options.name,
-    assets: options.assets,
+    serve: options.serve,
     vars: options.vars,
     define: options.define,
     compatibilityDate: options.compatibilityDate,
@@ -117,8 +117,10 @@ export async function deploy(options: {
     });
   }
 
-  if (config.assets) {
-    logger.warn("Deploying assets is experimental and may change any time");
+  if (config.serve) {
+    logger.warn(
+      "Deploying static assets is experimental and may change any time"
+    );
   }
 
   const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
@@ -130,11 +132,11 @@ export async function deploy(options: {
   const user = await getUser();
 
   const assetsConfig =
-    config.assets === undefined
+    config.serve === undefined
       ? {}
-      : typeof config.assets === "string"
-      ? { path: config.assets }
-      : config.assets;
+      : typeof config.serve === "string"
+      ? { path: config.serve }
+      : config.serve;
 
   const newAssetsMap: StaticAssetsManifestType = {
     devServer: "", // this is a no-op when deploying
@@ -176,7 +178,7 @@ export async function deploy(options: {
   ).filter((key) => assetsConfig[key] !== undefined);
   if (unsupportedKeys.length > 0) {
     throw new Error(
-      `Not implemented keys in assets: ${unsupportedKeys.join(", ")}`
+      `Not implemented keys in config.serve: ${unsupportedKeys.join(", ")}`
     );
   }
 
@@ -231,7 +233,11 @@ export async function deploy(options: {
     }
 
     if (filesToUpload.length > 0) {
-      logger.log(`Uploading ${filesToUpload.length} assets...`);
+      logger.log(
+        `Uploading ${filesToUpload.length} file${
+          filesToUpload.length > 1 ? "s" : ""
+        }...`
+      );
 
       for (const file of filesToUpload) {
         await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
@@ -246,8 +252,6 @@ export async function deploy(options: {
         });
         logger.log(`Uploaded ${file.file}`);
       }
-
-      logger.log(`Deployed ${filesToUpload.length} assets`);
     }
 
     await fetchResult(`/parties/${user.login}/${config.name}/assets`, {

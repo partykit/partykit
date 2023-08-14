@@ -2,7 +2,7 @@
   "$schema": "https://unpkg.com/partykit@beta/schema.json",
   "name": "monaco-partykit",
   "main": "src/server.ts",
-  "assets": {
+  "serve": {
     "path": "public",
     "build": {
       "entry": [

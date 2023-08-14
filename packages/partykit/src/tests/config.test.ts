@@ -617,21 +617,21 @@ describe("config", () => {
     });
   });
 
-  describe("assets", () => {
-    it("should not error on a string assets", () => {
+  describe("serve", () => {
+    it("should not error on a string `serve` config", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          assets: "public",
+          serve: "public",
         })
       );
       const config = getConfig(undefined, undefined);
       expect(config).toMatchInlineSnapshot(`
         {
-          "assets": "public",
           "define": {},
           "main": "./script.js",
+          "serve": "public",
           "vars": {},
         }
       `);
