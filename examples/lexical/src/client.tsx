@@ -9,11 +9,6 @@ import YPartyKitProvider from "y-partykit/provider";
 
 import { createRoot } from "react-dom/client";
 
-declare const PARTYKIT_HOST: string | undefined;
-
-const partykitHost =
-  typeof PARTYKIT_HOST === "undefined" ? "localhost:1999" : PARTYKIT_HOST;
-
 function Editor() {
   const initialConfig = {
     editorState: null,
@@ -40,7 +35,7 @@ function Editor() {
           yjsDocMap.set(id, doc);
 
           const provider = new YPartyKitProvider(
-            partykitHost || "localhost:1999",
+            process.env.PARTYKIT_HOST as string,
             id,
             doc
           );
