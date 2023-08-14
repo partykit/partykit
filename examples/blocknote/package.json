@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "partykit dev",
-    "deploy": "partykit deploy --define PARTYKIT_HOST=\\\"blocknote-demo.threepointone.partykit.dev\\\""
+    "deploy": "partykit deploy"
   },
   "keywords": [],
   "author": "",

@@ -167,6 +167,7 @@ export async function deploy(options: {
     format: assetsBuild?.format ?? "esm",
     sourcemap: assetsBuild?.sourcemap ?? true,
     define: {
+      "process.env.PARTYKIT_HOST": `"${config.name}.${user.login}.partykit.dev"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -286,6 +287,7 @@ export async function deploy(options: {
       ...esbuildOptions,
       minify: options.minify,
       define: {
+        "process.env.PARTYKIT_HOST": `"${config.name}.${user.login}.partykit.dev"`,
         ...esbuildOptions.define,
         ...config.define,
       },
