@@ -9,12 +9,12 @@ assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
 
 const API_BASE = process.env.PARTYKIT_API_BASE || PARTYKIT_API_BASE;
 
-export async function fetchResultAsUser(
+export async function fetchResultAsUser<T>(
   user: UserConfig,
   api: string,
   options: RequestInit = {}
 ) {
-  return fetchResult(api, {
+  return fetchResult<T>(api, {
     ...options,
     headers: {
       Authorization: `Bearer ${user.access_token}`,

@@ -754,7 +754,7 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResultAsUser(
+    const res = await fetchResultAsUser<string[]>(
       user,
       `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`
     );
