@@ -1,10 +1,6 @@
 // This is the facade for the worker that will be used in partykit.
 // It will be compiled and imported by the CLI.
 
-// @ts-expect-error We'll be replacing __WORKER__ with the path to the input worker
-import Worker from "__WORKER__";
-declare const Worker: PartyKitServer;
-
 import type {
   PartyKitServer,
   PartyKitRoom,
@@ -16,6 +12,12 @@ import type {
   DurableObjectState,
   ExecutionContext,
 } from "@cloudflare/workers-types";
+import fetchStaticAsset from "./fetch-static-asset";
+
+// @ts-expect-error We'll be replacing __WORKER__
+// with the path to the input worker
+import Worker from "__WORKER__";
+declare const Worker: PartyKitServer;
 
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
@@ -486,24 +488,29 @@ export default {
 
           return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
         }
-      } else if ("unstable_onFetch" in Worker) {
-        if (typeof Worker.unstable_onFetch === "function") {
-          return await Worker.unstable_onFetch(
-            request,
-            {
-              env: PARTYKIT_VARS,
-              parties,
-            },
-            ctx
-          );
-        } else {
-          throw new Error(".unstable_onFetch must be a function");
+      } else {
+        const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
+        if (staticAssetsResponse) {
+          return staticAssetsResponse;
+        } else if ("unstable_onFetch" in Worker) {
+          if (typeof Worker.unstable_onFetch === "function") {
+            return await Worker.unstable_onFetch(
+              request,
+              {
+                env: PARTYKIT_VARS,
+                parties,
+              },
+              ctx
+            );
+          } else {
+            throw new Error(".unstable_onFetch must be a function");
+          }
         }
-      }
 
-      return new Response("Not found", {
-        status: 404,
-      });
+        return new Response("Not found", {
+          status: 404,
+        });
+      }
     } catch (e) {
       return new Response(e instanceof Error ? e.message : `${e}`, {
         status: 500,

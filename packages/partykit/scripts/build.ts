@@ -19,6 +19,8 @@ esbuild.buildSync({
   format: "esm",
   outfile: "facade/generated.js",
   platform: "neutral",
+  bundle: true,
+  external: ["__WORKER__", "__STATIC_ASSETS_MANIFEST__"],
 });
 
 // generate bin/index.js

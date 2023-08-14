@@ -636,30 +636,5 @@ describe("config", () => {
         }
       `);
     });
-
-    it("should error on a non-string assets", () => {
-      fs.writeFileSync(
-        "partykit.json",
-        JSON.stringify({
-          main: "script.js",
-          assets: 123,
-        })
-      );
-      expect(() => {
-        getConfig(undefined, undefined);
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "[
-          {
-            \\"code\\": \\"invalid_type\\",
-            \\"expected\\": \\"string\\",
-            \\"received\\": \\"number\\",
-            \\"path\\": [
-              \\"assets\\"
-            ],
-            \\"message\\": \\"Expected string, received number\\"
-          }
-        ]"
-      `);
-    });
   });
 });

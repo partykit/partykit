@@ -93,7 +93,7 @@ describe("dev", () => {
 
   it("cannot connect to non-room path", async () => {
     await runDev({ main: onConnectFixture });
-    const ws = new WebSocket("ws://localhost:1999/notaroom?_pk=123");
+    const ws = new WebSocket("ws://127.0.0.1:1999/notaroom?_pk=123");
     try {
       await new Promise((resolve) => ws.on("error", resolve));
       expect(ws.readyState).toBe(WebSocket.CLOSED);
@@ -102,9 +102,9 @@ describe("dev", () => {
     }
   });
 
-  it.skip("should serve static assets in dev", async () => {
+  it("should serve static assets in dev", async () => {
     await runDev({ main: onConnectFixture, assets: publicFixture });
-    const res = await fetch("http://localhost:1999");
+    const res = await fetch("http://127.0.0.1:1999");
     expect(res.status).toBe(200);
     expect(await res.text()).toMatchInlineSnapshot(`
       "<!DOCTYPE html>

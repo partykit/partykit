@@ -26,9 +26,39 @@ import { render } from "ink";
 import React from "react";
 import chalk from "chalk";
 import { ConfigurationError, logger } from "./logger";
+import type { StaticAssetsManifestType } from "./server";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// duplicate dev.tsx
+function* findAllFiles(
+  root: string,
+  { ignore: _ignore }: { ignore?: string[] } = {}
+) {
+  const dirs = [root];
+  while (dirs.length > 0) {
+    const dir = dirs.pop()!;
+    const files = fs.readdirSync(dir);
+    // TODO: handle ignore arg
+    for (const file of files) {
+      if (file.startsWith(".")) {
+        continue;
+      }
+
+      const filePath = path.join(dir, file);
+      const stat = fs.statSync(filePath);
+      if (stat.isDirectory()) {
+        if (file === "node_modules") {
+          continue;
+        }
+        dirs.push(filePath);
+      } else {
+        yield path.relative(root, filePath);
+      }
+    }
+  }
 }
 
 const MissingProjectNameError = `Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>`;
@@ -68,8 +98,7 @@ export async function deploy(options: {
     throw new ConfigurationError(MissingEntryPointError);
   }
 
-  const configName = config.name;
-  if (!configName) {
+  if (!config.name) {
     throw new ConfigurationError(MissingProjectNameError);
   }
 
@@ -89,7 +118,7 @@ export async function deploy(options: {
   }
 
   if (config.assets) {
-    logger.warn("Uploading assets are not yet supported in deploy mode");
+    logger.warn("Deploying assets is experimental and may change any time");
   }
 
   const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
@@ -99,6 +128,107 @@ export async function deploy(options: {
 
   // get user details
   const user = await getUser();
+
+  const assetsConfig =
+    config.assets === undefined
+      ? {}
+      : typeof config.assets === "string"
+      ? { path: config.assets }
+      : config.assets;
+
+  const newAssetsMap: StaticAssetsManifestType = {
+    devServer: "", // this is a no-op when deploying
+    browserTTL: assetsConfig.browserTTL,
+    edgeTTL: assetsConfig.edgeTTL,
+    serveSinglePageApp: assetsConfig.serveSinglePageApp,
+    assets: {},
+  };
+
+  const unsupportedKeys = (
+    ["include", "exclude", "serveSinglePageApp"] as const
+  ).filter((key) => assetsConfig[key] !== undefined);
+  if (unsupportedKeys.length > 0) {
+    throw new Error(
+      `Not implemented keys in assets: ${unsupportedKeys.join(", ")}`
+    );
+  }
+
+  const assetsPath = assetsConfig.path;
+
+  if (assetsPath) {
+    // get current assetsMap
+    const currentAssetsMap = await fetchResult<{
+      assets: Record<string, string>;
+    }>(`/parties/${user.login}/${config.name}/assets`, {
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const filesToUpload = [];
+
+    for (const file of findAllFiles(assetsPath)) {
+      const filePath = path.join(assetsPath, file);
+
+      // throw an error if it's bigger than 10mb
+
+      if (fs.statSync(filePath).size > 10 * 1024 * 1024) {
+        throw new Error(
+          `Asset ${file} is larger than 10mb, please reduce its size`
+        );
+      }
+
+      const fileHash = crypto
+        .createHash("sha1")
+        .update(fs.readFileSync(filePath))
+        .digest("hex");
+      const fileName = `${path.basename(
+        file,
+        path.extname(file)
+      )}-${fileHash}${path.extname(file)}`;
+
+      newAssetsMap.assets[file] = fileName;
+
+      // if the file is already uploaded, skip it
+      if (currentAssetsMap.assets[file] !== fileName) {
+        filesToUpload.push({
+          file,
+          filePath,
+          fileName,
+        });
+      }
+    }
+
+    if (filesToUpload.length > 0) {
+      logger.log(`Uploading ${filesToUpload.length} assets...`);
+
+      for (const file of filesToUpload) {
+        await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+          method: "PUT",
+          body: fs.createReadStream(file.filePath),
+          headers: {
+            Authorization: `Bearer ${user.access_token}`,
+            ContentType: "application/octet-stream",
+            "X-PartyKit-Asset-Name": file.fileName,
+          },
+          duplex: "half",
+        });
+        logger.log(`Uploaded ${file.file}`);
+      }
+
+      logger.log(`Deployed ${filesToUpload.length} assets`);
+    }
+
+    await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+      method: "POST",
+      body: JSON.stringify(newAssetsMap),
+      headers: {
+        Authorization: `Bearer ${user.access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  }
 
   const wasmModules: Record<string, Buffer> = {};
 
@@ -180,6 +310,10 @@ export async function deploy(options: {
   }
   if (config.parties) {
     form.set("parties", JSON.stringify([...Object.keys(config.parties)]));
+  }
+
+  if (assetsPath) {
+    form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));
   }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {

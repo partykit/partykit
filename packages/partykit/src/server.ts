@@ -131,3 +131,11 @@ type ConnectionHandler = RequestHandler & {
 };
 
 export type PartyKitServer = ConnectionHandler;
+
+export type StaticAssetsManifestType = {
+  devServer: string;
+  browserTTL: number | undefined;
+  edgeTTL: number | undefined;
+  serveSinglePageApp: boolean | undefined;
+  assets: Record<string, string>;
+};
