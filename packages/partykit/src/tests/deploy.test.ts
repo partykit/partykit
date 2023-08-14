@@ -248,6 +248,7 @@ describe("deploy", () => {
           {
             "Authorization": "Bearer test-token",
             "Content-Type": "application/json",
+            "X-PartyKit-User-Type": "github",
           }
         `);
         return {
@@ -271,6 +272,7 @@ describe("deploy", () => {
           {
             "Authorization": "Bearer test-token",
             "Content-Type": "application/json",
+            "X-PartyKit-User-Type": "github",
           }
         `);
         expect(options?.body).toMatchInlineSnapshot(
