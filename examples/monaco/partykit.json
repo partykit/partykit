@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/partykit@beta/schema.json",
+  "name": "monaco-partykit",
+  "main": "src/server.ts",
+  "assets": {
+    "path": "public",
+    "build": {
+      "entry": [
+        "src/client.tsx",
+        "monaco-editor/esm/vs/language/typescript/ts.worker",
+        "monaco-editor/esm/vs/editor/editor.worker.js",
+        "monaco-editor/esm/vs/language/json/json.worker",
+        "monaco-editor/esm/vs/language/css/css.worker",
+        "monaco-editor/esm/vs/language/html/html.worker"
+      ],
+      "loader": {
+        ".ttf": "file"
+      },
+      "splitting": false,
+      "format": "iife"
+    }
+  }
+}

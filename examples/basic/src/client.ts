@@ -2,7 +2,7 @@ import PartySocket from "partysocket";
 
 const partySocket = new PartySocket({
   host: "localhost:1999",
-  // host: "testy.threepointone.partykit.dev",
+  // host: "basic.threepointone.partykit.dev",
   room: "some-room",
 });
 

@@ -27,6 +27,86 @@
             "path": {
               "type": "string"
             },
+            "build": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      ]
+                    },
+                    "bundle": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "splitting": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "outdir": {
+                      "type": "string"
+                    },
+                    "minify": {
+                      "type": "boolean"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": [
+                        "esm",
+                        "cjs",
+                        "iife"
+                      ]
+                    },
+                    "sourcemap": {
+                      "type": "boolean"
+                    },
+                    "define": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "loader": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "enum": [
+                          "base64",
+                          "binary",
+                          "copy",
+                          "css",
+                          "dataurl",
+                          "default",
+                          "empty",
+                          "file",
+                          "js",
+                          "json",
+                          "jsx",
+                          "local-css",
+                          "text",
+                          "ts",
+                          "tsx"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
             "include": {
               "type": "array",
               "items": {

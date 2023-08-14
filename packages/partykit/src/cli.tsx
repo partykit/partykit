@@ -144,6 +144,33 @@ export async function deploy(options: {
     assets: {},
   };
 
+  const assetsBuild =
+    typeof assetsConfig.build === "string"
+      ? { entry: assetsConfig.build }
+      : assetsConfig.build;
+
+  const assetsPath = assetsConfig.path;
+
+  const esbuildAssetOptions: BuildOptions = {
+    entryPoints:
+      typeof assetsBuild?.entry === "string"
+        ? [assetsBuild.entry]
+        : assetsBuild?.entry,
+    outdir:
+      assetsBuild?.outdir ||
+      (assetsPath ? path.join(assetsPath, "dist") : undefined),
+    bundle: assetsBuild?.bundle ?? true,
+    splitting: assetsBuild?.splitting ?? true,
+    minify: assetsBuild?.minify ?? true,
+    format: assetsBuild?.format ?? "esm",
+    sourcemap: assetsBuild?.sourcemap ?? true,
+    define: {
+      ...config.define,
+      ...assetsBuild?.define,
+    },
+    loader: assetsBuild?.loader,
+  };
+
   const unsupportedKeys = (
     ["include", "exclude", "serveSinglePageApp"] as const
   ).filter((key) => assetsConfig[key] !== undefined);
@@ -153,9 +180,12 @@ export async function deploy(options: {
     );
   }
 
-  const assetsPath = assetsConfig.path;
+  const esbuild = await import("esbuild");
 
   if (assetsPath) {
+    // do a build
+    esbuild.buildSync(esbuildAssetOptions);
+
     // get current assetsMap
     const currentAssetsMap = await fetchResult<{
       assets: Record<string, string>;
@@ -173,9 +203,9 @@ export async function deploy(options: {
 
       // throw an error if it's bigger than 10mb
 
-      if (fs.statSync(filePath).size > 10 * 1024 * 1024) {
+      if (fs.statSync(filePath).size > 20 * 1024 * 1024) {
         throw new Error(
-          `Asset ${file} is larger than 10mb, please reduce its size`
+          `Asset ${file} is larger than 20mb, please reduce its size`
         );
       }
 
@@ -231,8 +261,6 @@ export async function deploy(options: {
   }
 
   const wasmModules: Record<string, Buffer> = {};
-
-  const esbuild = await import("esbuild");
 
   const code = (
     await esbuild.build({

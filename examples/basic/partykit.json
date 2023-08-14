@@ -1,5 +1,6 @@
 {
-  "$schema": "../../packages/partykit/schema.json",
+  "$schema": "https://unpkg.com/partykit@beta/schema.json",
+  "name": "basic",
   "main": "src/server.ts",
   "vars": {
     "$a": 1,
@@ -18,8 +19,8 @@
     "SOME_GLOBAL": "456666",
     "process.env.WHATUP": "\"what's up\""
   },
-  "assets": "public",
-  "build": {
-    "command": "esbuild src/client.ts --bundle --outdir=public/dist --format=esm"
+  "assets": {
+    "path": "public",
+    "build": "src/client.ts"
   }
 }
