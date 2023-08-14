@@ -157,16 +157,20 @@ export async function deploy(options: {
 
   if (assetsPath) {
     // get current assetsMap
-    const currentAssetsMap = await fetchResult<{
+    const currentAssetsMap = await fetchResultAsUser<{
       assets: Record<string, string>;
-    }>(`/parties/${user.login}/${config.name}/assets`, {
+    }>(user, `/parties/${user.login}/${config.name}/assets`, {
       headers: {
         Authorization: `Bearer ${user.access_token}`,
         "Content-Type": "application/json",
       },
     });
 
-    const filesToUpload = [];
+    const filesToUpload: {
+      file: string;
+      filePath: string;
+      fileName: string;
+    }[] = [];
 
     for (const file of findAllFiles(assetsPath)) {
       const filePath = path.join(assetsPath, file);
@@ -204,30 +208,36 @@ export async function deploy(options: {
       logger.log(`Uploading ${filesToUpload.length} assets...`);
 
       for (const file of filesToUpload) {
-        await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
-          method: "PUT",
-          body: fs.createReadStream(file.filePath),
-          headers: {
-            Authorization: `Bearer ${user.access_token}`,
-            ContentType: "application/octet-stream",
-            "X-PartyKit-Asset-Name": file.fileName,
-          },
-          duplex: "half",
-        });
+        await fetchResultAsUser(
+          user,
+          `/parties/${user.login}/${config.name}/assets`,
+          {
+            method: "PUT",
+            body: fs.createReadStream(file.filePath),
+            headers: {
+              ContentType: "application/octet-stream",
+              "X-PartyKit-Asset-Name": file.fileName,
+            },
+            duplex: "half",
+          }
+        );
         logger.log(`Uploaded ${file.file}`);
       }
 
       logger.log(`Deployed ${filesToUpload.length} assets`);
     }
 
-    await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
-      method: "POST",
-      body: JSON.stringify(newAssetsMap),
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    await fetchResultAsUser(
+      user,
+      `/parties/${user.login}/${config.name}/assets`,
+      {
+        method: "POST",
+        body: JSON.stringify(newAssetsMap),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 
   const wasmModules: Record<string, Buffer> = {};
