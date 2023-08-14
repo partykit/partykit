@@ -58,7 +58,7 @@ We have great defaults here too, but you can pass additional configs:
     "path": "path/to/assets",
     // ...
     "build": {
-      "entry": "path/to/entry.ts",
+      "entry": "path/to/entry.ts", // can also be an array of paths
       "bundle": true, // bundle all dependencies, default true
       "splitting": true, // split bundles, default true
       "outdir": "path/to/outdir", // defaults to serve.path + "dist"
