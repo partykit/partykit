@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"esbuild src/client.ts --bundle --outdir=public/dist --format=esm --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others"
+    "start": "partykit dev"
   },
   "keywords": [],
   "author": "",

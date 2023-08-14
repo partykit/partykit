@@ -8,19 +8,17 @@ import fs from "fs";
 import path from "path";
 import { execaCommand } from "execa";
 import esbuild from "esbuild";
-import type { BuildOptions } from "esbuild";
+import type { BuildContext, BuildOptions } from "esbuild";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import crypto from "crypto";
 import type { Abortable } from "node:events";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import React from "react";
 import { render } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
 import { logger } from "./logger";
-import polka from "polka";
-import sirv from "sirv";
 import type { StaticAssetsManifestType } from "./server";
 
 const esbuildOptions: BuildOptions = {
@@ -207,7 +205,10 @@ function* findAllFiles(root: string) {
   }
 }
 
-function useAssetServer(options: Config["assets"]) {
+function useAssetServer(
+  options: Config["assets"],
+  defines: Record<string, string> | undefined
+) {
   const theOptions: Config["assets"] =
     typeof options === "string" ? { path: options } : options || {};
 
@@ -218,6 +219,37 @@ function useAssetServer(options: Config["assets"]) {
     : typeof options === "string"
     ? options
     : options.path;
+
+  const assetsBuild = useMemo(
+    () =>
+      typeof theOptions.build === "string"
+        ? { entry: theOptions.build }
+        : theOptions.build,
+    [theOptions.build]
+  );
+
+  const esbuildAssetOptions: esbuild.BuildOptions = useMemo(
+    () => ({
+      entryPoints:
+        typeof assetsBuild?.entry === "string"
+          ? [assetsBuild.entry]
+          : assetsBuild?.entry,
+      outdir:
+        assetsBuild?.outdir ||
+        (assetsPath ? path.join(assetsPath, "dist") : undefined),
+      bundle: assetsBuild?.bundle ?? true,
+      splitting: assetsBuild?.splitting ?? true,
+      minify: assetsBuild?.minify,
+      format: assetsBuild?.format ?? "esm",
+      sourcemap: assetsBuild?.sourcemap ?? true,
+      define: {
+        ...defines,
+        ...assetsBuild?.define,
+      },
+      loader: assetsBuild?.loader,
+    }),
+    [assetsBuild, assetsPath, defines]
+  );
 
   const unsupportedKeys = (
     ["include", "exclude", "serveSinglePageApp"] as const
@@ -238,6 +270,11 @@ function useAssetServer(options: Config["assets"]) {
     };
     if (!assetsPath) return assetsMap;
 
+    if (assetsBuild?.entry) {
+      // do an initial build
+      esbuild.buildSync(esbuildAssetOptions);
+    }
+
     for (const file of findAllFiles(assetsPath)) {
       // in dev it's just the same file
       assetsMap.assets[file] = file;
@@ -247,30 +284,28 @@ function useAssetServer(options: Config["assets"]) {
 
   useEffect(() => {
     if (!assetsPath) return;
-    const assets = sirv(assetsPath, {
-      dev: true,
-      etag: true,
-    });
+    let ctx: BuildContext | undefined;
 
-    const app = polka();
+    async function startServer() {
+      // run esbuild's dev server
+      ctx = await esbuild.context(esbuildAssetOptions);
 
-    app.use(assets).listen(assetsServerPort, (err: Error) => {
-      if (err) {
-        console.error(
-          `Failed to start asset server at port ${assetsServerPort}`,
-          err
-        );
-      }
+      await ctx.serve({
+        port: assetsServerPort,
+        servedir: assetsPath,
+      });
+    }
+
+    startServer().catch((err) => {
+      console.error("Failed to start the assets build server", err);
     });
 
     return () => {
-      try {
-        app.server!.close();
-      } catch (error) {
-        console.error(error);
-      }
+      ctx?.dispose().catch((err) => {
+        console.error("Failed to dispose the assets build server", err);
+      });
     };
-  }, [assetsPath, assetsServerPort]);
+  }, [assetsBuild, assetsPath, assetsServerPort, esbuildAssetOptions]);
 
   return {
     assetsMap,
@@ -301,7 +336,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     undefined
   );
 
-  const { assetsMap } = useAssetServer(config.assets);
+  const { assetsMap } = useAssetServer(config.assets, config.define);
 
   if (!config.main) {
     throw new Error(

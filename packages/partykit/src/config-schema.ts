@@ -1,8 +1,26 @@
 // we keep this file separate so that we can import it
 // cleanly in the build script to generate a json schema
-// without all theo ther the baggage
+// without all the other baggage
 
 import { z } from "zod";
+
+const loaders = [
+  "base64",
+  "binary",
+  "copy",
+  "css",
+  "dataurl",
+  "default",
+  "empty",
+  "file",
+  "js",
+  "json",
+  "jsx",
+  "local-css",
+  "text",
+  "ts",
+  "tsx",
+] as const;
 
 export const schema = z
   .object({
@@ -16,6 +34,22 @@ export const schema = z
         z.string(),
         z.object({
           path: z.string().optional(),
+          build: z
+            .union([
+              z.string(),
+              z.object({
+                entry: z.union([z.string(), z.array(z.string())]).optional(),
+                bundle: z.boolean().default(true).optional(),
+                splitting: z.boolean().default(true).optional(),
+                outdir: z.string().optional(),
+                minify: z.boolean().optional(),
+                format: z.enum(["esm", "cjs", "iife"]).optional(),
+                sourcemap: z.boolean().optional(),
+                define: z.record(z.string()).optional(),
+                loader: z.record(z.enum(loaders)).optional(),
+              }),
+            ])
+            .optional(),
           include: z.array(z.string()).optional(),
           exclude: z.array(z.string()).optional(),
           browserTTL: z.number().optional(),

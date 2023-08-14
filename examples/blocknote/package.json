@@ -5,8 +5,8 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "concurrently \"esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --servedir=public\" \"npx partykit dev src/server.ts\" --kill-others",
-    "build:assets": "esbuild src/client.tsx --bundle --outdir=public/dist --format=esm --sourcemap --define:PARTYKIT_HOST=\\\"blocknote-demo.threepointone.partykit.dev\\\""
+    "start": "partykit dev",
+    "deploy": "partykit deploy --define PARTYKIT_HOST=\\\"blocknote-demo.threepointone.partykit.dev\\\""
   },
   "keywords": [],
   "author": "",

@@ -1,4 +1,8 @@
 {
   "name": "lexical-demo",
-  "main": "src/server.ts"
+  "main": "src/server.ts",
+  "assets": {
+    "path": "public",
+    "build": "src/client.tsx"
+  }
 }
