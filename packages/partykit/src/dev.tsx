@@ -243,6 +243,7 @@ function useAssetServer(
       format: assetsBuild?.format ?? "esm",
       sourcemap: assetsBuild?.sourcemap ?? true,
       define: {
+        "process.env.PARTYKIT_HOST": `"127.0.0.1:1999"`,
         ...defines,
         ...assetsBuild?.define,
       },
@@ -391,6 +392,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
         define: {
+          "process.env.PARTYKIT_HOST": `"127.0.0.1:1999"`,
           ...esbuildOptions.define,
           ...config.define,
         },

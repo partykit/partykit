@@ -6,14 +6,9 @@ import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { getRandomUser } from "./randomUser";
 
-declare const PARTYKIT_HOST: string | undefined;
-
-const partykitHost =
-  typeof PARTYKIT_HOST === "undefined" ? "localhost:1999" : PARTYKIT_HOST;
-
 const doc = new Y.Doc();
 const provider = new YPartyKitProvider(
-  partykitHost || "localhost:1999",
+  process.env.PARTYKIT_HOST as string,
   "my-document-id",
   doc
 );
