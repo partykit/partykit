@@ -2,7 +2,11 @@
 
 EXPERIMENTAL: This feature is still in development. It may change.
 
-tl;dr - you can now serve static assets (html, css, js, images, etc) from your project. Either pass it via CLI: `--serve path/to/assets` or add it to your `partykit.json`:
+tl;dr - you can now serve static assets (html, css, js, images, etc) from your project.
+
+(If you need superior hosting for websites, or features that we can't provide, I'd still recommend using a host like vercel/netlify/fly.io/et al.)
+
+Pass it via CLI: `--serve path/to/assets` or add it to your `partykit.json`:
 
 ```jsonc
 {
