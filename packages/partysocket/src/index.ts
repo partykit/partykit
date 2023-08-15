@@ -52,9 +52,20 @@ export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
-    const { host, room, party, protocol, query, protocols, ...socketOptions } =
-      partySocketOptions;
+    const {
+      host: rawHost,
+      room,
+      party,
+      protocol,
+      query,
+      protocols,
+      ...socketOptions
+    } = partySocketOptions;
     const _pk = partySocketOptions.id || generateUUID();
+
+    // strip the protocol from the beginning of `host` if any
+    const host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
+
     let url = `${
       protocol ||
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")

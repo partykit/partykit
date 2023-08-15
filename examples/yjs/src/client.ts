@@ -1,15 +1,12 @@
 import YProvider from "y-partykit/provider";
 import * as Y from "yjs";
 
+declare const PARTYKIT_HOST: string;
+
 const doc = new Y.Doc();
-const provider = new YProvider(
-  process.env.PARTYKIT_HOST as string,
-  "yjs-demo",
-  doc,
-  {
-    connect: false,
-  }
-);
+const provider = new YProvider(PARTYKIT_HOST, "yjs-demo", doc, {
+  connect: false,
+});
 const yMessage: Y.Text = doc.getText("message");
 const awareness = provider.awareness;
 

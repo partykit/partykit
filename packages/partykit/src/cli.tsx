@@ -49,7 +49,7 @@ export async function init(options: {
   // look for a package.json (that doesn't have workspaces defined)
   const packageJsonPath = findConfig("package.json");
   let shouldInitNewPackageJson = true;
-  let shouldRunNpmInstall = true;
+  let shouldRunNpmInstall = false;
   if (packageJsonPath) {
     shouldInitNewPackageJson = false;
     const packageJson = JSON.parse(
@@ -71,14 +71,18 @@ export async function init(options: {
         deploy: "partykit deploy",
       },
       dependencies: {
-        partykit: packageVersion,
         partysocket: packageVersion,
+      },
+      devDependencies: {
+        partykit: packageVersion,
       },
     };
     fs.writeFileSync(
       path.join(pathToProject, "package.json"),
       JSON.stringify(packageJson, null, 2)
     );
+
+    shouldRunNpmInstall = true;
   } else {
     // add dev and deploy scripts
     const packageJson = JSON.parse(
@@ -109,11 +113,15 @@ export async function init(options: {
 
     // add the partykit dependency
     packageJson.dependencies ||= {};
-    if (!packageJson.dependencies.partykit) {
-      packageJson.dependencies.partykit = packageVersion;
+    packageJson.devDependencies ||= {};
+    if (!packageJson.devDependencies.partykit) {
+      packageJson.devDependencies.partykit = packageVersion;
+      shouldRunNpmInstall = true;
+    }
+
+    if (!packageJson.dependencies.partysocket) {
       packageJson.dependencies.partysocket = packageVersion;
-    } else {
-      shouldRunNpmInstall = false;
+      shouldRunNpmInstall = true;
     }
 
     fs.writeFileSync(packageJsonPath!, JSON.stringify(packageJson, null, 2));
@@ -122,9 +130,9 @@ export async function init(options: {
   if (shouldRunNpmInstall) {
     // run npm install from packageJsonPath
     await execaCommand(
-      findConfig("yarn.lock")
+      findConfig("yarn.lock", { home: false })
         ? "yarn"
-        : findConfig("pnpm-lock.yaml")
+        : findConfig("pnpm-lock.yaml", { home: false })
         ? "pnpm install"
         : "npm install",
       {
@@ -298,7 +306,7 @@ export async function deploy(options: {
     format: assetsBuild?.format ?? "esm",
     sourcemap: assetsBuild?.sourcemap ?? true,
     define: {
-      "process.env.PARTYKIT_HOST": `"${config.name}.${user.login}.partykit.dev"`,
+      PARTYKIT_HOST: `"${config.name}.${user.login}.partykit.dev"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -418,7 +426,7 @@ export async function deploy(options: {
       ...esbuildOptions,
       minify: options.minify,
       define: {
-        "process.env.PARTYKIT_HOST": `"${config.name}.${user.login}.partykit.dev"`,
+        PARTYKIT_HOST: `"${config.name}.${user.login}.partykit.dev"`,
         ...esbuildOptions.define,
         ...config.define,
       },
@@ -515,7 +523,7 @@ export async function deploy(options: {
   );
 
   logger.log(
-    `Deployed ${config.main} to ${`${
+    `Deployed ${config.main} to https://${`${
       options.preview ? `${options.preview}.` : ""
     }${config.name}.${user.login.toLowerCase()}.partykit.dev`}`
   );

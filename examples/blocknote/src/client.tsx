@@ -6,12 +6,10 @@ import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import { getRandomUser } from "./randomUser";
 
+declare const PARTYKIT_HOST: string;
+
 const doc = new Y.Doc();
-const provider = new YPartyKitProvider(
-  process.env.PARTYKIT_HOST as string,
-  "my-document-id",
-  doc
-);
+const provider = new YPartyKitProvider(PARTYKIT_HOST, "my-document-id", doc);
 
 function Editor() {
   const editor = useBlockNote({

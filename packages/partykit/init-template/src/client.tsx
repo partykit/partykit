@@ -1,5 +1,7 @@
 import PartySocket from "partysocket";
 
+declare const PARTYKIT_HOST: string;
+
 // Let's append all the messages we get into this DOM element
 const output = document.getElementById("app") as HTMLDivElement;
 
@@ -12,7 +14,7 @@ function add(text: string) {
 // A PartySocket is like a WebSocket, except it's a bit more magical.
 // It handles reconnection logic, buffering messages while it's offline, and more.
 const conn = new PartySocket({
-  host: process.env.PARTYKIT_HOST as string,
+  host: PARTYKIT_HOST,
   room: "my-new-room",
 });
 

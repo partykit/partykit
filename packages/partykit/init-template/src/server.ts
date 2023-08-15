@@ -1,13 +1,23 @@
 import type {
   PartyKitConnection,
+  PartyKitContext,
   PartyKitRoom,
   PartyKitServer,
 } from "partykit/server";
 
 export default {
-  onConnect(conn: PartyKitConnection, room: PartyKitRoom) {
-    // let's log the connection id and room id
-    console.log(`connection ${conn.id} connected to room ${room.id}`);
+  onConnect(
+    conn: PartyKitConnection,
+    room: PartyKitRoom,
+    ctx: PartyKitContext
+  ) {
+    // A websocket just connected!
+    console.log(
+      `Connected:
+  id: ${conn.id}
+  room: ${room.id}
+  url: ${new URL(ctx.request.url).pathname}`
+    );
 
     // let's send a message to the connection
     conn.send("hello from server");
