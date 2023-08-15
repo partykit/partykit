@@ -216,6 +216,14 @@ export function getConfigPath() {
   );
 }
 
+function removeUndefinedKeys(obj: Record<string, unknown> | undefined) {
+  return obj === undefined
+    ? obj
+    : Object.fromEntries(
+        Object.entries(obj).filter(([, value]) => value !== undefined)
+      );
+}
+
 export function getConfig(
   configPath: string | undefined | null,
   overrides: ConfigOverrides = {},
@@ -274,16 +282,16 @@ export function getConfig(
 
     const config = configSchema.parse({
       // defaults?
-      ...packageJsonConfig,
-      ...overrides,
+      ...removeUndefinedKeys(packageJsonConfig),
+      ...removeUndefinedKeys(overrides),
       vars: {
-        ...packageJsonConfig.vars,
-        ...envVars,
-        ...overrides.vars,
+        ...removeUndefinedKeys(packageJsonConfig.vars),
+        ...removeUndefinedKeys(envVars),
+        ...removeUndefinedKeys(overrides.vars),
       },
       define: {
-        ...packageJsonConfig.define,
-        ...overrides.define,
+        ...removeUndefinedKeys(packageJsonConfig.define),
+        ...removeUndefinedKeys(overrides.define),
       },
     });
 
@@ -314,16 +322,16 @@ export function getConfig(
   configSchema.parse(parsedConfig);
 
   const config = configSchema.parse({
-    ...overrides,
-    ...parsedConfig,
+    ...removeUndefinedKeys(parsedConfig),
+    ...removeUndefinedKeys(overrides),
     vars: {
-      ...parsedConfig.vars,
-      ...envVars,
-      ...overrides.vars,
+      ...removeUndefinedKeys(parsedConfig.vars),
+      ...removeUndefinedKeys(envVars),
+      ...removeUndefinedKeys(overrides.vars),
     },
     define: {
-      ...parsedConfig.define,
-      ...overrides.define,
+      ...removeUndefinedKeys(parsedConfig.define),
+      ...removeUndefinedKeys(overrides.define),
     },
   });
 
