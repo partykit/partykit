@@ -1,5 +1,4 @@
 {
-  "$schema": "https://unpkg.com/partykit@beta/schema.json",
   "name": "basic",
   "main": "src/server.ts",
   "vars": {
