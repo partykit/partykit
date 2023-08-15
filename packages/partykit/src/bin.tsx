@@ -80,6 +80,19 @@ program
   });
 
 program
+  .command("init")
+  .description("Initialize a new project")
+  .argument("[name]", "Name of the project")
+  .option("-y, --yes", "Skip prompts")
+  .action(async (name, options) => {
+    await printBanner();
+    await cli.init({
+      name,
+      yes: options.yes,
+    });
+  });
+
+program
   .command("dev")
   .description("Run a script in development mode")
   .argument("[script]", "Path to the script to run")
