@@ -544,6 +544,9 @@ export default class YPartyKitProvider extends WebsocketProvider {
       party?: string;
     } = {}
   ) {
+    // strip the protocol from the beginning of `host` if any
+    host = host.replace(/^(http|https|ws|wss):\/\//, "");
+
     const serverUrl = `${
       host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"

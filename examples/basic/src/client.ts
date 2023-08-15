@@ -1,7 +1,9 @@
 import PartySocket from "partysocket";
 
+declare const PARTYKIT_HOST: string;
+
 const partySocket = new PartySocket({
-  host: process.env.PARTYKIT_HOST as string,
+  host: PARTYKIT_HOST,
   room: "some-room",
 });
 

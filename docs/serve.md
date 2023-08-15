@@ -85,7 +85,7 @@ We have great defaults here too, but you can pass additional configs:
 
 One last thing...
 
-If you use partykit's bundler via `serve.build`, then we'll automatically define `process.env.PARTYKIT_HOST` correctly in both `dev` and `deploy`. See this PR to see how it eliminates all your boilerplate https://github.com/partykit/partykit/pull/246
+If you use partykit's bundler via `serve.build`, then we'll automatically define `PARTYKIT_HOST` correctly in both `dev` and `deploy`. See this PR to see how it eliminates all your boilerplate https://github.com/partykit/partykit/pull/246
 
 Please give us feedback if you try this out! This might have some changes over the next few days. I hope you enjoy it!
 

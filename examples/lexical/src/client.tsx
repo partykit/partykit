@@ -9,6 +9,8 @@ import YPartyKitProvider from "y-partykit/provider";
 
 import { createRoot } from "react-dom/client";
 
+declare const PARTYKIT_HOST: string;
+
 function Editor() {
   const initialConfig = {
     editorState: null,
@@ -34,11 +36,7 @@ function Editor() {
           const doc = new Y.Doc();
           yjsDocMap.set(id, doc);
 
-          const provider = new YPartyKitProvider(
-            process.env.PARTYKIT_HOST as string,
-            id,
-            doc
-          );
+          const provider = new YPartyKitProvider(PARTYKIT_HOST, id, doc);
 
           return provider;
         }}
