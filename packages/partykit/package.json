@@ -57,7 +57,8 @@
     "*.d.ts",
     "*.d.ts.map",
     "facade/generated.js",
-    "schema.json"
+    "schema.json",
+    "init-template"
   ],
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
