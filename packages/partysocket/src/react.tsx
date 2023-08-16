@@ -11,25 +11,13 @@ import React, {
 
 const PartySocketContext = createContext<PartySocket | null>(null);
 
-type UsePartySocketListeners = {
-  onOpen?: (event: WebSocketEventMap["open"]) => void;
-  onMessage?: (event: WebSocketEventMap["message"]) => void;
-  onClose?: (event: WebSocketEventMap["close"]) => void;
-  onError?: (event: WebSocketEventMap["error"]) => void;
-};
-type UsePartySocketOptions =
-  | (PartySocketOptions & UsePartySocketListeners)
-  | (UsePartySocketListeners & { room?: never; host?: never });
-
 const globalPartySockets: {
   [host: string]: {
     [room: string]: PartySocket;
   };
 } = {};
-const listenersCounter: { [host: string]: { [room: string]: number } } = {};
-const getGlobalPartySocket = (options?: PartySocketOptions) => {
-  if (!options) return;
 
+const getGlobalPartySocket = (options: PartySocketOptions) => {
   const { host, room } = options;
   globalPartySockets[host] ??= {};
   globalPartySockets[host][room] ??= new PartySocket({
@@ -39,6 +27,29 @@ const getGlobalPartySocket = (options?: PartySocketOptions) => {
 
   return globalPartySockets[host][room];
 };
+
+export function PartySocketProvider({
+  children,
+  ...options
+}: PropsWithChildren<PartySocketOptions>) {
+  const [socket] = useState(() => getGlobalPartySocket(options)!);
+
+  return (
+    <PartySocketContext.Provider value={socket}>
+      {children}
+    </PartySocketContext.Provider>
+  );
+}
+
+type UsePartySocketListeners = {
+  onOpen?: (event: WebSocketEventMap["open"]) => void;
+  onMessage?: (event: WebSocketEventMap["message"]) => void;
+  onClose?: (event: WebSocketEventMap["close"]) => void;
+  onError?: (event: WebSocketEventMap["error"]) => void;
+};
+type UsePartySocketOptions =
+  | (PartySocketOptions & UsePartySocketListeners)
+  | (UsePartySocketListeners & { room?: never; host?: never });
 
 const usePartySocketEvent = <
   E extends keyof WebSocketEventMap,
@@ -64,6 +75,8 @@ const usePartySocketEvent = <
     };
   }, [socket]);
 };
+
+const listenersCounter: { [host: string]: { [room: string]: number } } = {};
 
 /**
  *
@@ -94,6 +107,7 @@ export const usePartySocket = ({
     listenersCounter[host][room] ??= 0;
     listenersCounter[host][room] += 1;
 
+    // socket starts closed and reconnects when there are listeners
     if (socket.shouldReconnect) socket.reconnect();
     return () => {
       listenersCounter[host][room] -= 1;
