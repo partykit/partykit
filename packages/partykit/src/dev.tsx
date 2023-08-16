@@ -242,6 +242,7 @@ function useAssetServer(
       minify: assetsBuild?.minify,
       format: assetsBuild?.format ?? "esm",
       sourcemap: assetsBuild?.sourcemap ?? true,
+      external: assetsBuild?.external,
       define: {
         PARTYKIT_HOST: `"127.0.0.1:1999"`,
         ...defines,

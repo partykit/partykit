@@ -41,6 +41,7 @@ export const schema = z
                 entry: z.union([z.string(), z.array(z.string())]).optional(),
                 bundle: z.boolean().default(true).optional(),
                 splitting: z.boolean().default(true).optional(),
+                external: z.array(z.string()).optional(),
                 outdir: z.string().optional(),
                 minify: z.boolean().optional(),
                 format: z.enum(["esm", "cjs", "iife"]).optional(),
