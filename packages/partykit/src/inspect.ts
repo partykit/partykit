@@ -316,7 +316,7 @@ export default function useInspector(props: InspectorProps) {
     /**
      * A handle to the interval we run to keep the websocket alive
      */
-    let keepAliveInterval: NodeJS.Timer;
+    let keepAliveInterval: ReturnType<typeof setInterval>;
 
     /**
      * Test if the websocket is closed
