@@ -1,3 +1,5 @@
+import "styles.css";
+
 import PartySocket from "partysocket";
 
 declare const PARTYKIT_HOST: string;
