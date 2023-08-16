@@ -1,6 +1,5 @@
 // A shebang will be inserted by the build script
 import * as cli from "./cli";
-import { version } from "../package.json";
 import { Option, program /*, Option*/ } from "commander";
 import React, { Suspense } from "react";
 import updateNotifier from "update-notifier";
@@ -13,14 +12,17 @@ import { Dev } from "./dev";
 
 import gradient from "gradient-string";
 
-import packageJson from "../package.json";
+import {
+  version as packageVersion,
+  name as packageName,
+} from "../package.json";
 import { ConfigurationError, logger } from "./logger";
 
 async function printBanner() {
   const notifier = updateNotifier({
     pkg: {
-      name: packageJson.name,
-      version: packageJson.version,
+      name: packageName,
+      version: packageVersion,
     },
     distTag: "beta",
     updateCheckInterval:
@@ -28,7 +30,7 @@ async function printBanner() {
   });
 
   const string =
-    `🎈 PartyKit v${packageJson.version}` +
+    `🎈 PartyKit v${packageVersion}` +
     (notifier.update ? ` (update available: ${notifier.update.latest})` : "");
   console.log(gradient.fruit(string));
   console.log(gradient.passion(`-`.repeat(string.length + 1)));
@@ -72,24 +74,11 @@ function getArrayKVOption(val: string[] = []) {
 
 program
   .name("partykit")
-  .version(version, "-v, --version", "Output the current version")
+  .version(packageVersion, "-v, --version", "Output the current version")
   .description("Welcome to the party, pal!")
   .action(async () => {
     await printBanner();
     program.help();
-  });
-
-program
-  .command("init")
-  .description("Initialize a new project")
-  .argument("[name]", "Name of the project")
-  .option("-y, --yes", "Skip prompts")
-  .action(async (name, options) => {
-    await printBanner();
-    await cli.init({
-      name,
-      yes: options.yes,
-    });
   });
 
 program

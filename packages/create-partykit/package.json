@@ -2,11 +2,32 @@
   "name": "create-partykit",
   "version": "0.0.0",
   "description": "Scaffolding for PartyKit projects",
-  "main": "index.js",
+  "bin": "dist/index.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "shx rm -rf dist",
+    "start": "npm run clean && node -r esbuild-register --watch --watch-path src scripts/build.ts",
+    "build": "npm run clean && node -r esbuild-register scripts/build.ts"
   },
+  "files": [
+    "dist",
+    "template"
+  ],
   "keywords": [],
   "author": "PartyKit, Inc. <team@partykit.io>",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "execa": "^7.2.0",
+    "find-config": "^1.0.0",
+    "ink": "^4.3.1",
+    "ink-select-input": "^5.0.0",
+    "ink-text-input": "^5.0.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/execa": "^2.0.0",
+    "@types/react": "^18.2.20",
+    "esbuild": "^0.19.2"
+  }
 }
