@@ -5,6 +5,7 @@ import { version as packageVersion } from "../../package.json";
 
 import * as ConfigSchema from "../config-schema";
 import { userConfigSchema, type UserConfig } from "../config";
+import countdown from "../countdown";
 
 export const configSchema = ConfigSchema.schema;
 export type Config = ConfigSchema.Config;
@@ -44,6 +45,8 @@ export async function signInWithGitHub(): Promise<UserConfig> {
       user_code
     )} (copied to your clipboard) and authorize the app.`
   );
+
+  await countdown("Opening browser", 5);
 
   console.log(`Waiting for you to authorize...`);
 
