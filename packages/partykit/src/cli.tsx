@@ -1,6 +1,6 @@
 import path from "path";
 import * as fs from "fs";
-import { fetchResult, fetchResultAsUser } from "./fetchResult";
+import { fetchResultAsUser } from "./fetchResult";
 import { File, FormData } from "undici";
 import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
