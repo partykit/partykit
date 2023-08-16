@@ -1,4 +1,4 @@
-import "styles.css";
+import "./styles.css";
 
 import PartySocket from "partysocket";
 
