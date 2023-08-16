@@ -74,6 +74,7 @@ We have great defaults here too, but you can pass additional configs:
         "process.env.xyz": "123"
         // bonus: you can pass values via the cli with --define key=value
       },
+      "external": ["react", "react-dom"], // externalize modules, default []
       "loader": {
         // configure loaders, default {}
         ".png": "file" // see https://esbuild.github.io/content-types/ for more info

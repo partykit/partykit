@@ -305,6 +305,7 @@ export async function deploy(options: {
     minify: assetsBuild?.minify ?? true,
     format: assetsBuild?.format ?? "esm",
     sourcemap: assetsBuild?.sourcemap ?? true,
+    external: assetsBuild?.external,
     define: {
       PARTYKIT_HOST: `"${config.name}.${user.login}.partykit.dev"`,
       ...config.define,

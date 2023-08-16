@@ -56,6 +56,12 @@
                       "type": "boolean",
                       "default": true
                     },
+                    "external": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "outdir": {
                       "type": "string"
                     },
