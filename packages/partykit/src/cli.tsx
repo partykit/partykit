@@ -671,9 +671,11 @@ export async function tail(options: {
     );
   });
 
-  onExit(async () => {
+  onExit(() => {
     tailSocket.terminate();
-    await deleteTail();
+    deleteTail().catch((err) => {
+      logger.error(`Failed to delete tail: ${err.message}`);
+    });
   });
 
   const printLog: (data: RawData) => void =
