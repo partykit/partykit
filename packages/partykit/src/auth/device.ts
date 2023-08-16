@@ -47,7 +47,7 @@ export async function signInWithBrowser(): Promise<
             const error = url.searchParams.get("error");
             if (error) {
               res.statusCode = 200;
-              res.end(error);
+              res.end("OK");
               resolve({ aborted: true });
             } else {
               const token = url.searchParams.get("token");
