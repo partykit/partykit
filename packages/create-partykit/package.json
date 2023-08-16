@@ -1,0 +1,12 @@
+{
+  "name": "create-partykit",
+  "version": "0.0.0",
+  "description": "Scaffolding for PartyKit projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "PartyKit, Inc. <team@partykit.io>",
+  "license": "ISC"
+}
