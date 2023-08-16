@@ -7,6 +7,7 @@ import JSON5 from "json5";
 import findConfig from "find-config";
 import { ConfigurationError, logger } from "./logger";
 import chalk from "chalk";
+import { getFlags } from "./featureFlags";
 
 import * as ConfigSchema from "./config-schema";
 
@@ -16,8 +17,9 @@ export type Config = ConfigSchema.Config;
 
 import { createClerkClient, fetchClerkClientToken } from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
+import { signInWithGitHub } from "./auth/github";
 
-const userConfigSchema = z.object({
+export const userConfigSchema = z.object({
   /** @deprecated use team and username instead */
   login: z.string(),
   access_token: z.string(),
@@ -29,18 +31,33 @@ const userConfigSchema = z.object({
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
+export type LoginMethod = UserConfig["type"];
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
+export async function getUser(loginMethod?: LoginMethod): Promise<UserConfig> {
+  const flags = getFlags();
+  const method = loginMethod ?? flags.defaultLoginMethod;
 
-export async function getUser(): Promise<UserConfig> {
   // load persisted config, or create a new session if valid session doesn't exist
   let userConfig;
+
   try {
     userConfig = getUserConfig();
+    if (!flags.supportedLoginMethods.includes(userConfig.type)) {
+      throw new Error(
+        `Login method ${userConfig.type} is not supported, logging in again.`
+      );
+    }
   } catch (e) {
     console.log("Attempting to login...");
-    await fetchUserConfig();
-    userConfig = getUserConfig();
+    userConfig = await fetchUserConfig(method);
+    if (!userConfig) {
+      throw new Error("Login failed. Please try again.");
+    }
+
+    // now write the token to the config file at ~/.partykit/config.json
+    fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
+    fs.writeFileSync(USER_CONFIG_PATH, JSON.stringify(userConfig, null, 2));
   }
 
   // for clerk tokens, we need to exchange the client token for a session token,
@@ -72,6 +89,8 @@ export function getUserConfig(): UserConfig {
       login: process.env.PARTYKIT_LOGIN,
       access_token: process.env.PARTYKIT_TOKEN,
       type: "clerk",
+      username: process.env.PARTYKIT_LOGIN,
+      team: process.env.PARTYKIT_TEAM, // optional
     };
   }
 
@@ -114,7 +133,15 @@ export function getUserConfig(): UserConfig {
 
 import process from "process";
 
-export async function fetchUserConfig(): Promise<void> {
+export async function fetchUserConfig(
+  method: LoginMethod
+): Promise<UserConfig> {
+  // TODO: Remove when GitHub login is deprecated
+  if (method === "github") {
+    return signInWithGitHub();
+  }
+
+  // initiate login oauth login flow
   const signInResult = await signInWithBrowser();
 
   // if the user aborts the login flow, there's nowhere to go,
@@ -127,7 +154,7 @@ export async function fetchUserConfig(): Promise<void> {
   const user = await fetchClerkClientToken(signInResult.token);
 
   if (user) {
-    const config = userConfigSchema.parse({
+    return userConfigSchema.parse({
       type: "clerk",
       team: signInResult.teamId,
       username: user.username,
@@ -137,11 +164,9 @@ export async function fetchUserConfig(): Promise<void> {
       // going forward, we should use team and username explicitly
       login: signInResult.teamId,
     });
-
-    // now write the token to the config file at ~/.partykit/config.json
-    fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
-    fs.writeFileSync(USER_CONFIG_PATH, JSON.stringify(config, null, 2));
   }
+
+  throw new Error("Login failed.");
 }
 
 export async function logout() {
