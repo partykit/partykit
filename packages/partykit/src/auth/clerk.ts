@@ -9,8 +9,7 @@ type TokenStore = {
   token?: string;
 };
 
-const CLERK_PUBLISHABLE_KEY =
-  "pk_test_b2JsaWdpbmctc25pcGUtMzcuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsucGFydHlraXQuaW8k";
 
 const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
   return async ({ tokenStore }: { tokenStore: TokenStore }): Promise<Clerk> => {
