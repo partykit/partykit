@@ -4,10 +4,9 @@ import { clearMocks } from "./fetchResult-mock";
 import { tail } from "../cli";
 
 vi.mock("../fetchResult", async () => {
-  const { fetchResult, fetchResultAsUser } = await import("./fetchResult-mock");
+  const { fetchResult } = await import("./fetchResult-mock");
   return {
     fetchResult,
-    fetchResultAsUser,
   };
 });
 

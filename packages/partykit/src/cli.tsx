@@ -1,6 +1,6 @@
 import path from "path";
 import * as fs from "fs";
-import { fetchResultAsUser } from "./fetchResult";
+import { fetchResult } from "./fetchResult";
 import { File, FormData } from "undici";
 import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
@@ -330,11 +330,11 @@ export async function deploy(options: {
     esbuild.buildSync(esbuildAssetOptions);
 
     // get current assetsMap
-    const currentAssetsMap = await fetchResultAsUser<{
+    const currentAssetsMap = await fetchResult<{
       assets: Record<string, string>;
-    }>(user, `/parties/${user.login}/${config.name}/assets`, {
+    }>(`/parties/${user.login}/${config.name}/assets`, {
+      user,
       headers: {
-        Authorization: `Bearer ${user.access_token}`,
         "Content-Type": "application/json",
       },
     });
@@ -385,34 +385,28 @@ export async function deploy(options: {
       );
 
       for (const file of filesToUpload) {
-        await fetchResultAsUser(
+        await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
           user,
-          `/parties/${user.login}/${config.name}/assets`,
-          {
-            method: "PUT",
-            body: fs.createReadStream(file.filePath),
-            headers: {
-              ContentType: "application/octet-stream",
-              "X-PartyKit-Asset-Name": file.fileName,
-            },
-            duplex: "half",
-          }
-        );
+          method: "PUT",
+          body: fs.createReadStream(file.filePath),
+          headers: {
+            ContentType: "application/octet-stream",
+            "X-PartyKit-Asset-Name": file.fileName,
+          },
+          duplex: "half",
+        });
         logger.log(`Uploaded ${file.file}`);
       }
     }
 
-    await fetchResultAsUser(
+    await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
       user,
-      `/parties/${user.login}/${config.name}/assets`,
-      {
-        method: "POST",
-        body: JSON.stringify(newAssetsMap),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      method: "POST",
+      body: JSON.stringify(newAssetsMap),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   const wasmModules: Record<string, Buffer> = {};
@@ -519,12 +513,12 @@ export async function deploy(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResultAsUser(
-    user,
+  await fetchResult(
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "POST",
       body: form,
     }
@@ -554,12 +548,12 @@ export async function _delete(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResultAsUser(
-    user,
+  await fetchResult(
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "DELETE",
     }
   );
@@ -622,12 +616,12 @@ export async function tail(options: {
   }
   const {
     result: { id: tailId, url: websocketUrl, expires_at: expiration },
-  } = await fetchResultAsUser<TailCreationApiResponse>(
-    user,
+  } = await fetchResult<TailCreationApiResponse>(
     `/parties/${user.login}/${config.name}/tail${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "POST",
       body: JSON.stringify(filters),
     }
@@ -640,12 +634,12 @@ export async function tail(options: {
   }
 
   async function deleteTail() {
-    await fetchResultAsUser(
-      user,
+    await fetchResult(
       `/parties/${user.login}/${config.name}/tail/${tailId}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "DELETE",
       }
     );
@@ -716,9 +710,9 @@ export async function list(options: { format: "json" | "pretty" }) {
   // get user details
   const user = await getUser();
 
-  const res = await fetchResultAsUser<{ name: string; url: string }[]>(
-    user,
-    `/parties/${user.login}`
+  const res = await fetchResult<{ name: string; url: string }[]>(
+    `/parties/${user.login}`,
+    { user }
   );
 
   if (options.format === "json") {
@@ -764,9 +758,9 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResultAsUser<string[]>(
-      user,
-      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`
+    const res = await fetchResult<string[]>(
+      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
+      { user }
     );
 
     console.log(`Deployed variables: ${res.join(", ")}`);
@@ -794,11 +788,11 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    const res = await fetchResultAsUser(
-      user,
+    const res = await fetchResult(
       `/parties/${user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
-      }`
+      }`,
+      { user }
     );
 
     const targetFileName =
@@ -848,12 +842,12 @@ export const env = {
       return;
     }
 
-    await fetchResultAsUser(
-      user,
+    await fetchResult(
       `/parties/${user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "POST",
         body: JSON.stringify(config.vars || {}),
         headers: {
@@ -918,12 +912,12 @@ export const env = {
       urlSearchParams.set("preview", options.preview);
     }
 
-    await fetchResultAsUser(
-      user,
+    await fetchResult(
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "POST",
         body: value,
       }
@@ -968,12 +962,12 @@ export const env = {
         console.log("Aborted");
         return;
       } else {
-        await fetchResultAsUser(
-          user,
+        await fetchResult(
           `/parties/${user.login}/${config.name}/env${
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
           {
+            user,
             method: "DELETE",
           }
         );
@@ -982,12 +976,12 @@ export const env = {
       }
     }
 
-    await fetchResultAsUser(
-      user,
+    await fetchResult(
       `/parties/${user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "DELETE",
       }
     );

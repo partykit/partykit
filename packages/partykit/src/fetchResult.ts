@@ -9,35 +9,29 @@ assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
 
 const API_BASE = process.env.PARTYKIT_API_BASE || PARTYKIT_API_BASE;
 
-export async function fetchResultAsUser<T>(
-  user: UserConfig,
-  api: string,
-  options: RequestInit = {}
-) {
-  return fetchResult<T>(api, {
-    ...options,
-    headers: {
-      Authorization: `Bearer ${user.access_token}`,
-      "X-PartyKit-User-Type": user.type,
-      ...(options.headers ?? {}),
-    },
-  });
-}
+export type FetchInit = RequestInit & { user?: UserConfig };
 
 export async function fetchResult<T>(
   api: string,
-  options: RequestInit = {}
+  options: FetchInit = {}
 ): Promise<T> {
+  const { user, ...fetchOptions } = options;
   const res = await fetch(`${API_BASE}${api}`, {
-    ...options,
+    ...fetchOptions,
     headers: {
-      ...(typeof options.body === "string"
-        ? { "Content-Type": "application/json" }
-        : {}),
       Accept: "application/json",
       "User-Agent": `partykit/${packageVersion}`,
       "X-PartyKit-Version": packageVersion,
-      ...(options.headers ?? {}),
+      ...(typeof fetchOptions.body === "string"
+        ? { "Content-Type": "application/json" }
+        : {}),
+      ...(user
+        ? {
+            Authorization: `Bearer ${user.access_token}`,
+            "X-PartyKit-User-Type": user.type,
+          }
+        : {}),
+      ...(fetchOptions.headers ?? {}),
     },
   });
   if (res.ok) {
