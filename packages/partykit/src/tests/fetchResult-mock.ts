@@ -1,15 +1,16 @@
-type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+import type { FetchInit } from "../fetchResult";
 
+type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 const mocks: [
   Method,
   string,
-  (url: string, options: RequestInit | undefined) => unknown
+  (url: string, options: FetchInit | undefined) => unknown
 ][] = [];
 
 export function mockFetchResult<T>(
   method: Method,
   url: string,
-  reply: (url: string, options: RequestInit | undefined) => T
+  reply: (url: string, options: FetchInit | undefined) => T
 ) {
   mocks.push([method, url, reply]);
 }
@@ -20,7 +21,7 @@ export function clearMocks() {
 
 export async function fetchResult<T>(
   url: string,
-  options: RequestInit = {}
+  options: FetchInit = {}
 ): Promise<T> {
   const mock = mocks.find(([method, mockUrl]) => {
     return mockUrl === url && method === (options.method || "GET");

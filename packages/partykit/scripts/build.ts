@@ -39,6 +39,7 @@ esbuild.buildSync({
   define: {
     PARTYKIT_API_BASE: `"${process.env.PARTYKIT_API_BASE}"`,
     "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
+    PARTYKIT_DASHBOARD_BASE: `"${process.env.PARTYKIT_DASHBOARD_BASE}"`,
   },
 });
 

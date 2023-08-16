@@ -333,13 +333,17 @@ export async function deploy(options: {
     const currentAssetsMap = await fetchResult<{
       assets: Record<string, string>;
     }>(`/parties/${user.login}/${config.name}/assets`, {
+      user,
       headers: {
-        Authorization: `Bearer ${user.access_token}`,
         "Content-Type": "application/json",
       },
     });
 
-    const filesToUpload = [];
+    const filesToUpload: {
+      file: string;
+      filePath: string;
+      fileName: string;
+    }[] = [];
 
     for (const file of findAllFiles(assetsPath)) {
       const filePath = path.join(assetsPath, file);
@@ -382,10 +386,10 @@ export async function deploy(options: {
 
       for (const file of filesToUpload) {
         await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+          user,
           method: "PUT",
           body: fs.createReadStream(file.filePath),
           headers: {
-            Authorization: `Bearer ${user.access_token}`,
             ContentType: "application/octet-stream",
             "X-PartyKit-Asset-Name": file.fileName,
           },
@@ -396,10 +400,10 @@ export async function deploy(options: {
     }
 
     await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+      user,
       method: "POST",
       body: JSON.stringify(newAssetsMap),
       headers: {
-        Authorization: `Bearer ${user.access_token}`,
         "Content-Type": "application/json",
       },
     });
@@ -514,12 +518,9 @@ export async function deploy(options: {
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "POST",
       body: form,
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-        "X-PartyKit-User-Type": user.type,
-      },
     }
   );
 
@@ -552,10 +553,8 @@ export async function _delete(options: {
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
     }
   );
 
@@ -622,11 +621,9 @@ export async function tail(options: {
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
+      user,
       method: "POST",
       body: JSON.stringify(filters),
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
     }
   );
 
@@ -642,10 +639,8 @@ export async function tail(options: {
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
   }
@@ -717,11 +712,7 @@ export async function list(options: { format: "json" | "pretty" }) {
 
   const res = await fetchResult<{ name: string; url: string }[]>(
     `/parties/${user.login}`,
-    {
-      headers: {
-        Authorization: `Bearer ${user.access_token}`,
-      },
-    }
+    { user }
   );
 
   if (options.format === "json") {
@@ -769,11 +760,7 @@ export const env = {
 
     const res = await fetchResult<string[]>(
       `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
+      { user }
     );
 
     console.log(`Deployed variables: ${res.join(", ")}`);
@@ -805,11 +792,7 @@ export const env = {
       `/parties/${user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
-      }
+      { user }
     );
 
     const targetFileName =
@@ -864,10 +847,10 @@ export const env = {
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "POST",
         body: JSON.stringify(config.vars || {}),
         headers: {
-          Authorization: `Bearer ${user.access_token}`,
           "Content-Type": "application/json",
         },
       }
@@ -934,11 +917,9 @@ export const env = {
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "POST",
         body: value,
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
 
@@ -986,10 +967,8 @@ export const env = {
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
           {
+            user,
             method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${user.access_token}`,
-            },
           }
         );
         logger.log(`Deleted all deployed environment variables`);
@@ -1002,10 +981,8 @@ export const env = {
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
+        user,
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        },
       }
     );
 

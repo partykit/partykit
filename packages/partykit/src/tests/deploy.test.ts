@@ -61,12 +61,7 @@ describe("deploy", () => {
       "/parties/test-user/test-script",
       (url, options) => {
         expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
-        expect(options?.headers).toMatchInlineSnapshot(`
-          {
-            "Authorization": "Bearer test-token",
-            "X-PartyKit-User-Type": "github",
-          }
-        `);
+        expect(options?.user?.access_token).toBe("test-token");
         checkedResponse = true;
         return null;
       }
@@ -107,12 +102,8 @@ describe("deploy", () => {
       "/parties/test-user/test-script",
       (url, options) => {
         expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
-        expect(options?.headers).toMatchInlineSnapshot(`
-          {
-            "Authorization": "Bearer test-token",
-            "X-PartyKit-User-Type": "github",
-          }
-        `);
+        expect(options?.user?.access_token).toBe("test-token");
+
         const form = options?.body as FormData;
         expect(form.get("vars")).toMatchInlineSnapshot(
           '"{\\"a\\":\\"b\\",\\"c\\":\\"d\\"}"'
@@ -160,12 +151,8 @@ describe("deploy", () => {
       "/parties/test-user/test-script",
       (url, options) => {
         expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
-        expect(options?.headers).toMatchInlineSnapshot(`
-          {
-            "Authorization": "Bearer test-token",
-            "X-PartyKit-User-Type": "github",
-          }
-        `);
+        expect(options?.user?.access_token).toBe("test-token");
+
         const form = options?.body as FormData;
         expect(form.get("vars")).toMatchInlineSnapshot(
           '"{\\"a\\":\\"b\\",\\"b\\":\\"b2\\",\\"c\\":\\"d\\",\\"d\\":\\"d4\\"}"'
@@ -225,12 +212,8 @@ describe("deploy", () => {
       "/parties/test-user/test-script",
       (url, options) => {
         expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
-        expect(options?.headers).toMatchInlineSnapshot(`
-          {
-            "Authorization": "Bearer test-token",
-            "X-PartyKit-User-Type": "github",
-          }
-        `);
+        expect(options?.user?.access_token).toBe("test-token");
+
         checkedResponse = true;
         return null;
       }
@@ -245,10 +228,11 @@ describe("deploy", () => {
         );
         expect(options?.headers).toMatchInlineSnapshot(`
           {
-            "Authorization": "Bearer test-token",
             "Content-Type": "application/json",
           }
         `);
+        expect(options?.user?.access_token).toBe("test-token");
+
         return {
           devServer: "",
           browserTTL: undefined,
@@ -268,10 +252,11 @@ describe("deploy", () => {
         );
         expect(options?.headers).toMatchInlineSnapshot(`
           {
-            "Authorization": "Bearer test-token",
             "Content-Type": "application/json",
           }
         `);
+        expect(options?.user?.access_token).toBe("test-token");
+
         expect(options?.body).toMatchInlineSnapshot(
           '"{\\"devServer\\":\\"\\",\\"assets\\":{}}"'
         );

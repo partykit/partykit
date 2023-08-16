@@ -4,13 +4,10 @@ import path from "path";
 import * as dotenv from "dotenv";
 import { z } from "zod";
 import JSON5 from "json5";
-import chalk from "chalk";
 import findConfig from "find-config";
-import { fetch } from "undici";
-import open from "open";
-import { version as packageVersion } from "../package.json";
 import { ConfigurationError, logger } from "./logger";
-import countdown from "./countdown";
+import chalk from "chalk";
+import { getFlags } from "./featureFlags";
 
 import * as ConfigSchema from "./config-schema";
 
@@ -18,29 +15,85 @@ export const configSchema = ConfigSchema.schema;
 
 export type Config = ConfigSchema.Config;
 
-const userConfigSchema = z.object({
+import { createClerkClient, fetchClerkClientToken } from "./auth/clerk";
+import { signInWithBrowser } from "./auth/device";
+import { signInWithGitHub } from "./auth/github";
+
+export const userConfigSchema = z.object({
+  /** @deprecated use team and username instead */
   login: z.string(),
   access_token: z.string(),
-  type: z.string(),
+  type: z.enum(["clerk", "github"]),
+
+  // TODO: make fields non-nullable when GitHub logins are deprecated
+  username: z.string().optional(),
+  team: z.string().optional(),
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
+export type LoginMethod = UserConfig["type"];
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
+export async function getUser(loginMethod?: LoginMethod): Promise<UserConfig> {
+  const flags = getFlags();
+  const method = loginMethod ?? flags.defaultLoginMethod;
 
-export async function getUser(): Promise<UserConfig> {
+  // load persisted config, or create a new session if valid session doesn't exist
   let userConfig;
+
   try {
     userConfig = getUserConfig();
+    if (!flags.supportedLoginMethods.includes(userConfig.type)) {
+      throw new Error(
+        `Login method ${userConfig.type} is not supported, logging in again.`
+      );
+    }
   } catch (e) {
     console.log("Attempting to login...");
-    await fetchUserConfig();
-    userConfig = getUserConfig();
+    userConfig = await fetchUserConfig(method);
+    if (!userConfig) {
+      throw new Error("Login failed. Please try again.");
+    }
+
+    // now write the token to the config file at ~/.partykit/config.json
+    fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
+    fs.writeFileSync(USER_CONFIG_PATH, JSON.stringify(userConfig, null, 2));
   }
+
+  // for clerk tokens, we need to exchange the client token for a session token,
+  // which are only valid for 1 minute at a time
+  if (userConfig.type === "clerk") {
+    const clerk = await createClerkClient({
+      tokenStore: {
+        token: userConfig.access_token,
+      },
+    });
+
+    const sessionToken = await clerk?.session?.getToken();
+    if (!sessionToken) {
+      throw new Error("Session expired. Please log in again.");
+    }
+
+    userConfig = {
+      ...userConfig,
+      access_token: sessionToken,
+    };
+  }
+
   return userConfig;
 }
 
 export function getUserConfig(): UserConfig {
+  if (process.env.PARTYKIT_TOKEN && process.env.PARTYKIT_LOGIN) {
+    return {
+      login: process.env.PARTYKIT_LOGIN,
+      access_token: process.env.PARTYKIT_TOKEN,
+      type: "clerk",
+      username: process.env.PARTYKIT_LOGIN,
+      team: process.env.PARTYKIT_TEAM, // optional
+    };
+  }
+
   if (process.env.GITHUB_TOKEN && process.env.GITHUB_LOGIN) {
     return {
       login: process.env.GITHUB_LOGIN,
@@ -78,121 +131,42 @@ export function getUserConfig(): UserConfig {
 //   return false;
 // }
 
-const GITHUB_APP_ID = "670a9f76d6be706f5209";
+import process from "process";
 
-export async function fetchUserConfig(): Promise<void> {
-  // run github's oauth device flow
-  // https://docs.github.com/en/developers/apps/building-oauth-apps/authorizing-oauth-apps#device-flow
-  const res = await fetch("https://github.com/login/device/code", {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "User-Agent": `partykit/${packageVersion}`,
-      "X-PartyKit-Version": packageVersion,
-    },
-    body: JSON.stringify({
-      client_id: GITHUB_APP_ID,
-    }),
-  });
-
-  if (!res.ok) {
-    throw new Error(
-      `Failed to get device code: ${res.status} ${res.statusText}`
-    );
+export async function fetchUserConfig(
+  method: LoginMethod
+): Promise<UserConfig> {
+  // TODO: Remove when GitHub login is deprecated
+  if (method === "github") {
+    return signInWithGitHub();
   }
 
-  const { device_code, user_code, verification_uri, expires_in, interval } =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (await res.json()) as any;
+  // initiate login oauth login flow
+  const signInResult = await signInWithBrowser();
 
-  console.log(
-    `We will now open your browser to ${chalk.bold(
-      verification_uri
-    )}\nPlease paste the code ${chalk.bold(
-      user_code
-    )} (copied to your clipboard) and authorize the app.`
-  );
+  // if the user aborts the login flow, there's nowhere to go,
+  // so exit gracefully
+  if ("aborted" in signInResult) {
+    logger.info("User aborted login flow in the browser.");
+    process.exit(0);
+  }
 
-  await countdown("Opening browser", 5);
+  const user = await fetchClerkClientToken(signInResult.token);
 
-  console.log(`Waiting for you to authorize...`);
+  if (user) {
+    return userConfigSchema.parse({
+      type: "clerk",
+      team: signInResult.teamId,
+      username: user.username,
+      access_token: user.access_token,
 
-  // we do this because for some reason the clipboardy package doesn't work
-  // with a direct import up top
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore kill me, bring me sweet release of death please
-  const { default: clipboardy } = await import("clipboardy");
-  clipboardy.writeSync(user_code);
-
-  open(verification_uri).catch(() => {
-    console.error(
-      `Failed to open ${verification_uri}, please copy the code ${user_code} to your clipboard`
-    );
-  });
-
-  const start = Date.now();
-  while (Date.now() - start < expires_in * 1000) {
-    const res = await fetch("https://github.com/login/oauth/access_token", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "User-Agent": `partykit/${packageVersion}`,
-        "X-PartyKit-Version": packageVersion,
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_APP_ID,
-        device_code,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-      }),
+      // `login` is used for backwards compatibility with old github config.
+      // going forward, we should use team and username explicitly
+      login: signInResult.teamId,
     });
-
-    if (!res.ok) {
-      throw new Error(
-        `Failed to get access token: ${res.status} ${res.statusText}`
-      );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { access_token, error } = (await res.json()) as any;
-
-    // now get the username
-    const githubUserDetails = (await (
-      await fetch("https://api.github.com/user", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          "User-Agent": `partykit/${packageVersion}`,
-          "X-PartyKit-Version": packageVersion,
-        },
-      })
-    ).json()) as { login: string };
-
-    if (access_token) {
-      // now write the token to the config file at ~/.partykit/config.json
-      fs.mkdirSync(path.dirname(USER_CONFIG_PATH), { recursive: true });
-      fs.writeFileSync(
-        USER_CONFIG_PATH,
-        JSON.stringify(
-          userConfigSchema.parse({
-            access_token,
-            login: githubUserDetails.login,
-            type: "github",
-          }),
-          null,
-          2
-        )
-      );
-      console.log(`Logged in as ${chalk.bold(githubUserDetails.login)}`);
-      return;
-    }
-    if (error === "authorization_pending") {
-      // try again in a bit
-      await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-      continue;
-    }
-    throw new Error(`Unexpected error: ${error}`);
   }
+
+  throw new Error("Login failed.");
 }
 
 export async function logout() {

@@ -1,12 +1,13 @@
 import React from "react";
-import { getUser } from "../config";
+import { getUser, type LoginMethod } from "../config";
+
 import asyncCache from "../async-cache";
 import { Text } from "ink";
 
 const read = asyncCache();
 
-export default function Login() {
-  const userConfig = read("get-user", getUser) as Awaited<
+export default function Login({ method }: { method?: LoginMethod }) {
+  const userConfig = read("get-user", () => getUser(method)) as Awaited<
     ReturnType<typeof getUser>
   >;
 
