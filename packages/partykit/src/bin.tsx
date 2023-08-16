@@ -293,11 +293,17 @@ envCommand
 program
   .command("login")
   .description("Login to PartyKit")
-  .action(async () => {
+  .addOption(
+    new Option(
+      "-p, --provider <provider>",
+      "login provider (experimental)"
+    ).choices(["github", "partykit"])
+  )
+  .action(async ({ provider }: { provider?: "github" | "partykit" }) => {
     await printBanner();
     render(
       <Suspense>
-        <Login />
+        <Login method={provider === "partykit" ? "clerk" : provider} />
       </Suspense>
     );
   });
