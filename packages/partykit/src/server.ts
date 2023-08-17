@@ -9,15 +9,13 @@ import type {
 // Because when you construct a `new Response()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
 // This is fine by us, let user return whichever response type.
-type FetchRequest = Request;
-type FetchResponse = Response;
-type UserDefinedRequest = FetchRequest | PartyKitRequest;
-type UserDefinedResponse = FetchResponse | PartyKitResponse;
+type Request = globalThis.Request | PartyKitRequest;
+type Response = globalThis.Response | PartyKitResponse;
 
 export type PartyKitStorage = DurableObjectStorage;
 
 export type PartyKitContext = {
-  request: PartyKitRequest;
+  request: Request;
 };
 
 export type PartyKitRoom = {
@@ -31,7 +29,7 @@ export type PartyKitRoom = {
     {
       get(id: string): {
         connect: () => WebSocket;
-        fetch: (init: RequestInit) => Promise<PartyKitResponse>;
+        fetch: (init: RequestInit) => Promise<Response>;
       };
     }
   >;
@@ -64,7 +62,7 @@ type RequestHandler = {
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) => UserDefinedResponse | Promise<UserDefinedResponse>;
+  ) => Response | Promise<Response>;
   onBeforeRequest?: (
     req: Request,
     room: {
@@ -73,15 +71,11 @@ type RequestHandler = {
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) =>
-    | UserDefinedRequest
-    | Promise<UserDefinedRequest>
-    | UserDefinedResponse
-    | Promise<UserDefinedResponse>;
+  ) => Request | Promise<Request> | Response | Promise<Response>;
   onRequest?: (
     req: Request,
     room: PartyKitRoom
-  ) => UserDefinedResponse | Promise<UserDefinedResponse>;
+  ) => Response | Promise<Response>;
   onAlarm?: (room: Omit<PartyKitRoom, "id">) => void | Promise<void>;
 };
 
@@ -105,11 +99,7 @@ type ConnectionHandler = RequestHandler & {
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) =>
-    | UserDefinedRequest
-    | Promise<UserDefinedRequest>
-    | UserDefinedResponse
-    | Promise<UserDefinedResponse>;
+  ) => Request | Promise<Request> | Response | Promise<Response>;
   /**
    * PartyKitServer may opt into being hibernated between WebSocket
    * messages, which enables a single server to handle more connections.
@@ -131,6 +121,62 @@ type ConnectionHandler = RequestHandler & {
 };
 
 export type PartyKitServer = ConnectionHandler;
+
+// New Class API
+// --------------------------------------------
+
+export type Party = PartyKitRoom;
+
+// PartyKitServer is now called PartyServer
+export interface PartyServer {
+  party: Party;
+  onConnect?(
+    ws: PartyKitConnection,
+    ctx: PartyKitContext
+  ): void | Promise<void>;
+  onMessage?(
+    message: string | ArrayBuffer,
+    ws: PartyKitConnection
+  ): void | Promise<void>;
+  onClose?(ws: PartyKitConnection): void | Promise<void>;
+  onError?(ws: PartyKitConnection, err: Error): void | Promise<void>;
+  onRequest?(req: Request): Response | Promise<Response>;
+
+  // TODO: does this belong on the static side?
+  onAlarm?(room: Omit<PartyKitRoom, "id">): void | Promise<void>;
+}
+
+// PartyServer class definition has static methods
+export type PartyServerConstructor = {
+  new (party: Party): PartyServer;
+  unstable_onFetch?(
+    req: Request,
+    lobby: {
+      env: Record<string, unknown>;
+      parties: Party["parties"];
+    },
+    ctx: ExecutionContext
+  ): Response | Promise<Response>;
+  onBeforeRequest?(
+    req: Request,
+    room: {
+      id: string;
+      env: Record<string, unknown>;
+      parties: Party["parties"];
+    },
+    ctx: ExecutionContext
+  ): Request | Promise<Request> | Response | Promise<Response>;
+
+  onBeforeConnect?(
+    req: Request,
+    room: {
+      id: string;
+      env: Record<string, unknown>;
+      parties: PartyKitRoom["parties"];
+    },
+    ctx: ExecutionContext
+  ): Request | Promise<Request> | Response | Promise<Response>;
+};
 
 export type StaticAssetsManifestType = {
   devServer: string;
