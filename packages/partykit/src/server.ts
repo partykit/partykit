@@ -127,9 +127,15 @@ export type PartyKitServer = ConnectionHandler;
 
 export type Party = PartyKitRoom;
 
+export type PartyServerOptions = {
+  hibernate?: boolean;
+};
+
 // PartyKitServer is now called PartyServer
 export interface PartyServer {
-  party: Party;
+  readonly party: Party;
+  readonly?: PartyServerOptions;
+
   onStart?(): void | Promise<void>;
   onConnect?(
     ws: PartyKitConnection,
