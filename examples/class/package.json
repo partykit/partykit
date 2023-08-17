@@ -1,0 +1,13 @@
+{
+  "name": "@partykit/examples-class",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "partykit dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
