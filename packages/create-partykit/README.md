@@ -1,5 +1,7 @@
 ## create-partykit
 
+_(Work in progress)_
+
 Scaffolding for PartyKit projects.
 
 ## Usage
