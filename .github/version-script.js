@@ -12,6 +12,7 @@ try {
       "./packages/partykit.io/package.json",
       "./packages/y-partykit/package.json",
       "./packages/partysocket/package.json",
+      "./packages/create-partykit/package.json",
     ]) {
       const package = JSON.parse(fs.readFileSync(path));
       package.version = "0.0.0-" + stdout.trim();
