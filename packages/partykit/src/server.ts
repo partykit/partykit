@@ -130,6 +130,7 @@ export type Party = PartyKitRoom;
 // PartyKitServer is now called PartyServer
 export interface PartyServer {
   party: Party;
+  onStart?(): void | Promise<void>;
   onConnect?(
     ws: PartyKitConnection,
     ctx: PartyKitContext

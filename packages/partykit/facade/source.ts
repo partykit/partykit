@@ -161,6 +161,8 @@ function createDurable(Worker: PartyKitServer) {
     "onAlarm",
   ] satisfies (keyof PartyKitServer)[]);
 
+  let pendingInitializer: Promise<boolean> | void;
+
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
     room: PartyKitRoom;
@@ -203,6 +205,17 @@ function createDurable(Worker: PartyKitServer) {
           })
         );
       }
+
+      if (
+        "onStart" in this.server &&
+        typeof this.server.onStart === "function"
+      ) {
+        pendingInitializer = this.server
+          .onStart()
+          ?.then(() => true)
+          .catch(() => false)
+          .finally(() => (pendingInitializer = undefined));
+      }
     }
 
     broadcast = (msg: string | Uint8Array, without: string[] = []) => {
@@ -215,6 +228,12 @@ function createDurable(Worker: PartyKitServer) {
 
     async fetch(request: Request) {
       const url = new URL(request.url);
+
+      // wait for any initialization code to complete
+      if (pendingInitializer) {
+        await pendingInitializer;
+      }
+
       try {
         this.room.parties = createMultiParties(this.namespaces, {
           host: url.host,
