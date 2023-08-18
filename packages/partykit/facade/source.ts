@@ -380,27 +380,27 @@ function createDurable(Worker: PartyKitServer) {
         "No onConnect handler"
       );
 
-      const handleCloseOrErrorFromClient = () => {
-        // Remove the client from the room and delete associated user data.
-        this.room.connections.delete(connection.id);
-
-        connection.removeEventListener("close", handleCloseOrErrorFromClient);
-        connection.removeEventListener("error", handleCloseOrErrorFromClient);
-
-        if (room.connections.size === 0) {
-          // TODO: implement this
-        }
+      const handleCloseFromClient = () => {
+        console.log("non-hibernated connection closed");
+        connection.removeEventListener("close", handleCloseFromClient);
+        return this.onConnectionClose(connection);
       };
 
-      connection.addEventListener("close", handleCloseOrErrorFromClient);
-      connection.addEventListener("error", handleCloseOrErrorFromClient);
+      const handleErrorFromClient = (e: ErrorEvent) => {
+        connection.removeEventListener("error", handleErrorFromClient);
+        return this.onConnectionError(connection, e.error);
+      };
+
+      connection.addEventListener("close", handleCloseFromClient);
+      connection.addEventListener("error", handleErrorFromClient);
+
       // and finally, connect the client to the worker
-      // TODO: pass room id here? and other meta
       return this.worker.isClass
         ? this.worker.server.onConnect(connection, context)
         : this.worker.server.onConnect(connection, room, context);
     }
 
+    /** Runtime calls webSocketMessage when hibernated connection receives a message  */
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
       if (
         "onMessage" in this.worker.server &&
@@ -430,8 +430,19 @@ function createDurable(Worker: PartyKitServer) {
       }
     }
 
+    /** Runtime calls webSocketClose when hibernated connection closes  */
     async webSocketClose(ws: WebSocket) {
-      const connection = rehydrateHibernatedConnection(ws);
+      console.log("hibernated connection closed");
+      return this.onConnectionClose(rehydrateHibernatedConnection(ws));
+    }
+
+    /** Runtime calls webSocketError when hibernated connection errors  */
+    async webSocketError(ws: WebSocket, err: Error) {
+      return this.onConnectionError(rehydrateHibernatedConnection(ws), err);
+    }
+
+    /** Handle both hibernating and non-hibernating connection close events */
+    async onConnectionClose(connection: PartyKitConnection) {
       this.room.connections.delete(connection.id);
 
       if (
@@ -444,8 +455,8 @@ function createDurable(Worker: PartyKitServer) {
       }
     }
 
-    async webSocketError(ws: WebSocket, err: Error) {
-      const connection = rehydrateHibernatedConnection(ws);
+    /** Handle both hibernating and non-hibernating connection close events */
+    async onConnectionError(connection: PartyKitConnection, err: Error) {
       this.room.connections.delete(connection.id);
 
       if (
