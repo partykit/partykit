@@ -198,6 +198,9 @@ function createDurable(Worker: PartyKitServer) {
         context: {
           parties: {},
         },
+        getWebSockets() {
+          return controller.getWebSockets();
+        },
       };
 
       if (isClassAPI && "onMessage" in WorkerInstanceMethods) {
