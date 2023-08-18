@@ -2,23 +2,30 @@ import type {
   DurableObjectStorage,
   ExecutionContext,
   WebSocket,
+  CFRequest,
 } from "@cloudflare/workers-types";
-
-import type {
-  Request as CFRequest,
-  Response as CFResponse,
-} from "@cloudflare/workers-types/experimental";
-
 // Because when you construct a `new Response()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
 // This is fine by us, let user return whichever response type.
-export type PartyKitRequest = Request | CFRequest;
-export type PartyKitResponse = Response | CFResponse;
+// export type Response = Response;
+
+export interface PartyRequest extends CFRequest {}
 
 export type PartyKitStorage = DurableObjectStorage;
 
 export type PartyKitContext = {
-  request: PartyKitRequest;
+  request: PartyRequest;
+};
+
+export type PartyStub = {
+  get(id: string): {
+    connect: () => WebSocket;
+    fetch: (init: RequestInit) => Promise<Response>;
+  };
+};
+
+export type PartyContext = {
+  parties: Record<string, PartyStub>;
 };
 
 export type PartyKitRoom = {
@@ -27,15 +34,12 @@ export type PartyKitRoom = {
   connections: Map<string, PartyKitConnection>;
   env: Record<string, unknown>; // use a .env file, or --var
   storage: PartyKitStorage;
-  parties: Record<
-    string,
-    {
-      get(id: string): {
-        connect: () => WebSocket;
-        fetch: (init: RequestInit) => Promise<PartyKitResponse>;
-      };
-    }
-  >;
+  /** @deprecated Use `room.context.parties` instead */
+  parties: Record<string, PartyStub>;
+  context: {
+    // replaces room.parties
+    parties: Record<string, PartyStub>;
+  };
   broadcast: (msg: string, without?: string[] | undefined) => void;
 };
 
@@ -59,30 +63,26 @@ export type PartyKitConnection = WebSocket & {
  */
 type RequestHandler = {
   unstable_onFetch?: (
-    req: PartyKitRequest,
+    req: PartyRequest,
     lobby: {
       env: Record<string, unknown>;
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) => PartyKitResponse | Promise<PartyKitResponse>;
+  ) => Response | Promise<Response>;
   onBeforeRequest?: (
-    req: PartyKitRequest,
+    req: PartyRequest,
     room: {
       id: string;
       env: Record<string, unknown>;
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) =>
-    | PartyKitRequest
-    | Promise<PartyKitRequest>
-    | PartyKitResponse
-    | Promise<PartyKitResponse>;
+  ) => PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
   onRequest?: (
-    req: PartyKitRequest,
+    req: PartyRequest,
     room: PartyKitRoom
-  ) => PartyKitResponse | Promise<PartyKitResponse>;
+  ) => Response | Promise<Response>;
   onAlarm?: (room: Omit<PartyKitRoom, "id">) => void | Promise<void>;
 };
 
@@ -99,18 +99,14 @@ type ConnectionHandler = RequestHandler & {
     ctx: PartyKitContext
   ) => void | Promise<void>;
   onBeforeConnect?: (
-    req: PartyKitRequest,
+    req: PartyRequest,
     room: {
       id: string;
       env: Record<string, unknown>;
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) =>
-    | PartyKitRequest
-    | Promise<PartyKitRequest>
-    | PartyKitResponse
-    | Promise<PartyKitResponse>;
+  ) => PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
   /**
    * PartyKitServer may opt into being hibernated between WebSocket
    * messages, which enables a single server to handle more connections.
@@ -136,8 +132,10 @@ export type PartyKitServer = ConnectionHandler;
 // New Class API
 // --------------------------------------------
 
-export type Party = PartyKitRoom;
-
+export type Party = Omit<PartyKitRoom, "parties"> & {
+  context: PartyContext;
+};
+export type PartyConnection = PartyKitConnection;
 export type PartyServerOptions = {
   hibernate?: boolean;
 };
@@ -145,22 +143,17 @@ export type PartyServerOptions = {
 // PartyKitServer is now called PartyServer
 export interface PartyServer {
   readonly party: Party;
-  readonly?: PartyServerOptions;
+  readonly options?: PartyServerOptions;
 
   onStart?(): void | Promise<void>;
-  onConnect?(
-    ws: PartyKitConnection,
-    ctx: PartyKitContext
-  ): void | Promise<void>;
+  onConnect?(ws: PartyConnection, ctx: PartyKitContext): void | Promise<void>;
   onMessage?(
     message: string | ArrayBuffer,
-    ws: PartyKitConnection
+    ws: PartyConnection
   ): void | Promise<void>;
-  onClose?(ws: PartyKitConnection): void | Promise<void>;
-  onError?(ws: PartyKitConnection, err: Error): void | Promise<void>;
-  onRequest?(
-    req: PartyKitRequest
-  ): PartyKitResponse | Promise<PartyKitResponse>;
+  onClose?(ws: PartyConnection): void | Promise<void>;
+  onError?(ws: PartyConnection, err: Error): void | Promise<void>;
+  onRequest?(req: PartyRequest): Response | Promise<Response>;
 
   // TODO: does this belong on the static side?
   onAlarm?(room: Omit<PartyKitRoom, "id">): void | Promise<void>;
@@ -170,40 +163,32 @@ export interface PartyServer {
 export type PartyServerConstructor = {
   new (party: Party): PartyServer;
   unstable_onFetch?(
-    req: PartyKitRequest,
+    req: PartyRequest,
     lobby: {
       env: Record<string, unknown>;
-      parties: Party["parties"];
+      parties: Party["context"]["parties"];
     },
     ctx: ExecutionContext
-  ): PartyKitResponse | Promise<PartyKitResponse>;
+  ): Response | Promise<Response>;
   onBeforeRequest?(
-    req: PartyKitRequest,
+    req: PartyRequest,
     room: {
       id: string;
       env: Record<string, unknown>;
-      parties: Party["parties"];
+      parties: Party["context"]["parties"];
     },
     ctx: ExecutionContext
-  ):
-    | PartyKitRequest
-    | Promise<PartyKitRequest>
-    | PartyKitResponse
-    | Promise<PartyKitResponse>;
+  ): PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
 
   onBeforeConnect?(
-    req: PartyKitRequest,
+    req: PartyRequest,
     room: {
       id: string;
       env: Record<string, unknown>;
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ):
-    | PartyKitRequest
-    | Promise<PartyKitRequest>
-    | PartyKitResponse
-    | Promise<PartyKitResponse>;
+  ): PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
 };
 
 export type StaticAssetsManifestType = {

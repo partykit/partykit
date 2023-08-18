@@ -1,8 +1,7 @@
 import type {
   Party,
   PartyKitConnection,
-  PartyKitRequest,
-  PartyKitResponse,
+  PartyRequest,
   PartyServer,
   PartyServerConstructor,
   PartyServerOptions,
@@ -22,12 +21,8 @@ export default class Main implements PartyServer {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
   }
 
-  static onBeforeRequest(req: Request) {
+  static onBeforeRequest(req: PartyRequest) {
     return new Response("Intercepted at worker " + req.url);
-  }
-
-  onRequest(req: PartyKitRequest): PartyKitResponse {
-    return new Response(`Hello from party ${this.party.id}`);
   }
 
   async onConnect(connection: PartyKitConnection) {

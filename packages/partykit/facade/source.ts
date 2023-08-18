@@ -8,12 +8,14 @@ import type {
   PartyKitContext,
   PartyServerConstructor,
   PartyServer,
+  PartyRequest,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
   DurableObjectState,
   ExecutionContext,
 } from "@cloudflare/workers-types";
+
 import fetchStaticAsset from "./fetch-static-asset";
 
 // @ts-expect-error We'll be replacing __WORKER__
@@ -71,17 +73,6 @@ const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
   ? Worker.prototype
   : Worker;
 
-function assertHandlers(
-  definition: Record<string, unknown>,
-  handlers: string[]
-) {
-  for (const handler of handlers) {
-    if (handler in definition && typeof definition[handler] !== "function") {
-      throw new Error(`.${handler} should be a function`);
-    }
-  }
-}
-
 class PartyDurable {}
 
 type Env = {
@@ -90,7 +81,7 @@ type Env = {
   PARTYKIT_VARS: Record<string, unknown>;
 };
 
-let parties: PartyKitRoom["parties"];
+let parties: PartyKitRoom["context"]["parties"];
 
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
@@ -206,10 +197,16 @@ function createDurable(Worker: PartyKitServer) {
         storage: this.controller.storage,
         parties: {},
         broadcast: this.broadcast,
+        context: {
+          parties: {},
+        },
       };
 
       if (isClassAPI) {
-        this.worker = { server: new Worker(this.room), isClass: true };
+        this.worker = {
+          server: new Worker(this.room),
+          isClass: true,
+        };
       } else {
         this.worker = { server: Worker, isClass: false };
       }
@@ -246,7 +243,11 @@ function createDurable(Worker: PartyKitServer) {
       });
     };
 
-    async fetch(request: Request) {
+    async fetch(req: Request) {
+      // Coerce the request type to our extended request type.
+      // We do this to make typing in userland simpler
+      const request = req as unknown as PartyRequest;
+
       const url = new URL(request.url);
 
       // wait for any initialization code to complete
@@ -255,9 +256,11 @@ function createDurable(Worker: PartyKitServer) {
       }
 
       try {
-        this.room.parties = createMultiParties(this.namespaces, {
+        this.room.context.parties = createMultiParties(this.namespaces, {
           host: url.host,
         });
+        // deprecated, keep around for legacy users
+        this.room.parties = this.room.context.parties;
 
         // populate the room id/slug if not previously done so
 
@@ -470,7 +473,7 @@ declare const __PARTIES__: Record<string, string>;
 
 export default {
   async fetch(
-    request: Request,
+    request: PartyRequest,
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
@@ -515,7 +518,7 @@ export default {
           // we should make this work, once we decide behaviour
           // isValidRequest?
           // onAuth?
-          let onBeforeConnectResponse: Request | Response | undefined =
+          let onBeforeConnectResponse: PartyRequest | Response | undefined =
             undefined;
           if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
@@ -599,7 +602,7 @@ export default {
           return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
         }
       } else {
-        const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
+        const staticAssetsResponse = await fetchStaticAsset(url, env, ctx);
         if (staticAssetsResponse) {
           return staticAssetsResponse;
         } else if ("unstable_onFetch" in Worker) {
