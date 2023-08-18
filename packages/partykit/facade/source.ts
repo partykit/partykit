@@ -256,18 +256,7 @@ function createDurable(Worker: PartyKitServer) {
       }
 
       try {
-        this.room.context.parties = createMultiParties(this.namespaces, {
-          host: url.host,
-        });
-        // deprecated, keep around for legacy users
-        this.room.parties = this.room.context.parties;
-
-        // populate the room id/slug if not previously done so
-
-        const roomId = getRoomIdFromPathname(url.pathname);
-
-        assert(roomId, "No room id found in request url");
-        this.room.id = roomId;
+        this.populatePartyInfo(request.url);
 
         if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
           if ("onRequest" in this.worker.server) {
@@ -370,6 +359,24 @@ function createDurable(Worker: PartyKitServer) {
       }
     }
 
+    /**
+     * Parties can only be created once we have a request URL.
+     * This method should be called when the durable object receives its
+     * first connection, or is woken up from hibernation.
+     */
+    populatePartyInfo(requestUri: string) {
+      const url = new URL(requestUri);
+      const roomId = getRoomIdFromPathname(url.pathname);
+      assert(roomId, "No room id found in request url");
+
+      this.room.id = roomId;
+      this.room.context.parties = createMultiParties(this.namespaces, {
+        host: url.host,
+      });
+      //
+      this.room.parties = this.room.context.parties;
+    }
+
     async handleConnection(
       room: PartyKitRoom,
       connection: PartyKitConnection,
@@ -420,18 +427,8 @@ function createDurable(Worker: PartyKitServer) {
       if (this.room.id === UNDEFINED) {
         // This means the room "woke up" after hibernation
         // so we need to hydrate this.room again
-        const { uri } = connection;
-        assert(uri, "No uri found in connection");
-
-        const url = new URL(uri);
-        const roomId = getRoomIdFromPathname(url.pathname);
-        assert(roomId, "No room id found in request url");
-
-        this.room.id = roomId;
-        this.room.context.parties = createMultiParties(this.namespaces, {
-          host: url.host,
-        });
-        this.room.parties = this.room.context.parties;
+        assert(connection.uri, "No uri found in connection");
+        this.populatePartyInfo(connection.uri);
       }
 
       return this.invokeOnMessage(connection, msg);
