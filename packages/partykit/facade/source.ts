@@ -328,7 +328,8 @@ function createDurable(Worker: PartyKitServer) {
           // if worker sets explicit options, use that
           ("options" in this.worker.server &&
             this.worker.server.options?.hibernate === true) ||
-          // otherwise default to legacy behaviour for object workers
+          // otherwise default to legacy behaviour for object workers:
+          // hibernate if there's a message handler, or no onConnect handler
           (!this.worker.isClass &&
             ("onMessage" in this.worker.server ||
               !(`onConnect` in this.worker.server)));
@@ -380,19 +381,31 @@ function createDurable(Worker: PartyKitServer) {
         "No onConnect handler"
       );
 
+      const handleMessageFromClient = (event: MessageEvent) => {
+        this.invokeOnMessage(connection, event.data).catch((e) => {
+          console.error(e);
+        });
+      };
+
       const handleCloseFromClient = () => {
-        console.log("non-hibernated connection closed");
+        connection.removeEventListener("message", handleMessageFromClient);
         connection.removeEventListener("close", handleCloseFromClient);
-        return this.onConnectionClose(connection);
+        this.invokeOnClose(connection).catch((e) => {
+          console.error(e);
+        });
       };
 
       const handleErrorFromClient = (e: ErrorEvent) => {
+        connection.removeEventListener("message", handleMessageFromClient);
         connection.removeEventListener("error", handleErrorFromClient);
-        return this.onConnectionError(connection, e.error);
+        this.invokeOnError(connection, e.error).catch((e) => {
+          console.error(e);
+        });
       };
 
       connection.addEventListener("close", handleCloseFromClient);
       connection.addEventListener("error", handleErrorFromClient);
+      connection.addEventListener("message", handleMessageFromClient);
 
       // and finally, connect the client to the worker
       return this.worker.isClass
@@ -402,70 +415,66 @@ function createDurable(Worker: PartyKitServer) {
 
     /** Runtime calls webSocketMessage when hibernated connection receives a message  */
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      if (
-        "onMessage" in this.worker.server &&
-        typeof this.worker.server.onMessage === "function"
-      ) {
-        const connection = rehydrateHibernatedConnection(ws);
-        // @ts-expect-error - it may be a symbol before initialised
-        if (this.room.id === UNDEFINED) {
-          // This means the room "woke up" after hibernation
-          // so we need to hydrate this.room again
-          const { uri } = connection;
-          assert(uri, "No uri found in connection");
+      const connection = rehydrateHibernatedConnection(ws);
+      // @ts-expect-error - it may be a symbol before initialised
+      if (this.room.id === UNDEFINED) {
+        // This means the room "woke up" after hibernation
+        // so we need to hydrate this.room again
+        const { uri } = connection;
+        assert(uri, "No uri found in connection");
 
-          const url = new URL(uri);
-          const roomId = getRoomIdFromPathname(url.pathname);
-          assert(roomId, "No room id found in request url");
+        const url = new URL(uri);
+        const roomId = getRoomIdFromPathname(url.pathname);
+        assert(roomId, "No room id found in request url");
 
-          this.room.id = roomId;
-          this.room.parties = createMultiParties(this.namespaces, {
-            host: url.host,
-          });
-        }
-
-        return this.worker.isClass
-          ? this.worker.server.onMessage(msg, connection)
-          : this.worker.server.onMessage(msg, connection, this.room);
+        this.room.id = roomId;
+        this.room.context.parties = createMultiParties(this.namespaces, {
+          host: url.host,
+        });
+        this.room.parties = this.room.context.parties;
       }
+
+      return this.invokeOnMessage(connection, msg);
     }
 
     /** Runtime calls webSocketClose when hibernated connection closes  */
     async webSocketClose(ws: WebSocket) {
-      console.log("hibernated connection closed");
-      return this.onConnectionClose(rehydrateHibernatedConnection(ws));
+      return this.invokeOnClose(rehydrateHibernatedConnection(ws));
     }
 
     /** Runtime calls webSocketError when hibernated connection errors  */
     async webSocketError(ws: WebSocket, err: Error) {
-      return this.onConnectionError(rehydrateHibernatedConnection(ws), err);
+      return this.invokeOnError(rehydrateHibernatedConnection(ws), err);
     }
 
-    /** Handle both hibernating and non-hibernating connection close events */
-    async onConnectionClose(connection: PartyKitConnection) {
+    async invokeOnClose(connection: PartyKitConnection) {
       this.room.connections.delete(connection.id);
 
-      if (
-        "onClose" in this.worker.server &&
-        typeof this.worker.server.onClose === "function"
-      ) {
+      if (typeof this.worker.server.onClose === "function") {
         return this.worker.isClass
           ? this.worker.server.onClose(connection)
           : this.worker.server.onClose(connection, this.room);
       }
     }
 
-    /** Handle both hibernating and non-hibernating connection close events */
-    async onConnectionError(connection: PartyKitConnection, err: Error) {
+    async invokeOnError(connection: PartyKitConnection, err: Error) {
       this.room.connections.delete(connection.id);
 
-      if (
-        "onError" in this.worker.server &&
-        typeof this.worker.server.onError === "function"
-      ) {
+      if (typeof this.worker.server.onError === "function") {
         return this.worker.isClass
           ? this.worker.server.onError(connection, err)
           : this.worker.server.onError(connection, err, this.room);
+      }
+    }
+
+    async invokeOnMessage(
+      connection: PartyKitConnection,
+      msg: string | ArrayBuffer
+    ) {
+      if (typeof this.worker.server.onMessage === "function") {
+        return this.worker.isClass
+          ? this.worker.server.onMessage(msg, connection)
+          : this.worker.server.onMessage(msg, connection, this.room);
       }
     }
 
