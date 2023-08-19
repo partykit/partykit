@@ -83,7 +83,8 @@ async function initGit({ cwd }: { cwd: string }) {
     await execaCommand("git add -A", { cwd, stdio: "inherit" });
     await execaCommand('git commit -m "Initial commit from PartyKit"', {
       cwd,
-      stdio: "inherit",
+      stdout: "ignore",
+      stderr: "inherit",
       shell: true,
     });
   } catch (e) {
@@ -221,6 +222,12 @@ export async function init(options: {
         )}`
       );
     }
+    logInstructions.push(
+      `To start your dev server, run: ${chalk.bold("npm run dev")}\n`
+    );
+    logInstructions.push(
+      `‣ To publish your project, run: ${chalk.bold("npm run deploy")}\n`
+    );
 
     shouldRunNpmInstall = true;
   } else {
@@ -400,7 +407,11 @@ export async function init(options: {
     }
   }
 
-  console.log(`\nYay! Your project is now ready to go!`);
+  console.log(
+    `\nYay! Your project is created at ${chalk.bold(
+      path.relative(originalCwd, pathToProject)
+    )}!`
+  );
 
   if (logInstructions.length > 0) {
     console.log(`\n${logInstructions.join("\n")}\n`);
