@@ -223,10 +223,10 @@ export async function init(options: {
       );
     }
     logInstructions.push(
-      `To start your dev server, run: ${chalk.bold("npm run dev")}\n`
+      `‣ To start your dev server, run: ${chalk.bold("npm run dev")}`
     );
     logInstructions.push(
-      `‣ To publish your project, run: ${chalk.bold("npm run deploy")}\n`
+      `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
     );
 
     shouldRunNpmInstall = true;
@@ -239,22 +239,22 @@ export async function init(options: {
     if (!packageJson.scripts.dev) {
       packageJson.scripts.dev = "partykit dev";
       logInstructions.push(
-        `To start your dev server, run: ${chalk.bold("npm run dev")}\n`
+        `To start your dev server, run: ${chalk.bold("npm run dev")}`
       );
     } else {
       logInstructions.push(
-        `To start your dev server, run: ${chalk.bold("npx partykit dev")}\n`
+        `To start your dev server, run: ${chalk.bold("npx partykit dev")}`
       );
     }
 
     if (!packageJson.scripts.deploy) {
       packageJson.scripts.dev = "partykit deploy";
       logInstructions.push(
-        `‣ To publish your project, run: ${chalk.bold("npm run deploy")}\n`
+        `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
       );
     } else {
       logInstructions.push(
-        `‣ To publish your project, run: ${chalk.bold("npx partykit deploy")}\n`
+        `‣ To publish your project, run: ${chalk.bold("npx partykit deploy")}`
       );
     }
 
@@ -417,8 +417,8 @@ export async function init(options: {
     console.log(`\n${logInstructions.join("\n")}\n`);
   }
 
-  console.log(`🎈 If you need any help, reach out to us on:`);
-  console.log(`- Discord: https://discord.gg/2U9s75c`);
+  console.log(`🎈 That's it! If you need any help, reach out to us on:`);
+  console.log(`- Discord: https://discord.gg/g5uqHQJc3z`);
   console.log(`- Github: https://github.com/partykit/partykit`);
   console.log(`- Twitter: https://twitter.com/partykit_io`);
 }
