@@ -374,7 +374,9 @@ export async function deploy(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResult(
+  const deployRes = await fetchResult<{
+    result: { is_initial_deploy: boolean };
+  }>(
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
@@ -390,6 +392,13 @@ export async function deploy(options: {
       options.preview ? `${options.preview}.` : ""
     }${config.name}.${user.login.toLowerCase()}.partykit.dev`}`
   );
+  if (deployRes.result.is_initial_deploy) {
+    logger.log(
+      `We're provisioning your partykit.dev domain. This can take up to ${chalk.bold(
+        "2 minutes"
+      )}. Hold tight!`
+    );
+  }
 }
 
 export async function _delete(options: {

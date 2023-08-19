@@ -37,6 +37,12 @@ afterEach(() => {
   fs.rmdirSync(tmpDir, { recursive: true });
 });
 
+type DeployResponse = {
+  result: {
+    is_first_deploy: boolean;
+  };
+};
+
 describe("deploy", () => {
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
@@ -56,14 +62,16 @@ describe("deploy", () => {
 
   it("should build and submit a script to the server", async () => {
     let checkedResponse = false;
-    mockFetchResult<null>(
+    mockFetchResult<DeployResponse>(
       "POST",
       "/parties/test-user/test-script",
       (url, options) => {
         expect(url).toMatchInlineSnapshot('"/parties/test-user/test-script"');
         expect(options?.user?.access_token).toBe("test-token");
         checkedResponse = true;
-        return null;
+        return {
+          result: { is_first_deploy: false },
+        };
       }
     );
     await deploy({
@@ -97,7 +105,7 @@ describe("deploy", () => {
     );
 
     let checkedResponse = false;
-    mockFetchResult<null>(
+    mockFetchResult<DeployResponse>(
       "POST",
       "/parties/test-user/test-script",
       (url, options) => {
@@ -109,7 +117,9 @@ describe("deploy", () => {
           '"{\\"a\\":\\"b\\",\\"c\\":\\"d\\"}"'
         );
         checkedResponse = true;
-        return null;
+        return {
+          result: { is_first_deploy: false },
+        };
       }
     );
     await deploy({
@@ -146,7 +156,7 @@ describe("deploy", () => {
     );
 
     let checkedResponse = false;
-    mockFetchResult<null>(
+    mockFetchResult<DeployResponse>(
       "POST",
       "/parties/test-user/test-script",
       (url, options) => {
@@ -158,7 +168,9 @@ describe("deploy", () => {
           '"{\\"a\\":\\"b\\",\\"b\\":\\"b2\\",\\"c\\":\\"d\\",\\"d\\":\\"d4\\"}"'
         );
         checkedResponse = true;
-        return null;
+        return {
+          result: { is_first_deploy: false },
+        };
       }
     );
     await deploy({
@@ -207,7 +219,7 @@ describe("deploy", () => {
 
   it('should warn if using "serve" in the config', async () => {
     let checkedResponse = false;
-    mockFetchResult<null>(
+    mockFetchResult<DeployResponse>(
       "POST",
       "/parties/test-user/test-script",
       (url, options) => {
@@ -215,7 +227,9 @@ describe("deploy", () => {
         expect(options?.user?.access_token).toBe("test-token");
 
         checkedResponse = true;
-        return null;
+        return {
+          result: { is_first_deploy: false },
+        };
       }
     );
 
