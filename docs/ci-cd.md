@@ -1,6 +1,4 @@
-CI/CD with Github Actions
-
----
+## CI/CD with Github Actions
 
 So, you want to deploy a PartyKit project with [Github Actions](https://github.com/features/actions); here's a quick recipe for doing so. This example deploys a PartyKit project on every commit to the `main` branch of a repository.
 
