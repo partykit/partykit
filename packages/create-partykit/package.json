@@ -10,7 +10,8 @@
   },
   "files": [
     "dist",
-    "template"
+    "js-template",
+    "ts-template"
   ],
   "keywords": [],
   "author": "PartyKit, Inc. <team@partykit.io>",
@@ -20,14 +21,19 @@
     "commander": "^11.0.0",
     "execa": "^7.2.0",
     "find-config": "^1.0.0",
+    "gradient-string": "^2.0.2",
     "ink": "^4.3.1",
     "ink-select-input": "^5.0.0",
     "ink-text-input": "^5.0.1",
-    "react": "^18.2.0"
+    "random-words": "^2.0.0",
+    "react": "^18.2.0",
+    "which-pm-runs": "^1.1.0"
   },
   "devDependencies": {
     "@types/execa": "^2.0.0",
+    "@types/random-words": "^1.1.2",
     "@types/react": "^18.2.20",
+    "@types/which-pm-runs": "^1.0.0",
     "esbuild": "^0.19.2"
   }
 }

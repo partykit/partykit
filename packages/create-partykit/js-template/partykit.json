@@ -1,0 +1,8 @@
+{
+  "name": "$PROJECT_NAME",
+  "main": "src/server.js",
+  "serve": {
+    "path": "public",
+    "build": "src/client.jsx"
+  }
+}

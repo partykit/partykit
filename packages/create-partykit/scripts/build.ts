@@ -7,7 +7,7 @@ const minify = process.argv.includes("--minify");
 const isProd = process.argv.includes("--production");
 
 esbuild.buildSync({
-  entryPoints: ["src/index.ts"],
+  entryPoints: ["src/index.tsx"],
   bundle: true,
   platform: "node",
   format: "esm",
