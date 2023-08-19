@@ -239,11 +239,11 @@ export async function init(options: {
     if (!packageJson.scripts.dev) {
       packageJson.scripts.dev = "partykit dev";
       logInstructions.push(
-        `To start your dev server, run: ${chalk.bold("npm run dev")}`
+        `‣ To start your dev server, run: ${chalk.bold("npm run dev")}`
       );
     } else {
       logInstructions.push(
-        `To start your dev server, run: ${chalk.bold("npx partykit dev")}`
+        `‣ To start your dev server, run: ${chalk.bold("npx partykit dev")}`
       );
     }
 
