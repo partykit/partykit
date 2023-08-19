@@ -7,7 +7,7 @@ Scaffolding for PartyKit projects.
 ## Usage
 
 ```bash
-npm create partykit
+npm create partykit@latest
 ```
 
 `create-partykit` automatically runs in interactive mode, but you can also specify your project name and other options with command line arguments.
