@@ -82,8 +82,12 @@ function ensureYarnLock({ cwd }: { cwd: string }) {
 
 async function initGit({ cwd }: { cwd: string }) {
   try {
-    await execaCommand("git init", { cwd, stdio: "inherit" });
-    await execaCommand("git add -A", { cwd, stdio: "inherit" });
+    await execaCommand("git init", { cwd, stdio: "inherit", stdout: "ignore" });
+    await execaCommand("git add -A", {
+      cwd,
+      stdio: "inherit",
+      stdout: "ignore",
+    });
     await execaCommand('git commit -m "Initial commit from PartyKit"', {
       cwd,
       stdout: "ignore",
@@ -419,23 +423,23 @@ export async function init(options: {
   }
 
   console.log(
-    `\nYay! Your project is created at ${chalk.bold(
+    `\n🎈 Yay! Your project is created at ${chalk.bold(
       path.relative(originalCwd, pathToProject)
     )}!`
   );
 
   console.log("\nNext steps:");
   console.log(
-    `Enter your project directory with ${chalk.bold(
+    `‣ Enter your project directory with ${chalk.bold(
       `cd ${path.relative(originalCwd, pathToProject)}`
     )}`
   );
 
   if (logInstructions.length > 0) {
-    console.log(`\n${logInstructions.join("\n")}\n`);
+    console.log(`${logInstructions.join("\n")}\n`);
   }
 
-  console.log(`🎈 That's it! If you need any help, reach out to us on:`);
+  console.log(`That's it! If you need any help, reach out to us on:`);
   console.log(`- Discord: https://discord.gg/g5uqHQJc3z`);
   console.log(`- Github: https://github.com/partykit/partykit`);
   console.log(`- Twitter: https://twitter.com/partykit_io`);
