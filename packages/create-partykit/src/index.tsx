@@ -62,11 +62,14 @@ async function install({
   cwd: string;
 }) {
   if (pkgManager === "yarn") ensureYarnLock({ cwd });
-  return execaCommand(`${pkgManager} install`, {
-    cwd,
-    timeout: 90_000,
-    stdio: "inherit",
-  });
+  return execaCommand(
+    `${pkgManager} install${pkgManager === "npm" ? " --no-fund" : ""}`,
+    {
+      cwd,
+      timeout: 90_000,
+      stdio: "inherit",
+    }
+  );
 }
 
 function ensureYarnLock({ cwd }: { cwd: string }) {
