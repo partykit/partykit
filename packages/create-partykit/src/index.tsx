@@ -101,6 +101,7 @@ export async function init(options: {
   dryRun: boolean | undefined;
 }) {
   printBanner();
+  const originalCwd = process.cwd();
 
   const inputPathToProject = await new Promise<string>((resolve, reject) => {
     const randomName =
@@ -152,8 +153,7 @@ export async function init(options: {
     const { unmount, clear } = render(<GetPath />);
   });
 
-  const originalCwd = process.cwd();
-  const pathToProject = path.join(process.cwd(), inputPathToProject);
+  const pathToProject = path.join(originalCwd, inputPathToProject);
   if (!options.dryRun) {
     fs.mkdirSync(pathToProject, { recursive: true });
     process.chdir(pathToProject);
@@ -223,7 +223,9 @@ export async function init(options: {
       );
     }
     logInstructions.push(
-      `‣ To start your dev server, run: ${chalk.bold("npm run dev")}`
+      `‣ To start your dev server, run: ${chalk.bold(
+        "npm run dev"
+      )} (CTRL+C to stop)`
     );
     logInstructions.push(
       `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
@@ -239,11 +241,15 @@ export async function init(options: {
     if (!packageJson.scripts.dev) {
       packageJson.scripts.dev = "partykit dev";
       logInstructions.push(
-        `‣ To start your dev server, run: ${chalk.bold("npm run dev")}`
+        `‣ To start your dev server, run: ${chalk.bold(
+          "npm run dev"
+        )} (CTRL+C to stop)`
       );
     } else {
       logInstructions.push(
-        `‣ To start your dev server, run: ${chalk.bold("npx partykit dev")}`
+        `‣ To start your dev server, run: ${chalk.bold(
+          "npx partykit dev"
+        )} (CTRL+C to stop)`
       );
     }
 
@@ -343,14 +349,16 @@ export async function init(options: {
         .replace(/\$PROJECT_NAME/g, projectName)
     );
     console.log(
-      `‣ Created project at ${chalk.bold(
-        path.relative(process.cwd(), pathToProject)
-      )}`
+      `‣ Created a ${
+        shouldUseTypeScript ? "TypeScript" : "JavaScript"
+      } project at ${chalk.bold(path.relative(originalCwd, pathToProject))}`
     );
   } else {
     console.log(
-      `⤬ Dry run: skipping copying template files to ${chalk.bold(
-        path.relative(process.cwd(), pathToProject)
+      `⤬ Dry run: skipping copying ${
+        shouldUseTypeScript ? "TypeScript" : "JavaScript"
+      } template files to ${chalk.bold(
+        path.relative(originalCwd, pathToProject)
       )}`
     );
   }
@@ -411,6 +419,13 @@ export async function init(options: {
     `\nYay! Your project is created at ${chalk.bold(
       path.relative(originalCwd, pathToProject)
     )}!`
+  );
+
+  console.log("\nNext steps:");
+  console.log(
+    `Enter your project directory with ${chalk.bold(
+      `cd ${path.relative(originalCwd, pathToProject)}`
+    )}`
   );
 
   if (logInstructions.length > 0) {

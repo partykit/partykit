@@ -4,7 +4,7 @@ So, you want to deploy a PartyKit project with [Github Actions](https://github.c
 
 ### 1. Create a Github Token
 
-You'll need to configure a token using GitHub's Secrets feature - go to _Settings_ -> Secrets* and variables* -> _Actions_ and click "New repository secret". (You can make one in your [Developer Settings](https://github.com/settings/tokens/new)). Your API token is encrypted by GitHub, and the action won't print it into logs, so it should be safe! Let's say you've saved the token as `GITHUB_TOKEN`.
+You'll need to configure a token using GitHub's Secrets feature - go to _Settings_ -> _Secrets and variables_ -> _Actions_ and click "New repository secret". (You can make one in your [Developer Settings](https://github.com/settings/tokens/new)). Your API token is encrypted by GitHub, and the action won't print it into logs, so it should be safe! Let's say you've saved the token as `GITHUB_TOKEN`.
 
 ### 2. Create a Github Action
 
