@@ -70,7 +70,7 @@ npx partykit deploy server.ts --name my-party
 
 You can add further configuration including passing variables, substituting expressions, and more with a `partykit.json` file. For example:
 
-```json
+```jsonc
 {
   "name": "my-cool-partykit-project",
   "main": "server.ts", // path to the server file
@@ -91,7 +91,7 @@ You can add further configuration including passing variables, substituting expr
 }
 ```
 
-See more details in the [reference docs](./docs/reference).
+See more details in the [reference docs](./docs/reference.md).
 
 Next, connect your application to this server with a simple client:
 
@@ -120,7 +120,7 @@ Configure your bundler/server of choice to serve the client code (like [`vite`](
 
 You can serve static assets (like html, css, js, images) from PartyKit. Keep them in a directory (say `./public`), and pass `--serve public` to the `dev`/`deploy` commands. These assets will be served from the root of your domain. You can also compile and bundle your client code with configuration. For example, in your `partykit.json` file:
 
-```json
+```jsonc
 {
   // ...
   "serve": {
@@ -130,4 +130,4 @@ You can serve static assets (like html, css, js, images) from PartyKit. Keep the
 }
 ```
 
-See additional configuration that you can pass to `serve` and `serve.build` in the [reference docs](./docs/reference).
+See additional configuration that you can pass to `serve` and `serve.build` in the [reference docs](./docs/reference.md).

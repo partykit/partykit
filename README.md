@@ -95,7 +95,7 @@ You can add further configuration including passing variables, substituting expr
 }
 ```
 
-See more details in the [reference docs](./docs/reference).
+See more details in the [reference docs](./docs/reference.md).
 
 Next, connect your application to this server with a simple client:
 
@@ -134,7 +134,7 @@ You can serve static assets (like html, css, js, images) from PartyKit. Keep the
 }
 ```
 
-See additional configuration that you can pass to `serve` and `serve.build` in the [reference docs](./docs/reference).
+See additional configuration that you can pass to `serve` and `serve.build` in the [reference docs](./docs/reference.md).
 
 ## Libraries
 
