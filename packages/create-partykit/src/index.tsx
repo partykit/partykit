@@ -82,11 +82,15 @@ function ensureYarnLock({ cwd }: { cwd: string }) {
 
 async function initGit({ cwd }: { cwd: string }) {
   try {
-    await execaCommand("git init", { cwd, stdio: "inherit", stdout: "ignore" });
+    await execaCommand("git init", {
+      cwd,
+      stdout: "ignore",
+      stderr: "inherit",
+    });
     await execaCommand("git add -A", {
       cwd,
-      stdio: "inherit",
       stdout: "ignore",
+      stderr: "inherit",
     });
     await execaCommand('git commit -m "Initial commit from PartyKit"', {
       cwd,
