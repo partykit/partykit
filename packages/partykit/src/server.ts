@@ -75,9 +75,8 @@ type RequestHandler = {
     ctx: ExecutionContext
   ) =>
     | UserDefinedRequest
-    | Promise<UserDefinedRequest>
     | UserDefinedResponse
-    | Promise<UserDefinedResponse>;
+    | Promise<UserDefinedRequest | UserDefinedResponse>;
   onRequest?: (
     req: Request,
     room: PartyKitRoom
@@ -107,9 +106,8 @@ type ConnectionHandler = RequestHandler & {
     ctx: ExecutionContext
   ) =>
     | UserDefinedRequest
-    | Promise<UserDefinedRequest>
     | UserDefinedResponse
-    | Promise<UserDefinedResponse>;
+    | Promise<UserDefinedRequest | UserDefinedResponse>;
   /**
    * PartyKitServer may opt into being hibernated between WebSocket
    * messages, which enables a single server to handle more connections.
