@@ -134,7 +134,10 @@ export type PartyKitServer = ConnectionHandler;
 
 export type Party = Omit<PartyKitRoom, "parties"> & {
   context: PartyContext;
+  getConnection(id: string): PartyConnection | undefined;
+  getConnections(tag?: string): Iterator<PartyConnection>;
 };
+
 export type PartyConnection = PartyKitConnection;
 export type PartyServerOptions = {
   hibernate?: boolean;

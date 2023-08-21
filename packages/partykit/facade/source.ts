@@ -21,6 +21,7 @@ import fetchStaticAsset from "./fetch-static-asset";
 // @ts-expect-error We'll be replacing __WORKER__
 // with the path to the input worker
 import Worker from "__WORKER__";
+import { getConnection, getConnections } from "./connection";
 declare const Worker: PartyKitServer;
 
 function assert(condition: unknown, msg?: string): asserts condition {
@@ -201,6 +202,12 @@ function createDurable(Worker: PartyKitServer) {
         getWebSockets() {
           return controller.getWebSockets();
         },
+        getConnection(id: string) {
+          return getConnection(controller, id);
+        },
+        getConnections(id: string) {
+          return getConnections(controller, id);
+        },
       };
 
       if (isClassAPI && "onMessage" in WorkerInstanceMethods) {
@@ -303,7 +310,7 @@ function createDurable(Worker: PartyKitServer) {
 
         // Accept the websocket connection
         if (shouldHibernate) {
-          this.controller.acceptWebSocket(serverWebSocket);
+          this.controller.acceptWebSocket(serverWebSocket, [connectionId]);
           connection.serializeAttachment({
             id: connectionId,
             uri: request.url,
