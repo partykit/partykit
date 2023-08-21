@@ -2,7 +2,7 @@ import type {
   DurableObjectStorage,
   ExecutionContext,
   WebSocket,
-  CFRequest,
+  Request as CFRequest,
 } from "@cloudflare/workers-types";
 // Because when you construct a `new Response()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
