@@ -634,7 +634,7 @@ export default {
           return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
         }
       } else {
-        const staticAssetsResponse = await fetchStaticAsset(url, env, ctx);
+        const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
         if (staticAssetsResponse) {
           return staticAssetsResponse;
         } else if ("unstable_onFetch" in Worker) {

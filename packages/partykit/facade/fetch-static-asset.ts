@@ -7,10 +7,11 @@ import type { PartyRequest, StaticAssetsManifestType } from "../src/server";
 declare const StaticAssetManifest: StaticAssetsManifestType;
 
 export default async function fetchStaticAsset<Env>(
-  url: URL,
+  request: Request | PartyRequest,
   _env: Env,
   _ctx: ExecutionContext
 ): Promise<Response | null> {
+  const url = new URL(request.url);
   let response: Response | null = null;
 
   let filePath = decodeURIComponent(url.pathname);
