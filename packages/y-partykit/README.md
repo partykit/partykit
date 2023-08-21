@@ -37,9 +37,9 @@ export default {
           // or some external storage
         },
         // control how often handler is called with these options
-        debounceWait: 10000; // default: 2000 ms
-        debounceMaxWait: 20000; // default: 10000 ms
-        timeout: 5000; // default: 5000 ms
+        debounceWait: 10000, // default: 2000 ms
+        debounceMaxWait: 20000, // default: 10000 ms
+        timeout: 5000, // default: 5000 ms
       },
     });
   },
@@ -72,8 +72,7 @@ const provider = new YPartyKitProvider(
   {
     connect: false, // don't connect immediately, use provider.connect() when required
     params: { token: "my-secre-token" }, // adds to the query string of the websocket connection
-    awareness: new awarenessProtocol.Awareness(yDoc), // use your own awareness instance
-    // available from `import * as awarenessProtocol from 'y-protocols/awareness.js'`
+    awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
   }
 );
 ```
