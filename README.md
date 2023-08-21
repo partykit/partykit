@@ -162,7 +162,7 @@ import { onConnect } from "y-partykit";
 export default {
   async onConnect(conn, room, context) {
     return await onConnect(conn, room, {
-      // experiemental: persist the document to partykit's room storage
+      // experimental: persist the document to partykit's room storage
       persist: true,
 
       // Or, you can load/save to your own database or storage
@@ -177,9 +177,9 @@ export default {
           // or some external storage
         },
         // control how often handler is called with these options
-        debounceWait: 10000; // default: 2000 ms
-        debounceMaxWait: 20000; // default: 10000 ms
-        timeout: 5000; // default: 5000 ms
+        debounceWait: 10000, // default: 2000 ms
+        debounceMaxWait: 20000, // default: 10000 ms
+        timeout: 5000, // default: 5000 ms
       },
     });
   },
@@ -211,9 +211,8 @@ const provider = new YPartyKitProvider(
   yDoc,
   {
     connect: false, // don't connect immediately, use provider.connect() when required
-    params: { token: "my-secre-token" }, // adds to the query string of the websocket connection
-    awareness: new awarenessProtocol.Awareness(yDoc), // use your own awareness instance
-    // available from `import * as awarenessProtocol from 'y-protocols/awareness.js'`
+    params: { token: "my-secret-token" }, // adds to the query string of the websocket connection
+    awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
   }
 );
 ```
