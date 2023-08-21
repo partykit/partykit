@@ -288,7 +288,8 @@ export async function init(options: {
     }
 
     if (!packageJson.devDependencies.typescript) {
-      packageJson.devDependencies.partykit = packageDevDependencies.typescript;
+      packageJson.devDependencies.typescript =
+        packageDevDependencies.typescript;
       shouldRunNpmInstall = true;
     }
 
