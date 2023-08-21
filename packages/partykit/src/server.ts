@@ -31,16 +31,20 @@ export type PartyContext = {
 export type PartyKitRoom = {
   id: string; // room id, usually a slug
   internalID: string; // internal id
-  connections: Map<string, PartyKitConnection>;
+
   env: Record<string, unknown>; // use a .env file, or --var
   storage: PartyKitStorage;
+  /** @deprecated Use `room.getConnections` instead */
+  connections: Map<string, PartyKitConnection>;
+
   /** @deprecated Use `room.context.parties` instead */
   parties: Record<string, PartyStub>;
-  context: {
-    // replaces room.parties
-    parties: Record<string, PartyStub>;
-  };
+
+  context: PartyContext;
   broadcast: (msg: string, without?: string[] | undefined) => void;
+
+  getConnection(id: string): PartyConnection | undefined;
+  getConnections(tag?: string): IterableIterator<PartyConnection>;
 };
 
 export type PartyKitConnection = WebSocket & {
@@ -132,11 +136,7 @@ export type PartyKitServer = ConnectionHandler;
 // New Class API
 // --------------------------------------------
 
-export type Party = Omit<PartyKitRoom, "parties"> & {
-  context: PartyContext;
-  getConnection(id: string): PartyConnection | undefined;
-  getConnections(tag?: string): Iterator<PartyConnection>;
-};
+export type Party = PartyKitRoom;
 
 export type PartyConnection = PartyKitConnection;
 export type PartyServerOptions = {
