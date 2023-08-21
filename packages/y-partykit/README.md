@@ -22,7 +22,7 @@ import { onConnect } from "y-partykit";
 export default {
   async onConnect(conn, room, context) {
     return await onConnect(conn, room, {
-      // experiemental: persist the document to partykit's room storage
+      // experimental: persist the document to partykit's room storage
       persist: true,
 
       // Or, you can load/save to your own database or storage
@@ -71,7 +71,7 @@ const provider = new YPartyKitProvider(
   yDoc,
   {
     connect: false, // don't connect immediately, use provider.connect() when required
-    params: { token: "my-secre-token" }, // adds to the query string of the websocket connection
+    params: { token: "my-secret-token" }, // adds to the query string of the websocket connection
     awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
   }
 );
