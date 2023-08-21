@@ -4,7 +4,7 @@ Welcome to the party, pal!
 
 This is a [Partykit](https://partykit.io) project, which lets you create real-time collaborative applications with minimal coding effort.
 
-[`server.js`](./src/server.js) is the server-side code, which is responsible for handling WebSocket events and HTTP requests. [`client.js`](./src/client.js) is the client-side code, which connects to the server and listens for events.
+[`server.js`](./src/server.js) is the server-side code, which is responsible for handling WebSocket events and HTTP requests. [`client.jsx`](./src/client.jsx) is the client-side code, which connects to the server and listens for events.
 
 You can start developing by running `npm run dev` and opening [http://localhost:1999](http://localhost:1999) in your browser. When you're ready, you can deploy your application on to the PartyKit cloud with `npm run deploy`.
 
