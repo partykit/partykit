@@ -6,7 +6,6 @@ import type {
   PartyKitRoom,
   PartyKitConnection,
   PartyServerConstructor,
-  PartyServer,
   PartyRequest,
   Party,
 } from "../src/server";
@@ -15,23 +14,20 @@ import type {
   DurableObjectState,
   ExecutionContext,
 } from "@cloudflare/workers-types";
-
 import fetchStaticAsset from "./fetch-static-asset";
-
-// @ts-expect-error We'll be replacing __WORKER__
-// with the path to the input worker
-import Worker from "__WORKER__";
 import {
   type ConnectionManager,
   HibernatingConnectionManager,
   InMemoryConnectionManager,
   createLazyConnection,
 } from "./connection";
-declare const Worker: PartyKitServer;
+import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
 
-type WorkerDefinition =
-  | { server: PartyServer; isClass: true }
-  | { server: PartyKitServer; isClass: false };
+// @ts-expect-error We'll be replacing __WORKER__
+// with the path to the input worker
+import Worker from "__WORKER__";
+
+declare const Worker: PartyKitServer;
 
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
@@ -60,17 +56,6 @@ function isClassWorker(worker: unknown): worker is PartyServerConstructor {
     typeof worker === "function" &&
     "prototype" in worker &&
     worker.prototype instanceof Object
-  );
-}
-
-function supportsHibernation(worker: WorkerDefinition) {
-  // if worker sets explicit options, use that
-  return (
-    ("options" in worker.server && worker.server.options?.hibernate === true) ||
-    // otherwise default to legacy behaviour for object workers:
-    // hibernate if there's a message handler, or no onConnect handler
-    (!worker.isClass &&
-      ("onMessage" in worker.server || !(`onConnect` in worker.server)))
   );
 }
 
@@ -179,10 +164,7 @@ function createDurable(Worker: PartyKitServer) {
     // assigned when first connection is received
     connectionManager?: ConnectionManager;
 
-    // for the interim, we support both class and object worker syntax.
-    worker?:
-      | { server: PartyServer; isClass: true }
-      | { server: PartyKitServer; isClass: false };
+    worker?: PartyServerAPI;
 
     constructor(controller: DurableObjectState, env: Env) {
       super();
@@ -214,6 +196,7 @@ function createDurable(Worker: PartyKitServer) {
           if (self.connectionManager) {
             return self.connectionManager.getConnection(id);
           }
+
           console.warn(
             ".getConnection was invoked before first connection. This will always return undefined."
           );
@@ -224,6 +207,7 @@ function createDurable(Worker: PartyKitServer) {
           if (self.connectionManager) {
             return self.connectionManager.getConnections(tag);
           }
+
           console.warn(
             "Party.getConnections was invoked before first connection. This will always return an empty list."
           );
@@ -235,10 +219,10 @@ function createDurable(Worker: PartyKitServer) {
           console.warn(
             "Party.connections is deprecated and will be removed in a future version of PartyKit. Use Party.getConnections() instead."
           );
-
           if (self.connectionManager) {
             return self.connectionManager.legacy_getConnectionMap();
           }
+
           console.warn(
             "Party.connections was invoked before first connection. This will always return an empty Map."
           );
@@ -277,19 +261,13 @@ function createDurable(Worker: PartyKitServer) {
           await this.initialize(request.url);
         }
 
+        // make sure initialization ran as expected
         assert(this.worker, "Worker not initialized.");
         assert(this.connectionManager, "ConnectionManager not initialized.");
 
+        // handle non-websocket requests
         if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-          if ("onRequest" in this.worker.server) {
-            if (typeof this.worker?.server.onRequest === "function") {
-              return await this.worker.server.onRequest(request, this.room);
-            } else {
-              return new Response("Invalid onRequest handler", {
-                status: 500,
-              });
-            }
-          }
+          return await this.worker.onRequest(request);
         }
       } catch (e) {
         const errMessage = e instanceof Error ? e.message : `${e}`;
@@ -302,13 +280,14 @@ function createDurable(Worker: PartyKitServer) {
           }
         );
       }
+      // handle websocket connections
       try {
         if (
           !(
-            ("onConnect" in this.worker.server &&
-              typeof this.worker.server.onConnect === "function") ||
-            ("onMessage" in this.worker.server &&
-              typeof this.worker.server.onMessage === "function")
+            ("onConnect" in this.worker &&
+              typeof this.worker.onConnect === "function") ||
+            ("onMessage" in this.worker &&
+              typeof this.worker.onMessage === "function")
           )
         ) {
           throw new Error("No onConnect or onMessage handler");
@@ -335,16 +314,11 @@ function createDurable(Worker: PartyKitServer) {
         // Accept the websocket connection
         this.connectionManager.accept(connection, []);
 
-        if (!supportsHibernation(this.worker)) {
+        if (!this.worker.supportsHibernation) {
           await this.attachSocketEventHandlers(connection);
         }
 
-        // Notify the user server that a new connection has been established
-        if (typeof this.worker.server.onConnect === "function") {
-          await (this.worker.isClass
-            ? this.worker.server.onConnect(connection, { request })
-            : this.worker.server.onConnect(connection, this.room, { request }));
-        }
+        await this.worker.onConnect(connection, { request });
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
@@ -385,25 +359,15 @@ function createDurable(Worker: PartyKitServer) {
     }
 
     async #initializeWorker() {
-      if (isClassAPI) {
-        this.worker = {
-          server: new Worker(this.room),
-          isClass: true,
-        };
-      } else {
-        this.worker = { server: Worker, isClass: false };
-      }
+      this.worker = isClassAPI
+        ? new ClassWorker(Worker, this.room)
+        : new ModuleWorker(Worker, this.room);
 
-      this.connectionManager = supportsHibernation(this.worker)
+      this.connectionManager = this.worker.supportsHibernation
         ? new HibernatingConnectionManager(this.controller)
         : new InMemoryConnectionManager();
 
-      if (
-        "onStart" in this.worker.server &&
-        typeof this.worker.server.onStart === "function"
-      ) {
-        return this.worker.server.onStart();
-      }
+      return this.worker.onStart();
     }
 
     async attachSocketEventHandlers(connection: PartyKitConnection) {
@@ -462,22 +426,12 @@ function createDurable(Worker: PartyKitServer) {
 
     async invokeOnClose(connection: PartyKitConnection) {
       assert(this.worker, "[onClose] Worker not initialized.");
-
-      if (typeof this.worker.server.onClose === "function") {
-        return this.worker.isClass
-          ? this.worker.server.onClose(connection)
-          : this.worker.server.onClose(connection, this.room);
-      }
+      return this.worker.onClose(connection);
     }
 
     async invokeOnError(connection: PartyKitConnection, err: Error) {
       assert(this.worker, "[onError] Worker not initialized.");
-
-      if (typeof this.worker.server.onError === "function") {
-        return this.worker.isClass
-          ? this.worker.server.onError(connection, err)
-          : this.worker.server.onError(connection, err, this.room);
-      }
+      return this.worker.onError(connection, err);
     }
 
     async invokeOnMessage(
@@ -485,11 +439,7 @@ function createDurable(Worker: PartyKitServer) {
       msg: string | ArrayBuffer
     ) {
       assert(this.worker, "[onMessage] Worker not initialized.");
-      if (typeof this.worker.server.onMessage === "function") {
-        return this.worker.isClass
-          ? this.worker.server.onMessage(msg, connection)
-          : this.worker.server.onMessage(msg, connection, this.room);
-      }
+      return this.worker.onMessage(msg, connection);
     }
 
     async alarm() {
@@ -500,9 +450,7 @@ function createDurable(Worker: PartyKitServer) {
         assert(this.worker, "[onAlarm] Worker not initialized.");
       }
 
-      if (this.worker.server.onAlarm) {
-        return this.worker.server.onAlarm(this.room);
-      }
+      return this.worker.onAlarm(this.room);
     }
   };
 }
