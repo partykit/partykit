@@ -34,6 +34,7 @@
     "@types/random-words": "^1.1.2",
     "@types/react": "^18.2.20",
     "@types/which-pm-runs": "^1.0.0",
-    "esbuild": "^0.19.2"
+    "esbuild": "^0.19.2",
+    "typescript": "^5.1.6"
   }
 }

@@ -10,7 +10,10 @@ import detectPackageManager from "which-pm-runs";
 import path from "path";
 import fs from "fs";
 import findConfig from "find-config";
-import { version as packageVersion } from "../package.json";
+import {
+  version as packageVersion,
+  devDependencies as packageDevDependencies,
+} from "../package.json";
 import chalk from "chalk";
 import { program /*, Option*/ } from "commander";
 
@@ -214,6 +217,7 @@ export async function init(options: {
       },
       devDependencies: {
         partykit: packageVersion,
+        typescript: packageDevDependencies.typescript,
       },
     };
     if (!options.dryRun) {
@@ -280,6 +284,11 @@ export async function init(options: {
     packageJson.devDependencies ||= {};
     if (!packageJson.devDependencies.partykit) {
       packageJson.devDependencies.partykit = packageVersion;
+      shouldRunNpmInstall = true;
+    }
+
+    if (!packageJson.devDependencies.typescript) {
+      packageJson.devDependencies.partykit = packageDevDependencies.typescript;
       shouldRunNpmInstall = true;
     }
 
@@ -359,6 +368,15 @@ export async function init(options: {
         .readFileSync(partykitJsonPath, { encoding: "utf-8" })
         .replace(/\$PROJECT_NAME/g, projectName)
     );
+    // do the same with README.md
+    const readmePath = path.join(pathToProject, "README.md");
+    fs.writeFileSync(
+      readmePath,
+      fs
+        .readFileSync(readmePath, { encoding: "utf-8" })
+        .replace(/\$PROJECT_NAME/g, projectName)
+    );
+
     console.log(
       `‣ Created a ${
         shouldUseTypeScript ? "TypeScript" : "JavaScript"
