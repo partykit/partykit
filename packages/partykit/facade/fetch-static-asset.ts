@@ -2,12 +2,12 @@
 // details about static assets
 import StaticAssetManifest from "__STATIC_ASSETS_MANIFEST__";
 
-import type { StaticAssetsManifestType } from "../src/server";
+import type { PartyRequest, StaticAssetsManifestType } from "../src/server";
 
 declare const StaticAssetManifest: StaticAssetsManifestType;
 
 export default async function fetchStaticAsset<Env>(
-  request: Request,
+  request: Request | PartyRequest,
   _env: Env,
   _ctx: ExecutionContext
 ): Promise<Response | null> {

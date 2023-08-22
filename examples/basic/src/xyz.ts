@@ -1,7 +1,7 @@
 import type { PartyKitServer } from "partykit/server";
 
 export default {
-  onRequest(_req: Request) {
+  onRequest(_req) {
     return new Response("Hello from xyz");
   },
   onConnect(ws, _room) {

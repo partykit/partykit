@@ -2,10 +2,11 @@
 // It will be compiled and imported by the CLI.
 
 import type {
+  Party,
   PartyKitServer,
-  PartyKitRoom,
-  PartyKitConnection,
-  PartyKitContext,
+  PartyConnection,
+  PartyWorker,
+  PartyRequest,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
@@ -13,10 +14,18 @@ import type {
   ExecutionContext,
 } from "@cloudflare/workers-types";
 import fetchStaticAsset from "./fetch-static-asset";
+import {
+  type ConnectionManager,
+  HibernatingConnectionManager,
+  InMemoryConnectionManager,
+  createLazyConnection,
+} from "./connection";
+import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
 
 // @ts-expect-error We'll be replacing __WORKER__
 // with the path to the input worker
 import Worker from "__WORKER__";
+
 declare const Worker: PartyKitServer;
 
 function assert(condition: unknown, msg?: string): asserts condition {
@@ -38,21 +47,21 @@ function getRoomIdFromPathname(pathname: string) {
   }
 }
 
-const rehydratedConnections = new WeakMap<WebSocket, PartyKitConnection>();
-
-function rehydrateHibernatedConnection(ws: WebSocket): PartyKitConnection {
-  if (rehydratedConnections.has(ws)) {
-    return rehydratedConnections.get(ws) as PartyKitConnection;
-  }
-  const connection = Object.assign(ws, {
-    ...ws.deserializeAttachment(),
-    socket: ws,
-  }) as PartyKitConnection;
-
-  rehydratedConnections.set(ws, connection);
-  return connection;
-}
 let didWarnAboutMissingConnectionId = false;
+
+// The worker script can either be an object with handlers, or a class with same handlers
+function isClassWorker(worker: unknown): worker is PartyWorker {
+  return (
+    typeof worker === "function" &&
+    "prototype" in worker &&
+    worker.prototype instanceof Object
+  );
+}
+
+// When the worker is a class, to validate worker shape we'll look onto the worker prototype
+const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
+  ? Worker.prototype
+  : Worker;
 
 class PartyDurable {}
 
@@ -62,7 +71,7 @@ type Env = {
   PARTYKIT_VARS: Record<string, unknown>;
 };
 
-let parties: PartyKitRoom["parties"];
+let parties: Party["context"]["parties"];
 
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
@@ -107,17 +116,12 @@ function createMultiParties(
   return parties;
 }
 
-// we use a symbol as a sigil value to indicate
-// that the room id hasn't been set yet
-const UNDEFINED = Symbol("UNDEFINED");
-
 function createDurable(Worker: PartyKitServer) {
+  const isClassAPI = isClassWorker(Worker);
+
   for (const handler of [
-    "unstable_onFetch",
     "onConnect",
-    "onBeforeConnect",
     "onRequest",
-    "onBeforeRequest",
     "onMessage",
     "onClose",
     "onError",
@@ -128,10 +132,37 @@ function createDurable(Worker: PartyKitServer) {
     }
   }
 
+  for (const handler of [
+    "unstable_onFetch",
+    "onFetch",
+    "onBeforeConnect",
+    "onBeforeRequest",
+  ] satisfies (keyof PartyKitServer)[]) {
+    if (handler in WorkerInstanceMethods) {
+      if (isClassAPI) {
+        console.warn(
+          `.${handler} is present on the class instance, but it should be defined as a static method`
+        );
+      }
+
+      if (typeof WorkerInstanceMethods[handler] !== "function") {
+        throw new Error(`.${handler} should be a function`);
+      }
+    }
+  }
+
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
-    room: PartyKitRoom;
+    room: Party;
     namespaces: Record<string, DurableObjectNamespace>;
+    inAlarm = false; // used to prevent access to certain properties in onAlarm
+
+    // assigned when first connection is received
+    id?: string;
+    worker?: PartyServerAPI;
+    parties?: Party["context"]["parties"];
+    connectionManager?: ConnectionManager;
+
     constructor(controller: DurableObjectState, env: Env) {
       super();
 
@@ -144,62 +175,123 @@ function createDurable(Worker: PartyKitServer) {
         main: PARTYKIT_DURABLE,
       });
 
+      // Party.connections getter needs access to durable object in closure
+      // eslint-disable-next-line @typescript-eslint/no-this-alias
+      const self = this;
+
       this.room = {
-        // @ts-expect-error - id is a symbol when we start
-        id: UNDEFINED, // using a string here because we're guaranteed to have set it before we use it
+        get id() {
+          if (self.inAlarm) {
+            throw new Error(
+              "You can not access `Party.id` in the `onAlarm` handler.\n" +
+                "This is a known limitation, and may be fixed in a future version of PartyKit.\n" +
+                "If you access to the id, you can save it into the Party storage when setting the alarm.\n"
+            );
+          }
+          if (self.id) {
+            return self.id;
+          }
+          throw new Error(
+            "Party.id is not yet initialized. This is probably a bug in PartyKit."
+          );
+        },
         internalID: this.controller.id.toString(),
-        connections: new Map(),
         env: PARTYKIT_VARS,
         storage: this.controller.storage,
-        parties: {},
         broadcast: this.broadcast,
-      };
+        context: {
+          get parties() {
+            if (self.inAlarm) {
+              throw new Error(
+                "You can not access `Party.context.parties` in the `onAlarm` handler.\n" +
+                  "This is a known limitation, and may be fixed in a future version of PartyKit."
+              );
+            }
+            if (self.parties) {
+              return self.parties;
+            }
+            throw new Error(
+              "Parties are not yet initialized. This is probably a bug in PartyKit."
+            );
+          },
+        },
+        getConnection(id: string) {
+          if (self.connectionManager) {
+            return self.connectionManager.getConnection(id);
+          }
 
-      if ("onMessage" in Worker) {
-        // when using the Hibernation API, we'll initialize the connections map by deserializing
-        // the sockets tracked by the platform. after this point, the connections map is kept up
-        // to date as sockets connect/disconnect, until next hibernation
-        this.room.connections = new Map(
-          controller.getWebSockets().map((socket) => {
-            const connection = rehydrateHibernatedConnection(socket);
-            return [connection.id, connection];
-          })
-        );
-      }
+          console.warn(
+            ".getConnection was invoked before first connection. This will always return undefined."
+          );
+          return undefined;
+        },
+
+        getConnections(tag?: string) {
+          if (self.connectionManager) {
+            return self.connectionManager.getConnections(tag);
+          }
+
+          console.warn(
+            "Party.getConnections was invoked before first connection. This will always return an empty list."
+          );
+          return [].values();
+        },
+
+        /// @deprecated, supported for backwards compatibility only
+        get connections() {
+          console.warn(
+            "Party.connections is deprecated and will be removed in a future version of PartyKit. Use Party.getConnections() instead."
+          );
+          if (self.connectionManager) {
+            // note: this is expensive for hibernating connections
+            return self.connectionManager.legacy_getConnectionMap();
+          }
+
+          console.warn(
+            "Party.connections was invoked before first connection. This will always return an empty Map."
+          );
+          return new Map();
+        },
+
+        get parties() {
+          console.warn(
+            "Party.parties is deprecated and will be removed in a future version of PartyKit. Use Party.context.parties instead."
+          );
+          return this.context.parties;
+        },
+      };
     }
 
     broadcast = (msg: string | Uint8Array, without: string[] = []) => {
-      this.room.connections.forEach((connection) => {
+      if (!this.connectionManager) {
+        return;
+      }
+
+      for (const connection of this.connectionManager.getConnections()) {
         if (!without.includes(connection.id)) {
           connection.send(msg);
         }
-      });
+      }
     };
 
-    async fetch(request: Request) {
+    async fetch(req: Request) {
+      // Coerce the request type to our extended request type.
+      // We do this to make typing in userland simpler
+      const request = req as unknown as PartyRequest;
       const url = new URL(request.url);
+
       try {
-        this.room.parties = createMultiParties(this.namespaces, {
-          host: url.host,
-        });
+        if (!this.worker) {
+          await this.initialize(request.url);
+        }
 
-        // populate the room id/slug if not previously done so
+        // make sure initialization ran as expected
+        assert(this.worker, "Worker not initialized.");
+        assert(this.connectionManager, "ConnectionManager not initialized.");
 
-        const roomId = getRoomIdFromPathname(url.pathname);
-
-        assert(roomId, "No room id found in request url");
-        this.room.id = roomId;
-
+        // handle non-websocket requests
         if (request.headers.get("upgrade")?.toLowerCase() !== "websocket") {
-          if ("onRequest" in Worker) {
-            if (typeof Worker.onRequest === "function") {
-              return await Worker.onRequest(request, this.room);
-            } else {
-              return new Response("Invalid onRequest handler", {
-                status: 500,
-              });
-            }
-          }
+          return await this.worker.onRequest(request);
         }
       } catch (e) {
         const errMessage = e instanceof Error ? e.message : `${e}`;
@@ -212,11 +304,14 @@ function createDurable(Worker: PartyKitServer) {
           }
         );
       }
+      // handle websocket connections
       try {
         if (
           !(
-            ("onConnect" in Worker && typeof Worker.onConnect === "function") ||
-            ("onMessage" in Worker && typeof Worker.onMessage === "function")
+            ("onConnect" in this.worker &&
+              typeof this.worker.onConnect === "function") ||
+            ("onMessage" in this.worker &&
+              typeof this.worker.onMessage === "function")
           )
         ) {
           throw new Error("No onConnect or onMessage handler");
@@ -234,30 +329,23 @@ function createDurable(Worker: PartyKitServer) {
         }
 
         // TODO: Object.freeze / mark as readonly!
-        const connection: PartyKitConnection = Object.assign(serverWebSocket, {
+        const connection: PartyConnection = Object.assign(serverWebSocket, {
           id: connectionId,
           socket: serverWebSocket,
           uri: request.url,
         });
-        this.room.connections.set(connectionId, connection);
 
-        const context = { request };
+        const ctx = { request };
+        const tags = await this.worker.getConnectionTags(connection, ctx);
 
         // Accept the websocket connection
-        if ("onMessage" in Worker || !(`onConnect` in Worker)) {
-          this.controller.acceptWebSocket(serverWebSocket);
-          connection.serializeAttachment({
-            id: connectionId,
-            uri: request.url,
-          });
+        this.connectionManager.accept(connection, tags);
 
-          if ("onConnect" in Worker && typeof Worker.onConnect === "function") {
-            await Worker.onConnect(connection, this.room, context);
-          }
-        } else {
-          serverWebSocket.accept();
-          await this.handleConnection(this.room, connection, context);
+        if (!this.worker.supportsHibernation) {
+          await this.attachSocketEventHandlers(connection);
         }
+
+        await this.worker.onConnect(connection, ctx);
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
@@ -274,80 +362,125 @@ function createDurable(Worker: PartyKitServer) {
       }
     }
 
-    async handleConnection(
-      room: PartyKitRoom,
-      connection: PartyKitConnection,
-      context: PartyKitContext
-    ) {
-      assert(
-        "onConnect" in Worker && typeof Worker.onConnect === "function",
-        "No onConnect handler"
-      );
+    /**
+     * Parties can only be created once we have a request URL.
+     * This method should be called when the durable object receives its
+     * first connection, or is woken up from hibernation.
+     */
+    async initialize(requestUri: string) {
+      // these can be collapsed into a single method once we solve
+      // request url rehydration on alarm
+      this.#initializeParty(requestUri);
+      return this.#initializeWorker();
+    }
 
-      const handleCloseOrErrorFromClient = () => {
-        // Remove the client from the room and delete associated user data.
-        this.room.connections.delete(connection.id);
+    #initializeParty(requestUri: string) {
+      const url = new URL(requestUri);
+      const roomId = getRoomIdFromPathname(url.pathname);
+      assert(roomId, "No room id found in request url");
 
-        connection.removeEventListener("close", handleCloseOrErrorFromClient);
-        connection.removeEventListener("error", handleCloseOrErrorFromClient);
+      this.id = roomId;
+      this.parties = createMultiParties(this.namespaces, {
+        host: url.host,
+      });
+    }
 
-        if (room.connections.size === 0) {
-          // TODO: implement this
-        }
+    async #initializeWorker() {
+      this.worker = isClassAPI
+        ? new ClassWorker(Worker, this.room)
+        : new ModuleWorker(Worker, this.room);
+
+      this.connectionManager = this.worker.supportsHibernation
+        ? new HibernatingConnectionManager(this.controller)
+        : new InMemoryConnectionManager();
+
+      return this.worker.onStart();
+    }
+
+    async attachSocketEventHandlers(connection: PartyConnection) {
+      assert(this.worker, "[onConnect] Worker not initialized.");
+
+      const handleMessageFromClient = (event: MessageEvent) => {
+        this.invokeOnMessage(connection, event.data).catch((e) => {
+          console.error(e);
+        });
       };
 
-      connection.addEventListener("close", handleCloseOrErrorFromClient);
-      connection.addEventListener("error", handleCloseOrErrorFromClient);
-      // and finally, connect the client to the worker
-      // TODO: pass room id here? and other meta
-      return Worker.onConnect(connection, room, context);
+      const handleCloseFromClient = () => {
+        connection.removeEventListener("message", handleMessageFromClient);
+        connection.removeEventListener("close", handleCloseFromClient);
+        this.invokeOnClose(connection).catch((e) => {
+          console.error(e);
+        });
+      };
+
+      const handleErrorFromClient = (e: ErrorEvent) => {
+        connection.removeEventListener("message", handleMessageFromClient);
+        connection.removeEventListener("error", handleErrorFromClient);
+        this.invokeOnError(connection, e.error).catch((e) => {
+          console.error(e);
+        });
+      };
+
+      connection.addEventListener("close", handleCloseFromClient);
+      connection.addEventListener("error", handleErrorFromClient);
+      connection.addEventListener("message", handleMessageFromClient);
     }
 
+    /** Runtime calls webSocketMessage when hibernated connection receives a message  */
     async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
-      if ("onMessage" in Worker && typeof Worker.onMessage === "function") {
-        const connection = rehydrateHibernatedConnection(ws);
-        // @ts-expect-error - it may be a symbol before initialised
-        if (this.room.id === UNDEFINED) {
-          // This means the room "woke up" after hibernation
-          // so we need to hydrate this.room again
-          const { uri } = connection;
-          assert(uri, "No uri found in connection");
-
-          const url = new URL(uri);
-          const roomId = getRoomIdFromPathname(url.pathname);
-          assert(roomId, "No room id found in request url");
-
-          this.room.id = roomId;
-          this.room.parties = createMultiParties(this.namespaces, {
-            host: url.host,
-          });
-        }
-
-        return Worker.onMessage(msg, connection, this.room);
+      const connection = createLazyConnection(ws);
+      if (!this.worker) {
+        // This means the room "woke up" after hibernation
+        // so we need to hydrate this.room again
+        assert(connection.uri, "No uri found in connection");
+        await this.initialize(connection.uri);
       }
+
+      return this.invokeOnMessage(connection, msg);
     }
 
+    /** Runtime calls webSocketClose when hibernated connection closes  */
     async webSocketClose(ws: WebSocket) {
-      const connection = rehydrateHibernatedConnection(ws);
-      this.room.connections.delete(connection.id);
-
-      if ("onClose" in Worker && typeof Worker.onClose === "function") {
-        return Worker.onClose(connection, this.room);
-      }
+      return this.invokeOnClose(createLazyConnection(ws));
     }
 
+    /** Runtime calls webSocketError when hibernated connection errors  */
     async webSocketError(ws: WebSocket, err: Error) {
-      const connection = rehydrateHibernatedConnection(ws);
-      this.room.connections.delete(connection.id);
+      return this.invokeOnError(createLazyConnection(ws), err);
+    }
 
-      if ("onError" in Worker && typeof Worker.onError === "function") {
-        return Worker.onError(connection, err, this.room);
-      }
+    async invokeOnClose(connection: PartyConnection) {
+      assert(this.worker, "[onClose] Worker not initialized.");
+      return this.worker.onClose(connection);
+    }
+
+    async invokeOnError(connection: PartyConnection, err: Error) {
+      assert(this.worker, "[onError] Worker not initialized.");
+      return this.worker.onError(connection, err);
+    }
+
+    async invokeOnMessage(
+      connection: PartyConnection,
+      msg: string | ArrayBuffer
+    ) {
+      assert(this.worker, "[onMessage] Worker not initialized.");
+      return this.worker.onMessage(msg, connection);
     }
 
     async alarm() {
-      if (Worker.onAlarm) {
-        return Worker.onAlarm(this.room);
+      if (!this.worker) {
+        // TODO: we need the room id here so we can call initialize.
+        // Currently room.id and room.parties are going to be undefined
+        await this.#initializeWorker();
+        assert(this.worker, "[onAlarm] Worker not initialized.");
+      }
+
+      try {
+        this.inAlarm = true;
+        return await this.worker.onAlarm();
+      } finally {
+        this.inAlarm = false;
       }
     }
   };
@@ -360,7 +493,7 @@ declare const __PARTIES__: Record<string, string>;
 
 export default {
   async fetch(
-    request: Request,
+    request: PartyRequest,
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
@@ -388,7 +521,7 @@ export default {
         main: PARTYKIT_DURABLE,
       });
 
-      const parties: PartyKitRoom["parties"] = createMultiParties(namespaces, {
+      const parties: Party["parties"] = createMultiParties(namespaces, {
         host: url.host,
       });
 
@@ -405,7 +538,7 @@ export default {
           // we should make this work, once we decide behaviour
           // isValidRequest?
           // onAuth?
-          let onBeforeConnectResponse: Request | Response | undefined =
+          let onBeforeConnectResponse: PartyRequest | Response | undefined =
             undefined;
           if ("onBeforeConnect" in Worker) {
             if (typeof Worker.onBeforeConnect === "function") {
@@ -478,7 +611,7 @@ export default {
           if (onBeforeRequestResponse instanceof Response) {
             return onBeforeRequestResponse;
           }
-          if (!("onRequest" in Worker)) {
+          if (!("onRequest" in WorkerInstanceMethods)) {
             throw new Error("No onRequest handler");
           }
 
@@ -490,21 +623,19 @@ export default {
         }
       } else {
         const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
+        const onFetch = Worker.onFetch ?? Worker.unstable_onFetch;
+
         if (staticAssetsResponse) {
           return staticAssetsResponse;
-        } else if ("unstable_onFetch" in Worker) {
-          if (typeof Worker.unstable_onFetch === "function") {
-            return await Worker.unstable_onFetch(
-              request,
-              {
-                env: PARTYKIT_VARS,
-                parties,
-              },
-              ctx
-            );
-          } else {
-            throw new Error(".unstable_onFetch must be a function");
-          }
+        } else if (typeof onFetch === "function") {
+          return await onFetch(
+            request,
+            {
+              env: PARTYKIT_VARS,
+              parties,
+            },
+            ctx
+          );
         }
 
         return new Response("Not found", {

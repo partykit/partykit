@@ -1,0 +1,8 @@
+{
+  "name": "class-example",
+  "main": "src/server.ts",
+  "serve": {
+    "path": "public",
+    "build": "src/client.ts"
+  }
+}
