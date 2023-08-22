@@ -246,7 +246,7 @@ To reflect this, we made the following names in our TypeScript types:
 -  `PartyKit*`-prefixed types are now shortened to `Party*` by dropping the "Kit". It's cleaner.
 -  `room.parties` ➡️ `party.context.parties` — Represents the taxonomy and relationship between parties more clearly.
   
-The old names are deprecated, but will continue to work. The old names are decorated with JSDoc `@deprecated` pragmas, so you can easily see which types you should rename,
+The old names are deprecated, but will continue to work. The deprecated names are decorated with JSDoc `@deprecated` pragmas, so you can find the types you need to rename.
 ## Breaking changes
 
 There are no breaking runtime changes. Existing PartyKit projects should continue working as expected.
