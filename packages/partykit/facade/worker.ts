@@ -121,9 +121,12 @@ export class ClassWorker implements PartyServerAPI {
       return this.worker.onAlarm();
     }
   }
-  getConnectionTags(connection: PartyConnection) {
+  getConnectionTags(
+    connection: PartyConnection,
+    context: PartyConnectionContext
+  ) {
     if (this.worker.getConnectionTags) {
-      return this.worker.getConnectionTags(connection);
+      return this.worker.getConnectionTags(connection, context);
     }
 
     return [];

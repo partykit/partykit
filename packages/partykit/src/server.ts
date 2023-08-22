@@ -126,7 +126,10 @@ export interface PartyServer {
    * You can tag a connection to filter them in Party#getConnections.
    * Each connection supports up to 9 tags, each tag max length is 256 characters.
    */
-  getConnectionTags?(connection: PartyConnection): string[] | Promise<string[]>;
+  getConnectionTags?(
+    connection: PartyConnection,
+    context: PartyConnectionContext
+  ): string[] | Promise<string[]>;
 
   /**
    * Called when the server is started, before first `onConnect` or `onRequest`.

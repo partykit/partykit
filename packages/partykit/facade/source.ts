@@ -335,7 +335,8 @@ function createDurable(Worker: PartyKitServer) {
           uri: request.url,
         });
 
-        const tags = await this.worker.getConnectionTags(connection);
+        const ctx = { request };
+        const tags = await this.worker.getConnectionTags(connection, ctx);
 
         // Accept the websocket connection
         this.connectionManager.accept(connection, tags);
@@ -344,7 +345,7 @@ function createDurable(Worker: PartyKitServer) {
           await this.attachSocketEventHandlers(connection);
         }
 
-        await this.worker.onConnect(connection, { request });
+        await this.worker.onConnect(connection, ctx);
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
