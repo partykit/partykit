@@ -23,6 +23,7 @@ import getPort from "get-port";
 import asyncCache from "./async-cache";
 import open from "open";
 import type { StaticAssetsManifestType } from "./server";
+import nodejsCompatPlugin from "./nodejs-compat";
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -539,6 +540,7 @@ Workers["${name}"] = ${name};
           ...config.define,
         },
         plugins: [
+          nodejsCompatPlugin,
           {
             name: "partykit",
             setup(build) {
