@@ -10,7 +10,7 @@ Scaffolding for PartyKit projects.
 npm create partykit@latest
 ```
 
-`create-partykit` automatically runs in interactive mode, but you can also specify your project name and other options with command line arguments.
+`create-partykit` automatically runs in interactive mode, but you can specify your project name and other options with command line arguments.
 
 ### CLI Flags
 

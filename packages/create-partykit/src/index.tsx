@@ -218,134 +218,56 @@ export async function init(options: {
     );
   }
 
-  const logInstructions = [];
-
   const projectName = path.basename(pathToProject);
 
   // look for a package.json (that doesn't have workspaces defined)
-  const packageJsonPath = findConfig("package.json");
-  let shouldInitNewPackageJson = true;
-  let shouldRunNpmInstall = false;
-  if (packageJsonPath) {
-    shouldInitNewPackageJson = false;
+  let packageInstallPath = pathToProject;
+  const existingPackageJsonPath = findConfig("package.json", { home: false });
+
+  if (existingPackageJsonPath) {
     const packageJson = JSON.parse(
-      fs.readFileSync(packageJsonPath, { encoding: "utf-8" })
+      fs.readFileSync(existingPackageJsonPath, { encoding: "utf-8" })
     );
     if (packageJson.workspaces) {
-      shouldInitNewPackageJson = true;
+      // this means we're in a mono repo, so
+      // we'll have to run npm install from this dir
+      packageInstallPath = path.dirname(existingPackageJsonPath);
     }
   }
 
-  if (shouldInitNewPackageJson) {
-    // init a new package.json
-    const packageJson = {
-      name: projectName,
-      version: "0.0.0",
-      private: true,
-      scripts: {
-        dev: "partykit dev",
-        deploy: "partykit deploy",
-      },
-      dependencies: {
-        partysocket: packageVersion,
-      },
-      devDependencies: {
-        partykit: packageVersion,
-        typescript: packageDevDependencies.typescript,
-      },
-    };
-    if (!options.dryRun) {
-      fs.writeFileSync(
-        path.join(pathToProject, "package.json"),
-        JSON.stringify(packageJson, null, 2)
-      );
-      console.log(
-        `‣ Created package.json at ${chalk.bold(
-          path.relative(originalCwd, path.join(pathToProject, "package.json"))
-        )}`
-      );
-    } else {
-      console.log(
-        `⤬ Dry run: skipping creating package.json at ${chalk.bold(
-          path.relative(originalCwd, path.join(pathToProject, "package.json"))
-        )}`
-      );
-    }
-    logInstructions.push(
-      `‣ To start your dev server, run: ${chalk.bold(
-        "npm run dev"
-      )} (CTRL+C to stop)`
+  // init a new package.json
+  const packageJson = {
+    name: projectName,
+    version: "0.0.0",
+    private: true,
+    scripts: {
+      dev: "partykit dev",
+      deploy: "partykit deploy",
+    },
+    dependencies: {
+      partysocket: packageVersion,
+    },
+    devDependencies: {
+      partykit: packageVersion,
+      typescript: packageDevDependencies.typescript,
+    },
+  };
+  if (!options.dryRun) {
+    fs.writeFileSync(
+      path.join(pathToProject, "package.json"),
+      JSON.stringify(packageJson, null, 2)
     );
-    logInstructions.push(
-      `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
+    console.log(
+      `‣ Created package.json at ${chalk.bold(
+        path.relative(originalCwd, path.join(pathToProject, "package.json"))
+      )}`
     );
-
-    shouldRunNpmInstall = true;
   } else {
-    // add dev and deploy scripts
-    const packageJson = JSON.parse(
-      fs.readFileSync(packageJsonPath!, { encoding: "utf-8" })
+    console.log(
+      `⤬ Dry run: skipping creating package.json at ${chalk.bold(
+        path.relative(originalCwd, path.join(pathToProject, "package.json"))
+      )}`
     );
-    packageJson.scripts = packageJson.scripts || {};
-    if (!packageJson.scripts.dev) {
-      packageJson.scripts.dev = "partykit dev";
-      logInstructions.push(
-        `‣ To start your dev server, run: ${chalk.bold(
-          "npm run dev"
-        )} (CTRL+C to stop)`
-      );
-    } else {
-      logInstructions.push(
-        `‣ To start your dev server, run: ${chalk.bold(
-          "npx partykit dev"
-        )} (CTRL+C to stop)`
-      );
-    }
-
-    if (!packageJson.scripts.deploy) {
-      packageJson.scripts.dev = "partykit deploy";
-      logInstructions.push(
-        `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
-      );
-    } else {
-      logInstructions.push(
-        `‣ To publish your project, run: ${chalk.bold("npx partykit deploy")}`
-      );
-    }
-
-    // add the partykit dependency
-    packageJson.dependencies ||= {};
-    packageJson.devDependencies ||= {};
-    if (!packageJson.devDependencies.partykit) {
-      packageJson.devDependencies.partykit = packageVersion;
-      shouldRunNpmInstall = true;
-    }
-
-    if (!packageJson.devDependencies.typescript) {
-      packageJson.devDependencies.typescript =
-        packageDevDependencies.typescript;
-      shouldRunNpmInstall = true;
-    }
-
-    if (!packageJson.dependencies.partysocket) {
-      packageJson.dependencies.partysocket = packageVersion;
-      shouldRunNpmInstall = true;
-    }
-
-    if (!options.dryRun) {
-      fs.writeFileSync(packageJsonPath!, JSON.stringify(packageJson, null, 2));
-      console.log(
-        `‣ Updated package.json at ${chalk.bold(
-          path.relative(originalCwd, packageJsonPath!)
-        )}`
-      );
-    } else {
-      console.log(
-        `⤬ Dry run: skipping updating package.json at at ${chalk.bold(
-          path.relative(originalCwd, packageJsonPath!)
-        )}`
-      );
-    }
   }
 
   const shouldUseTypeScript = await new Promise<boolean>((resolve, _reject) => {
@@ -427,18 +349,47 @@ export async function init(options: {
     );
   }
 
-  if (!options.dryRun) {
-    if (shouldRunNpmInstall && options.install !== false) {
+  const shouldInstallDependencies = await new Promise<boolean>(
+    (resolve, _reject) => {
+      if (options.yes || options.install) {
+        resolve(true);
+        return;
+      }
+      if (options.install === false) {
+        resolve(false);
+        return;
+      }
+      const { unmount, clear } = render(
+        <>
+          <Text>WOuld you like to install dependencies?</Text>
+          <SelectInput
+            items={[
+              { label: "Yes", value: true },
+              { label: "No", value: false },
+            ]}
+            onSelect={(item) => {
+              resolve(item.value);
+              clear();
+              unmount();
+            }}
+          />
+        </>
+      );
+    }
+  );
+
+  if (shouldInstallDependencies === true) {
+    if (!options.dryRun) {
       console.log(`‣ Installing dependencies...`);
       // run npm install from packageJsonPath
       await install({
         pkgManager: detectPackageManager()?.name || "npm",
-        cwd: packageJsonPath ? path.dirname(packageJsonPath) : pathToProject,
+        cwd: packageInstallPath,
       });
       console.log(`‣ Installed dependencies`);
+    } else {
+      console.log(`⤬ Dry run: skipping installing dependencies`);
     }
-  } else {
-    console.log(`⤬ Dry run: skipping installing dependencies`);
   }
 
   // step: [git]   Initialize a new git repository? (optional)
@@ -492,9 +443,14 @@ export async function init(options: {
     )}`
   );
 
-  if (logInstructions.length > 0) {
-    console.log(`${logInstructions.join("\n")}\n`);
-  }
+  console.log(
+    `‣ To start your dev server, run: ${chalk.bold(
+      "npm run dev"
+    )} (CTRL+C to stop)`
+  );
+  console.log(
+    `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
+  );
 
   console.log(`That's it! If you need any help, reach out to us on:`);
   console.log(`- Discord: https://discord.gg/g5uqHQJc3z`);
