@@ -55,7 +55,7 @@ export const schema = z
           exclude: z.array(z.string()).optional(),
           browserTTL: z.number().optional(),
           edgeTTL: z.number().optional(),
-          serveSinglePageApp: z.boolean().optional(),
+          singlePageApp: z.boolean().optional(),
         }),
       ])
       .optional(),

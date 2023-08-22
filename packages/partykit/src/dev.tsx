@@ -253,9 +253,9 @@ function useAssetServer(
     [assetsBuild, assetsPath, defines]
   );
 
-  const unsupportedKeys = (
-    ["include", "exclude", "serveSinglePageApp"] as const
-  ).filter((key) => theOptions[key] !== undefined);
+  const unsupportedKeys = (["include", "exclude"] as const).filter(
+    (key) => theOptions[key] !== undefined
+  );
   if (unsupportedKeys.length > 0) {
     throw new Error(
       `Not implemented keys in config.serve: ${unsupportedKeys.join(", ")}`
@@ -269,7 +269,7 @@ function useAssetServer(
       devServer: `http://127.0.0.1:${assetsServerPort}`,
       browserTTL: theOptions.browserTTL,
       edgeTTL: theOptions.edgeTTL,
-      serveSinglePageApp: theOptions.serveSinglePageApp,
+      singlePageApp: theOptions.singlePageApp,
       assets: {},
     };
     if (!assetsPath) return assetsMap;
