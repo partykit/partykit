@@ -1,10 +1,9 @@
 import type {
   Party,
   PartyConnection,
-  PartyKitConnection,
   PartyRequest,
   PartyServer,
-  PartyServerConstructor,
+  PartyWorker,
   PartyServerOptions,
 } from "partykit/server";
 
@@ -13,6 +12,7 @@ export default class Main implements PartyServer {
   readonly options: PartyServerOptions = {
     hibernate: true,
   };
+
   readonly party: Party;
   messages: string[];
 
@@ -38,13 +38,13 @@ export default class Main implements PartyServer {
   }
 
   getConnectionTags(
-    _connection: PartyKitConnection
+    _connection: PartyConnection
   ): string[] | Promise<string[]> {
     const team = this.party.connections.size % 2 === 0 ? "red" : "green";
     return [team];
   }
 
-  async onConnect(connection: PartyKitConnection) {
+  async onConnect(connection: PartyConnection) {
     connection.send("Welcome!");
     connection.send(this.getRoomSummary());
     connection.send(
@@ -65,11 +65,11 @@ export default class Main implements PartyServer {
     await this.party.storage.put("messages", this.messages);
   }
 
-  async onClose(ws: PartyKitConnection) {
+  async onClose(ws: PartyConnection) {
     console.log(`Connection ${ws.id} closed`);
   }
 
-  onError(ws: PartyKitConnection, err: Error) {
+  onError(ws: PartyConnection, err: Error) {
     console.log(`Connection ${ws.id} failed with error "${err.message}"`);
   }
 
@@ -80,4 +80,4 @@ export default class Main implements PartyServer {
   }
 }
 
-Main satisfies PartyServerConstructor;
+Main satisfies PartyWorker;
