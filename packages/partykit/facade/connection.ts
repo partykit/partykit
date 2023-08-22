@@ -6,17 +6,26 @@ type ConnectionFields = {
   uri: string;
 };
 
+/**
+ * Cache websocket attachments to avoid having to rehydrate them on every property access.
+ */
 const attachments = new WeakMap<WebSocket, ConnectionFields>();
 function deserializeAttachment(ws: WebSocket): ConnectionFields {
   let attachment = attachments.get(ws);
   if (!attachment) {
-    attachment = ws.deserializeAttachment() as ConnectionFields;
+    // pick only known fields to avoid keeping user's attachments in memory
+    const { id, uri } = ws.deserializeAttachment() as ConnectionFields;
+    attachment = { id, uri };
     attachments.set(ws, attachment);
   }
 
   return attachment;
 }
 
+/**
+ * Wraps a WebSocket with PartyConnection fields that rehydrate the
+ * socket attachment lazily only when requested.
+ */
 export const createLazyConnection = (ws: WebSocket): PartyConnection => {
   return Object.assign(ws, {
     get id() {
@@ -31,7 +40,9 @@ export const createLazyConnection = (ws: WebSocket): PartyConnection => {
   });
 };
 
-class PartyConnectionIterator implements IterableIterator<PartyConnection> {
+class HibernatingConnectionIterator
+  implements IterableIterator<PartyConnection>
+{
   private index: number = 0;
   private sockets: WebSocket[] | undefined;
   constructor(private state: DurableObjectState, private tag?: string) {}
@@ -63,6 +74,9 @@ export interface ConnectionManager {
   legacy_getConnectionMap(): Map<string, PartyKitConnection>;
 }
 
+/**
+ * When not using hibernation, we track active connections manually.
+ */
 export class InMemoryConnectionManager implements ConnectionManager {
   connections: Map<string, PartyConnection> = new Map();
   tags: WeakMap<PartyConnection, string[]> = new WeakMap();
@@ -77,6 +91,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
       return;
     }
 
+    // simulate DurableObjectState.getWebSockets(tag) behaviour
     for (const connection of this.connections.values()) {
       const connectionTags = this.tags.get(connection) ?? [];
       if (connectionTags.includes(tag)) {
@@ -94,6 +109,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
 
     this.connections.set(connection.id, connection);
     this.tags.set(connection, [
+      // make sure we have id tag
       connection.id,
       ...tags.filter((t) => t !== connection.id),
     ]);
@@ -108,11 +124,14 @@ export class InMemoryConnectionManager implements ConnectionManager {
   }
 }
 
+/**
+ * When opting into hibernation, the platform tracks connections for us.
+ */
 export class HibernatingConnectionManager implements ConnectionManager {
   constructor(private controller: DurableObjectState) {}
 
   getConnection(id: string) {
-    // TODO: Should we cache the connections
+    // TODO: Should we cache the connections?
     const sockets = this.controller.getWebSockets(id);
     if (sockets.length === 0) return undefined;
     if (sockets.length === 1) return createLazyConnection(sockets[0]);
@@ -123,7 +142,7 @@ export class HibernatingConnectionManager implements ConnectionManager {
   }
 
   getConnections(tag?: string | undefined) {
-    return new PartyConnectionIterator(this.controller, tag);
+    return new HibernatingConnectionIterator(this.controller, tag);
   }
 
   legacy_getConnectionMap() {

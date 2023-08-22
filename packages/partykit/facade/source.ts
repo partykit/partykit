@@ -220,6 +220,7 @@ function createDurable(Worker: PartyKitServer) {
             "Party.connections is deprecated and will be removed in a future version of PartyKit. Use Party.getConnections() instead."
           );
           if (self.connectionManager) {
+            // note: this is expensive for hibernating connections
             return self.connectionManager.legacy_getConnectionMap();
           }
 
