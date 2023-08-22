@@ -262,7 +262,9 @@ function useAssetServer(
     );
   }
 
-  const [assetsMap, setAssetsMap] = useState<{ assets: Record<string, string> }>(() => {
+  const [assetsMap, setAssetsMap] = useState<{
+    assets: Record<string, string>;
+  }>(() => {
     const assetsMap: StaticAssetsManifestType = {
       devServer: `http://127.0.0.1:${assetsServerPort}`,
       browserTTL: theOptions.browserTTL,
@@ -293,7 +295,6 @@ function useAssetServer(
     });
 
     watcher.on("all", () => {
-
       const newFiles = [...findAllFiles(assetsPath)];
       // compare the new files with the old ones
       const oldFiles = Object.keys(assetsMap.assets);
@@ -308,11 +309,9 @@ function useAssetServer(
         // in dev it's just the same file
         assetsMap.assets[file] = file;
       }
-      setAssetsMap({ ...assetsMap })
+      setAssetsMap({ ...assetsMap });
     });
-    
-
-  }, [assetsMap, assetsPath])
+  }, [assetsMap, assetsPath]);
 
   useEffect(() => {
     if (!assetsPath) return;
@@ -377,12 +376,6 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   }
 
   useEffect(() => {
-    if (config.serve) {
-      logger.warn(
-        "Serving static assets in dev mode is experimental and may change any time"
-      );
-    }
-
     async function runBuild() {
       let isFirstBuild = true;
 
@@ -528,7 +521,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                       },
                       ...Object.entries(wasmModules).map(([name, p]) => ({
                         type: "CompiledWasm",
-                        path: name,
+                        path: path.join(path.dirname(absoluteScriptPath), name),
                         contents: fs.readFileSync(p),
                       })),
                     ],
