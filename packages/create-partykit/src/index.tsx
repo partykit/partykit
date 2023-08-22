@@ -83,13 +83,47 @@ function ensureYarnLock({ cwd }: { cwd: string }) {
   });
 }
 
-async function initGit({ cwd }: { cwd: string }) {
+/**
+ * Initialize a new Worker project with a git repository.
+ *
+ * We want the branch to be called `main` but earlier versions of git do not support `--initial-branch`.
+ * If that is the case then we just fallback to the default initial branch name.
+ */
+export async function initializeGitRepo(cwd: string) {
   try {
+    // Get the default init branch name
+    const { stdout: defaultBranchName } = await execaCommand(
+      "git config --get init.defaultBranch",
+      {
+        cwd,
+        stdout: "ignore",
+        stderr: "inherit",
+      }
+    );
+
+    // Try to create the repository with the HEAD branch of defaultBranchName ?? `main`.
+    await execaCommand(
+      `git init --initial-branch ${defaultBranchName ?? "main"}`,
+      {
+        cwd,
+        stdout: "ignore",
+        stderr: "inherit",
+      }
+    );
+  } catch {
+    // Unable to create the repo with a HEAD branch name, so just fall back to the default.
     await execaCommand("git init", {
       cwd,
       stdout: "ignore",
       stderr: "inherit",
     });
+  }
+}
+
+async function initGit({ cwd }: { cwd: string }) {
+  try {
+    await initializeGitRepo(cwd);
+
     await execaCommand("git add -A", {
       cwd,
       stdout: "ignore",
