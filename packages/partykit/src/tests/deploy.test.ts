@@ -251,7 +251,7 @@ describe("deploy", () => {
           devServer: "",
           browserTTL: undefined,
           edgeTTL: undefined,
-          serveSinglePageApp: false,
+          singlePageApp: false,
           assets: {},
         };
       }

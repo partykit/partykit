@@ -9,7 +9,7 @@ export type StaticAssetsManifestType = {
   devServer: string;
   browserTTL: number | undefined;
   edgeTTL: number | undefined;
-  serveSinglePageApp: boolean | undefined;
+  singlePageApp: boolean | undefined;
   assets: Record<string, string>;
 };
 

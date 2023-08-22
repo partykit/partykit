@@ -136,7 +136,7 @@ export async function deploy(options: {
     devServer: "", // this is a no-op when deploying
     browserTTL: assetsConfig.browserTTL,
     edgeTTL: assetsConfig.edgeTTL,
-    serveSinglePageApp: assetsConfig.serveSinglePageApp,
+    singlePageApp: assetsConfig.singlePageApp,
     assets: {},
   };
 
@@ -169,9 +169,9 @@ export async function deploy(options: {
     loader: assetsBuild?.loader,
   };
 
-  const unsupportedKeys = (
-    ["include", "exclude", "serveSinglePageApp"] as const
-  ).filter((key) => assetsConfig[key] !== undefined);
+  const unsupportedKeys = (["include", "exclude"] as const).filter(
+    (key) => assetsConfig[key] !== undefined
+  );
   if (unsupportedKeys.length > 0) {
     throw new Error(
       `Not implemented keys in config.serve: ${unsupportedKeys.join(", ")}`

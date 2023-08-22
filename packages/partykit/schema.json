@@ -131,7 +131,7 @@
             "edgeTTL": {
               "type": "number"
             },
-            "serveSinglePageApp": {
+            "singlePageApp": {
               "type": "boolean"
             }
           },
