@@ -1,13 +1,12 @@
 import type {
   Party,
-  PartyKitConnection,
-  PartyKitContext,
-  PartyKitRoom,
+  PartyConnection,
   PartyKitServer,
   PartyRequest,
   PartyServer,
-  PartyServerConstructor,
+  PartyWorker,
   PartyServerOptions,
+  PartyConnectionContext,
 } from "../src/server";
 
 /**
@@ -33,22 +32,22 @@ export class ModuleWorker implements PartyServerAPI {
     // no-op
   }
 
-  onConnect(ws: PartyKitConnection, ctx: PartyKitContext) {
+  onConnect(ws: PartyConnection, ctx: PartyConnectionContext) {
     if (this.worker.onConnect) {
       return this.worker.onConnect(ws, this.party, ctx);
     }
   }
-  onMessage(message: string | ArrayBuffer, ws: PartyKitConnection) {
+  onMessage(message: string | ArrayBuffer, ws: PartyConnection) {
     if (this.worker.onMessage) {
       return this.worker.onMessage(message, ws, this.party);
     }
   }
-  onClose(ws: PartyKitConnection) {
+  onClose(ws: PartyConnection) {
     if (this.worker.onClose) {
       return this.worker.onClose(ws, this.party);
     }
   }
-  onError(ws: PartyKitConnection, err: Error) {
+  onError(ws: PartyConnection, err: Error) {
     if (this.worker.onError) {
       return this.worker.onError(ws, err, this.party);
     }
@@ -61,9 +60,9 @@ export class ModuleWorker implements PartyServerAPI {
       status: 500,
     });
   }
-  onAlarm(room: Omit<PartyKitRoom, "id">) {
+  onAlarm() {
     if (this.worker.onAlarm) {
-      return this.worker.onAlarm(room);
+      return this.worker.onAlarm(this.party);
     }
   }
   getConnectionTags(): string[] | Promise<string[]> {
@@ -79,7 +78,7 @@ export class ClassWorker implements PartyServerAPI {
   options: PartyServerOptions;
   supportsHibernation: boolean;
 
-  constructor(private Worker: PartyServerConstructor, readonly party: Party) {
+  constructor(private Worker: PartyWorker, readonly party: Party) {
     this.worker = new Worker(party);
     this.options = this.worker.options ?? {};
     this.supportsHibernation = this.options.hibernate === true;
@@ -89,22 +88,22 @@ export class ClassWorker implements PartyServerAPI {
       return this.worker.onStart();
     }
   }
-  onConnect(ws: PartyKitConnection, ctx: PartyKitContext) {
+  onConnect(ws: PartyConnection, ctx: PartyConnectionContext) {
     if (this.worker.onConnect) {
       return this.worker.onConnect(ws, ctx);
     }
   }
-  onMessage(message: string | ArrayBuffer, ws: PartyKitConnection) {
+  onMessage(message: string | ArrayBuffer, ws: PartyConnection) {
     if (this.worker.onMessage) {
       return this.worker.onMessage(message, ws);
     }
   }
-  onClose(ws: PartyKitConnection) {
+  onClose(ws: PartyConnection) {
     if (this.worker.onClose) {
       return this.worker.onClose(ws);
     }
   }
-  onError(ws: PartyKitConnection, err: Error) {
+  onError(ws: PartyConnection, err: Error) {
     if (this.worker.onError) {
       return this.worker.onError(ws, err);
     }
@@ -117,12 +116,12 @@ export class ClassWorker implements PartyServerAPI {
       status: 500,
     });
   }
-  onAlarm(room: Omit<PartyKitRoom, "id">) {
+  onAlarm() {
     if (this.worker.onAlarm) {
-      return this.worker.onAlarm(room);
+      return this.worker.onAlarm();
     }
   }
-  getConnectionTags(connection: PartyKitConnection) {
+  getConnectionTags(connection: PartyConnection) {
     if (this.worker.getConnectionTags) {
       return this.worker.getConnectionTags(connection);
     }

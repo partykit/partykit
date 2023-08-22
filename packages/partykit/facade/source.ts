@@ -5,7 +5,7 @@ import type {
   PartyKitServer,
   PartyKitRoom,
   PartyKitConnection,
-  PartyServerConstructor,
+  PartyWorker,
   PartyRequest,
   Party,
 } from "../src/server";
@@ -51,7 +51,7 @@ function getRoomIdFromPathname(pathname: string) {
 let didWarnAboutMissingConnectionId = false;
 
 // The worker script can either be an object with handlers, or a class with same handlers
-function isClassWorker(worker: unknown): worker is PartyServerConstructor {
+function isClassWorker(worker: unknown): worker is PartyWorker {
   return (
     typeof worker === "function" &&
     "prototype" in worker &&

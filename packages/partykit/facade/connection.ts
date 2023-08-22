@@ -1,4 +1,4 @@
-import type { PartyConnection, PartyKitConnection } from "../src/server";
+import type { PartyConnection } from "../src/server";
 
 /** Fields that are stored and rehydrates when a durable object hibernates */
 type ConnectionFields = {
@@ -47,11 +47,11 @@ class HibernatingConnectionIterator
   private sockets: WebSocket[] | undefined;
   constructor(private state: DurableObjectState, private tag?: string) {}
 
-  [Symbol.iterator](): IterableIterator<PartyKitConnection> {
+  [Symbol.iterator](): IterableIterator<PartyConnection> {
     return this;
   }
 
-  next(): IteratorResult<PartyKitConnection, number | undefined> {
+  next(): IteratorResult<PartyConnection, number | undefined> {
     const sockets =
       this.sockets ?? (this.sockets = this.state.getWebSockets(this.tag));
 
@@ -71,7 +71,7 @@ export interface ConnectionManager {
   accept(connection: PartyConnection, tags: string[]): void;
 
   // This can be removed when Party.connections is removed
-  legacy_getConnectionMap(): Map<string, PartyKitConnection>;
+  legacy_getConnectionMap(): Map<string, PartyConnection>;
 }
 
 /**
@@ -104,7 +104,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
     return this.connections;
   }
 
-  accept(connection: PartyKitConnection, tags: string[]): void {
+  accept(connection: PartyConnection, tags: string[]): void {
     connection.accept();
 
     this.connections.set(connection.id, connection);
