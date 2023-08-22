@@ -7,6 +7,7 @@ import type {
   PartyConnection,
   PartyWorker,
   PartyRequest,
+  PartyServer,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
@@ -59,7 +60,6 @@ function isClassWorker(worker: unknown): worker is PartyWorker {
 }
 
 // When the worker is a class, to validate worker shape we'll look onto the worker prototype
-// TODO: FIXME This type is not accurate when the worker is a class worker
 const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
   ? Worker.prototype
   : Worker;
@@ -162,9 +162,8 @@ function createDurable(Worker: PartyKitServer) {
     namespaces: Record<string, DurableObjectNamespace>;
 
     // assigned when first connection is received
-    connectionManager?: ConnectionManager;
-
     worker?: PartyServerAPI;
+    connectionManager?: ConnectionManager;
 
     constructor(controller: DurableObjectState, env: Env) {
       super();
