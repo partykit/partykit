@@ -5,84 +5,87 @@ import type {
   PartyServer,
   PartyWorker,
   PartyServerOptions,
+  PartyConnectionContext,
 } from "partykit/server";
 
+// PartyKit servers now implement PartyServer interface
 export default class Main implements PartyServer {
-  // explicit options
+  // onBefore* handlers that run in the worker nearest the user are now
+  // explicitly marked static, because they have no access to Party state
+  static async onBeforeRequest(req: PartyRequest) {
+    return req;
+  }
+  static async onBeforeConnect(req: PartyRequest) {
+    return req;
+  }
+  // onFetch is now stable. No more unstable_onFetch
+  static async onFetch(req: PartyRequest) {
+    return new Response("Unrecognized request: " + req.url, { status: 404 });
+  }
+
+  // Opting into hibernation is now an explicit option
   readonly options: PartyServerOptions = {
     hibernate: true,
   };
 
-  readonly party: Party;
-  messages: string[];
+  // Servers can now keep state in class instance variables
+  messages: string[] = [];
 
+  // PartyServer receives the Party (previous PartyKitRoom) as a constructor argument
+  // instead of receiving the `room` argument in each method.
+  readonly party: Party;
   constructor(party: Party) {
-    this.messages = []; // loaded in onStart
     this.party = party;
   }
 
-  // static methods run in the worker nearest the user
-
-  static async onFetch(req: PartyRequest) {
-    return new Response("Hello from " + req.url);
-  }
-
-  static async onBeforeRequest(request: PartyRequest) {
-    return request;
-  }
-
-  static async onBeforeConnect(request: PartyRequest) {
-    return request;
-  }
-
-  // on* methods run in the shared room
-
+  // There's now a new lifecycle method `onStart` which fires before first connection
+  // or request to the room. You can use this to load data from storage and perform other
+  // asynchronous initialization. The Party will wait until `onStart` completes before
+  // processing any connections or requests.
   async onStart() {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
   }
 
-  getConnectionTags(
-    _connection: PartyConnection
-  ): string[] | Promise<string[]> {
-    const size = [...this.party.getConnections()].length;
-    const team = size % 2 === 0 ? "red" : "green";
-    return [team];
+  // You can now tag connections, and retrieve tagged connections using Party.getConnections()
+  getConnectionTags(connection: PartyConnection, ctx: PartyConnectionContext) {
+    const country = (ctx.request.cf?.country as string) ?? "unknown";
+    return [country];
   }
 
-  async onConnect(connection: PartyConnection) {
-    connection.send("Welcome!");
-    connection.send(this.getRoomSummary());
-    connection.send(
-      "Red team: " + [...this.party.getConnections("red")].length
-    );
-    connection.send(
-      "Green team: " + [...this.party.getConnections("green")].length
+  // onConnect, onRequest, onAlarm no longer receive the room argument.
+  async onRequest(_req: PartyRequest) {
+    return new Response(
+      `Party ${this.party.id} has received ${this.messages.length} messages`
     );
   }
+  async onConnect(connection: PartyConnection, ctx: PartyConnectionContext) {
+    // You can now read the room state from `this.party` instead.
+    this.party.broadcast(
+      "A new connection has joined the party! Say hello to " + connection.id
+    );
 
-  onRequest(_req: PartyRequest): Response | Promise<Response> {
-    return new Response(this.getRoomSummary());
+    // room.connections is now called room.getConnections(tag?)
+    // that receives an optional tag argument to filter connections
+    const country = ctx.request.cf?.country as string;
+    for (const compatriot of this.party.getConnections(country)) {
+      compatriot.send(`${connection.id} is also from ${country}!`);
+    }
   }
 
+  // Previously onMessage, onError, onClose were only called for hibernating parties.
+  // They're now available for all parties, so you no longer need to manually
+  // manage event handlers in onConnect!
   async onMessage(message: string, connection: PartyConnection) {
-    this.messages.push(message);
-    connection.send(this.getRoomSummary());
-    await this.party.storage.put("messages", this.messages);
+    connection.send("Pong!");
+    this.party.broadcast(message, [connection.id]);
   }
-
-  async onClose(ws: PartyConnection) {
-    console.log(`Connection ${ws.id} closed`);
+  async onError(connection: PartyConnection, err: Error) {
+    console.log("Error from " + connection.id, err.message);
   }
-
-  onError(ws: PartyConnection, err: Error) {
-    console.log(`Connection ${ws.id} failed with error "${err.message}"`);
-  }
-
-  // you can define your own methods on the class
-
-  getRoomSummary() {
-    return `There are ${this.messages.length} messages in ${this.party.id} room.`;
+  async onClose(connection: PartyConnection) {
+    console.log("Closed " + connection.id);
   }
 }
 
+// Optional: Typecheck the static methods with a `satisfies` statement.
 Main satisfies PartyWorker;
