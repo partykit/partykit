@@ -12,15 +12,15 @@ const partySocket = new PartySocket({
   room: "some-room",
 });
 
-partySocket.onerror = (err) => log("error: " + err.message);
-partySocket.onclose = (evt) => log("closed");
+partySocket.onerror = (err: { message: string }) =>
+  log("error: " + err.message);
+partySocket.onclose = () => log("closed");
 partySocket.onopen = () => {
   log("open");
 };
 
-partySocket.onmessage = (evt) => {
-  const data = evt.data as string;
-  log(data);
+partySocket.onmessage = (evt: { data: string }) => {
+  log(evt.data);
 };
 
 document.getElementById("ping")?.addEventListener("click", () => {

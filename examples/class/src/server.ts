@@ -13,51 +13,57 @@ export default class Main implements PartyServer {
   readonly options: PartyServerOptions = {
     hibernate: false,
   };
+  readonly party: Party;
+  messages: string[];
 
-  messages: string[] = [];
-
-  constructor(readonly party: Party) {
-    console.log("Constructor", party.id, this.messages.length);
+  constructor(party: Party) {
+    this.messages = []; // loaded in onStart
+    this.party = party;
   }
 
+  // onBefore* methods run in the worker nearest the user
+
   static async onBeforeRequest(request: PartyRequest) {
-    console.log("onBeforeRequest", request.url);
-    // TODO: fixme
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return request;
   }
 
   static async onBeforeConnect(request: PartyRequest) {
-    console.log("onBeforeConnect", request.url);
-    // TODO: fixme
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return request;
   }
 
+  // on* methods run in the shared room
+
   async onStart() {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
-    console.log("onStart", this.party.id, this.messages.length);
   }
 
   async onConnect(connection: PartyKitConnection) {
-    console.log("onConnect", this.party.id, this.messages.length);
     connection.send("Welcome!");
-    connection.send(`There are ${this.messages.length} messages in this room`);
+    connection.send(this.getRoomSummary());
   }
-  // party (previously PartyKitRoom is available
 
   onRequest(_req: PartyRequest): Response | Promise<Response> {
-    console.log("onRequest", this.party.id, this.messages.length);
-    return new Response(
-      `There are ${this.messages.length} messages in this room`
-    );
+    return new Response(this.getRoomSummary());
   }
 
   async onMessage(message: string, connection: PartyConnection) {
     this.messages.push(message);
+    connection.send(this.getRoomSummary());
     await this.party.storage.put("messages", this.messages);
-    connection.send(`There are ${this.messages.length} messages in this room`);
-    console.log("onMessage", this.party.id, this.messages.length);
+  }
+
+  async onClose(ws: PartyKitConnection) {
+    console.log(`Connection ${ws.id} closed`);
+  }
+
+  onError(ws: PartyKitConnection, err: Error) {
+    console.log(`Connection ${ws.id} failed with error "${err.message}"`);
+  }
+
+  // you can define your own methods on the class
+
+  getRoomSummary() {
+    return `There are ${this.messages.length} messages in ${this.party.id} room.`;
   }
 }
 
