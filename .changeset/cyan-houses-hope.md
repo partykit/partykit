@@ -4,75 +4,71 @@
 
 # New class-based `PartyServer` API
 
-PartyKit now supports a new ES6 Class-based API. TL;DR;
+PartyKit now supports a new ES6 Class-based API.
 
-```diff
+## TL;DR;
 
+Before:
+
+```ts
 import type {
--    PartyKitServer,
-+    PartyServer,
--    PartyKitRoom,
-+    Party,
--    PartyKitConnection
-+    PartyConnection
-+    PartyWorker,
-+    PartyRequest,
-} from 'partykit/server';
+  PartyKitServer,
+  PartyKitRoom,
+  PartyKitConnection,
+} from "partykit/server";
 
-- export default {
-+ export default class MyParty implements PartyServer {
+export default {
+  onBeforeConnect(request: Request) {
+    request.headers.set("X-User", getUser(request.headers.Authorization));
+    return request;
+  },
+  onConnect(connection: PartyKitConnection, room: PartyKitRoom) {
+    room.broadcast(`Someone joined room ${room.id}!`);
+  },
+} satisfies PartyKitServer;
+```
 
-+    readonly party: Party;
-+    constructor(party: Party) {
-+        this.party = party;
-+    }
+After:
 
--   onBeforeConnect(request: Request) {
-+   static onBeforeConnect(request: PartyRequest) {
-        if (!authenticateRequest(request))
-            return new Response("Unauthorized", { status: 401 );}
+```ts
+import type {
+  Party,
+  PartyConnection,
+  PartyRequest,
+  PartyServer,
+  PartyWorker,
+} from "partykit/server";
 
-        return request;
-    }
+export default class MyParty implements PartyServer {
+  party: Party;
+  constructor(party: Party) {
+    this.party = party;
+  }
 
--    onConnect(connection: PartyKitConnection, room: PartyKitRoom) {
-+    onConnect(connection: PartyConnection) {
--        room.broadcast(`Someone joined room ${room.id}!`);
-+        this.party.broadcast(`Someone joined room ${this.party.id}!`);
-    }
-- } satisfies PartyKitServer
-+ }
-+ MyParty satisfies PartyWorker
+  static onBeforeConnect(request: PartyRequest) {
+    request.headers.set("X-User", getUser(request.headers.Authorization));
+    return request;
+  }
 
+  onConnect(connection: PartyConnection) {
+    this.party.broadcast(`Someone joined room ${this.party.id}!`);
+  }
+}
+
+MyParty satisfies PartyWorker;
 ```
 
 The old API remains supported for the time being, but we highly recommend starting all new projects with the new API, as the old API may be deprecated in the future.
+## New Class-based API
 
-## Old API
+Previously, you created PartyKit servers by exporting an plain object that defines handlers for different events that occur in a room.  This was nice and terse, but we found a lot of room for improvement:
 
-Previously, you've created PartyKit servers by exporting an object that defines handlers for different events that occur in a room:
-
-```ts
-export default {
-    onBeforeConnect(req) {
-        return req;
-    }
-    onConnect(connection, room) {
-        room.broadcast("Someone joined!");
-    }
-}
-```
-
-This is nice and terse! However, listening to user feedback, we've found that there's quite a lot of room for improvement:
-
-- This API doesn't accurately convey PartyKit's mental model of each party being a stateful object (backed by a CloudFlare Durable Object)
-- It's been hard to manage derived state safely
-- It's been hard to distinguish between code that runs in the Edge worker near the user (e.g.`onBeforeConnect`) and the Party worker that runs where the room was first created (e.g. `onConnect`).
-- The naming of different concepts (parties, rooms, etc) has been ambiguous
+- This API didn't accurately convey PartyKit's mental model of each party being a stateful object (backed by a CloudFlare Durable Object)
+- It was hard to manage derived state safely
+- It was hard to distinguish between code that runs in the Edge worker near the user (e.g.`onBeforeConnect`) and the Party worker that runs where the room was first created (e.g. `onConnect`).
+- The naming of different concepts (parties, rooms, etc) was ambiguous
 
 With this feedback in mind, we've redesigned PartyKit's primary server interface with a new ES6 Class-based API.
-
-## New Class-based API
 
 The following code sample demonstrates the new API, with comments describing what's changing:
 
