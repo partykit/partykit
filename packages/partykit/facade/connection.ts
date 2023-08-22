@@ -66,6 +66,7 @@ class HibernatingConnectionIterator
 }
 
 export interface ConnectionManager {
+  getCount(): number;
   getConnection(id: string): PartyConnection | undefined;
   getConnections(tag?: string): IterableIterator<PartyConnection>;
   accept(connection: PartyConnection, tags: string[]): void;
@@ -80,6 +81,10 @@ export interface ConnectionManager {
 export class InMemoryConnectionManager implements ConnectionManager {
   connections: Map<string, PartyConnection> = new Map();
   tags: WeakMap<PartyConnection, string[]> = new WeakMap();
+
+  getCount() {
+    return this.connections.size;
+  }
 
   getConnection(id: string) {
     return this.connections.get(id);
@@ -129,6 +134,10 @@ export class InMemoryConnectionManager implements ConnectionManager {
  */
 export class HibernatingConnectionManager implements ConnectionManager {
   constructor(private controller: DurableObjectState) {}
+
+  getCount() {
+    return Number(this.controller.getWebSockets().length);
+  }
 
   getConnection(id: string) {
     // TODO: Should we cache the connections?
