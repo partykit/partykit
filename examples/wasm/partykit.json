@@ -1,0 +1,11 @@
+{
+  "name": "wasm-demo",
+  "main": "src/server.ts",
+  "serve": {
+    "path": "public",
+    "build": "src/client.ts"
+  },
+  "build": {
+    "command": "asc src/fib.asc.ts --outFile src/fib.wasm --optimize"
+  }
+}

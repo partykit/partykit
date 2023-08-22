@@ -117,12 +117,6 @@ export async function deploy(options: {
     });
   }
 
-  if (config.serve) {
-    logger.warn(
-      "Deploying static assets is experimental and may change any time"
-    );
-  }
-
   const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
     /\\/g, // windows
     "/"
@@ -300,13 +294,7 @@ export async function deploy(options: {
         {
           name: "partykit-wasm-publish",
           setup(build) {
-            build.onResolve({ filter: /\.wasm$/ }, (args) => {
-              throw new Error(
-                `Cannot import .wasm files directly. Use import "${args.path}?module" instead.`
-              );
-            });
-
-            build.onResolve({ filter: /\.wasm\?module$/ }, (args) => {
+            build.onResolve({ filter: /\.wasm(\?module)?$/ }, (args) => {
               const filePath = path.join(
                 args.resolveDir,
                 args.path.replace(/\?module$/, "")
@@ -316,10 +304,9 @@ export async function deploy(options: {
                 .createHash("sha1")
                 .update(fileContent)
                 .digest("hex");
-              const fileName = `${fileHash}-${path.basename(
-                args.path,
-                ".wasm?module"
-              )}`;
+              const fileName = `./${fileHash}-${path
+                .basename(args.path)
+                .replace(/\?module$/, "")}`;
 
               wasmModules[fileName] = fs.readFileSync(filePath);
 
@@ -356,9 +343,10 @@ export async function deploy(options: {
   }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
+    const uploadFileName = path.join("upload", fileName);
     form.set(
-      `upload/${fileName}`,
-      new File([buffer], `upload/${fileName}`, { type: "application/wasm" })
+      uploadFileName,
+      new File([buffer], uploadFileName, { type: "application/wasm" })
     );
   }
 
@@ -374,7 +362,9 @@ export async function deploy(options: {
     urlSearchParams.set("preview", options.preview);
   }
 
-  await fetchResult(
+  const deployRes = await fetchResult<{
+    result: { is_initial_deploy: boolean };
+  }>(
     `/parties/${user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
@@ -390,6 +380,13 @@ export async function deploy(options: {
       options.preview ? `${options.preview}.` : ""
     }${config.name}.${user.login.toLowerCase()}.partykit.dev`}`
   );
+  if (deployRes.result.is_initial_deploy) {
+    logger.log(
+      `We're provisioning your partykit.dev domain. This can take up to ${chalk.bold(
+        "2 minutes"
+      )}. Hold tight!`
+    );
+  }
 }
 
 export async function _delete(options: {

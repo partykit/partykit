@@ -262,7 +262,9 @@ function useAssetServer(
     );
   }
 
-  const [assetsMap] = useState<{ assets: Record<string, string> }>(() => {
+  const [assetsMap, setAssetsMap] = useState<{
+    assets: Record<string, string>;
+  }>(() => {
     const assetsMap: StaticAssetsManifestType = {
       devServer: `http://127.0.0.1:${assetsServerPort}`,
       browserTTL: theOptions.browserTTL,
@@ -283,6 +285,33 @@ function useAssetServer(
     }
     return assetsMap;
   });
+
+  useEffect(() => {
+    // update the assets map anytime any files under assetsPath change
+    if (!assetsPath) return;
+    const watcher = chokidar.watch(assetsPath, {
+      ignoreInitial: true,
+      ignored: ["**/node_modules/**", "**/.git/**"],
+    });
+
+    watcher.on("all", () => {
+      const newFiles = [...findAllFiles(assetsPath)];
+      // compare the new files with the old ones
+      const oldFiles = Object.keys(assetsMap.assets);
+      const added = newFiles.filter((f) => !oldFiles.includes(f));
+      const removed = oldFiles.filter((f) => !newFiles.includes(f));
+
+      // don't do anything if nothing changed
+      if (added.length === 0 && removed.length === 0) return;
+
+      assetsMap.assets = {};
+      for (const file of newFiles) {
+        // in dev it's just the same file
+        assetsMap.assets[file] = file;
+      }
+      setAssetsMap({ ...assetsMap });
+    });
+  }, [assetsMap, assetsPath]);
 
   useEffect(() => {
     if (!assetsPath) return;
@@ -347,12 +376,6 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   }
 
   useEffect(() => {
-    if (config.serve) {
-      logger.warn(
-        "Serving static assets in dev mode is experimental and may change any time"
-      );
-    }
-
     async function runBuild() {
       let isFirstBuild = true;
 
@@ -498,7 +521,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                       },
                       ...Object.entries(wasmModules).map(([name, p]) => ({
                         type: "CompiledWasm",
-                        path: name,
+                        path: path.join(path.dirname(absoluteScriptPath), name),
                         contents: fs.readFileSync(p),
                       })),
                     ],

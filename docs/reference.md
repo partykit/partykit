@@ -107,7 +107,7 @@ This is a reference of all the fields you can add to your `partykit.json` file t
 
 **name**: The name of your project. This is used to identify your project on the platform, and is also used to generate the url for your project (typically `https://<name>.<user>.partykit.dev`) For example:
 
-```json
+```jsonc
 {
   "name": "my-project"
 }
@@ -119,7 +119,7 @@ Alternately, you can pass this as an argument to the `dev` or `deploy` commands,
 
 **vars**: A list of environment variables that you want to set for your project. These are available on the `room` object as `room.env`. Example:
 
-```json
+```jsonc
 {
   "vars": {
     "MY_VAR": "my value",
@@ -144,7 +144,7 @@ export default {
 
 **define**: A list of constants that you want to set for your project. Any globals with these names will be substituted with the values you provide here. For example:
 
-```json
+```jsonc
 {
   "define": {
     "MY_CONSTANT": "my value"
@@ -170,7 +170,7 @@ export default {
 
 So for example, a `build` object that runs `npm run build` and watches the `src` directory would look like this:
 
-```json
+```jsonc
 {
   "build": {
     "command": "npm run build",

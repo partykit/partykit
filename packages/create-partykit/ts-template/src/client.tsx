@@ -30,6 +30,7 @@ conn.addEventListener("message", (event) => {
 conn.addEventListener("open", () => {
   add("Connected!");
   add("Sending a ping every 2 seconds...");
+  // TODO: make this more interesting / nice
   setInterval(() => {
     conn.send("ping");
   }, 1000);
