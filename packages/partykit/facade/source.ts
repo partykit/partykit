@@ -7,7 +7,6 @@ import type {
   PartyConnection,
   PartyWorker,
   PartyRequest,
-  PartyServer,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
@@ -117,10 +116,6 @@ function createMultiParties(
   return parties;
 }
 
-// we use a symbol as a sigil value to indicate
-// that the room id hasn't been set yet
-const UNDEFINED = Symbol("UNDEFINED");
-
 function createDurable(Worker: PartyKitServer) {
   const isClassAPI = isClassWorker(Worker);
 
@@ -160,9 +155,12 @@ function createDurable(Worker: PartyKitServer) {
     controller: DurableObjectState;
     room: Party;
     namespaces: Record<string, DurableObjectNamespace>;
+    inAlarm = false; // used to prevent access to certain properties in onAlarm
 
     // assigned when first connection is received
+    id?: string;
     worker?: PartyServerAPI;
+    parties?: Party["context"]["parties"];
     connectionManager?: ConnectionManager;
 
     constructor(controller: DurableObjectState, env: Env) {
@@ -182,14 +180,40 @@ function createDurable(Worker: PartyKitServer) {
       const self = this;
 
       this.room = {
-        // @ts-expect-error - id is a symbol when we start
-        id: UNDEFINED, // using a string here because we're guaranteed to have set it before we use it
+        get id() {
+          if (self.inAlarm) {
+            throw new Error(
+              "You can not access `Party.id` in the `onAlarm` handler.\n" +
+                "This is a known limitation, and may be fixed in a future version of PartyKit.\n" +
+                "If you access to the id, you can save it into the Party storage when setting the alarm.\n"
+            );
+          }
+          if (self.id) {
+            return self.id;
+          }
+          throw new Error(
+            "Party.id is not yet initialized. This is probably a bug in PartyKit."
+          );
+        },
         internalID: this.controller.id.toString(),
         env: PARTYKIT_VARS,
         storage: this.controller.storage,
         broadcast: this.broadcast,
         context: {
-          parties: {},
+          get parties() {
+            if (self.inAlarm) {
+              throw new Error(
+                "You can not access `Party.context.parties` in the `onAlarm` handler.\n" +
+                  "This is a known limitation, and may be fixed in a future version of PartyKit."
+              );
+            }
+            if (self.parties) {
+              return self.parties;
+            }
+            throw new Error(
+              "Parties are not yet initialized. This is probably a bug in PartyKit."
+            );
+          },
         },
         getConnection(id: string) {
           if (self.connectionManager) {
@@ -354,8 +378,8 @@ function createDurable(Worker: PartyKitServer) {
       const roomId = getRoomIdFromPathname(url.pathname);
       assert(roomId, "No room id found in request url");
 
-      this.room.id = roomId;
-      this.room.context.parties = createMultiParties(this.namespaces, {
+      this.id = roomId;
+      this.parties = createMultiParties(this.namespaces, {
         host: url.host,
       });
     }
@@ -451,7 +475,12 @@ function createDurable(Worker: PartyKitServer) {
         assert(this.worker, "[onAlarm] Worker not initialized.");
       }
 
-      return this.worker.onAlarm();
+      try {
+        this.inAlarm = true;
+        return await this.worker.onAlarm();
+      } finally {
+        this.inAlarm = false;
+      }
     }
   };
 }
