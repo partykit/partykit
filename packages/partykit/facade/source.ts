@@ -312,8 +312,10 @@ function createDurable(Worker: PartyKitServer) {
           uri: request.url,
         });
 
+        const tags = await this.worker.getConnectionTags(connection);
+
         // Accept the websocket connection
-        this.connectionManager.accept(connection, []);
+        this.connectionManager.accept(connection, tags);
 
         if (!this.worker.supportsHibernation) {
           await this.attachSocketEventHandlers(connection);

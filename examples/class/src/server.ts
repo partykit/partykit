@@ -11,7 +11,7 @@ import type {
 export default class Main implements PartyServer {
   // explicit options
   readonly options: PartyServerOptions = {
-    hibernate: false,
+    hibernate: true,
   };
   readonly party: Party;
   messages: string[];
@@ -37,9 +37,22 @@ export default class Main implements PartyServer {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
   }
 
+  getConnectionTags(
+    _connection: PartyKitConnection
+  ): string[] | Promise<string[]> {
+    const team = this.party.connections.size % 2 === 0 ? "red" : "green";
+    return [team];
+  }
+
   async onConnect(connection: PartyKitConnection) {
     connection.send("Welcome!");
     connection.send(this.getRoomSummary());
+    connection.send(
+      "Red team: " + [...this.party.getConnections("red")].length
+    );
+    connection.send(
+      "Green team: " + [...this.party.getConnections("green")].length
+    );
   }
 
   onRequest(_req: PartyRequest): Response | Promise<Response> {

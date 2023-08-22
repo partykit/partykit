@@ -153,11 +153,34 @@ export class HibernatingConnectionManager implements ConnectionManager {
     return connections;
   }
 
-  accept(connection: PartyConnection, tags: string[]) {
-    this.controller.acceptWebSocket(connection, [
+  accept(connection: PartyConnection, userTags: string[]) {
+    // dedupe tags in case user already provided id tag
+    const tags = [
       connection.id,
-      ...tags.filter((t) => t !== connection.id),
-    ]);
+      ...userTags.filter((t) => t !== connection.id),
+    ];
+
+    // validate tags against documented restrictions
+    // shttps://developers.cloudflare.com/durable-objects/api/hibernatable-websockets-api/#state-methods-for-websockets
+    if (tags.length > 10) {
+      throw new Error(
+        "A connection can only have 10 tags, including the default id tag."
+      );
+    }
+
+    for (const tag of tags) {
+      if (typeof tag !== "string") {
+        throw new Error(`A connection tag must be a string. Received: ${tag}`);
+      }
+      if (tag === "") {
+        throw new Error(`A connection tag must not be an empty string.`);
+      }
+      if (tag.length > 256) {
+        throw new Error(`A connection tag must not exceed 256 characters`);
+      }
+    }
+
+    this.controller.acceptWebSocket(connection, tags);
     connection.serializeAttachment({
       id: connection.id,
       uri: connection.uri,

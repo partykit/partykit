@@ -33,14 +33,15 @@ export default {
   //   return { x: 1 };
   // },
 
-  async onBeforeRequest(req: Request) {
+  async onBeforeRequest(req) {
     return new Request(req.url, {
       headers: {
         "x-foo": "bar",
       },
     });
   },
-  async onRequest(req: Request, room) {
+
+  async onRequest(req, room) {
     console.log(room.env);
 
     console.log(process.env.WHATUP);

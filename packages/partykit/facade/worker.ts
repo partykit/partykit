@@ -66,6 +66,9 @@ export class ModuleWorker implements PartyServerAPI {
       return this.worker.onAlarm(room);
     }
   }
+  getConnectionTags(): string[] | Promise<string[]> {
+    return [];
+  }
 }
 
 /**
@@ -118,5 +121,12 @@ export class ClassWorker implements PartyServerAPI {
     if (this.worker.onAlarm) {
       return this.worker.onAlarm(room);
     }
+  }
+  getConnectionTags(connection: PartyKitConnection) {
+    if (this.worker.getConnectionTags) {
+      return this.worker.getConnectionTags(connection);
+    }
+
+    return [];
   }
 }

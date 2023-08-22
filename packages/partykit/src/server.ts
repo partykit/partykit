@@ -11,6 +11,8 @@ import type {
 
 export interface PartyRequest extends CFRequest {}
 
+type UserDefinedRequest = Request | PartyRequest;
+
 export type PartyKitStorage = DurableObjectStorage;
 
 export type PartyKitContext = {
@@ -82,7 +84,8 @@ type RequestHandler = {
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) => PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
+  ) => UserDefinedRequest | Response | Promise<UserDefinedRequest | Response>;
+
   onRequest?: (
     req: PartyRequest,
     room: PartyKitRoom
@@ -110,7 +113,8 @@ type ConnectionHandler = RequestHandler & {
       parties: PartyKitRoom["parties"];
     },
     ctx: ExecutionContext
-  ) => PartyRequest | Promise<PartyRequest> | Response | Promise<Response>;
+  ) => UserDefinedRequest | Response | Promise<UserDefinedRequest | Response>;
+
   /**
    * PartyKitServer may opt into being hibernated between WebSocket
    * messages, which enables a single server to handle more connections.
@@ -147,6 +151,8 @@ export type PartyServerOptions = {
 export interface PartyServer {
   readonly party: Party;
   readonly options?: PartyServerOptions;
+
+  getConnectionTags?(connection: PartyConnection): string[] | Promise<string[]>;
 
   onStart?(): void | Promise<void>;
   onConnect?(ws: PartyConnection, ctx: PartyKitContext): void | Promise<void>;
