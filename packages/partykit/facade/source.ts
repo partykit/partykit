@@ -410,7 +410,6 @@ function createDurable(Worker: PartyKitServer) {
         await this.initialize(connection.uri);
       }
 
-      assert(this.worker, "[onMessage] Worker not initialized.");
       return this.invokeOnMessage(connection, msg);
     }
 
