@@ -11,6 +11,11 @@ export default async function fetchStaticAsset<Env>(
   _env: Env,
   _ctx: ExecutionContext
 ): Promise<Response | null> {
+  const SUPPORTED_METHODS = ["GET", "HEAD"];
+  if (!SUPPORTED_METHODS.includes(request.method)) {
+    return null;
+  }
+
   const url = new URL(request.url);
   let response: Response | null = null;
 
