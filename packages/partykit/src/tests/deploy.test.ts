@@ -310,9 +310,7 @@ describe("deploy", () => {
         "err": "",
         "info": "",
         "out": "Deployed ./../packages/partykit/src/tests/fixture.js to https://test-script.test-user.partykit.dev",
-        "warn": "[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDeploying static assets is experimental and may change any time[0m
-
-      ",
+        "warn": "",
       }
     `);
   });
