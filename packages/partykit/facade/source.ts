@@ -2,12 +2,11 @@
 // It will be compiled and imported by the CLI.
 
 import type {
+  Party,
   PartyKitServer,
-  PartyKitRoom,
-  PartyKitConnection,
+  PartyConnection,
   PartyWorker,
   PartyRequest,
-  Party,
 } from "../src/server";
 import type {
   DurableObjectNamespace,
@@ -73,7 +72,7 @@ type Env = {
   PARTYKIT_VARS: Record<string, unknown>;
 };
 
-let parties: PartyKitRoom["context"]["parties"];
+let parties: Party["context"]["parties"];
 
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
@@ -140,6 +139,7 @@ function createDurable(Worker: PartyKitServer) {
 
   for (const handler of [
     "unstable_onFetch",
+    "onFetch",
     "onBeforeConnect",
     "onBeforeRequest",
   ] satisfies (keyof PartyKitServer)[]) {
@@ -306,7 +306,7 @@ function createDurable(Worker: PartyKitServer) {
         }
 
         // TODO: Object.freeze / mark as readonly!
-        const connection: PartyKitConnection = Object.assign(serverWebSocket, {
+        const connection: PartyConnection = Object.assign(serverWebSocket, {
           id: connectionId,
           socket: serverWebSocket,
           uri: request.url,
@@ -373,7 +373,7 @@ function createDurable(Worker: PartyKitServer) {
       return this.worker.onStart();
     }
 
-    async attachSocketEventHandlers(connection: PartyKitConnection) {
+    async attachSocketEventHandlers(connection: PartyConnection) {
       assert(this.worker, "[onConnect] Worker not initialized.");
 
       const handleMessageFromClient = (event: MessageEvent) => {
@@ -426,18 +426,18 @@ function createDurable(Worker: PartyKitServer) {
       return this.invokeOnError(createLazyConnection(ws), err);
     }
 
-    async invokeOnClose(connection: PartyKitConnection) {
+    async invokeOnClose(connection: PartyConnection) {
       assert(this.worker, "[onClose] Worker not initialized.");
       return this.worker.onClose(connection);
     }
 
-    async invokeOnError(connection: PartyKitConnection, err: Error) {
+    async invokeOnError(connection: PartyConnection, err: Error) {
       assert(this.worker, "[onError] Worker not initialized.");
       return this.worker.onError(connection, err);
     }
 
     async invokeOnMessage(
-      connection: PartyKitConnection,
+      connection: PartyConnection,
       msg: string | ArrayBuffer
     ) {
       assert(this.worker, "[onMessage] Worker not initialized.");
@@ -452,7 +452,7 @@ function createDurable(Worker: PartyKitServer) {
         assert(this.worker, "[onAlarm] Worker not initialized.");
       }
 
-      return this.worker.onAlarm(this.room);
+      return this.worker.onAlarm();
     }
   };
 }
@@ -492,7 +492,7 @@ export default {
         main: PARTYKIT_DURABLE,
       });
 
-      const parties: PartyKitRoom["parties"] = createMultiParties(namespaces, {
+      const parties: Party["parties"] = createMultiParties(namespaces, {
         host: url.host,
       });
 
@@ -594,21 +594,19 @@ export default {
         }
       } else {
         const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
+        const onFetch = Worker.onFetch ?? Worker.unstable_onFetch;
+
         if (staticAssetsResponse) {
           return staticAssetsResponse;
-        } else if ("unstable_onFetch" in Worker) {
-          if (typeof Worker.unstable_onFetch === "function") {
-            return await Worker.unstable_onFetch(
-              request,
-              {
-                env: PARTYKIT_VARS,
-                parties,
-              },
-              ctx
-            );
-          } else {
-            throw new Error(".unstable_onFetch must be a function");
-          }
+        } else if (typeof onFetch === "function") {
+          return await onFetch(
+            request,
+            {
+              env: PARTYKIT_VARS,
+              parties,
+            },
+            ctx
+          );
         }
 
         return new Response("Not found", {

@@ -21,7 +21,11 @@ export default class Main implements PartyServer {
     this.party = party;
   }
 
-  // onBefore* methods run in the worker nearest the user
+  // static methods run in the worker nearest the user
+
+  static async onFetch(req: PartyRequest) {
+    return new Response("Hello from " + req.url);
+  }
 
   static async onBeforeRequest(request: PartyRequest) {
     return request;

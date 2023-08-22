@@ -196,7 +196,7 @@ export type PartyWorker = PartyServerConstructor & {
    * Useful for running lightweight HTTP endpoints that don't need access to the Party
    * state.
    **/
-  unstable_onFetch?(
+  onFetch?(
     req: PartyRequest,
     lobby: {
       env: Record<string, unknown>;
@@ -248,7 +248,16 @@ export type PartyWorker = PartyServerConstructor & {
  * }
  */
 export type PartyKitServer = {
+  /** @deprecated. Use `onFetch` instead */
   unstable_onFetch?: (
+    req: PartyRequest,
+    lobby: {
+      env: Record<string, unknown>;
+      parties: PartyContext["parties"];
+    },
+    ctx: ExecutionContext
+  ) => Response | Promise<Response>;
+  onFetch?: (
     req: PartyRequest,
     lobby: {
       env: Record<string, unknown>;
