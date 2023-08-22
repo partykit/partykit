@@ -44,7 +44,8 @@ export default class Main implements PartyServer {
   getConnectionTags(
     _connection: PartyConnection
   ): string[] | Promise<string[]> {
-    const team = this.party.connections.size % 2 === 0 ? "red" : "green";
+    const size = [...this.party.getConnections()].length;
+    const team = size % 2 === 0 ? "red" : "green";
     return [team];
   }
 
