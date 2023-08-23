@@ -19,6 +19,8 @@ import { render } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
 import { logger } from "./logger";
+import getPort from "get-port";
+import asyncCache from "./async-cache";
 import type { StaticAssetsManifestType } from "./server";
 
 const esbuildOptions: BuildOptions = {
@@ -31,6 +33,14 @@ const esbuildOptions: BuildOptions = {
 interface ReloadedEventOptions {
   url: URL;
   // internalDurableObjects: CfDurableObject[];
+}
+
+const portCache = asyncCache();
+
+function getPortForServer(name: string, preferred?: number) {
+  return portCache(name, () => getPort({ port: preferred })) as Awaited<
+    ReturnType<typeof getPort>
+  >;
 }
 
 class ReloadedEvent extends Event implements ReloadedEventOptions {
@@ -121,7 +131,6 @@ export async function devTest(props: DevProps) {
         onReady={() => {
           resolve({
             close: () => {
-              console.log("close");
               unmount();
             },
           });
@@ -164,8 +173,9 @@ function DevImpl(props: DevProps) {
 }
 
 function Inspector(props: { inspectorUrl: string | undefined }) {
+  const portForInspector = getPortForServer("inspector", 9229);
   useInspector({
-    port: 9230,
+    port: portForInspector,
     inspectorUrl: props.inspectorUrl,
     logToTerminal: true,
     sourceMapPath: undefined,
@@ -207,12 +217,14 @@ function* findAllFiles(root: string) {
 
 function useAssetServer(
   options: Config["serve"],
-  defines: Record<string, string> | undefined
+  defines: Record<string, string>
 ) {
   const theOptions: Config["serve"] =
     typeof options === "string" ? { path: options } : options || {};
 
-  const assetsServerPort = 3141; // TODO: just find a free port
+  const portForAssetsServer = getPortForServer("assets");
+  // ^ no preferred port for the assets server, since we don't expect
+  // it to be used by the user directly
 
   const assetsPath = !options
     ? undefined
@@ -244,7 +256,6 @@ function useAssetServer(
       sourcemap: assetsBuild?.sourcemap ?? true,
       external: assetsBuild?.external,
       define: {
-        PARTYKIT_HOST: `"127.0.0.1:1999"`,
         ...defines,
         ...assetsBuild?.define,
       },
@@ -266,7 +277,7 @@ function useAssetServer(
     assets: Record<string, string>;
   }>(() => {
     const assetsMap: StaticAssetsManifestType = {
-      devServer: `http://127.0.0.1:${assetsServerPort}`,
+      devServer: `http://127.0.0.1:${portForAssetsServer}`,
       browserTTL: theOptions.browserTTL,
       edgeTTL: theOptions.edgeTTL,
       singlePageApp: theOptions.singlePageApp,
@@ -322,7 +333,7 @@ function useAssetServer(
       ctx = await esbuild.context(esbuildAssetOptions);
 
       await ctx.serve({
-        port: assetsServerPort,
+        port: portForAssetsServer,
         servedir: assetsPath,
       });
     }
@@ -336,15 +347,20 @@ function useAssetServer(
         console.error("Failed to dispose the assets build server", err);
       });
     };
-  }, [assetsBuild, assetsPath, assetsServerPort, esbuildAssetOptions]);
+  }, [assetsBuild, assetsPath, portForAssetsServer, esbuildAssetOptions]);
 
   return {
     assetsMap,
-    assetsServerPort,
+    portForAssetsServer,
   };
 }
 
 function useDev(options: DevProps): { inspectorUrl: string | undefined } {
+  const portForServer = options.port ?? getPortForServer("dev", 1999);
+  const portForRuntimeInspector = getPortForServer("runtime-inspector");
+  // ^ no preferred port for the runtime inspector, in fact it's better if
+  // it's a different port every time so that it doesn't clash with multiple devs
+
   const [config] = useState<Config>(() =>
     getConfig(
       options.config,
@@ -367,7 +383,10 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     undefined
   );
 
-  const { assetsMap } = useAssetServer(config.serve, config.define);
+  const { assetsMap } = useAssetServer(config.serve, {
+    PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
+    ...config.define,
+  });
 
   if (!config.main) {
     throw new Error(
@@ -416,7 +435,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
         define: {
-          PARTYKIT_HOST: `"127.0.0.1:1999"`,
+          PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
           ...esbuildOptions.define,
           ...config.define,
         },
@@ -470,14 +489,14 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                   void server.onBundleUpdate({
                     log: new Log(5, { prefix: "pk" }),
                     verbose: options.verbose,
-                    inspectorPort: 9229,
+                    inspectorPort: portForRuntimeInspector,
 
                     compatibilityDate: config.compatibilityDate || "2023-04-11",
                     compatibilityFlags: [
                       "nodejs_compat",
                       ...(config.compatibilityFlags || []),
                     ],
-                    port: config.port || 1999,
+                    port: portForServer,
                     bindings: {
                       ...(config.vars
                         ? { PARTYKIT_VARS: config.vars as Json }
@@ -618,6 +637,8 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     options.minify,
     options.verbose,
     assetsMap,
+    portForServer,
+    portForRuntimeInspector,
   ]);
 
   useEffect(() => {
@@ -629,7 +650,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
 
       try {
         // Fetch the inspector JSON response from the DevTools Inspector protocol
-        const jsonUrl = `http://127.0.0.1:9229/json`;
+        const jsonUrl = `http://127.0.0.1:${portForRuntimeInspector}/json`;
         const res = await fetch(jsonUrl);
         const body = (await res.json()) as InspectorWebSocketTarget[];
         const debuggerUrl = body?.find(({ id }) =>
@@ -674,7 +695,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     });
 
     // const abortController = new AbortController();
-  }, [inspectorUrl, options, server]);
+  }, [inspectorUrl, options, server, portForRuntimeInspector]);
 
   useEffect(() => {
     return () => {
