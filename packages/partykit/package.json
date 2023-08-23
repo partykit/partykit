@@ -52,6 +52,7 @@
     "@types/update-notifier": "^6.0.4",
     "@types/ws": "^8.5.5",
     "devtools-protocol": "^0.0.1182435",
+    "dotenv-cli": "^7.3.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "zod-to-json-schema": "^3.21.4"
   },
@@ -64,7 +65,9 @@
   ],
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
-    "start": "npm run clean && concurrently \"cross-env PARTYKIT_API_BASE=http://127.0.0.1:8787 PARTYKIT_DASHBOARD_BASE=http://localhost:3000 node -r esbuild-register --watch --watch-path src --watch-path facade scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
-    "build": "npm run clean && cross-env PARTYKIT_API_BASE=https://api.partykit.dev PARTYKIT_DASHBOARD_BASE=https://dashboard.partykit.io node -r esbuild-register scripts/build.ts --production && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
+    "dev:local": "npm run clean && concurrently \"dotenv -c development node -- -r esbuild-register --watch --watch-path src --watch-path facade scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
+    "dev:remote": "npm run clean && concurrently \"dotenv -c production node -- -r esbuild-register --watch --watch-path src --watch-path facade scripts/build.ts\" \"tsc -p scripts/tsconfig.extract.json --watch\" \"node -r esbuild-register --watch --watch-path dts scripts/copy-dts.ts\" --kill-others",
+    "start": "npm run dev:local",
+    "build": "npm run clean && dotenv -c production node -- -r esbuild-register scripts/build.ts --production && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
   }
 }

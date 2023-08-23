@@ -1,6 +1,14 @@
 import type Clerk from "@clerk/clerk-js";
 import clerk from "@clerk/clerk-js/headless/index.js";
 
+declare const CLERK_PUBLISHABLE_KEY: string | undefined;
+const PUBLISHABLE_KEY =
+  process.env.CLERK_PUBLISHABLE_KEY || CLERK_PUBLISHABLE_KEY;
+
+if (!PUBLISHABLE_KEY) {
+  throw new Error("CLERK_PUBLISHABLE_KEY not defined");
+}
+
 const ClerkConstructor = clerk.default;
 
 global.window = global.window || {};
@@ -8,8 +16,6 @@ global.window = global.window || {};
 type TokenStore = {
   token?: string;
 };
-
-const CLERK_PUBLISHABLE_KEY = "pk_live_Y2xlcmsucGFydHlraXQuaW8k";
 
 const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
   /**
@@ -43,7 +49,7 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
 };
 
 export const createClerkClient = clerkFactory({
-  publishableKey: CLERK_PUBLISHABLE_KEY,
+  publishableKey: PUBLISHABLE_KEY,
 });
 
 export const fetchClerkClientToken = async (signInToken: string) => {
