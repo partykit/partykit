@@ -383,10 +383,15 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     undefined
   );
 
-  const { assetsMap } = useAssetServer(config.serve, {
-    PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
-    ...config.define,
-  });
+  const assetDefines = useMemo(
+    () => ({
+      PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
+      ...config.define,
+    }),
+    [config.define, portForServer]
+  );
+
+  const { assetsMap } = useAssetServer(config.serve, assetDefines);
 
   if (!config.main) {
     throw new Error(
