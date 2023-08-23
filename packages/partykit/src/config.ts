@@ -4,7 +4,7 @@ import path from "path";
 import * as dotenv from "dotenv";
 import { z } from "zod";
 import JSON5 from "json5";
-import findConfig from "find-config";
+import { findUpSync } from "find-up";
 import { ConfigurationError, logger } from "./logger";
 import chalk from "chalk";
 import { getFlags } from "./featureFlags";
@@ -184,9 +184,9 @@ export type ConfigOverrides = Config; // Partial? what of .env?
 
 export function getConfigPath() {
   return (
-    findConfig("partykit.json", { home: false }) ||
-    findConfig("partykit.json5", { home: false }) ||
-    findConfig("partykit.jsonc", { home: false })
+    findUpSync("partykit.json") ||
+    findUpSync("partykit.json5") ||
+    findUpSync("partykit.jsonc")
   );
 }
 
@@ -203,8 +203,8 @@ export function getConfig(
   overrides: ConfigOverrides = {},
   options?: { readEnvLocal?: boolean }
 ): Config {
-  const envPath = findConfig(".env");
-  const envLocalPath = findConfig(".env.local");
+  const envPath = findUpSync(".env");
+  const envLocalPath = findUpSync(".env.local");
   let envVars: Record<string, string> = {};
   if (envPath) {
     console.log(
@@ -239,7 +239,7 @@ export function getConfig(
     }
 
     let packageJsonConfig = {} as ConfigOverrides;
-    const packageJsonPath = findConfig("package.json", { home: false });
+    const packageJsonPath = findUpSync("package.json");
     if (packageJsonPath) {
       packageJsonConfig =
         JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).partykit || {};

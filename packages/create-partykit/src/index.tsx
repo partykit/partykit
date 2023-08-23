@@ -9,7 +9,7 @@ import detectPackageManager from "which-pm-runs";
 
 import path from "path";
 import fs from "fs";
-import findConfig from "find-config";
+import { findUpSync } from "find-up";
 import {
   version as packageVersion,
   devDependencies as packageDevDependencies,
@@ -76,7 +76,7 @@ async function install({
 }
 
 function ensureYarnLock({ cwd }: { cwd: string }) {
-  const yarnLock = findConfig("yarn.lock", { home: false, cwd });
+  const yarnLock = findUpSync("yarn.lock", { cwd });
   if (yarnLock) return;
   return fs.writeFileSync(path.join(cwd, "yarn.lock"), "", {
     encoding: "utf-8",
@@ -222,7 +222,7 @@ export async function init(options: {
 
   // look for a package.json (that doesn't have workspaces defined)
   let packageInstallPath = pathToProject;
-  const existingPackageJsonPath = findConfig("package.json", { home: false });
+  const existingPackageJsonPath = findUpSync("package.json");
 
   if (existingPackageJsonPath) {
     const packageJson = JSON.parse(
@@ -392,16 +392,28 @@ export async function init(options: {
     }
   }
 
+  // detect if we're inside a git repo, even if several directories up
+  const gitRepoPath = findUpSync(".git", { type: "directory" });
+
+  if (gitRepoPath) {
+    console.log(
+      `‣ Detected git repository at ${chalk.bold(
+        path.relative(originalCwd, gitRepoPath)
+      )}`
+    );
+  }
+
   // step: [git]   Initialize a new git repository? (optional)
   const shouldInitGit = await new Promise<boolean>((resolve) => {
+    if (options.git === false || gitRepoPath) {
+      resolve(false);
+      return;
+    }
     if (options.yes || options.git === true) {
       resolve(true);
       return;
     }
-    if (options.git === false) {
-      resolve(false);
-      return;
-    }
+
     const { unmount, clear } = render(
       <>
         <Text>Initialize a new git repository?</Text>

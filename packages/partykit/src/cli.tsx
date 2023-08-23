@@ -13,7 +13,8 @@ import InkTable from "./ink-table";
 import { Dev } from "./dev";
 import type { DevProps } from "./dev";
 
-export { Dev, DevProps };
+export { Dev };
+export type { DevProps };
 
 import { execaCommand } from "execa";
 import { version as packageVersion } from "../package.json";
