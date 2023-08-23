@@ -349,6 +349,8 @@ function createDurable(Worker: PartyKitServer) {
 
         return new Response(null, { status: 101, webSocket: clientWebSocket });
       } catch (e) {
+        console.error("Error when connecting");
+        console.error(e);
         // Annoyingly, if we return an HTTP error
         // in response to a WebSocket request, Chrome devtools
         // won't show us the response body! So...
