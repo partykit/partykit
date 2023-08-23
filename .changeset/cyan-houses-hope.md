@@ -40,10 +40,7 @@ import type {
 } from "partykit/server";
 
 export default class MyParty implements PartyServer {
-  party: Party;
-  constructor(party: Party) {
-    this.party = party;
-  }
+  constructor(public party: Party) {}
 
   static onBeforeConnect(request: PartyRequest) {
     request.headers.set("X-User", getUser(request.headers.Authorization));
