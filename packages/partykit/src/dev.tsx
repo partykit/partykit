@@ -646,10 +646,12 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     portForRuntimeInspector,
   ]);
 
+  const { onReady } = options;
+
   useEffect(() => {
-    server.addEventListener("reloaded", async (event) => {
+    async function serverReloadedListener(event: ReloadedEvent) {
       // await maybeRegisterLocalWorker(event, props.name);
-      options.onReady?.(event.url.hostname, parseInt(event.url.port));
+      onReady?.(event.url.hostname, parseInt(event.url.port));
 
       // let inspectorUrl: string | undefined;
 
@@ -693,14 +695,23 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       //     removeMiniflareServerExitListener();
       //   },
       // });
-    });
-    server.addEventListener("error", ({ error }) => {
-      console.error("Error reloading local server:", error);
-      // reject(error);
-    });
+    }
+
+    function serverErrorListener(event: ErrorEvent) {
+      console.error("Error reloading local server:", event.error);
+      // reject(event.error);
+    }
+
+    server.addEventListener("reloaded", serverReloadedListener);
+    server.addEventListener("error", serverErrorListener);
+
+    return () => {
+      server.removeEventListener("reloaded", serverReloadedListener);
+      server.removeEventListener("error", serverErrorListener);
+    };
 
     // const abortController = new AbortController();
-  }, [inspectorUrl, options, server, portForRuntimeInspector]);
+  }, [onReady, server, portForRuntimeInspector]);
 
   useEffect(() => {
     return () => {
