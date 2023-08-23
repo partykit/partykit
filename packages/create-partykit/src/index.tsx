@@ -361,7 +361,7 @@ export async function init(options: {
       }
       const { unmount, clear } = render(
         <>
-          <Text>WOuld you like to install dependencies?</Text>
+          <Text>Would you like to install dependencies?</Text>
           <SelectInput
             items={[
               { label: "Yes", value: true },
