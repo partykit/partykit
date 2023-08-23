@@ -10,6 +10,28 @@
 
 import type { TypedEventTarget } from "./type-helper";
 
+if (!globalThis.EventTarget || !globalThis.Event) {
+  console.error(`
+  PartySocket requires a global 'EventTarget' class to be available!
+  You can use the 'event-target-shim' package to polyfill this. See https://www.npmjs.com/package/event-target-shim. 
+  First, run:
+  \`\`\`
+  npm install event-target-shim
+  \`\`\`
+  Then, add this in your code:
+  \`\`\`
+  import {Event, EventTarget} from 'event-target-shim';
+  if(!globalThis.Event) {
+    globalThis.Event = Event;
+  }
+  if(!globalThis.EventTarget) {
+    globalThis.EventTarget = EventTarget;
+  }
+  \`\`\`
+  Please file an issue at https://github.com/partykit/partykit if you're still having trouble.
+`);
+}
+
 export class ErrorEvent extends Event {
   public message: string;
   public error: Error;
@@ -87,28 +109,6 @@ export type ProtocolsProvider =
   | (() => Promise<string | string[] | null>);
 
 export type Message = string | ArrayBuffer | Blob | ArrayBufferView;
-
-if (!globalThis.EventTarget) {
-  console.error(`
-  PartySocket requires a global 'EventTarget' class to be available!
-  You can use the 'event-target-shim' package to polyfill this. See https://www.npmjs.com/package/event-target-shim. 
-  First, run:
-  \`\`\`
-  npm install event-target-shim
-  \`\`\`
-  Then, add this in your code:
-  \`\`\`
-  import {Event, EventTarget} from 'event-target-shim';
-  if(!globalThis.Event) {
-    globalThis.Event = Event;
-  }
-  if(!globalThis.EventTarget) {
-    globalThis.EventTarget = EventTarget;
-  }
-  \`\`\`
-  Please file an issue at https://github.com/partykit/partykit if you're still having trouble.
-`);
-}
 
 export default class ReconnectingWebSocket extends (EventTarget as TypedEventTarget<WebSocketEventMap>) {
   private _ws: WebSocket | undefined;
