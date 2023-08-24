@@ -29,8 +29,8 @@ if (WebSocket.OPEN === undefined) {
   Object.assign(WebSocket.prototype, WebSocketStatus);
 }
 
-// Disable BroadcastChannel by default in Cloudflare Workers
-const DEFAULT_DISABLE_BC = navigator.userAgent === "Cloudflare-Workers";
+// Disable BroadcastChannel by default in Cloudflare Workers / Node
+const DEFAULT_DISABLE_BC = typeof window === "undefined";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
