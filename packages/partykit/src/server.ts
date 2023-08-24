@@ -55,6 +55,19 @@ export type PartyContext = {
   >;
 };
 
+export type PartyFetchLobby = {
+  env: Record<string, unknown>;
+  parties: PartyContext["parties"];
+};
+
+export type PartyLobby = {
+  id: string;
+  env: Record<string, unknown>;
+  parties: PartyContext["parties"];
+};
+
+export type PartyExecutionContext = ExecutionContext;
+
 /** A WebSocket connected to the Party */
 export type PartyConnection = WebSocket & {
   /** Connection identifier */
@@ -201,11 +214,8 @@ export type PartyWorker = PartyServerConstructor & {
    **/
   onFetch?(
     req: PartyRequest,
-    lobby: {
-      env: Record<string, unknown>;
-      parties: Party["context"]["parties"];
-    },
-    ctx: ExecutionContext
+    lobby: PartyFetchLobby,
+    ctx: PartyExecutionContext
   ): Response | Promise<Response>;
 
   /**
@@ -214,12 +224,8 @@ export type PartyWorker = PartyServerConstructor & {
    */
   onBeforeRequest?(
     req: PartyRequest,
-    lobby: {
-      id: string;
-      env: Record<string, unknown>;
-      parties: Party["context"]["parties"];
-    },
-    ctx: ExecutionContext
+    lobby: PartyLobby,
+    ctx: PartyExecutionContext
   ): PartyRequest | Response | Promise<PartyRequest | Response>;
 
   /**
@@ -228,12 +234,8 @@ export type PartyWorker = PartyServerConstructor & {
    */
   onBeforeConnect?(
     req: PartyRequest,
-    lobby: {
-      id: string;
-      env: Record<string, unknown>;
-      parties: PartyContext["parties"];
-    },
-    ctx: ExecutionContext
+    lobby: PartyLobby,
+    ctx: PartyExecutionContext
   ): PartyRequest | Response | Promise<PartyRequest | Response>;
 };
 
@@ -254,19 +256,13 @@ export type PartyKitServer = {
   /** @deprecated. Use `onFetch` instead */
   unstable_onFetch?: (
     req: PartyRequest,
-    lobby: {
-      env: Record<string, unknown>;
-      parties: PartyContext["parties"];
-    },
-    ctx: ExecutionContext
+    lobby: PartyFetchLobby,
+    ctx: PartyExecutionContext
   ) => Response | Promise<Response>;
   onFetch?: (
     req: PartyRequest,
-    lobby: {
-      env: Record<string, unknown>;
-      parties: PartyContext["parties"];
-    },
-    ctx: ExecutionContext
+    lobby: PartyFetchLobby,
+    ctx: PartyExecutionContext
   ) => Response | Promise<Response>;
   onBeforeRequest?: (
     req: PartyRequest,
@@ -275,7 +271,7 @@ export type PartyKitServer = {
       env: Record<string, unknown>;
       parties: PartyContext["parties"];
     },
-    ctx: ExecutionContext
+    ctx: PartyExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
   onRequest?: (req: PartyRequest, party: Party) => Response | Promise<Response>;
@@ -292,7 +288,7 @@ export type PartyKitServer = {
       env: Record<string, unknown>;
       parties: PartyContext["parties"];
     },
-    ctx: ExecutionContext
+    ctx: PartyExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
   /**
