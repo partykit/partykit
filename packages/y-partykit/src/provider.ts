@@ -1,4 +1,4 @@
-import * as Y from "yjs"; // eslint-disable-line
+import type * as Y from "yjs";
 import * as bc from "lib0/broadcastchannel";
 import * as time from "lib0/time";
 import * as encoding from "lib0/encoding";
@@ -14,6 +14,24 @@ export const messageSync = 0;
 export const messageQueryAwareness = 3;
 export const messageAwareness = 1;
 export const messageAuth = 2;
+
+export const WebSocketStatus = {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3,
+};
+
+// Polyfill WebSocket status code constants for environments that don't have them
+// (e.g. Cloudflare Workers)
+if (WebSocket.OPEN === undefined) {
+  console.log("Polyfilling WebSocketStatus");
+  Object.assign(WebSocket, WebSocketStatus);
+  Object.assign(WebSocket.prototype, WebSocketStatus);
+}
+
+// Disable BroadcastChannel by default in Cloudflare Workers
+const DEFAULT_DISABLE_BC = navigator.userAgent === "Cloudflare-Workers";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -279,7 +297,7 @@ export class WebsocketProvider extends Observable<string> {
       WebSocketPolyfill = WebSocket, // Optionally provide a WebSocket polyfill
       resyncInterval = -1, // Request server state every `resyncInterval` milliseconds
       maxBackoffTime = 2500, // Maximum amount of time to wait before trying to reconnect (we try to reconnect using exponential backoff)
-      disableBc = false, // Disable cross-tab BroadcastChannel communication
+      disableBc = DEFAULT_DISABLE_BC, // Disable cross-tab BroadcastChannel communication
     }: {
       connect?: boolean;
       awareness?: awarenessProtocol.Awareness;
