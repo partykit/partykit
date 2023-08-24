@@ -4,5 +4,8 @@
   "serve": {
     "path": "public",
     "build": "src/client.ts"
+  },
+  "parties": {
+    "npc": "src/npc.ts"
   }
 }
