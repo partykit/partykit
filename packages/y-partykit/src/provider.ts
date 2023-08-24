@@ -25,7 +25,6 @@ export const WebSocketStatus = {
 // Polyfill WebSocket status code constants for environments that don't have them
 // (e.g. Cloudflare Workers)
 if (WebSocket.OPEN === undefined) {
-  console.log("Polyfilling WebSocketStatus");
   Object.assign(WebSocket, WebSocketStatus);
   Object.assign(WebSocket.prototype, WebSocketStatus);
 }
