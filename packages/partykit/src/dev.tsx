@@ -427,7 +427,8 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   }
 
   useEffect(() => {
-    let chokidarWatcher: ReturnType<typeof chokidar.watch> | undefined;
+    let customBuildFolderWatcher: ReturnType<typeof chokidar.watch> | undefined;
+    let ctx: BuildContext | undefined;
     async function runBuild() {
       let isFirstBuild = true;
 
@@ -445,7 +446,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
         "/"
       );
 
-      const ctx = await esbuild.context({
+      ctx = await esbuild.context({
         stdin: {
           contents: workerFacade
             .replace("__WORKER__", absoluteScriptPath)
@@ -635,7 +636,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
           ...(buildCwd && { cwd: buildCwd }),
         });
 
-        chokidarWatcher = chokidar
+        customBuildFolderWatcher = chokidar
           .watch(config.build.watch || path.join(process.cwd(), "./src"), {
             persistent: true,
             ignoreInitial: true,
@@ -664,8 +665,11 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     });
 
     return () => {
-      chokidarWatcher?.close().catch((err) => {
+      customBuildFolderWatcher?.close().catch((err) => {
         console.error("Failed to close the custom build folder watcher", err);
+      });
+      ctx?.dispose().catch((err) => {
+        console.error("Failed to dispose the build server", err);
       });
     };
   }, [
