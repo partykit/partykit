@@ -102,7 +102,6 @@ describe("dev", () => {
     }
   });
 
-  // flaky test, disabling for now
   it("should serve static assets in dev", async () => {
     const { host, port } = await runDev({
       main: onConnectFixture,
