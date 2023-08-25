@@ -223,35 +223,41 @@ export default function useInspector(props: InspectorProps) {
   }
   const wsServer = wsServerRef.current;
 
-  wsServer.on("connection", (ws: WebSocket) => {
-    if (wsServer.clients.size > 1) {
-      /** We only want to have one active Devtools instance at a time. */
-      logger.error(
-        "Tried to open a new devtools window when a previous one was already open."
-      );
-      ws.close(1013, "Too many clients; only one can be connected at a time");
-    } else {
-      // Since partykit proxies the inspector, reloading Chrome DevTools won't trigger debugger initialisation events (because it's connecting to an extant session).
-      // This sends a `Debugger.disable` message to the remote when a new WebSocket connection is initialised,
-      // with the assumption that the new connection will shortly send a `Debugger.enable` event and trigger re-initialisation.
-      // The key initialisation messages that are needed are the `Debugger.scriptParsed events`.
-      remoteWebSocket?.send(
-        JSON.stringify({
-          // This number is arbitrary, and is chosen to be high so as not to conflict with messages that DevTools might actually send.
-          // For completeness, these options don't work: 0, -1, or Number.MAX_SAFE_INTEGER
-          id: 100_000_000,
-          method: "Debugger.disable",
-        })
-      );
-      // As promised, save the created websocket in a state hook
-      setLocalWebSocket(ws);
+  useEffect(() => {
+    function onWSServerConnection(ws: WebSocket) {
+      if (wsServer.clients.size > 1) {
+        /** We only want to have one active Devtools instance at a time. */
+        logger.error(
+          "Tried to open a new devtools window when a previous one was already open."
+        );
+        ws.close(1013, "Too many clients; only one can be connected at a time");
+      } else {
+        // Since partykit proxies the inspector, reloading Chrome DevTools won't trigger debugger initialisation events (because it's connecting to an extant session).
+        // This sends a `Debugger.disable` message to the remote when a new WebSocket connection is initialised,
+        // with the assumption that the new connection will shortly send a `Debugger.enable` event and trigger re-initialisation.
+        // The key initialisation messages that are needed are the `Debugger.scriptParsed events`.
+        remoteWebSocket?.send(
+          JSON.stringify({
+            // This number is arbitrary, and is chosen to be high so as not to conflict with messages that DevTools might actually send.
+            // For completeness, these options don't work: 0, -1, or Number.MAX_SAFE_INTEGER
+            id: 100_000_000,
+            method: "Debugger.disable",
+          })
+        );
+        // As promised, save the created websocket in a state hook
+        setLocalWebSocket(ws);
 
-      ws.addEventListener("close", () => {
-        // And and cleanup when devtools closes
-        setLocalWebSocket(undefined);
-      });
+        ws.addEventListener("close", () => {
+          // And and cleanup when devtools closes
+          setLocalWebSocket(undefined);
+        });
+      }
     }
-  });
+    wsServer.on("connection", onWSServerConnection);
+    return () => {
+      wsServer.off("connection", onWSServerConnection);
+    };
+  }, [remoteWebSocket, wsServer]);
 
   /**
    * We start and stop the server in an effect to take advantage
@@ -356,108 +362,102 @@ export default function useInspector(props: InspectorProps) {
      * the terminal (which means you have insight into your worker
      * without having to open the devtools).
      */
-    if (props.logToTerminal) {
-      ws.addEventListener("message", async (event: MessageEvent) => {
-        if (typeof event.data === "string") {
-          const evt = JSON.parse(event.data);
-          if (evt.method === "Runtime.exceptionThrown") {
-            const params = evt.params as Protocol.Runtime.ExceptionThrownEvent;
 
-            // Parse stack trace with source map.
-            if (props.sourceMapPath) {
-              // Parse in the sourcemap
-              const mapContent = JSON.parse(
-                await readFile(props.sourceMapPath, "utf-8")
-              );
+    async function onMessage(event: MessageEvent) {
+      if (typeof event.data === "string") {
+        const evt = JSON.parse(event.data);
+        if (evt.method === "Runtime.exceptionThrown") {
+          const params = evt.params as Protocol.Runtime.ExceptionThrownEvent;
 
-              // Create the lines for the exception details log
-              const exceptionLines = [
-                params.exceptionDetails.exception?.description?.split("\n")[0],
-              ];
+          // Parse stack trace with source map.
+          if (props.sourceMapPath) {
+            // Parse in the sourcemap
+            const mapContent = JSON.parse(
+              await readFile(props.sourceMapPath, "utf-8")
+            );
 
-              await SourceMapConsumer.with(
-                mapContent,
-                null,
-                async (consumer) => {
-                  // Pass each of the callframes into the consumer, and format the error
-                  const stack = params.exceptionDetails.stackTrace?.callFrames;
+            // Create the lines for the exception details log
+            const exceptionLines = [
+              params.exceptionDetails.exception?.description?.split("\n")[0],
+            ];
 
-                  stack?.forEach(
-                    ({ functionName, lineNumber, columnNumber }, i) => {
-                      try {
-                        if (lineNumber) {
-                          // The line and column numbers in the stackTrace are zero indexed,
-                          // whereas the sourcemap consumer indexes from one.
-                          const pos = consumer.originalPositionFor({
-                            line: lineNumber + 1,
-                            column: columnNumber + 1,
-                          });
+            await SourceMapConsumer.with(mapContent, null, async (consumer) => {
+              // Pass each of the callframes into the consumer, and format the error
+              const stack = params.exceptionDetails.stackTrace?.callFrames;
 
-                          // Print out line which caused error:
-                          if (i === 0 && pos.source && pos.line) {
-                            const fileSource = consumer.sourceContentFor(
-                              pos.source
-                            );
-                            const fileSourceLine =
-                              fileSource?.split("\n")[pos.line - 1] || "";
-                            exceptionLines.push(fileSourceLine.trim());
+              stack?.forEach(
+                ({ functionName, lineNumber, columnNumber }, i) => {
+                  try {
+                    if (lineNumber) {
+                      // The line and column numbers in the stackTrace are zero indexed,
+                      // whereas the sourcemap consumer indexes from one.
+                      const pos = consumer.originalPositionFor({
+                        line: lineNumber + 1,
+                        column: columnNumber + 1,
+                      });
 
-                            // If we have a column, we can mark the position underneath
-                            if (pos.column) {
-                              exceptionLines.push(
-                                `${" ".repeat(
-                                  pos.column - fileSourceLine.search(/\S/)
-                                )}^`
-                              );
-                            }
-                          }
+                      // Print out line which caused error:
+                      if (i === 0 && pos.source && pos.line) {
+                        const fileSource = consumer.sourceContentFor(
+                          pos.source
+                        );
+                        const fileSourceLine =
+                          fileSource?.split("\n")[pos.line - 1] || "";
+                        exceptionLines.push(fileSourceLine.trim());
 
-                          // From the way esbuild implements the "names" field:
-                          // > To save space, the original name is only recorded when it's different from the final name.
-                          // however, source-map consumer does not handle this
-                          if (pos && pos.line != null) {
-                            const convertedFnName =
-                              pos.name || functionName || "";
-                            exceptionLines.push(
-                              `    at ${convertedFnName} (${pos.source}:${pos.line}:${pos.column})`
-                            );
-                          }
+                        // If we have a column, we can mark the position underneath
+                        if (pos.column) {
+                          exceptionLines.push(
+                            `${" ".repeat(
+                              pos.column - fileSourceLine.search(/\S/)
+                            )}^`
+                          );
                         }
-                      } catch {
-                        // Line failed to parse through the sourcemap consumer
-                        // We should handle this better
+                      }
+
+                      // From the way esbuild implements the "names" field:
+                      // > To save space, the original name is only recorded when it's different from the final name.
+                      // however, source-map consumer does not handle this
+                      if (pos && pos.line != null) {
+                        const convertedFnName = pos.name || functionName || "";
+                        exceptionLines.push(
+                          `    at ${convertedFnName} (${pos.source}:${pos.line}:${pos.column})`
+                        );
                       }
                     }
-                  );
+                  } catch {
+                    // Line failed to parse through the sourcemap consumer
+                    // We should handle this better
+                  }
                 }
               );
+            });
 
-              // Log the parsed stacktrace
-              logger.error(
-                params.exceptionDetails.text,
-                exceptionLines.join("\n")
-              );
-            } else {
-              // We log the stacktrace to the terminal
-              logger.error(
-                params.exceptionDetails.text,
-                params.exceptionDetails.exception?.description ?? ""
-              );
-            }
-          }
-          if (evt.method === "Runtime.consoleAPICalled") {
-            logConsoleMessage(
-              evt.params as Protocol.Runtime.ConsoleAPICalledEvent
+            // Log the parsed stacktrace
+            logger.error(
+              params.exceptionDetails.text,
+              exceptionLines.join("\n")
+            );
+          } else {
+            // We log the stacktrace to the terminal
+            logger.error(
+              params.exceptionDetails.text,
+              params.exceptionDetails.exception?.description ?? ""
             );
           }
-        } else {
-          // We should never get here, but who know is 2022...
-          logger.error("Unrecognised devtools event:", event);
         }
-      });
+        if (evt.method === "Runtime.consoleAPICalled") {
+          logConsoleMessage(
+            evt.params as Protocol.Runtime.ConsoleAPICalledEvent
+          );
+        }
+      } else {
+        // We should never get here, but who know is 2022...
+        logger.error("Unrecognised devtools event:", event);
+      }
     }
 
-    ws.addEventListener("open", () => {
+    function onOpen() {
       send({ method: "Runtime.enable", id: messageCounterRef.current });
       // TODO: This doesn't actually work. Must fix.
       send({ method: "Network.enable", id: messageCounterRef.current++ });
@@ -468,20 +468,28 @@ export default function useInspector(props: InspectorProps) {
           id: messageCounterRef.current++,
         });
       }, 10_000);
-    });
+    }
 
-    ws.on("unexpected-response", () => {
+    function onUnexpectedResponse() {
       logger.log("Waiting for connection...");
       /**
        * This usually means the worker is not "ready" yet
        * so we'll just retry the connection process
        */
       retryRemoteWebSocketConnection();
-    });
+    }
 
-    ws.addEventListener("close", () => {
+    function onClose() {
       clearInterval(keepAliveInterval);
-    });
+    }
+
+    if (props.logToTerminal) {
+      ws.addEventListener("message", onMessage);
+    }
+
+    ws.addEventListener("open", onOpen);
+    ws.on("unexpected-response", onUnexpectedResponse);
+    ws.addEventListener("close", onClose);
 
     return () => {
       // clean up! Let's first stop the heartbeat interval
@@ -508,6 +516,13 @@ export default function useInspector(props: InspectorProps) {
           })
         );
       });
+
+      // remove the listeners
+      ws.removeEventListener("message", onMessage);
+      ws.removeEventListener("open", onOpen);
+      ws.off("unexpected-response", onUnexpectedResponse);
+      ws.removeEventListener("close", onClose);
+
       // Finally, we'll close the websocket
       close();
       // And we'll clear `remoteWebsocket`

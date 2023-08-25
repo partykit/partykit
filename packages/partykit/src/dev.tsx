@@ -215,25 +215,6 @@ function* findAllFiles(root: string) {
   }
 }
 
-function useDebouncedState<T>(initial: () => T, period: number) {
-  const [state, setState] = useState<T>(initial);
-  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(
-    undefined
-  );
-  const setDebouncedState = React.useCallback(
-    (newState: T | ((old: T) => T)) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = setTimeout(() => {
-        setState(newState);
-      }, period);
-    },
-    [period]
-  );
-  return [state, setDebouncedState] as const;
-}
-
 function useAssetServer(
   options: Config["serve"],
   defines: Record<string, string>
@@ -292,30 +273,27 @@ function useAssetServer(
     );
   }
 
-  const [assetsMap, setAssetsMap] = useDebouncedState<StaticAssetsManifestType>(
-    () => {
-      const assetsMap: StaticAssetsManifestType = {
-        devServer: `http://127.0.0.1:${portForAssetsServer}`,
-        browserTTL: theOptions.browserTTL,
-        edgeTTL: theOptions.edgeTTL,
-        singlePageApp: theOptions.singlePageApp,
-        assets: {},
-      };
-      if (!assetsPath) return assetsMap;
+  const [assetsMap, setAssetsMap] = useState<StaticAssetsManifestType>(() => {
+    const assetsMap: StaticAssetsManifestType = {
+      devServer: `http://127.0.0.1:${portForAssetsServer}`,
+      browserTTL: theOptions.browserTTL,
+      edgeTTL: theOptions.edgeTTL,
+      singlePageApp: theOptions.singlePageApp,
+      assets: {},
+    };
+    if (!assetsPath) return assetsMap;
 
-      if (assetsBuild?.entry) {
-        // do an initial build
-        esbuild.buildSync(esbuildAssetOptions);
-      }
+    if (assetsBuild?.entry) {
+      // do an initial build
+      esbuild.buildSync(esbuildAssetOptions);
+    }
 
-      for (const file of findAllFiles(assetsPath)) {
-        // in dev it's just the same file
-        assetsMap.assets[file] = file;
-      }
-      return assetsMap;
-    },
-    100
-  );
+    for (const file of findAllFiles(assetsPath)) {
+      // in dev it's just the same file
+      assetsMap.assets[file] = file;
+    }
+    return assetsMap;
+  });
 
   useEffect(() => {
     // update the assets map anytime any files under assetsPath change
@@ -429,6 +407,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   useEffect(() => {
     let customBuildFolderWatcher: ReturnType<typeof chokidar.watch> | undefined;
     let ctx: BuildContext | undefined;
+    const abortController = new AbortController();
     async function runBuild() {
       let isFirstBuild = true;
 
@@ -520,67 +499,74 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
                         )
                       : undefined;
 
-                  void server.onBundleUpdate({
-                    log: new Log(5, { prefix: "pk" }),
-                    verbose: options.verbose,
-                    inspectorPort: portForRuntimeInspector,
+                  void server.onBundleUpdate(
+                    {
+                      log: new Log(5, { prefix: "pk" }),
+                      verbose: options.verbose,
+                      inspectorPort: portForRuntimeInspector,
 
-                    compatibilityDate: config.compatibilityDate || "2023-04-11",
-                    compatibilityFlags: [
-                      "nodejs_compat",
-                      ...(config.compatibilityFlags || []),
-                    ],
-                    port: portForServer,
-                    bindings: {
-                      ...(config.vars
-                        ? { PARTYKIT_VARS: config.vars as Json }
-                        : {}),
-                    },
-                    durableObjects: {
-                      PARTYKIT_DURABLE: "PartyKitDurable",
-                      ...Object.entries(config.parties || {}).reduce<
-                        Record<string, string>
-                      >((obj, [name, _]) => {
-                        obj[name] = `${name}DO`;
-                        return obj;
-                      }, {}),
-                    },
-                    ...(persistencePath && {
-                      cachePersist: path.join(persistencePath, "cache"),
-                      durableObjectsPersist: path.join(
-                        persistencePath,
-                        "party"
-                      ),
-                      kvPersist: path.join(persistencePath, "kv"),
-                      r2Persist: path.join(persistencePath, "r2"),
-                      d1Persist: path.join(persistencePath, "d1"),
-                    }),
-                    // @ts-expect-error miniflare's types are wrong
-                    modules: [
-                      {
-                        type: "ESModule",
-                        path: absoluteScriptPath,
-                        contents: code,
+                      compatibilityDate:
+                        config.compatibilityDate || "2023-04-11",
+                      compatibilityFlags: [
+                        "nodejs_compat",
+                        ...(config.compatibilityFlags || []),
+                      ],
+                      port: portForServer,
+                      bindings: {
+                        ...(config.vars
+                          ? { PARTYKIT_VARS: config.vars as Json }
+                          : {}),
                       },
-                      {
-                        type: "ESModule",
-                        path: path.join(
-                          path.dirname(absoluteScriptPath),
-                          "__STATIC_ASSETS_MANIFEST__"
+                      durableObjects: {
+                        PARTYKIT_DURABLE: "PartyKitDurable",
+                        ...Object.entries(config.parties || {}).reduce<
+                          Record<string, string>
+                        >((obj, [name, _]) => {
+                          obj[name] = `${name}DO`;
+                          return obj;
+                        }, {}),
+                      },
+                      ...(persistencePath && {
+                        cachePersist: path.join(persistencePath, "cache"),
+                        durableObjectsPersist: path.join(
+                          persistencePath,
+                          "party"
                         ),
-                        contents: `export default ${JSON.stringify(
-                          assetsMap
-                        )};`,
-                      },
-                      ...Object.entries(wasmModules).map(([name, p]) => ({
-                        type: "CompiledWasm",
-                        path: path.join(path.dirname(absoluteScriptPath), name),
-                        contents: fs.readFileSync(p),
-                      })),
-                    ],
-                    modulesRoot: process.cwd(),
-                    script: code,
-                  });
+                        kvPersist: path.join(persistencePath, "kv"),
+                        r2Persist: path.join(persistencePath, "r2"),
+                        d1Persist: path.join(persistencePath, "d1"),
+                      }),
+                      // @ts-expect-error miniflare's types are wrong
+                      modules: [
+                        {
+                          type: "ESModule",
+                          path: absoluteScriptPath,
+                          contents: code,
+                        },
+                        {
+                          type: "ESModule",
+                          path: path.join(
+                            path.dirname(absoluteScriptPath),
+                            "__STATIC_ASSETS_MANIFEST__"
+                          ),
+                          contents: `export default ${JSON.stringify(
+                            assetsMap
+                          )};`,
+                        },
+                        ...Object.entries(wasmModules).map(([name, p]) => ({
+                          type: "CompiledWasm",
+                          path: path.join(
+                            path.dirname(absoluteScriptPath),
+                            name
+                          ),
+                          contents: fs.readFileSync(p),
+                        })),
+                      ],
+                      modulesRoot: process.cwd(),
+                      script: code,
+                    },
+                    { signal: abortController.signal }
+                  );
                 });
               });
             },
@@ -665,6 +651,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     });
 
     return () => {
+      abortController.abort();
       customBuildFolderWatcher?.close().catch((err) => {
         console.error("Failed to close the custom build folder watcher", err);
       });
