@@ -8,7 +8,10 @@ import type {
   PartyConnectionContext,
 } from "partykit/server";
 
+import { Inspector } from "partyinspector";
+
 // PartyKit servers now implement PartyServer interface
+@Inspector
 export default class Main implements PartyServer {
   // onBefore* handlers that run in the worker nearest the user are now
   // explicitly marked static, because they have no access to Party state

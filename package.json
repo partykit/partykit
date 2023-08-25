@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start": "npm start -w partykit",
-    "build": "npm run build -w partykit -w y-partykit -w partysocket -w partykit.io -w create-partykit",
+    "build": "npm run build -w partykit -w y-partykit -w partysocket -w partykit.io -w create-partykit -w partyinspector",
     "check": "npm run lint && npm run repocheck && npm run typecheck && npx vitest --watch=false",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
