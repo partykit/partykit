@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "deploy": "partykit deploy",
-    "dev": "REMIX_DEV_SERVER_WS_PORT=8002 remix dev --manual -c \"partykit dev\" --port 8002",
+    "start": "remix dev --manual -c \"partykit dev\" --port 8002",
     "check": "tsc"
   },
   "dependencies": {
