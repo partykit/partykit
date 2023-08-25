@@ -103,7 +103,7 @@ describe("dev", () => {
   });
 
   // flaky test, disabling for now
-  it.skip("should serve static assets in dev", async () => {
+  it("should serve static assets in dev", async () => {
     const { host, port } = await runDev({
       main: onConnectFixture,
       serve: publicFixture,
