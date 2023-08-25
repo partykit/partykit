@@ -215,6 +215,25 @@ function* findAllFiles(root: string) {
   }
 }
 
+function useDebouncedState<T>(initial: () => T, period: number) {
+  const [state, setState] = useState<T>(initial);
+  const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | undefined>(
+    undefined
+  );
+  const setDebouncedState = React.useCallback(
+    (newState: T | ((old: T) => T)) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        setState(newState);
+      }, period);
+    },
+    [period]
+  );
+  return [state, setDebouncedState] as const;
+}
+
 function useAssetServer(
   options: Config["serve"],
   defines: Record<string, string>
@@ -273,29 +292,30 @@ function useAssetServer(
     );
   }
 
-  const [assetsMap, setAssetsMap] = useState<{
-    assets: Record<string, string>;
-  }>(() => {
-    const assetsMap: StaticAssetsManifestType = {
-      devServer: `http://127.0.0.1:${portForAssetsServer}`,
-      browserTTL: theOptions.browserTTL,
-      edgeTTL: theOptions.edgeTTL,
-      singlePageApp: theOptions.singlePageApp,
-      assets: {},
-    };
-    if (!assetsPath) return assetsMap;
+  const [assetsMap, setAssetsMap] = useDebouncedState<StaticAssetsManifestType>(
+    () => {
+      const assetsMap: StaticAssetsManifestType = {
+        devServer: `http://127.0.0.1:${portForAssetsServer}`,
+        browserTTL: theOptions.browserTTL,
+        edgeTTL: theOptions.edgeTTL,
+        singlePageApp: theOptions.singlePageApp,
+        assets: {},
+      };
+      if (!assetsPath) return assetsMap;
 
-    if (assetsBuild?.entry) {
-      // do an initial build
-      esbuild.buildSync(esbuildAssetOptions);
-    }
+      if (assetsBuild?.entry) {
+        // do an initial build
+        esbuild.buildSync(esbuildAssetOptions);
+      }
 
-    for (const file of findAllFiles(assetsPath)) {
-      // in dev it's just the same file
-      assetsMap.assets[file] = file;
-    }
-    return assetsMap;
-  });
+      for (const file of findAllFiles(assetsPath)) {
+        // in dev it's just the same file
+        assetsMap.assets[file] = file;
+      }
+      return assetsMap;
+    },
+    100
+  );
 
   useEffect(() => {
     // update the assets map anytime any files under assetsPath change
@@ -306,23 +326,30 @@ function useAssetServer(
     });
 
     watcher.on("all", () => {
-      const newFiles = [...findAllFiles(assetsPath)];
-      // compare the new files with the old ones
-      const oldFiles = Object.keys(assetsMap.assets);
-      const added = newFiles.filter((f) => !oldFiles.includes(f));
-      const removed = oldFiles.filter((f) => !newFiles.includes(f));
+      setAssetsMap((assetsMap: StaticAssetsManifestType) => {
+        const newFiles = [...findAllFiles(assetsPath)];
+        // compare the new files with the old ones
+        const oldFiles = Object.keys(assetsMap.assets);
+        const added = newFiles.filter((f) => !oldFiles.includes(f));
+        const removed = oldFiles.filter((f) => !newFiles.includes(f));
 
-      // don't do anything if nothing changed
-      if (added.length === 0 && removed.length === 0) return;
+        // don't do anything if nothing changed
+        if (added.length === 0 && removed.length === 0) return assetsMap;
 
-      assetsMap.assets = {};
-      for (const file of newFiles) {
-        // in dev it's just the same file
-        assetsMap.assets[file] = file;
-      }
-      setAssetsMap({ ...assetsMap });
+        assetsMap.assets = {};
+        for (const file of newFiles) {
+          // in dev it's just the same file
+          assetsMap.assets[file] = file;
+        }
+        return { ...assetsMap };
+      });
     });
-  }, [assetsMap, assetsPath]);
+    return () => {
+      watcher.close().catch((err) => {
+        console.error("Failed to close the asset folder watcher", err);
+      });
+    };
+  }, [assetsPath, setAssetsMap]);
 
   useEffect(() => {
     if (!assetsPath) return;
@@ -347,7 +374,7 @@ function useAssetServer(
         console.error("Failed to dispose the assets build server", err);
       });
     };
-  }, [assetsBuild, assetsPath, portForAssetsServer, esbuildAssetOptions]);
+  }, [assetsPath, portForAssetsServer, esbuildAssetOptions]);
 
   return {
     assetsMap,
@@ -400,6 +427,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
   }
 
   useEffect(() => {
+    let chokidarWatcher: ReturnType<typeof chokidar.watch> | undefined;
     async function runBuild() {
       let isFirstBuild = true;
 
@@ -607,7 +635,7 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
           ...(buildCwd && { cwd: buildCwd }),
         });
 
-        const _watcher = chokidar
+        chokidarWatcher = chokidar
           .watch(config.build.watch || path.join(process.cwd(), "./src"), {
             persistent: true,
             ignoreInitial: true,
@@ -634,6 +662,12 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       console.error(error);
       process.exit(1);
     });
+
+    return () => {
+      chokidarWatcher?.close().catch((err) => {
+        console.error("Failed to close the custom build folder watcher", err);
+      });
+    };
   }, [
     config,
     server,
