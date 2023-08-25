@@ -1,0 +1,36 @@
+{
+  "name": "partymix",
+  "version": "0.0.1",
+  "description": "PartyKit + Remix = PartyMix",
+  "author": "PartyKit, Inc. <team@partykit.io>",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "dependencies": {
+    "@remix-run/server-runtime": "^1.19.3"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ],
+    "dts": true
+  },
+  "scripts": {
+    "check": "tsc",
+    "clean": "shx rm -rf dist *.d.ts",
+    "post-build": "shx mv dist/*.d.ts* .",
+    "build": "npm run clean && tsup && npm run post-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "devDependencies": {
+    "shx": "^0.3.4",
+    "tsup": "^7.2.0"
+  }
+}
