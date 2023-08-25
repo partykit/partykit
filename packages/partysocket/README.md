@@ -2,7 +2,7 @@
 
 _(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes)_
 
-A better WebSocket that Just Works™   
+A better WebSocket that Just Works™
 
 ## Install
 
@@ -14,7 +14,7 @@ npm install partysocket@beta
 
 - WebSocket API compatible (same interface, Level0 and Level2 event model)
 - Reconnects when a connection drops
-- Buffers messages when not connected, and sends accumulated messages when open  
+- Buffers messages when not connected, and sends accumulated messages when open
 - Handle connection timeouts
 - Allows changing server URL between reconnections
 - Fully configurable
@@ -57,7 +57,7 @@ const ws = new PartySocket({
 
 ### Update URL
 
-The `url` parameter will be resolved before connecting, possible types:
+The `url` parameter will be resolved before connecting, with possible types:
 
 - `string`
 - `() => string`
