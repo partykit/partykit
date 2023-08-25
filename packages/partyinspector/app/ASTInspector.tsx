@@ -2,12 +2,10 @@ import makeClass from "clsx";
 import { useTheme, ThemeProvider } from "@devtools-ds/themes";
 import type { ThemeableElement } from "@devtools-ds/themes";
 import type { ASTNode, ResolvedASTNode } from "@devtools-ds/object-parser";
-// @ts-expect-error lol
+// @ts-expect-error todo fixme
 import { ObjectInspectorItem } from "@devtools-ds/object-inspector/dist/esm/ObjectInspectorItem";
 
 import _styles from "@devtools-ds/object-inspector/src/ObjectInspector.css?inline";
-
-console.log("_styles", _styles);
 
 const styles = _styles as unknown as Record<string, string>;
 

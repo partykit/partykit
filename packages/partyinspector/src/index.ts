@@ -1,4 +1,4 @@
-// TODO: Make this less gross
+// TODO: Make this less gross by e.g adding a html loader
 import app from "../dist/index.html.txt";
 
 // TODO: Parse on server to get better type information
@@ -23,11 +23,13 @@ import type {
 
 const render = async (server: PartyServer) => {
   const instance = { ...server };
-  // @ts-expect-error lol
+  // @ts-expect-error todo fixme
   instance.party = { ...server.party };
-  // @ts-expect-error lol
+  // @ts-expect-error todo fixme
   instance.party.storage = await instance.party.storage.list();
 
+  // TODO: Do object->AST transformation on the "server" to get better
+  // information about prototype chains etc.
   //const data = await parse(instance);
 
   const json = JSON.stringify(instance);
@@ -36,10 +38,9 @@ const render = async (server: PartyServer) => {
 };
 
 export function Inspector<T extends PartyWorker>(constructor: T) {
-  // @ts-expect-error idk
+  // @ts-expect-error todo fixme
   return class InspectableServer extends constructor {
     async onConnect(connection: PartyConnection, ctx: PartyConnectionContext) {
-      console.log("Connection made");
       if (super.onConnect) {
         await super.onConnect(connection, ctx);
       }
