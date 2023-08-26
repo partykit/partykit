@@ -9,8 +9,7 @@ This is a [remix.run](https://remix.run) adapter to deploy applications to [Part
 You can create a new PartyMix app with the following command:
 
 ```bash
-# This doesn't actually work yet, but it will soon!
-npm create partykit@latest -- --template remix
+npx create-remix@latest ./my-remix-app --template partykit/remix-starter
 ```
 
 That's it! Alternately, you can add PartyMix to an existing Remix app with the following steps:
@@ -80,3 +79,7 @@ And then deploy the whole thing with:
 ```bash
 npx remix build && npx partykit deploy
 ```
+
+## Thanks
+
+(This adapter based on the original template for [Cloudflare Workers](https://github.com/remix-run/remix/tree/main/packages/remix-cloudflare-workers))
