@@ -9,6 +9,7 @@ This is a [remix.run](https://remix.run) adapter to deploy applications to [Part
 You can create a new PartyMix app with the following command:
 
 ```bash
+# This doesn't actually work yet, but it will soon!
 npm create partykit@latest -- --template remix
 ```
 
@@ -45,7 +46,7 @@ And your `partykit.json` like so:
 // partykit.json
 {
   "name": "partymix",
-  "main": "src/server.js",
+  "main": "build/server.js", // point to the built version of your server
   "serve": "public"
 }
 ```
@@ -57,13 +58,12 @@ And your `remix.config.js` like so:
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
   ignoredRouteFiles: ["**/.*"],
-  server: "./src/server.ts",
+  server: "./build/server.js",
   serverConditions: ["partykit", "workerd", "worker", "browser"],
-  serverMainFields: ["browser", "module", "main"],
-  serverMinify: true,
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
   assetsBuildDirectory: "public/build",
+  serverBuildPath: "build/server.js",
   publicPath: "/build/",
   // ...
 };
