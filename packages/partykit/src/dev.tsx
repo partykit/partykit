@@ -15,12 +15,13 @@ import crypto from "crypto";
 import type { Abortable } from "node:events";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import React from "react";
-import { render } from "ink";
+import { Text, Box, render, useApp, useInput } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
 import { logger } from "./logger";
 import getPort from "get-port";
 import asyncCache from "./async-cache";
+import open from "open";
 import type { StaticAssetsManifestType } from "./server";
 
 const esbuildOptions: BuildOptions = {
@@ -140,6 +141,73 @@ export async function devTest(props: DevProps) {
   });
 }
 
+/**
+ * An extremely simple wrapper around the open command.
+ * Specifically, it adds an 'error' event handler so that when this function
+ * is called in environments where we can't open the browser (e.g. GitHub Codespaces,
+ * StackBlitz, remote servers), it doesn't just crash the process.
+ *
+ * @param url the URL to point the browser at
+ */
+export async function openInBrowser(url: string): Promise<void> {
+  // updateStatus("Opening browser");
+  const childProcess = await open(url);
+  childProcess.on("error", () => {
+    logger.warn("Failed to open browser");
+  });
+}
+
+function useHotkeys(props: {
+  // inspectorPort: number;
+  // inspect: boolean;
+  localProtocol: "http" | "https";
+  // worker: string | undefined;
+  host: string;
+  port: number;
+}) {
+  const {
+    // inspectorPort, inspect,
+    localProtocol,
+  } = props;
+  // UGH, we should put port in context instead
+  // const [toggles, setToggles] = useState({});
+  const { exit } = useApp();
+
+  useInput(async (input, _key) => {
+    switch (input.toLowerCase()) {
+      // clear console
+      case "c":
+        console.clear();
+        // This console.log causes Ink to re-render the `DevSession` component.
+        // Couldn't find a better way to tell it to do so...
+        console.log();
+        break;
+      // open browser
+      case "b": {
+        await openInBrowser(`${localProtocol}://${props.host}:${props.port}`);
+        break;
+      }
+      // toggle inspector
+      // case "d": {
+      // 	if (inspect) {
+      // 		await openInspector(inspectorPort, props.worker);
+      // 	}
+      // 	break;
+      // }
+
+      // shut down
+      case "q":
+      case "x":
+        exit();
+        break;
+      default:
+        // nothing?
+        break;
+    }
+  });
+  // return toggles;
+}
+
 export type DevProps = {
   main?: string;
   port?: number;
@@ -167,9 +235,21 @@ export function Dev(props: DevProps) {
 function DevImpl(props: DevProps) {
   const { inspectorUrl } = useDev(props);
 
-  return props.enableInspector ?? true ? (
-    <Inspector inspectorUrl={inspectorUrl} />
-  ) : null;
+  return (
+    <>
+      {props.enableInspector ?? true ? (
+        <Inspector inspectorUrl={inspectorUrl} />
+      ) : null}
+      <Box borderStyle="round" paddingLeft={1} paddingRight={1}>
+        <Text bold={true}>[b]</Text>
+        <Text> open a browser, </Text>
+        <Text bold={true}>[c]</Text>
+        <Text> clear console, </Text>
+        <Text bold={true}>[x]</Text>
+        <Text> to exit</Text>
+      </Box>
+    </>
+  );
 }
 
 function Inspector(props: { inspectorUrl: string | undefined }) {
@@ -757,6 +837,15 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
       removeMiniflareServerExitListener();
     };
   }, [server]);
+
+  useHotkeys({
+    // inspectorPort: portForRuntimeInspector,
+    // inspect: options.enableInspector,
+    localProtocol: "http",
+    // worker: undefined,
+    host: `localhost`,
+    port: portForServer,
+  });
 
   return {
     inspectorUrl,
