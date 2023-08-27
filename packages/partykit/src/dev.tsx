@@ -15,7 +15,7 @@ import crypto from "crypto";
 import type { Abortable } from "node:events";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import React from "react";
-import { Text, Box, render, useApp, useInput } from "ink";
+import { Text, Box, render, useApp, useInput, useStdin } from "ink";
 import useInspector from "./inspect";
 import { fetch } from "undici";
 import { logger } from "./logger";
@@ -233,21 +233,16 @@ export function Dev(props: DevProps) {
 }
 
 function DevImpl(props: DevProps) {
-  const { inspectorUrl } = useDev(props);
+  const { inspectorUrl, portForServer } = useDev(props);
+  // only load the UI if we're running in a supported environment
+  const { isRawModeSupported } = useStdin();
 
   return (
     <>
       {props.enableInspector ?? true ? (
         <Inspector inspectorUrl={inspectorUrl} />
       ) : null}
-      <Box borderStyle="round" paddingLeft={1} paddingRight={1}>
-        <Text bold={true}>[b]</Text>
-        <Text> open a browser, </Text>
-        <Text bold={true}>[c]</Text>
-        <Text> clear console, </Text>
-        <Text bold={true}>[x]</Text>
-        <Text> to exit</Text>
-      </Box>
+      {isRawModeSupported ? <HotKeys portForServer={portForServer} /> : null}
     </>
   );
 }
@@ -440,7 +435,10 @@ function useAssetServer(
   };
 }
 
-function useDev(options: DevProps): { inspectorUrl: string | undefined } {
+function useDev(options: DevProps): {
+  inspectorUrl: string | undefined;
+  portForServer: number;
+} {
   const portForServer = options.port ?? getPortForServer("dev", 1999);
   const portForRuntimeInspector = getPortForServer("runtime-inspector");
   // ^ no preferred port for the runtime inspector, in fact it's better if
@@ -838,6 +836,19 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     };
   }, [server]);
 
+  return {
+    inspectorUrl,
+    portForServer,
+  };
+}
+
+function HotKeys({
+  portForServer,
+}: {
+  portForServer: number;
+  // inspectorPort: number;
+  // inspect: boolean;
+}) {
   useHotkeys({
     // inspectorPort: portForRuntimeInspector,
     // inspect: options.enableInspector,
@@ -847,7 +858,14 @@ function useDev(options: DevProps): { inspectorUrl: string | undefined } {
     port: portForServer,
   });
 
-  return {
-    inspectorUrl,
-  };
+  return (
+    <Box borderStyle="round" paddingLeft={1} paddingRight={1}>
+      <Text bold={true}>[b]</Text>
+      <Text> open a browser, </Text>
+      <Text bold={true}>[c]</Text>
+      <Text> clear console, </Text>
+      <Text bold={true}>[x]</Text>
+      <Text> to exit</Text>
+    </Box>
+  );
 }
