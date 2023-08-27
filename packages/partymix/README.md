@@ -19,7 +19,8 @@ That's it! Alternately, you can add PartyMix to an existing Remix app with the f
 First, install the dependencies:
 
 ```bash
-npm install partykit partymix --save-dev
+npm install partykit@beta --save-dev
+npm install partymix@beta
 ```
 
 Define your PartyKit server like so:
@@ -57,13 +58,11 @@ And your `remix.config.js` like so:
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
   ignoredRouteFiles: ["**/.*"],
-  server: "./build/server.js",
+  server: "./party/main.ts",
   serverConditions: ["partykit", "workerd", "worker", "browser"],
+  serverMainFields: ["browser", "module", "main"],
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
-  assetsBuildDirectory: "public/build",
-  serverBuildPath: "build/server.js",
-  publicPath: "/build/",
   // ...
 };
 ```
