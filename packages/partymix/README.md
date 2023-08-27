@@ -1,7 +1,5 @@
 ## PartyMix: 🎈 PartyKit ⤫ Remix 💿
 
-_*(Work in progress, come back later!)*_
-
 This is a [remix.run](https://remix.run) adapter to deploy applications to [PartyKit](https://partykit.io) servers.
 
 ## Get started
