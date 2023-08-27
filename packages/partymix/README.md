@@ -56,7 +56,7 @@ And your `remix.config.js` like so:
 /** @type {import('@remix-run/dev').AppConfig} */
 export default {
   ignoredRouteFiles: ["**/.*"],
-  server: "./party/main.ts",
+  server: "./src/server.js",
   serverConditions: ["partykit", "workerd", "worker", "browser"],
   serverMainFields: ["browser", "module", "main"],
   serverModuleFormat: "esm",
