@@ -9,6 +9,7 @@ import type { RawData } from "ws";
 import { onExit } from "signal-exit";
 
 import InkTable from "./ink-table";
+import SelectInput from "ink-select-input";
 
 import { Dev } from "./dev";
 import type { DevProps } from "./dev";
@@ -16,7 +17,7 @@ import type { DevProps } from "./dev";
 export { Dev };
 export type { DevProps };
 
-import { execaCommand } from "execa";
+import { execaCommand, execaCommandSync } from "execa";
 import { version as packageVersion } from "../package.json";
 
 import {
@@ -26,14 +27,18 @@ import {
   getUser,
   getUserConfig,
 } from "./config";
+import detectPackageManager from "which-pm-runs";
+
 import type { TailFilterMessage } from "./tail/filters";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
-import { render } from "ink";
+import { Box, Text, render } from "ink";
 import React from "react";
 import chalk from "chalk";
 import { ConfigurationError, logger } from "./logger";
 import type { StaticAssetsManifestType } from "./server";
+import { findUpSync } from "find-up";
+import { fileURLToPath } from "url";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,8 +73,249 @@ function* findAllFiles(
   }
 }
 
+async function installWithPackageManager({
+  pkgManager,
+  cwd,
+}: {
+  pkgManager: string;
+  cwd: string;
+}) {
+  if (pkgManager === "yarn") ensureYarnLock({ cwd });
+  return execaCommand(
+    `${pkgManager} install${pkgManager === "npm" ? " --no-fund" : ""}`,
+    {
+      cwd,
+      timeout: 90_000,
+      stdio: "inherit",
+    }
+  );
+}
+
+function ensureYarnLock({ cwd }: { cwd: string }) {
+  const yarnLock = findUpSync("yarn.lock", { cwd });
+  if (yarnLock) return;
+  return fs.writeFileSync(path.join(cwd, "yarn.lock"), "", {
+    encoding: "utf-8",
+  });
+}
+
 const MissingProjectNameError = `Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>`;
 const MissingEntryPointError = `Missing entry point, please specify "main" in your config, or pass it in via the CLI`;
+
+export async function init(options: {
+  yes: boolean | undefined;
+  name: string | undefined;
+  dryRun: boolean | undefined;
+}) {
+  // check if we're inside an existing project
+  // by looking for a package.json
+  const packageJsonPath = findUpSync("package.json");
+
+  // check if we're inside a git repo
+  const isGitRepo = !!findUpSync(".git");
+
+  // check whether we're in a typescript project
+  const isTypeScriptProject = !!findUpSync("tsconfig.json");
+
+  const pkgManager = detectPackageManager();
+
+  if (packageJsonPath) {
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    // if there's an existing package.json, we're in a project
+    // ask the user whether they want to add to it, or create a new one
+    const shouldAddToExisting =
+      options.yes ??
+      (await new Promise<boolean>((resolve, _reject) => {
+        function Component(props: { onSelect: (shouldAdd: boolean) => void }) {
+          return (
+            <>
+              <Box>
+                <Text>
+                  Would you like to add PartyKit to{" "}
+                  {chalk.bold(packageJsonPath)}?
+                </Text>
+              </Box>
+              <SelectInput
+                items={[
+                  { label: "Add to package.json", value: true },
+                  { label: "Create new project", value: false },
+                ]}
+                onSelect={(item) => {
+                  props.onSelect(item.value);
+                }}
+              />
+            </>
+          );
+        }
+        const { clear, unmount } = render(
+          <Component
+            onSelect={(shouldAdd: boolean) => {
+              resolve(shouldAdd);
+              clear();
+              unmount();
+            }}
+          />
+        );
+      }));
+
+    if (shouldAddToExisting) {
+      let shouldRunInstaller = false;
+      if (!options.dryRun) {
+        console.log(
+          `‣ Adding to existing project at ${chalk.bold(packageJsonPath)}`
+        );
+        // we're adding to an existing project
+        // so let's add the partykit dependency
+        // and make a partykit.json file
+
+        if (!packageJson.devDependencies.partykit) {
+          packageJson.devDependencies = packageJson.devDependencies || {};
+          packageJson.devDependencies.partykit = packageVersion;
+          shouldRunInstaller = true;
+        }
+
+        packageJson.dependencies = packageJson.dependencies || {};
+        if (!packageJson.dependencies.partysocket) {
+          packageJson.dependencies.partysocket = packageVersion;
+          shouldRunInstaller = true;
+        }
+
+        // write the package.json back
+        fs.writeFileSync(
+          packageJsonPath,
+          JSON.stringify(packageJson, null, 2) + "\n"
+        );
+      } else {
+        console.log(
+          `⤬ Dry run: Skipped adding dependencies to ${chalk.bold(
+            packageJsonPath
+          )}`
+        );
+      }
+
+      if (!options.dryRun) {
+        // make a partykit.json file
+        fs.writeFileSync(
+          path.join(process.cwd(), "partykit.json"),
+          JSON.stringify(
+            {
+              name: options.name || `${packageJson.name || "my"}-party`,
+              main: isTypeScriptProject ? "party/index.ts" : "party/index.js",
+            },
+            null,
+            2
+          )
+        );
+        console.log(`‣ Created ${chalk.bold("partykit.json")}`);
+      } else {
+        console.log(
+          `⤬ Dry run: Skipped creating ${chalk.bold("partykit.json")}`
+        );
+      }
+
+      if (!options.dryRun) {
+        fs.mkdirSync(path.join(process.cwd(), "src"), { recursive: true });
+      }
+
+      // write an entrypoint file
+      if (!options.dryRun) {
+        if (isTypeScriptProject) {
+          fs.writeFileSync(
+            path.join(process.cwd(), "party/index.ts"),
+            fs.readFileSync(
+              path.join(
+                path.dirname(fileURLToPath(import.meta.url)),
+                "..",
+                "init",
+                "index.ts"
+              )
+            )
+          );
+          console.log(`‣ Created ${chalk.bold("party/index.ts")}`);
+        } else {
+          fs.writeFileSync(
+            path.join(process.cwd(), "party/index.js"),
+            fs.readFileSync(
+              path.join(
+                path.dirname(fileURLToPath(import.meta.url)),
+                "..",
+                "init",
+                "index.js"
+              )
+            )
+          );
+          console.log(`‣ Created ${chalk.bold("party/index.js")}`);
+        }
+      } else {
+        console.log(
+          `⤬ Dry run: Skipped creating ${chalk.bold(
+            isTypeScriptProject ? "party/index.ts" : "party/index.js"
+          )}`
+        );
+      }
+
+      // install the dependencies
+      if (shouldRunInstaller) {
+        if (!options.dryRun) {
+          await installWithPackageManager({
+            pkgManager: pkgManager?.name || "npm",
+            cwd: path.dirname(packageJsonPath),
+          });
+          console.log(
+            "‣ Installed dependencies with " +
+              chalk.bold(pkgManager?.name || "npm")
+          );
+        } else {
+          console.log(
+            `⤬ Dry run: Skipped installing dependencies with ${chalk.bold(
+              pkgManager?.name || "npm"
+            )}`
+          );
+        }
+      }
+    } else {
+      // we're making a new project altogether
+      // so let's call the `npm create partykit` on the shell
+
+      const partyKitProjectName =
+        options.name || `${packageJson.name || "my"}-party`;
+
+      const command = `${
+        pkgManager?.name || "npm"
+      } create partykit@latest ${partyKitProjectName} -- ${
+        isTypeScriptProject ? "--typescript" : ""
+      } ${isGitRepo ? "" : "--git"} --install -y ${
+        options.dryRun ? "--dry-run" : ""
+      }`;
+
+      execaCommandSync(command, {
+        shell: true,
+        // we keep these two as "inherit" so that
+        // logs are still visible.
+        stdout: "inherit",
+        stderr: "inherit",
+      });
+    }
+  } else {
+    // we're making a new project altogether
+    // so let's call the `npm create partykit` on the shell
+    const command = `${
+      pkgManager?.name || "npm"
+    } create partykit@latest my-party ${
+      isTypeScriptProject ? "--typescript" : ""
+    } ${isGitRepo ? "" : "--git"} --install -y ${
+      options.dryRun ? "--dry-run" : ""
+    }`;
+
+    execaCommandSync(command, {
+      shell: true,
+      // we keep these two as "inherit" so that
+      // logs are still visible.
+      stdout: "inherit",
+      stderr: "inherit",
+    });
+  }
+}
 
 const esbuildOptions: BuildOptions = {
   format: "esm",

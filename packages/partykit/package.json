@@ -26,6 +26,7 @@
     "gradient-string": "^2.0.2",
     "http-terminator": "^3.2.0",
     "ink": "^4.3.1",
+    "ink-select-input": "^5.0.0",
     "json5": "^2.2.3",
     "mime": "^3.0.0",
     "miniflare": "^3.20230814.1",
@@ -38,6 +39,7 @@
     "source-map": "^0.7.4",
     "undici": "^5.23.0",
     "update-notifier": "^6.0.2",
+    "which-pm-runs": "^1.1.0",
     "ws": "^8.13.0",
     "zod": "^3.22.1"
   },

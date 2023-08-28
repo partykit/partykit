@@ -81,9 +81,23 @@ program
   });
 
 program
+  .command("init")
+  .description("Add PartyKit to a project")
+  .argument("[name]", "Name of the project")
+  .option("-y, --yes", "Skip prompts")
+  .option("--dry-run", "Skip writing files and installing dependencies")
+  .action(async (name, options) => {
+    await printBanner();
+    await cli.init({
+      dryRun: options.dryRun,
+      name,
+      yes: options.yes,
+    });
+  });
+program
   .command("dev")
-  .description("Run a script in development mode")
-  .argument("[script]", "Path to the script to run")
+  .description("Run a project in development mode")
+  .argument("[script]", "Path to the project to run")
   .option("-p, --port <number>", "Port to run the server on")
   .option("--serve <path>", "Serve this directory of static assets")
   .option("-c, --config <path>", "Path to config file")
@@ -124,17 +138,17 @@ program
 program
   .command("deploy")
   .alias("publish")
-  .description("Deploy a script to the internet")
-  .argument("[script]", "Path to the script to deploy")
+  .description("Deploy a project to the PartyKit platform")
+  .argument("[script]", "Path to the project to deploy")
   .option("--serve <path>", "Serve this directory of static assets")
   .option("-c, --config <path>", "Path to config file")
   .option(
     "-v, --var [vars...]",
-    "A key-value pair to be injected into the script as a variable"
+    "A key-value pair to be injected into the project as a variable"
   )
   .option(
     "-d, --define [defines...]",
-    "A key-value pair to be substituted in the script"
+    "A key-value pair to be substituted in the project"
   )
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
