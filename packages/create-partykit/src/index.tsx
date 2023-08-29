@@ -16,7 +16,7 @@ import {
 } from "../package.json";
 
 import chalk from "chalk";
-import { program /*, Option*/ } from "commander";
+import { program, Option } from "commander";
 
 import { fileURLToPath } from "url";
 
@@ -148,8 +148,11 @@ export async function init(options: {
   typescript: boolean | undefined;
   yes: boolean | undefined;
   dryRun: boolean | undefined;
+  hideBanner: boolean | undefined;
 }) {
-  printBanner();
+  if (!options.hideBanner) {
+    printBanner();
+  }
   const originalCwd = process.cwd();
 
   const inputPathToProject = await new Promise<string>((resolve, reject) => {
@@ -471,6 +474,10 @@ export async function init(options: {
   console.log(`- Twitter: https://twitter.com/partykit_io`);
 }
 
+// for when we call this via the main CLI
+const hideBanner = new Option("--hide-banner", "Persist local state");
+hideBanner.hidden = true;
+
 program
   .name("create-partykit")
   .version(packageVersion, "-v, --version", "Output the current version")
@@ -481,6 +488,7 @@ program
   .option("--typescript", "Initialize a new typescript project")
   .option("-y, --yes", "Skip prompts")
   .option("--dry-run", "Skip writing files and installing dependencies")
+  .addOption(hideBanner)
   .action(async (name, options) => {
     await init({
       name,
@@ -488,6 +496,7 @@ program
       dryRun: options.dryRun,
       install: options.install,
       git: options.git,
+      hideBanner: options.hideBanner,
       typescript: options.typescript,
     });
   });

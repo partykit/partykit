@@ -3,5 +3,5 @@
   "compilerOptions": {
     "moduleResolution": "bundler"
   },
-  "exclude": ["facade/*"]
+  "exclude": ["facade/*", "init/*"]
 }

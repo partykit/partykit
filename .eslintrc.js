@@ -20,6 +20,7 @@ module.exports = {
     "coverage",
     ".eslintrc.js",
     "*.d.ts",
+    "packages/partykit/init/index.js",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
