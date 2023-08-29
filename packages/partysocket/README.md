@@ -7,7 +7,7 @@ A better WebSocket that Just Works™
 ## Install
 
 ```bash
-npm install partysocket@beta
+npm install partysocket
 ```
 
 ## Features

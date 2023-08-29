@@ -1,6 +1,16 @@
 ### y-partykit
 
-`y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software. You can set up a Yjs backend with just a few lines of code:
+`y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software.
+
+## Install
+
+```sh
+npm install y-partykit
+```
+
+## Usage
+
+You can set up a Yjs backend with just a few lines of code:
 
 ```ts
 // server.ts

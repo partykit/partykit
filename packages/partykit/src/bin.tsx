@@ -24,7 +24,6 @@ async function printBanner() {
       name: packageName,
       version: packageVersion,
     },
-    distTag: "beta",
     updateCheckInterval:
       process.env.NODE_ENV !== "production" ? 0 : 1000 * 60 * 60 * 24,
   });

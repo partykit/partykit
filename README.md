@@ -27,7 +27,7 @@ For a quick demonstration, we will create a server that sends a welcome message 
 First, install PartyKit through npm:
 
 ```sh
-npm install partykit@beta partysocket@beta
+npm install partykit partysocket
 ```
 
 Then, let's create our server:
