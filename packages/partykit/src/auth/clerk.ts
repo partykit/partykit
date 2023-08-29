@@ -104,6 +104,5 @@ export const expireClerkClientToken = async (
   };
 
   const clerk = await createClerkClient({ tokenStore, headers });
-
   await clerk.signOut();
 };

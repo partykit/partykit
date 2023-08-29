@@ -209,7 +209,11 @@ export async function logout() {
   if (config) {
     fs.rmSync(USER_CONFIG_PATH);
     if (config.type === "clerk") {
-      await expireClerkClientToken(config.access_token);
+      try {
+        await expireClerkClientToken(config.access_token);
+      } catch (e) {
+        logger.info(chalk.dim("You were logged out this device."));
+      }
     }
   }
   // TODO: delete the token from github
