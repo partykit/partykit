@@ -15,7 +15,11 @@ export const configSchema = ConfigSchema.schema;
 
 export type Config = ConfigSchema.Config;
 
-import { createClerkClient, fetchClerkClientToken } from "./auth/clerk";
+import {
+  createClerkClient,
+  expireClerkClientToken,
+  fetchClerkClientToken,
+} from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
 import { signInWithGitHub } from "./auth/github";
 
@@ -83,6 +87,15 @@ export async function getUser(loginMethod?: LoginMethod): Promise<UserConfig> {
   return userConfig;
 }
 
+export function readUserConfig(path: string): UserConfig | null {
+  if (!fs.existsSync(path)) {
+    return null;
+  }
+
+  const config = JSON5.parse(fs.readFileSync(path, "utf8"));
+  return userConfigSchema.parse(config);
+}
+
 export function getUserConfig(): UserConfig {
   if (process.env.PARTYKIT_TOKEN && process.env.PARTYKIT_LOGIN) {
     return {
@@ -102,15 +115,16 @@ export function getUserConfig(): UserConfig {
     };
   }
 
-  if (!fs.existsSync(USER_CONFIG_PATH)) {
+  const config = readUserConfig(USER_CONFIG_PATH);
+  if (!config) {
     throw new Error(
       `No User configuration was found, please run ${chalk.bold(
         "npx partykit login"
       )}.`
     );
   }
-  const config = JSON5.parse(fs.readFileSync(USER_CONFIG_PATH, "utf8"));
-  return userConfigSchema.parse(config);
+
+  return config;
 }
 
 // this isn't super useful since we're validating on the server
@@ -133,16 +147,13 @@ export function getUserConfig(): UserConfig {
 
 import process from "process";
 
-export async function fetchUserConfig(
-  method: LoginMethod
-): Promise<UserConfig> {
-  // TODO: Remove when GitHub login is deprecated
-  if (method === "github") {
-    return signInWithGitHub();
-  }
-
+export async function createClerkSession({
+  mode,
+}: {
+  mode: "cli" | "token";
+}): Promise<UserConfig> {
   // initiate login oauth login flow
-  const signInResult = await signInWithBrowser();
+  const signInResult = await signInWithBrowser(mode);
 
   // if the user aborts the login flow, there's nowhere to go,
   // so exit gracefully
@@ -151,7 +162,12 @@ export async function fetchUserConfig(
     process.exit(0);
   }
 
-  const user = await fetchClerkClientToken(signInResult.token);
+  // This label is used to identify the token in the clerk dashboard.
+  // Clerk dashboard only shows first word, so don't use spaces
+  const label = mode === "cli" ? "partykit-cli" : "partykit-token";
+  const user = await fetchClerkClientToken(signInResult.token, {
+    "User-Agent": label,
+  });
 
   if (user) {
     return userConfigSchema.parse({
@@ -169,9 +185,32 @@ export async function fetchUserConfig(
   throw new Error("Login failed.");
 }
 
+export async function createClerkClientSession() {
+  return createClerkSession({ mode: "cli" });
+}
+
+export async function createClerkServiceTokenSession() {
+  return createClerkSession({ mode: "token" });
+}
+
+export async function fetchUserConfig(
+  method: LoginMethod
+): Promise<UserConfig> {
+  // TODO: Remove when GitHub login is deprecated
+  if (method === "github") {
+    return signInWithGitHub();
+  }
+
+  return createClerkClientSession();
+}
+
 export async function logout() {
-  if (fs.existsSync(USER_CONFIG_PATH)) {
+  const config = readUserConfig(USER_CONFIG_PATH);
+  if (config) {
     fs.rmSync(USER_CONFIG_PATH);
+    if (config.type === "clerk") {
+      await expireClerkClientToken(config.access_token);
+    }
   }
   // TODO: delete the token from github
 }

@@ -22,16 +22,24 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
    * The Clerk CLI is meant for browser use, and relies on cookies by default.
    * Here we make it work by passing the token in the Authorization header instead.
    */
-  return async ({ tokenStore }: { tokenStore: TokenStore }): Promise<Clerk> => {
+  return async ({
+    tokenStore,
+    headers = {},
+  }: {
+    tokenStore: TokenStore;
+    headers?: Record<string, string>;
+  }): Promise<Clerk> => {
     const clerk: Clerk = new ClerkConstructor(publishableKey);
     // pass captured or provided token in subsequent requests
     clerk.__unstable__onBeforeRequest(async (requestInit) => {
       requestInit.credentials = "omit";
       requestInit.url?.searchParams.append("_is_native", "1");
-      (requestInit.headers as Headers).set(
-        "authorization",
-        tokenStore.token || ""
-      );
+      const requestHeaders = requestInit.headers as Headers;
+      requestHeaders.set("authorization", tokenStore.token || "");
+      requestHeaders.set("user-agent", "partykit-cli");
+      for (const key in headers) {
+        requestHeaders.set(key, headers[key]);
+      }
     });
 
     // capture token from responses for future use
@@ -52,13 +60,16 @@ export const createClerkClient = clerkFactory({
   publishableKey: PUBLISHABLE_KEY,
 });
 
-export const fetchClerkClientToken = async (signInToken: string) => {
+export const fetchClerkClientToken = async (
+  signInToken: string,
+  headers?: Record<string, string>
+) => {
   // the login process will populate the token in this object
   const tokenStore = {
     token: undefined,
   };
 
-  const clerk = await createClerkClient({ tokenStore });
+  const clerk = await createClerkClient({ tokenStore, headers });
   const res = await clerk.client?.signIn.create({
     strategy: "ticket",
     ticket: signInToken,
@@ -72,7 +83,7 @@ export const fetchClerkClientToken = async (signInToken: string) => {
     throw new Error("No client token received");
   }
 
-  // `clerk.session` won't be populated on device, but session should exist
+  // `clerk.session` won't be populated on device, but activeSessions are
   const session = clerk.client?.activeSessions?.[0];
   if (!session || !session.user) {
     throw new Error("No session created");
@@ -82,4 +93,17 @@ export const fetchClerkClientToken = async (signInToken: string) => {
     access_token: tokenStore.token,
     username: session.user.username,
   };
+};
+
+export const expireClerkClientToken = async (
+  clientToken: string,
+  headers?: Record<string, string>
+) => {
+  const tokenStore = {
+    token: clientToken,
+  };
+
+  const clerk = await createClerkClient({ tokenStore, headers });
+
+  await clerk.signOut();
 };

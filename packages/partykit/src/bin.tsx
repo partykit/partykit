@@ -329,6 +329,22 @@ program
     await cli.whoami();
   });
 
+const tokenCommand = program
+  .command("token")
+  .description("Manage authentication tokens")
+  .action(async () => {
+    await printBanner();
+    tokenCommand.outputHelp();
+  });
+
+tokenCommand
+  .command("generate")
+  .description("Generate a secret authentication token")
+  .action(async () => {
+    await printBanner();
+    await cli.generateToken();
+  });
+
 // semiver implementation via https://github.com/lukeed/semiver/blob/ae7eebe6053c96be63032b14fb0b68e2553fcac4/src/index.js
 
 /**
