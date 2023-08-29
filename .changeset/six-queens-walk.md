@@ -1,5 +1,0 @@
----
-"partykit": patch
----
-
-configure bundledDependencies
