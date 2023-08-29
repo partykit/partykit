@@ -17,8 +17,7 @@ That's it! Alternately, you can add PartyMix to an existing Remix app with the f
 First, install the dependencies:
 
 ```bash
-npm install partykit@beta --save-dev
-npm install partymix@beta
+npm install partykit partymix
 ```
 
 Define your PartyKit server like so:

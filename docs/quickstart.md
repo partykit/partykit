@@ -15,7 +15,7 @@ If the version is lower than 17, update Node.
 2. Install the `partykit` package:
 
 ```bash
-npm install partykit@beta
+npm install partykit
 ```
 
 ## Your first app

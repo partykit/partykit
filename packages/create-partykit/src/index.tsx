@@ -14,6 +14,7 @@ import {
   version as packageVersion,
   devDependencies as packageDevDependencies,
 } from "../package.json";
+
 import chalk from "chalk";
 import { program /*, Option*/ } from "commander";
 
@@ -23,7 +24,7 @@ import { execaCommand } from "execa";
 import gradient from "gradient-string";
 
 function printBanner() {
-  const string = `🎈 PartyKit v${packageVersion}`;
+  const string = `🎈 PartyKit`;
   console.log(gradient.fruit(string));
   console.log(gradient.passion(`-`.repeat(string.length + 1)));
 }
@@ -245,10 +246,10 @@ export async function init(options: {
       deploy: "partykit deploy",
     },
     dependencies: {
-      partysocket: packageVersion,
+      partysocket: "*",
     },
     devDependencies: {
-      partykit: packageVersion,
+      partykit: "*",
       typescript: packageDevDependencies.typescript,
     },
   };
