@@ -19,7 +19,13 @@ export type { DevProps };
 import { execaCommand } from "execa";
 import { version as packageVersion } from "../package.json";
 
-import { getConfig, getConfigPath, getUser, getUserConfig } from "./config";
+import {
+  createClerkServiceTokenSession,
+  getConfig,
+  getConfigPath,
+  getUser,
+  getUserConfig,
+} from "./config";
 import type { TailFilterMessage } from "./tail/filters";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
@@ -579,6 +585,23 @@ export async function list(options: { format: "json" | "pretty" }) {
   } else {
     render(<InkTable data={res} />);
   }
+}
+
+export async function generateToken() {
+  logger.log("Opening web browser to authenticate you...");
+  logger.log("");
+  const session = await createClerkServiceTokenSession();
+
+  // Using console directly instead of ink because ink inserts line breaks
+  // into text and makes it harder to copy the generated token
+  logger.log(
+    "Set the following environment variables to allow a machine to deploy to PartyKit on your behalf:"
+  );
+  logger.log("");
+  logger.log(`PARTYKIT_LOGIN=${chalk.bold(session.login)}`);
+  logger.log(`PARTYKIT_TOKEN=${chalk.bold(session.access_token)}`);
+  logger.log("");
+  logger.log("Store the token securely, it will not be shown again.");
 }
 
 export async function whoami() {

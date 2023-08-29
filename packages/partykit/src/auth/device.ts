@@ -12,7 +12,7 @@ if (!DASHBOARD_BASE) {
   throw new Error("PARTYKIT_DASHBOARD_BASE not defined");
 }
 
-export async function signInWithBrowser(): Promise<
+export async function signInWithBrowser(mode: "cli" | "token"): Promise<
   | {
       token: string;
       teamId: string;
@@ -88,7 +88,7 @@ export async function signInWithBrowser(): Promise<
     const redirectUrl = `http://localhost:${port}/device/callback`;
 
     // the remote server url that will handle the login flow
-    const loginUrl = `${DASHBOARD_BASE}/login/device?redirectUrl=${encodeURIComponent(
+    const loginUrl = `${DASHBOARD_BASE}/login/device?mode=${mode}&redirectUrl=${encodeURIComponent(
       redirectUrl
     )}`;
 
