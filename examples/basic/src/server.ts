@@ -46,8 +46,8 @@ export default {
 
     console.log(process.env.WHATUP);
     console.log(room.parties);
-    // const res = await room.parties.xyz.get("some-id").fetch();
-    // console.log("gottt", await res.text());
+    const res = await room.parties.xyz.get("some-id").fetch();
+    console.log("gottt", await res.text());
     const wssss = room.parties.xyz.get("some-id").connect();
     wssss.addEventListener("message", (evt) => {
       console.log("got a message from xyz", evt.data);

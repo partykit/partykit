@@ -516,7 +516,11 @@ function useDev(options: DevProps): {
               Object.entries(config.parties || {})
                 .map(
                   ([name, party]) =>
-                    `import ${name} from '${party}'; export const ${name}DO = createDurable(${name});`
+                    `
+import ${name} from '${party}'; 
+export const ${name}DO = createDurable(${name});
+Workers["${name}"] = ${name};
+`
                 )
                 .join("\n")
             ),
