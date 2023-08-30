@@ -35,16 +35,26 @@ function assert(condition: unknown, msg?: string): asserts condition {
 }
 
 // The roomId is /party/[roomId] or /parties/[partyName]/[roomId]
-function getRoomIdFromPathname(pathname: string) {
+function getRoomAndPartyFromPathname(pathname: string): {
+  room: string;
+  party: string;
+} | null {
   // TODO: use a URLPattern here instead
   // TODO: might want to introduce a real router too
   if (pathname.startsWith("/party/")) {
     const [_, roomId] = pathname.split("/party/");
-    return roomId;
+    return {
+      room: roomId,
+      party: "main",
+    };
   } else if (pathname.startsWith("/parties/")) {
-    const [_, __, _partyName, roomId] = pathname.split("/");
-    return roomId;
+    const [_, __, partyName, roomId] = pathname.split("/");
+    return {
+      room: roomId,
+      party: partyName,
+    };
   }
+  return null;
 }
 
 let didWarnAboutMissingConnectionId = false;
@@ -58,17 +68,15 @@ function isClassWorker(worker: unknown): worker is PartyWorker {
   );
 }
 
-// When the worker is a class, to validate worker shape we'll look onto the worker prototype
-const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
-  ? Worker.prototype
-  : Worker;
-
 class PartyDurable {}
 
-type Env = {
+type DurableObjectNamespaceEnv = {
   [key: string]: DurableObjectNamespace;
-} & {
+};
+
+type Env = DurableObjectNamespaceEnv & {
   PARTYKIT_VARS: Record<string, unknown>;
+  PARTYKIT_DURABLE: DurableObjectNamespace;
 };
 
 let parties: Party["context"]["parties"];
@@ -118,6 +126,11 @@ function createMultiParties(
 
 function createDurable(Worker: PartyKitServer) {
   const isClassAPI = isClassWorker(Worker);
+
+  // When the worker is a class, to validate worker shape we'll look onto the worker prototype
+  const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
+    ? Worker.prototype
+    : Worker;
 
   for (const handler of [
     "onConnect",
@@ -294,6 +307,7 @@ function createDurable(Worker: PartyKitServer) {
           return await this.worker.onRequest(request);
         }
       } catch (e) {
+        console.error("onRequest error", e);
         const errMessage = e instanceof Error ? e.message : `${e}`;
         // @ts-expect-error - code is not a property on Error
         const errCode = "code" in e ? (e.code as number) : 500;
@@ -324,6 +338,9 @@ function createDurable(Worker: PartyKitServer) {
         if (!connectionId) {
           if (!didWarnAboutMissingConnectionId) {
             didWarnAboutMissingConnectionId = true;
+            console.warn(
+              "No connection id found in request url, generating one"
+            );
           }
           connectionId = crypto.randomUUID();
         }
@@ -351,6 +368,7 @@ function createDurable(Worker: PartyKitServer) {
       } catch (e) {
         console.error("Error when connecting");
         console.error(e);
+
         // Annoyingly, if we return an HTTP error
         // in response to a WebSocket request, Chrome devtools
         // won't show us the response body! So...
@@ -378,7 +396,7 @@ function createDurable(Worker: PartyKitServer) {
 
     #initializeParty(requestUri: string) {
       const url = new URL(requestUri);
-      const roomId = getRoomIdFromPathname(url.pathname);
+      const roomId = getRoomAndPartyFromPathname(url.pathname)?.room;
       assert(roomId, "No room id found in request url");
 
       this.id = roomId;
@@ -488,8 +506,11 @@ function createDurable(Worker: PartyKitServer) {
   };
 }
 
-export const PartyKitDurable = createDurable(Worker);
+const Workers: Record<string, PartyKitServer> = {
+  main: Worker,
+};
 
+export const PartyKitDurable = createDurable(Worker);
 __PARTIES__;
 declare const __PARTIES__: Record<string, string>;
 
@@ -502,19 +523,6 @@ export default {
     try {
       const url = new URL(request.url);
 
-      if (url.pathname.startsWith("/parties/")) {
-        const [_, __, partyName, docName] = url.pathname.split("/");
-        const partyDO = env[partyName];
-        if (!partyDO) {
-          return new Response(`Party ${partyName} not found`, { status: 404 });
-        }
-        const docId = partyDO.idFromName(docName).toString();
-        const id = partyDO.idFromString(docId);
-        const ns = partyDO.get(id);
-        return await ns.fetch(request);
-      }
-
-      const roomId = getRoomIdFromPathname(url.pathname);
       // TODO: throw if room is longer than x characters
 
       const { PARTYKIT_VARS, PARTYKIT_DURABLE, ...namespaces } = env;
@@ -523,16 +531,40 @@ export default {
         main: PARTYKIT_DURABLE,
       });
 
-      const parties: Party["parties"] = createMultiParties(namespaces, {
-        host: url.host,
-      });
+      const { room: roomId, party: targetParty } =
+        getRoomAndPartyFromPathname(url.pathname) || {};
+
+      const parties: Party["context"]["parties"] = createMultiParties(
+        namespaces,
+        {
+          host: url.host,
+        }
+      );
 
       if (roomId) {
+        assert(targetParty, "No party found in request url"); // hopefully this never triggers
+        const targetWorker = Workers[targetParty];
+        if (!targetWorker) {
+          return new Response(`Party ${targetParty} not found`, {
+            status: 404,
+          });
+        }
+
+        // When the worker is a class, to validate worker shape we'll look onto the worker prototype
+        const WorkerInstanceMethods: PartyKitServer = isClassWorker(
+          targetWorker
+        )
+          ? targetWorker.prototype
+          : targetWorker;
+
         if (request.headers.get("upgrade")?.toLowerCase() === "websocket") {
           let connectionId = url.searchParams.get("_pk");
           if (!connectionId) {
             if (!didWarnAboutMissingConnectionId) {
               didWarnAboutMissingConnectionId = true;
+              console.warn(
+                "No connection id found in request url, generating one"
+              );
             }
             connectionId = crypto.randomUUID();
           }
@@ -542,10 +574,10 @@ export default {
           // onAuth?
           let onBeforeConnectResponse: PartyRequest | Response | undefined =
             undefined;
-          if ("onBeforeConnect" in Worker) {
-            if (typeof Worker.onBeforeConnect === "function") {
+          if ("onBeforeConnect" in targetWorker) {
+            if (typeof targetWorker.onBeforeConnect === "function") {
               try {
-                onBeforeConnectResponse = await Worker.onBeforeConnect(
+                onBeforeConnectResponse = await targetWorker.onBeforeConnect(
                   request,
                   {
                     id: roomId,
@@ -555,6 +587,7 @@ export default {
                   ctx
                 );
               } catch (e) {
+                console.error("onBeforeConnect error", e);
                 return new Response(
                   e instanceof Error ? e.message : `${e}` || "Unauthorised",
                   {
@@ -584,10 +617,10 @@ export default {
           return await PARTYKIT_DURABLE.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
-          if ("onBeforeRequest" in Worker) {
-            if (typeof Worker.onBeforeRequest === "function") {
+          if ("onBeforeRequest" in targetWorker) {
+            if (typeof targetWorker.onBeforeRequest === "function") {
               try {
-                onBeforeRequestResponse = await Worker.onBeforeRequest(
+                onBeforeRequestResponse = await targetWorker.onBeforeRequest(
                   request,
                   {
                     id: roomId,
@@ -597,6 +630,7 @@ export default {
                   ctx
                 );
               } catch (e) {
+                console.error("onBeforeRequest error", e);
                 return new Response(
                   e instanceof Error ? e.message : `${e}` || "Unauthorised",
                   {
@@ -645,6 +679,7 @@ export default {
         });
       }
     } catch (e) {
+      console.error("fetch error", e);
       return new Response(e instanceof Error ? e.message : `${e}`, {
         status: 500,
       });

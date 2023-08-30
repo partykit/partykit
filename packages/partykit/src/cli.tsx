@@ -527,7 +527,10 @@ export async function deploy(options: {
           ${Object.entries(config.parties || {})
             .map(
               ([name, party]) =>
-                `import ${name}Party from '${party}'; export const ${name} = ${name}Party;`
+                `
+import ${name}Party from '${party}'; 
+export const ${name} = ${name}Party;
+`
             )
             .join("\n")}
         `,
