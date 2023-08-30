@@ -173,7 +173,11 @@ function useHotkeys(props: {
   // const [toggles, setToggles] = useState({});
   const { exit } = useApp();
 
-  useInput(async (input, _key) => {
+  useInput(async (input, key) => {
+    if (key.return) {
+      console.log("");
+      return;
+    }
     switch (input.toLowerCase()) {
       // clear console
       case "c":
