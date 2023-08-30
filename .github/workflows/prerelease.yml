@@ -37,6 +37,8 @@ jobs:
         run: node .github/version-script.js
 
       - run: npm run build
+        env:
+          PARTYKIT_API_BASE: beta-api.partykit.dev
       - run: npm run check
 
       - run: npm publish --tag beta
