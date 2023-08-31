@@ -47,6 +47,7 @@ export type PartyStub = {
 
 /** Additional information about other resources in the current project */
 export type PartyContext = {
+  /** Access other parties in this project */
   parties: Record<
     string,
     {
@@ -94,7 +95,7 @@ export type Party = {
   /** Environment variables (--var, partykit.json#vars, or .env) */
   env: Record<string, unknown>;
 
-  /** A per-party key-value storage*/
+  /** A per-party key-value storage */
   storage: PartyStorage;
 
   /** Additional information about other resources in the current project */
@@ -133,6 +134,9 @@ export type Party = {
 export interface PartyServer {
   // readonly party: Party;
 
+  /**
+   * You can define an `options` field to customise the PartyServer behaviour.
+   */
   readonly options?: PartyServerOptions;
 
   /**
@@ -147,11 +151,15 @@ export interface PartyServer {
   /**
    * Called when the server is started, before first `onConnect` or `onRequest`.
    * Useful for loading data from storage.
+   *
+   * You can use this to load data from storage and perform other asynchronous
+   * initialization, such as retrieving data or configuration from other
+   * services or databases.
    */
   onStart?(): void | Promise<void>;
 
   /**
-   * Called when a new WebSocket connection is opened.
+   * Called when a new incoming WebSocket connection is opened.
    */
   onConnect?(
     connection: PartyConnection,
@@ -163,7 +171,7 @@ export interface PartyServer {
    */
   onMessage?(
     message: string | ArrayBuffer,
-    connection: PartyConnection
+    sender: PartyConnection
   ): void | Promise<void>;
 
   /**
@@ -174,7 +182,7 @@ export interface PartyServer {
   /**
    * Called when a WebSocket connection is closed due to a connection error.
    */
-  onError?(connection: PartyConnection, err: Error): void | Promise<void>;
+  onError?(connection: PartyConnection, error: Error): void | Promise<void>;
 
   /**
    * Called when a HTTP request is made to the party URL.
@@ -183,6 +191,10 @@ export interface PartyServer {
 
   /**
    * Called when an alarm is triggered. Use Party.storage.setAlarm to set an alarm.
+   *
+   * Alarms have access to most Party resources such as storage, but not Party.id
+   * and Party.context.parties properties. Attempting to access them will result in a
+   * runtime error.
    */
   onAlarm?(): void | Promise<void>;
 }
@@ -315,5 +327,11 @@ export type PartyKitRoom = Party;
 export type PartyKitConnection = PartyConnection;
 
 export type PartyServerOptions = {
+  /**
+   * Whether the PartyKit platform should remove the server from memory
+   * between HTTP requests and WebSocket messages.
+   *
+   * The default value is `false`.
+   */
   hibernate?: boolean;
 };
