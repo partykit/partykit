@@ -1,6 +1,6 @@
 {
   "name": "partykit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Everything's better with friends",
   "bin": "dist/bin.mjs",
   "exports": {
