@@ -168,7 +168,7 @@ export async function init(options: {
         // so let's add the partykit dependency
         // and make a partykit.json file
 
-        if (!packageJson.devDependencies.partykit) {
+        if (!packageJson.devDependencies?.partykit) {
           packageJson.devDependencies = packageJson.devDependencies || {};
           packageJson.devDependencies.partykit = packageVersion;
           shouldRunInstaller = true;
@@ -214,7 +214,7 @@ export async function init(options: {
       }
 
       if (!options.dryRun) {
-        fs.mkdirSync(path.join(process.cwd(), "src"), { recursive: true });
+        fs.mkdirSync(path.join(process.cwd(), "party"), { recursive: true });
       }
 
       // write an entrypoint file
