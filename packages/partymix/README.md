@@ -67,7 +67,7 @@ export default {
 You can then run your app locally:
 
 ```bash
-npx remix dev --manual -c "npx partykit dev",
+npx remix dev --manual -c "npx partykit dev"
 ```
 
 And then deploy the whole thing with:
