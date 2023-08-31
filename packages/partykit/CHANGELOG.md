@@ -1,5 +1,27 @@
 # partykit
 
+## 0.0.3
+
+### Patch Changes
+
+- [#296](https://github.com/partykit/partykit/pull/296) [`57f71c9`](https://github.com/partykit/partykit/commit/57f71c94639ace4a6fefd9f53fe2bd20f24d46b2) Thanks [@jevakallio](https://github.com/jevakallio)! - Add `partykit token generate` to create API tokens
+
+- [#305](https://github.com/partykit/partykit/pull/305) [`8e087cc`](https://github.com/partykit/partykit/commit/8e087ccc6f18581f74f769c341589afadf7a1156) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix edge case bugs in `partykit init`
+
+- [#299](https://github.com/partykit/partykit/pull/299) [`2209de9`](https://github.com/partykit/partykit/commit/2209de9b8de794db5c19a9a0a7fe21b94b140711) Thanks [@threepointone](https://github.com/threepointone)! - fix: call oBC/oBR on sub parties
+
+  We hadn't wired up onBeforeConnect/onBeforeRequest for multi parties. To fix this, I did a refactor where _every_ request goes through a common codepath now. Additionally, this also means that `/parties/main/:id` is equivalent to `party/:id`. I also massaged out some differences between the platform/cli facade.
+
+- [#300](https://github.com/partykit/partykit/pull/300) [`6bd4609`](https://github.com/partykit/partykit/commit/6bd4609017ee32596ac5fdf37a09fba4e24c6dd3) Thanks [@threepointone](https://github.com/threepointone)! - add new lines when hitting return in `dev`
+
+  fairly common behaviour with other CLIs, just adding it to ours as well.
+
+- [#293](https://github.com/partykit/partykit/pull/293) [`53eb0b5`](https://github.com/partykit/partykit/commit/53eb0b54f09628e3c625dba052dffdbbf6b4c836) Thanks [@threepointone](https://github.com/threepointone)! - `partykit init`: add partykit to existing projects
+
+  The common usecase is to add partykit to an existing project, usually running on another stack/provider. This adds an `init` command that simply adds dependencies, a `partykit.json` file, and an entry point. If it's not run inside an existing project, it defers to running `npm create partykit` instead.
+
+- [#303](https://github.com/partykit/partykit/pull/303) [`6b773ae`](https://github.com/partykit/partykit/commit/6b773ae6e276dc4a68a958ebc86099a51186b471) Thanks [@jevakallio](https://github.com/jevakallio)! - Improve type documentation
+
 ## 0.0.2
 
 ### Patch Changes
