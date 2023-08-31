@@ -173,7 +173,11 @@ function useHotkeys(props: {
   // const [toggles, setToggles] = useState({});
   const { exit } = useApp();
 
-  useInput(async (input, _key) => {
+  useInput(async (input, key) => {
+    if (key.return) {
+      console.log("");
+      return;
+    }
     switch (input.toLowerCase()) {
       // clear console
       case "c":
@@ -512,7 +516,11 @@ function useDev(options: DevProps): {
               Object.entries(config.parties || {})
                 .map(
                   ([name, party]) =>
-                    `import ${name} from '${party}'; export const ${name}DO = createDurable(${name});`
+                    `
+import ${name} from '${party}'; 
+export const ${name}DO = createDurable(${name});
+Workers["${name}"] = ${name};
+`
                 )
                 .join("\n")
             ),

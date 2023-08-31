@@ -12,7 +12,7 @@ You can create a PartyKit project by running:
 npm create partykit@latest
 ```
 
-This will ask a few questions about your project and create a new directory with a PartyKit application, that includes as server and a client. From inside the directory, you can then run `npm run dev` to start the development server. When you'reready, you can deploy your application on to the PartyKit cloud with `npm run deploy`.
+This will ask a few questions about your project and create a new directory with a PartyKit application, that includes a server and a client. From inside the directory, you can then run `npm run dev` to start the development server. When you'reready, you can deploy your application on to the PartyKit cloud with `npm run deploy`.
 
 ## From scratch
 

@@ -42,7 +42,7 @@ export type PartyKitContext = PartyConnectionContext;
 
 export type PartyStub = {
   connect: () => WebSocket;
-  fetch: (init: RequestInit) => Promise<Response>;
+  fetch: (init?: RequestInit) => Promise<Response>;
 };
 
 /** Additional information about other resources in the current project */
