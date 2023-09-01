@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.6
+
+### Patch Changes
+
+- [#314](https://github.com/partykit/partykit/pull/314) [`d9a1871`](https://github.com/partykit/partykit/commit/d9a187180cb1b205b26b3f26cd8bde6701426d24) Thanks [@threepointone](https://github.com/threepointone)! - trigger a release
+
 ## 0.0.5
 
 ### Patch Changes
