@@ -194,7 +194,7 @@ export async function init(options: {
           <Text>Where should we create your project?</Text>
           <TextInput
             value={text}
-            placeholder={` ./${randomName}`}
+            placeholder={`${randomName}`}
             onChange={setText}
             onSubmit={done}
           />
