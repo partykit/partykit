@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.4
+
+### Patch Changes
+
+- [#307](https://github.com/partykit/partykit/pull/307) [`ad3ea55`](https://github.com/partykit/partykit/commit/ad3ea552b42614217493f71fd69343a53591d470) Thanks [@threepointone](https://github.com/threepointone)! - fix: route sub party requests correctly
+
+  sigh. we were always fetching from the main party. This fix routest he request to the correct sub party.
+
 ## 0.0.3
 
 ### Patch Changes
