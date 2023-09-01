@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.5
+
+### Patch Changes
+
+- [#304](https://github.com/partykit/partykit/pull/304) [`9c5df06`](https://github.com/partykit/partykit/commit/9c5df06e5378bf24338349403aa75a07e0d21c21) Thanks [@jevakallio](https://github.com/jevakallio)! - Update create and init templates to use Class API
+
 ## 0.0.4
 
 ### Patch Changes
