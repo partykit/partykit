@@ -544,6 +544,7 @@ export default {
       if (roomId) {
         assert(targetParty, "No party found in request url"); // hopefully this never triggers
         const targetWorker = Workers[targetParty];
+        const targetDurable = namespaces[targetParty];
         if (!targetWorker) {
           return new Response(`Party ${targetParty} not found`, {
             status: 404,
@@ -601,20 +602,18 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = PARTYKIT_DURABLE.idFromName(roomId).toString();
-          const id = PARTYKIT_DURABLE.idFromString(docId);
+          const docId = targetDurable.idFromName(roomId).toString();
+          const id = targetDurable.idFromString(docId);
 
           if (onBeforeConnectResponse) {
             if (onBeforeConnectResponse instanceof Response) {
               return onBeforeConnectResponse;
             } else if (onBeforeConnectResponse instanceof Request) {
-              return await PARTYKIT_DURABLE.get(id).fetch(
-                onBeforeConnectResponse
-              );
+              return await targetDurable.get(id).fetch(onBeforeConnectResponse);
             }
           }
 
-          return await PARTYKIT_DURABLE.get(id).fetch(request);
+          return await targetDurable.get(id).fetch(request);
         } else {
           let onBeforeRequestResponse: Request | Response = request;
           if ("onBeforeRequest" in targetWorker) {
@@ -652,10 +651,10 @@ export default {
           }
 
           // Set up the durable object for this room
-          const docId = PARTYKIT_DURABLE.idFromName(roomId).toString();
-          const id = PARTYKIT_DURABLE.idFromString(docId);
+          const docId = targetDurable.idFromName(roomId).toString();
+          const id = targetDurable.idFromString(docId);
 
-          return await PARTYKIT_DURABLE.get(id).fetch(onBeforeRequestResponse);
+          return await targetDurable.get(id).fetch(onBeforeRequestResponse);
         }
       } else {
         const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
