@@ -1,0 +1,39 @@
+---
+const { title, subtitle, kicker, image, text, variant = 1 } = Astro.props;
+---
+
+{variant === 1 && 
+  <article class='grid cols-2-m g3 px3 py4 py5-m'>
+    <div style='background-image: url(https://mrmrs.github.io/photos/u/035.jpg);' class='br4 cover bg-center aspect-ratio-16x9'>
+    </div>
+    <div class='bg-white pl5-m flex flex-column justify-center'>
+      <h4 class='f3 mw9 mt0 mb2 indigo-5'>{kicker}</h3>
+      <h3 class='f7 fw9 mt0 mb0'>{title}</h3>
+      <p class='measure lh-copy'>
+        {text}
+      </p>
+      <div class='mt4'>
+        <a href="#0" class='f3 fw7 link lh-copy indigo-0 px3 py2 ba br3 nowrap'>Click here</a>
+        <a href="#0" class='f3 fw7 link lh-copy indigo-0 px3 py2 br3 nowrap'>Learn more &rarr;</a>
+      </div>
+    </div>
+  </article>
+}
+
+{variant === 2 && 
+  <article class='grid cols-2-m g3 px3 py4 py5-m'>
+    <div style='background-image: url(https://mrmrs.github.io/photos/u/035.jpg);' class='order-1 br4 cover bg-center aspect-ratio-16x9'>
+    </div>
+    <div class='bg-white pl5-m flex flex-column justify-center order-0'>
+      <h4 class='f3 mw9 mt0 mb2 indigo-5'>{kicker}</h3>
+      <h3 class='f7 fw9 mt0 mb0'>{title}</h3>
+      <p class='measure lh-copy'>
+        {text}
+      </p>
+      <div class='mt4'>
+        <a href="#0" class='f3 fw7 link lh-copy indigo-0 px3 py2 ba br3 nowrap'>Click here</a>
+        <a href="#0" class='f3 fw7 link lh-copy indigo-0 px3 py2 br3 nowrap'>Learn more &rarr;</a>
+      </div>
+    </div>
+  </article>
+}

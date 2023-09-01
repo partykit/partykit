@@ -1,0 +1,26 @@
+/*
+
+   BORDER COLORS
+   Docs: http://tachyons.io/docs/themes/borders/
+
+   Border colors can be used to extend the base
+   border classes ba,bt,bb,br,bl found in the _borders.css file.
+
+   The base border class by default will set the color of the border
+   to that of the current text color. These classes are for the cases
+   where you desire for the text and border colors to be different.
+
+   Base:
+     b = border
+
+   Modifiers:
+   --color-name = each color variable name is also a border color name
+
+*/
+
+.b--color { border-color: var(--border-color, gray); }
+.b--transparent { border-color: transparent; }
+.b--current { border-color: currentColor; }
+.b--inherit { border-color: inherit; }
+.b--initial { border-color: initial; }
+.b--unset { border-color: unset; }

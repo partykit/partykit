@@ -1,0 +1,13 @@
+---
+const { href, title, body } = Astro.props;
+---
+
+<a href={href} title={title} 
+   class='link flex items-center g2 color'>
+    <slot />
+    {body}
+</a>
+
+<style>
+    a:hover { color: var(--primary); }
+</style>

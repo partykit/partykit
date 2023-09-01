@@ -1,0 +1,76 @@
+/*
+
+  FLEXBOX
+
+  Media Query Extensions:
+   -s = small
+   -m  = medium
+   -l  = large
+
+*/
+
+/* 1. Fix for Chrome 44 bug.
+ * https://code.google.com/p/chromium/issues/detail?id=506893 */
+.flex-auto {
+  flex: 1 1 auto;
+  min-width: 0; /* 1 */
+  min-height: 0; /* 1 */
+}
+
+.flex-none { flex: none; }
+
+.flex-grow-0 { flex-grow: 0; }
+.flex-grow-1 { flex-grow: 1; }
+
+.flex-shrink-0 { flex-shrink: 0; }
+.flex-shrink-1 { flex-shrink: 1; }
+
+@media (--breakpoint-small) {
+  .flex-s { display: flex; }
+  .inline-flex-s { display: inline-flex; }
+  .flex-auto-s {
+    flex: 1 1 auto;
+    min-width: 0; /* 1 */
+    min-height: 0; /* 1 */
+  }
+  .flex-none-s { flex: none; }
+
+  .flex-grow-0-s { flex-grow: 0; }
+  .flex-grow-1-s { flex-grow: 1; }
+
+  .flex-shrink-0-s { flex-shrink: 0; }
+  .flex-shrink-1-s { flex-shrink: 1; }
+}
+@media (--breakpoint-medium) {
+  .flex-m { display: flex; }
+  .inline-flex-m { display: inline-flex; }
+  .flex-auto-m {
+    flex: 1 1 auto;
+    min-width: 0; /* 1 */
+    min-height: 0; /* 1 */
+  }
+  .flex-none-m { flex: none; }
+
+  .flex-grow-0-m { flex-grow: 0; }
+  .flex-grow-1-m { flex-grow: 1; }
+
+  .flex-shrink-0-m { flex-shrink: 0; }
+  .flex-shrink-1-m { flex-shrink: 1; }
+}
+
+@media (--breakpoint-large) {
+  .flex-l { display: flex; }
+  .inline-flex-l { display: inline-flex; }
+  .flex-auto-l {
+    flex: 1 1 auto;
+    min-width: 0; /* 1 */
+    min-height: 0; /* 1 */
+  }
+  .flex-none-l { flex: none; }
+
+  .flex-grow-0-l { flex-grow: 0; }
+  .flex-grow-1-l { flex-grow: 1; }
+
+  .flex-shrink-0-l { flex-shrink: 0; }
+  .flex-shrink-1-l { flex-shrink: 1; }
+}

@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import NavLink from "../components/NavLink.astro";
+import Hero from "../components/Hero.astro";
+import Features from "../components/Features.astro";
+import Integrations from "../components/Integrations.astro";
+import Testimonials from "../components/Testimonials.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Code from "../components/Code.astro";
+import SlabStat from "../components/SlabStat.astro";
+import GettingStarted from "../components/GettingStarted.astro";
+import PanelCenter from "../components/PanelCenter.astro";
+import ButtonLink from "../components/ButtonLink.astro";
+import GA from "../components/GA.astro";
+---
+
+<Layout title="PartyKit | Everything is better with friends">
+  <Header />
+  <main>
+    <Hero
+      variant={12}
+      title="Everything is better with friends"
+      text={"PartyKit is an open source deployment platform for AI agents, multiplayer and local-first apps, games, and websites."}
+    />
+    <Features />
+    <Integrations />
+    <GettingStarted />
+    <Testimonials variant={3} />
+
+    <section
+      class="px4 px6-m py6"
+      style="--gradient-color-1: var(--teal-5);--gradient-color-2: var(--blue-5);"
+    >
+      <div class="grid cols-2-m items-center g5">
+        <div>
+          <p class="m0 lh-title measure-narrow f6 f8-s fw9">
+            Designed for real-time collaborative apps
+          </p>
+          <p class="lh-copy measure f5 gray-5">
+            The future of the Internet is collaborative. It has always been hard
+            and operationally expensive to build experiences that bring the
+            world together. PartyKit changes that.
+          </p>
+          <p class="lh-copy measure f5 black">
+            <b>Welcome to the party, pal!</b>
+          </p>
+        </div>
+        <div>
+          <ButtonLink
+            title="Join our Discord!"
+            href="https://discord.gg/g5uqHQJc3z"
+          >
+            Join the party &rarr;
+          </ButtonLink>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer variant={1} />
+  <GA />
+</Layout>

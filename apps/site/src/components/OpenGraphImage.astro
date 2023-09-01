@@ -1,0 +1,32 @@
+---
+import Avatar from './Avatar.astro';
+const { title, subtitle, text, image = 'https://dc28c2r6oodom.cloudfront.net/avatars/11.jpg', variant = 2 } = Astro.props;
+
+---
+
+{variant === 1 && 
+  <article class='relative bg-gray-0 gray-11 p5 flex flex-wrap items-start' style='aspect-ratio: 1200 / 630;'>
+    <h1 class='m0 w-100'>🎈 PartyKit</h1>
+    <h2 class='f10 mt6 mb0 lh-solid'>Building realtime collaborative software with PartyKit</h2>
+    <h3 class='f7 mt3 mb6 overlay-tint-9 fw4 lh-solid'>An amazing subtitle that we will test out</h3>
+    <div class='flex items-center g4 flex-end w-100'>
+      <div style='width: 80px;'><Avatar /></div>
+      <span class='f7 gray-11'>Author name</span>
+    </div>
+  </article>
+}
+
+{variant === 2 && 
+  <article class='relative overflow-hidden bg-indigo-11 indigo-5 p5 flex flex-wrap items-start' style='aspect-ratio: 1200 / 630;'>
+    <h1 class='m0 w-100'>🎈 PartyKit</h1>
+    <h2 class='f9 mt3 mb0 lh-solid'>API Reference</h2>
+    <p class='f7 mt0 mb0 indigo-1 fw4 lh-copy'>
+The PartyKit runtime is a modern standards-based JavaScript runtime based on the workerd runtime by Cloudflare. In addition to running modern JavaScript, it also supports TypeScript, thousands of modules from the npm registry, and WebAssembly modules.
+    </p>
+    <div class='flex items-center g4 w-100'>
+      <div style='width: 80px;'><Avatar variant={4} /></div>
+      <span class='f7 indigo-0 o-70'>Author name</span>
+    </div>
+  </article>
+}
+

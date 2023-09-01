@@ -1,0 +1,146 @@
+/*
+
+   COORDINATES
+   Docs: http://tachyons.io/docs/layout/position/
+
+   Use in combination with the position module.
+
+   Base:
+     top
+     bottom
+     right
+     left
+
+   Modifiers:
+     -0  = literal value 0
+     -1  = literal value 1
+     -2  = literal value 2
+     --1 = literal value -1
+     --2 = literal value -2
+
+   Media Query Extensions:
+     -s = small
+     -m  = medium
+     -l  = large
+
+*/
+
+.top-0    { top:    0; }
+.right-0  { right:  0; }
+.bottom-0 { bottom: 0; }
+.left-0   { left:   0; }
+
+.top-1    { top:    var(--size, 1rem); }
+.right-1  { right:  var(--size, 1rem); }
+.bottom-1 { bottom: var(--size, 1rem); }
+.left-1   { left:   var(--size, 1rem); }
+
+.top-2    { top:    calc(var(--size, 1rem) * 2); }
+.right-2  { right:  calc(var(--size, 1rem) * 2); }
+.bottom-2 { bottom: calc(var(--size, 1rem) * 2); }
+.left-2   { left:   calc(var(--size, 1rem) * 2); }
+
+.top--1    { top:    calc(var(--size, 1rem) * -1); }
+.right--1  { right:  calc(var(--size, 1rem) * -1); }
+.bottom--1 { bottom: calc(var(--size, 1rem) * -1); }
+.left--1   { left:   calc(var(--size, 1rem) * -1); }
+
+.top--2    { top:    calc(var(--size, 1rem) * -2); }
+.right--2  { right:  calc(var(--size, 1rem) * -2); }
+.bottom--2 { bottom: calc(var(--size, 1rem) * -2); }
+.left--2   { left:   calc(var(--size, 1rem) * -2); }
+
+
+.absolute--fill {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+@media (--breakpoint-small) {
+  .top-0-s     { top:   0; }
+  .left-0-s    { left:  0; }
+  .right-0-s   { right: 0; }
+  .bottom-0-s  { bottom: 0; }
+  .top-1-s     { top:    var(--size, 1rem); }
+  .left-1-s    { left:   var(--size, 1rem); }
+  .right-1-s   { right:  var(--size, 1rem); }
+  .bottom-1-s  { bottom: var(--size, 1rem); }
+  .top-2-s     { top:    calc(var(--size, 1rem) * 2); }
+  .left-2-s    { left:   calc(var(--size, 1rem) * 2); }
+  .right-2-s   { right:  calc(var(--size, 1rem) * 2); }
+  .bottom-2-s  { bottom: calc(var(--size, 1rem) * 2); }
+  .top--1-s    { top:    calc(var(--size, 1rem) * -1); }
+  .right--1-s  { right:  calc(var(--size, 1rem) * -1); }
+  .bottom--1-s { bottom: calc(var(--size, 1rem) * -1); }
+  .left--1-s   { left:   calc(var(--size, 1rem) * -1); }
+  .top--2-s    { top:    calc(var(--size, 1rem) * -2); }
+  .right--2-s  { right:  calc(var(--size, 1rem) * -2); }
+  .bottom--2-s { bottom: calc(var(--size, 1rem) * -2); }
+  .left--2-s   { left:   calc(var(--size, 1rem) * -2); }
+  .absolute--fill-s {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@media (--breakpoint-medium) {
+  .top-0-m     { top:   0; }
+  .left-0-m    { left:  0; }
+  .right-0-m   { right: 0; }
+  .bottom-0-m  { bottom: 0; }
+  .top-1-m     { top:    var(--size, 1rem); }
+  .left-1-m    { left:   var(--size, 1rem); }
+  .right-1-m   { right:  var(--size, 1rem); }
+  .bottom-1-m  { bottom: var(--size, 1rem); }
+  .top-2-m     { top:    calc(var(--size, 1rem) * 2); }
+  .left-2-m    { left:   calc(var(--size, 1rem) * 2); }
+  .right-2-m   { right:  calc(var(--size, 1rem) * 2); }
+  .bottom-2-m  { bottom: calc(var(--size, 1rem) * 2); }
+  .top--1-m    { top:    calc(var(--size, 1rem) * -1); }
+  .right--1-m  { right:  calc(var(--size, 1rem) * -1); }
+  .bottom--1-m { bottom: calc(var(--size, 1rem) * -1); }
+  .left--1-m   { left:   calc(var(--size, 1rem) * -1); }
+  .top--2-m    { top:    calc(var(--size, 1rem) * -2); }
+  .right--2-m  { right:  calc(var(--size, 1rem) * -2); }
+  .bottom--2-m { bottom: calc(var(--size, 1rem) * -2); }
+  .left--2-m   { left:   calc(var(--size, 1rem) * -2); }
+  .absolute--fill-m {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}
+
+@media (--breakpoint-large) {
+  .top-0-l     { top:   0; }
+  .left-0-l    { left:  0; }
+  .right-0-l   { right: 0; }
+  .bottom-0-l  { bottom: 0; }
+  .top-1-l     { top:    var(--size, 1rem); }
+  .left-1-l    { left:   var(--size, 1rem); }
+  .right-1-l   { right:  var(--size, 1rem); }
+  .bottom-1-l  { bottom: var(--size, 1rem); }
+  .top-2-l     { top:    calc(var(--size, 1rem) * 2); }
+  .left-2-l    { left:   calc(var(--size, 1rem) * 2); }
+  .right-2-l   { right:  calc(var(--size, 1rem) * 2); }
+  .bottom-2-l  { bottom: calc(var(--size, 1rem) * 2); }
+  .top--1-l    { top:    calc(var(--size, 1rem) * -1); }
+  .right--1-l  { right:  calc(var(--size, 1rem) * -1); }
+  .bottom--1-l { bottom: calc(var(--size, 1rem) * -1); }
+  .left--1-l   { left:   calc(var(--size, 1rem) * -1); }
+  .top--2-l    { top:    calc(var(--size, 1rem) * -2); }
+  .right--2-l  { right:  calc(var(--size, 1rem) * -2); }
+  .bottom--2-l { bottom: calc(var(--size, 1rem) * -2); }
+  .left--2-l   { left:   calc(var(--size, 1rem) * -2); }
+  .absolute--fill-l {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+}

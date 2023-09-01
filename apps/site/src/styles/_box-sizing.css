@@ -1,0 +1,13 @@
+/*
+ 
+  BOX SIZING
+
+*/
+
+*, 
+*::before, 
+*::after,
+.border-box,
+.border-box::before,
+.border-box::after { box-sizing: border-box; }
+.content-box { box-sizing: content-box; }

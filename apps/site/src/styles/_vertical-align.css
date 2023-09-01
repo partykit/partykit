@@ -1,0 +1,36 @@
+/*
+
+   VERTICAL ALIGN
+
+   Media Query Extensions:
+     -s = small
+     -m  = medium
+     -l  = large
+
+*/
+
+.v-base     { vertical-align: baseline; }
+.v-mid      { vertical-align: middle; }
+.v-top      { vertical-align: top; }
+.v-btm      { vertical-align: bottom; }
+
+@media (--breakpoint-small) {
+  .v-base-s     { vertical-align: baseline; }
+  .v-mid-s      { vertical-align: middle; }
+  .v-top-s      { vertical-align: top; }
+  .v-btm-s      { vertical-align: bottom; }
+}
+
+@media (--breakpoint-medium) {
+  .v-base-m     { vertical-align: baseline; }
+  .v-mid-m      { vertical-align: middle; }
+  .v-top-m      { vertical-align: top; }
+  .v-btm-m      { vertical-align: bottom; }
+}
+
+@media (--breakpoint-large) {
+  .v-base-l     { vertical-align: baseline; }
+  .v-mid-l      { vertical-align: middle; }
+  .v-top-l      { vertical-align: top; }
+  .v-btm-l      { vertical-align: bottom; }
+}
