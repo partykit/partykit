@@ -1,0 +1,36 @@
+---
+import Avatar from './Avatar.astro';
+
+const { author, href, title, subtitle, kicker, text, image, date = 'https://source.unsplash.com/random/1200x630', variant = 1 } = Astro.props;
+---
+
+{variant === 1 && 
+  <a href={href} class='link gray-0 db shadow-6 br2 overflow-hidden p3 shadow-hover'>
+    <img src={image} class='db mb2 br1' style='aspect-ratio: 120/630; '/>
+    <h4 class='f3 gray-4 fw4 mt3 mb1 lh-title'>{kicker}</h4>
+    <h4 class='gray-0 lh-title m0 f5'>{title}</h4>
+    <p class='lh-copy f3 mt2'>
+      {text}
+    </p>
+    <div class='flex items-center g3 mt2'>
+      <div class='w2'><Avatar variant={4} /></div>
+      <span class='f2'>{author}</span>
+    </div>
+  </a>
+}
+
+{variant === 2 && 
+  <a href={href} class='link gray-0 db shadow-6 br2 overflow-hidden p3 shadow-hover'>
+    <img height='630' width='1200' src={image} class='db mb2 br1' style='aspect-ratio: 1200/630'/>
+    <h4 class='f3 gray-4 fw4 m0'>{kicker}</h4>
+    <h4 class='gray-0 lh-title m0 f4'>{title}</h4>
+    <p class='lh-copy f3 mt2'>
+      {text}
+    </p>
+    <div class='flex items-center g3 mt2'>
+      <div class='w2'><Avatar variant={4} /></div>
+      <span class='f2'>{author}</span>
+    </div>
+  </a>
+}
+

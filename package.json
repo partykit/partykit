@@ -4,6 +4,7 @@
   "private": true,
   "description": "The monorepo for Partykit",
   "workspaces": [
+    "apps/*",
     "packages/*",
     "examples/*"
   ],

@@ -1,0 +1,17 @@
+/*
+
+  DEBUG CHILDREN
+  Docs: http://tachyons.io/docs/debug/
+
+  Just add the debug class to any element to see outlines on its
+  children.
+
+*/
+
+.debug * { 
+  --debug-color: 128 0 90;
+  --debug-opacity: .8;
+  outline: 1px solid rbg(var(--debug-color, 128 0 90) / (--debug-opacity, .8)); 
+}
+
+

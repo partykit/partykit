@@ -1,0 +1,21 @@
+/* 
+
+   DEBUG GRID
+   http://tachyons.io/docs/debug-grid/
+
+   Can be useful for debugging layout issues
+   or helping to make sure things line up perfectly.
+   Just tack this class onto a parent element
+
+*/
+
+.debug-grid {
+  --grid-size: 16px; 
+  --grid-color: var(--magenta-9);
+
+  background-image: 
+    repeating-linear-gradient(0deg, var(--grid-color), var(--grid-color) 1px, transparent 1px, transparent var(--grid-size)), 
+    repeating-linear-gradient(90deg, var(--grid-color), var(--grid-color) 1px, transparent 1px, transparent var(--grid-size));
+  background-size: 100% var(--grid-size);
+}
+

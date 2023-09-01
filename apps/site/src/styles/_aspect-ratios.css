@@ -1,0 +1,86 @@
+/*
+
+   ASPECT RATIOS
+   MDN: https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio
+
+*/
+
+
+.aspect-ratio-16x9 { aspect-ratio: 16 / 9; }
+.aspect-ratio-9x16 { aspect-ratio: 9 / 16; }
+
+.aspect-ratio-4x3 {  aspect-ratio: 4 / 3; }
+.aspect-ratio-3x4 {  aspect-ratio: 3 / 4; }
+
+.aspect-ratio-6x4 {  aspect-ratio: 6 / 4; }
+.aspect-ratio-4x6 {  aspect-ratio: 4 / 6; }
+
+.aspect-ratio-8x5 {  aspect-ratio: 8 / 5; }
+.aspect-ratio-5x8 {  aspect-ratio: 5 / 8; }
+
+.aspect-ratio-7x5 {  aspect-ratio: 7 / 5; }
+.aspect-ratio-5x7 {  aspect-ratio: 5 / 7; }
+
+.aspect-ratio-square, 
+.aspect-ratio-1x1 {  aspect-ratio: 1 / 1; }
+
+
+@media (--breakpoint-small){
+  .aspect-ratio-16x9-s { aspect-ratio: 16 / 9; }
+  .aspect-ratio-9x16-s { aspect-ratio: 9 / 16; }
+
+  .aspect-ratio-4x3-s {  aspect-ratio: 4 / 3; }
+  .aspect-ratio-3x4-s {  aspect-ratio: 3 / 4; }
+
+  .aspect-ratio-6x4-s {  aspect-ratio: 6 / 4; }
+  .aspect-ratio-4x6-s {  aspect-ratio: 4 / 6; }
+
+  .aspect-ratio-8x5-s {  aspect-ratio: 8 / 5; }
+  .aspect-ratio-5x8-s {  aspect-ratio: 5 / 8; }
+
+  .aspect-ratio-7x5-s {  aspect-ratio: 7 / 5; }
+  .aspect-ratio-5x7-s {  aspect-ratio: 5 / 7; }
+
+  .aspect-ratio-square-s, 
+  .aspect-ratio-1x1-s { aspect-ratio: 1 / 1; }
+}
+
+@media (--breakpoint-medium){
+  .aspect-ratio-16x9-m { aspect-ratio: 16 / 9; }
+  .aspect-ratio-9x16-m { aspect-ratio: 9 / 16; }
+
+  .aspect-ratio-4x3-m {  aspect-ratio: 4 / 3; }
+  .aspect-ratio-3x4-m {  aspect-ratio: 3 / 4; }
+
+  .aspect-ratio-6x4-m {  aspect-ratio: 6 / 4; }
+  .aspect-ratio-4x6-m {  aspect-ratio: 4 / 6; }
+
+  .aspect-ratio-8x5-m {  aspect-ratio: 8 / 5; }
+  .aspect-ratio-5x8-m {  aspect-ratio: 5 / 8; }
+
+  .aspect-ratio-7x5-m {  aspect-ratio: 7 / 5; }
+  .aspect-ratio-5x7-m {  aspect-ratio: 5 / 7; }
+
+  .aspect-ratio-square-m, 
+  .aspect-ratio-1x1-m { aspect-ratio: 1 / 1; }
+}
+
+@media (--breakpoint-large){
+  .aspect-ratio-16x9-l { aspect-ratio: 16 / 9; }
+  .aspect-ratio-9x16-l { aspect-ratio: 9 / 16; }
+
+  .aspect-ratio-4x3-l {  aspect-ratio: 4 / 3; }
+  .aspect-ratio-3x4-l {  aspect-ratio: 3 / 4; }
+
+  .aspect-ratio-6x4-l {  aspect-ratio: 6 / 4; }
+  .aspect-ratio-4x6-l {  aspect-ratio: 4 / 6; }
+
+  .aspect-ratio-8x5-l {  aspect-ratio: 8 / 5; }
+  .aspect-ratio-5x8-l {  aspect-ratio: 5 / 8; }
+
+  .aspect-ratio-7x5-l {  aspect-ratio: 7 / 5; }
+  .aspect-ratio-5x7-l {  aspect-ratio: 5 / 7; }
+
+  .aspect-ratio-square-l, 
+  .aspect-ratio-1x1-l { aspect-ratio: 1 / 1; }
+}
