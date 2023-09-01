@@ -1,42 +1,47 @@
-/** @typedef {import("partykit/server")} PK */
+/* eslint-env browser */
+
+// @ts-check
+// Optional JS type checking, powered by TypeScript.
+/** @typedef {import("partykit/server").Party} Party */
+/** @typedef {import("partykit/server").PartyServer} PartyServer */
+/** @typedef {import("partykit/server").PartyConnection} PartyConnection */
+/** @typedef {import("partykit/server").PartyConnectionContext} PartyConnectionContext */
 
 /**
- * The server object that satisfies the PartyKitServer interface.
- * @type {PK.PartyKitServer}
+ * @implements {PartyServer}
  */
-const server = {
+class Server {
+  constructor(party) {
+    /** @type {Party} */
+    this.party = party;
+  }
+
   /**
-   * Handler for when a connection is established.
-   *
-   * @param {PK.PartyKitConnection} conn - The connection object.
-   * @param {PK.PartyKitRoom} room - The room object.
-   * @param {PK.PartyKitContext} ctx - The context object.
+   * @param {PartyConnection} conn - The connection object.
+   * @param {PartyConnectionContext} ctx - The context object.
    */
-  onConnect(conn, room, ctx) {
+  onConnect(conn, ctx) {
     // A websocket just connected!
     console.log(
       `Connected:
   id: ${conn.id}
-  room: ${room.id}
+  room: ${this.party.id}
   url: ${new URL(ctx.request.url).pathname}`
     );
 
     // Send a message to the connection
     conn.send("hello from server");
+  }
 
-    /**
-     * Event listener for when a message is received from the connection.
-     *
-     * @param {Event} event - The message event.
-     */
-    conn.addEventListener("message", function (event) {
-      // Log the received message
-      console.log(`connection ${conn.id} sent message: ${event.data}`);
+  /**
+   * @param {string} message
+   * @param {PartyConnection} sender
+   */
+  onMessage(message, sender) {
+    console.log(`connection ${sender.id} sent message: ${message}`);
+    // Broadcast the received message to all other connections in the room except the sender
+    this.party.broadcast(`${sender.id}: ${message}`, [sender.id]);
+  }
+}
 
-      // Broadcast the received message to all other connections in the room except the sender
-      room.broadcast(`${conn.id}: ${event.data}`, [conn.id]);
-    });
-  },
-};
-
-export default server;
+export default Server;
