@@ -39,6 +39,7 @@ import { ConfigurationError, logger } from "./logger";
 import type { StaticAssetsManifestType } from "./server";
 import { findUpSync } from "find-up";
 import { fileURLToPath } from "url";
+import nodejsCompatPlugin from "./nodejs-compat";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -547,6 +548,7 @@ export const ${name} = ${name}Party;
         ...config.define,
       },
       plugins: [
+        nodejsCompatPlugin,
         {
           name: "partykit-wasm-publish",
           setup(build) {
