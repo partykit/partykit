@@ -1,5 +1,11 @@
 # @partykit/site
 
+## 0.0.3
+
+### Patch Changes
+
+- [#317](https://github.com/partykit/partykit/pull/317) [`2d6f073`](https://github.com/partykit/partykit/commit/2d6f0737d010ae3c61049f970fde46a70969154d) Thanks [@threepointone](https://github.com/threepointone)! - add vercel analytics
+
 ## 0.0.2
 
 ### Patch Changes

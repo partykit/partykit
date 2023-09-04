@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.7
+
+### Patch Changes
+
+- [#274](https://github.com/partykit/partykit/pull/274) [`30fabc9`](https://github.com/partykit/partykit/commit/30fabc95645adbfe5293e0f8b131a917d344965f) Thanks [@threepointone](https://github.com/threepointone)! - don't compile node builtins that the platform supports
+
+  We support some node builtins, so we shouldn't try to compile them into the bundle.
+
 ## 0.0.6
 
 ### Patch Changes
