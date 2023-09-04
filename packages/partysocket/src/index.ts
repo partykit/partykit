@@ -87,3 +87,4 @@ export default class PartySocket extends ReconnectingWebSocket {
 }
 
 export const WebSocket = ReconnectingWebSocket;
+export { ReconnectingWebSocket };
