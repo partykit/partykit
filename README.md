@@ -217,6 +217,20 @@ const provider = new YPartyKitProvider(
 );
 ```
 
+If you're using react, then you can the hook version of the provider: `useYPartyKitProvider`.
+
+```tsx
+import useYProvider from "y-partykit/react";
+function App() {
+  const provider = useYProvider({
+    host: "localhost:1999",
+    room: "my-document-name",
+    doc: yDoc, // optional!
+    options,
+  });
+}
+```
+
 Refer to the [official Yjs documentation](https://docs.yjs.dev/ecosystem/editor-bindings) for more information. Examples provided in the Yjs documentation should work seamlessly with `y-partykit` (ensure to replace `y-websocket` with `y-partykit/provider`).
 
 ## Contributing
