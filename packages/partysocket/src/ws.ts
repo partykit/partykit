@@ -71,12 +71,23 @@ function assert(condition: unknown, msg?: string): asserts condition {
   }
 }
 
-function cloneEvent(e: Event) {
+function cloneEventBrowser(e: Event) {
   return new (e as any).constructor(e.type, e) as Event;
 }
 
+function cloneEventNode(e: Event) {
+  return new Event(e.type, e);
+}
+
+const isNode =
+  typeof process !== "undefined" &&
+  typeof process.versions.node !== "undefined" &&
+  typeof document === "undefined";
+
+const cloneEvent = isNode ? cloneEventNode : cloneEventBrowser;
+
 export type Options = {
-  // WebSocket?: any;
+  WebSocket?: any;
   maxReconnectionDelay?: number;
   minReconnectionDelay?: number;
   reconnectionDelayGrowFactor?: number;
@@ -436,10 +447,9 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
           this._connectLock = false;
           return;
         }
+        const WS: typeof WebSocket = this._options.WebSocket || WebSocket;
         this._debug("connect", { url, protocols });
-        this._ws = protocols
-          ? new WebSocket(url, protocols)
-          : new WebSocket(url);
+        this._ws = protocols ? new WS(url, protocols) : new WS(url);
 
         this._ws.binaryType = this._binaryType;
         this._connectLock = false;
@@ -561,7 +571,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     this._ws.addEventListener("open", this._handleOpen);
     this._ws.addEventListener("close", this._handleClose);
     this._ws.addEventListener("message", this._handleMessage);
-    // @ts-expect-error we need to fix event/listerner types
+    // @ts-expect-error we need to fix event/listener types
     this._ws.addEventListener("error", this._handleError);
   }
 
