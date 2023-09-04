@@ -1,4 +1,4 @@
-import type * as Y from "yjs";
+import { Doc as YDoc } from "yjs";
 import * as bc from "lib0/broadcastchannel";
 import * as time from "lib0/time";
 import * as encoding from "lib0/encoding";
@@ -265,7 +265,7 @@ export class WebsocketProvider extends Observable<string> {
   bcChannel: string;
   url: string;
   roomname: string;
-  doc: Y.Doc;
+  doc: YDoc;
   _WS: typeof WebSocket;
   awareness: awarenessProtocol.Awareness;
   wsconnected: boolean;
@@ -288,7 +288,7 @@ export class WebsocketProvider extends Observable<string> {
   constructor(
     serverUrl: string,
     roomname: string,
-    doc: Y.Doc,
+    doc: YDoc,
     {
       connect = true,
       awareness = new awarenessProtocol.Awareness(doc),
@@ -556,7 +556,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
   constructor(
     host: string,
     room: string,
-    doc: Y.Doc,
+    doc?: YDoc,
     options: ConstructorParameters<typeof WebsocketProvider>[3] & {
       party?: string;
     } = {}
@@ -577,7 +577,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
     } else {
       options.params._pk = id;
     }
-    super(serverUrl, room, doc, options);
+    super(serverUrl, room, doc ?? new YDoc(), options);
     this.id = id;
   }
 }

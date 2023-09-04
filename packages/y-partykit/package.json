@@ -19,13 +19,19 @@
       "types": "./storage.d.ts",
       "import": "./dist/storage.mjs",
       "require": "./dist/storage.js"
+    },
+    "./react": {
+      "types": "./react.d.ts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
     }
   },
   "tsup": {
     "entry": [
       "src/index.ts",
       "src/storage.ts",
-      "src/provider.ts"
+      "src/provider.ts",
+      "src/react.ts"
     ],
     "format": [
       "esm",
@@ -52,6 +58,7 @@
   "dependencies": {
     "lib0": "^0.2.60",
     "lodash.debounce": "^4.0.8",
+    "react": "^18.2.0",
     "y-protocols": "^1.0.5",
     "yjs": "^13.5.44"
   }
