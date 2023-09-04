@@ -19,13 +19,19 @@
       "types": "./react.d.ts",
       "import": "./dist/react.mjs",
       "require": "./dist/react.js"
+    },
+    "./use-ws": {
+      "types": "./use-ws.d.ts",
+      "import": "./dist/use-ws.mjs",
+      "require": "./dist/use-ws.js"
     }
   },
   "tsup": {
     "entry": [
       "src/index.ts",
       "src/react.ts",
-      "src/ws.ts"
+      "src/ws.ts",
+      "src/use-ws.ts"
     ],
     "format": [
       "esm",
