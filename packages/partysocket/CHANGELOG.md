@@ -1,5 +1,13 @@
 # partysocket
 
+## 0.0.3
+
+### Patch Changes
+
+- [#323](https://github.com/partykit/partykit/pull/323) [`2ca369a`](https://github.com/partykit/partykit/commit/2ca369aacbc5920c6e5d52c2cdd7c0aa5a49f7ba) Thanks [@threepointone](https://github.com/threepointone)! - useWebSocket
+
+  a hook version of our reconnecting websocket
+
 ## 0.0.2
 
 ### Patch Changes
