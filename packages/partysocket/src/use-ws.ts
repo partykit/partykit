@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react";
-import type { PartySocketOptions } from ".";
-import PartySocket from ".";
-import useWebSocketImpl from "./use-ws";
+// import React from "react";
+// import PartySocket from ".";
+import { useEffect, useRef, useState } from "react";
 
-type UsePartySocketOptions = PartySocketOptions & {
+import WebSocket from "./ws";
+import type { Options, ProtocolsProvider, UrlProvider } from "./ws";
+
+type UseWebSocketOptions = Options & {
   onOpen?: (event: WebSocketEventMap["open"]) => void;
   onMessage?: (event: WebSocketEventMap["message"]) => void;
   onClose?: (event: WebSocketEventMap["close"]) => void;
@@ -11,13 +13,20 @@ type UsePartySocketOptions = PartySocketOptions & {
 };
 
 // A React hook that wraps PartySocket
-export default function usePartySocket(options: UsePartySocketOptions) {
-  const { onOpen, onMessage, onClose, onError, ...partySocketOptions } =
-    options;
+export default function useWebSocket(
+  url: UrlProvider,
+  protocols?: ProtocolsProvider,
+  options?: UseWebSocketOptions
+) {
+  // we want to use startClosed as an initial state
+  // so we hold it in a state hook and never change it
+  const [startClosed] = useState<boolean>(options?.startClosed || false);
+  const { onOpen, onMessage, onClose, onError, ...webSocketOptions } =
+    options || {};
 
-  const socketRef = useRef<PartySocket>(
-    new PartySocket({
-      ...partySocketOptions,
+  const socketRef = useRef<WebSocket>(
+    new WebSocket(url, protocols, {
+      ...webSocketOptions,
       startClosed: true, // only connect on mount
     })
   );
@@ -39,21 +48,15 @@ export default function usePartySocket(options: UsePartySocketOptions) {
   }, [onOpen, onMessage, onClose, onError]);
 
   // note: this effect must be defined after the event listener registration above
-  useEffect(
-    () => {
-      const socket = socketRef.current;
-      if (options.startClosed !== true) {
-        socket.reconnect();
-      }
+  useEffect(() => {
+    const socket = socketRef.current;
+    if (startClosed !== true) {
+      socket.reconnect();
+    }
 
-      return () => {
-        socket.close();
-      };
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+    return () => {
+      socket.close();
+    };
+  }, [startClosed]);
   return socketRef.current;
 }
-
-export const useWebSocket = useWebSocketImpl;
