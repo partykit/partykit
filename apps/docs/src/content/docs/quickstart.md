@@ -3,11 +3,9 @@ title: Quickstart
 description: Bring realtime collaboration to your app with PartyKit.
 ---
 
-Follow this quickstart guide to create and deploy your first PartyKit app in just a few minutes!
+Follow this quickstart guide to create and deploy your first PartyKit app in just a few minutes.
 
-:::note[Node version]
-To run PartyKit, you need to have Node v. 17 or higher installed.
-:::
+Note that to run PartyKit, you need to have Node v. 17 or higher installed.
 
 ## Create a PartyKit app
 
@@ -17,13 +15,12 @@ To start your adventure, run the following command in your teminal:
 npm create partykit@latest
 ```
 
-Answer the prompts about your project's title, TypeScript setup, git repository initialization, and... That's it.
+Answer the prompts about your project's title, TypeScript setup, git repository initialization, and... that's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
 
 :::tip[Create projects faster]
 To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to  install dependencies.
 :::
 
-Navigate to your project's directory, and explore your first PartyKit app 🥳
 
 ## Run a dev server
 
@@ -47,7 +44,7 @@ If you're running PartyKit for the first time, you will be prompted to log in us
 
 Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your `partykit.dev` domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
 
-Provisioning of the domain may take up to 2 minutes after which **you and your friends will be able to play with it live** 🎈
+After the domain has been provisioned (up to two minutes), **share the link with your friends and play with it live** 🥳
 
 :::note
 Custom domains will be available in the near future.
