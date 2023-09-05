@@ -59,7 +59,7 @@ You can communicate with the `user` party from any other party:
 const userParty = this.party.context.parties.user;
 const userRoom = userParty.get(userId);
 
-// make a HTTP request to the room
+// make an HTTP request to the room
 const res = await userRoom.fetch({ method: "GET" });
 
 // or open a WebSocket connectin to the room to listen to messages
@@ -72,7 +72,7 @@ Let's look at a more fleshed-out example.
 
 Let's say you want to track of all room instances, and see how many active connections there are to each room.
 
-You can define a `connections` party that keeps track of the number of active connections when it receives an update via a HTTP `POST` request:
+You can define a `connections` party that keeps track of the number of active connections when it receives an update via an HTTP `POST` request:
 
 ```ts
 // src/connections.ts
@@ -128,7 +128,7 @@ export default class Server implements PartyServer {
     const connectionsRoomId = "active-connections";
     const connectionsRoom = connectionsParty.get(connectionsRoomId);
 
-    // notify room by making a HTTP POST request
+    // notify room by making an HTTP POST request
     await connectionsRoom.fetch({
       method: "POST",
       body: JSON.stringify({
@@ -140,5 +140,3 @@ export default class Server implements PartyServer {
   }
 }
 ```
-
-
