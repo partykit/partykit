@@ -1,0 +1,36 @@
+---
+title: PartyKit Docs
+description: PartyKit simplifies developing multiplayer applications. 
+template: splash
+hero:
+  tagline: An open source platform for collaboration.
+  # image:
+  #   file: ../../assets/houston.webp
+  actions:
+    - text: Read the docs
+      link: /what-is-partykit
+      icon: right-arrow
+      variant: primary
+    - text: Play with PartyKit live
+      link: /examples/all-examples/ #this is going to be the Vercel template
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Ready to party?
+
+<CardGrid stagger>
+  <Card title="Make your app real-time" icon="rocket">
+    Our [Quickstart guide](/quickstart/) will get you started right away!
+  </Card>
+  <Card title="Explore our examples gallery" icon="magnifier">
+    See what our community [built with PartyKit](/examples/all-examples/).
+  </Card>
+  <Card title="Build a collaborative text editor" icon="add-document">
+    Follow a tutorial to build a simple real-time app powered by PartyKit.
+  </Card>
+  <Card title="Read the docs" icon="open-book">
+    Learn more in [the PartyKit Docs](https://docs.partykit.io/).
+  </Card>
+</CardGrid>
