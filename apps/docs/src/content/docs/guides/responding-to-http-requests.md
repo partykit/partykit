@@ -5,12 +5,11 @@ description: ...
 
 In addition to [serving real-time WebSocket traffic](../building-a-real-time-websocket-server/), PartyKit servers can respond to regular HTTP requests.
 
-Let's send a request to the room's public URL:
-
 :::note[About Party URLs]
-Parties accept requests at `/parties/:party/:room-id`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](../using-multiple-parties-per-project/)
+Parties accept requests at `/parties/:party/:room-id`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](../using-multiple-parties-per-project/).
 :::
 
+Let's send a request to the room's public URL:
 
 ```ts
 fetch(`${PARTYKIT_HOST}/parties/main/${roomId}`, { 
@@ -52,7 +51,7 @@ export default class MessageServer implements PartyServer {
 }
 ```
 
-In the above example, the client can send messages via a HTTP `POST` request, and fetch all messages with a `GET` request. 
+In the above example, the client can send messages via an HTTP `POST` request, and fetch all messages with a `GET` request.
 
 ### Push/pull
 
@@ -64,12 +63,12 @@ this.party.broadcast(payload.message);
 
 The `onRequest` method has access to all of the room's resources, including connected WebSocket clients. 
 
-As simple as this sounds, this is a powerful pattern. Being able to access the same party state with both WebSockets and HTTP requests enables us to create flexible push/pull systems that integrate well with third-party systems:
+As simple as this sounds, this is a powerful pattern. Being able to access the same party state with both WebSockets and HTTP requests enables us to create flexible push/pull systems that integrate well with third-party systems such as:
 
-- Fetching initial page data for e.g. React server rendering
-- Interacting with the party from environments that don't support WebSockets
-- Using parties as webhook endpoints for third-party services
-- Messaging between [multiple parties](./using-multiple-parties-per-project/)
-- Building room admin APIs
+- fetching initial page data for, for example, React server rendering,
+- interacting with the party from environments that don't support WebSockets,
+- using parties as webhook endpoints for third-party services,
+- messaging between [multiple parties](./using-multiple-parties-per-project/),
+- building room admin APIs.
 
 To learn more common patterns and uses cases, head over to the [Examples](../../examples/all-examples/) section.
