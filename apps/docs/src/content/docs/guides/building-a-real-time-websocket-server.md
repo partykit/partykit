@@ -39,9 +39,9 @@ partySocket.addEventListener("message", (e) => {
 
 This will automatically open a WebSocket connection to the PartyKit server at `ws://localhost:1999/party/my-room`, and send a greeting message.
 
-The `room` id, in this case `"my-room"`, uniquely identifies the party that you're connecting to. Each time you use a new room id, we create a new PartyServer instance. 
+The `room` id, in this case `"my-room"`, uniquely identifies the party that you're connecting to. Each time you use a new room id, a new PartyServer instance is created.
 
-This means that two clients connecting with the same room id will always be connected to the same server, and can communicate to each other. This also means that creating new server instances is as easy as using a new id.
+This means that two clients connecting with the same `room` id will always be connected to the same server and can communicate to each other. In other words, creating new server instances is as easy as using a new id.
 
 ### Handling incoming messages
 
@@ -68,13 +68,14 @@ Now, every connected client will instantly see the same message in their browser
 <!-- TODO: API reference link -->
 This works, because the `Party` maintains references to all connected clients. You can access them using the `Party.getConnections()` method.
 
-This pattern is called "broadcasting" -- we receive a message from one client, and send the same message to everyone. In fact, this use case is so common that PartyKit includes a `broadcast` utility method that does the same thing as the `for...of` loop through connections.
+This pattern is called "broadcasting" -- a message from one client is received and sent to everyone. In fact, this use case is so common that PartyKit includes a `broadcast` utility method that does the same thing as the `for...of` loop through connections.
 
 ```ts
 this.party.broadcast(message);
 ```
 
-So the above can be simplified to:
+The above can be simplified to:
+
 ```ts
 export default class WebSocketServer implements PartyServer {
   constructor(readonly party: Party) {}
@@ -88,7 +89,7 @@ That's it! We've implemented a simple WebSocket broadcast server in just 5 lines
 
 ### Handling connection events
 
-Let's make our server a little friendlier and notify other members new users connect and disconnect:
+Let's make our server a little friendlier and notify other members when new users connect and disconnect:
 
 ```ts
 export default class WebSocketServer implements PartyServer {
@@ -122,4 +123,4 @@ And every other connected client will see the following:
 
 ### Putting into action
 
-That's all it takes to create a real-time WebSocket server with PartyKit. To learn more common patterns and uses cases, head over to the [Examples](../../examples/all-examples/) section.
+That's all it takes to create a real-time WebSocket server with PartyKit. To learn more about common patterns and uses cases, head over to the [Examples](../../examples/all-examples/) section.
