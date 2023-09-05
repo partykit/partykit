@@ -198,14 +198,26 @@ export async function init(options: {
       return;
     }
 
-    function done(text: string) {
-      // TODO: make sure text is a valid path
-      const isValidPathRegex = /^([a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+$/;
-
-      if (!isValidPathRegex.test(text || randomName)) {
+    function done(input: string) {
+      const text = input || randomName;
+      if (path.isAbsolute(text)) {
         console.log(
           chalk.red(
-            `Invalid path. Please use a path like "randomName" or just "." to use the current directory. You entered "${text}"`
+            `Absolute paths not supported. Please use a relative path like "randomName", "./randomName", or just "." to use the current directory. You entered "${text}"`
+          )
+        );
+        reject(new Error("Invalid path"));
+      }
+
+      const parsed = path.parse(text);
+      const isValidPathRegex = /^\.*?([a-zA-Z0-9_-]{0,}\/)*[a-zA-Z0-9_-]+$/;
+      if (
+        !isValidPathRegex.test(parsed.base) ||
+        !isValidPathRegex.test(parsed.name)
+      ) {
+        console.log(
+          chalk.red(
+            `Invalid path. Please use a valid directory name like "randomName". You entered "${input}"`
           )
         );
         reject(new Error("Invalid path"));
