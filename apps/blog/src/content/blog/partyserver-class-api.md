@@ -282,8 +282,8 @@ You can set additional metadata on connections by returning them from a `getConn
 You can then filter connections by tag, removing the need to wake up hibernated sockets unnecessarily:
 
 ```ts
-for (const americans of this.party.getConnections("US")) {
-  americans.send(`Yee-haw!`);
+for (const italians of this.party.getConnections("US")) {
+  italians.send(`Buongiorno!`);
 }
 ```
 
