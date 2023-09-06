@@ -42,59 +42,23 @@ export default defineConfig({
           },
           {
             label: "Guides",
-            collapsed: true,
             autogenerate: {
               directory: "guides",
             },
           },
           {
             label: "Examples",
+            collapsed: true,
             autogenerate: {
               directory: "examples",
             },
           },
-          // {
-          //   label: "Tutorial",
-          //   collapsed: true,
-          //   items: [
-          //     {
-          //       label: "1. Build a realtime chat app",
-          //       link: "/tutorial/1-build-a-realtime-chat-app",
-          //     },
-          //   ],
-          // },
           {
             label: "API Reference",
             collapsed: true,
             autogenerate: {
               directory: "reference",
             },
-            // items: [
-            //   {
-            //     label: "Overview",
-            //     link: "/reference/partykit-api-overview",
-            //   },
-            //   {
-            //     label: "PartyKit CLI",
-            //     link: "/reference/partykit-cli",
-            //   },
-            //   {
-            //     label: "PartyServer (Server API)",
-            //     link: "/reference/partyserver-api",
-            //   },
-            //   {
-            //     label: "PartySocket (Client API)",
-            //     link: "/reference/partysocket-api",
-            //   },
-            //   {
-            //     label: "Configuration",
-            //     link: "/reference/partykit-configuration",
-            //   },
-            //   {
-            //     label: "Y-Partykit API",
-            //     link: "/reference/y-partykit-api",
-            //   },
-            // ],
           },
           {
             label: "Glossary",
