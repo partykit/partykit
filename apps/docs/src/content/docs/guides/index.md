@@ -1,6 +1,6 @@
 ---
 title: Building a WebSocket server
-description: ...
+description: ... 
 ---
 
 :::note[Run it yourself]
@@ -29,7 +29,7 @@ const partySocket = new PartySocket({
 });
 
 // send a message to the server
-partySocket.send("Hello everyone!");
+partySocket.send("Hello everyone");
 
 // print each incoming message from the server to console
 partySocket.addEventListener("message", (e) => {
