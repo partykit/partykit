@@ -2,7 +2,7 @@
 title: Scaling PartyKit servers with Hibernation
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!

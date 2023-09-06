@@ -2,7 +2,7 @@
 title: Persisting state into storage
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!
