@@ -35,7 +35,7 @@ This is useful for:
 
 Each party is exposed at `/parties/:party/:room-id`, where the `party` path segment is the name of the party defined in `partykit.json`.
 
-To connect to a party using [`PartySocket`](../../reference/partysocket-api/), specify the party name in the `party` argument:
+To connect to a party using [`PartySocket`](/reference/partysocket-api/), specify the party name in the `party` argument:
 
 ```ts
 const partySocket = new PartySocket({

@@ -4,7 +4,7 @@ description: ...
 ---
 
 :::note[Run it yourself]
-To try this code yourself, follow the [Quickstart](../../quickstart/) guide to create a new PartyKit project.
+To try this code yourself, follow the [Quickstart](/quickstart/) guide to create a new PartyKit project.
 :::
 
 Every PartyKit server accepts WebSocket connections by default:
@@ -16,7 +16,7 @@ import type { PartyServer } from "partykit/server";
 export default class WebSocket implements PartyServer { }
 ```
 
-You can connect to it using the [`PartySocket`](../../reference/partysocket-api/) client library. 
+You can connect to it using the [`PartySocket`](/reference/partysocket-api/) client library. 
 
 ```ts
 // client.ts
@@ -123,4 +123,4 @@ And every other connected client will see the following:
 
 ### Putting into action
 
-That's all it takes to create a real-time WebSocket server with PartyKit. To learn more about common patterns and uses cases, head over to the [Examples](../../examples/all-examples/) section.
+That's all it takes to create a real-time WebSocket server with PartyKit. To learn more about common patterns and uses cases, head over to the [Examples](/examples/all-examples/) section.
