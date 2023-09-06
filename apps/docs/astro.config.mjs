@@ -4,14 +4,13 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://docs.partykit.io',
   integrations: [
     starlight(
       {
         title: "PartyKit Docs",
         description: "Collaborative applications are the future of software.",
         customCss: ["./src/styles/custom.css"],
-        site: 'https://docs.partykit.io',
-        integrations: [starlight({ title: 'PartyKit Docs' })],
         social: {
           github: "https://github.com/partykit/docs",
           discord: "https://discord.gg/KDZb7J4uxJ",
