@@ -57,6 +57,10 @@ A static code definition of the server which runs in a separate worker before co
 
 xyz
 
+## Room
+
+An instance of a party, distinguishable by a unique id. For example, you may have a `user` party and every `user` will have its own id (which is reflected in the URL: `/parties/:party/:room-id` - and with an example: `/parties/user/ada`).
+
 ## Server
 
 A single Durable Object, also called a "Party" in PartyKit.
