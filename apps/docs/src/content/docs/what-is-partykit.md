@@ -5,7 +5,7 @@ description: PartyKit simplifies developing multiplayer applications.
 
 Everything's better with friends.
 
-PartyKit simplifies developing multiplayer applications. With PartyKit, you can focus on building multiplayer apps or adding realtime experiences to your existing projects with as little as one line of code. Meanwhile, PartyKit will handle operational complexity and realtime infrastructure scaling.
+PartyKit simplifies developing multiplayer applications. With PartyKit, you can focus on building multiplayer apps or adding real-time experiences to your existing projects with as little as one line of code. Meanwhile, PartyKit will handle operational complexity and real-time infrastructure scaling.
 
 By leveraging the reach of edge computing platforms and novel programming primitives, PartyKit is powerful enough to build the most complex of applications, all the while providing a familiar interface.
 
@@ -18,10 +18,6 @@ To get started:
 - see the ["Quickstart" page](/quickstart/)
 - explore the ["Examples" section](/examples/all-examples/)
 - read the [API reference page](/reference/partykit-api/)
-
-## Technology
-
-The PartyKit runtime is a modern standards-based JavaScript runtime based on the [`workerd`](https://github.com/cloudflare/workerd) runtime by Cloudflare that powers [Cloudflare Workers](https://workers.cloudflare.com/) In addition to running modern JavaScript, it also supports [TypeScript](https://www.typescriptlang.org/), thousands of modules from [the npm registry](https://www.npmjs.com/), and [WebAssembly modules](https://webassembly.org/).
 
 ## Key Features
 
@@ -56,4 +52,6 @@ Reach out on [Discord](https://discord.gg/KDZb7J4uxJ) or [Twitter](https://twitt
 
 ## Learn more
 
-To learn more, watch Sunil Pai's talk ['Everything is better with friends'](https://www.youtube.com/watch?v=wd8QTRjZZaE) from React Miami 2023 or see him implement a multiplayer mode in [a Learn with Jason episode](https://www.youtube.com/watch?v=qvAzFoaxvAE&t=3418s).
+- Dive deep in [How PartyKit works](/what-is-partykit)
+- Explore our [Guides](/guides) and [Examples](/examples)
+- Watch Sunil Pai's talk ['Everything is better with friends'](https://www.youtube.com/watch?v=wd8QTRjZZaE) from React Miami 2023 
