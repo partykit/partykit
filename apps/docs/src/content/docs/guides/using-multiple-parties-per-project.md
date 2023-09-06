@@ -4,6 +4,7 @@ description: Splitting your PartyKit project up to separate, smaller units that 
 ---
 
 By default, each PartyKit project defines one party called `main`:
+
 ```json
 {
   "name": "onbefore",
@@ -29,6 +30,7 @@ This is useful for:
 
 - Splitting unrelated functionality into different servers while deploying them together
 - Composing larger systems from multiple parties that communicate with each other
+
 ### Accessing parties via HTTP or WebSocket
 
 Each party is exposed at `/parties/:party/:room-id`, where the `party` path segment is the name of the party defined in `partykit.json`.
@@ -49,11 +51,11 @@ Composing larger applications from multiple parties can be very useful when you 
 
 #### Accessing parties from other parties
 
-All parties of the project are exposed on the `Party` object, accessible using the name defined in `partykit.json`. 
+All parties of the project are exposed on the `Party` object, accessible using the name defined in `partykit.json`.
 
-Let's say you've created a `"user"` party to store user and session state on a per-user basis, for example user preferences, e-commerce shopping cart, or similar.
+Let's say you've created a `"user"` party to store user and session state on a per-user basis, for example user preferences, e-commerce shopping cart, or similar. Each room (an instance of the party) is distinguishable by its id.
 
-You can communicate with the `user` party from any other party:
+You can communicate with any room:
 
 ```ts
 const userParty = this.party.context.parties.user;
@@ -66,9 +68,9 @@ const res = await userRoom.fetch({ method: "GET" });
 const socket = userRoom.connect();
 ```
 
-#### Example: Tracking connections across room
+#### Example: Tracking connections across rooms
 
-Let's look at a more fleshed-out example.
+Let's now look at a more fleshed-out example.
 
 Let's say you want to track of all room instances, and see how many active connections there are to each room.
 
