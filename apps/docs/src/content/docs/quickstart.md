@@ -9,25 +9,30 @@ Note that to run PartyKit, you need to have Node v. 17 or higher installed.
 
 ## Create a PartyKit app
 
-To start your adventure, run the following command in your teminal:
+To start your adventure, run the following command in your terminal to create a new PartyKit project:
 
 ```bash
 npm create partykit@latest
 ```
 
-Answer the prompts about your project's title, TypeScript setup, git repository initialization, and... that's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
+Alternatively, you can add PartyKit to your existing project using the following command in the project's root directory:
+
+```bash
+npx partykit@latest init
+```
+
+That's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
 
 :::tip[Create projects faster]
 To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to  install dependencies.
 :::
-
 
 ## Run a dev server
 
 To see your app, run the following command in your terminal in your project's directory:
 
 ```bash
-npm run dev
+npx partykit dev
 ```
 
 Once the server is running, open localhost with the designated port (defaulting to 1999) in two windows to simulate two users logging using the app.
@@ -37,7 +42,7 @@ Once the server is running, open localhost with the designated port (defaulting 
 To deploy your app, run the following command in your terminal in your project's directory:
 
 ```bash
-npm run deploy
+npx partykit deploy
 ```
 
 If you're running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page where you can paste the code that was automatically copied to your clipboard from the terminal output.
