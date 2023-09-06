@@ -3,10 +3,10 @@ title: Responding to HTTP requests
 description: ...
 ---
 
-In addition to [serving real-time WebSocket traffic](../building-a-real-time-websocket-server/), PartyKit servers can respond to regular HTTP requests.
+In addition to [serving real-time WebSocket traffic](/guides/building-a-real-time-websocket-server/), PartyKit servers can respond to regular HTTP requests.
 
 :::note[About Party URLs]
-Parties accept requests at `/parties/:party/:room-id`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](../using-multiple-parties-per-project/).
+Parties accept requests at `/parties/:party/:room-id`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](/guides/using-multiple-parties-per-project/).
 :::
 
 Let's send a request to the room's public URL:

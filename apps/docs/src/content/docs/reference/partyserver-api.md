@@ -83,7 +83,7 @@ export default class Server implements PartyServer {
 }
 ```
 
-**Related guide:** [Building a Real-time WebSocket server](/guides/building-a-real-time-websocket-server)
+**Related guide:** [Building a Real-time WebSocket server](/guides/)
 
 ### PartyServer.onMessage
 
