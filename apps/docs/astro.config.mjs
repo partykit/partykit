@@ -26,7 +26,7 @@ export default defineConfig({
             items: [
               {
                 label: "What is PartyKit",
-                link: "/what-is-partykit/",
+                link: "/",
               },
               {
                 label: "Quickstart",
