@@ -4,7 +4,7 @@ author: Sat Naing
 pubDatetime: 2022-06-09T03:42:51Z
 postSlug: how-do-i-develop-my-terminal-portfolio-website-with-react
 featured: false
-draft: false
+draft: true
 tags:
   - JavaScript
   - ReactJS
