@@ -4,7 +4,7 @@ pubDatetime: 2022-09-23T15:22:00Z
 title: Adding new posts in AstroPaper theme
 postSlug: adding-new-posts-in-astropaper-theme
 featured: true
-draft: false
+draft: true
 tags:
   - docs
 ogImage: ""
@@ -67,7 +67,7 @@ author: your name
 pubDatetime: 2022-09-21T05:17:19Z
 postSlug: the-title-of-the-post
 featured: true
-draft: false
+draft: true
 tags:
   - some
   - example
