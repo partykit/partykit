@@ -15,21 +15,23 @@ To start your adventure, run the following command in your terminal to create a 
 npm create partykit@latest
 ```
 
+:::tip[Create projects faster]
+To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to  install dependencies.
+:::
+
+That's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
+
+### Add PartyKit to an existing app
+
 Alternatively, you can add PartyKit to your existing project using the following command in the project's root directory:
 
 ```bash
 npx partykit@latest init
 ```
 
-That's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
-
-:::tip[Create projects faster]
-To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to  install dependencies.
-:::
-
 ## Run a dev server
 
-To see your app, run the following command in your terminal in your project's directory:
+To see PartyKit in action, run the following command in your terminal in your project's directory:
 
 ```bash
 npx partykit dev
