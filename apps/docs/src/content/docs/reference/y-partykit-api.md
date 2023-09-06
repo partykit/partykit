@@ -1,13 +1,20 @@
 ---
-title: Y-PartyKit API Reference
+title: Y-PartyKit (Y.js API)
 description: Y-PartyKit is an addon library designed to host backends for Yjs.
 sidebar:
-    badge: WIP
+    order: 5
 ---
 
 `y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software.
 
 ## Setting up a Yjs backend
+
+:::danger[Example syntax]
+The example code on this page uses the legacy `export default {}` module
+syntax. We're working on converting `y-partykit` to use the new [PartyServer API](/references/partyserver-api). 
+
+See [Legacy API](/reference/partykitserver-legacy-api) for documentation.
+:::
 
 Using `y-partykit` simplifies setting up a Yjs backend. Only a few lines of code are needed:
 

@@ -61,7 +61,7 @@ You can also pass the name of the project as an argument to the command, like th
 
 The `npx partykit env <command>` commands allow you to manage environment variables available to PartyKit projects deployed via `deploy`
 
-For a more comprehensive guide, see [Managing secrets with PartyKit](/guides/managing-secrets-with-partykit).
+For a more comprehensive guide, see [Managing secrets with PartyKit](/guides/managing-secrets-with-partykit/).
 
 #### env list
 
@@ -116,7 +116,7 @@ If you don't run `login` manually, we'll automatically log you in when you first
 
 `npx partykit token generate` will generate a new OAuth token you can use to grant access to deploy on your behalf. This is useful for tasks like deploying to PartyKit from GitHub Actions, or your Continuous Integration jobs. Each time you run the command, a new token will be generated.
 
-Read more: [Setting up CI/CD with GitHUb Actions](/guides/setting-up-ci-cd-with-github-actions)
+Read more: [Setting up CI/CD with GitHUb Actions](/guides/setting-up-ci-cd-with-github-actions/)
 
 
 
