@@ -1,19 +1,22 @@
 ---
 title: PartySocket (Client API)
-description: PartySocket is ...
+description: PartySocket is 
 sidebar:
-    badge: WIP
     order: 4
 ---
 
-_(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes)_
+`PartySocket` is a TypeScript client library for connecting to PartyKit servers via WebSockets.
 
-WebSocket that will automatically reconnect if the connection is closed.
+## Install
+
+```bash
+npm install partysocket@latest
+```
 
 ## Features
 
 - WebSocket API compatible (same interface, Level0 and Level2 event model)
-- Fully configurable
+- Automatically reconnect if the connection is closed.
 - Multi-platform (Web, ServiceWorkers, Node.js, React Native)
 - Dependency free (does not depend on Window, DOM or any EventEmitter library)
 - Handle connection timeouts
@@ -21,31 +24,15 @@ WebSocket that will automatically reconnect if the connection is closed.
 - Buffering. Will send accumulated messages on open
 - Multiple builds available (see dist folder)
 - Debug mode
+- Fully configurable
 - Works everywhere, not just with PartyKit!
 
-## Install
-
-```bash
-npm install partysocket@beta
-```
 
 ## Usage
 
 ### Compatible with WebSocket Browser API
 
 [MDN WebSocket API](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket).
-
-### Simple usage
-
-```javascript
-import { WebSocket } from "partysocket";
-
-const ws = new WebSocket("ws://my.site.com");
-
-ws.addEventListener("open", () => {
-  ws.send("hello!");
-});
-```
 
 ### Usage with PartyKit
 
@@ -57,7 +44,60 @@ const ws = new PartySocket({
   room: "my-room",
   // add an optional id to identify the client,
   // if not provided, a random id will be generated
+  // note that the id needs to be unique per connection,
+  // not per user, so e.g. multiple devices or tabs need a different id
   id: "some-connection-id",
+
+  // optionally, specify the party to connect to.
+  // if not provided, will connect to the "main" party defined in partykit.json
+  party: "main"
+});
+```
+
+### Usage with React
+
+PartySocket also exports a React hook for convenience:
+
+```tsx
+import usePartySocket from "partysocket/react";
+
+const Component = () => {
+  const ws = usePartySocket({
+    // usePartySocket takes the same arguments as PartySocket.
+    host: "project.name.partykit.dev", // or localhost:1999 in dev
+    room: "my-room",
+
+    // in addition, you can provide socket lifecycle event handlers
+    // (equivalent to using ws.addEventListener in an effect hook)
+    onConnect() {
+      console.log("connected");
+    },
+    onMessage(e) {
+      console.log("message", e.data);
+    },
+    onClose() {
+      console.log("connected");
+    },
+    onError(e) {
+      console.log("connected");
+    },
+  });
+}
+```
+
+The `usePartySocket` hook handles connecting on mount, disconnecting on unmount, and cleaning up the `on(Connect|Message|Close|Error)` handlers.
+
+### Usage with other WebSocket servers
+
+PartySocket can be used with any WebSocket server, not only PartyKit servers.
+
+```javascript
+import { WebSocket } from "partysocket";
+
+const ws = new WebSocket("ws://my.site.com");
+
+ws.addEventListener("open", () => {
+  ws.send("hello!");
 });
 ```
 
@@ -204,13 +244,16 @@ retryCount: number;
 
 ### Constants
 
-```text
+```
 CONNECTING 0 The connection is not yet open.
 OPEN       1 The connection is open and ready to communicate.
 CLOSING    2 The connection is in the process of closing.
 CLOSED     3 The connection is closed or couldn't be opened.
 ```
 
-## License
 
-MIT
+## Acknowledgements
+
+:::note[Open Source]
+PartySocket is a fork of the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes.
+:::
