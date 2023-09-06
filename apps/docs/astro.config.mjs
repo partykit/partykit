@@ -17,7 +17,7 @@ export default defineConfig({
           twitter: "https://twitter.com/partykit_io",
         },
         editLink: {
-          baseUrl: "https://github.com/partykit/docs/edit/main/",
+          baseUrl: "https://github.com/partykit/partykit/apps/docs/edit/main/",
         },
         lastUpdated: true,
         sidebar: [
