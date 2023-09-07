@@ -1,22 +1,29 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
-import vercel from '@astrojs/vercel/serverless';
-import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://docs.partykit.io',
-  output: 'server',
-  adapter: vercel({
-    analytics: true,
-  }),
+  site: "https://docs.partykit.io",
   integrations: [
     starlight(
       {
         title: "PartyKit Docs",
         description: "Collaborative applications are the future of software.",
         customCss: ["./src/styles/custom.css"],
+        head: [
+          {
+            tag: 'script',
+            content: 'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };'
+          },
+          {
+            tag: 'script',
+            attrs: {
+              src: '/_vercel/insights/script.js',
+              defer: true,
+            },
+          },
+        ],
         social: {
           github: "https://github.com/partykit/docs",
           discord: "https://discord.gg/KDZb7J4uxJ",
@@ -76,13 +83,7 @@ export default defineConfig({
       },
       tailwind({
         applyBaseStyles: false,
-      }),
-      partytown({
-        // Adds dataLayer.push as a forwarding-event.
-        config: {
-          forward: ["dataLayer.push"],
-        },
-      }),
+      })
     ),
   ],
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
