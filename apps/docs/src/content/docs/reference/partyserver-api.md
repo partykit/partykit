@@ -307,7 +307,7 @@ Internal ID assigned by the platform. Use `Party.id` instead.
 
 Environment variables defined for this party.
 
-Related reading: [Managing secrets with PartyKit](/guides/managing-secrets-with-partykit).
+Related reading: [Managing environment variables with PartyKit](/guides/managing-environment-variables).
 
 ### Party.storage
 

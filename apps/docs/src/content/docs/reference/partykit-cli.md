@@ -61,7 +61,7 @@ You can also pass the name of the project as an argument to the command, like th
 
 The `npx partykit env <command>` commands allow you to manage environment variables available to PartyKit projects deployed via `deploy`
 
-For a more comprehensive guide, see [Managing secrets with PartyKit](/guides/managing-secrets-with-partykit/).
+For a more comprehensive guide, see [Managing environment variables with PartyKit](/guides/managing-environment-variables/).
 
 #### env list
 

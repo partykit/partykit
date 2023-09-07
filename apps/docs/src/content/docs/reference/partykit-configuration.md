@@ -83,7 +83,7 @@ Related guide: [Serving static assets](/guides/serving-static-assets/)
 :::danger[Deprecated]
 The `vars` field is deprecated and may be removed in a future version of PartyKit. 
 
-For updated documentation, read [Managing secrets in PartyKit](/guides/managing-secrets-with-partykit/)
+For updated documentation, read [Managing environment variables in PartyKit](/guides/managing-environment-variables/)
 :::
 
 A list of environment variables that you want to set for your project. These are available on the `room` object as `room.env`. Example:
@@ -137,7 +137,7 @@ export default {
 };
 ```
 
-Related guide: [Managing secrets in PartyKit](/guides/managing-secrets-with-partykit/)
+Related guide: [Managing environment variables in PartyKit](/guides/managing-environment-variables/)
 
 
 ## Build configuration
