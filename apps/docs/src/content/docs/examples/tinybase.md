@@ -2,7 +2,7 @@
 title: TinyBase
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!

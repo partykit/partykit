@@ -1,0 +1,33 @@
+---
+title: Cursors (presence)
+description: Help your users follow each other's movement on the page by marking their presence with realtime cursors.
+sidebar:
+    hidden: true
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+Help your users feel like they are together in one room by adding realtime cursors that indicate their movement on the page.
+
+## Design Pattern
+
+Some description of the design pattern
+
+## Apps using cursors
+
+See how these projects impelmented cursors
+
+<CardGrid>
+    <Card title="Cursors with country flags" icon="star">
+		Matt Webb's 'Voronoi' app features cursors with country flags on a colorful, ever-changing background.
+
+		To share state, the party rebroadcasts all cursor moves. (The cursor positions are not absolute; they are scaled to the viewport.) All cursors are tracked on the server (party-side) so that new clients can immediately see all cursors. The current cursor state is stashed in the websocket connection object itself.
+
+		Mouse and touch pointers are differentiated. For touchscreen users, their own cursor is also drawn for them, under their finger.
+	</Card>
+	<Card title="Some App" icon="star">
+		xyz
+	</Card>
+</CardGrid>
+
+## Build it yourself

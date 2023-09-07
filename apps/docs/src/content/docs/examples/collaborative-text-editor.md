@@ -2,7 +2,7 @@
 title: Collaborative text editor 
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!

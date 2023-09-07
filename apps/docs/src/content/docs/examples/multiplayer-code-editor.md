@@ -2,7 +2,7 @@
 title: Multiplayer code editor 
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!
