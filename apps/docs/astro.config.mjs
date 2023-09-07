@@ -2,6 +2,7 @@ import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
 import vercel from '@astrojs/vercel/serverless';
+import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
 export default defineConfig({
@@ -75,7 +76,13 @@ export default defineConfig({
       },
       tailwind({
         applyBaseStyles: false,
-      })
+      }),
+      partytown({
+        // Adds dataLayer.push as a forwarding-event.
+        config: {
+          forward: ["dataLayer.push"],
+        },
+      }),
     ),
   ],
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp

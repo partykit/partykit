@@ -13,8 +13,12 @@
   "dependencies": {
     "@astrojs/starlight": "^0.8.0",
     "@astrojs/tailwind": "^4.0.0",
+    "@astrojs/vercel": "^3.8.2",
     "astro": "^2.8.0",
     "sharp": "^0.32.1",
     "tailwindcss": "^3.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/partytown": "^2.0.0"
   }
 }
