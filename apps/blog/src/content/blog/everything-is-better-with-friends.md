@@ -9,7 +9,7 @@ tags:
   - announcement
   - team
 ogImage: https://blog.partykit.io/content-images/team-opengraph.png
-description: Annoucing the PartyKit founding team!
+description: Announcing the PartyKit founding team!
 ---
 
 ![Sunil Pai on stage at React Miami](/content-images/team-sunil-stage.jpg)
