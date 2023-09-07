@@ -1,38 +1,55 @@
 ---
-const { href, title, body, variant = 3 } = Astro.props;
+const { href, title, body, variant = 3, fontSize = "f4" } = Astro.props;
 ---
-{variant === 1 && 
-    <a href={href} title={title} 
-       class='f4 link dif items-center g2 gray-11 bg-primary px4 py3 bg-primary-hov br3'>
-        {body}
-        <slot />
+
+{
+  variant === 1 && (
+    <a
+      href={href}
+      title={title}
+      class={`${fontSize} link dif items-center g2 gray-11 bg-primary px4 py3 bg-primary-hov br3`}
+    >
+      {body}
+      <slot />
     </a>
+  )
 }
 
-{variant === 2 && 
-    <a href={href} title={title} 
-       class='f4 link nowrap gray-0 dib shadow-border-1 shadow-dark-hover py3 px4 br3'>
-       {body}
-       <slot />
+{
+  variant === 2 && (
+    <a
+      href={href}
+      title={title}
+      class={`${fontSize} link nowrap gray-0 dib shadow-border-1 shadow-dark-hover py3 px4 br3`}
+    >
+      {body}
+      <slot />
     </a>
+  )
 }
 
-
-{variant === 3 && 
-    <a href={href} title={title} 
-       class='link dif items-center g2 gray-11 gradient-1 bg-size-grow f4 py3 px4 br3 fw4 trans-all'
-       style='--gradient-color-1: var(--indigo-5);--gradient-color-2: var(--magenta-5);'
-       >
-        {body}
-        <slot />
+{
+  variant === 3 && (
+    <a
+      href={href}
+      title={title}
+      class={`${fontSize} link dif items-center g2 gray-11 gradient-1 bg-size-grow py3 px4 br3 fw4 trans-all`}
+      style="--gradient-color-1: var(--indigo-5);--gradient-color-2: var(--magenta-5);"
+    >
+      {body}
+      <slot />
     </a>
+  )
 }
-{variant === 4 && 
-    <a href={href} title={title} 
-       class='bg-gray-11 link dif items-center g2 indigo-5 hover-bg-indigo-11 hover-indigo-3 f4 py3 px4 br3 fw4 trans-all'
-       >
-        {body}
-        <slot />
+{
+  variant === 4 && (
+    <a
+      href={href}
+      title={title}
+      class={`${fontSize} bg-gray-11 link dif items-center g2 indigo-5 hover-bg-indigo-11 hover-indigo-3 py3 px4 br3 fw4 trans-all`}
+    >
+      {body}
+      <slot />
     </a>
+  )
 }
-
