@@ -2,7 +2,7 @@
 title: Multiplayer Whiteboard
 description: ...
 sidebar:
-    badge: WIP
+    hidden: true
 ---
 
 Coming soon!
