@@ -64,7 +64,7 @@ Look, we got professional headshots and everything!
 />
 </div>
 <div class="lg:w-3/4">
-<p><a href="https://twitter.com/SylwiaVargas">Sylwia Vargas</a> joins PartyKit as Chief Experience Officer. Previously, she’s led Developer Relations at StackBlitz and had a career in running NGOs, teaching and research.</p>
+<p><a href="https://twitter.com/SylwiaVargas">Sylwia Vargas</a> joins PartyKit as Chief Experience Officer. Previously, she’s led Developer Relations at StackBlitz and had a career in NGOs, teaching and research.</p>
 <p>Outside of work, she loves books, hikes, plants, and pierogi.
 </p>
 </div>
