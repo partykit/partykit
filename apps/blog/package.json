@@ -16,6 +16,7 @@
   "dependencies": {
     "@astrojs/rss": "^2.4.1",
     "@resvg/resvg-js": "^2.4.1",
+    "@vercel/analytics": "^1.0.2",
     "astro": "^2.8.0",
     "fuse.js": "^6.6.2",
     "github-slugger": "^2.0.0",
