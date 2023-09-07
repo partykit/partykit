@@ -4,42 +4,42 @@ description: Get a quick refresher on realtime collaborative tech
 ---
 
 This page offers a glossary on key terms and concepts used in the PartyKit documentation.
-
+<!-- 
 ## AI Agents
 
-xyz
-
+xyz -->
+<!-- 
 ## Broadcast
 
-xyz
-
+xyz -->
+<!-- 
 ## Client
 
-xyz
-
+xyz -->
+<!-- 
 ## Connection
 
-xyz
-
+xyz -->
+<!-- 
 ## CRDTs
 
-xyz
-
+xyz -->
+<!-- 
 ## Durable Object
 
-xyz
-
+xyz -->
+<!-- 
 ## Multiparty
 
-xyz
-
+xyz -->
+<!-- 
 ## Multiplayer
 
-xyz
-
+xyz -->
+<!-- 
 ## Lobby
 
-xyz
+xyz -->
 
 ## Party
 
@@ -52,10 +52,10 @@ An instance code definition of the server.
 ## PartyWorker
 
 A static code definition of the server which runs in a separate worker before connecting to the Party.
-
+<!-- 
 ## Presence
 
-xyz
+xyz -->
 
 ## Room
 
@@ -64,7 +64,7 @@ An instance of a party, distinguishable by a unique id. For example, you may hav
 ## Server
 
 A single Durable Object, also called a "Party" in PartyKit.
-
+<!-- 
 ## WebSockets
 
-xyz
+xyz -->
