@@ -11,6 +11,19 @@ export default defineConfig({
         title: "PartyKit Docs",
         description: "Collaborative applications are the future of software.",
         customCss: ["./src/styles/custom.css"],
+        head: [
+          {
+            tag: 'script',
+            content: 'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };'
+          },
+          {
+            tag: 'script',
+            attrs: {
+              src: '/_vercel/insights/script.js',
+              defer: true,
+            },
+          },
+        ],
         social: {
           github: "https://github.com/partykit/docs",
           discord: "https://discord.gg/KDZb7J4uxJ",
