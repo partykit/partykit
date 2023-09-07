@@ -94,7 +94,7 @@ Look, we got professional headshots and everything!
 
 At PartyKit, we don’t only want to bring collaboration to everyone, but bring everyone to collaborate with us. To this effect, we’ve started a residency program for technologists exploring the multiplayer software space.
 
-Our first resident is Matt Webb. [Matt](https://interconnected.org/) has a long history in using design to help invent products, with clients such as Google, and recently in building his own AI-powered poem clock.
+Our first resident is Matt Webb. [Matt](https://interconnected.org/) has a long history in using design to help invent products, with clients such as Google, and recently in [building his own AI-powered poem clock](https://www.theverge.com/23669343/ai-clock-chatgpt-poems-rhymes-diy-project).
 
 Matt will write more about his escapades on this blog soon, but in his first month in residence, he’s been exploring multiplayer cursors, presence, chat, games, polls, video, community gardening, and most recently, [interacting with AI NPCs on an infinite-canvas whiteboard using TLDraw](https://interconnected.org/home/2023/09/01/npcs).
 
