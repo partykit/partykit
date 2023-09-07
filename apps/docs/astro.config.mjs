@@ -1,10 +1,15 @@
 import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
+import vercel from '@astrojs/vercel/serverless';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://docs.partykit.io',
+  output: 'server',
+  adapter: vercel({
+    analytics: true,
+  }),
   integrations: [
     starlight(
       {
