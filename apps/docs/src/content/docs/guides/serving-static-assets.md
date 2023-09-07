@@ -35,7 +35,7 @@ While PartyKit defaults should satisfy most needs, you can override some optiona
     edgeTTL: 1000 * 60 * 60 * 24 * 365, // any number of seconds
 
 
-    // COMING SOON: serve in "single page app" mode
+    // serve in "single page app" mode
     serveSinglePageApp: true
     // COMING SOON: exclude files from being served
     exclude: ["**/*.map"] // PartyKit already excludes dotfiles and node_modules

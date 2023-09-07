@@ -1,15 +1,9 @@
-import type {
-  Party,
-  PartyConnection,
-  PartyConnectionContext,
-  PartyServer,
-  PartyWorker,
-} from "partykit/server";
+import type * as Party from "partykit/server";
 
-export default class Server implements PartyServer {
-  constructor(readonly party: Party) {}
+export default class Server implements Party.Server {
+  constructor(readonly party: Party.Party) {}
 
-  onConnect(conn: PartyConnection, ctx: PartyConnectionContext) {
+  onConnect(conn: Party.Connection, ctx: Party.ConnectionContext) {
     // A websocket just connected!
     console.log(
       `Connected:
@@ -22,7 +16,7 @@ export default class Server implements PartyServer {
     conn.send("hello from server");
   }
 
-  onMessage(message: string, sender: PartyConnection) {
+  onMessage(message: string, sender: Party.Connection) {
     // let's log the message
     console.log(`connection ${sender.id} sent message: ${message}`);
     // as well as broadcast it to all the other connections in the room...
@@ -34,4 +28,4 @@ export default class Server implements PartyServer {
   }
 }
 
-Server satisfies PartyWorker;
+Server satisfies Party.Worker;

@@ -12,27 +12,26 @@ Parties accept requests at `/parties/:party/:room-id`. The default `party` in ea
 Let's send a request to the room's public URL:
 
 ```ts
-fetch(`${PARTYKIT_HOST}/parties/main/${roomId}`, { 
-  method: "POST", 
+fetch(`${PARTYKIT_HOST}/parties/main/${roomId}`, {
+  method: "POST",
   body: JSON.stringify({
-    message: "Hello!"
-  })
+    message: "Hello!",
+  }),
 });
 ```
-
 
 ### Handle incoming requests
 
 To handle incoming requests, define an `onRequest` handler in your PartyKit server:
+
 ```ts
+import type * as Party from "partykit/server";
 
-import type { Party, PartyRequest, PartyServer } from "partykit/server";
-
-export default class MessageServer implements PartyServer {
+export default class MessageServer implements Party.Server {
   messages: string[] = [];
-  constructor(readonly party: Party) {}
+  constructor(readonly party: Party.Party) {}
 
-  async onRequest(request: PartyRequest) {
+  async onRequest(request: Party.Request) {
     // push new message
     if (request.method === "POST") {
       const payload = await request.json<{ message: string }>();
@@ -61,7 +60,7 @@ The above code snippet implements a simple stateful HTTP server, but did you not
 this.party.broadcast(payload.message);
 ```
 
-The `onRequest` method has access to all of the room's resources, including connected WebSocket clients. 
+The `onRequest` method has access to all of the room's resources, including connected WebSocket clients.
 
 As simple as this sounds, this is a powerful pattern. Being able to access the same party state with both WebSockets and HTTP requests enables us to create flexible push/pull systems that integrate well with third-party systems such as:
 

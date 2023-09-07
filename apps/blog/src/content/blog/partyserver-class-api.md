@@ -1,7 +1,7 @@
 ---
 author: Jani Eväkallio
 pubDatetime: 2023-08-25T11:00:00Z
-title: PartyServer — New API for a programmable primitive
+title: Party.Server — New API for a programmable primitive
 postSlug: partyserver-api
 featured: true
 draft: true
@@ -15,17 +15,18 @@ description: Why we reimagined PartyKit's API, and how to use it.
 
 If you hang out in the [PartyKit Discord](https://discord.gg/g5uqHQJc3z), you may have heard we recently redesigned the primary way developers interact with PartyKit.
 
-PartyKit makes developing real-time, collaborative, multiplayer applications simple. In this post, I'll explain how the new `PartyServer` API makes it even simpler, and more fun!
+PartyKit makes developing real-time, collaborative, multiplayer applications simple. In this post, I'll explain how the new `Party.Server` API makes it even simpler, and more fun!
 
 First, let's look at an example of a little chat room:
 
 ```ts
-// PartyKit creates an instance PartyServer for each chatroom id
-export default class Chat implements PartyServer {
+import type * as { Party } from 'partykit/server';
+// PartyKit creates an instance Party.Server for each chatroom id
+export default class Chat implements Party.Server {
   // each server instance is stateful, so we can keep data in memory
   messages: string[];
   constructor(public party: Party) {}
-  onConnect(conn: PartyConnection) {
+  onConnect(conn: Party.Connection) {
     // when a client connects via WebSocket, send them the full message history
     conn.send(this.messages);
   },
@@ -68,26 +69,26 @@ That's a lot of words! Let's unpack:
 
 - **Web server** — Each party is a **web server**, addressed by an unique id, in above examples referred to as `id`. Every time you connect with a **new** `id`, we create a new web server for you.
 - **On-demand** — Parties are so lightweight that we can spin them up with practically zero start-up time. In this regard, they are similar to a serverless function.
-- **Stateful** — Unlike a serverless function, each party is also **stateful**. Every time a new client connects with the **same** `id`, we guarantee that the connection is routed to the same `PartyServer` instance. And because it's stateful, the `PartyServer` can keep data in memory in between requests.
+- **Stateful** — Unlike a serverless function, each party is also **stateful**. Every time a new client connects with the **same** `id`, we guarantee that the connection is routed to the same `Party.Server` instance. And because it's stateful, the `Party.Server` can keep data in memory in between requests.
 - **Globally distributed** — Parties are powered by Cloudflare Durable Objects. This makes them reliable, horizontally scalable, and also very fast: thanks to Cloudflare's global edge network, we can create each party in a geographical location near you, minimising network latency.
 - **Programmable** — Most hosted real-time platforms offer limited or no customisability of the server-side behaviour, leading developers to implement business rules on client-side. Parties allow you to write your own business logic, or use industry-standard open source packages to implement common use cases and workflows with full customisability.
 
 In short, parties are a novel programming primitive that make developing real-time, collaborative, multiplayer systems as easy and fun as writing a serverless function.
 
-## `PartyServer`: a programming primitive
+## `Party.Server`: a programming primitive
 
-In designing the `PartyServer` API, we wanted to accurately convey the mental model of **globally distributed**, **stateful**, **programmable**, **on-demand** web servers, and make it easy for you, a developer, to build the functionality you need.
+In designing the `Party.Server` API, we wanted to accurately convey the mental model of **globally distributed**, **stateful**, **programmable**, **on-demand** web servers, and make it easy for you, a developer, to build the functionality you need.
 
-Let's walk through the `PartyServer` API, step by step.
+Let's walk through the `Party.Server` API, step by step.
 
-### `class implements PartyServer`
+### `class implements Party.Server`
 
 Classes are a divisive topic among JavaScript developers, but for us they are the perfect fit.
 
 By expressing each server as a class instance, we're able to convey the statefulness of the party, and make it easy to store per-party state, as we do here for `messages`.
 
 ```ts
-export default class Main implements PartyServer {
+export default class Main implements Party.Server {
   party: Party;
   messages: string[];
   constructor(party: Party) {
@@ -137,16 +138,16 @@ There's now a new lifecycle method `onStart` which fires before first connection
 
 ### `onConnect`, `onClose`, `onError`
 
-Each WebSocket connection's lifecycle is now exposed on `PartyServer`:
+Each WebSocket connection's lifecycle is now exposed on `Party.Server`:
 
 ```ts
-async onConnect(connection: PartyConnection, ctx: PartyConnectionContext) {
+async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
   this.party.broadcast(`${connection.id} joined`);
 }
-async onClose(connection: PartyConnection) {
+async onClose(connection: Party.Connection) {
   this.party.broadcast(`${connection.id} left`);
 }
-async onError(connection: PartyConnection, err: Error) {
+async onError(connection: Party.Connection, err: Error) {
   this.party.broadcast(`${connection.id} is having connection difficulties`);
 }
 ```
@@ -156,7 +157,7 @@ async onError(connection: PartyConnection, err: Error) {
 Every WebSocket message received from any connected client is routed to `onMessage`:
 
 ```ts
-async onMessage(message: string, sender: PartyConnection) {
+async onMessage(message: string, sender: Party.Connection) {
   this.party.broadcast(message, [sender.id]);
 }
 ```
@@ -165,10 +166,10 @@ Just as with `onClose` and `onError`, you no longer need to manually attach and 
 
 ### `onRequest`
 
-Each `PartyServer` can also handle standard HTTP requests (`GET`, `POST`, `PUT`, and others).
+Each `Party.Server` can also handle standard HTTP requests (`GET`, `POST`, `PUT`, and others).
 
 ```ts
-async onRequest(req: PartyRequest) {
+async onRequest(req: Party.Request) {
   if (req.method === "POST") {
     this.messages.push(await req.json());
     return new Response("OK", { status: 200 });
@@ -193,14 +194,14 @@ The static `onBefore*` methods allow you to modify incoming request before they'
 This can be very useful for scenarios such as authentication and authorisation:
 
 ```ts
-export default class Main implements PartyServer {
-  static async onBeforeRequest(req: PartyRequest) {
+export default class Main implements Party.Server {
+  static async onBeforeRequest(req: Party.Request) {
     // only allow admins to make HTTP requests
     const user = authenticate(req);
     if (!user?.isAdmin) return new Response("Unauthorized", { status: 401 });
     return req;
   }
-  static async onBeforeConnect(req: PartyRequest) {
+  static async onBeforeConnect(req: Party.Request) {
     // allow anyone to connect, pass user to the party
     const user = authenticate(req);
     if (user) req.headers.set("X-User-Id", authenticate(req).userId);
@@ -223,8 +224,8 @@ The `onBefore*` methods run in the edge worker, so we've marked them static to m
 We've added another request handler to the edge worker, `onFetch`. It runs for every request that isn't routed to a party:
 
 ```ts
-export default class Main implements PartyServer {
-  static onFetch(req: PartyRequest) {
+export default class Main implements Party.Server {
+  static onFetch(req: Party.Request) {
     return new Response(`<h1>Hello ${req.url}!</h1>`, {
       headers: { "Content-Type": "application/html" },
     });
@@ -236,7 +237,7 @@ This means you can now use your PartyServer as a full-fledged web server, and se
 
 ## Better support for Hibernatable WebSockets
 
-So far, I've told you that `PartyServer` is stateful, and remains in memory between requests. This is true, and indeed very useful, but for very high-traffic or high-connection requests, this can get expensive both computationally, and in billing seconds.
+So far, I've told you that `Party.Server` is stateful, and remains in memory between requests. This is true, and indeed very useful, but for very high-traffic or high-connection requests, this can get expensive both computationally, and in billing seconds.
 
 In order to support scaling parties to tens of thousands of concurrent connections, PartyKit supports the Cloudflare Durable Object [Hibernatable WebSockets API](https://developers.cloudflare.com/durable-objects/api/hibernatable-websockets-api).
 
@@ -249,7 +250,7 @@ Hibernation comes with tradeoffs. For lower-concurrency applications, you may wa
 To give you control over which execution model you prefer, you can define an `options.hibernate` field, which defaults to `false`:
 
 ```ts
-  readonly options: PartyServerOptions = {
+  readonly options: Party.ServerOptions = {
     hibernate: true,
   };
 ```
@@ -270,10 +271,10 @@ for (const c of this.party.getConnections()) {
 
 ### Tagged connections
 
-You can set additional metadata on connections by returning them from a `getConnectionTags` callback on `PartyServer`. Here, for example, we tag each connection with its origin country:
+You can set additional metadata on connections by returning them from a `getConnectionTags` callback on `Party.Server`. Here, for example, we tag each connection with its origin country:
 
 ```ts
-  getConnectionTags(connection: PartyConnection, ctx: PartyConnectionContext) {
+  getConnectionTags(connection: Party.Connection, ctx: Party.ConnectionContext) {
     const country = (ctx.request.cf?.country as string) ?? "unknown";
     return [country];
   }
@@ -296,16 +297,16 @@ The biggest problem we wanted to solve was the distinction between "parties" and
 To reflect this, we made the following names in our TypeScript types:
 
 - `PartyKitRoom` is now `Party`, and refers to a single server instance (in other words, Durable Object)
-- `PartyServer` refers to the instance code definition of the server (in other words, Durable Object)
-- `PartyWorker` refers to the static code definition of the server which runs in a separate worker before connecting to the Party.
-- `PartyKit*`-prefixed types are now shortened to `Party*` by dropping the "Kit". It's cleaner.
+- `Party.Server` refers to the instance code definition of the server (in other words, Durable Object)
+- `Party.Worker` refers to the static code definition of the server which runs in a separate worker before connecting to the Party.
+- `PartyKit*`-prefixed types are now shortened to `Party.*` by dropping the "Kit". It's cleaner.
 - `room.parties` ➡️ `party.context.parties` — Represents the taxonomy and relationship between parties more clearly.
 
 The old names are deprecated, but will continue to work. The deprecated names are decorated with JSDoc `@deprecated` pragmas, so it's easier to find the types that needs to be renamed.
 
 ## Full code example
 
-You can see a full `PartyServer` example implementation in the [partykit GitHub repository](https://github.com/partykit/partykit/blob/main/examples/class/src/server.ts).
+You can see a full `Party.Server` example implementation in the [partykit GitHub repository](https://github.com/partykit/partykit/blob/main/examples/class/src/server.ts).
 
 We also have a [Next.js template](https://github.com/partykit/partykit-nextjs-chat-template) that demonstrates how to build a fully featured chatroom (with an AI participant!).
 
