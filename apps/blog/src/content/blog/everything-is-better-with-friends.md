@@ -8,7 +8,7 @@ tags:
   - partykit
   - announcement
   - team
-ogImage: https://blog.partykit.io/content-images/team-opengraph.png
+ogImage: /content-images/team-opengraph.png
 description: Announcing the PartyKit founding team!
 ---
 
@@ -29,7 +29,7 @@ Where were those friends? So sad.
 
 Throughout the summer, we’ve been building the foundations for PartyKit’s **product**, **company** and the **team**. We have big announcements coming later this month about the product and the company *(ooh, foreshadowing…),* but today we’re announcing the third foundational pillar of PartyKit: **the team**.
 
-If you’ve been keeping an eye on PartyKit’s GitHub or Discord, you may have already seen spoilers, but today we’re making it official.
+If you’ve been keeping an eye on PartyKit’s [GitHub](https://github.com/partykit/partykit) or [Discord](https://discord.gg/vwDWs68C), you may have already seen spoilers, but today we’re making it official.
 
 ## PartyKit, Party of Three
 
