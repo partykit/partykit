@@ -3,22 +3,22 @@
 // @ts-check
 // Optional JS type checking, powered by TypeScript.
 /** @typedef {import("partykit/server").Party} Party */
-/** @typedef {import("partykit/server").PartyServer} PartyServer */
-/** @typedef {import("partykit/server").PartyConnection} PartyConnection */
-/** @typedef {import("partykit/server").PartyConnectionContext} PartyConnectionContext */
+/** @typedef {import("partykit/server").Server} Server */
+/** @typedef {import("partykit/server").Connection} Connection */
+/** @typedef {import("partykit/server").ConnectionContext} ConnectionContext */
 
 /**
- * @implements {PartyServer}
+ * @implements {Server}
  */
-class Server {
+class PartyServer {
   constructor(party) {
     /** @type {Party} */
     this.party = party;
   }
 
   /**
-   * @param {PartyConnection} conn - The connection object.
-   * @param {PartyConnectionContext} ctx - The context object.
+   * @param {Connection} conn - The connection object.
+   * @param {ConnectionContext} ctx - The context object.
    */
   onConnect(conn, ctx) {
     // A websocket just connected!
@@ -35,7 +35,7 @@ class Server {
 
   /**
    * @param {string} message
-   * @param {PartyConnection} sender
+   * @param {Connection} sender
    */
   onMessage(message, sender) {
     console.log(`connection ${sender.id} sent message: ${message}`);
@@ -44,4 +44,4 @@ class Server {
   }
 }
 
-export default Server;
+export default PartyServer;

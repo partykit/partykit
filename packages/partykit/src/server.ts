@@ -1,6 +1,6 @@
 import type {
   DurableObjectStorage,
-  ExecutionContext,
+  ExecutionContext as CFExecutionContext,
   WebSocket,
   Request as CFRequest,
 } from "@cloudflare/workers-types";
@@ -13,64 +13,60 @@ export type StaticAssetsManifestType = {
   assets: Record<string, string>;
 };
 
+type StandardRequest = globalThis.Request;
+
 // Types with PartyKit* prefix are used in module workers, i.e.
 // `export default {} satisfies PartyKitServer;`
 
-// Types with Party* prefix are used in class workers, i.e.
-// `export default class Room implements PartyServer {}`
+// Types with Party.* prefix are used in class workers, i.e.
+// `export default class Room implements Party.Server {}`
 
 // Extend type so that when language server (e.g. vscode) autocompletes,
 // it will import this type instead of the underlying type directly.
-export interface PartyRequest extends CFRequest {}
+export interface Request extends CFRequest {}
 
 // Because when you construct a `new Request()` in a user script,
 // it's assumed to be a standards-based Fetch API Response, unless overridden.
 // This is fine by us, let user return whichever request type
-type ReturnRequest = Request | PartyRequest;
+type ReturnRequest = StandardRequest | CFRequest;
 
 /** Per-party key-value storage */
-export interface PartyStorage extends DurableObjectStorage {}
-
-/** @deprecated use PartyStorage instead */
-export type PartyKitStorage = PartyStorage;
+export interface Storage extends DurableObjectStorage {}
 
 /** Connection metadata only available when the connection is made */
-export type PartyConnectionContext = { request: PartyRequest };
+export type ConnectionContext = { request: CFRequest };
 
-/** @deprecated use PartyConnectionContext instead */
-export type PartyKitContext = PartyConnectionContext;
-
-export type PartyStub = {
+export type Stub = {
   connect: () => WebSocket;
   fetch: (init?: RequestInit) => Promise<Response>;
 };
 
 /** Additional information about other resources in the current project */
-export type PartyContext = {
+export type Context = {
   /** Access other parties in this project */
   parties: Record<
     string,
     {
-      get(id: string): PartyStub;
+      get(id: string): Stub;
     }
   >;
 };
 
-export type PartyFetchLobby = {
+export type FetchLobby = {
   env: Record<string, unknown>;
-  parties: PartyContext["parties"];
+  parties: Context["parties"];
 };
 
-export type PartyLobby = {
+export type Lobby = {
   id: string;
   env: Record<string, unknown>;
-  parties: PartyContext["parties"];
+  parties: Context["parties"];
 };
 
-export type PartyExecutionContext = ExecutionContext;
+export type ExecutionContext = CFExecutionContext;
 
 /** A WebSocket connected to the Party */
-export type PartyConnection = WebSocket & {
+export type Connection = WebSocket & {
   /** Connection identifier */
   id: string;
 
@@ -96,56 +92,53 @@ export type Party = {
   env: Record<string, unknown>;
 
   /** A per-party key-value storage */
-  storage: PartyStorage;
+  storage: Storage;
 
   /** Additional information about other resources in the current project */
-  context: PartyContext;
+  context: Context;
 
   /** @deprecated Use `party.getConnections` instead */
-  connections: Map<string, PartyConnection>;
+  connections: Map<string, Connection>;
 
   /** @deprecated Use `party.context.parties` instead */
-  parties: PartyContext["parties"];
+  parties: Context["parties"];
 
   /** Send a message to all connected clients, except connection ids listed `without` */
   broadcast: (msg: string, without?: string[] | undefined) => void;
 
   /** Get a connection by connection id */
-  getConnection(id: string): PartyConnection | undefined;
+  getConnection(id: string): Connection | undefined;
 
   /**
    * Get all connections. Optionally, you can provide a tag to filter returned connections.
-   * Use `PartyServer#getConnectionTags` to tag the connection on connect.
+   * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
-  getConnections(tag?: string): Iterable<PartyConnection>;
+  getConnections(tag?: string): Iterable<Connection>;
 };
 
-/**
- * PartyServer defines what happens when someone connects to and sends messages or HTTP requests to your party
+/* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party
  *
  * @example
- * export default class Room implements PartyServer {
+ * export default class Room implements Party.Server {
  *   constructor(readonly party: Party) {}
- *   onConnect(connection: PartyConnection) {
+ *   onConnect(connection: Party.Connection) {
  *     this.party.broadcast("Someone connected with id " + connection.id);
  *   }
  * }
  */
-export interface PartyServer {
-  // readonly party: Party;
-
+export type Server = {
   /**
-   * You can define an `options` field to customise the PartyServer behaviour.
+   * You can define an `options` field to customise the Party.Server behaviour.
    */
-  readonly options?: PartyServerOptions;
+  readonly options?: ServerOptions;
 
   /**
    * You can tag a connection to filter them in Party#getConnections.
    * Each connection supports up to 9 tags, each tag max length is 256 characters.
    */
   getConnectionTags?(
-    connection: PartyConnection,
-    context: PartyConnectionContext
+    connection: Connection,
+    context: ConnectionContext
   ): string[] | Promise<string[]>;
 
   /**
@@ -162,8 +155,8 @@ export interface PartyServer {
    * Called when a new incoming WebSocket connection is opened.
    */
   onConnect?(
-    connection: PartyConnection,
-    ctx: PartyConnectionContext
+    connection: Connection,
+    ctx: ConnectionContext
   ): void | Promise<void>;
 
   /**
@@ -171,23 +164,23 @@ export interface PartyServer {
    */
   onMessage?(
     message: string | ArrayBuffer,
-    sender: PartyConnection
+    sender: Connection
   ): void | Promise<void>;
 
   /**
    * Called when a WebSocket connection is closed by the client.
    */
-  onClose?(connection: PartyConnection): void | Promise<void>;
+  onClose?(connection: Connection): void | Promise<void>;
 
   /**
    * Called when a WebSocket connection is closed due to a connection error.
    */
-  onError?(connection: PartyConnection, error: Error): void | Promise<void>;
+  onError?(connection: Connection, error: Error): void | Promise<void>;
 
   /**
    * Called when a HTTP request is made to the party URL.
    */
-  onRequest?(req: PartyRequest): Response | Promise<Response>;
+  onRequest?(req: Request): Response | Promise<Response>;
 
   /**
    * Called when an alarm is triggered. Use Party.storage.setAlarm to set an alarm.
@@ -197,37 +190,37 @@ export interface PartyServer {
    * runtime error.
    */
   onAlarm?(): void | Promise<void>;
-}
+};
 
-type PartyServerConstructor = {
-  new (party: Party): PartyServer;
+type ServerConstructor = {
+  new (party: Party): Server;
 };
 
 /**
- * PartyWorker allows you to customise the behaviour of the Edge worker that routes
+ * Party.Worker allows you to customise the behaviour of the Edge worker that routes
  * connections to your party.
  *
- * The PartyWorker methods can be defined as static methods on the PartyServer constructor.
+ * The Party.Worker methods can be defined as static methods on the Party.Server constructor.
  * @example
- * export default class Room implements PartyServer {
- *   static onBeforeConnect(req: PartyRequest) {
+ * export default class Room implements Party.Server {
+ *   static onBeforeConnect(req: Party.Request) {
  *     return new Response("Access denied", { status: 403 })
  *   }
  *   constructor(readonly party: Party) {}
  * }
  *
- * Room satisfies PartyWorker;
+ * Room satisfies Party.Worker;
  */
-export type PartyWorker = PartyServerConstructor & {
+export type Worker = ServerConstructor & {
   /**
    * Runs on any HTTP request that does not match a Party URL or a static asset.
    * Useful for running lightweight HTTP endpoints that don't need access to the Party
    * state.
    **/
   onFetch?(
-    req: PartyRequest,
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
+    req: Request,
+    lobby: FetchLobby,
+    ctx: ExecutionContext
   ): Response | Promise<Response>;
 
   /**
@@ -235,27 +228,27 @@ export type PartyWorker = PartyServerConstructor & {
    * before it is forwarded to the party, or return a Response to short-circuit it.
    */
   onBeforeRequest?(
-    req: PartyRequest,
-    lobby: PartyLobby,
-    ctx: PartyExecutionContext
-  ): PartyRequest | Response | Promise<PartyRequest | Response>;
+    req: Request,
+    lobby: Lobby,
+    ctx: ExecutionContext
+  ): Request | Response | Promise<Request | Response>;
 
   /**
    * Runs before any WebSocket connection is made to the party. You can modify the request
    * before opening a connection, or return a Response to prevent the connection.
    */
   onBeforeConnect?(
-    req: PartyRequest,
-    lobby: PartyLobby,
-    ctx: PartyExecutionContext
-  ): PartyRequest | Response | Promise<PartyRequest | Response>;
+    req: Request,
+    lobby: Lobby,
+    ctx: ExecutionContext
+  ): Request | Response | Promise<Request | Response>;
 };
 
 /**
  * PartyKitServer is allows you to customise the behaviour of your Party.
  *
  * @note If you're starting a new project, we recommend using the newer
- * PartyServer API instead.
+ * Party.Server API instead.
  *
  * @example
  * export default {
@@ -267,40 +260,40 @@ export type PartyWorker = PartyServerConstructor & {
 export type PartyKitServer = {
   /** @deprecated. Use `onFetch` instead */
   unstable_onFetch?: (
-    req: PartyRequest,
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
+    req: Request,
+    lobby: FetchLobby,
+    ctx: ExecutionContext
   ) => Response | Promise<Response>;
   onFetch?: (
-    req: PartyRequest,
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
+    req: Request,
+    lobby: FetchLobby,
+    ctx: ExecutionContext
   ) => Response | Promise<Response>;
   onBeforeRequest?: (
-    req: PartyRequest,
+    req: Request,
     party: {
       id: string;
       env: Record<string, unknown>;
-      parties: PartyContext["parties"];
+      parties: Context["parties"];
     },
-    ctx: PartyExecutionContext
+    ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
-  onRequest?: (req: PartyRequest, party: Party) => Response | Promise<Response>;
+  onRequest?: (req: Request, party: Party) => Response | Promise<Response>;
   onAlarm?: (party: Omit<Party, "id" | "parties">) => void | Promise<void>;
   onConnect?: (
-    connection: PartyConnection,
+    connection: Connection,
     party: Party,
-    ctx: PartyConnectionContext
+    ctx: ConnectionContext
   ) => void | Promise<void>;
   onBeforeConnect?: (
-    req: PartyRequest,
+    req: Request,
     party: {
       id: string;
       env: Record<string, unknown>;
-      parties: PartyContext["parties"];
+      parties: Context["parties"];
     },
-    ctx: PartyExecutionContext
+    ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
   /**
@@ -309,24 +302,18 @@ export type PartyKitServer = {
    */
   onMessage?: (
     message: string | ArrayBuffer,
-    connection: PartyConnection,
+    connection: Connection,
     party: Party
   ) => void | Promise<void>;
-  onClose?: (connection: PartyConnection, party: Party) => void | Promise<void>;
+  onClose?: (connection: Connection, party: Party) => void | Promise<void>;
   onError?: (
-    connection: PartyConnection,
+    connection: Connection,
     err: Error,
     party: Party
   ) => void | Promise<void>;
 };
 
-/** @deprecated Use `Party` instead */
-export type PartyKitRoom = Party;
-
-/** @deprecated Use `PartyConnection` instead */
-export type PartyKitConnection = PartyConnection;
-
-export type PartyServerOptions = {
+export type ServerOptions = {
   /**
    * Whether the PartyKit platform should remove the server from memory
    * between HTTP requests and WebSocket messages.
@@ -335,3 +322,58 @@ export type PartyServerOptions = {
    */
   hibernate?: boolean;
 };
+
+//
+// ---
+// DEPRECATIONS
+// ---
+//
+
+/** @deprecated use Party.Request instead */
+export type PartyRequest = Request;
+
+/** @deprecated use Party.Storage instead */
+export type PartyStorage = Storage;
+
+/** @deprecated use Party.Storage instead */
+export type PartyKitStorage = Storage;
+
+/** @deprecated use Party.ConnectionContext instead */
+export type PartyConnectionContext = { request: CFRequest };
+
+/** @deprecated use Party.ConnectionContext instead */
+export type PartyKitContext = ConnectionContext;
+
+/** @deprecated use Party.Stub instead */
+export type PartyStub = Stub;
+
+/** Additional information about other resources in the current project */
+/** @deprecated use Party.Context instead */
+export type PartyContext = Context;
+
+/** @deprecated use Party.FetchLobby instead */
+export type PartyFetchLobby = FetchLobby;
+
+/** @deprecated use Party.Lobby instead */
+export type PartyLobby = Lobby;
+
+/** @deprecated use Party.ExecutionContext instead */
+export type PartyExecutionContext = CFExecutionContext;
+
+/** @deprecated use Party.Connection instead */
+export type PartyConnection = Connection;
+
+/** @deprecated use Party.Server instead */
+export type PartyServer = Server;
+
+/** @deprecated use Party.Worker instead */
+export type PartyWorker = Worker;
+
+/** @deprecated Use `Party` instead */
+export type PartyKitRoom = Party;
+
+/** @deprecated Use `Party.Connection` instead */
+export type PartyKitConnection = Connection;
+
+/** @deprecated Use `Party.ServerOptions` instead */
+export type PartyServerOptions = ServerOptions;

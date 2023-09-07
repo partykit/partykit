@@ -9,7 +9,7 @@ PartyKit simplifies developing real-time and multiplayer applications. To unders
 
 PartyKit is a deployment and hosting platform for **globally distributed**, **stateful**, **on-demand**, **programmable** **web servers**. In practice, this means that:
 
-- You **implement** the server code using [the `PartyServer` JS/TS API](/reference/partyserver-api).
+- You **implement** the server code using [the `Party.Server` JS/TS API](/reference/partyserver-api).
 - You **deploy** the server to the PartyKit runtime using [the `partykit` CLI](/reference/partykit-cli).
 - We **host** the servers on [the PartyKit runtime](#partykit-runtime).
 
@@ -23,7 +23,7 @@ In addition to running modern JavaScript, it also supports [TypeScript](https://
 
 ## PartyKit servers
 
-Above, we described PartyKit as a hosting platform for  **globally distributed**, **stateful**, **on-demand**, **programmable** **web servers**.
+Above, we described PartyKit as a hosting platform for **globally distributed**, **stateful**, **on-demand**, **programmable** **web servers**.
 
 That's a lot of words! Let's unpack them, one by one.
 
@@ -32,17 +32,20 @@ That's a lot of words! Let's unpack them, one by one.
 Each PartyKit server (also known as a **Party**), is backed by a Cloudflare [Durable Object](/glossary/#durable-object).
 
 You can communicate with a Party with standard HTTP requests:
+
 ```ts
-fetch(`https://${project}.${user}.partykit.dev/parties/main/${id}`, { method: "GET"});
+fetch(`https://${project}.${user}.partykit.dev/parties/main/${id}`, {
+  method: "GET",
+});
 ```
 
 More interestingly, you can also connect to a Party using standard WebSockets, enabling real-time push between client and the party instance (also known as "room"):
 
 ```ts
-new WebSocket(`https://${project}.${user}.partykit.dev/parties/main/${id}`)
+new WebSocket(`https://${project}.${user}.partykit.dev/parties/main/${id}`);
 ```
 
-Because the Party server uses standard HTTP and WebSocket protocols, you can connect to them from anywhere: web browsers, native mobile apps, or embedded devices. 
+Because the Party server uses standard HTTP and WebSocket protocols, you can connect to them from anywhere: web browsers, native mobile apps, or embedded devices.
 
 PartyKit also provides optional client SDKs, such as the [PartySocket](/reference/partysocket-api/) JavaScript/TypeScript client.
 
