@@ -96,13 +96,13 @@ At PartyKit, we don’t only want to bring collaboration to everyone, but bring 
 
 Our first resident is Matt Webb. [Matt](https://interconnected.org/) has a long history in using design to help invent products, with clients such as Google, and recently in [building his own AI-powered poem clock](https://www.theverge.com/23669343/ai-clock-chatgpt-poems-rhymes-diy-project).
 
-Matt will write more about his escapades on this blog soon, but in his first month in residence, he’s been exploring multiplayer cursors, presence, chat, games, polls, video, community gardening, and most recently, [interacting with AI NPCs on an infinite-canvas whiteboard using TLDraw](https://interconnected.org/home/2023/09/01/npcs).
+Matt will write more about his escapades on this blog soon, but in his first month in residence, he’s been exploring multiplayer cursors, presence, chat, games, polls, video, community gardening, and most recently, [interacting with AI NPCs on an infinite-canvas whiteboard using tldraw](https://interconnected.org/home/2023/09/01/npcs).
 
 Explorations help us stretch PartyKit, which makes it more useful for everyone. We can’t wait to see what Matt does next!
 
-### PartyKit x TLDraw
+### PartyKit x tldraw
 
-Speaking of [TLDraw](https://www.tldraw.com/) ******(nice segue, huh?),****** we’ve recently moved into our brand-new office in London. And because everything’s better with friends (*have we said that enough yet?*), we’re sharing the office the lovely bunch of arrowsmiths at TLDraw!
+Speaking of [tldraw](https://www.tldraw.com/) ******(nice segue, huh?),****** we’ve recently moved into our brand-new office in London. And because everything’s better with friends (*have we said that enough yet?*), we’re sharing the office the lovely bunch of arrowsmiths at tldraw!
 
 If you’re ever in North London and want to talk multiplayer, real-time, building AI agents, or any that sort of thing, do drop in!
 
