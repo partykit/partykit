@@ -1,5 +1,17 @@
 # partysocket
 
+## 0.0.4
+
+### Patch Changes
+
+- [#333](https://github.com/partykit/partykit/pull/333) [`dc324d9`](https://github.com/partykit/partykit/commit/dc324d91d9521682bf8490e1fed51d5371a752df) Thanks [@threepointone](https://github.com/threepointone)! - fix: `init` doesn't install the right versions of packages
+
+  This fix should pick up the latest versions of partykit /partysocket when installing. We were using the previous beta logic when every package was on the same version. This patch picks up the latest versions of both and uses it.
+
+  (also sneaking in a quick types fix for usePartySocket)
+
+- [#318](https://github.com/partykit/partykit/pull/318) [`8330c57`](https://github.com/partykit/partykit/commit/8330c5755b88a261cb141993910ce29ac9de7d89) Thanks [@sdnts](https://github.com/sdnts)! - Export `WebSocket` from `partysocket` correctly
+
 ## 0.0.3
 
 ### Patch Changes

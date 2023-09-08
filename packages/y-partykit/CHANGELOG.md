@@ -1,5 +1,13 @@
 # y-partykit
 
+## 0.0.2
+
+### Patch Changes
+
+- [#324](https://github.com/partykit/partykit/pull/324) [`d470878`](https://github.com/partykit/partykit/commit/d4708786da4bf2d2edc2a27aba14586a58665400) Thanks [@threepointone](https://github.com/threepointone)! - `tsximport useYProvider from "y-partykit/react";function App() {  const provider = useYProvider({    host: "localhost:1999",    room: "my-document-name",    doc: yDoc, // optional!    options,  });}`
+
+- [#332](https://github.com/partykit/partykit/pull/332) [`7898032`](https://github.com/partykit/partykit/commit/7898032735e9c880aa83a24df0f440bd6348de38) Thanks [@jevakallio](https://github.com/jevakallio)! - Better error messages for YPartyKitProvider
+
 ## 0.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.4
+
+### Patch Changes
+
+- [#334](https://github.com/partykit/partykit/pull/334) [`9e46880`](https://github.com/partykit/partykit/commit/9e468804206d7a3a3d56d3d3c795bd603a131b9d) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix create-partykit crash issue by downgrading "ink" dependency to last known good version
+
 ## 0.0.3
 
 ### Patch Changes
