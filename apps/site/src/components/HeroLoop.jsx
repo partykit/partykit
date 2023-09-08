@@ -1,5 +1,5 @@
 import * as React from "react";
-import TextLoop from "react-text-loop";
+import { TextLoop } from "react-text-loop-next-18";
 
 export default function HeroLoop() {
   return (
