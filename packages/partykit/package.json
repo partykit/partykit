@@ -25,7 +25,7 @@
     "get-port": "^7.0.0",
     "gradient-string": "^2.0.2",
     "http-terminator": "^3.2.0",
-    "ink": "^4.3.1",
+    "ink": "4.3.1",
     "ink-select-input": "^5.0.0",
     "json5": "^2.2.3",
     "mime": "^3.0.0",

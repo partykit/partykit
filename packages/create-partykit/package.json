@@ -22,7 +22,7 @@
     "execa": "^7.2.0",
     "find-up": "^6.3.0",
     "gradient-string": "^2.0.2",
-    "ink": "^4.3.1",
+    "ink": "4.3.1",
     "ink-select-input": "^5.0.0",
     "ink-text-input": "^5.0.1",
     "random-words": "^2.0.0",
