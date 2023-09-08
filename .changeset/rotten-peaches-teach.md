@@ -2,4 +2,4 @@
 "partysocket": patch
 ---
 
-Export ReconnectingWebSocket
+Export `WebSocket` from `partysocket` correctly
