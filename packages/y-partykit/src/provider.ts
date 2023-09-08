@@ -551,6 +551,14 @@ function generateUUID(): string {
   });
 }
 
+function assertType(value: unknown, label: string, type: string) {
+  if (typeof value !== type) {
+    throw new Error(
+      `Invalid "${label}" parameter provided to YPartyKitProvider. Expected: ${type}, received: ${value}`
+    );
+  }
+}
+
 export default class YPartyKitProvider extends WebsocketProvider {
   id: string;
   constructor(
@@ -561,6 +569,9 @@ export default class YPartyKitProvider extends WebsocketProvider {
       party?: string;
     } = {}
   ) {
+    assertType(host, "host", "string");
+    assertType(room, "room", "string");
+
     // strip the protocol from the beginning of `host` if any
     host = host.replace(/^(http|https|ws|wss):\/\//, "");
 
