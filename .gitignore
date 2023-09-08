@@ -132,3 +132,7 @@ dist
 /TODO.md
 .partykit
 
+.jampack
+
+# Docs, blog and website
+.astro

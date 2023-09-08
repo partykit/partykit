@@ -1,45 +1,49 @@
 ---
-import ButtonLink from '../components/ButtonLink.astro';
-import Code from '../components/Code.astro';
+import ButtonLink from "../components/ButtonLink.astro";
+import Code from "../components/Code.astro";
 ---
-<section class='bb b--color pb6'>
-  <div class='pt4 center measure-wide px4'>
-  <div>
-    <h3 class='f6 f8-s fw9 mb3'>Getting Started</h3>
-    <p class='measure lh-copy'>
-      Let's create a simple stateful web server that responds to WebSockets and HTTP Requests!
-    </p>
-  </div>
-  <div>
-      <section class='flex flex-wrap'>
+
+<!-- prettier-ignore -->
+<section class="bb b--color pb6">
+  <div class="pt4 center measure-wide px4">
+    <div>
+      <h3 class="f6 f8-s fw9 mb3">Getting Started</h3>
+      <p class="measure lh-copy">
+        Let's create a simple stateful web server that responds to WebSockets
+        and HTTP Requests!
+      </p>
+    </div>
+    <div>
+      <section class="flex flex-wrap">
         <div>
-          <h4 class='f4 fw7 mb2'>Install with NPM</h4>
-          <Code>npm install partykit</Code> 
+          <h4 class="f4 fw7 mb2">Install with npm</h4>
+          <Code>npm install partykit</Code>
         </div>
       </section>
-      <h4 class='f4 fw7 mb2'>Write your code</h4>
-      <Code>
-<span class='indigo-5'>// server.js</span>
-
-export default &#123
-  onConnect(websocket, room) &#123
-    websocket.addEventListener(&quot;message&quot;, (event) =&gt; &#123
-      websocket.send(&quot;pong&quot;);
-    &#125);
-  &#125,
-  onRequest(request, room) &#123
-    return new Response(
-      &#96;Room $&#123room.id&#125 has $&#123room.connections.size&#125 connected participants&#96;
-    );
+      <h4 class="f4 fw7 mb2">Write your code</h4>
+      <Code><span class="indigo-5">// server.js</span>
+export default class Server &#123
+  onMessage(message, websocket) &#123
+    websocket.send(&quot;pong&quot;);
   &#125
-&#125
-      </Code>
-      <h4 class='f4 fw7 mb2'>Develop on localhost</h4>
+  onRequest(request) &#123
+    return new Response(&#96;This is room $&#123party.id&#125&#96;);
+  &#125
+&#125</Code>
+      <h4 class="f4 fw7 mb2">Develop on localhost</h4>
       <Code>npx partykit dev server.js</Code>
-      <h4 class='f4 fw7 mb2'>Deploy to the edge</h4>
-      <Code>npx partykit deploy server.js --name first-party</Code> </div>
-      <h4 class='f4 fw7 mb2'>Try it out</h4>
-      <Code>curl https://first-party.&#123yourname&#125.partykit.dev/party/my-room</Code> 
-</div>
-</div>
-    </section>
+      <h4 class="f4 fw7 mb2">Deploy to the edge</h4>
+      <Code>npx partykit deploy server.js --name first-party</Code>
+    </div>
+    <h4 class="f4 fw7 mb2">Try it out</h4>
+    <Code>curl https://first-party.&#123yourname&#125.partykit.dev/party/my-room</Code>
+    <div class="mt4">
+      <ButtonLink 
+          href='https://docs.partykit.io' 
+          body='Read the docs &rarr;' 
+          title='Start developing collaborative apps with PartyKit'
+          variant={3}
+      />
+    </div>
+  </div>
+</section>

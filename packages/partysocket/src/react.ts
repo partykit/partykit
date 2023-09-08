@@ -1,8 +1,7 @@
-// import React from "react";
-// import PartySocket from ".";
 import { useEffect, useRef } from "react";
 import type { PartySocketOptions } from ".";
 import PartySocket from ".";
+import useWebSocketImpl from "./use-ws";
 
 type UsePartySocketOptions = PartySocketOptions & {
   onOpen?: (event: WebSocketEventMap["open"]) => void;
@@ -56,3 +55,5 @@ export default function usePartySocket(options: UsePartySocketOptions) {
   );
   return socketRef.current;
 }
+
+export const useWebSocket = useWebSocketImpl;
