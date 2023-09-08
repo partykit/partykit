@@ -56,4 +56,4 @@ export default function usePartySocket(options: UsePartySocketOptions) {
   return socketRef.current;
 }
 
-export const useWebSocket = useWebSocketImpl;
+export { useWebSocketImpl as useWebSocket };

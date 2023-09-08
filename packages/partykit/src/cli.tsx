@@ -120,6 +120,35 @@ export async function init(options: {
 
   const pkgManager = detectPackageManager();
 
+  let latestPartyKitVersion = "*";
+  let latestPartySocketVersion = "*";
+  if (packageVersion.startsWith("0.0.0-")) {
+    // this means it's a beta, so let's use this version everywhere
+    latestPartyKitVersion = packageVersion;
+    latestPartySocketVersion = packageVersion;
+  } else {
+    try {
+      latestPartyKitVersion = await fetch(
+        `https://registry.npmjs.org/partykit/latest`
+      )
+        .then((res) => res.json())
+        .then((res) => res.version as string);
+
+      latestPartySocketVersion = await fetch(
+        `https://registry.npmjs.org/partysocket/latest`
+      )
+        .then((res) => res.json())
+        .then((res) => res.version as string);
+    } catch (e) {
+      logger.error(
+        "Could not fetch latest versions of partykit and partysocket, defaulting to *"
+      );
+      logger.debug(e);
+      latestPartyKitVersion = "*";
+      latestPartySocketVersion = "*";
+    }
+  }
+
   if (packageJsonPath) {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
     // if there's an existing package.json, we're in a project
@@ -171,13 +200,13 @@ export async function init(options: {
 
         if (!packageJson.devDependencies?.partykit) {
           packageJson.devDependencies = packageJson.devDependencies || {};
-          packageJson.devDependencies.partykit = packageVersion;
+          packageJson.devDependencies.partykit = latestPartyKitVersion;
           shouldRunInstaller = true;
         }
 
         packageJson.dependencies = packageJson.dependencies || {};
         if (!packageJson.dependencies.partysocket) {
-          packageJson.dependencies.partysocket = packageVersion;
+          packageJson.dependencies.partysocket = latestPartySocketVersion;
           shouldRunInstaller = true;
         }
 
