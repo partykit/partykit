@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.9
+
+### Patch Changes
+
+- [`c5a8357`](https://github.com/partykit/partykit/commit/c5a835761e4b81a0dbd460ac53aa93193ce4c658) Thanks [@jevakallio](https://github.com/jevakallio)! - Trigger a new release
+
 ## 0.0.8
 
 ### Patch Changes
