@@ -1,10 +1,6 @@
 import type { AppLoadContext, ServerBuild } from "./cf";
 import { createRequestHandler as createRemixRequestHandler } from "./cf";
-import type {
-  PartyRequest,
-  PartyExecutionContext,
-  PartyFetchLobby,
-} from "partykit/server";
+import type * as Party from "partykit/server";
 
 /**
  * A function that returns the value to use as `context` in route `loader` and
@@ -14,15 +10,15 @@ import type {
  * environment/platform-specific values through to your loader/action.
  */
 export type GetLoadContextFunction = (
-  req: PartyRequest,
-  lobby: PartyFetchLobby,
-  ctx: PartyExecutionContext
+  req: Party.Request,
+  lobby: Party.FetchLobby,
+  ctx: Party.ExecutionContext
 ) => Promise<AppLoadContext> | AppLoadContext;
 
 export type RequestHandler = (
-  req: PartyRequest,
-  lobby: PartyFetchLobby,
-  ctx: PartyExecutionContext
+  req: Party.Request,
+  lobby: Party.FetchLobby,
+  ctx: Party.ExecutionContext
 ) => Promise<Response>;
 
 /**
@@ -41,9 +37,9 @@ export function createRequestHandler({
   const handleRequest = createRemixRequestHandler(build, mode);
 
   return async (
-    req: PartyRequest,
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
+    req: Party.Request,
+    lobby: Party.FetchLobby,
+    ctx: Party.ExecutionContext
   ) => {
     const loadContext = await getLoadContext?.(req, lobby, ctx);
 

@@ -2,7 +2,7 @@ import * as Y from "yjs";
 import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
 
-import type { PartyKitStorage } from "partykit/server";
+import type * as Party from "partykit/server";
 
 const PREFERRED_TRIM_SIZE = 300;
 
@@ -46,7 +46,7 @@ type Datum = {
  * This helper method returns `null` if the key is not found.
  */
 export async function levelGet(
-  db: PartyKitStorage,
+  db: Party.Storage,
   key: StorageKey
 ): Promise<Uint8Array | null> {
   const prefix = keyEncoding.encode(key);
@@ -80,7 +80,7 @@ export async function levelGet(
  * Set a key + value in storage
  */
 export async function levelPut(
-  db: PartyKitStorage,
+  db: Party.Storage,
   key: StorageKey,
   val: Uint8Array
 ): Promise<void> {
@@ -112,7 +112,7 @@ function groupBy<T>(arr: T[], fn: (el: T) => string): Map<string, T[]> {
  * A "bulkier" implementation of getting keys and/or values.
  */
 export async function getLevelBulkData(
-  db: PartyKitStorage,
+  db: Party.Storage,
   opts: {
     gte: StorageKey;
     lt: StorageKey;
@@ -160,7 +160,7 @@ export async function getLevelBulkData(
  * Get all document updates for a specific document.
  */
 async function getLevelUpdates(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string,
   opts: {
     values: boolean;
@@ -183,7 +183,7 @@ async function getLevelUpdates(
  * Get the current document 'clock' / counter
  */
 async function getCurrentUpdateClock(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string
 ): Promise<number> {
   return getLevelUpdates(db, docName, {
@@ -205,7 +205,7 @@ async function getCurrentUpdateClock(
 }
 
 export async function clearRange(
-  db: PartyKitStorage,
+  db: Party.Storage,
   gte: StorageKey, // Greater than or equal
   lt: StorageKey // lower than (not equal)
 ): Promise<void> {
@@ -228,7 +228,7 @@ export async function clearRange(
 }
 
 async function clearUpdatesRange(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string,
   from: number, // Greater than or equal
   to: number // lower than (not equal)
@@ -314,7 +314,7 @@ function mergeUpdates(updates: Array<Uint8Array>): {
 }
 
 async function writeStateVector(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string,
   sv: Uint8Array, // state vector
   clock: number // current clock of the document so we can determine when this statevector was created
@@ -339,7 +339,7 @@ function decodeLeveldbStateVector(buf: Uint8Array): {
   return { sv, clock };
 }
 
-async function readStateVector(db: PartyKitStorage, docName: string) {
+async function readStateVector(db: Party.Storage, docName: string) {
   const buf = await levelGet(db, createDocumentStateVectorKey(docName));
   if (buf === null) {
     // no state vector created yet or no document exists
@@ -349,7 +349,7 @@ async function readStateVector(db: PartyKitStorage, docName: string) {
 }
 
 async function flushDocument(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string,
   stateAsUpdate: Uint8Array,
   stateVector: Uint8Array
@@ -361,7 +361,7 @@ async function flushDocument(
 }
 
 async function storeUpdate(
-  db: PartyKitStorage,
+  db: Party.Storage,
   docName: string,
   update: Uint8Array
 ): Promise<number> /* Returns the clock of the stored update */ {
@@ -378,15 +378,15 @@ async function storeUpdate(
 }
 
 export class YPartyKitStorage {
-  db: PartyKitStorage;
+  db: Party.Storage;
   tr: Promise<unknown>;
-  _transact<T>(f: (arg0: PartyKitStorage) => Promise<T>): Promise<T>;
-  _transact<T>(fn: (arg0: PartyKitStorage) => Promise<T>) {
+  _transact<T>(f: (arg0: Party.Storage) => Promise<T>): Promise<T>;
+  _transact<T>(fn: (arg0: Party.Storage) => Promise<T>) {
     // Implemented in constructor
     throw Error("implement _transact");
     return fn(this.db);
   }
-  constructor(storage: PartyKitStorage) {
+  constructor(storage: Party.Storage) {
     const db = (this.db = storage);
     this.tr = Promise.resolve();
     /**
@@ -401,9 +401,7 @@ export class YPartyKitStorage {
      * @param {function(any):Promise<T>} f A transaction that receives the db object
      * @return {Promise<T>}
      */
-    this._transact = <T>(
-      f: (db: PartyKitStorage) => Promise<T>
-    ): Promise<T> => {
+    this._transact = <T>(f: (db: Party.Storage) => Promise<T>): Promise<T> => {
       const currTr = this.tr;
       this.tr = (async () => {
         await currTr;
