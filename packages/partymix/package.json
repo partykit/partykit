@@ -1,6 +1,6 @@
 {
   "name": "partymix",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "PartyKit + Remix = PartyMix",
   "author": "PartyKit, Inc. <team@partykit.io>",
   "main": "./dist/index.js",
