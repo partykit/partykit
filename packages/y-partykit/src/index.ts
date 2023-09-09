@@ -1,5 +1,3 @@
-// Our dev environment has a problem where yjs doesn't
-// "work", so we use a special build
 import * as Y from "yjs";
 import * as syncProtocol from "y-protocols/sync";
 import * as awarenessProtocol from "y-protocols/awareness";
@@ -7,7 +5,7 @@ import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
 
 import debounce from "lodash.debounce";
-import type { PartyKitRoom, PartyKitConnection } from "partykit/server";
+import type * as Party from "partykit/server";
 import { YPartyKitStorage } from "./storage";
 
 function assert(condition: unknown, message: string): asserts condition {
@@ -37,13 +35,13 @@ function updateHandler(update: Uint8Array, origin: unknown, doc: WSSharedDoc) {
 
 class WSSharedDoc extends Y.Doc {
   name: string;
-  conns: Map<PartyKitConnection, Set<number>>;
+  conns: Map<Party.Connection, Set<number>>;
   awareness: awarenessProtocol.Awareness;
   storage: YPartyKitStorage | undefined;
   persist: boolean;
   gc: boolean;
 
-  constructor(room: PartyKitRoom, options: YPartyKitOptions) {
+  constructor(room: Party.Party, options: YPartyKitOptions) {
     super({ gc: options.gc ?? !options.persist });
     this.gc = options.gc ?? !options.persist;
     this.name = room.id;
@@ -70,7 +68,7 @@ class WSSharedDoc extends Y.Doc {
         updated: Array<number>;
         removed: Array<number>;
       },
-      conn: PartyKitConnection | null // Origin is the connection that made the change
+      conn: Party.Connection | null // Origin is the connection that made the change
     ) => {
       const changedClients = added.concat(updated, removed);
       if (conn !== null) {
@@ -152,7 +150,7 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
  */
 async function getYDoc(
   // docname: string, // the name of the Y.Doc to find or create
-  room: PartyKitRoom,
+  room: Party.Party,
   options: YPartyKitOptions
 ): Promise<WSSharedDoc> {
   let doc = docs.get(room.id);
@@ -175,7 +173,7 @@ async function getYDoc(
     doc.on(
       "update",
       debounce(
-        (update: Uint8Array, origin: PartyKitConnection, doc: WSSharedDoc) => {
+        (update: Uint8Array, origin: Party.Connection, doc: WSSharedDoc) => {
           const dataToSend = {
             room: doc.name,
             data: {},
@@ -240,7 +238,7 @@ function readSyncMessage(
   decoder: decoding.Decoder,
   encoder: encoding.Encoder,
   doc: Y.Doc,
-  transactionOrigin: PartyKitConnection,
+  transactionOrigin: Party.Connection,
   readOnly = false
 ) {
   const messageType = decoding.readVarUint(decoder);
@@ -262,7 +260,7 @@ function readSyncMessage(
 }
 
 function messageListener(
-  conn: PartyKitConnection,
+  conn: Party.Connection,
   doc: WSSharedDoc,
   message: Uint8Array,
   readOnly: boolean
@@ -298,7 +296,7 @@ function messageListener(
   }
 }
 
-function closeConn(doc: WSSharedDoc, conn: PartyKitConnection): void {
+function closeConn(doc: WSSharedDoc, conn: Party.Connection): void {
   if (doc.conns.has(conn)) {
     const controlledIds: Set<number> = doc.conns.get(conn) as Set<number>;
     doc.conns.delete(conn);
@@ -328,7 +326,7 @@ function closeConn(doc: WSSharedDoc, conn: PartyKitConnection): void {
   }
 }
 
-function send(doc: WSSharedDoc, conn: PartyKitConnection, m: Uint8Array) {
+function send(doc: WSSharedDoc, conn: Party.Connection, m: Uint8Array) {
   if (
     conn.readyState !== undefined &&
     conn.readyState !== wsReadyStateConnecting &&
@@ -385,8 +383,8 @@ export type YPartyKitOptions = {
 };
 
 export async function onConnect(
-  conn: PartyKitConnection,
-  room: PartyKitRoom,
+  conn: Party.Connection,
+  room: Party.Party,
   opts: YPartyKitOptions = {}
 ) {
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
