@@ -13,8 +13,9 @@ export default {
     console.log(SOME_GLOBAL);
     // your business logic here
     ws.addEventListener("message", (evt) => {
+      const connections = [...room.getConnections()];
       if (evt.data === "ping") {
-        ws.send(`pong:${room.connections.size}`);
+        ws.send(`pong:${connections.length}`);
       } else if ((evt.data as string).startsWith("latency")) {
         ws.send(evt.data);
       }
@@ -45,10 +46,10 @@ export default {
     console.log(room.env);
 
     console.log(process.env.WHATUP);
-    console.log(room.parties);
-    const res = await room.parties.xyz.get("some-id").fetch();
+    console.log(room.context.parties);
+    const res = await room.context.parties.xyz.get("some-id").fetch();
     console.log("gottt", await res.text());
-    const wssss = room.parties.xyz.get("some-id").connect();
+    const wssss = room.context.parties.xyz.get("some-id").connect();
     wssss.addEventListener("message", (evt) => {
       console.log("got a message from xyz", evt.data);
     });

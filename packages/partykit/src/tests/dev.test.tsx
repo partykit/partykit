@@ -1,5 +1,5 @@
 import { describe, it, expect, afterEach } from "vitest";
-import { render } from "ink-testing-library";
+import { render } from "./ink-testing-library";
 import type { DevProps } from "../dev";
 import { Dev } from "../dev";
 import { fetch } from "undici";
