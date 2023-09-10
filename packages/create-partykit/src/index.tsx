@@ -155,6 +155,35 @@ export async function init(options: {
   }
   const originalCwd = process.cwd();
 
+  let latestPartyKitVersion = "*";
+  let latestPartySocketVersion = "*";
+  if (packageVersion.startsWith("0.0.0-")) {
+    // this means it's a beta, so let's use this version everywhere
+    latestPartyKitVersion = packageVersion;
+    latestPartySocketVersion = packageVersion;
+  } else {
+    try {
+      latestPartyKitVersion = await fetch(
+        `https://registry.npmjs.org/partykit/latest`
+      )
+        .then((res) => res.json())
+        .then((res) => res.version as string);
+
+      latestPartySocketVersion = await fetch(
+        `https://registry.npmjs.org/partysocket/latest`
+      )
+        .then((res) => res.json())
+        .then((res) => res.version as string);
+    } catch (e) {
+      console.error(
+        "Could not fetch latest versions of partykit and partysocket, defaulting to *"
+      );
+      console.debug(e);
+      latestPartyKitVersion = "*";
+      latestPartySocketVersion = "*";
+    }
+  }
+
   const inputPathToProject = await new Promise<string>((resolve, reject) => {
     const randomName =
       options.name ||
@@ -249,10 +278,10 @@ export async function init(options: {
       deploy: "partykit deploy",
     },
     dependencies: {
-      partysocket: "*",
+      partysocket: latestPartySocketVersion,
     },
     devDependencies: {
-      partykit: "*",
+      partykit: latestPartyKitVersion,
       typescript: packageDevDependencies.typescript,
     },
   };
