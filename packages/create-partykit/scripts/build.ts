@@ -6,19 +6,30 @@ process.chdir(`${__dirname}/../`);
 const minify = process.argv.includes("--minify");
 const isProd = process.argv.includes("--production");
 
+const createRequireSnippet = `
+import { createRequire as topLevelCreateRequire } from "node:module";
+import { fileURLToPath as topLevelFileURLToPath, URL as topLevelURL } from "node:url";
+const require = topLevelCreateRequire(import.meta.url);
+const __filename = topLevelFileURLToPath(import.meta.url);
+const __dirname = topLevelFileURLToPath(new topLevelURL(".", import.meta.url));
+`;
+
 esbuild.buildSync({
   entryPoints: ["src/index.tsx"],
   bundle: true,
   platform: "node",
   format: "esm",
-  packages: "external",
+  external: ["react-devtools-core", "yoga-wasm-web"],
   minify,
+  alias: {
+    "react-devtools-core": "create-partykit/rdt-mock.js",
+  },
   sourcemap: true,
   banner: isProd
-    ? { js: "#!/usr/bin/env node" }
-    : { js: "#!/usr/bin/env node --enable-source-maps" },
+    ? { js: "#!/usr/bin/env node" + createRequireSnippet }
+    : { js: "#!/usr/bin/env node --enable-source-maps" + createRequireSnippet },
   define: {
-    "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
+    "process.env.NODE_ENV": `"production"`,
   },
   outfile: "dist/index.mjs",
 });
