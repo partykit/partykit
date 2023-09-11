@@ -121,7 +121,7 @@ program
     render(
       <Dev
         main={scriptPath}
-        port={options.port}
+        port={options.port ? parseInt(options.port) : undefined}
         persist={options.persist}
         config={options.config}
         vars={getArrayKVOption(options.var)}
