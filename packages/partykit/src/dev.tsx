@@ -215,7 +215,7 @@ function useHotkeys(props: {
 
 export type DevProps = {
   main?: string;
-  port?: number | string;
+  port?: number;
   serve?: string;
   config?: string;
   persist?: boolean | string;
@@ -444,12 +444,7 @@ function useDev(options: DevProps): {
   inspectorUrl: string | undefined;
   portForServer: number;
 } {
-  const optionsPort = options.port
-    ? typeof options.port === "number"
-      ? options.port
-      : parseInt(options.port || "1999")
-    : undefined;
-  const portForServer = optionsPort ?? getPortForServer("dev", 1999);
+  const portForServer = options.port ?? getPortForServer("dev", 1999);
   const portForRuntimeInspector = getPortForServer("runtime-inspector");
   // ^ no preferred port for the runtime inspector, in fact it's better if
   // it's a different port every time so that it doesn't clash with multiple devs
