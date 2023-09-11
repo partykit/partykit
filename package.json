@@ -39,5 +39,8 @@
     "tsup": "^7.2.0",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"
-  }
+  },
+  "trustedDependencies": [
+    "sharp"
+  ]
 }
