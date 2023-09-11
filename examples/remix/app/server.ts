@@ -3,13 +3,7 @@ import * as build from "@remix-run/dev/server-build";
 
 // import { createCookie } from "../src/cf";
 
-import type {
-  PartyExecutionContext,
-  PartyFetchLobby,
-  PartyRequest,
-  PartyServer,
-  PartyWorker,
-} from "partykit/server";
+import type * as Party from "partykit/server";
 
 if (process.env.NODE_ENV === "development") {
   logDevReady(build);
@@ -17,14 +11,14 @@ if (process.env.NODE_ENV === "development") {
 
 const handleRequest = createRequestHandler({ build });
 
-export default class MyRemix implements PartyServer {
+export default class MyRemix implements Party.Server {
   static onFetch(
-    request: PartyRequest,
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
+    request: Party.Request,
+    lobby: Party.FetchLobby,
+    ctx: Party.ExecutionContext
   ) {
     return handleRequest(request, lobby, ctx);
   }
 }
 
-MyRemix satisfies PartyWorker;
+MyRemix satisfies Party.Worker;

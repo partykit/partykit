@@ -1,18 +1,9 @@
-import type {
-  Party,
-  PartyConnection,
-  PartyKitServer,
-  PartyRequest,
-  PartyServer,
-  PartyWorker,
-  PartyServerOptions,
-  PartyConnectionContext,
-} from "../src/server";
+import type * as Party from "../src/server";
 
 /**
  * Provides a standard interface to userland server implementations
  */
-export type PartyServerAPI = Required<Omit<PartyServer, "options">> & {
+export type PartyServerAPI = Required<Omit<Party.Server, "options">> & {
   supportsHibernation: boolean;
 };
 
@@ -20,10 +11,13 @@ export type PartyServerAPI = Required<Omit<PartyServer, "options">> & {
  * Module (non-class) server implementation
  */
 export class ModuleWorker implements PartyServerAPI {
-  options: PartyServerOptions = {};
+  options: Party.ServerOptions = {};
   supportsHibernation: boolean;
 
-  constructor(private worker: PartyKitServer, readonly party: Party) {
+  constructor(
+    private worker: Party.PartyKitServer,
+    readonly party: Party.Party
+  ) {
     this.supportsHibernation =
       "onMessage" in worker || !(`onConnect` in worker);
   }
@@ -32,27 +26,27 @@ export class ModuleWorker implements PartyServerAPI {
     // no-op
   }
 
-  onConnect(ws: PartyConnection, ctx: PartyConnectionContext) {
+  onConnect(ws: Party.Connection, ctx: Party.ConnectionContext) {
     if (this.worker.onConnect) {
       return this.worker.onConnect(ws, this.party, ctx);
     }
   }
-  onMessage(message: string | ArrayBuffer, ws: PartyConnection) {
+  onMessage(message: string | ArrayBuffer, ws: Party.Connection) {
     if (this.worker.onMessage) {
       return this.worker.onMessage(message, ws, this.party);
     }
   }
-  onClose(ws: PartyConnection) {
+  onClose(ws: Party.Connection) {
     if (this.worker.onClose) {
       return this.worker.onClose(ws, this.party);
     }
   }
-  onError(ws: PartyConnection, err: Error) {
+  onError(ws: Party.Connection, err: Error) {
     if (this.worker.onError) {
       return this.worker.onError(ws, err, this.party);
     }
   }
-  onRequest(req: PartyRequest) {
+  onRequest(req: Party.Request) {
     if (this.worker.onRequest) {
       return this.worker.onRequest(req, this.party);
     }
@@ -74,11 +68,11 @@ export class ModuleWorker implements PartyServerAPI {
  * Class server implementation
  */
 export class ClassWorker implements PartyServerAPI {
-  private worker: PartyServer;
-  options: PartyServerOptions;
+  private worker: Party.Server;
+  options: Party.ServerOptions;
   supportsHibernation: boolean;
 
-  constructor(private Worker: PartyWorker, readonly party: Party) {
+  constructor(private Worker: Party.Worker, readonly party: Party.Party) {
     this.worker = new Worker(party);
     this.options = this.worker.options ?? {};
     this.supportsHibernation = this.options.hibernate === true;
@@ -88,27 +82,27 @@ export class ClassWorker implements PartyServerAPI {
       return this.worker.onStart();
     }
   }
-  onConnect(ws: PartyConnection, ctx: PartyConnectionContext) {
+  onConnect(ws: Party.Connection, ctx: Party.ConnectionContext) {
     if (this.worker.onConnect) {
       return this.worker.onConnect(ws, ctx);
     }
   }
-  onMessage(message: string | ArrayBuffer, ws: PartyConnection) {
+  onMessage(message: string | ArrayBuffer, ws: Party.Connection) {
     if (this.worker.onMessage) {
       return this.worker.onMessage(message, ws);
     }
   }
-  onClose(ws: PartyConnection) {
+  onClose(ws: Party.Connection) {
     if (this.worker.onClose) {
       return this.worker.onClose(ws);
     }
   }
-  onError(ws: PartyConnection, err: Error) {
+  onError(ws: Party.Connection, err: Error) {
     if (this.worker.onError) {
       return this.worker.onError(ws, err);
     }
   }
-  onRequest(req: PartyRequest) {
+  onRequest(req: Party.Request) {
     if (this.worker.onRequest) {
       return this.worker.onRequest(req);
     }
@@ -122,8 +116,8 @@ export class ClassWorker implements PartyServerAPI {
     }
   }
   getConnectionTags(
-    connection: PartyConnection,
-    context: PartyConnectionContext
+    connection: Party.Connection,
+    context: Party.ConnectionContext
   ) {
     if (this.worker.getConnectionTags) {
       return this.worker.getConnectionTags(connection, context);

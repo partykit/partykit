@@ -339,7 +339,7 @@ export type PartyStorage = Storage;
 export type PartyKitStorage = Storage;
 
 /** @deprecated use Party.ConnectionContext instead */
-export type PartyConnectionContext = { request: CFRequest };
+export type PartyConnectionContext = ConnectionContext;
 
 /** @deprecated use Party.ConnectionContext instead */
 export type PartyKitContext = ConnectionContext;
@@ -358,7 +358,7 @@ export type PartyFetchLobby = FetchLobby;
 export type PartyLobby = Lobby;
 
 /** @deprecated use Party.ExecutionContext instead */
-export type PartyExecutionContext = CFExecutionContext;
+export type PartyExecutionContext = ExecutionContext;
 
 /** @deprecated use Party.Connection instead */
 export type PartyConnection = Connection;

@@ -1,4 +1,4 @@
-import type { PartyConnection } from "../src/server";
+import type * as Party from "../src/server";
 
 /** Fields that are stored and rehydrates when a durable object hibernates */
 type ConnectionFields = {
@@ -26,7 +26,7 @@ function deserializeAttachment(ws: WebSocket): ConnectionFields {
  * Wraps a WebSocket with PartyConnection fields that rehydrate the
  * socket attachment lazily only when requested.
  */
-export const createLazyConnection = (ws: WebSocket): PartyConnection => {
+export const createLazyConnection = (ws: WebSocket): Party.Connection => {
   return Object.assign(ws, {
     get id() {
       return deserializeAttachment(ws).id;
@@ -41,17 +41,17 @@ export const createLazyConnection = (ws: WebSocket): PartyConnection => {
 };
 
 class HibernatingConnectionIterator
-  implements IterableIterator<PartyConnection>
+  implements IterableIterator<Party.Connection>
 {
   private index: number = 0;
   private sockets: WebSocket[] | undefined;
   constructor(private state: DurableObjectState, private tag?: string) {}
 
-  [Symbol.iterator](): IterableIterator<PartyConnection> {
+  [Symbol.iterator](): IterableIterator<Party.Connection> {
     return this;
   }
 
-  next(): IteratorResult<PartyConnection, number | undefined> {
+  next(): IteratorResult<Party.Connection, number | undefined> {
     const sockets =
       this.sockets ?? (this.sockets = this.state.getWebSockets(this.tag));
 
@@ -67,20 +67,20 @@ class HibernatingConnectionIterator
 
 export interface ConnectionManager {
   getCount(): number;
-  getConnection(id: string): PartyConnection | undefined;
-  getConnections(tag?: string): IterableIterator<PartyConnection>;
-  accept(connection: PartyConnection, tags: string[]): void;
+  getConnection(id: string): Party.Connection | undefined;
+  getConnections(tag?: string): IterableIterator<Party.Connection>;
+  accept(connection: Party.Connection, tags: string[]): void;
 
   // This can be removed when Party.connections is removed
-  legacy_getConnectionMap(): Map<string, PartyConnection>;
+  legacy_getConnectionMap(): Map<string, Party.Connection>;
 }
 
 /**
  * When not using hibernation, we track active connections manually.
  */
 export class InMemoryConnectionManager implements ConnectionManager {
-  connections: Map<string, PartyConnection> = new Map();
-  tags: WeakMap<PartyConnection, string[]> = new WeakMap();
+  connections: Map<string, Party.Connection> = new Map();
+  tags: WeakMap<Party.Connection, string[]> = new WeakMap();
 
   getCount() {
     return this.connections.size;
@@ -90,7 +90,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
     return this.connections.get(id);
   }
 
-  *getConnections(tag?: string): IterableIterator<PartyConnection> {
+  *getConnections(tag?: string): IterableIterator<Party.Connection> {
     if (!tag) {
       yield* this.connections.values();
       return;
@@ -109,7 +109,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
     return this.connections;
   }
 
-  accept(connection: PartyConnection, tags: string[]): void {
+  accept(connection: Party.Connection, tags: string[]): void {
     connection.accept();
 
     this.connections.set(connection.id, connection);
@@ -162,7 +162,7 @@ export class HibernatingConnectionManager implements ConnectionManager {
     return connections;
   }
 
-  accept(connection: PartyConnection, userTags: string[]) {
+  accept(connection: Party.Connection, userTags: string[]) {
     // dedupe tags in case user already provided id tag
     const tags = [
       connection.id,
