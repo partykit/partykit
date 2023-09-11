@@ -49,7 +49,7 @@ esbuild.buildSync({
     ? { js: "#!/usr/bin/env node" + createRequireSnippet }
     : { js: "#!/usr/bin/env node --enable-source-maps" + createRequireSnippet },
   alias: {
-    "react-devtools-core": "create-partykit/rdt-mock.js",
+    "react-devtools-core": "partykit/rdt-mock.js",
   },
   sourcemap: true,
   minify,
