@@ -29,7 +29,7 @@ esbuild.buildSync({
     ? { js: "#!/usr/bin/env node" + createRequireSnippet }
     : { js: "#!/usr/bin/env node --enable-source-maps" + createRequireSnippet },
   define: {
-    "process.env.NODE_ENV": `"production"`,
+    "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
   },
   outfile: "dist/index.mjs",
 });
