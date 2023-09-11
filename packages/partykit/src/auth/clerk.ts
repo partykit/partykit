@@ -1,5 +1,5 @@
 import type Clerk from "@clerk/clerk-js";
-import clerk from "@clerk/clerk-js/headless/index.js";
+import ClerkImplementation from "@clerk/clerk-js/headless";
 
 declare const CLERK_PUBLISHABLE_KEY: string | undefined;
 const PUBLISHABLE_KEY =
@@ -8,8 +8,6 @@ const PUBLISHABLE_KEY =
 if (!PUBLISHABLE_KEY) {
   throw new Error("CLERK_PUBLISHABLE_KEY not defined");
 }
-
-const ClerkConstructor = clerk.default;
 
 global.window = global.window || {};
 
@@ -29,7 +27,7 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
     tokenStore: TokenStore;
     headers?: Record<string, string>;
   }): Promise<Clerk> => {
-    const clerk: Clerk = new ClerkConstructor(publishableKey);
+    const clerk: Clerk = new ClerkImplementation(publishableKey);
     // pass captured or provided token in subsequent requests
     clerk.__unstable__onBeforeRequest(async (requestInit) => {
       requestInit.credentials = "omit";
