@@ -444,11 +444,6 @@ function useDev(options: DevProps): {
   inspectorUrl: string | undefined;
   portForServer: number;
 } {
-  const portForServer = options.port ?? getPortForServer("dev", 1999);
-  const portForRuntimeInspector = getPortForServer("runtime-inspector");
-  // ^ no preferred port for the runtime inspector, in fact it's better if
-  // it's a different port every time so that it doesn't clash with multiple devs
-
   const [config] = useState<Config>(() =>
     getConfig(
       options.config,
@@ -465,6 +460,13 @@ function useDev(options: DevProps): {
       { readEnvLocal: true }
     )
   );
+
+  const portForServer = config.port ?? getPortForServer("dev", 1999);
+
+  const portForRuntimeInspector = getPortForServer("runtime-inspector");
+  // ^ no preferred port for the runtime inspector, in fact it's better if
+  // it's a different port every time so that it doesn't clash with multiple devs
+
   const [server] = useState(() => new MiniflareServer());
 
   const [inspectorUrl, setInspectorUrl] = useState<string | undefined>(
@@ -530,7 +532,7 @@ Workers["${name}"] = ${name};
           // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
         },
         ...esbuildOptions,
-        minify: options.minify,
+        minify: config.minify,
         format: "esm",
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
@@ -750,13 +752,11 @@ Workers["${name}"] = ${name};
   }, [
     config,
     server,
-    options.config,
-    options.persist,
-    options.minify,
-    options.verbose,
     assetsMap,
     portForServer,
     portForRuntimeInspector,
+    options.config,
+    options.verbose,
   ]);
 
   const { onReady } = options;
