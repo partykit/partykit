@@ -9,6 +9,7 @@
       "module": "./dist/server.js",
       "import": "./dist/server.js"
     },
+    "./rdt-mock.js": "./rdt-mock.js",
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
