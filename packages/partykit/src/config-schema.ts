@@ -28,7 +28,7 @@ export const schema = z
     account: z.string().optional(),
     name: z.string().optional(),
     main: z.string().optional(),
-    port: z.number().optional(),
+    port: z.union([z.number(), z.string()]).optional(),
     serve: z
       .union([
         z.string(),

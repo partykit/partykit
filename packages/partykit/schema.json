@@ -14,7 +14,10 @@
       "type": "string"
     },
     "port": {
-      "type": "number"
+      "type": [
+        "number",
+        "string"
+      ]
     },
     "serve": {
       "anyOf": [
