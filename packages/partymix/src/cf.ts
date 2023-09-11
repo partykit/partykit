@@ -36,6 +36,7 @@ export type {
   CookieSignatureOptions,
   DataFunctionArgs,
   EntryContext,
+  // eslint-disable-next-line deprecation/deprecation
   ErrorBoundaryComponent,
   HandleDataRequestFunction,
   HandleDocumentRequestFunction,
@@ -55,6 +56,7 @@ export type {
   HandleErrorFunction,
   PageLinkDescriptor,
   RequestHandler,
+  // eslint-disable-next-line deprecation/deprecation
   RouteComponent,
   RouteHandle,
   SerializeFrom,

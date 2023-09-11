@@ -12,6 +12,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react-hooks/recommended",
+    "plugin:deprecation/recommended",
   ],
   ignorePatterns: [
     "node_modules",
@@ -21,6 +22,7 @@ module.exports = {
     ".eslintrc.js",
     "*.d.ts",
     "packages/partykit/init/index.js",
+    "packages/partykit/facade/generated.js",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
