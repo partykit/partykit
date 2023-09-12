@@ -249,15 +249,11 @@ export async function init(options: {
   if (!options.dryRun) {
     fs.mkdirSync(pathToProject, { recursive: true });
     process.chdir(pathToProject);
-    console.log(
-      `‣ Creating project at ${chalk.bold(
-        path.relative(originalCwd, pathToProject)
-      )}`
-    );
+    console.log(`‣ Creating project at ${chalk.bold(pathToProject)}`);
   } else {
     console.log(
       `⤬ Dry run: skipping creating project directory at ${chalk.bold(
-        path.relative(originalCwd, pathToProject)
+        pathToProject
       )}`
     );
   }
