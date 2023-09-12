@@ -281,7 +281,7 @@ You can set additional metadata on connections by returning them from a `getConn
 You can then filter connections by tag, removing the need to wake up hibernated sockets unnecessarily:
 
 ```ts
-for (const italians of this.party.getConnections("US")) {
+for (const italians of this.party.getConnections("IT")) {
   italians.send(`Buongiorno!`);
 }
 ```
@@ -307,6 +307,10 @@ The old names are deprecated, but will continue to work. The deprecated names ar
 You can see a full `Party.Server` example implementation in the [partykit GitHub repository](https://github.com/partykit/partykit/blob/main/examples/class/src/server.ts).
 
 We also have a [Next.js template](https://github.com/partykit/partykit-nextjs-chat-template) that demonstrates how to build a fully featured chatroom (with an AI participant!).
+
+## Documentation
+
+The `Party.Server` API is documented in detail in the [PartyKit API Reference](https://docs.partykit.io/reference/partyserver-api/).
 
 ## Feedback welcome!
 
