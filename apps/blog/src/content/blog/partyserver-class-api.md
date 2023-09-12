@@ -3,8 +3,6 @@ author: Jani Eväkallio
 pubDatetime: 2023-08-25T11:00:00Z
 title: Party.Server — New API for a programmable primitive
 postSlug: partyserver-api
-featured: true
-draft: true
 tags:
   - partykit
   - engineering
