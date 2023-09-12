@@ -23,7 +23,7 @@ import type * as Party from 'partykit/server';
 export default class Chat implements Party.Server {
   // each server instance is stateful, so we can keep data in memory
   messages: string[];
-  constructor(public party: Party) {}
+  constructor(public party: Party.Party) {}
   onConnect(conn: Party.Connection) {
     // when a client connects via WebSocket, send them the full message history
     conn.send(this.messages);
