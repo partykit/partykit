@@ -1,5 +1,20 @@
 import type * as Party from "../src/server";
 
+// Polyfill WebSocket status code constants for environments that don't have them
+// in order to support libraries that expect standards-compatible WebSocket
+// implementations (e.g. PartySocket)
+if ("OPEN" in WebSocket) {
+  const WebSocketStatus = {
+    CONNECTING: WebSocket.READY_STATE_CONNECTING,
+    OPEN: WebSocket.READY_STATE_OPEN,
+    CLOSING: WebSocket.READY_STATE_CLOSING,
+    CLOSED: WebSocket.READY_STATE_CLOSED,
+  };
+
+  Object.assign(WebSocket, WebSocketStatus);
+  Object.assign(WebSocket.prototype, WebSocketStatus);
+}
+
 /** Fields that are stored and rehydrates when a durable object hibernates */
 type ConnectionFields = {
   id: string;
@@ -55,13 +70,17 @@ class HibernatingConnectionIterator
     const sockets =
       this.sockets ?? (this.sockets = this.state.getWebSockets(this.tag));
 
-    if (this.index >= sockets.length) {
-      // reached the end of the iteratee
-      return { done: true, value: undefined };
+    let socket: WebSocket;
+    while ((socket = sockets[this.index++])) {
+      // only yield open sockets to match non-hibernating behaviour
+      if (socket.readyState === WebSocket.READY_STATE_OPEN) {
+        const value = createLazyConnection(socket);
+        return { done: false, value };
+      }
     }
 
-    const value = createLazyConnection(this.sockets[this.index++]);
-    return { done: false, value };
+    // reached the end of the iteratee
+    return { done: true, value: undefined };
   }
 }
 
