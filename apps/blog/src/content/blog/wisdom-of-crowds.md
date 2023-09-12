@@ -9,7 +9,7 @@ tags:
   - sketchbook
   - residency
   - demos
-ogImage: "/src/assets/blog/wisdom-of-crowds/tree.png"
+ogImage: "../src/assets/blog/wisdom-of-crowds/tree.png"
 description: Building a simple multiplayer drawing challenge, and what I learnt.
 ---
 
@@ -23,7 +23,7 @@ Well, does it work? I couldn’t find the original experiment. (If this rings a 
 
 So I tested it.
 
-![14 people drawing a tree](/src/assets/blog/wisdom-of-crowds/tree.png)
+![14 people drawing a tree](../src/assets/blog/wisdom-of-crowds/tree.png)
 
 Here’s **Mosaic Challenge.** It’s real-time and multiplayer. There’s a single challenge, and you just get asked to choose whether a tile is black or not.
 
@@ -43,7 +43,7 @@ Lesson: with collective intelligence, you need to know when to stop. I wonder if
 
 Also, I suspect that there’s usually a single person (maybe two) driving most of the decision-making, simply by flipping tiles faster than anyone else. I should check that.
 
-![Drawing the number 3](/src/assets/blog/wisdom-of-crowds/three-small.gif)
+![Drawing the number 3](../src/assets/blog/wisdom-of-crowds/three-small.gif)
 
 ## Let’s look at the code
 
