@@ -206,7 +206,7 @@ export async function init(options: {
             `Absolute paths not supported. Please use a relative path like "randomName", "./randomName", or just "." to use the current directory. You entered "${text}"`
           )
         );
-        reject(new Error("Invalid path"));
+        reject(new Error("Absolute paths not supported"));
       }
 
       const parsed = path.parse(text);
