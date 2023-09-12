@@ -1,5 +1,11 @@
 # partymix
 
+## 0.0.3
+
+### Patch Changes
+
+- [#345](https://github.com/partykit/partykit/pull/345) [`9990c2c`](https://github.com/partykit/partykit/commit/9990c2cbe872c61e2949f4cf091e16cdd8f5aff3) Thanks [@threepointone](https://github.com/threepointone)! - add a lint rule for not using deprecated APIs
+
 ## 0.0.2
 
 ### Patch Changes

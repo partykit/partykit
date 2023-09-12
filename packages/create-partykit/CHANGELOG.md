@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.6
+
+### Patch Changes
+
+- [#342](https://github.com/partykit/partykit/pull/342) [`03b782e`](https://github.com/partykit/partykit/commit/03b782e037ad35fa76af686f2c6b4dee73ae98cd) Thanks [@threepointone](https://github.com/threepointone)! - create-partykit: use latest version of partykit/partysocket
+
 ## 0.0.5
 
 ### Patch Changes

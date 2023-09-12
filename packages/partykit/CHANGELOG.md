@@ -1,5 +1,19 @@
 # partykit
 
+## 0.0.11
+
+### Patch Changes
+
+- [#346](https://github.com/partykit/partykit/pull/346) [`58fe7e2`](https://github.com/partykit/partykit/commit/58fe7e2eaa9d905af4d4b6e0843ae7eed9ccd044) Thanks [@mellson](https://github.com/mellson)! - pass custom port to dev from CLI correctly
+
+- [#345](https://github.com/partykit/partykit/pull/345) [`9990c2c`](https://github.com/partykit/partykit/commit/9990c2cbe872c61e2949f4cf091e16cdd8f5aff3) Thanks [@threepointone](https://github.com/threepointone)! - add a lint rule for not using deprecated APIs
+
+- [#347](https://github.com/partykit/partykit/pull/347) [`3d05975`](https://github.com/partykit/partykit/commit/3d059753a7cb4b85e34fe7060a598c21fc65a771) Thanks [@threepointone](https://github.com/threepointone)! - use the right config/options in dev
+
+  We weren't reading config correctly in dev, this fixes it
+
+- [#348](https://github.com/partykit/partykit/pull/348) [`08a1caa`](https://github.com/partykit/partykit/commit/08a1caad40c0a39e663fec7853d252a060b84e11) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix `partykit login` with new bundled imports
+
 ## 0.0.10
 
 ### Patch Changes
