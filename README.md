@@ -30,7 +30,7 @@ Alternatively, you can add PartyKit to your existing project using the following
 npx partykit@latest init
 ```
 
-From inside the directory, you can then run `npm run dev` to start the development server. When you'reready, you can deploy your application on to the PartyKit cloud with `npm run deploy`.
+From inside the directory, you can then run `npm run dev` to start the development server. When you're ready, you can deploy your application on to the PartyKit cloud with `npm run deploy`.
 
 ## Developers
 
