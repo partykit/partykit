@@ -1,47 +1,71 @@
 ---
 title: Persisting state into storage
-description: ...
-sidebar:
-    hidden: true
+description: Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance.
 ---
 
-Each PartyKit room comes with a transactional key-value storage API, that allows you to persist data alongside your party instance.
+Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance. This page provides an overview on what Storage API is, its data format, and programming.
 
-Because PartyKit servers also allow you to keep in-memory state (link example), persisting data to disk is optional, but necessary when you want the stored data to survive server restarts.
+## Keeping data between server restarts
+
+Persisting data to disk is optional as PartyKit servers also allow you to keep in-memory state. It is, however, necessary, when you want the stored data to persist between server restarts.
 
 Server restarts happen when:
 
-- The server lifetime reaches the maximum 30 CPU-seconds (better phrasing here) -- source: https://developers.cloudflare.com/durable-objects/platform/limits/#limits
-- When you re-deploy the party using `partykit deploy`
-- When opting into hibernation (link to guide), when the server is currently not processing messages
-- Unexpected error in the PartyKit runtime (e.g. hardware fault)
+- You re-deploy the party using `partykit deploy`.
+- Having opted into [Hibernation](/guides/scaling-partykit-servers-with-hibernation/), the server is currently not processing messages.
+- There's an unexpected error in the PartyKit runtime (for example, a hardware fault).
+- The server reaches its maximum lifetime.
 
-Essentially, if you want to guarantee that your party state is not lost at any of these events, you'll need to save the state somewhere and reload it when your party starts up again.
+If you want to guarantee that your party state is not lost between server restarts, you'll need to save the state somewhere and reload it when your party starts up again.
 
-You can store your state in a third-party database such as PlanetScale, or send it to an arbitrary API endpoint that you choose, but the most convenient storage options is to use `Party.storage` (reference link).
+You can store your state in a third-party edge-compatible database such as PlanetScale or Supabase, or send it to an arbitrary API endpoint of your choice. The most convenient storage option is to use []`Party.storage`](/reference/partyserver-api/#partystorage/).
 
 ## Data format
 
-You can store most types of data without having to serialize them to JSON. 
-- The key must be a string with a max size of 2,048 bytes.
-- The value can be any type supported by the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), limited to 128 KiB (131,072 bytes) per value
-^ from partyserver-api 
+You can store most types of data without having to serialize them to JSON.
 
+Please note that:
 
+- The key must be a string with a maximum size of 2,048 bytes.
+- The value can be any type supported by the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), limited to 128 KiB (131,072 bytes) per value.
 
 ### Storing large amounts of data
 
-There is no practical limit to how many keys each party can store, so with thoughful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
+There is no practical limit to how many keys each Party can store, so with thoughful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
 
-Sylwia: Repurpose code example from Hibernation doc.
+```ts
+type AllItems = Record<string, any>;
 
-Keep in mind that each Party only has 128MB of memory, so you'll need to also be thoughtful about read-patterns of the data, and not read vast amounts of data to memory when loading from storage.
+export default class Server implements Party.Server {
+  options: Party.ServerOptions = { hibernate: true };
+  constructor(readonly party: Party.Party) {}
+
+  async onMessage(websocketMessage: string) {
+    const event = JSON.parse(websocketMessage);
+    if (event.type === "create") {
+      this.party.broadcast(event.data);
+      // store each item under a separate key
+      this.party.storage.put(`item:${event.id}`, event.data);
+    };
+
+    if (event.type === "update") {
+      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
+      const updatedItem = {
+        ...item,
+        ...event.data,
+      };
+
+      this.party.storage.put(`item:${event.id}`, updatedItem);
+    };
+  };
+};
+```
+
+:::caution[Thoughtful read-patterns]
+Keep in mind that each Party has a total of 128MiB RAM. We recommend thoughtful data read-patterns, which includes not reading vast amounts of data to memory when loading from `storage`.
+:::
 
 ## API
-
-get, put, list, delete
-
-https://developers.cloudflare.com/durable-objects/api/transactional-storage-api/
 
 ### Reading data
 
@@ -63,7 +87,7 @@ await this.party.storage.delete("key")
 
 ### Listing items
 
-Returns a map of all items in storage.
+`list()` returns a map of all items in storage.
 
 ```ts
 const items = await this.party.storage.list();
@@ -72,24 +96,24 @@ for (const [key, value] of items) {
 }
 ```
 
-You should only use this operation when you need to iterate through all of the items in storage. Otherwise, use `get` instead.
-
-Sylwia: https://developers.cloudflare.com/durable-objects/api/transactional-storage-api/
-> Be aware of how much data may be stored in your Durable Object before calling this version of list without options because all the data will be loaded into the Durable Object’s memory, potentially hitting its limit. If that is a concern, pass options to list as documented below.
+:::caution[Can you use get() instead?]
+You should only use this operation when you **need to iterate through all of the items in storage**. It may be a memory-heavy activity. If you don't need to access all the items, use [`get`](#reading-data).
+:::
 
 If you only need access to the keys, you can do this:
 ```ts
 const keys = [...(await this.party.storage.list()).keys()];
 ```
 
-
 ## Data access patterns
+
+Storage API will work better with certain programming patterns.
 
 ### Read data up front in `onStart`
 
 A common pattern is to read the data from storage into memory when the server starts. This way, the data is accessible in a convenient format.
 
-This pattern makes sense when you have frequent reads and infrequent writes, or when you need to join multiple data sets to create derived data (e.g. load data from a third-party API or database in addition to the party storage).
+This pattern is especially helpful when your app features **frequent reads and infrequent writes** or when you need to **join multiple data sets to create derived data** (for example, load data from a third-party API or database in addition to the party `storage`).
 
 You'll also need to keep in mind that for large data sets, you may reach either the 128KB per key storage limit, or the 128MB total RAM limit of the Party. For simplicity, below examples assume all your "messages" data fits in a single 128KB value.
 
@@ -105,40 +129,43 @@ export default class Main implements Party.Server {
   // processing any connections or requests.
   async onStart() {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
-  }
+  };
   
   async onConnect(connection: Party.Connection) {
     connection.send(JSON.stringify(this.messages));
-  }
+  };
 
   async onMessage(message: string) {
     this.messages.push(message);
     this.party.storage.put("messages", message);
     connection.send(message);
-  }
+  };
 ```
 
-Warning: When using Hibernation (link), be careful about loading data on server start.
+:::danger[Loading data with Hibernation]
+When using the [Hibernation API](/guides/scaling-partykit-servers-with-hibernation/), be careful about loading data on server start.
+:::
 
-### Read data as it's needed
+### Read data when needed
 
-Alternatively, you can read data from storage as and when you need it. The storage API implements its own in-memory cache, so frequent reads to the same key are likely going to be fast.
+Alternatively, you can read data from `storage` as you need it. The Storage API implements its own in-memory cache, so frequent reads to the same key are likely going to be fast.
 
-The tradeoff is that the programming model is less ergonomic, because you need to perform an asynchronous read from storage every time you need access to your state.
+This pattern is especially helpful when your app features **frequent writes and less frequent reads**, or when your **read-write ratio is balanced**.
 
-This pattern works well when you have frequent writes, and less frequent reads, or when your read-write ratio is approximately 1:1.
+The tradeoff is that the programming model is less ergonomic, because you need to perform an asynchronous read from storage every time you access your state.
 
 ```ts
 export default class Main implements Party.Server {
 
-  constructor(public party: Party.Party) {}
+  constructor(public party: Party.Party) {};
 
   async readMessages() {
     return this.party.storage.get<string[]>("messages")) ?? [];
-  }
+  };
+
   async onConnect(connection: Party.Connection) {
     connection.send(JSON.stringify(await this.readMessages()));
-  }
+  };
 
   async onMessage(message: string) {
     connection.send(message);
@@ -146,13 +173,5 @@ export default class Main implements Party.Server {
     const messages = await this.readMessages();
     messages.push(message);
     this.party.storage.put("messages", message);
-  }
+  };
 ```
-
-
-
-
-
-
-
-
