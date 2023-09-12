@@ -1,13 +1,16 @@
 ---
 title: Scaling PartyKit servers with Hibernation
-description: ...
+description: Hibernation API enables your app to scale to tens of thousands of connections.
 sidebar:
     hidden: true
 ---
 
-## Code
+Hibernation API enables your app to scale to tens of thousands of connections. This page provides an overview of the Hibernation API - what it is, how it works, when it’s useful, and how to implement it.
 
-How to opt-into hibenation
+## Opting into Hibernation
+
+Opting into Hibernation is done with the following code:
+
 ```ts
 export default class Server implements Party.Server {
   options: Party.ServerOptions = {
@@ -17,6 +20,8 @@ export default class Server implements Party.Server {
 ```
 
 ## Background
+
+PartyKit enables your app to scale up to tens of thousands of connections. This is achieved thanks to the Hibernation API, which allows offloading the memory burden to the PartyKit platform instead of managing them inside the Party instance process.
 
 - PartyKit can scale up to tens of thousands of connections, thanks to Hibernation
 - The limit to scale per party instance is typically the 128MB memory
