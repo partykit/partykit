@@ -18,7 +18,7 @@ PartyKit makes developing real-time, collaborative, multiplayer applications sim
 First, let's look at an example of a little chat room:
 
 ```ts
-import type * as { Party } from 'partykit/server';
+import type * as Party from 'partykit/server';
 // PartyKit creates an instance Party.Server for each chatroom id
 export default class Chat implements Party.Server {
   // each server instance is stateful, so we can keep data in memory
