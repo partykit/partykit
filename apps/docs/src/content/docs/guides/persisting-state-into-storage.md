@@ -18,7 +18,7 @@ Server restarts happen when:
 
 If you want to guarantee that your party state is not lost between server restarts, you'll need to save the state somewhere and reload it when your party starts up again.
 
-You can store your state in a third-party edge-compatible database such as PlanetScale or Supabase, or send it to an arbitrary API endpoint of your choice. The most convenient storage option is to use []`Party.storage`](/reference/partyserver-api/#partystorage/).
+You can store your state in a third-party edge-compatible database such as PlanetScale or Supabase, or send it to an arbitrary API endpoint of your choice. The most convenient storage option is to use [`Party.storage`](/reference/partyserver-api/#partystorage/).
 
 ## Data format
 
@@ -29,43 +29,7 @@ Please note that:
 - The key must be a string with a maximum size of 2,048 bytes.
 - The value can be any type supported by the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), limited to 128 KiB (131,072 bytes) per value.
 
-### Storing large amounts of data
-
-There is no practical limit to how many keys each Party can store, so with thoughful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
-
-```ts
-type AllItems = Record<string, any>;
-
-export default class Server implements Party.Server {
-  options: Party.ServerOptions = { hibernate: true };
-  constructor(readonly party: Party.Party) {}
-
-  async onMessage(websocketMessage: string) {
-    const event = JSON.parse(websocketMessage);
-    if (event.type === "create") {
-      this.party.broadcast(event.data);
-      // store each item under a separate key
-      this.party.storage.put(`item:${event.id}`, event.data);
-    };
-
-    if (event.type === "update") {
-      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
-      const updatedItem = {
-        ...item,
-        ...event.data,
-      };
-
-      this.party.storage.put(`item:${event.id}`, updatedItem);
-    };
-  };
-};
-```
-
-:::caution[Thoughtful read-patterns]
-Keep in mind that each Party has a total of 128MiB RAM. We recommend thoughtful data read-patterns, which includes not reading vast amounts of data to memory when loading from `storage`.
-:::
-
-## API
+## Usage
 
 ### Reading data
 
@@ -101,9 +65,48 @@ You should only use this operation when you **need to iterate through all of the
 :::
 
 If you only need access to the keys, you can do this:
+
 ```ts
 const keys = [...(await this.party.storage.list()).keys()];
 ```
+
+## Storing large amounts of data
+
+There is no practical limit to how many keys each Party can store, so with thoughful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
+
+```ts
+type AllItems = Record<string, any>;
+
+export default class Server implements Party.Server {
+  options: Party.ServerOptions = { hibernate: true };
+  constructor(readonly party: Party.Party) {}
+
+  async onMessage(websocketMessage: string) {
+    const event = JSON.parse(websocketMessage);
+    if (event.type === "create") {
+      this.party.broadcast(event.data);
+      // store each item under a separate key
+      this.party.storage.put(`item:${event.id}`, event.data);
+    };
+
+    if (event.type === "update") {
+      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
+      const updatedItem = {
+        ...item,
+        ...event.data,
+      };
+
+      this.party.storage.put(`item:${event.id}`, updatedItem);
+    };
+  };
+};
+```
+
+In the above example we were able to shard the data across multiple keys. However, if an individual value were to exceed 128KiB limit, you would need to implement an additional sharding strategy to split the value across multiple keys -- see [an example in the `y-partykit` storage adapter](https://github.com/partykit/partykit/blob/7f307216f33dbef8fb61963cac7ce88ce8e8f769/packages/y-partykit/src/storage.ts#L79C1-L97C2).
+
+:::caution[Thoughtful read-patterns]
+Given that each Party has a total of 128MiB RAM, we recommend thoughtful data read-patterns, which includes not reading vast amounts of data to memory when loading from `storage`.
+:::
 
 ## Data access patterns
 
@@ -120,8 +123,7 @@ You'll also need to keep in mind that for large data sets, you may reach either 
 ```ts
 export default class Main implements Party.Server {
 
-  constructor(public party: Party.Party) {}
-
+  constructor(public party: Party.Party) {};
   messages: string[] = [];
 
   // You can use this to load data from storage and perform other
@@ -140,6 +142,7 @@ export default class Main implements Party.Server {
     this.party.storage.put("messages", message);
     connection.send(message);
   };
+};
 ```
 
 :::danger[Loading data with Hibernation]
@@ -174,4 +177,5 @@ export default class Main implements Party.Server {
     messages.push(message);
     this.party.storage.put("messages", message);
   };
+};
 ```
