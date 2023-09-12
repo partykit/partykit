@@ -13,7 +13,13 @@ export default function Login({ method }: { method?: LoginMethod }) {
 
   return (
     <Text>
-      Logged in as <Text bold>{userConfig.login}</Text>
+      Logged in as{" "}
+      <Text bold>
+        {
+          // eslint-disable-next-line deprecation/deprecation
+          userConfig.login
+        }
+      </Text>
     </Text>
   );
 }

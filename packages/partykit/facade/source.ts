@@ -1,13 +1,7 @@
 // This is the facade for the worker that will be used in partykit.
 // It will be compiled and imported by the CLI.
 
-import type {
-  Party,
-  PartyKitServer,
-  PartyConnection,
-  PartyWorker,
-  PartyRequest,
-} from "../src/server";
+import type * as Party from "../src/server";
 import type {
   DurableObjectNamespace,
   DurableObjectState,
@@ -26,7 +20,7 @@ import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
 // with the path to the input worker
 import Worker from "__WORKER__";
 
-declare const Worker: PartyKitServer;
+declare const Worker: Party.PartyKitServer;
 
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
@@ -60,7 +54,7 @@ function getRoomAndPartyFromPathname(pathname: string): {
 let didWarnAboutMissingConnectionId = false;
 
 // The worker script can either be an object with handlers, or a class with same handlers
-function isClassWorker(worker: unknown): worker is PartyWorker {
+function isClassWorker(worker: unknown): worker is Party.Worker {
   return (
     typeof worker === "function" &&
     "prototype" in worker &&
@@ -79,7 +73,7 @@ type Env = DurableObjectNamespaceEnv & {
   PARTYKIT_DURABLE: DurableObjectNamespace;
 };
 
-let parties: Party["context"]["parties"];
+let parties: Party.Party["context"]["parties"];
 
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
@@ -124,11 +118,11 @@ function createMultiParties(
   return parties;
 }
 
-function createDurable(Worker: PartyKitServer) {
+function createDurable(Worker: Party.PartyKitServer) {
   const isClassAPI = isClassWorker(Worker);
 
   // When the worker is a class, to validate worker shape we'll look onto the worker prototype
-  const WorkerInstanceMethods: PartyKitServer = isClassWorker(Worker)
+  const WorkerInstanceMethods: Party.PartyKitServer = isClassWorker(Worker)
     ? Worker.prototype
     : Worker;
 
@@ -139,7 +133,7 @@ function createDurable(Worker: PartyKitServer) {
     "onClose",
     "onError",
     "onAlarm",
-  ] satisfies (keyof PartyKitServer)[]) {
+  ] satisfies (keyof Party.PartyKitServer)[]) {
     if (handler in Worker && typeof Worker[handler] !== "function") {
       throw new Error(`.${handler} should be a function`);
     }
@@ -150,7 +144,7 @@ function createDurable(Worker: PartyKitServer) {
     "onFetch",
     "onBeforeConnect",
     "onBeforeRequest",
-  ] satisfies (keyof PartyKitServer)[]) {
+  ] satisfies (keyof Party.PartyKitServer)[]) {
     if (handler in WorkerInstanceMethods) {
       if (isClassAPI) {
         console.warn(
@@ -166,14 +160,14 @@ function createDurable(Worker: PartyKitServer) {
 
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
-    room: Party;
+    room: Party.Party;
     namespaces: Record<string, DurableObjectNamespace>;
     inAlarm = false; // used to prevent access to certain properties in onAlarm
 
     // assigned when first connection is received
     id?: string;
     worker?: PartyServerAPI;
-    parties?: Party["context"]["parties"];
+    parties?: Party.Party["context"]["parties"];
     connectionManager?: ConnectionManager;
 
     constructor(controller: DurableObjectState, env: Env) {
@@ -290,7 +284,7 @@ function createDurable(Worker: PartyKitServer) {
     async fetch(req: Request) {
       // Coerce the request type to our extended request type.
       // We do this to make typing in userland simpler
-      const request = req as unknown as PartyRequest;
+      const request = req as unknown as Party.Request;
       const url = new URL(request.url);
 
       try {
@@ -346,7 +340,7 @@ function createDurable(Worker: PartyKitServer) {
         }
 
         // TODO: Object.freeze / mark as readonly!
-        const connection: PartyConnection = Object.assign(serverWebSocket, {
+        const connection: Party.Connection = Object.assign(serverWebSocket, {
           id: connectionId,
           socket: serverWebSocket,
           uri: request.url,
@@ -417,7 +411,7 @@ function createDurable(Worker: PartyKitServer) {
       return this.worker.onStart();
     }
 
-    async attachSocketEventHandlers(connection: PartyConnection) {
+    async attachSocketEventHandlers(connection: Party.Connection) {
       assert(this.worker, "[onConnect] Worker not initialized.");
 
       const handleMessageFromClient = (event: MessageEvent) => {
@@ -470,18 +464,18 @@ function createDurable(Worker: PartyKitServer) {
       return this.invokeOnError(createLazyConnection(ws), err);
     }
 
-    async invokeOnClose(connection: PartyConnection) {
+    async invokeOnClose(connection: Party.Connection) {
       assert(this.worker, "[onClose] Worker not initialized.");
       return this.worker.onClose(connection);
     }
 
-    async invokeOnError(connection: PartyConnection, err: Error) {
+    async invokeOnError(connection: Party.Connection, err: Error) {
       assert(this.worker, "[onError] Worker not initialized.");
       return this.worker.onError(connection, err);
     }
 
     async invokeOnMessage(
-      connection: PartyConnection,
+      connection: Party.Connection,
       msg: string | ArrayBuffer
     ) {
       assert(this.worker, "[onMessage] Worker not initialized.");
@@ -506,7 +500,7 @@ function createDurable(Worker: PartyKitServer) {
   };
 }
 
-const Workers: Record<string, PartyKitServer> = {
+const Workers: Record<string, Party.PartyKitServer> = {
   main: Worker,
 };
 
@@ -516,7 +510,7 @@ declare const __PARTIES__: Record<string, string>;
 
 export default {
   async fetch(
-    request: PartyRequest,
+    request: Party.Request,
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
@@ -534,7 +528,7 @@ export default {
       const { room: roomId, party: targetParty } =
         getRoomAndPartyFromPathname(url.pathname) || {};
 
-      const parties: Party["context"]["parties"] = createMultiParties(
+      const parties: Party.Party["context"]["parties"] = createMultiParties(
         namespaces,
         {
           host: url.host,
@@ -552,7 +546,7 @@ export default {
         }
 
         // When the worker is a class, to validate worker shape we'll look onto the worker prototype
-        const WorkerInstanceMethods: PartyKitServer = isClassWorker(
+        const WorkerInstanceMethods: Party.PartyKitServer = isClassWorker(
           targetWorker
         )
           ? targetWorker.prototype
@@ -573,7 +567,7 @@ export default {
           // we should make this work, once we decide behaviour
           // isValidRequest?
           // onAuth?
-          let onBeforeConnectResponse: PartyRequest | Response | undefined =
+          let onBeforeConnectResponse: Party.Request | Response | undefined =
             undefined;
           if ("onBeforeConnect" in targetWorker) {
             if (typeof targetWorker.onBeforeConnect === "function") {
@@ -658,7 +652,11 @@ export default {
         }
       } else {
         const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
-        const onFetch = Worker.onFetch ?? Worker.unstable_onFetch;
+
+        const onFetch =
+          Worker.onFetch ??
+          // eslint-disable-next-line deprecation/deprecation
+          Worker.unstable_onFetch;
 
         if (staticAssetsResponse) {
           return staticAssetsResponse;

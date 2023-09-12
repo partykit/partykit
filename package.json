@@ -10,8 +10,8 @@
   ],
   "scripts": {
     "start": "npm start -w partykit",
-    "build": "npm run build -w partykit -w y-partykit -w partysocket -w partykit.io -w create-partykit -w partymix -w @partykit/site -w @partykit/blog -w @partykit/docs",
-    "check": "npm run lint && npm run repocheck && npm run typecheck && npx vitest --watch=false",
+    "build": "npm run build -w partykit && concurrently \"npm run build -w y-partykit\" \"npm run build -w partysocket\" \"npm run build -w create-partykit\" \"npm run build -w partymix\" --kill-others-on-fail",
+    "check": "concurrently \"npm run lint\" \"npm run repocheck\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
     "repocheck": "manypkg check",
@@ -32,11 +32,15 @@
     "cross-env": "^7.0.3",
     "esbuild-register": "^3.4.2",
     "eslint": "^8.47.0",
+    "eslint-plugin-deprecation": "^1.5.0",
     "ink-testing-library": "^3.0.0",
     "jsdom": "^22.1.0",
     "shx": "^0.3.4",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"
-  }
+  },
+  "trustedDependencies": [
+    "sharp"
+  ]
 }

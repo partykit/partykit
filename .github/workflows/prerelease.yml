@@ -21,15 +21,11 @@ jobs:
           node-version: 18
           cache: "npm"
 
-      - uses: actions/cache@v3
-        id: check-cache
+      - uses: oven-sh/setup-bun@v1
         with:
-          path: |
-            .eslintcache
-            **/*/tsconfig.tsbuildinfo
-          key: eslint-tsbuildinfo-${{ hashFiles('**/*.ts','**/*.js', 'package-lock.json', 'tsconfig.json', '**/*/tsconfig.json', '.eslintrc.js') }}
+          bun-version: latest
 
-      - run: npm ci
+      - run: bun install
 
       - name: Modify package.json version
         run: node .github/version-script.js

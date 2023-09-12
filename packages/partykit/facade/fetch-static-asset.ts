@@ -3,9 +3,9 @@
 import StaticAssetManifest from "__STATIC_ASSETS_MANIFEST__";
 import mime from "mime/lite";
 
-import type { PartyRequest, StaticAssetsManifestType } from "../src/server";
+import type * as Party from "../src/server";
 
-declare const StaticAssetManifest: StaticAssetsManifestType;
+declare const StaticAssetManifest: Party.StaticAssetsManifestType;
 
 // The roomId is /party/[roomId] or /parties/[partyName]/[roomId]
 function getRoomIdFromPathname(pathname: string) {
@@ -21,7 +21,7 @@ function getRoomIdFromPathname(pathname: string) {
 }
 
 export default async function fetchStaticAsset<Env>(
-  request: PartyRequest,
+  request: Party.Request,
   _env: Env,
   _ctx: ExecutionContext
 ): Promise<Response | null> {

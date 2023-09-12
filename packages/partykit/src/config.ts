@@ -25,6 +25,7 @@ import { signInWithGitHub } from "./auth/github";
 
 export const userConfigSchema = z.object({
   /** @deprecated use team and username instead */
+  // eslint-disable-next-line deprecation/deprecation
   login: z.string(),
   access_token: z.string(),
   type: z.enum(["clerk", "github"]),
