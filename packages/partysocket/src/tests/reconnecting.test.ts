@@ -281,7 +281,7 @@ const maxRetriesTest = (count: number, done: () => void) => {
 
   ws.addEventListener("error", () => {
     if (ws.retryCount === count) {
-      setTimeout(done, 500);
+      setTimeout(done, 100);
     }
     if (ws.retryCount > count) {
       throw Error(`too many retries: ${ws.retryCount}`);
@@ -524,7 +524,7 @@ testDone("start closed", (done, fail) => {
       expect(event.code).toBe(1000);
       done();
     });
-  }, 300);
+  }, 100);
 });
 
 testDone("connect, send, receive, close", (done, fail) => {
@@ -651,7 +651,7 @@ testDone(
   (done, fail) => {
     const ws = new ReconnectingWebSocket(ERROR_URL, [], {
       maxRetries: 0,
-      connectionTimeout: 2000,
+      connectionTimeout: 1000,
       minReconnectionDelay: 100,
       maxReconnectionDelay: 200,
     });
@@ -667,7 +667,7 @@ testDone(
       }
       setTimeout(() => {
         done();
-      }, 2100);
+      }, 1100);
     });
   }
 );
@@ -695,7 +695,7 @@ testDone("connect and close before establishing connection", (done, fail) => {
   setTimeout(() => {
     // wait a little to be sure no unexpected open or close events happen
     done();
-  }, 1000);
+  }, 100);
 });
 
 testDone("enqueue messages", (done) => {
@@ -798,7 +798,7 @@ testDone("closing from the other side should reconnect", (done, fail) => {
       setTimeout(() => {
         wss.off("connection", onConnection);
         done();
-      }, 500);
+      }, 100);
     }
     if (j > max) {
       fail(new Error("unexpected open"));
@@ -836,7 +836,7 @@ testDone(
         setTimeout(() => {
           wss.off("connection", onConnection);
           done();
-        }, 1000);
+        }, 200);
       }
     });
   }
@@ -860,7 +860,7 @@ testDone("reconnection delay grow factor", (done) => {
       ws.close();
       setTimeout(() => {
         done();
-      }, 500);
+      }, 100);
     }
   });
 });
@@ -872,7 +872,7 @@ testDone("minUptime", (done) => {
     reconnectionDelayGrowFactor: 2,
     minUptime: 250,
   });
-  const expectedDelays = [50, 100, 200, 400, 50, 50];
+  const expectedDelays = [50, 100, 100, 200, 50, 50];
   const expectedRetryCount = [1, 2, 3, 4, 1, 1];
   let connectionCount = 0;
 
@@ -881,7 +881,7 @@ testDone("minUptime", (done) => {
     if (connectionCount <= expectedDelays.length) {
       setTimeout(() => {
         client.close();
-      }, connectionCount * 50);
+      }, connectionCount * 20);
     }
   }
 
