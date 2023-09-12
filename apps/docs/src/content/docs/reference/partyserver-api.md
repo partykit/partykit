@@ -1,5 +1,5 @@
 ---
-title: PartyServer (Server API)
+title: Party.Server (Server API)
 description: PartyKit enables you to create real-time collaborative applications.
 sidebar:
   order: 3

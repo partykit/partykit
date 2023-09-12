@@ -5,7 +5,7 @@ sidebar:
     order: 1
 ---
 
-- [`PartyServer` (Server) API](/reference/partyserver-api/)
+- [`Party.Server` (Server) API](/reference/partyserver-api/)
 - [`PartySocket` (Client) API](/reference/partysocket-api/)
 - [`partykit` Command-Line Interface (CLI)](/reference/partykit-cli/)
 - [`partykit.json` Configuration file](/reference/partykit-configuration/)
