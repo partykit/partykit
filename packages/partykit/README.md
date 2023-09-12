@@ -4,9 +4,13 @@
 [![Discord](https://img.shields.io/discord/1051830863576453180?color=7289DA&logo=discord&logoColor=white)](https://discord.gg/g5uqHQJc3z)
 ![License](https://img.shields.io/github/license/partykit/partykit)
 
-[PartyKit](https://partykit.io/) PartyKit simplifies developing multiplayer applications.
+[PartyKit](https://partykit.io/) simplifies developing multiplayer applications.
 
 With PartyKit, you can focus on building multiplayer apps or adding real-time experiences to your existing projects with as little as one line of code. Meanwhile, PartyKit will handle operational complexity and real-time infrastructure scaling.
+
+## Documentation
+
+Go to [docs.partykit.io](https://docs.partykit.io) for documentation, guides and examples.
 
 ## Quick start
 
