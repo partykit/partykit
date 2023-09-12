@@ -23,14 +23,13 @@ export default class Server implements Party.Server {}
 
 ### new Party.Server (constructor)
 
-The `PartyServer` constructor receives an instance of [`Party.Party`](#party), which gives you access to the room state and resources such as storage, connections, id, and more.
+The `Party.Server` constructor receives an instance of [`Party.Party`](#party), which gives you access to the room state and resources such as storage, connections, id, and more.
 
 ```ts
 import type * as Party from "partykit/server";
 export default class Server implements Party.Server {
-  readonly party: Party;
-  constructor(party: Party.Party) {
-    this.party = party;
+  constructor(readonly party: Party.Party) {
+    // ...
   }
 }
 ```
@@ -270,9 +269,8 @@ Each `Party.Server` instance receives an instance of `Party.Party` as a construc
 ```ts
 import type * as Party from "partykit/server";
 export default class Server implements Party.Server {
-  readonly party: Party;
-  constructor(party: Party.Party) {
-    this.party = party;
+  constructor(readonly party: Party.Party) {
+    // ...
   }
 }
 ```
