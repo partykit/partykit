@@ -2,7 +2,7 @@
 title: Y-PartyKit (Y.js API)
 description: Y-PartyKit is an addon library designed to host backends for Yjs.
 sidebar:
-    order: 5
+  order: 5
 ---
 
 `y-partykit` is an addon library for `partykit` designed to host backends for [Yjs](https://yjs.dev), a high-performance library of data structures for building collaborative software.
@@ -11,7 +11,7 @@ sidebar:
 
 :::danger[Example syntax]
 The example code on this page uses the legacy `export default {}` module
-syntax. We're working on converting `y-partykit` to use the new [PartyServer API](/references/partyserver-api). 
+syntax. We're working on converting `y-partykit` to use the new [PartyServer API](/references/partyserver-api).
 
 See [Legacy API](/reference/partykitserver-legacy-api) for documentation.
 :::
@@ -42,6 +42,9 @@ export default {
     return await onConnect(conn, room, {
       // experimental: persists the document to partykit's room storage
       persist: true,
+
+      // enable read only access to true to disable editing, default: false
+      readOnly: true,
 
       // Or, you can load/save to your own database or storage
       load() {

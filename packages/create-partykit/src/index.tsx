@@ -198,14 +198,25 @@ export async function init(options: {
       return;
     }
 
-    function done(text: string) {
-      // TODO: make sure text is a valid path
-      const isValidPathRegex = /^([a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+$/;
-
-      if (!isValidPathRegex.test(text || randomName)) {
+    function done(input: string) {
+      const text = input || randomName;
+      if (path.isAbsolute(text)) {
         console.log(
           chalk.red(
-            `Invalid path. Please use a path like "randomName" or just "." to use the current directory. You entered "${text}"`
+            `Absolute paths not supported. Please use a relative path like "randomName", "./randomName", or just "." to use the current directory. You entered "${text}"`
+          )
+        );
+        reject(new Error("Absolute paths not supported"));
+      }
+
+      const parsed = path.parse(text);
+      const isValidPathRegex = /^\.*?([a-zA-Z0-9_-]{0,}\/)*[a-zA-Z0-9_-]+$/;
+      const isValidPath = (path: string) =>
+        path === "." || path === ".." || isValidPathRegex.test(path);
+      if (!isValidPath(parsed.base) || !isValidPath(parsed.name)) {
+        console.log(
+          chalk.red(
+            `Invalid path. Please use a valid directory name like "randomName". You entered "${input}"`
           )
         );
         reject(new Error("Invalid path"));
@@ -238,15 +249,11 @@ export async function init(options: {
   if (!options.dryRun) {
     fs.mkdirSync(pathToProject, { recursive: true });
     process.chdir(pathToProject);
-    console.log(
-      `‣ Creating project at ${chalk.bold(
-        path.relative(originalCwd, pathToProject)
-      )}`
-    );
+    console.log(`‣ Creating project at ${chalk.bold(pathToProject)}`);
   } else {
     console.log(
       `⤬ Dry run: skipping creating project directory at ${chalk.bold(
-        path.relative(originalCwd, pathToProject)
+        pathToProject
       )}`
     );
   }

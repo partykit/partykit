@@ -36,7 +36,7 @@ While PartyKit defaults should satisfy most needs, you can override some optiona
 
 
     // serve in "single page app" mode
-    serveSinglePageApp: true
+    singlePageApp: true
     // COMING SOON: exclude files from being served
     exclude: ["**/*.map"] // PartyKit already excludes dotfiles and node_modules
     // COMING SOON: include files to be served
