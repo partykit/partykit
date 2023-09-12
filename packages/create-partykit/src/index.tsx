@@ -211,10 +211,9 @@ export async function init(options: {
 
       const parsed = path.parse(text);
       const isValidPathRegex = /^\.*?([a-zA-Z0-9_-]{0,}\/)*[a-zA-Z0-9_-]+$/;
-      if (
-        !isValidPathRegex.test(parsed.base) ||
-        !isValidPathRegex.test(parsed.name)
-      ) {
+      const isValidPath = (path: string) =>
+        path === "." || path === ".." || isValidPathRegex.test(path);
+      if (!isValidPath(parsed.base) || !isValidPath(parsed.name)) {
         console.log(
           chalk.red(
             `Invalid path. Please use a valid directory name like "randomName". You entered "${input}"`
