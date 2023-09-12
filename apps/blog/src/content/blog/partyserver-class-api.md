@@ -7,7 +7,7 @@ tags:
   - partykit
   - engineering
   - api-design
-ogImage: ""
+ogImage: /content-images/partyserver-class-api-og.png
 description: Why we reimagined PartyKit's API, and how to use it.
 ---
 
