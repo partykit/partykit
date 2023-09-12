@@ -80,6 +80,7 @@ const provider = new YPartyKitProvider(
   "my-document-name",
   yDoc,
   {
+    readOnly: false, // Only allow read access to the document (default: false)
     connect: false, // don't connect immediately, use provider.connect() when required
     params: { token: "my-secret-token" }, // adds to the query string of the websocket connection
     awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance

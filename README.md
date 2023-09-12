@@ -165,6 +165,9 @@ export default {
       // experimental: persist the document to partykit's room storage
       persist: true,
 
+      // enable read only access to true to disable editing, default: false
+      readOnly: true,
+
       // Or, you can load/save to your own database or storage
       load() {
         // load a document from a database, or some remote resource
