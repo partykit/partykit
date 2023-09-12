@@ -2,148 +2,135 @@
 title: PartyServer (Server API)
 description: PartyKit enables you to create real-time collaborative applications.
 sidebar:
-    order: 3
+  order: 3
 ---
 
 :::tip[TypeScript usage]
 These code examples assume you're using TypeScript. PartyKit supports `.ts` files out of the box, but if you prefer to write your server in plain JavaScript, you can use the `.js` file extension and omit type annotations.
 :::
 
-## PartyServer
+## Party.Server
 
-Each PartyKit server is a TypeScript module that implements the `PartyServer` interface.
+Each PartyKit server is a TypeScript module that implements the `Party.Server` interface.
 
 ```ts
 // server.ts
-import type { PartyServer } from "partykit/server";
-export default class Server implements PartyServer {}
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {}
 ```
 
 **Note:** Previously, PartyKit supported an alternative `export default {} satisfies PartyKitServer` syntax. You can [read the API documentation for the legacy syntax here](/reference/partykitserver-legacy-api)
 
+### new Party.Server (constructor)
 
-### new PartyServer (constructor)
-
-The `PartyServer` constructor receives an instance of [`Party`](#party), which gives you access to the room state and resources such as storage, connections, id, and more.
+The `PartyServer` constructor receives an instance of [`Party.Party`](#party), which gives you access to the room state and resources such as storage, connections, id, and more.
 
 ```ts
-import type { PartyServer, Party } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   readonly party: Party;
-  constructor(party: Party) {
+  constructor(party: Party.Party) {
     this.party = party;
   }
 }
 ```
 
-### PartyServer.options
+### Party.Server.options
 
 You can define an `options` field to customise the PartyServer behaviour.
+
 ```ts
-import type { PartyServer } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   readonly options = {
-    hibernate: false
-  }
+    hibernate: false,
+  };
 }
 ```
 
-##### PartyServer.options.hibernate
+##### Party.Server.options.hibernate
 
 Whether the PartyKit platform should remove the server from memory between HTTP requests and WebSocket messages. The default value is `false`.
 
 **Related guide:** [Scaling PartyKit Servers with Hibernation](/guides/scaling-partykit-servers-with-hibernation)
 
-### PartyServer.onStart
+### Party.Server.onStart
 
-Called when the server is started, before first [`onConnect`]() or [`onRequest`](#onrequest).
+Called when the server is started, before first [`onConnect`](#partyserveronconnect) or [`onRequest`](#partyserveronrequest).
 
 You can use this to load data from storage and perform other asynchronous initialization, such as retrieving data or configuration from other services or databases.
 
 ```ts
-import type { PartyServer } from "partykit/server";
-export default class Server implements PartyServer {
-  async onStart() { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onStart() {}
 }
 ```
 
-### PartyServer.onConnect
+### Party.Server.onConnect
 
 Called when a new incoming WebSocket connection is opened.
 
-Receives a reference to the connecting [`PartyConnection`](#partyconnection), and a [`PartyConnectionContext`](#partyconnectioncontext) that provides information about the initial connection request.
+Receives a reference to the connecting [`Party.Connection`](#partyconnection), and a [`Party.ConnectionContext`](#partyconnectioncontext) that provides information about the initial connection request.
 
 ```ts
-import type { PartyServer, PartyConnection, PartyConnectionContext } from "partykit/server";
-export default class Server implements PartyServer {
-  async onConnect(
-    connection: PartyConnection, 
-    ctx: PartyConnectionContext
-  ) { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {}
 }
 ```
 
 **Related guide:** [Building a Real-time WebSocket server](/guides/)
 
-### PartyServer.onMessage
+### Party.Server.onMessage
 
 Called when a WebSocket connection receives a message from a client, or another connected party.
 
-Receives the incoming message, which can either be a string or a raw binary [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), and a reference to the sending [`PartyConnection`](#partyconnection).
+Receives the incoming message, which can either be a string or a raw binary [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), and a reference to the sending [`Party.Connection`](#partyconnection).
 
 ```ts
-import type { PartyServer, PartyConnection } from "partykit/server";
-export default class Server implements PartyServer {
-  async onMessage(
-    message: string | ArrayBuffer,
-    sender: PartyConnection
-  ) { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onMessage(message: string | ArrayBuffer, sender: Party.Connection) {}
 }
 ```
 
-### PartyServer.onClose
+### Party.Server.onClose
 
 Called when a WebSocket connection is closed by the client.
 
-Receives a reference to the closed [`PartyConnection`](#partyconnection). By the time `onClose` is called, the connection is already closed and can no longer receive messages.
+Receives a reference to the closed [`Party.Connection`](#partyconnection). By the time `onClose` is called, the connection is already closed and can no longer receive messages.
 
 ```ts
-import type { PartyServer, PartyConnection } from "partykit/server";
-export default class Server implements PartyServer {
-  async onClose(
-    connection: PartyConnection, 
-  ) { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onClose(connection: Party.Connection) {}
 }
 ```
 
-### PartyServer.onError
+### Party.Server.onError
 
 Called when a WebSocket connection is closed due to a connection error.
 
-Receives a reference to the closed [`PartyConnection`](#partyconnection), and an `Error` object.
+Receives a reference to the closed [`Party.Connection`](#partyconnection), and an `Error` object.
 
 ```ts
-import type { PartyServer, PartyConnection } from "partykit/server";
-export default class Server implements PartyServer {
-  async onError(
-    connection: PartyConnection, 
-    error: Error
-  ) { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onError(connection: Party.Connection, error: Error) {}
 }
 ```
 
-### PartyServer.onRequest
+### Party.Server.onRequest
 
-Called when a HTTP request is made to the party URL. 
+Called when a HTTP request is made to the party URL.
 
-Receives an instance of [`PartyRequest`](#partyrequest), and is expected to return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
+Receives an instance of [`Party.Request`](#partyrequest), and is expected to return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 ```ts
-import type { PartyServer, PartyRequest } from "partykit/server";
-export default class Server implements PartyServer {
-  async onRequest(
-    req: PartyRequest, 
-  ) { 
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onRequest(req: Party.Request) {
     return new Response(req.cf.country, { status: 200 });
   }
 }
@@ -151,35 +138,36 @@ export default class Server implements PartyServer {
 
 **Related guide:** [Responding to HTTP requests](/guides/responding-to-http-requests)
 
-### PartyServer.onAlarm
+### Party.Server.onAlarm
 
 Called when an alarm is triggered.
 
 Alarms have access to most [`Party`](#party) resources such as storage, but not [`Party.id`](#partyid) and [`Party.context.parties`](#partycontextparties) properties. Attempting to access them will result in a runtime error.
 
-
 ```ts
-import type { PartyServer } from "partykit/server";
-export default class Server implements PartyServer {
-  async onAlarm() { }
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  async onAlarm() {}
 }
 ```
 
 **Related guide:** [Scheduling tasks with Alarms](/guides/scheduling-tasks-with-alarms)
 
-### PartyServer.getConnectionTags
+### Party.Server.getConnectionTags
 
 You can set additional metadata on connections by returning them from a `getConnectionTags`, and then filter connections based on the tag with [`Party.getConnections`](#partygetconnections).
 
 ```ts
-
-import type { PartyServer, PartyConnection } from "partykit/server";
-export default class Server implements PartyServer {
-  getConnectionTags(connection: PartyConnection, ctx: PartyConnectionContext) {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  getConnectionTags(
+    connection: Party.Connection,
+    ctx: Party.ConnectionContext
+  ) {
     const country = (ctx.request.cf?.country as string) ?? "unknown";
     return [country];
   }
-  async onMessage(message: string) { 
+  async onMessage(message: string) {
     for (const british of this.party.getConnections("GB")) {
       british.send(`Pip-pip!`);
     }
@@ -191,23 +179,22 @@ export default class Server implements PartyServer {
 
 Runs before any HTTP request is made to the party. You can modify the `request` before it is forwarded to the party, or return a `Response` to short-circuit it.
 
-Receives an instance of [`PartyRequest`](#partyrequest), and is expected to either return a request, or a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response). 
-
+Receives an instance of [`Party.Request`](#partyrequest), and is expected to either return a request, or a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 ```ts
-import type { PartyServer, PartyRequest, PartyLobby, PartyExecutionContext } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   static async onBeforeRequest(
-    req: PartyRequest, 
-    lobby: PartyLobby,
-    ctx: PartyExecutionContext
-  ) { 
+    req: Party.Request,
+    lobby: Party.Lobby,
+    ctx: Party.ExecutionContext
+  ) {
     return new Response("Access denied", { status: 403 });
   }
 }
 ```
 
-Because the static `onBeforeRequest` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`PartyLobby`](#partylobby).
+Because the static `onBeforeRequest` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`Party.Lobby`](#partylobby).
 
 Related reading: [How PartyKit works](/how-partykit-works)
 
@@ -215,23 +202,22 @@ Related reading: [How PartyKit works](/how-partykit-works)
 
 Runs before any WebSocket connection is made to the party. You can modify the `request` before it is forwarded to the party, or return a `Response` to prevent the connection
 
-Receives an instance of [`PartyRequest`](#partyrequest), and is expected to either return a request, or a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response). 
-
+Receives an instance of [`Party.Request`](#partyrequest), and is expected to either return a request, or a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 ```ts
-import type { PartyServer, PartyRequest, PartyLobby, PartyExecutionContext } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   static async onBeforeConnect(
-    req: PartyRequest, 
-    lobby: PartyLobby,
-    ctx: PartyExecutionContext
-  ) { 
+    req: Party.Request,
+    lobby: Party.Lobby,
+    ctx: Party.ExecutionContext
+  ) {
     return new Response("Access denied", { status: 403 });
   }
 }
 ```
 
-Because the static `onBeforeConnect` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`PartyLobby`](#partylobby).
+Because the static `onBeforeConnect` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`Party.Lobby`](#partylobby).
 
 Related reading: [How PartyKit works](/how-partykit-works)
 
@@ -239,57 +225,53 @@ Related reading: [How PartyKit works](/how-partykit-works)
 
 Runs on any HTTP request that does not match a Party URL or a static asset. Useful for running lightweight HTTP endpoints that don't need access to the [`Party`]() state.
 
-Receives an instance of [`PartyRequest`](#partyrequest), and is expected to either return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response). 
-
+Receives an instance of [`Party.Request`](#partyrequest), and is expected to either return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
 ```ts
-import type { PartyServer, PartyRequest, PartyFetchLobby, PartyExecutionContext } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   static async onFetch(
-    req: PartyRequest, 
-    lobby: PartyFetchLobby,
-    ctx: PartyExecutionContext
-  ) { 
+    req: Party.Request,
+    lobby: Party.FetchLobby,
+    ctx: Party.ExecutionContext
+  ) {
     return new Response(req.url, { status: 403 });
   }
 }
 ```
 
-Because the static `onFetch` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`PartyFetchLobby`](#partyfetchlobby).
+Because the static `onFetch` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`Party.FetchLobby`](#partyfetchlobby).
 
 :::danger[Multiple parties and onFetch]
 Each project can only define one `onFetch` handler in its `main` party. Other parties' `onFetch` handlers are quietly ignored. Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
 :::
 
-
 Related reading: [Creating custom endpoints with onFetch](/guides/creating-custom-endpoints-with-onfetch)
 
+## Party.Worker
 
-## PartyWorker
-
-The `PartyWorker` interface describes the `static` methods available on the `PartyServer` class. You can use it to add additional type safety to your TypeScript code:
+The `Party.Worker` interface describes the `static` methods available on the `Party.Server` class. You can use it to add additional type safety to your TypeScript code:
 
 ```ts
-import type { PartyServer, PartyWorker, PartyRequest} from "partykit/server";
-export default class Server implements PartyServer { 
-  static async onFetch(req: PartyRequest) {
-    return new Response(req.url)
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  static async onFetch(req: Party.Request) {
+    return new Response(req.url);
   }
 }
 
-Server satisfies PartyWorker
+Server satisfies Party.Worker;
 ```
 
 ## Party
 
-
-Each `PartyServer` instance receives an instance of `Party` as a constructor parameter, and can use it to access the room state and resources such as storage, connections, id, and more.
+Each `Party.Server` instance receives an instance of `Party.Party` as a constructor parameter, and can use it to access the room state and resources such as storage, connections, id, and more.
 
 ```ts
-import type { PartyServer, Party } from "partykit/server";
-export default class Server implements PartyServer {
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
   readonly party: Party;
-  constructor(party: Party) { 
+  constructor(party: Party.Party) {
     this.party = party;
   }
 }
@@ -319,7 +301,7 @@ A per-party, asyncronous key-value storage.
 ```ts
 // write arbitrary data
 const input = { username: "jani" };
-await this.party.storage.put("user", {user});
+await this.party.storage.put("user", { user });
 // read data
 const user = await this.party.storage.get<{ username: string }>("user");
 ```
@@ -355,7 +337,7 @@ this.party.broadcast(message, [sender.id]);
 
 ### Party.getConnection
 
-Get a connection by connection id. Returns a [`PartyConnection`](#partyconnection) `undefined` if connection by id doesn't exist. 
+Get a connection by connection id. Returns a [`PartyConnection`](#partyconnection) `undefined` if connection by id doesn't exist.
 
 ### Party.getConnections
 
@@ -371,12 +353,11 @@ for (const everyone of this.party.getConnections()) {
 for (const tagged of this.party.getConnections("some-tag")) {
   tagged.send(`You're it!`);
 }
-
 ```
 
 Use [`PartyServer.getConnectionTags`](#partyservergetconnectiontags) to tag the connection when the connection is made.
 
-## PartyConnection
+## Party.Connection
 
 Wraps a standard [`WebSocket`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket), with a few additional PartyKit-specific properties.
 
@@ -385,17 +366,17 @@ connection.send("Good-bye!");
 connection.close();
 ```
 
-##### PartyConnection.id
+##### Party.Connection.id
 
 Uniquely identifies the connection. Usually an automatically generated GUID, but can be specified by the client by setting an `id` property on [PartySocket](/reference/partysocket-api).
 
-##### PartyConnection.uri
+##### Party.Connection.uri
 
 The original URI of the connection request.
 
-##### PartyConnection.serializeAttachment
+##### Party.Connection.serializeAttachment
 
-Normally, you can store state (e.g. connection metadata) on each connection by simply assigning a value to the `PartyConnection` object. However, when [`options.hibernate`](#partyserveroptionshibernate) is set to `true`, any in-memory state is lost when the server hibernates.
+Normally, you can store state (e.g. connection metadata) on each connection by simply assigning a value to the `Party.Connection` object. However, when [`options.hibernate`](#partyserveroptionshibernate) is set to `true`, any in-memory state is lost when the server hibernates.
 
 To store state to survive hibernation, store it on the connection using `serializeAttachment`:
 
@@ -405,7 +386,7 @@ connection.serializeAttachment({ username: "jani" });
 
 **Related guide:** [Scaling PartyKit Servers with Hibernation](/guides/scaling-partykit-servers-with-hibernation)
 
-##### PartyConnection.deserializeAttachment
+##### Party.Connection.deserializeAttachment
 
 Read state stored with [`PartyConnection.serializeAttachment`](#partyconnectionserializeattachment).
 
@@ -415,37 +396,34 @@ const user = connection.deserializeAttachment() as { username: string };
 
 **Related guide:** [Scaling PartyKit Servers with Hibernation](/guides/scaling-partykit-servers-with-hibernation)
 
-## PartyRequest
+## Party.Request
 
 Wraps an underlying Cloudflare runtime [Request](https://developers.cloudflare.com/workers/runtime-apis/request/).
 
-## PartyLobby
+## Party.Lobby
 
 Provides access to a limited subset of room resources for `onBeforeConnect` and `onBeforeRequest` methods.
 
-### PartyLobby.id
+### Party.Lobby.id
 
 See: [`Party.id`](#partyid)
 
-### PartyLobby.env
+### Party.Lobby.env
 
 See: [`Party.env`](#partyenv)
 
-### PartyLobby.parties
+### Party.Lobby.parties
 
 See: [`Party.context.parties`](#partycontextparties)
 
-
-## PartyFetchLobby
+## Party.FetchLobby
 
 Provides access to a limited subset of project resources for the `onFetch` method:
 
-### PartyLobby.env
+### Party.Lobby.env
 
 See: [`Party.env`](#partyenv)
 
-### PartyLobby.parties
+### Party.Lobby.parties
 
 See: [`Party.context.parties`](#partycontextparties)
-
-
