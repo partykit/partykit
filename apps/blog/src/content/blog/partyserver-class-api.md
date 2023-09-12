@@ -1,6 +1,6 @@
 ---
 author: Jani Eväkallio
-pubDatetime: 2023-09-12T15:00:00Z
+pubDatetime: 2023-09-12T14:00:00Z
 title: Party.Server — New API for a programmable primitive
 postSlug: partyserver-api
 tags:
