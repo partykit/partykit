@@ -41,7 +41,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm"
       - run: npm ci
       - run: npx partykit deploy
         env:
