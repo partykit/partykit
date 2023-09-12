@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.12
+
+### Patch Changes
+
+- [#353](https://github.com/partykit/partykit/pull/353) [`a634046`](https://github.com/partykit/partykit/commit/a634046ed521d3451abb278e98bbb1b84359e50d) Thanks [@sylwiavargas](https://github.com/sylwiavargas)! - Updates readme and package metadata
+
 ## 0.0.11
 
 ### Patch Changes

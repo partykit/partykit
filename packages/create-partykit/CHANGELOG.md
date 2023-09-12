@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.7
+
+### Patch Changes
+
+- [#361](https://github.com/partykit/partykit/pull/361) [`7f30721`](https://github.com/partykit/partykit/commit/7f307216f33dbef8fb61963cac7ce88ce8e8f769) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix relative paths in create-partykit
+
 ## 0.0.6
 
 ### Patch Changes
