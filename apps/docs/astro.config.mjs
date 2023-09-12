@@ -25,7 +25,7 @@ export default defineConfig({
           },
         ],
         social: {
-          github: "https://github.com/partykit/docs",
+          github: "https://github.com/partykit/partykit",
           discord: "https://discord.gg/KDZb7J4uxJ",
           twitter: "https://twitter.com/partykit_io",
         },
