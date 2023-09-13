@@ -1,6 +1,6 @@
 ---
 title: PartySocket (Client API)
-description: `PartySocket` is a TypeScript client library for connecting to PartyKit servers via WebSockets.
+description: PartySocket is a TypeScript client library for connecting to PartyKit servers via WebSockets.
 
 sidebar:
   order: 4
