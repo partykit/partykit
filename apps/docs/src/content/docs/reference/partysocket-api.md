@@ -1,8 +1,9 @@
 ---
 title: PartySocket (Client API)
-description: PartySocket is 
+description: `PartySocket` is a TypeScript client library for connecting to PartyKit servers via WebSockets.
+
 sidebar:
-    order: 4
+  order: 4
 ---
 
 `PartySocket` is a TypeScript client library for connecting to PartyKit servers via WebSockets.
@@ -27,7 +28,6 @@ npm install partysocket@latest
 - Fully configurable
 - Works everywhere, not just with PartyKit!
 
-
 ## Usage
 
 ### Compatible with WebSocket Browser API
@@ -50,7 +50,7 @@ const ws = new PartySocket({
 
   // optionally, specify the party to connect to.
   // if not provided, will connect to the "main" party defined in partykit.json
-  party: "main"
+  party: "main",
 });
 ```
 
@@ -82,7 +82,7 @@ const Component = () => {
       console.log("connected");
     },
   });
-}
+};
 ```
 
 The `usePartySocket` hook handles connecting on mount, disconnecting on unmount, and cleaning up the `on(Connect|Message|Close|Error)` handlers.
@@ -94,7 +94,7 @@ PartySocket can be used with any WebSocket server, not only PartyKit servers.
 ```javascript
 import { WebSocket } from "partysocket";
 
-const ws = new WebSocket("ws://my.site.com");
+const ws = new WebSocket("wss://my.site.com");
 
 ws.addEventListener("open", () => {
   ws.send("hello!");
@@ -112,7 +112,11 @@ The `url` parameter will be resolved before connecting, possible types:
 ```javascript
 import { WebSocket } from "partysocket";
 
-const urls = ["ws://my.site.com", "ws://your.site.com", "ws://their.site.com"];
+const urls = [
+  "wss://my.site.com",
+  "wss://your.site.com",
+  "wss://their.site.com",
+];
 let urlIndex = 0;
 
 // round robin url provider
@@ -145,7 +149,7 @@ The `protocols` parameter will be resolved before connecting, possible types:
 
 ```javascript
 import { WebSocket } from "partysocket";
-const ws = new WebSocket("ws://your.site.com", "your protocol");
+const ws = new WebSocket("wss://your.site.com", "your protocol");
 ```
 
 ```javascript
@@ -157,7 +161,7 @@ let protocolsIndex = 0;
 // round robin protocols provider
 const protocolsProvider = () => protocols[protocolsIndex++ % protocols.length];
 
-const ws = new WebSocket('ws://your.site.com', protocolsProvider);
+const ws = new WebSocket('wss://your.site.com', protocolsProvider);
 ```
 
 ### Options
@@ -173,7 +177,7 @@ const options = {
   connectionTimeout: 1000,
   maxRetries: 10,
 };
-const ws = new WebSocket("ws://my.site.com", [], options);
+const ws = new WebSocket("wss://my.site.com", [], options);
 ```
 
 #### Available options
@@ -250,7 +254,6 @@ OPEN       1 The connection is open and ready to communicate.
 CLOSING    2 The connection is in the process of closing.
 CLOSED     3 The connection is closed or couldn't be opened.
 ```
-
 
 ## Acknowledgements
 

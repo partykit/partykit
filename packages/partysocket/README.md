@@ -34,7 +34,7 @@ npm install partysocket
 ```javascript
 import { WebSocket } from "partysocket";
 
-const ws = new WebSocket("ws://my.site.com");
+const ws = new WebSocket("wss://my.site.com");
 
 ws.addEventListener("open", () => {
   ws.send("hello!");
@@ -66,7 +66,11 @@ The `url` parameter will be resolved before connecting, with possible types:
 ```javascript
 import { WebSocket } from "partysocket";
 
-const urls = ["ws://my.site.com", "ws://your.site.com", "ws://their.site.com"];
+const urls = [
+  "wss://my.site.com",
+  "wss://your.site.com",
+  "wss://their.site.com",
+];
 let urlIndex = 0;
 
 // round robin url provider
@@ -99,7 +103,7 @@ The `protocols` parameter will be resolved before connecting, possible types:
 
 ```javascript
 import { WebSocket } from "partysocket";
-const ws = new WebSocket("ws://your.site.com", "your protocol");
+const ws = new WebSocket("wss://your.site.com", "your protocol");
 ```
 
 ```javascript
@@ -111,7 +115,7 @@ let protocolsIndex = 0;
 // round robin protocols provider
 const protocolsProvider = () => protocols[protocolsIndex++ % protocols.length];
 
-const ws = new WebSocket('ws://your.site.com', protocolsProvider);
+const ws = new WebSocket('wss://your.site.com', protocolsProvider);
 ```
 
 ### Options
@@ -127,7 +131,7 @@ const options = {
   connectionTimeout: 1000,
   maxRetries: 10,
 };
-const ws = new WebSocket("ws://my.site.com", [], options);
+const ws = new WebSocket("wss://my.site.com", [], options);
 ```
 
 #### Available options
