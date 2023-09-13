@@ -42,9 +42,9 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "^4.20230814.0",
+    "@cloudflare/workers-types": "^4.20230904.0",
     "esbuild": "^0.19.2",
-    "miniflare": "^3.20230814.1",
+    "miniflare": "^3.20230904.0",
     "yoga-wasm-web": "^0.3.3"
   },
   "optionalDependencies": {
