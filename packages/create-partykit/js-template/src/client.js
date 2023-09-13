@@ -5,6 +5,8 @@ import "./styles.css";
 
 import PartySocket from "partysocket";
 
+let pingInterval;
+
 /** @type {HTMLDivElement} - The DOM element to append all messages we get */
 const output = document.getElementById("app");
 
@@ -43,7 +45,8 @@ conn.addEventListener("open", function () {
   add("Sending a ping every 2 seconds...");
 
   // TODO: make this more interesting / nice
-  setInterval(function () {
+  clearInterval(pingInterval);
+  pingInterval = setInterval(function () {
     conn.send("ping");
   }, 1000);
 });
