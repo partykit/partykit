@@ -1,5 +1,13 @@
 # partymix
 
+## 0.0.4
+
+### Patch Changes
+
+- [#366](https://github.com/partykit/partykit/pull/366) [`b79f846`](https://github.com/partykit/partykit/commit/b79f84696d52d07c2b4a402dbb52ab688a17b4d7) Thanks [@threepointone](https://github.com/threepointone)! - use npm ci for CI installs
+
+  We shouldn't use bun install until https://github.com/partykit/partykit/pull/352 lands
+
 ## 0.0.3
 
 ### Patch Changes
