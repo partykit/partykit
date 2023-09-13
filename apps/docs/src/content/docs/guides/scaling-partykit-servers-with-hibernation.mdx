@@ -80,7 +80,7 @@ Instead of loading the full state from storage in the `onStart` lifecycle method
 
 If your party instance requires state, you will need to persist it to party storage, an external database, or an API, and reload it when the party is woken up from hibernation.
 
-:::tip[PartyKit `storage`]
+:::tip[PartyKit storage]
 The PartyKit `storage` API has its own built-in cache. Because of that, reading frequently the same key is very performant as the result is cached in memory instead of having to read it from disk every time.
 :::
 
