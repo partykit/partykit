@@ -26,7 +26,7 @@ Hibernation allows a single party instance to handle vastly more active connecti
 - Without Hibernation: up to **100 connections** per party instance
 - With Hibernation: up to **32,000 connections** per party instance
 
-The number of working connections may vary depending on the performance characteristics of the code you run on PartyKit (for example, memory use or CPU time). In PartyKit apps, memory use depends on:
+Note that even with Hibernation, the practical maximum amount of connections may vary depending on the performance characteristics of the code you run on PartyKit (for example, memory use or CPU time). In PartyKit apps, memory use depends on:
 
 - active connections,
 - code size - for example, third-party libraries,
@@ -80,7 +80,7 @@ Instead of loading the full state from storage in the `onStart` lifecycle method
 
 If your party instance requires state, you will need to persist it to party storage, an external database, or an API, and reload it when the party is woken up from hibernation.
 
-:::tip[PartyKit `storage`]
+:::tip[PartyKit storage]
 The PartyKit `storage` API has its own built-in cache. Because of that, reading frequently the same key is very performant as the result is cached in memory instead of having to read it from disk every time.
 :::
 
