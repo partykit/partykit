@@ -1,5 +1,5 @@
 ---
-title: Y-PartyKit (Y.js API)
+title: Y-PartyKit (Yjs API)
 description: Y-PartyKit is an addon library designed to host backends for Yjs.
 sidebar:
   order: 5
@@ -96,6 +96,23 @@ const provider = new YPartyKitProvider(
     awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
   }
 );
+```
+
+## Usage with React
+
+If you're using React, then you can use the hook version of the provider: `useYProvider`.
+
+```ts
+import useYProvider from "y-partykit/react";
+
+function App() {
+  const provider = useYProvider({
+    host: "localhost:1999",
+    room: "my-document-name",
+    doc: yDoc, // optional!
+    options,
+  });
+}
 ```
 
 ## Learn more
