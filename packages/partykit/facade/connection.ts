@@ -3,7 +3,7 @@ import type * as Party from "../src/server";
 // Polyfill WebSocket status code constants for environments that don't have them
 // in order to support libraries that expect standards-compatible WebSocket
 // implementations (e.g. PartySocket)
-if ("OPEN" in WebSocket) {
+if (!("OPEN" in WebSocket)) {
   const WebSocketStatus = {
     CONNECTING: WebSocket.READY_STATE_CONNECTING,
     OPEN: WebSocket.READY_STATE_OPEN,
