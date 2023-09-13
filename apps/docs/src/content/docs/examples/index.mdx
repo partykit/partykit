@@ -3,7 +3,7 @@ title: PartyKit App Examples
 description: Explore collaborative, multiplayer, and realtime apps built with PartyKit
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid } from "@astrojs/starlight/components";
 
 Here are examples of apps built with PartyKit.
 
@@ -26,6 +26,23 @@ Our Next.js template features multiple chatrooms with chat history, avatars, and
 [Matt Webb's](https://twitter.com/genmon) 'Voronoi' app features cursors with country flags on a colorful, ever-changing background. Cursors indicate presence and movement on the demo, which helps your users get a sense that they are together in one room.
 
 🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-voronoi) | [live demo](https://multicursor-sketch.vercel.app/)
+
+## Connection Counter
+
+![connection counter](../../../assets/connection-counter.gif)
+
+This example shows how many people are currently viewing any of the pages linked from the the current one - the counter placed near the links increases or decreases as users move around the app. It is a demo of an advanced use of [multi-party communication](https://docs.partykit.io/guides/using-multiple-parties-per-project/).
+
+🎈 **Explore:** [GitHub repository](https://github.com/partykit/example-link-counter) | [live demo](https://connection-counter.jevakallio.partykit.dev/pages/a)
+
+## Realtime Reaction Counters
+
+![reactions](../../../assets/reactions.gif)
+
+See your friends react in real time. This example contains a barebones HTML page and an SSR version built with Next.js.
+
+🎈 **Explore:** [GitHub repository](https://github.com/partykit/example-reactions) | [live demo](https://example-reactions.jevakallio.partykit.dev/)
+
 
 ## Multiplayer text editor
 
@@ -57,6 +74,18 @@ A starter template for Remix and PartyKit.
 
 🎈 **Explore:** [the GitHub repository](https://github.com/partykit/remix-starter)
 
+## Replicache starter
+
+A community starter template for a local-first chat app. Built with Replicache and PartyKit by [Alex Anderson](https://twitter.com/ralex1993),
+
+🎈 **Explore:** [the GitHub repository](https://github.com/alexanderson1993/partykit-replicache)
+
+## Game starter
+
+A community starter template for turn-based multiplayer games with Next.js, Redux, and PartyKit by [Swen Mulderij](https://twitter.com/Swendude).
+
+🎈 **Explore:** [the GitHub repository](https://github.com/Swendude/partykit-starter)
+
 ## Mosaic - realtime collaborative game
 
 ![mosaic game](../../../assets/mosaic.png)
@@ -75,9 +104,8 @@ Three web components from [Matt Webb](https://twitter.com/genmon): the first one
 
 🎈 **Explore:** [the GitHub repository](https://github.com/partykit/sketch-disco)
 
+---
 
-
---- 
 :::tip[Share your project!]
-Are you using PartyKit? We want to hear from you! Share your project with us on  [Discord](https://discord.gg/KDZb7J4uxJ) or [Twitter](https://twitter.com/partykit_io)!
+Are you using PartyKit? We want to hear from you! Share your project with us on [Discord](https://discord.gg/KDZb7J4uxJ) or [Twitter](https://twitter.com/partykit_io)!
 :::
