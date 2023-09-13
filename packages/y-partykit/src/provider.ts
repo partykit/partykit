@@ -15,20 +15,6 @@ export const messageQueryAwareness = 3;
 export const messageAwareness = 1;
 export const messageAuth = 2;
 
-export const WebSocketStatus = {
-  CONNECTING: 0,
-  OPEN: 1,
-  CLOSING: 2,
-  CLOSED: 3,
-};
-
-// Polyfill WebSocket status code constants for environments that don't have them
-// (e.g. Cloudflare Workers)
-if (WebSocket.OPEN === undefined) {
-  Object.assign(WebSocket, WebSocketStatus);
-  Object.assign(WebSocket.prototype, WebSocketStatus);
-}
-
 // Disable BroadcastChannel by default in Cloudflare Workers / Node
 const DEFAULT_DISABLE_BC = typeof window === "undefined";
 
