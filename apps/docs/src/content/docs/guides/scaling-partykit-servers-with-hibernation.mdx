@@ -7,7 +7,7 @@ import { Tabs, TabItem } from "@astrojs/starlight/components";
 
 PartyKit simplifies building realtime multiplayer applications. However, as your app grows, maintaining WebSocket connections requires a lot of memory. Hibernation API is a pathway for scaling your app to tens of thousands of connections. It is done by offloading the memory burden from the party instance process to the PartyKit platform.
 
-This page provides an overview of the Hibernation API - what it is, how it works, when it’s useful, and how to implement it.
+This page provides an overview of the Hibernation API — what it is, how it works, when it’s useful, and how to implement it.
 
 ## Opting into Hibernation
 
@@ -29,9 +29,9 @@ Hibernation allows a single party instance to handle vastly more active connecti
 Note that even with Hibernation, the practical maximum amount of connections may vary depending on the performance characteristics of the code you run on PartyKit (for example, memory use or CPU time). In PartyKit apps, memory use depends on:
 
 - active connections,
-- code size - for example, third-party libraries,
-- state - class fields you keep in memory between requests,
-- dynamic allocations - memory used by JavaScript for local variables, execution stack, and others.
+- code size — for example, third-party libraries,
+- state — class fields you keep in memory between requests,
+- dynamic allocations — memory used by JavaScript for local variables, execution stack, and others.
 
 :::caution[Scale limit]
 The limit to scale per party instance is typically 128MB memory. With Hibernation, the active WebSocket connections no longer count towards your party's 128MB memory limit, but the total memory footprint of your code, state, and dynamic allocations may still exceed that limit.
@@ -49,17 +49,17 @@ This process can happen quite frequently. With no messages from any client, alar
 
 Hibernation is well-suited for the following use cases:
 
-- a party will handle more than 100 connected clients simultaneously.
-- a party will have 'infrequent writes' (when clients rarely send messages), which will lower the usage cost.
-- a party is based on 'HTTP-only writes', when WebSockets are used solely for pushing messages to clients (for example, webhooks).
-- you should always opt into hibernation when you don't need to maintain in-memory state between messages. This will lower the cost as the party is unloaded from memory when it's not being used. A good example here is message passing between clients like a relay server.
+- A party will handle more than 100 connected clients simultaneously.
+- A party will have *infrequent writes* (when clients rarely send messages), which will lower the usage cost.
+- A party is based on *HTTP-only writes*, when WebSockets are used solely for pushing messages to clients (for example, webhooks).
+- You should always opt into hibernation when you don't need to maintain in-memory state between messages. This will lower the cost as the party is unloaded from memory when it's not being used. A good example here is message passing between clients like a relay server.
 
 ## Who is it not for
 
 Hibernation does not perform well in the following cases:
 
-- if your server depends for message handling on state that is expensive to recreate (for example, when it includes an API call to an external service to fetch data),
-- if you're building with `Yjs` as `y-partykit` doesn't currently support Hibernation. (We are working on this.)
+- If your server depends for message handling on state that is expensive to recreate (for example, when it includes an API call to an external service to fetch data),
+- If you're building with `Yjs` as `y-partykit` doesn't currently support Hibernation. (We are working on this.)
 
 ## Limitations
 
