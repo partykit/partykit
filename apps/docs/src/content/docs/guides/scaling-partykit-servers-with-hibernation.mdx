@@ -34,7 +34,7 @@ The number of working connections may vary depending on the performance characte
 - dynamic allocations - memory used by JavaScript for local variables, execution stack, and others.
 
 :::caution[Scale limit]
-Please note that the limit to scale per party instance is typically 128MB memory.
+The limit to scale per party instance is typically 128MB memory. With Hibernation, the active WebSocket connections no longer count towards your party's 128MB memory limit, but the total memory footprint of your code, state, and dynamic allocations may still exceed that limit.
 :::
 
 ## How Hibernation works
@@ -99,13 +99,13 @@ export default class Server implements Party.Server {
   // GOOD: no data loading on startup
   // onStart() {}
 
-async onMessage(websocketMessage: string) {
-const event = JSON.parse(websocketMessage);
-if (event.type === "create") {
-this.party.broadcast(event.data);
-// store each item under a separate key
-this.party.storage.put(`item:${event.id}`, event.data);
-};
+  async onMessage(websocketMessage: string) {
+    const event = JSON.parse(websocketMessage);
+    if (event.type === "create") {
+      this.party.broadcast(event.data);
+      // store each item under a separate key
+      this.party.storage.put(`item:${event.id}`, event.data);
+    };
 
     if (event.type === "update") {
       // GOOD: read stored state on-demand when needed
@@ -118,11 +118,9 @@ this.party.storage.put(`item:${event.id}`, event.data);
       // GOOD: now we need to write only to a single key
       this.party.storage.put(`item:${event.id}`, updatedItem);
     };
-
+  };
 };
-};
-
-````
+```
 </TabItem>
 <TabItem label="⛔️ DON'T">
 ```ts
@@ -157,7 +155,7 @@ export default class Server implements Party.Server {
     await this.party.storage.put("items", this.items);
   };
 };
-````
+```
 
   </TabItem>
 </Tabs>
