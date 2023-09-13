@@ -1,5 +1,19 @@
 # partykit
 
+## 0.0.13
+
+### Patch Changes
+
+- [#366](https://github.com/partykit/partykit/pull/366) [`b79f846`](https://github.com/partykit/partykit/commit/b79f84696d52d07c2b4a402dbb52ab688a17b4d7) Thanks [@threepointone](https://github.com/threepointone)! - use npm ci for CI installs
+
+  We shouldn't use bun install until https://github.com/partykit/partykit/pull/352 lands
+
+## 0.0.12
+
+### Patch Changes
+
+- [#353](https://github.com/partykit/partykit/pull/353) [`a634046`](https://github.com/partykit/partykit/commit/a634046ed521d3451abb278e98bbb1b84359e50d) Thanks [@sylwiavargas](https://github.com/sylwiavargas)! - Updates readme and package metadata
+
 ## 0.0.11
 
 ### Patch Changes

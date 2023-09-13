@@ -24,11 +24,7 @@ jobs:
           node-version: 18
           cache: "npm"
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - run: bun install
+      - run: npm ci
 
       - run: npm run build
       - run: npm run check
