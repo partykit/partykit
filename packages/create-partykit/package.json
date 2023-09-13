@@ -24,14 +24,13 @@
     "fsevents": "^2.3.3"
   },
   "devDependencies": {
-    "@types/execa": "^2.0.0",
     "@types/random-words": "^1.1.2",
-    "@types/react": "^18.2.20",
+    "@types/react": "^18.2.21",
     "@types/which-pm-runs": "^1.0.0",
     "chalk": "^5.3.0",
     "commander": "^11.0.0",
     "esbuild": "^0.19.2",
-    "execa": "^7.2.0",
+    "execa": "^8.0.1",
     "find-up": "^6.3.0",
     "gradient-string": "^2.0.2",
     "ink": "4.4.1",
@@ -39,7 +38,7 @@
     "ink-text-input": "^5.0.1",
     "random-words": "^2.0.0",
     "react": "^18.2.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "which-pm-runs": "^1.1.0"
   }
 }
