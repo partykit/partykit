@@ -352,13 +352,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"guides/scaling-partykit-servers-with-hibernation.md": {
-	id: "guides/scaling-partykit-servers-with-hibernation.md";
+"guides/scaling-partykit-servers-with-hibernation.mdx": {
+	id: "guides/scaling-partykit-servers-with-hibernation.mdx";
   slug: "guides/scaling-partykit-servers-with-hibernation";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
+} & { render(): Render[".mdx"] };
 "guides/scheduling-tasks-with-alarms.md": {
 	id: "guides/scheduling-tasks-with-alarms.md";
   slug: "guides/scheduling-tasks-with-alarms";
