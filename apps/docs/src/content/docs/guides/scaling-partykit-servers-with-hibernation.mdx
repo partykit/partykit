@@ -1,0 +1,161 @@
+---
+title: Scaling PartyKit servers with Hibernation
+description: Hibernation API is a pathway for scaling your app to tens of thousands of connections as it offloads the memory burden from the party instance process to the PartyKit platform.
+---
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+PartyKit simplifies building realtime multiplayer applications. However, as your app grows, maintaining WebSocket connections requires a lot of memory. Hibernation API is a pathway for scaling your app to tens of thousands of connections. It is done by offloading the memory burden from the party instance process to the PartyKit platform.
+
+This page provides an overview of the Hibernation API — what it is, how it works, when it’s useful, and how to implement it.
+
+## Opting into Hibernation
+
+```ts
+export default class Server implements Party.Server {
+  options: Party.ServerOptions = {
+    hibernate: true,
+  };
+}
+```
+
+## Benefits
+
+Hibernation allows a single party instance to handle vastly more active connections than it otherwise would:
+
+- Without Hibernation: up to **100 connections** per party instance
+- With Hibernation: up to **32,000 connections** per party instance
+
+Note that even with Hibernation, the practical maximum amount of connections may vary depending on the performance characteristics of the code you run on PartyKit (for example, memory use or CPU time). In PartyKit apps, memory use depends on:
+
+- active connections,
+- code size — for example, third-party libraries,
+- state — class fields you keep in memory between requests,
+- dynamic allocations — memory used by JavaScript for local variables, execution stack, and others.
+
+:::caution[Scale limit]
+The limit to scale per party instance is typically 128MB memory. With Hibernation, the active WebSocket connections no longer count towards your party's 128MB memory limit, but the total memory footprint of your code, state, and dynamic allocations may still exceed that limit.
+:::
+
+## How Hibernation works
+
+By default, PartyKit keeps the `Party.Server` instance in memory as long as there are connected WebSockets.
+
+With Hibernation, the party hibernates (goes to sleep) when it's not actively handling messages. This means that the `Party.Server` instance is unallocated by the platform. However, the open connections to clients are still maintained and the clients don't notice anything. As soon as a client sends a message, a new party instance is instantiated and the constructor and `onStart` callback are executed again.
+
+This process can happen quite frequently. With no messages from any client, alarms, or other background processes keeping the room alive, hibernation may be triggered even after a few seconds.
+
+## Who is it for
+
+Hibernation is well-suited for the following use cases:
+
+- A party will handle more than 100 connected clients simultaneously.
+- A party will have *infrequent writes* (when clients rarely send messages), which will lower the usage cost.
+- A party is based on *HTTP-only writes*, when WebSockets are used solely for pushing messages to clients (for example, webhooks).
+- You should always opt into hibernation when you don't need to maintain in-memory state between messages. This will lower the cost as the party is unloaded from memory when it's not being used. A good example here is message passing between clients like a relay server.
+
+## Who is it not for
+
+Hibernation does not perform well in the following cases:
+
+- If your server depends for message handling on state that is expensive to recreate (for example, when it includes an API call to an external service to fetch data),
+- If you're building with `Yjs` as `y-partykit` doesn't currently support Hibernation. (We are working on this.)
+
+## Limitations
+
+While using Hibernation, please note that:
+
+- Attaching event handlers manually in `onConnect` will not work. As soon as the party hibernates, these handlers are lost. Use `onMessage` and `onClose` instead.
+- The local `partykit dev` development environment does not hibernate. This means the behaviour of the code while developing can be different from behaviour on the hosted platform. (We are working on this.)
+
+To better understand the limitations, check [the Cloudflare documentation](https://developers.cloudflare.com/durable-objects/platform/limits/).
+
+## Patterns
+
+Hibernation will work better with certain programming patterns.
+
+### Partial state loading
+
+Instead of loading the full state from storage in the `onStart` lifecycle method, only read from storage the data you need, and only when you need it. Additionally, store state under multiple keys instead of one.
+
+If your party instance requires state, you will need to persist it to party storage, an external database, or an API, and reload it when the party is woken up from hibernation.
+
+:::tip[PartyKit storage]
+The PartyKit `storage` API has its own built-in cache. Because of that, reading frequently the same key is very performant as the result is cached in memory instead of having to read it from disk every time.
+:::
+
+If loading the state is expensive (for example, because of the large amounts of state stored in party storage or a slow API call), message handling may be slower, as the party will have to wait for the state to load before running in the `onMessage` callback.
+
+#### Example
+
+<Tabs>
+	<TabItem label="✅ DO">
+```ts
+type AllItems = Record<string, any>;
+
+export default class Server implements Party.Server {
+  options: Party.ServerOptions = { hibernate: true };
+  constructor(readonly party: Party.Party) {}
+  // GOOD: no data loading on startup
+  // onStart() {}
+
+  async onMessage(websocketMessage: string) {
+    const event = JSON.parse(websocketMessage);
+    if (event.type === "create") {
+      this.party.broadcast(event.data);
+      // store each item under a separate key
+      this.party.storage.put(`item:${event.id}`, event.data);
+    };
+
+    if (event.type === "update") {
+      // GOOD: read stored state on-demand when needed
+      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
+      const updatedItem = {
+        ...item,
+        ...event.data,
+      };
+
+      // GOOD: now we need to write only to a single key
+      this.party.storage.put(`item:${event.id}`, updatedItem);
+    };
+  };
+};
+```
+</TabItem>
+<TabItem label="⛔️ DON'T">
+```ts
+type AllItems = Record<string, any>;
+
+export default class Server implements Party.Server {
+  options: Party.ServerOptions = { hibernate: true };
+  constructor(readonly party: Party.Party) {}
+  async onStart() {
+    // BAD
+    // we load full state from storage on start (may be big)
+    this.items = await this.party.storage.get<AllItems>("state");
+  };
+
+  async onMessage(websocketMessage: string) {
+    const event = JSON.parse(websocketMessage);
+    if (event.type === "create") {
+      this.items[event.id] = event.data;
+      this.party.broadcast(event.data);
+    };
+
+    if (event.type === "update") {
+      const item = this.items[event.id];
+      this.items[event.id] = {
+        ...item,
+        ...event.data,
+      };
+    };
+
+    // BAD
+    // we need to persist the whole state again (expensive)
+    await this.party.storage.put("items", this.items);
+  };
+};
+```
+
+  </TabItem>
+</Tabs>
