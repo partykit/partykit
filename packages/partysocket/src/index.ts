@@ -1,10 +1,7 @@
 import type * as RWS from "./ws";
 import ReconnectingWebSocket from "./ws";
 
-export type PartySocketOptions = Omit<
-  RWS.Options,
-  "WebSocket" | "constructor"
-> & {
+export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   id?: string; // the id of the client
   host: string; // base url for the party
   room: string; // the room to connect to
