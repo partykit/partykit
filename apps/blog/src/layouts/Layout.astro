@@ -1,6 +1,13 @@
 ---
 import { SITE } from "@config";
 import "@styles/base.css";
+declare global {
+  interface Window {
+    // vercel analytics
+    va(): void;
+    vaq: unknown[];
+  }
+}
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -35,7 +42,11 @@ const socialImageURL = new URL(
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
     <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+      window.va =
+        window.va ||
+        function () {
+          (window.vaq = window.vaq || []).push(arguments);
+        };
     </script>
     <script defer src="/_vercel/insights/script.js"></script>
 
