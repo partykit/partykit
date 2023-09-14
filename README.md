@@ -35,9 +35,9 @@ From inside the directory, you can then run `npm run dev` to start the developme
 ## Developers
 
 - [Documentation](https://docs.partykit.io/) - [`/apps/docs`](./apps/docs)
-- [Examples](https://docs.partykit.io/examples) - [`/apps/docs/examples`](./apps/docs/examples)
-- [API References](https://docs.partykit.io/reference/) - [`./apps/docs/reference`](./apps/docs/reference)
-- [Guides](https://docs.partykit.io/guides) - [`./apps/docs/guides`](./apps/docs/guides)
+- [Examples](https://docs.partykit.io/examples) - [`/apps/docs/src/content/docs/examples`](./apps/docs/src/content/docs/examples)
+- [API References](https://docs.partykit.io/reference/) - [`./apps/docs/src/content/docs/reference`](./apps/docs/src/content/docs/reference)
+- [Guides](https://docs.partykit.io/guides) - [`./apps/docs/src/content/docs/guides`](./apps/docs/src/content/docs/guides)
 - [Release Notes](https://github.com/partykit/partykit/releases)
 - [Blog](https://blog.partykit.io/) - [`/apps/blog`](./apps/blog)
 
