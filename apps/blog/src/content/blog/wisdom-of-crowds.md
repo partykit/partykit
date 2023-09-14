@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-14T11:11:00Z
+pubDatetime: 2023-09-14T14:03:00Z
 title: The wisdom of crowds a.k.a. doing your own experiments
 postSlug: wisdom-of-crowds
 featured: false
@@ -9,6 +9,7 @@ tags:
   - sketchbook
   - residency
   - demos
+  - game
 ogImage: "/content-images/wisdom-of-crowds/smiley.png"
 description: Building a simple multiplayer drawing challenge, and what I learnt.
 ---
