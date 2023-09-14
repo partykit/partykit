@@ -21,7 +21,7 @@ jobs:
           node-version: 18
           cache: "npm"
 
-      - run: npm ci
+      - run: npm install
 
       - name: Modify package.json version
         run: node .github/version-script.js

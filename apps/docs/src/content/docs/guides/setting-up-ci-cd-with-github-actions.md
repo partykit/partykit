@@ -42,7 +42,7 @@ jobs:
         with:
           node-version: 18
           cache: "npm"
-      - run: npm ci
+      - run: npm install
       - run: npx partykit deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
