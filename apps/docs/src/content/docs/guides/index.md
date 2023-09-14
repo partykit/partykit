@@ -126,4 +126,4 @@ And every other connected client will see the following:
 
 ### Putting into action
 
-That's all it takes to create a real-time WebSocket server with PartyKit. To learn more about common patterns and uses cases, head over to the [Examples](/examples/all-examples/) section.
+That's all it takes to create a real-time WebSocket server with PartyKit. To learn more about common patterns and uses cases, head over to the [Examples](/examples/) section.
