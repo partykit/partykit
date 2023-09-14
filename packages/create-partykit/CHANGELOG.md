@@ -1,5 +1,15 @@
 # create-partykit
 
+## 0.0.9
+
+### Patch Changes
+
+- [#372](https://github.com/partykit/partykit/pull/372) [`a9b3593`](https://github.com/partykit/partykit/commit/a9b3593f8c4e8f463a95df9f4d8440645b3de6c0) Thanks [@jamesgpearce](https://github.com/jamesgpearce)! - Reduce double ping in client.js/ts
+
+  When server hot-reloads (for example), the clients reconnect and another ping sequence starts. You then get multiple pings from each browser. This change cancels an existing sequence if it exists.
+
+- [#368](https://github.com/partykit/partykit/pull/368) [`a9c980f`](https://github.com/partykit/partykit/commit/a9c980f931d4d4feae6d9abe15216751784ca5ad) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
 ## 0.0.8
 
 ### Patch Changes

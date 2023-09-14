@@ -1,5 +1,15 @@
 # partysocket
 
+## 0.0.6
+
+### Patch Changes
+
+- [#321](https://github.com/partykit/partykit/pull/321) [`5e1f03d`](https://github.com/partykit/partykit/commit/5e1f03de909491755e9ea5974c80012cff64a85f) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: pass custom WebSocket constructor
+
+  This lets you pass a custom WebSocket constructor to PartySocket / ReconnectingWebSocket. This means we can now run PartySocket from node.
+
+  Fixes #320
+
 ## 0.0.5
 
 ### Patch Changes

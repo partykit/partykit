@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.14
+
+### Patch Changes
+
+- [#365](https://github.com/partykit/partykit/pull/365) [`5e73617`](https://github.com/partykit/partykit/commit/5e736175902c85df401bc9e2e756fa0ec7c3d355) Thanks [@jevakallio](https://github.com/jevakallio)! - Only yield open hibernating connections to match non-hibernating behaviour + polyfill WebSocket status code on platform side
+
+- [#368](https://github.com/partykit/partykit/pull/368) [`a9c980f`](https://github.com/partykit/partykit/commit/a9c980f931d4d4feae6d9abe15216751784ca5ad) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
 ## 0.0.13
 
 ### Patch Changes

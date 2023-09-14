@@ -1,6 +1,6 @@
 {
   "name": "partysocket",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "party hotline",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
