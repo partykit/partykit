@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.15
+
+### Patch Changes
+
+- [#377](https://github.com/partykit/partykit/pull/377) [`9d37d81`](https://github.com/partykit/partykit/commit/9d37d81542918a503e229f1d4c8b88c1ce339080) Thanks [@jevakallio](https://github.com/jevakallio)! - Make request mutable before passing it to onBefore\* methods
+
 ## 0.0.14
 
 ### Patch Changes
