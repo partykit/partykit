@@ -49,8 +49,10 @@ export default class Server implements Party.Server {
       // get token from request query string
       const token = new URL(request.url).searchParams.get("token") ?? "";
       // verify the JWT (in this case using clerk)
-      await verifyToken(token, { issuer: CLERK_ENDPOINT });
-      // forward the request onwards on onRequest
+      const session = await verifyToken(token, { issuer: CLERK_ENDPOINT });
+      // pass any information to the onConnect handler in headers
+      request.headers.set("X-User-ID", session.sub);
+      // forward the request onwards on onConnect
       return request;
     } catch (e) {
       // authentication failed!
@@ -59,8 +61,9 @@ export default class Server implements Party.Server {
     }
   }
 
-  onRequest(req: Party.Request) {
-    return new Response(`Hello from party!`);
+  onConnect(connection: Party.Connection, { request }: Party.ConnectionContext) {
+    const userId = request.headers.get("X-User-ID");
+    return new Response(`Hello ${userId} from party!`);
   }
 }
 ```
