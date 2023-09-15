@@ -572,8 +572,9 @@ export default {
           if ("onBeforeConnect" in targetWorker) {
             if (typeof targetWorker.onBeforeConnect === "function") {
               try {
+                const mutableRequest = new Request(request.url, request);
                 onBeforeConnectResponse = await targetWorker.onBeforeConnect(
-                  request,
+                  mutableRequest,
                   {
                     id: roomId,
                     env: PARTYKIT_VARS,
@@ -613,8 +614,9 @@ export default {
           if ("onBeforeRequest" in targetWorker) {
             if (typeof targetWorker.onBeforeRequest === "function") {
               try {
+                const mutableRequest = new Request(request.url, request);
                 onBeforeRequestResponse = await targetWorker.onBeforeRequest(
-                  request,
+                  mutableRequest,
                   {
                     id: roomId,
                     env: PARTYKIT_VARS,
