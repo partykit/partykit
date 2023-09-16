@@ -1,5 +1,15 @@
 # partysocket
 
+## 0.0.7
+
+### Patch Changes
+
+- [#382](https://github.com/partykit/partykit/pull/382) [`8c0bd23`](https://github.com/partykit/partykit/commit/8c0bd236cc47220d1c7ac109ef4aba939b53f129) Thanks [@threepointone](https://github.com/threepointone)! - partysocket fix: don't crash in codesandbox
+
+  looks like tools like stackblitz defines `process` on the fronted (???), but when we test for process.versions.node it crashes. This fixes the detection logic.
+
+  (PartyKit doesn't work in stackblitz yet, but atleast this error shouldn't happen)
+
 ## 0.0.6
 
 ### Patch Changes
