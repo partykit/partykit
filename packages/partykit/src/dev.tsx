@@ -521,7 +521,7 @@ function useDev(options: DevProps): {
                   ([name, party]) =>
                     `
 import ${name} from '${party}'; 
-export const ${name}DO = createDurable(${name});
+export const ${name}DO = createDurable(${name}, { name: "${name}" });
 Workers["${name}"] = ${name};
 `
                 )

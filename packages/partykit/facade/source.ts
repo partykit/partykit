@@ -118,7 +118,12 @@ function createMultiParties(
   return parties;
 }
 
-function createDurable(Worker: Party.PartyKitServer) {
+function createDurable(
+  Worker: Party.PartyKitServer,
+  options: {
+    name: string;
+  }
+) {
   const isClassAPI = isClassWorker(Worker);
 
   // When the worker is a class, to validate worker shape we'll look onto the worker prototype
@@ -203,6 +208,7 @@ function createDurable(Worker: Party.PartyKitServer) {
           );
         },
         internalID: this.controller.id.toString(),
+        name: options.name,
         env: PARTYKIT_VARS,
         storage: this.controller.storage,
         broadcast: this.broadcast,
@@ -504,7 +510,7 @@ const Workers: Record<string, Party.PartyKitServer> = {
   main: Worker,
 };
 
-export const PartyKitDurable = createDurable(Worker);
+export const PartyKitDurable = createDurable(Worker, { name: "main" });
 __PARTIES__;
 declare const __PARTIES__: Record<string, string>;
 

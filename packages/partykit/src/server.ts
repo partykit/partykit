@@ -88,6 +88,9 @@ export type Party = {
   /** Internal ID assigned by the platform. Use Party.id instead. */
   internalID: string;
 
+  /** Party name defined in the Party URL, e.g. /parties/:name/:id */
+  name: string;
+
   /** Environment variables (--var, partykit.json#vars, or .env) */
   env: Record<string, unknown>;
 
