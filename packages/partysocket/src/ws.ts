@@ -81,7 +81,7 @@ function cloneEventNode(e: Event) {
 
 const isNode =
   typeof process !== "undefined" &&
-  typeof process.versions.node !== "undefined" &&
+  typeof process.versions?.node !== "undefined" &&
   typeof document === "undefined";
 
 const cloneEvent = isNode ? cloneEventNode : cloneEventBrowser;
