@@ -62,7 +62,7 @@ const { title, subtitle, kicker, text, variant = 12} = Astro.props;
         <iframe 
             src='https://multicursor-sketch.vercel.app?host=io' 
             class='bn overflow-hidden w-100 h-100 db' 
-            style='border-right: 1px solid black; opacity: 0.75;'>
+            style='opacity: 0.75;'>
         </iframe>
         </div>
         <h1 class='relative my0 lh-title lh-solid-s f8 f8-s f10-l fw9 tracked-tight mt4'
@@ -92,7 +92,7 @@ const { title, subtitle, kicker, text, variant = 12} = Astro.props;
 }
 {variant === 13 && 
     <header class='px4 py6 py7-m bb'>
-        <div class'mw9 center'>
+        <div class='mw9 center'>
         <h1 class='my0 lh-solid f5 f8-s fw9 tracked-tight mt4'>{title}</h1>
         <p class='lh-copy f5 f5-s mt4 measure'>{text}</p>
         <div class='flex g4'>
