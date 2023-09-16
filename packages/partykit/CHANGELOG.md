@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.16
+
+### Patch Changes
+
+- [#380](https://github.com/partykit/partykit/pull/380) [`22d8518`](https://github.com/partykit/partykit/commit/22d85184b6d14d951786167e410ff591e428fa4f) Thanks [@threepointone](https://github.com/threepointone)! - add `party.name`
+
+  This exposes the parent level name of the party (default "main", other wise the key from `parties` in `partykit.json`
+
 ## 0.0.15
 
 ### Patch Changes
