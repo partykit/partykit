@@ -47,6 +47,8 @@ function generateUUID(): string {
 // TODO: incorporate the above notes
 export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
+  _pkurl: string;
+  name: string;
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const {
@@ -77,9 +79,17 @@ export default class PartySocket extends ReconnectingWebSocket {
 
     super(url, protocols, socketOptions);
     this._pk = _pk;
+    this._pkurl = url;
+
+    this.name = party ?? "main";
   }
   get id() {
     return this._pk;
+  }
+
+  // partysocket has a static url, so we can just return that
+  get url(): string {
+    return this._pkurl;
   }
 }
 
