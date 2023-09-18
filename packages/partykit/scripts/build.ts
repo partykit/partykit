@@ -44,6 +44,7 @@ esbuild.buildSync({
     "esbuild",
     "fsevents",
     "miniflare",
+    "clipboardy",
   ],
   banner: isProd
     ? { js: "#!/usr/bin/env node" + createRequireSnippet }
