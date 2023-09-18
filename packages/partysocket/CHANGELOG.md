@@ -1,5 +1,15 @@
 # partysocket
 
+## 0.0.8
+
+### Patch Changes
+
+- [#384](https://github.com/partykit/partykit/pull/384) [`205d4aa`](https://github.com/partykit/partykit/commit/205d4aa4dd67a16d634a5199cb27df03230f06fc) Thanks [@threepointone](https://github.com/threepointone)! - expose `partySocket.name`, and a static `.url`
+
+  This exposes the top level party 'name' on partysocket. Since urls for partysocket are 'static' we can also override the base implementation and expose the calculated url as well.
+
+- [#386](https://github.com/partykit/partykit/pull/386) [`f9a648e`](https://github.com/partykit/partykit/commit/f9a648e87660499786ecb6cca73bc52bc0b160bf) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: expose `socket.room` and `socket.host` on instance
+
 ## 0.0.7
 
 ### Patch Changes
