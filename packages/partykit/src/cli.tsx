@@ -709,9 +709,11 @@ export async function _delete(options: {
     }
   );
 
-  logger.log(
-    `Deleted ${chalk.bold(`${config.name}.${user.login}.partykit.dev`)}`
-  );
+  const displayName = options.preview
+    ? `${options.preview}.${config.name}.${user.login}.partykit.dev`
+    : `${config.name}.${user.login}.partykit.dev`;
+
+  logger.log(`Deleted ${chalk.bold(displayName)}`);
 }
 
 type TailCreationApiResponse = {
