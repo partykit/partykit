@@ -49,6 +49,8 @@ export default class PartySocket extends ReconnectingWebSocket {
   _pk: string;
   _pkurl: string;
   name: string;
+  room: string;
+  host: string;
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const {
@@ -82,6 +84,8 @@ export default class PartySocket extends ReconnectingWebSocket {
     this._pkurl = url;
 
     this.name = party ?? "main";
+    this.room = room;
+    this.host = host;
   }
   get id() {
     return this._pk;
