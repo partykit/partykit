@@ -16,6 +16,9 @@
     "port": {
       "type": "number"
     },
+    "preview": {
+      "type": "string"
+    },
     "serve": {
       "anyOf": [
         {

@@ -29,6 +29,7 @@ export const schema = z
     name: z.string().optional(),
     main: z.string().optional(),
     port: z.number().optional(),
+    preview: z.string().optional(),
     serve: z
       .union([
         z.string(),
