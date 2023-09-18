@@ -465,13 +465,18 @@ export async function deploy(options: {
   const esbuild = await import("esbuild");
 
   if (assetsPath) {
+    const params = options?.preview
+      ? `?${new URLSearchParams({ preview: options.preview })}`
+      : "";
+    const assetsApiPath = `/parties/${user.login}/${config.name}/assets${params}`;
+
     // do a build
     esbuild.buildSync(esbuildAssetOptions);
 
     // get current assetsMap
     const currentAssetsMap = await fetchResult<{
       assets: Record<string, string>;
-    }>(`/parties/${user.login}/${config.name}/assets`, {
+    }>(assetsApiPath, {
       user,
       headers: {
         "Content-Type": "application/json",
@@ -524,7 +529,7 @@ export async function deploy(options: {
       );
 
       for (const file of filesToUpload) {
-        await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+        await fetchResult(assetsApiPath, {
           user,
           method: "PUT",
           body: fs.createReadStream(file.filePath),
@@ -538,7 +543,7 @@ export async function deploy(options: {
       }
     }
 
-    await fetchResult(`/parties/${user.login}/${config.name}/assets`, {
+    await fetchResult(assetsApiPath, {
       user,
       method: "POST",
       body: JSON.stringify(newAssetsMap),
