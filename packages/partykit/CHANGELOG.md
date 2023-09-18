@@ -1,5 +1,15 @@
 # partykit
 
+## 0.0.18
+
+### Patch Changes
+
+- [#389](https://github.com/partykit/partykit/pull/389) [`e3f2808`](https://github.com/partykit/partykit/commit/e3f2808cfed9afbe7f35e58fa6a6dc58cb326a4f) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix deleting preview deployments
+
+- [#390](https://github.com/partykit/partykit/pull/390) [`2cc09ee`](https://github.com/partykit/partykit/commit/2cc09eefe1197b7d14a9b6b79444fe88ce09cb4f) Thanks [@threepointone](https://github.com/threepointone)! - mark `clipboardy` as an external dependency
+
+  clipboardy comes with fallback binaries to use (esp. in windows). If we bundle it into the partykit bundle, then the references to those binaries fail. So we mark it as an external so it installs separately and resolves the binaries correctly.
+
 ## 0.0.17
 
 ### Patch Changes
