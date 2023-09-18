@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.19
+
+### Patch Changes
+
+- [#392](https://github.com/partykit/partykit/pull/392) [`d9a6531`](https://github.com/partykit/partykit/commit/d9a65319e73dc7f38f1b59749f1f083e4a5d0cf6) Thanks [@threepointone](https://github.com/threepointone)! - publish releases on discord
+
 ## 0.0.18
 
 ### Patch Changes
