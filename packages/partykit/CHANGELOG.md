@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.17
+
+### Patch Changes
+
+- [#387](https://github.com/partykit/partykit/pull/387) [`5bc204f`](https://github.com/partykit/partykit/commit/5bc204fa9ef1547a31a39e1bbff454f6ec3cb188) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix static asset deployment for PartyKit preview deployments
+
 ## 0.0.16
 
 ### Patch Changes
