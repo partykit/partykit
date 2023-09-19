@@ -5,6 +5,8 @@ import type {
   Request as CFRequest,
 } from "@cloudflare/workers-types";
 
+import type PartySocket from "partysocket";
+
 export type StaticAssetsManifestType = {
   devServer: string;
   browserTTL: number | undefined;
@@ -37,7 +39,7 @@ export interface Storage extends DurableObjectStorage {}
 export type ConnectionContext = { request: CFRequest };
 
 export type Stub = {
-  connect: () => WebSocket;
+  connect: () => PartySocket;
   fetch: (init?: RequestInit) => Promise<Response>;
 };
 

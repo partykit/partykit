@@ -15,6 +15,7 @@ import {
   createLazyConnection,
 } from "./connection";
 import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
+import PartySocket from "partysocket";
 
 // @ts-expect-error We'll be replacing __WORKER__
 // with the path to the input worker
@@ -102,11 +103,11 @@ function createMultiParties(
               },
               connect: () => {
                 // wish there was a way to create a websocket from a durable object
-                return new WebSocket(
-                  key === "main"
-                    ? `ws://${options.host}/party/${name}`
-                    : `ws://${options.host}/parties/${key}/${name}`
-                );
+                return new PartySocket({
+                  host: options.host,
+                  room: name,
+                  party: key,
+                });
               },
             };
           },

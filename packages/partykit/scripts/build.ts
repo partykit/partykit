@@ -28,7 +28,7 @@ esbuild.buildSync({
   outfile: "facade/generated.js",
   platform: "neutral",
   bundle: true,
-  external: ["__WORKER__", "__STATIC_ASSETS_MANIFEST__"],
+  external: ["__WORKER__", "__STATIC_ASSETS_MANIFEST__", "partysocket"],
 });
 
 // generate bin/index.js
@@ -39,12 +39,13 @@ esbuild.buildSync({
   outfile: "dist/bin.mjs",
   platform: "node",
   external: [
-    "react-devtools-core",
-    "yoga-wasm-web",
+    "clipboardy",
     "esbuild",
     "fsevents",
     "miniflare",
-    "clipboardy",
+    "partysocket",
+    "react-devtools-core",
+    "yoga-wasm-web",
   ],
   banner: isProd
     ? { js: "#!/usr/bin/env node" + createRequireSnippet }

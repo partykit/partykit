@@ -7,3 +7,6 @@ const { execSync } = require("node:child_process");
 // See https://github.com/changesets/changesets/issues/421.
 execSync("npx changeset version");
 execSync("npm install");
+execSync("node -r esbuild-register .github/rewrite-local-deps.ts", {
+  shell: true,
+});
