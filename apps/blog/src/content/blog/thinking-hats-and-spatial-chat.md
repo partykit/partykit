@@ -11,7 +11,7 @@ tags:
   - demos
   - ai
   - chat
-ogImage: "/content-imagesthinking-hats-and-spatial-chat/moving-rooms.png"
+ogImage: "/content-images/thinking-hats-and-spatial-chat/moving-rooms.png"
 description: AI chatbots with personality, for group teams. The code uses Yjs and is open for you to customise.
 ---
 
