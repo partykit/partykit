@@ -52,7 +52,7 @@ Let’s look at what we’ve got:
 
 Here’s a map. You start in the blue room.
 
-![Thinking Hats map](/content-images/thinking-hats-and-spatial-chat/map.png)
+![Thinking Hats map explaining how the rooms are connected. The top two rooms are: "Blue: the big picture" and "Green: new ideas". They connect respectively to: "White: facts and Info" and "Yellow: positive". Next row rooms are: "Red: feelings and emotions", "Black: evaluation" and "Poet". "Poet" connects to the last, secret, room](/content-images/thinking-hats-and-spatial-chat/map.png)
 
 ## The code: what you’ll find
 
