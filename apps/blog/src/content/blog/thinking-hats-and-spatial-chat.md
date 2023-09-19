@@ -11,7 +11,7 @@ tags:
   - demos
   - ai
   - chat
-ogImage: "/content-images/wisdom-of-crowds/smiley.png"
+ogImage: "/content-imagesthinking-hats-and-spatial-chat/moving-rooms.png"
 description: AI chatbots with personality, for group teams. The code uses Yjs and is open for you to customise.
 ---
 
@@ -93,6 +93,8 @@ We want the chatbot to run on the server, instead of from the user’s web brows
 ### Now... customise it!
 
 If you’d like to change the room map, or add your own NPCs, [start with RoomMap in shared.ts](https://github.com/partykit/sketch-spatial-chat/blob/main/src/shared.ts).
+
+![Moving rooms](/content-images/thinking-hats-and-spatial-chat/moving-rooms-small.png)
 
 ## What next?
 
