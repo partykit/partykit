@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-19T14:03:00Z
+pubDatetime: 2023-09-19T15:09:00Z
 title: AI chatbots for Edward De Bono’s Six Thinking Hats
 postSlug: thinking-hats-and-spatial-chat
 featured: false
