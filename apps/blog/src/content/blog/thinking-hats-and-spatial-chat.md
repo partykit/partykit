@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-19T15:09:00Z
+pubDatetime: 2023-09-19T15:16:00Z
 title: AI chatbots for Edward De Bono’s Six Thinking Hats
 postSlug: thinking-hats-and-spatial-chat
 featured: false
@@ -47,7 +47,7 @@ Let’s look at what we’ve got:
 - **There are six coloured rooms,** one for each of the six thinking hats: planning (blue), new ideas (green), facts (white), new benefits (yellow), feelings (red), and evaluation (black).
 - _(Actually there are a couple of bonus rooms, but I’ll leave you to discover those.)_
 - **The rooms are laid out in a spatial grid.** There’s a Google Maps-style navigator in the bottom right. A smooth animation takes you from room to room. Because the chatrooms connect spatially, the idea is that you’ll mentally record your way back to information more naturally than having those same conversations in a sidebar list.
-- **Each room has a helpful NPC.** NPC == non-player character, a fake user. In each room is an AI chatbot that facilitates the discussion according to the “hat.” If you’re in the yellow hat room, the chatbot will suggest new benefits of your idea. In the white room, you’ll be encouraged to dig for factual information.
+- **Each room has a helpful NPC.** An NPC is a non-player character, a fake user. In each room is an AI chatbot that facilitates the discussion according to the “hat.” If you’re in the yellow hat room, the chatbot will suggest new benefits of your idea. In the white room, you’ll be encouraged to dig for factual information.
 - **It’s all multiplayer.** We do our best thinking together, so you can all together together with the AI chatbots, or you can move around independently and catch up with the conversation when you enter a room.
 
 Here’s a map. You start in the blue room.
@@ -72,9 +72,9 @@ With this demo, each chat room is a separate Yjs document. If you’d like to di
 
 What’s neat about using PartyKit is that I can write my own business logic.
 
-In particular, [here’s the PartyKit code for the server](https://github.com/partykit/sketch-spatial-chat/blob/main/src/partykit/server.ts). For a Yjs backend, all you need is the `onConnect`` handler.
+In particular, [here’s the PartyKit code for the server](https://github.com/partykit/sketch-spatial-chat/blob/main/src/partykit/server.ts). For a Yjs backend, all you need is the `onConnect` handler.
 
-But I’ve also added a handler called `handleYDocChange`` which runs as a callback every time the shared Yjs document changes.
+But I’ve also added a handler called `handleYDocChange` which runs as a callback every time the shared Yjs document changes.
 
 This means that, on the server side, we’re watching the chatroom conversation. And whenever a new message comes in, we get to run some code. You can do all kinds of things with this pattern, and here we’re going to use it to respond to messages using a chatbot.
 
@@ -88,7 +88,7 @@ _"You are a motivational brainstorming partner. Build on what I say with a posit
 
 (That’s the green hat: new ideas.)
 
-We want the chatbot to run on the server, instead of from the user’s web browser, because that way it is independent of any particular user: it’s multiplayer after all You can also see in this example how the stream the response from OpenAI, so that the chatbot’s response message appears character by character in the room.
+We want the chatbot to run on the server, instead of from the user’s web browser, because that way it is independent of any particular user: it’s multiplayer after all. You can also see in this example how to stream the response from OpenAI, so that the chatbot’s response message appears character by character in the room.
 
 ### Now... customise it!
 
@@ -98,11 +98,11 @@ If you’d like to change the room map, or add your own NPCs, [start with RoomMa
 
 ## What next?
 
-I feel like De Bono’s _Six Thinking Hats_ approach is a good way to explore ideas from all sides? If you try this system with a team in a real life situation, I’d love to hear about your experience.
+I feel like De Bono’s _Six Thinking Hats_ approach is a good way to explore ideas from all sides? If you try this system with a team in a real-life situation, I’d love to hear about your experience.
 
 I’m into the idea of group chat + AI, but the chatbots should be able to learn from their participants, not just respond: are there better ways to interact, instead of replying to every message?
 
-I’m also into the idea of rooms for context, that can accrete docs and memory over time, rather than being wiped clean like Zoom rooms at the end of a video call.
+I’m also into the idea of rooms that hold context, so perhaps they accumulate docs and memory over time, rather than being wiped clean like Zoom rooms at the end of a video call.
 
 So, for me, this is the beginning of that exploration.
 
