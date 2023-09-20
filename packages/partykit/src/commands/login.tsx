@@ -7,7 +7,7 @@ import { Text } from "ink";
 const read = asyncCache();
 
 export default function Login({ method }: { method?: LoginMethod }) {
-  const userConfig = read("get-user", () => getUser(method)) as Awaited<
+  const userConfig = read("get-user", () => getUser(method, true)) as Awaited<
     ReturnType<typeof getUser>
   >;
 

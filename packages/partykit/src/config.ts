@@ -39,7 +39,10 @@ export type UserConfig = z.infer<typeof userConfigSchema>;
 export type LoginMethod = UserConfig["type"];
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
-export async function getUser(loginMethod?: LoginMethod): Promise<UserConfig> {
+export async function getUser(
+  loginMethod?: LoginMethod,
+  exact: boolean = false
+): Promise<UserConfig> {
   const flags = getFlags();
   const method = loginMethod ?? flags.defaultLoginMethod;
 
@@ -48,9 +51,16 @@ export async function getUser(loginMethod?: LoginMethod): Promise<UserConfig> {
 
   try {
     userConfig = getUserConfig();
+
     if (!flags.supportedLoginMethods.includes(userConfig.type)) {
       throw new Error(
-        `Login method ${userConfig.type} is not supported, logging in again.`
+        `Login method ${userConfig.type} is no longer supported, logging in again.`
+      );
+    }
+
+    if (exact && method !== userConfig.type) {
+      throw new Error(
+        `User has logged in using another method, logging in again`
       );
     }
   } catch (e) {
