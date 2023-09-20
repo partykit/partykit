@@ -13,7 +13,7 @@ const flagsSchema = z.object({
 });
 
 const defaultFlags: Flags = {
-  defaultLoginMethod: "github",
+  defaultLoginMethod: "clerk",
   supportedLoginMethods: ["clerk", "github"],
 };
 
@@ -24,18 +24,20 @@ type Flags = z.infer<typeof flagsSchema>;
 export function getFlags(): Flags {
   if (!cachedFlags) {
     try {
-      // use previously cached flags if available
-      cachedFlags = flagsSchema.parse(
-        JSON5.parse(fs.readFileSync(USER_FLAGS_PATH, "utf8"))
-      );
-
-      // fetch remote flags and cache them locally for offline use for next time
-      void fetchFlags().then((flags) => {
-        cachedFlags = flags;
-      });
+      if (fs.existsSync(USER_FLAGS_PATH)) {
+        // use previously cached flags if available
+        cachedFlags = flagsSchema.parse(
+          JSON5.parse(fs.readFileSync(USER_FLAGS_PATH, "utf8"))
+        );
+      }
     } catch (e) {
       // ignore, fall back to default settings
     }
+
+    // fetch remote flags and cache them locally for offline use for next time
+    void fetchFlags().then((flags) => {
+      cachedFlags = flags;
+    });
   }
 
   return {
@@ -45,8 +47,9 @@ export function getFlags(): Flags {
 }
 
 async function fetchFlags(): Promise<Flags> {
-  const flags = flagsSchema.parse(await fetchResult("/flags"));
+  const data = await fetchResult("/flags");
+  const flags = flagsSchema.parse(data);
   fs.mkdirSync(path.dirname(USER_FLAGS_PATH), { recursive: true });
-  fs.writeFileSync(USER_FLAGS_PATH, JSON.stringify(cachedFlags, null, 2));
+  fs.writeFileSync(USER_FLAGS_PATH, JSON.stringify(flags, null, 2));
   return flags;
 }
