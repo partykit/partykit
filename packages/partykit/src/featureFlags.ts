@@ -35,9 +35,14 @@ export function getFlags(): Flags {
     }
 
     // fetch remote flags and cache them locally for offline use for next time
-    void fetchFlags().then((flags) => {
-      cachedFlags = flags;
-    });
+    void fetchFlags()
+      .then((flags) => {
+        cachedFlags = flags;
+      })
+      .catch((e) => {
+        //
+        return true;
+      });
   }
 
   return {
