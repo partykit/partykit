@@ -116,6 +116,6 @@ This means you can radically simplify the programming model compared to the stan
 
 ### Globally distributed
 
-Each room runs in a separate [Durable Object](/glossary/#durable-object) inside CloudFlare's edge network and we can create servers on-demand in any of hundreds of data centers around the world. Because of that, they are reliable and horizontally scalable.
+Each room runs in a separate [Durable Object](/glossary/#durable-object) inside Cloudflare's edge network and we can create servers on-demand in any of hundreds of data centers around the world. Because of that, they are reliable and horizontally scalable.
 
 This is also why PartyKit servers are suitable for real-time, latency-sensitive use cases. The connection between the client and server is typically very fast as we always create the server in the network-topologically nearest data center.
