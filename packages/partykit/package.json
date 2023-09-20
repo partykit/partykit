@@ -42,14 +42,14 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "^4.20230914.0",
-    "clipboardy": "^3.0.0",
-    "esbuild": "^0.19.3",
-    "miniflare": "^3.20230918.0",
-    "yoga-wasm-web": "^0.3.3"
+    "@cloudflare/workers-types": "4.20230914.0",
+    "clipboardy": "3.0.0",
+    "esbuild": "0.19.3",
+    "miniflare": "3.20230918.0",
+    "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
-    "fsevents": "^2.3.3"
+    "fsevents": "2.3.3"
   },
   "devDependencies": {
     "@clerk/clerk-js": "4.57.0",
