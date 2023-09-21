@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.21
+
+### Patch Changes
+
+- [#400](https://github.com/partykit/partykit/pull/400) [`2ed33de`](https://github.com/partykit/partykit/commit/2ed33dea58cd4a978f10ae66fd3b14c98ee84d1b) Thanks [@threepointone](https://github.com/threepointone)! - pin dependencies
+
+- [#402](https://github.com/partykit/partykit/pull/402) [`18011e8`](https://github.com/partykit/partykit/commit/18011e80134eda921a24512d774c5b5ec2bc490a) Thanks [@jevakallio](https://github.com/jevakallio)! - Change default login provider to "partykit"
+
 ## 0.0.20
 
 ### Patch Changes
