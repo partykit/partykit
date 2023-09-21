@@ -293,6 +293,20 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"thinking-hats-and-spatial-chat.md": {
+	id: "thinking-hats-and-spatial-chat.md";
+  slug: "thinking-hats-and-spatial-chat";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"wisdom-of-crowds.md": {
+	id: "wisdom-of-crowds.md";
+  slug: "wisdom-of-crowds";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 };
 
 	};
