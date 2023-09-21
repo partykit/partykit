@@ -1,5 +1,7 @@
 import type Clerk from "@clerk/clerk-js";
 import ClerkImplementation from "@clerk/clerk-js/headless";
+import chalk from "chalk";
+import { logger } from "../logger";
 
 declare const CLERK_PUBLISHABLE_KEY: string | undefined;
 const PUBLISHABLE_KEY =
@@ -48,7 +50,21 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
       }
     });
 
+    // nuclear timeout: if you're not connected to the internet (or clerk)
+    // isn't reachable, clerk.load will hang forever. Throwing an error is
+    // not sufficient because the headless browser has internal timeouts
+    // that keep the process alive.
+    //
+    // This leaves us no choice: we must burn it all down.
+    const timeout = setTimeout(() => {
+      logger.log(chalk.bold("Authentication timed out."));
+      logger.log("Make sure you are connected to the internet any try again.");
+      process.exit(1);
+    }, 3000);
+
     await clerk.load({ standardBrowser: false });
+
+    clearTimeout(timeout);
 
     return clerk;
   };
