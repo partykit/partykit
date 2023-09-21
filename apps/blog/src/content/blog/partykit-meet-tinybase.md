@@ -96,6 +96,11 @@ project, and I want to give out a big thank you to Sunil, Sylwia, and Jani for
 being so responsive and helping get this built and released as quickly as we
 did.
 
-Please try out this new integration and let us know how it goes. There are
-plenty more things we can do to improve it, but we're excited to see what you
-build with it and would love your feedback. Party on, TinyBase!
+Please try out this new integration and let us know how it goes. We're standing
+by in the [PartyKit](https://discord.gg/g5uqHQJc3z) and
+[TinyBase](https://discord.com/invite/mGz3mevwP8) Discords, or hit up
+[TinyBase](https://twitter.com/tinybasejs) on X! There is plenty more we can do
+to improve things, but we're excited to see what you build with it and would
+love your feedback.
+
+Party on, TinyBase!
