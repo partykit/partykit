@@ -125,6 +125,6 @@ If you're rolling your own JWT authentication, or your identity provider doesn't
 
 Alternatively, you can consider these authentication methods:
 
-- For server-to-server communication, you can use a shared secret. Read about [managing environment variables with PartyKit](./managing-environment-variables).
+- For server-to-server communication, you can use a shared secret. Read about [managing environment variables with PartyKit](/guides/managing-environment-variables).
 
 - For client-to-server connections, you can pass any type of session token, and verify it against your session service. For an example with [NextAuth.js](https://next-auth.js.org/), see the [PartyKit Next.js example app](/examples/next-js).
