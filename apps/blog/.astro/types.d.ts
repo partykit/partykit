@@ -251,6 +251,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"partykit-meet-tinybase.md": {
+	id: "partykit-meet-tinybase.md";
+  slug: "partykit-meet-tinybase";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partyserver-class-api.md": {
 	id: "partyserver-class-api.md";
   slug: "partyserver-class-api";
