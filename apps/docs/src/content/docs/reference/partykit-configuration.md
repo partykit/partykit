@@ -169,7 +169,7 @@ A list of constants that you want to set for your project. Any globals with thes
 {
   "define": {
     "MY_CONSTANT": "'my value'",
-    "process.env.MY_MAGIC_NUMBER: "1"
+    "process.env.MY_MAGIC_NUMBER": "1"
   }
 }
 ```
