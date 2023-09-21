@@ -251,6 +251,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"partykit-meet-tinybase.md": {
+	id: "partykit-meet-tinybase.md";
+  slug: "partykit-meet-tinybase";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partyserver-class-api.md": {
 	id: "partyserver-class-api.md";
   slug: "partyserver-class-api";
@@ -289,6 +296,20 @@ declare module 'astro:content' {
 "terminal-development.md": {
 	id: "terminal-development.md";
   slug: "terminal-development";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"thinking-hats-and-spatial-chat.md": {
+	id: "thinking-hats-and-spatial-chat.md";
+  slug: "thinking-hats-and-spatial-chat";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"wisdom-of-crowds.md": {
+	id: "wisdom-of-crowds.md";
+  slug: "wisdom-of-crowds";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
