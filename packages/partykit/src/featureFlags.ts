@@ -39,8 +39,8 @@ export function getFlags(): Flags {
       .then((flags) => {
         cachedFlags = flags;
       })
-      .catch((e) => {
-        //
+      .catch(() => {
+        // ignore, fall back to default settings
         return true;
       });
   }
