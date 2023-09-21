@@ -168,7 +168,8 @@ A list of constants that you want to set for your project. Any globals with thes
 ```json
 {
   "define": {
-    "MY_CONSTANT": "my value"
+    "MY_CONSTANT": "'my value'",
+    "process.env.MY_MAGIC_NUMBER: "1"
   }
 }
 ```
@@ -178,7 +179,8 @@ With a configuration like that, you could then access the variable in your code 
 ```ts
 export default {
   onConnect(connection, room) {
-    console.log(MY_CONSTANT); // "my value"
+    console.log(MY_CONSTANT); // -> "my value"
+    console.log(process.env.MY_MAGIC_NUMBER) -> // 1
   },
 };
 ```
