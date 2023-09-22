@@ -9,7 +9,7 @@ To do so, you will first create a GitHub token and then set up a GitHub action.
 
 ### 1. Create a GitHub Token
 
-Create a GitHub Personal Access Token from [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new). You can just give it a name & expiration and leave other inputs as is.
+Create a GitHub Personal Access Token from [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new). You can give it a name & expiration, and leave the other inputs as is.
 
 Copy the token and add it to the project repository by going to "Settings" from the top menu of the repository. Then, find "Secrets and variables" in the sidebar and choose "Actions" from the submenu. Finally, click "New repository secret" to add the token.
 
