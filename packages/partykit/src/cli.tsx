@@ -70,10 +70,7 @@ function* findAllFiles(
         }
         dirs.push(filePath);
       } else {
-        yield path.relative(
-          root,
-          filePath.replace(/\\/g, "/") // windows
-        );
+        yield path.relative(root, filePath).replace(/\\/g, "/"); // windows;
       }
     }
   }
