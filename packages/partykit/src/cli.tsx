@@ -2,7 +2,7 @@
 import path from "path";
 import * as fs from "fs";
 import { fetchResult } from "./fetchResult";
-import { File, FormData } from "undici";
+import { fetch, File, FormData } from "undici";
 import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
 import WebSocket from "ws";
@@ -132,14 +132,14 @@ export async function init(options: {
       latestPartyKitVersion = await fetch(
         `https://registry.npmjs.org/partykit/latest`
       )
-        .then((res) => res.json())
-        .then((res) => res.version as string);
+        .then((res) => res.json() as Promise<{ version: string }>)
+        .then((res) => res.version);
 
       latestPartySocketVersion = await fetch(
         `https://registry.npmjs.org/partysocket/latest`
       )
-        .then((res) => res.json())
-        .then((res) => res.version as string);
+        .then((res) => res.json() as Promise<{ version: string }>)
+        .then((res) => res.version);
     } catch (e) {
       logger.error(
         "Could not fetch latest versions of partykit and partysocket, defaulting to *"

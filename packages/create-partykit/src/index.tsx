@@ -2,6 +2,7 @@ import { Text, render } from "ink";
 import * as React from "react";
 import TextInput from "ink-text-input";
 import SelectInput from "ink-select-input";
+import { fetch } from "undici";
 
 import * as RandomWords from "random-words";
 
@@ -166,14 +167,14 @@ export async function init(options: {
       latestPartyKitVersion = await fetch(
         `https://registry.npmjs.org/partykit/latest`
       )
-        .then((res) => res.json())
-        .then((res) => res.version as string);
+        .then((res) => res.json() as Promise<{ version: string }>)
+        .then((res) => res.version);
 
       latestPartySocketVersion = await fetch(
         `https://registry.npmjs.org/partysocket/latest`
       )
-        .then((res) => res.json())
-        .then((res) => res.version as string);
+        .then((res) => res.json() as Promise<{ version: string }>)
+        .then((res) => res.version);
     } catch (e) {
       console.error(
         "Could not fetch latest versions of partykit and partysocket, defaulting to *"
