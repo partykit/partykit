@@ -505,6 +505,20 @@ function useDev(options: DevProps): {
         "utf8"
       );
 
+      //replace \\ with / in windows
+      //the default output for assets in windows is {"dist\\index.js": "dist\\index.js"}[]
+      for (const key in assetsMap.assets) {
+        if (assetsMap.assets[key].includes("\\")) {
+          const updatedKey = key.replace(/\\/g, "/");
+          const updatedValue = assetsMap.assets[key].replace(/\\/g, "/");
+
+          assetsMap.assets[updatedKey] = updatedValue;
+
+          //delete the key with \\
+          delete assetsMap.assets[key];
+        }
+      }
+
       const absoluteScriptPath = path.join(process.cwd(), config.main!).replace(
         /\\/g, // windows
         "/"
