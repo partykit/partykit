@@ -278,18 +278,32 @@ interface InspectorWebSocketTarget {
 }
 
 // duplicate cli.tsx
-function* findAllFiles(root: string) {
+function* findAllFiles(
+  root: string,
+  { ignore: _ignore }: { ignore?: string[] } = {}
+) {
   const dirs = [root];
   while (dirs.length > 0) {
     const dir = dirs.pop()!;
     const files = fs.readdirSync(dir);
+    // TODO: handle ignore arg
     for (const file of files) {
+      if (file.startsWith(".")) {
+        continue;
+      }
+
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
       if (stat.isDirectory()) {
+        if (file === "node_modules") {
+          continue;
+        }
         dirs.push(filePath);
       } else {
-        yield path.relative(root, filePath);
+        yield path.relative(
+          root,
+          filePath.replace(/\\/g, "/") // windows
+        );
       }
     }
   }
@@ -504,20 +518,6 @@ function useDev(options: DevProps): {
         ),
         "utf8"
       );
-
-      //replace \\ with / in windows
-      //the default output for assets in windows is {"dist\\index.js": "dist\\index.js"}[]
-      for (const key in assetsMap.assets) {
-        if (assetsMap.assets[key].includes("\\")) {
-          const updatedKey = key.replace(/\\/g, "/");
-          const updatedValue = assetsMap.assets[key].replace(/\\/g, "/");
-
-          assetsMap.assets[updatedKey] = updatedValue;
-
-          //delete the key with \\
-          delete assetsMap.assets[key];
-        }
-      }
 
       const absoluteScriptPath = path.join(process.cwd(), config.main!).replace(
         /\\/g, // windows
