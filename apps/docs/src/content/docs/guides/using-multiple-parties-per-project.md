@@ -7,7 +7,7 @@ By default, each PartyKit project defines one party called `main`:
 
 ```json
 {
-  "name": "onbefore",
+  "name": "multiparty",
   "main": "src/server.ts"
 }
 ```
@@ -18,7 +18,7 @@ In addition to the `main` party, each project can define any number of additiona
 
 ```json
 {
-  "name": "onbefore",
+  "name": "multiparty",
   "main": "src/server.ts",
   "parties": {
     "user": "src/user.ts",

@@ -41,16 +41,18 @@ You can then verify your user's identity in a `static onBeforeConnect` method:
 import * as Party from "partykit/server";
 import { verifyToken } from "@clerk/backend";
 
-const CLERK_ENDPOINT = "https://clerk.yourdomain.com";
+const DEFAULT_CLERK_ENDPOINT = "https://clerk.yourdomain.com";
 
 export default class Server implements Party.Server {
-  static async onBeforeConnect(request: Party.Request) {
+  static async onBeforeConnect(request: Party.Request, lobby: Party.Lobby) {
     try {
+      // get authentication server url from environment variables (optional)
+      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT
       // get token from request query string
       const token = new URL(request.url).searchParams.get("token") ?? "";
       // verify the JWT (in this case using clerk)
-      const session = await verifyToken(token, { issuer: CLERK_ENDPOINT });
-      // pass any information to the onConnect handler in headers
+      const session = await verifyToken(token, { issuer });
+      // pass any information to the onConnect handler in headers (optional)
       request.headers.set("X-User-ID", session.sub);
       // forward the request onwards on onConnect
       return request;
@@ -93,15 +95,17 @@ You can then verify your user's identity in a `static onBeforeRequest` method:
 import type * as Party from "partykit/server";
 import { verifyToken } from "@clerk/backend";
 
-const CLERK_ENDPOINT = "https://clerk.yourdomain.com";
+const DEFAULT_CLERK_ENDPOINT = "https://clerk.yourdomain.com";
 
 export default class Server implements Party.Server {
   static async onBeforeRequest(request: Party.Request) {
     try {
+      // get authentication server url from environment variables (optional)
+      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT
       // get token from request headers
       const token = request.headers.get("Authorization") ?? "";
       // verify the JWT (in this case using clerk)
-      await verifyToken(token, { issuer: CLERK_ENDPOINT });
+      await verifyToken(token, { issuer });
       // forward the request onwards on onRequest
       return request;
     } catch (e) {
