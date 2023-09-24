@@ -44,6 +44,7 @@
   "dependencies": {
     "@cloudflare/workers-types": "4.20230914.0",
     "clipboardy": "3.0.0",
+    "detect-indent": "^7.0.1",
     "esbuild": "0.19.3",
     "miniflare": "3.20230918.0",
     "yoga-wasm-web": "0.3.3"

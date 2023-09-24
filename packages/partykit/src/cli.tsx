@@ -19,6 +19,7 @@ export { Dev };
 export type { DevProps };
 
 import { execaCommand, execaCommandSync } from "execa";
+import detectIndent from "detect-indent";
 import { version as packageVersion } from "../package.json";
 
 import {
@@ -151,7 +152,9 @@ export async function init(options: {
   }
 
   if (packageJsonPath) {
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
+    const packageJsonFile = fs.readFileSync(packageJsonPath, "utf8");
+    const packageJsonIndent = detectIndent(packageJsonFile).indent || 2;
+    const packageJson = JSON.parse(packageJsonFile);
     // if there's an existing package.json, we're in a project
     // ask the user whether they want to add to it, or create a new one
     const shouldAddToExisting =
@@ -214,7 +217,7 @@ export async function init(options: {
         // write the package.json back
         fs.writeFileSync(
           packageJsonPath,
-          JSON.stringify(packageJson, null, 2) + "\n"
+          JSON.stringify(packageJson, null, packageJsonIndent) + "\n"
         );
       } else {
         console.log(
