@@ -69,7 +69,7 @@ const Component = () => {
 
     // in addition, you can provide socket lifecycle event handlers
     // (equivalent to using ws.addEventListener in an effect hook)
-    onConnect() {
+    onOpen() {
       console.log("connected");
     },
     onMessage(e) {
