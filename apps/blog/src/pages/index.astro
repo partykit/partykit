@@ -89,7 +89,7 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
         {
           sortedPosts.map(
             ({ data }, index) =>
-              index < 4 && (
+              index < 10 && (
                 <Card
                   href={`/posts/${slugify(data)}`}
                   frontmatter={data}
