@@ -9,15 +9,15 @@ To do so, you will first create a GitHub token and then set up a GitHub action.
 
 ### 1. Create a GitHub Token
 
-Open the project repository on GitHub and choose "Settings" from the top menu. Then, find "Secrets and variables" in the sidebar and choose "Actions" from the submenu. Finally, click "New repository secret."
+Create a GitHub Personal Access Token from [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new). You can give it a name & expiration, and leave the other inputs as is.
 
-Alternatively, you can create the token in your [Developer Settings](https://github.com/settings/tokens/new).
+Copy the token and add it to the project repository by going to "Settings" from the top menu of the repository. Then, find "Secrets and variables" in the sidebar and choose "Actions" from the submenu. Finally, click "New repository secret" to add the token.
 
 :::note
-For the purpose of this guide, let's assume that you have saved the token as `GITHUB_TOKEN`.
+For the purpose of this guide, let's assume that you have saved the token as `PARTYKIT_GITHUB_TOKEN`.
 :::
 
-Your API token is encrypted by GitHub and the action won't print it into logs.
+Your token is encrypted by GitHub and the action won't print it into logs.
 
 ### 2. Create a Github Action
 
@@ -45,7 +45,7 @@ jobs:
       - run: npm ci
       - run: npx partykit deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PARTYKIT_GITHUB_TOKEN }}
           GITHUB_LOGIN: threepointone # use your GitHub username
 ```
 
