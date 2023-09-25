@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.23
+
+### Patch Changes
+
+- [`b9cd337`](https://github.com/partykit/partykit/commit/b9cd337a5b54a507d0d2df9d0cb4821e582349be) Thanks [@threepointone](https://github.com/threepointone)! - trigger a release
+
 ## 0.0.22
 
 ### Patch Changes
