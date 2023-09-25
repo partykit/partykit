@@ -1,5 +1,21 @@
 # partykit
 
+## 0.0.22
+
+### Patch Changes
+
+- [#409](https://github.com/partykit/partykit/pull/409) [`5593735`](https://github.com/partykit/partykit/commit/559373553f0b89c973b75945e6c18f0259bc453e) Thanks [@dev-badace](https://github.com/dev-badace)! - [fix] filePath in windows
+
+  Fixes #328
+
+  In Windows devices, the assetsMap was generating file paths with double backslashes, resulting in incorrect file paths. This PR addresses this issue by replacing the double backslashes with single forward slashes, ensuring that the file paths are correct and functional.
+
+- [#412](https://github.com/partykit/partykit/pull/412) [`5b04814`](https://github.com/partykit/partykit/commit/5b048146b1fb5587775b85e7ccda08924c49d7eb) Thanks [@tsriram](https://github.com/tsriram)! - Use existing indentation of package.json when running partykit init
+
+- [#410](https://github.com/partykit/partykit/pull/410) [`ecc80cc`](https://github.com/partykit/partykit/commit/ecc80cc8a28f5ecfa85f989f06acda8888c0fb36) Thanks [@threepointone](https://github.com/threepointone)! - fix: work on node 16 again
+
+  some references to `fetch` weren't being imported from undici. global fetch was introduced only in node 18. so the partykit cli (specifically `init`) and create-partykit weren't working on node 16. This fixes that issue (tho we should phase out node 16 support soon)
+
 ## 0.0.21
 
 ### Patch Changes
