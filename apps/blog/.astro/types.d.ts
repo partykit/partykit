@@ -209,6 +209,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"dancing-cursors-and-voronoi-diagrams.md": {
+	id: "dancing-cursors-and-voronoi-diagrams.md";
+  slug: "dancing-cursors-and-voronoi-diagrams";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "dynamic-og-images.md": {
 	id: "dynamic-og-images.md";
   slug: "dynamic-og-images";

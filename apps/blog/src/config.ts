@@ -7,7 +7,7 @@ export const SITE: Site = {
   title: "PartyKit Blog",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
-  postPerPage: 3,
+  postPerPage: 10,
 };
 
 export const LOCALE = ["en-GB"]; // set to [] to use the environment default
