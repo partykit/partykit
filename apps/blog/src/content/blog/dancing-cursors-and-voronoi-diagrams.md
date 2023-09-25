@@ -1,10 +1,10 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-22T16:16:00Z
+pubDatetime: 2023-09-25T13:26:00Z
 title: Dancing cursors and Voronoi diagrams
 postSlug: dancing-cursors-and-voronoi-diagrams
 featured: false
-draft: true
+draft: false
 tags:
   - sketchbook
   - residency
