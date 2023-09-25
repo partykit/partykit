@@ -1,5 +1,13 @@
 # create-partykit
 
+## 0.0.12
+
+### Patch Changes
+
+- [#410](https://github.com/partykit/partykit/pull/410) [`ecc80cc`](https://github.com/partykit/partykit/commit/ecc80cc8a28f5ecfa85f989f06acda8888c0fb36) Thanks [@threepointone](https://github.com/threepointone)! - fix: work on node 16 again
+
+  some references to `fetch` weren't being imported from undici. global fetch was introduced only in node 18. so the partykit cli (specifically `init`) and create-partykit weren't working on node 16. This fixes that issue (tho we should phase out node 16 support soon)
+
 ## 0.0.11
 
 ### Patch Changes
