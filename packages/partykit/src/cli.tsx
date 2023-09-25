@@ -70,7 +70,7 @@ function* findAllFiles(
         }
         dirs.push(filePath);
       } else {
-        yield path.relative(root, filePath);
+        yield path.relative(root, filePath).replace(/\\/g, "/"); // windows;
       }
     }
   }
@@ -512,10 +512,22 @@ export async function deploy(options: {
         path.extname(file)
       )}-${fileHash}${path.extname(file)}`;
 
-      newAssetsMap.assets[file] = fileName;
+      newAssetsMap.assets[
+        file.replace(
+          /\\/g, // windows
+          "/"
+        )
+      ] = fileName;
 
       // if the file is already uploaded, skip it
-      if (currentAssetsMap.assets[file] !== fileName) {
+      if (
+        currentAssetsMap.assets[
+          file.replace(
+            /\\/g, // windows
+            "/"
+          )
+        ] !== fileName
+      ) {
         filesToUpload.push({
           file,
           filePath,
@@ -542,7 +554,12 @@ export async function deploy(options: {
           },
           duplex: "half",
         });
-        logger.log(`Uploaded ${file.file}`);
+        logger.log(
+          `Uploaded ${file.file.replace(
+            /\\/g, // windows
+            "/"
+          )}`
+        );
       }
     }
 

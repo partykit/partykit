@@ -278,18 +278,29 @@ interface InspectorWebSocketTarget {
 }
 
 // duplicate cli.tsx
-function* findAllFiles(root: string) {
+function* findAllFiles(
+  root: string,
+  { ignore: _ignore }: { ignore?: string[] } = {}
+) {
   const dirs = [root];
   while (dirs.length > 0) {
     const dir = dirs.pop()!;
     const files = fs.readdirSync(dir);
+    // TODO: handle ignore arg
     for (const file of files) {
+      if (file.startsWith(".")) {
+        continue;
+      }
+
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
       if (stat.isDirectory()) {
+        if (file === "node_modules") {
+          continue;
+        }
         dirs.push(filePath);
       } else {
-        yield path.relative(root, filePath);
+        yield path.relative(root, filePath).replace(/\\/g, "/"); // windows;
       }
     }
   }
