@@ -71,3 +71,7 @@ This brings me to second announcement: PartyKit is now generally available, and 
 This is a big milestone for us, and we’re grateful that we can share it with you. Everything’s better with friends, and we have been blessed with the most amazing ones! Having such a supportive community on Twitter, Discord and at in-person events has brought PartyKit to this point. And it’s also only the beginning: we have a long roadmap with a number of exciting features planned. If you’d like to collaborate with us, do reach out via [mail](mailto:contact@partykit.io), [twitter](https://twitter.com/partykit_io), or on [discord](https://discord.gg/g5uqHQJc3z).
 
 We're getting back to building, so please join us for the ride. Get started at [partykit.io](https://www.partykit.io/) right now!
+
+## Read more
+
+Still want to read more? We're [featured in TechCrunch](https://techcrunch.com/2023/09/26/sequoia-backs-partykit-to-power-real-time-multiplayer-collaboration-for-any-app/) and on the [Sequoia blog](https://www.sequoiacap.com/article/partnering-with-partykit-everything-is-better-with-friends/).
