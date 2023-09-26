@@ -265,6 +265,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more.md": {
+	id: "partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more.md";
+  slug: "partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partyserver-class-api.md": {
 	id: "partyserver-class-api.md";
   slug: "partyserver-class-api";
