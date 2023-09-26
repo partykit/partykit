@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.6
+
+### Patch Changes
+
+- [#423](https://github.com/partykit/partykit/pull/423) [`d88f87f`](https://github.com/partykit/partykit/commit/d88f87fdc2f3d35c4fb7389ea412e58e82244416) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit fix: ignore string messages
+
 ## 0.0.5
 
 ### Patch Changes
