@@ -138,6 +138,10 @@ function setupWS(provider: WebsocketProvider) {
         websocket.send("pong");
         return;
       }
+      if (typeof event.data === "string") {
+        // ignore text messages
+        return;
+      }
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(provider, new Uint8Array(event.data), true);
       if (encoding.length(encoder) > 1) {
