@@ -76,10 +76,10 @@ const Component = () => {
       console.log("message", e.data);
     },
     onClose() {
-      console.log("connected");
+      console.log("closed");
     },
     onError(e) {
-      console.log("connected");
+      console.log("error");
     },
   });
 };
