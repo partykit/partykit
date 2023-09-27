@@ -15,9 +15,13 @@ import LogoPreact from './LogoPreact.astro';
 import LogoAstro from './LogoAstro.astro';
 import LogoIOS from './LogoIOS.astro';
 import LogoHTML5 from './LogoHTML5.astro';
-import LogoJS from  './LogoJS.astro';
-import LogoTS from  './LogoTS.astro';
-import LogoWasm from  './LogoWasm.astro';
+import LogoJS from './LogoJS.astro';
+import LogoTS from './LogoTS.astro';
+import LogoWasm from './LogoWasm.astro';
+import LogoAutomerge from './LogoAutomerge.astro';
+import LogoXState from './LogoXState.astro';
+import LogoTldraw from './LogoTldraw.astro';
+import LogoTinyBase from './LogoTinyBase.astro';
 ---
 
 <h3 class='f6 f8-s fw9 tc mt6 px4 mb3' id='tools'>
@@ -43,12 +47,17 @@ import LogoWasm from  './LogoWasm.astro';
 <h3>Effortless Integrations</h3>
 <p class='lh-copy f3 measure mb0'>
     Works well with with popular collaboration frameworks and libraries. 
-    <b>Y.js</b>, <b>Automerge</b>, <b>Replicache</b>, <b>XState</b>, <b>tldraw</b>, they all Just Work™.
+    <b>Y.js</b>, <b>Automerge</b>, <b>Replicache</b>, <b>XState</b>, <b>tldraw</b>, <b>TinyBase</b>, they all Just Work™.
 </p> 
-<div class='flex g4 items-center'>
-    <div class='w2'><LogoYjs /></div>
-    <div style='width: 6rem;'><LogoReplicache /></div>
-    <div class='flex items-center w2 g2 f1'><img src='images/automerge.png' /><b>Automerge</b></div>
+<div class='flex g4 items-center mt3' style='justify-content:space-evenly'>
+    <div class='h2 w2'><LogoYjs /></div>
+    <div style="width:6rem"><LogoAutomerge /></div>
+    <div style="width:6rem"><LogoReplicache /></div>
+</div>
+<div class='flex g4 items-center mt3' style='justify-content:space-evenly'>
+    <div class='w4'><LogoXState /></div>
+    <div style="width:5rem"><LogoTldraw /></div>
+    <div style="width:6rem"><LogoTinyBase /></div>
 </div>
 </article>
 <article>
@@ -60,7 +69,7 @@ import LogoWasm from  './LogoWasm.astro';
                     PartyKit integrates with your current setup. Plays nicely with <b>Vercel</b>, <b>Netlify</b>, <b>AWS</b>, <b>Cloudflare</b>, <b>fly.io</b>, or wherever you host your app. No big rewrite needed.
                 </p>
             </div>
-            <section class='flex g4 items-center'>
+            <section class='flex g4 items-center' style='justify-content:space-evenly'>
                 <div style='width: 2.5rem;'><LogoAWS /></div>    
                 <div style='width: 3rem;'><LogoCloudflare /></div>
                 <div style='width: 4rem;'><LogoVercel /></div>
@@ -76,7 +85,7 @@ import LogoWasm from  './LogoWasm.astro';
                     <b>WebSockets</b>, <b>Fetch</b>, <b>Request-Response</b>, <b>Wasm</b>. PartyKit uses web standards to guarantee interoperability with all your tools, now and in the future.
                 </p>
             </div>
-            <section class='flex g4 items-center'>
+            <section class='flex g4 items-center' style='justify-content:space-evenly'>
                 <div style='width: 2.5rem;'><LogoHTML5 /></div>    
                 <div style='width: 2.5rem;'><LogoJS /></div>
                 <div style='width: 2.5rem;'><LogoTS /></div>       
