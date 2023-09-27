@@ -192,6 +192,7 @@ program
   .command("delete")
   .description("Delete a deployed project")
   .option("-n, --name <name>", "Name of the project")
+  .option("-f, --force", "Force delete without confirmation")
   .option("-c, --config <path>", "Path to config file")
   .option("--preview [name]", "Delete preview")
   .action(async (options) => {
