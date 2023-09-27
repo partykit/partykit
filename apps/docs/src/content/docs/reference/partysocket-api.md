@@ -40,7 +40,7 @@ npm install partysocket@latest
 import PartySocket from "partysocket";
 
 const ws = new PartySocket({
-  host: "project.name.partykit.dev", // or localhost:1999 in dev
+  host: "project-name.username.partykit.dev", // or localhost:1999 in dev
   room: "my-room",
   // add an optional id to identify the client,
   // if not provided, a random id will be generated
@@ -64,7 +64,7 @@ import usePartySocket from "partysocket/react";
 const Component = () => {
   const ws = usePartySocket({
     // usePartySocket takes the same arguments as PartySocket.
-    host: "project.name.partykit.dev", // or localhost:1999 in dev
+    host: "project-name.username.partykit.dev", // or localhost:1999 in dev
     room: "my-room",
 
     // in addition, you can provide socket lifecycle event handlers
