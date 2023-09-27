@@ -702,11 +702,13 @@ export const ${name} = ${name}Party;
   }
 }
 
-export async function _delete(options: {
+export async function _delete(rawOptions: {
   name: string | undefined;
+  force: boolean | undefined;
   config: string | undefined;
   preview: string | undefined;
 }) {
+  const { force, ...options } = rawOptions;
   const config = getConfig(options.config, options);
   if (!config.name) {
     throw new ConfigurationError(MissingProjectNameError);
@@ -717,6 +719,57 @@ export async function _delete(options: {
   const urlSearchParams = new URLSearchParams();
   if (options.preview) {
     urlSearchParams.set("preview", options.preview);
+  }
+
+  if (!process.stdin.isTTY && !force) {
+    throw new Error(
+      "Cannot delete without --force when running in non-interactive mode"
+    );
+  }
+
+  const shouldDelete =
+    force ??
+    (await new Promise<boolean>((resolve, _reject) => {
+      function Component(props: { onSelect: (shouldDelete: boolean) => void }) {
+        return (
+          <>
+            <Box>
+              <Text>
+                Are you sure you want to delete{" "}
+                {chalk.bold(
+                  options.preview
+                    ? `${options.preview}.${config.name}.${user.login}.partykit.dev`
+                    : `${config.name}.${user.login}.partykit.dev`
+                )}
+                ?
+              </Text>
+            </Box>
+            <SelectInput
+              items={[
+                { label: "Yes", value: true },
+                { label: "No", value: false },
+              ]}
+              onSelect={(item) => {
+                props.onSelect(item.value);
+              }}
+            />
+          </>
+        );
+      }
+      const { clear, unmount } = render(
+        <Component
+          onSelect={(shouldDelete: boolean) => {
+            resolve(shouldDelete);
+            clear();
+            unmount();
+          }}
+        />
+      );
+    }));
+
+  if (!shouldDelete) {
+    logger.log("Aborted");
+    return;
   }
 
   await fetchResult(
