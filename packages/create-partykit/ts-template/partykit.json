@@ -1,6 +1,7 @@
 {
   "name": "$PROJECT_NAME",
   "main": "src/server.ts",
+  "compatibilityDate": "$COMPATIBILITY_DATE",
   "serve": {
     "path": "public",
     "build": "src/client.ts"

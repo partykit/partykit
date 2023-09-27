@@ -229,12 +229,21 @@ export async function init(options: {
 
       if (!options.dryRun) {
         // make a partykit.json file
+
+        const today = new Date();
+        const defaultCompatibilityDate = `${today.getFullYear()}-${(
+          today.getMonth() + 1
+        )
+          .toString()
+          .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
         fs.writeFileSync(
           path.join(process.cwd(), "partykit.json"),
           JSON.stringify(
             {
               name: options.name || `${packageJson.name || "my"}-party`,
               main: isTypeScriptProject ? "party/index.ts" : "party/index.js",
+              compatibilityDate: defaultCompatibilityDate,
             },
             null,
             2
@@ -665,6 +674,23 @@ export const ${name} = ${name}Party;
 
   if (config.compatibilityDate) {
     form.set("compatibilityDate", config.compatibilityDate);
+  } else {
+    const today = new Date();
+    const defaultCompatibilityDate = `${today.getFullYear()}-${(
+      today.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
+    logger.warn(
+      `No compatibilityDate specified in configuration, defaulting to ${defaultCompatibilityDate}
+You can silence this warning by adding this to your partykit.json file: 
+  "compatibilityDate": "${defaultCompatibilityDate}"
+or by passing it in via the CLI
+  --compatibility-date ${defaultCompatibilityDate}
+`
+    );
+    form.set("compatibilityDate", defaultCompatibilityDate);
   }
   if (config.compatibilityFlags) {
     form.set("compatibilityFlags", JSON.stringify(config.compatibilityFlags));

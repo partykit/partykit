@@ -283,6 +283,7 @@ describe("deploy", () => {
       JSON.stringify({
         name: "test-script",
         serve: "./public",
+        compatibilityDate: "2023-09-28",
       })
     );
 
