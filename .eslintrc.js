@@ -22,7 +22,6 @@ module.exports = {
     ".eslintrc.js",
     "*.d.ts",
     "packages/partykit/init/index.js",
-    "packages/partykit/facade/generated.js",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
