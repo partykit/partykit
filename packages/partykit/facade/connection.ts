@@ -15,42 +15,79 @@ if (!("OPEN" in WebSocket)) {
   Object.assign(WebSocket.prototype, WebSocketStatus);
 }
 
-/** Fields that are stored and rehydrates when a durable object hibernates */
-type ConnectionFields = {
-  id: string;
-  uri: string;
+/**
+ * Store both platform attachments and user attachments in different namespaces
+ */
+type ConnectionAttachments = {
+  __pk: {
+    id: string;
+    uri: string;
+  };
+  __user?: unknown;
 };
 
 /**
  * Cache websocket attachments to avoid having to rehydrate them on every property access.
  */
-const attachments = new WeakMap<WebSocket, ConnectionFields>();
-function deserializeAttachment(ws: WebSocket): ConnectionFields {
-  let attachment = attachments.get(ws);
-  if (!attachment) {
-    // pick only known fields to avoid keeping user's attachments in memory
-    const { id, uri } = ws.deserializeAttachment() as ConnectionFields;
-    attachment = { id, uri };
-    attachments.set(ws, attachment);
+class AttachmentCache {
+  _cache = new WeakMap<WebSocket, ConnectionAttachments>();
+
+  get(ws: WebSocket): ConnectionAttachments {
+    let attachment = this._cache.get(ws);
+    if (!attachment) {
+      attachment = WebSocket.prototype.deserializeAttachment.call(ws);
+      if (attachment !== undefined) {
+        this._cache.set(ws, attachment);
+      } else {
+        throw new Error(
+          "Missing websocket attachment. This is most likely an issue in PartyKit, please open an issue at https://github.com/partykit/partykit/issues"
+        );
+      }
+    }
+
+    return attachment;
   }
 
-  return attachment;
+  set(ws: WebSocket, attachment: ConnectionAttachments) {
+    this._cache.set(ws, attachment);
+    WebSocket.prototype.serializeAttachment.call(ws, attachment);
+  }
 }
 
+const attachments = new AttachmentCache();
+
+const isPatched = (ws: WebSocket): ws is Party.Connection => {
+  return "__is_patched" in ws;
+};
 /**
  * Wraps a WebSocket with PartyConnection fields that rehydrate the
- * socket attachment lazily only when requested.
+ * socket attachments lazily only when requested.
  */
 export const createLazyConnection = (ws: WebSocket): Party.Connection => {
+  if (isPatched(ws)) {
+    return ws;
+  }
+
   return Object.assign(ws, {
+    __is_patched: true,
     get id() {
-      return deserializeAttachment(ws).id;
+      return attachments.get(ws).__pk.id;
     },
     get uri() {
-      return deserializeAttachment(ws).uri;
+      return attachments.get(ws).__pk.uri;
     },
     get socket() {
       return ws;
+    },
+    deserializeAttachment<T = unknown>() {
+      const attachment = attachments.get(ws);
+      return (attachment.__user ?? null) as T;
+    },
+    serializeAttachment<T = unknown>(attachment: T) {
+      attachments.set(ws, {
+        ...attachments.get(ws),
+        __user: attachment ?? null,
+      });
     },
   });
 };
@@ -210,8 +247,11 @@ export class HibernatingConnectionManager implements ConnectionManager {
 
     this.controller.acceptWebSocket(connection, tags);
     connection.serializeAttachment({
-      id: connection.id,
-      uri: connection.uri,
+      __pk: {
+        id: connection.id,
+        uri: connection.uri,
+      },
+      __user: null,
     });
   }
 }
