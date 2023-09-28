@@ -1,6 +1,7 @@
 {
   "name": "class-example",
   "main": "src/server.ts",
+  "compatibilityDate": "2023-09-28",
   "serve": {
     "path": "public",
     "build": "src/client.ts"
