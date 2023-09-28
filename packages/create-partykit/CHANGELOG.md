@@ -1,5 +1,21 @@
 # create-partykit
 
+## 0.0.14
+
+### Patch Changes
+
+- [#436](https://github.com/partykit/partykit/pull/436) [`645edd6`](https://github.com/partykit/partykit/commit/645edd691f7153efc95a48d871b18eef68b38b18) Thanks [@threepointone](https://github.com/threepointone)! - fix (internal): fix infinite loop when developing
+
+  We use node's watch mode when developing partykit itself. On node 20, this just goes into an infinite loop, because it restarts on any writes, even if the file hasn't changed (iiuc). We are compiling facade/source.ts to facade/generated.js, while also watching the facade folder, which was triggering the restarts. I moved the outout to dist/generated.js, which fixes the problem.
+
+- [#435](https://github.com/partykit/partykit/pull/435) [`8fdb63f`](https://github.com/partykit/partykit/commit/8fdb63f31835f56a0d4dbf290c970580d4a9a9ba) Thanks [@threepointone](https://github.com/threepointone)! - add a default compatibility date
+
+  We should be adding a default compatibility date to new projects. Further, for projects that don't have one, we should warn that they should, and default to the latest compatibility date that we can. This PR adds that behaviour for both create, dev and deploy
+
+- [#431](https://github.com/partykit/partykit/pull/431) [`af40d14`](https://github.com/partykit/partykit/commit/af40d14d12d2a69f76c3a154a9f35dbd7b1f0955) Thanks [@threepointone](https://github.com/threepointone)! - fix: don't add `--enable-source-maps` in create-partykit's prod build
+
+- [#436](https://github.com/partykit/partykit/pull/436) [`645edd6`](https://github.com/partykit/partykit/commit/645edd691f7153efc95a48d871b18eef68b38b18) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
 ## 0.0.13
 
 ### Patch Changes

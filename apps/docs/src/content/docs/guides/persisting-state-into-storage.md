@@ -139,7 +139,7 @@ export default class Main implements Party.Server {
 
   async onMessage(message: string) {
     this.messages.push(message);
-    this.party.storage.put("messages", message);
+    this.party.storage.put("messages", this.messages);
     connection.send(message);
   };
 };

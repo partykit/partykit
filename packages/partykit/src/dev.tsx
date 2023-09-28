@@ -501,6 +501,40 @@ function useDev(options: DevProps): {
   }
 
   useEffect(() => {
+    const today = new Date();
+    const latestCompatibilityDate = `${today.getFullYear()}-${(
+      today.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+
+    if (!config.compatibilityDate) {
+      logger.warn(
+        `No compatibilityDate specified in configuration, defaulting to ${latestCompatibilityDate}
+    You can silence this warning by adding this to your partykit.json file: 
+      "compatibilityDate": "${latestCompatibilityDate}"
+    or by passing it in via the CLI
+      --compatibility-date ${latestCompatibilityDate}`
+      );
+    }
+
+    let compatibilityDate: string;
+    if (config.compatibilityDate) {
+      const minDate = new Date(
+        Math.min(
+          new Date(config.compatibilityDate).getTime(),
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          new Date(require("workerd").compatibilityDate).getTime()
+        )
+      );
+      compatibilityDate = `${minDate.getFullYear()}-${(minDate.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${minDate.getDate().toString().padStart(2, "0")}`;
+    } else {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      compatibilityDate = require("workerd").compatibilityDate;
+    }
+
     let customBuildFolderWatcher: ReturnType<typeof chokidar.watch> | undefined;
     let ctx: BuildContext | undefined;
     const abortController = new AbortController();
@@ -511,7 +545,7 @@ function useDev(options: DevProps): {
 
       const workerFacade = fs.readFileSync(
         fileURLToPath(
-          path.join(path.dirname(import.meta.url), "../facade/generated.js")
+          path.join(path.dirname(import.meta.url), "../dist/generated.js")
         ),
         "utf8"
       );
@@ -606,8 +640,7 @@ Workers["${name}"] = ${name};
                       verbose: options.verbose,
                       inspectorPort: portForRuntimeInspector,
 
-                      compatibilityDate:
-                        config.compatibilityDate || "2023-04-11",
+                      compatibilityDate,
                       compatibilityFlags: [
                         "nodejs_compat",
                         ...(config.compatibilityFlags || []),

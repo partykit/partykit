@@ -1,6 +1,7 @@
 {
   "name": "partymix-example",
   "main": "dist/index.js",
+  "compatibilityDate": "2023-09-28",
   "serve": "public",
   "define": {
     "process.env.REMIX_DEV_ORIGIN": "'http://127.0.0.1:8002'",
