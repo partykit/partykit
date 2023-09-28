@@ -81,6 +81,25 @@ export const createLazyConnection = (
     get socket() {
       return ws;
     },
+    get state() {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      return this.deserializeAttachment() as Party.ConnectionState<unknown>;
+    },
+
+    setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
+      let state: T;
+      if (setState instanceof Function) {
+        state = setState(this.state as Party.ConnectionState<T>);
+      } else {
+        state = setState;
+      }
+
+      // TODO: deepFreeze object?
+
+      this.serializeAttachment(state);
+      return state as Party.ConnectionState<T>;
+    },
+
     deserializeAttachment<T = unknown>() {
       const attachment = attachments.get(ws);
       return (attachment.__user ?? null) as T;
@@ -130,7 +149,7 @@ export interface ConnectionManager {
   getCount(): number;
   getConnection(id: string): Party.Connection | undefined;
   getConnections(tag?: string): IterableIterator<Party.Connection>;
-  accept(connection: Party.Connection, tags: string[]): void;
+  accept(connection: Party.Connection, tags: string[]): Party.Connection;
 
   // This can be removed when Party.connections is removed
   legacy_getConnectionMap(): Map<string, Party.Connection>;
@@ -171,6 +190,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
   }
 
   accept(connection: Party.Connection, tags: string[]): void {
+    connection = createStatefulConnection(connection);
     connection.accept();
 
     this.connections.set(connection.id, connection);
@@ -187,6 +207,8 @@ export class InMemoryConnectionManager implements ConnectionManager {
     };
     connection.addEventListener("close", removeConnection);
     connection.addEventListener("error", removeConnection);
+
+    return connection;
   }
 }
 
@@ -258,5 +280,7 @@ export class HibernatingConnectionManager implements ConnectionManager {
       },
       __user: null,
     });
+
+    return createLazyConnection(connection);
   }
 }

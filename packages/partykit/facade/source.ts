@@ -346,17 +346,30 @@ function createDurable(
         }
 
         // TODO: Object.freeze / mark as readonly!
-        const connection: Party.Connection = Object.assign(serverWebSocket, {
+        let connection: Party.Connection = Object.assign(serverWebSocket, {
           id: connectionId,
           socket: serverWebSocket,
           uri: request.url,
+          state: null as unknown as Party.ConnectionState<unknown>,
+          setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
+            let state: T;
+            if (setState instanceof Function) {
+              state = setState(this.state as Party.ConnectionState<T>);
+            } else {
+              state = setState;
+            }
+
+            // TODO: deepFreeze object?
+            this.state = state as Party.ConnectionState<T>;
+            return this.state;
+          },
         });
 
         const ctx = { request };
         const tags = await this.worker.getConnectionTags(connection, ctx);
 
         // Accept the websocket connection
-        this.connectionManager.accept(connection, tags);
+        connection = this.connectionManager.accept(connection, tags);
 
         if (!this.worker.supportsHibernation) {
           await this.attachSocketEventHandlers(connection);
