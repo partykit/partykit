@@ -6,6 +6,7 @@ description: PartyKit Configuration reference
 This is a reference of all the fields you can add to your `partykit.json` file to configure the behaviour of your project.
 
 ## Project configuration
+
 ### name
 
 The name of your project. This is used to identify your project on the platform, and is also used to generate the url for your project (typically `https://<name>.<user>.partykit.dev`) For example:
@@ -18,10 +19,10 @@ The name of your project. This is used to identify your project on the platform,
 
 Alternately, you can pass this as an argument to the `dev` or `deploy` commands, like this: `npx partykit dev --name my-project`
 
-
 ### main
 
-The entrypoint for your project. This is where you'd define a default export as specified by the [PartyKit API](/reference/partyserver-api/). For example: 
+The entrypoint for your project. This is where you'd define a default export as specified by the [PartyKit API](/reference/partyserver-api/). For example:
+
 ```json
 {
   "main": "src/server.ts"
@@ -81,7 +82,7 @@ Related guide: [Serving static assets](/guides/serving-static-assets/)
 ### vars
 
 :::danger[Deprecated]
-The `vars` field is deprecated and may be removed in a future version of PartyKit. 
+The `vars` field is deprecated and may be removed in a future version of PartyKit.
 
 For updated documentation, read [Managing environment variables in PartyKit](/guides/managing-environment-variables/)
 :::
@@ -122,9 +123,7 @@ Path to persist the party storage to in development mode. Defaults to `.partykit
 }
 ```
 
-Set to `false` if you don't want to persist storage between dev server restarts. 
-
-
+Set to `false` if you don't want to persist storage between dev server restarts.
 
 With a configuration like that, you could then access the variable in your code like this:
 
@@ -138,7 +137,6 @@ export default {
 ```
 
 Related guide: [Managing environment variables in PartyKit](/guides/managing-environment-variables/)
-
 
 ## Build configuration
 
@@ -188,6 +186,7 @@ export default {
 ### minify
 
 Whether to minify the JavaScript build output before deploying. Defaults to `true`.
+
 ```json
 {
   "minify": false
@@ -202,7 +201,7 @@ Cloudflare Workers API [Compatibility date](https://developers.cloudflare.com/wo
 
 ```json
 {
-  "compatibilityDate": "2023-04-11"
+  "compatibilityDate": "2023-09-27"
 }
 ```
 
@@ -215,5 +214,3 @@ Additional Cloudflare Workers API [Compatibility flags](https://developers.cloud
   "compatibilityFlags": ["web_socket_compression"]
 }
 ```
-
-

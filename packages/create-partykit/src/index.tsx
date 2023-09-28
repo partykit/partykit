@@ -358,13 +358,21 @@ export async function init(options: {
       path.join(pathToProject, ".gitignore")
     );
 
-    // replace $PROJECT_NAME in partykit.json
+    const today = new Date();
+
+    // replace $PROJECT_NAME & $COMPATIBILITY_DATE in partykit.json
     const partykitJsonPath = path.join(pathToProject, "partykit.json");
     fs.writeFileSync(
       partykitJsonPath,
       fs
         .readFileSync(partykitJsonPath, { encoding: "utf-8" })
         .replace(/\$PROJECT_NAME/g, projectName)
+        .replace(
+          /\$COMPATIBILITY_DATE/g,
+          `${today.getFullYear()}-${(today.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`
+        )
     );
     // do the same with README.md
     const readmePath = path.join(pathToProject, "README.md");
