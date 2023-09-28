@@ -545,7 +545,7 @@ function useDev(options: DevProps): {
 
       const workerFacade = fs.readFileSync(
         fileURLToPath(
-          path.join(path.dirname(import.meta.url), "../facade/generated.js")
+          path.join(path.dirname(import.meta.url), "../dist/generated.js")
         ),
         "utf8"
       );
