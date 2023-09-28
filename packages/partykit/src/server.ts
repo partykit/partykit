@@ -66,7 +66,7 @@ export type Lobby = {
 export type ExecutionContext = CFExecutionContext;
 
 /** A WebSocket connected to the Party */
-export type Connection = WebSocket & {
+export type Connection<TState = unknown> = WebSocket & {
   /** Connection identifier */
   id: string;
 
@@ -78,6 +78,15 @@ export type Connection = WebSocket & {
   // It's also set as readonly, so we can't set it ourselves.
   // Instead, we'll use the `uri` property.
   uri: string;
+
+  /** Returns any state stored with setState */
+  getState(): TState;
+
+  /**
+   * Stores arbitrary state on the connection. The maximum size is 2KB.
+   * Returns the updated state.
+   */
+  setState(value: TState | ((value: TState) => TState)): TState;
 };
 
 /** Party represents a single, self-contained, long-lived session. */

@@ -15,10 +15,13 @@ if (!("OPEN" in WebSocket)) {
   Object.assign(WebSocket.prototype, WebSocketStatus);
 }
 
+type ConnectionAttachment = unknown;
+
 /** Fields that are stored and rehydrates when a durable object hibernates */
 type ConnectionFields = {
-  id: string;
-  uri: string;
+  __pk_id: string;
+  __pk_uri: string;
+  __pk_state: ConnectionAttachment;
 };
 
 /**
@@ -29,12 +32,18 @@ function deserializeAttachment(ws: WebSocket): ConnectionFields {
   let attachment = attachments.get(ws);
   if (!attachment) {
     // pick only known fields to avoid keeping user's attachments in memory
-    const { id, uri } = ws.deserializeAttachment() as ConnectionFields;
-    attachment = { id, uri };
+    attachment = ws.deserializeAttachment() as ConnectionFields;
     attachments.set(ws, attachment);
   }
 
   return attachment;
+}
+
+function setAttachment(ws: WebSocket, newAttachment: ConnectionAttachment) {
+  let p = attachments.get(ws);
+  if (attachment) {
+    attachment = 
+  }
 }
 
 /**
@@ -44,14 +53,19 @@ function deserializeAttachment(ws: WebSocket): ConnectionFields {
 export const createLazyConnection = (ws: WebSocket): Party.Connection => {
   return Object.assign(ws, {
     get id() {
-      return deserializeAttachment(ws).id;
+      return deserializeAttachment(ws).__pk_id;
     },
     get uri() {
-      return deserializeAttachment(ws).uri;
+      return deserializeAttachment(ws).__pk_uri;
     },
     get socket() {
       return ws;
     },
+    getState<T>() {
+      return deserializeAttachment(ws).__pk_state as T;
+    },
+
+    setState() {},
   });
 };
 
