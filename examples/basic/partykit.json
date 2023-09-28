@@ -1,6 +1,7 @@
 {
   "name": "basic",
   "main": "src/server.ts",
+  "compatibilityDate": "2023-09-28",
   "vars": {
     "$a": 1,
     "$b": 2,
