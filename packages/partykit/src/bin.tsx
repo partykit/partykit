@@ -100,6 +100,12 @@ program
   .argument("[script]", "Path to the project to run")
   .option("-p, --port <number>", "Port to run the server on")
   .option("--serve <path>", "Serve this directory of static assets")
+  .addOption(
+    new Option(
+      "--unstable_outdir <path>",
+      "Output directory for builds"
+    ).hideHelp()
+  )
   .option("-c, --config <path>", "Path to config file")
   .addOption(
     new Option("--persist [path]", "Persist local state").default(true)
@@ -121,6 +127,7 @@ program
     render(
       <Dev
         main={scriptPath}
+        unstable_outdir={options.unstable_outdir}
         port={options.port ? parseInt(options.port) : undefined}
         persist={options.persist}
         config={options.config}
