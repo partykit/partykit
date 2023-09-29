@@ -1,5 +1,19 @@
 # partykit
 
+## 0.0.25
+
+### Patch Changes
+
+- [#440](https://github.com/partykit/partykit/pull/440) [`9a9fd8a`](https://github.com/partykit/partykit/commit/9a9fd8ac100a3d94a19d8cd25d4b43ec03a76505) Thanks [@threepointone](https://github.com/threepointone)! - experimental: `dev --unstable_outdir <path>`
+
+  When we have errors in the code, we log the error, but it uses line numbers from the output worker, which aren't helpful. Particularly because we don't output the actual worker to disk anyway, so they can't figure out where the error is coming from. It's really bad for large codebases.
+
+  Figuring out debugging is a top level concern for us; we want to have sourcemaps, breakpoints, devtools - the works. But until we get there, we should help people find where errors are coming from.
+
+  This adds an experimental `--unstable_outdir <path>` to `partykit dev` that spits out the actual code that we run in the dev environment, so folks can inspect it. The output code also inlines filenames, so that should help as well. This should hold folks until we have a better debugging story.
+
+- [#442](https://github.com/partykit/partykit/pull/442) [`532a241`](https://github.com/partykit/partykit/commit/532a241b95e67c3330569e7e60256176cd617370) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix compatibilityDate timezone issue, allow server to decide timezone if not provided
+
 ## 0.0.24
 
 ### Patch Changes
