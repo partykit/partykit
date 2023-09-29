@@ -675,22 +675,16 @@ export const ${name} = ${name}Party;
   if (config.compatibilityDate) {
     form.set("compatibilityDate", config.compatibilityDate);
   } else {
-    const today = new Date();
-    const defaultCompatibilityDate = `${today.getFullYear()}-${(
-      today.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+    const currentUTCDate = new Date().toISOString().split("T", 1)[0];
 
     logger.warn(
-      `No compatibilityDate specified in configuration, defaulting to ${defaultCompatibilityDate}
+      `No compatibilityDate specified in configuration, defaulting to ${currentUTCDate}
 You can silence this warning by adding this to your partykit.json file: 
-  "compatibilityDate": "${defaultCompatibilityDate}"
+  "compatibilityDate": "${currentUTCDate}"
 or by passing it in via the CLI
-  --compatibility-date ${defaultCompatibilityDate}
+  --compatibility-date ${currentUTCDate}
 `
     );
-    form.set("compatibilityDate", defaultCompatibilityDate);
   }
   if (config.compatibilityFlags) {
     form.set("compatibilityFlags", JSON.stringify(config.compatibilityFlags));

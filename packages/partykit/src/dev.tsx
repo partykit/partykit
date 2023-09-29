@@ -502,20 +502,15 @@ function useDev(options: DevProps): {
   }
 
   useEffect(() => {
-    const today = new Date();
-    const latestCompatibilityDate = `${today.getFullYear()}-${(
-      today.getMonth() + 1
-    )
-      .toString()
-      .padStart(2, "0")}-${today.getDate().toString().padStart(2, "0")}`;
+    const currentUTCDate = new Date().toISOString().split("T", 1)[0];
 
     if (!config.compatibilityDate) {
       logger.warn(
-        `No compatibilityDate specified in configuration, defaulting to ${latestCompatibilityDate}
+        `No compatibilityDate specified in configuration, defaulting to ${currentUTCDate}
     You can silence this warning by adding this to your partykit.json file: 
-      "compatibilityDate": "${latestCompatibilityDate}"
+      "compatibilityDate": "${currentUTCDate}"
     or by passing it in via the CLI
-      --compatibility-date ${latestCompatibilityDate}`
+      --compatibility-date ${currentUTCDate}`
       );
     }
 
@@ -528,9 +523,7 @@ function useDev(options: DevProps): {
           new Date(require("workerd").compatibilityDate).getTime()
         )
       );
-      compatibilityDate = `${minDate.getFullYear()}-${(minDate.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${minDate.getDate().toString().padStart(2, "0")}`;
+      compatibilityDate = minDate.toISOString().split("T", 1)[0];
     } else {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       compatibilityDate = require("workerd").compatibilityDate;
