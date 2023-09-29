@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-29T13:26:00Z
+pubDatetime: 2023-09-29T10:12:00Z
 title: Using Stencil to make a live poll Web Component
 postSlug: live-polls-with-stencil
 featured: false
@@ -10,7 +10,7 @@ tags:
   - residency
   - demos
   - web components
-ogImage: "/content-images//live-polls-with-stenci/social.png"
+ogImage: "/content-images/live-polls-with-stencil/social.png"
 description: Building a live poll Web Component with Stencil and PartyKit, plus a meditation on the art of maintenance.
 ---
 
