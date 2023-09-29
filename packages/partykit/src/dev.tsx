@@ -221,6 +221,7 @@ export type DevProps = {
   persist?: boolean | string;
   vars?: Record<string, string>;
   verbose?: boolean;
+  unstable_outdir?: string;
   define?: Record<string, string>;
   onReady?: (host: string, port: number) => void;
   compatibilityDate?: string;
@@ -581,6 +582,7 @@ Workers["${name}"] = ${name};
         format: "esm",
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
+        metafile: true,
         define: {
           PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
           ...esbuildOptions.define,
@@ -610,6 +612,25 @@ Workers["${name}"] = ${name};
                 }
 
                 const code = result.outputFiles[0].text;
+
+                if (options.unstable_outdir) {
+                  const outdir = path.join(
+                    process.cwd(),
+                    options.unstable_outdir
+                  );
+
+                  fs.mkdirSync(outdir, { recursive: true });
+                  fs.writeFileSync(
+                    path.join(
+                      outdir,
+                      `${path.basename(
+                        absoluteScriptPath,
+                        path.extname(absoluteScriptPath)
+                      )}.js`
+                    ),
+                    code
+                  );
+                }
 
                 return new Promise<void>((resolve) => {
                   server.addEventListener("reloaded", () => resolve(), {
@@ -801,6 +822,7 @@ Workers["${name}"] = ${name};
     portForRuntimeInspector,
     options.config,
     options.verbose,
+    options.unstable_outdir,
   ]);
 
   const { onReady } = options;
