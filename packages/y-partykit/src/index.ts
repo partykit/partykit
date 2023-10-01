@@ -474,3 +474,18 @@ export async function onConnect(
     }
   }
 }
+
+export async function unstable_onRequest(
+  _req: Request,
+  room: Party.Party,
+  options: YPartyKitOptions
+) {
+  const _doc = await getYDoc(room, options);
+
+  // if it's a POST, should we call options.callback here?
+
+  return new Response(
+    "document as json? or as a buffer?"
+    // we should send the response here
+  );
+}
