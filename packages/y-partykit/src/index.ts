@@ -380,6 +380,7 @@ export type YPartyKitOptions = {
   callback?: YPartyKitCallbackOptions;
   load?: () => Promise<Y.Doc>;
   readOnly?: boolean;
+  onLoad?: (doc: Y.Doc) => void;
 };
 
 export async function onConnect(
@@ -472,5 +473,8 @@ export async function onConnect(
       );
       send(doc, conn, encoding.toUint8Array(encoder));
     }
+  }
+  if (options.onLoad) {
+    options.onLoad(doc);
   }
 }
