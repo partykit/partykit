@@ -148,7 +148,7 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
 /**
  * Gets a Y.Doc by name, whether in memory or on disk
  */
-async function getYDoc(
+export async function getYDoc(
   // docname: string, // the name of the Y.Doc to find or create
   room: Party.Party,
   options: YPartyKitOptions
