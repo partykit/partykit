@@ -33,11 +33,17 @@ function updateHandler(update: Uint8Array, origin: unknown, doc: WSSharedDoc) {
   doc.conns.forEach((_, conn) => send(doc, conn, message));
 }
 
+let warnedAboutPersistDeprecation = false;
+
 class WSSharedDoc extends Y.Doc {
   name: string;
   conns: Map<Party.Connection, Set<number>>;
   awareness: awarenessProtocol.Awareness;
   storage: YPartyKitStorage | undefined;
+  /**
+   * @deprecated y-partykit's storage will be removed in the future.
+   * Instead, use the `load` and `callback` options to `onConnect`.
+   */
   persist: boolean;
   gc: boolean;
 
@@ -45,7 +51,16 @@ class WSSharedDoc extends Y.Doc {
     super({ gc: options.gc ?? !options.persist });
     this.gc = options.gc ?? !options.persist;
     this.name = room.id;
+    // eslint-disable-next-line deprecation/deprecation
     this.persist = options.persist ?? false;
+
+    // eslint-disable-next-line deprecation/deprecation
+    if (this.persist && !warnedAboutPersistDeprecation) {
+      console.warn(
+        "y-partykit's storage will be removed in the future. Instead, use the `load` and `callback` options to `onConnect`."
+      );
+      warnedAboutPersistDeprecation = true;
+    }
 
     if (options.persist) {
       this.storage = new YPartyKitStorage(room.storage);
@@ -120,9 +135,9 @@ class WSSharedDoc extends Y.Doc {
 }
 
 const CALLBACK_DEFAULTS = {
-  debounceWait: 2000,
+  debounceWait: 5000,
   debounceMaxWait: 10000,
-  timeout: 5000,
+  timeout: 7000,
   objects: {},
 };
 
@@ -226,6 +241,7 @@ async function getYDoc(
     );
   }
 
+  // eslint-disable-next-line deprecation/deprecation
   if (doc.persist) {
     await doc.bindState();
   }
@@ -305,6 +321,7 @@ function closeConn(doc: WSSharedDoc, conn: Party.Connection): void {
       Array.from(controlledIds),
       null
     );
+    // eslint-disable-next-line deprecation/deprecation
     if (doc.conns.size === 0 && doc.persist) {
       // if persisted, we store state and destroy ydocument
       doc.writeState().then(
