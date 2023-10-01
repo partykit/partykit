@@ -45,7 +45,7 @@ From inside the directory, you can then run `npm run dev` to start the developme
 
 - [GitHub issues](./issues) to report bugs 🐛
 - [Discord](https://discord.gg/vwDWs68C) to ask questions, share your ideas and feedback, and help us celebrate your PartyKit projects 💕
-- [Twitter](https://x.com/partykit) to say "hi" and get the freshest updates!
+- [Twitter](https://x.com/partykit_io) to say "hi" and get the freshest updates!
 
 ## Contributing
 
