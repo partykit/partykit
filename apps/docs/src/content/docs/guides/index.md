@@ -106,7 +106,7 @@ export default class WebSocketServer implements Party.Server {
     connection.send(`Welcome, ${connection.id}`);
     // let everyone else know that a new connection joined
     this.party.broadcast(`Heads up! ${connection.id} joined the party!`, [
-      sender.id,
+      connection.id,
     ]);
   }
   // when a client disconnects
