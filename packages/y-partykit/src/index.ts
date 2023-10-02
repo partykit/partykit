@@ -21,6 +21,32 @@ const wsReadyStateClosed = 3; // eslint-disable-line
 
 const docs: Map<string, WSSharedDoc> = new Map();
 
+// keep track of options used to initialize the connection
+// so we can warn user if options change once doc is initialized
+const opts: WeakMap<WSSharedDoc, string> = new WeakMap();
+const hashOptions = (options: YPartyKitOptions) => {
+  return JSON.stringify(options, (_key, value) =>
+    // don't compare function implementation, just whether we had one
+    typeof value === "function" ? "function() {}" : (value as unknown)
+  );
+};
+
+// warn user if options change once doc is initialized
+let didWarnAboutOptionsChange = false;
+const warnIfOptionsChanged = (doc: WSSharedDoc, options: YPartyKitOptions) => {
+  if (didWarnAboutOptionsChange) return;
+  const prevOpts = opts.get(doc);
+  const currOpts = hashOptions(options);
+  if (prevOpts !== currOpts) {
+    didWarnAboutOptionsChange = true;
+    console.warn(
+      "Document was previously initialized with different options. Provided options are ignored."
+    );
+    console.log("Previous options:", prevOpts);
+    console.log("Provided options:", currOpts);
+  }
+};
+
 const messageSync = 0;
 const messageAwareness = 1;
 // const messageAuth = 2
@@ -155,7 +181,28 @@ async function getYDoc(
 ): Promise<WSSharedDoc> {
   let doc = docs.get(room.id);
   if (doc) {
+    // TODO: remove warning once we have a single way to initialize a doc
+    warnIfOptionsChanged(doc, options);
     return doc;
+  }
+
+  // capture options before applying defaults to ensure we're comparing the right thing
+  const hashedOptions = hashOptions(options);
+
+  if (options.gc && options.persist) {
+    throw new Error("Cannot use gc and persist at the same time");
+  }
+
+  if (
+    options.gc === undefined &&
+    (options.persist === undefined || options.persist === false)
+  ) {
+    options.gc = true;
+    options.persist = false;
+  }
+
+  if (options.gc === undefined && options.persist === true) {
+    options.gc = false;
   }
 
   doc = new WSSharedDoc(room, options);
@@ -231,6 +278,8 @@ async function getYDoc(
   }
 
   docs.set(room.id, doc);
+  opts.set(doc, hashedOptions);
+
   return doc;
 }
 
@@ -380,6 +429,12 @@ export type YPartyKitOptions = {
   readOnly?: boolean;
 };
 
+/**
+ * Gets or loads the Y.Doc for given room.
+ * @NOTE The options provided must match the options provided to `onConnect`. Once the document is loaded, changes to `options` are ignored.
+ */
+export const unstable_getYDoc = getYDoc;
+
 export async function onConnect(
   conn: Party.Connection,
   room: Party.Party,
@@ -388,22 +443,6 @@ export async function onConnect(
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
 
   const options = { ...opts };
-
-  if (options.gc && options.persist) {
-    throw new Error("Cannot use gc and persist at the same time");
-  }
-
-  if (
-    options.gc === undefined &&
-    (options.persist === undefined || options.persist === false)
-  ) {
-    options.gc = true;
-    options.persist = false;
-  }
-
-  if (options.gc === undefined && options.persist === true) {
-    options.gc = false;
-  }
 
   // get doc, initialize if it does not exist yet
   const doc = await getYDoc(room, options);

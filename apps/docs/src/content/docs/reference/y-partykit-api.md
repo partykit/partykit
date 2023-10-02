@@ -9,24 +9,19 @@ sidebar:
 
 ## Setting up a Yjs backend
 
-:::danger[Example syntax]
-The example code on this page uses the legacy `export default {}` module
-syntax. We're working on converting `y-partykit` to use the new [PartyServer API](/references/partyserver-api).
-
-See [Legacy API](/reference/partykitserver-legacy-api) for documentation.
-:::
-
 Using `y-partykit` simplifies setting up a Yjs backend. Only a few lines of code are needed:
 
 ```ts
 // server.ts
+import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
-export default {
-  async onConnect(conn, room, context) {
-    return onConnect(conn, room);
-  },
-};
+export default class YjsServer implements Party.Server {
+  constructor(public party: Party.Party) {}
+  onConnect(conn: Party.Connection) {
+    return onConnect(conn, this.party);
+  }
+}
 ```
 
 ## Handling more complex backends
@@ -35,11 +30,14 @@ For more complex backends, you can pass additional options:
 
 ```ts
 // server.ts
+
+import type * as Party from "partykit/server";
 import { onConnect } from "y-partykit";
 
-export default {
-  async onConnect(conn, room, context) {
-    return await onConnect(conn, room, {
+export default class YjsServer implements Party.Server {
+  constructor(public party: Party.Party) {}
+  onConnect(conn: Party.Connection) {
+    return onConnect(conn, this.party, {
       // experimental: persists the document to partykit's room storage
       persist: true,
 
@@ -47,7 +45,7 @@ export default {
       readOnly: true,
 
       // Or, you can load/save to your own database or storage
-      load() {
+      async load() {
         // load a document from a database, or some remote resource
         // and return a Y.Doc instance here (or null if no document exists)
       },
@@ -63,8 +61,8 @@ export default {
         timeout: 5000, // default: 5000 ms
       },
     });
-  },
-};
+  }
+}
 ```
 
 Then, use the provider to connect to this server from your client:
