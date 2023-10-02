@@ -186,6 +186,22 @@ export async function getYDoc(
     return doc;
   }
 
+  if (options.gc && options.persist) {
+    throw new Error("Cannot use gc and persist at the same time");
+  }
+
+  if (
+    options.gc === undefined &&
+    (options.persist === undefined || options.persist === false)
+  ) {
+    options.gc = true;
+    options.persist = false;
+  }
+
+  if (options.gc === undefined && options.persist === true) {
+    options.gc = false;
+  }
+
   doc = new WSSharedDoc(room, options);
 
   const { callback, load } = options;
@@ -418,22 +434,6 @@ export async function onConnect(
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime
 
   const options = { ...opts };
-
-  if (options.gc && options.persist) {
-    throw new Error("Cannot use gc and persist at the same time");
-  }
-
-  if (
-    options.gc === undefined &&
-    (options.persist === undefined || options.persist === false)
-  ) {
-    options.gc = true;
-    options.persist = false;
-  }
-
-  if (options.gc === undefined && options.persist === true) {
-    options.gc = false;
-  }
 
   // get doc, initialize if it does not exist yet
   const doc = await getYDoc(room, options);
