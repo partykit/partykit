@@ -134,10 +134,6 @@ function setupWS(provider: WebsocketProvider) {
     provider.synced = false;
 
     websocket.onmessage = (event) => {
-      if (event.data === "ping") {
-        websocket.send("pong");
-        return;
-      }
       if (typeof event.data === "string") {
         // ignore text messages
         return;
@@ -250,6 +246,7 @@ type AwarenessUpdate = {
  *
  * @extends {Observable<string>}
  */
+// eslint-disable-next-line deprecation/deprecation
 export class WebsocketProvider extends Observable<string> {
   maxBackoffTime: number;
   bcChannel: string;
