@@ -189,8 +189,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
     return this.connections;
   }
 
-  accept(connection: Party.Connection, tags: string[]): void {
-    connection = createStatefulConnection(connection);
+  accept(connection: Party.Connection, tags: string[]) {
     connection.accept();
 
     this.connections.set(connection.id, connection);
