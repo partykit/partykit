@@ -1,5 +1,53 @@
 # y-partykit
 
+## 0.0.7
+
+### Patch Changes
+
+- [#450](https://github.com/partykit/partykit/pull/450) [`3fd5fc9`](https://github.com/partykit/partykit/commit/3fd5fc9901f74ebc3731cf4ab5b4fec39ceb16c9) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: export `unstable_getYDoc`
+
+  This is an escape hatch to get access to the `Y.Doc` instance, or initialize it if one doesn't exist yet.
+
+  ```ts
+  import type * as Party from "partykit/server";
+  import {
+    onConnect,
+    unstable_getYDoc,
+    type YPartyKitOptions,
+  } from "y-partykit";
+
+  // options must match when calling unstable_getYDoc and onConnect
+  const opts: YPartyKitOptions = { persist: true };
+
+  export default class YjsServer implements Party.Server {
+    yjsOptions: YPartyKitOptions = { persist: true };
+    constructor(public party: Party.Party) {}
+
+    async onRequest() {
+      const doc = await unstable_getYDoc(this.party, opts);
+      return new Response(doc.getText("message")?.toJSON());
+    }
+
+    onConnect(conn: Party.Connection) {
+      return onConnect(conn, this.party, opts);
+    }
+  }
+  ```
+
+  ### Caveats
+
+  This API is marked `unstable`, because it's likely to be superceded by a better API in the future.
+
+  Notably, the `options` argument provided to `unstable_getYDoc` should match the options provided to `onConnect`. We do currently not change the options when each change is made, so the first options passed are applied, and any further changes are ignored. We try to detect changed options, and show a warning if changes are detected.
+
+- [#449](https://github.com/partykit/partykit/pull/449) [`239aaef`](https://github.com/partykit/partykit/commit/239aaef1dbda80ca06491ed78ff8e3db28741b01) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: update deps
+
+- [#456](https://github.com/partykit/partykit/pull/456) [`af8af51`](https://github.com/partykit/partykit/commit/af8af51172f36696fdf43c51eabeeffa16b1904d) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: only import things we need
+
+- [#452](https://github.com/partykit/partykit/pull/452) [`cb57107`](https://github.com/partykit/partykit/commit/cb5710772a1b0ec0c298de4fd92f611cc46c264f) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: remove ping-pong
+
+  We had a ping-pong loop with partykit to keep the object alive, but it's not necessary. This patch removes it.
+
 ## 0.0.6
 
 ### Patch Changes
