@@ -55,21 +55,23 @@ class AttachmentCache {
 }
 
 const attachments = new AttachmentCache();
-
-const isPatched = (ws: WebSocket): ws is Party.Connection => {
-  return "__is_patched" in ws;
+const connections = new WeakSet<Party.Connection>();
+const isWrapped = (ws: WebSocket): ws is Party.Connection => {
+  return connections.has(ws as Party.Connection);
 };
+
 /**
  * Wraps a WebSocket with PartyConnection fields that rehydrate the
  * socket attachments lazily only when requested.
  */
-export const createLazyConnection = (ws: WebSocket): Party.Connection => {
-  if (isPatched(ws)) {
+export const createLazyConnection = (
+  ws: WebSocket | Party.Connection
+): Party.Connection => {
+  if (isWrapped(ws)) {
     return ws;
   }
 
-  return Object.assign(ws, {
-    __is_patched: true,
+  const connection = Object.assign(ws, {
     get id() {
       return attachments.get(ws).__pk.id;
     },
@@ -90,6 +92,9 @@ export const createLazyConnection = (ws: WebSocket): Party.Connection => {
       });
     },
   });
+
+  connections.add(connection);
+  return connection;
 };
 
 class HibernatingConnectionIterator
