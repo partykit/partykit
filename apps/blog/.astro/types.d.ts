@@ -258,6 +258,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"live-polls-with-stencil.md": {
+	id: "live-polls-with-stencil.md";
+  slug: "live-polls-with-stencil";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partykit-meet-tinybase.md": {
 	id: "partykit-meet-tinybase.md";
   slug: "partykit-meet-tinybase";
