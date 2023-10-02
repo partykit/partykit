@@ -56,10 +56,10 @@
     "@types/lodash.debounce": "^4.0.7"
   },
   "dependencies": {
-    "lib0": "^0.2.60",
+    "lib0": "^0.2.86",
     "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
-    "y-protocols": "^1.0.5",
-    "yjs": "^13.5.44"
+    "y-protocols": "^1.0.6",
+    "yjs": "^13.6.8"
   }
 }
