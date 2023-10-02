@@ -44,4 +44,10 @@ export const SOCIALS: SocialObjects = [
     linkTitle: `${SITE.title} on Discord`,
     active: true,
   },
+  {
+    name: "Rss",
+    href: "https://blog.partykit.io/rss.xml",
+    linkTitle: `Follow ${SITE.title} on RSS`,
+    active: true,
+  },
 ];
