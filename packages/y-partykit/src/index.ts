@@ -39,7 +39,6 @@ const warnIfOptionsChanged = (doc: WSSharedDoc, options: YPartyKitOptions) => {
   const currOpts = hashOptions(options);
   if (prevOpts !== currOpts) {
     didWarnAboutOptionsChange = true;
-    // TODO: Remove
     console.warn(
       "Document was previously initialized with different options. Provided options are ignored."
     );
@@ -175,13 +174,14 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
 /**
  * Gets a Y.Doc by name, whether in memory or on disk
  */
-export async function getYDoc(
+async function getYDoc(
   // docname: string, // the name of the Y.Doc to find or create
   room: Party.Party,
   options: YPartyKitOptions
 ): Promise<WSSharedDoc> {
   let doc = docs.get(room.id);
   if (doc) {
+    // TODO: remove warning once we have a single way to initialize a doc
     warnIfOptionsChanged(doc, options);
     return doc;
   }
@@ -425,6 +425,12 @@ export type YPartyKitOptions = {
   load?: () => Promise<YDoc>;
   readOnly?: boolean;
 };
+
+/**
+ * Gets or loads the Y.Doc for given room.
+ * @NOTE The options provided must match the options provided to `onConnect`. Once the document is loaded, changes to `options` are ignored.
+ */
+export const unstable_getYDoc = getYDoc;
 
 export async function onConnect(
   conn: Party.Connection,
