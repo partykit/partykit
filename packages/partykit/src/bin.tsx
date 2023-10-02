@@ -393,11 +393,9 @@ function semiver(aStr: string, bStr: string, bool?: boolean) {
   );
 }
 
-const MIN_NODE_VERSION = "16.8.0";
+const MIN_NODE_VERSION = "18.0.0";
 
 if (semiver(process.versions.node, MIN_NODE_VERSION) < 0) {
-  // Note Volta and nvm are also recommended in the official docs:
-  // https://developers.cloudflare.com/workers/get-started/guide#2-install-the-workers-cli
   console.error(
     `Partykit requires at least node.js v${MIN_NODE_VERSION}. You are using v${process.versions.node}. Please update your version of node.js.`
   );
