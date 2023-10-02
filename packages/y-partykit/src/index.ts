@@ -21,6 +21,33 @@ const wsReadyStateClosed = 3; // eslint-disable-line
 
 const docs: Map<string, WSSharedDoc> = new Map();
 
+// keep track of options used to initialize the connection
+// so we can warn user if options change once doc is initialized
+const opts: WeakMap<WSSharedDoc, string> = new WeakMap();
+const hashOptions = (options: YPartyKitOptions) => {
+  return JSON.stringify(options, (_key, value) =>
+    // don't compare function implementation, just whether we had one
+    typeof value === "function" ? "function() {}" : (value as unknown)
+  );
+};
+
+// warn user if options change once doc is initialized
+let didWarnAboutOptionsChange = false;
+const warnIfOptionsChanged = (doc: WSSharedDoc, options: YPartyKitOptions) => {
+  if (didWarnAboutOptionsChange) return;
+  const prevOpts = opts.get(doc);
+  const currOpts = hashOptions(options);
+  if (prevOpts !== currOpts) {
+    didWarnAboutOptionsChange = true;
+    // TODO: Remove
+    console.warn(
+      "Document was previously initialized with different options. Provided options are ignored."
+    );
+    console.log("Previous options:", prevOpts);
+    console.log("Provided options:", currOpts);
+  }
+};
+
 const messageSync = 0;
 const messageAwareness = 1;
 // const messageAuth = 2
@@ -155,6 +182,7 @@ export async function getYDoc(
 ): Promise<WSSharedDoc> {
   let doc = docs.get(room.id);
   if (doc) {
+    warnIfOptionsChanged(doc, options);
     return doc;
   }
 
@@ -231,6 +259,8 @@ export async function getYDoc(
   }
 
   docs.set(room.id, doc);
+  opts.set(doc, hashOptions(options));
+
   return doc;
 }
 
