@@ -1,4 +1,4 @@
-import * as Y from "yjs";
+import { Doc as YDoc, applyUpdate, encodeStateAsUpdate } from "yjs";
 import * as syncProtocol from "y-protocols/sync";
 import * as awarenessProtocol from "y-protocols/awareness";
 import * as encoding from "lib0/encoding";
@@ -33,7 +33,7 @@ function updateHandler(update: Uint8Array, origin: unknown, doc: WSSharedDoc) {
   doc.conns.forEach((_, conn) => send(doc, conn, message));
 }
 
-class WSSharedDoc extends Y.Doc {
+class WSSharedDoc extends YDoc {
   name: string;
   conns: Map<Party.Connection, Set<number>>;
   awareness: awarenessProtocol.Awareness;
@@ -102,9 +102,9 @@ class WSSharedDoc extends Y.Doc {
   async bindState() {
     assert(this.storage, "Storage not set");
     const persistedYdoc = await this.storage.getYDoc(this.name);
-    const newUpdates = Y.encodeStateAsUpdate(this);
+    const newUpdates = encodeStateAsUpdate(this);
     await this.storage.storeUpdate(this.name, newUpdates);
-    Y.applyUpdate(this, Y.encodeStateAsUpdate(persistedYdoc));
+    applyUpdate(this, encodeStateAsUpdate(persistedYdoc));
     this.on("update", (update) => {
       assert(this.storage, "Storage not set");
       this.storage.storeUpdate(this.name, update).catch((e) => {
@@ -114,7 +114,7 @@ class WSSharedDoc extends Y.Doc {
   }
   async writeState() {
     assert(this.storage, "Storage not set");
-    const newUpdates = Y.encodeStateAsUpdate(this);
+    const newUpdates = encodeStateAsUpdate(this);
     await this.storage.storeUpdate(this.name, newUpdates);
   }
 }
@@ -165,8 +165,8 @@ async function getYDoc(
   // allow caller to provide initial document state
   if (load) {
     const src = await load();
-    const state = Y.encodeStateAsUpdate(src);
-    Y.applyUpdate(doc, state);
+    const state = encodeStateAsUpdate(src);
+    applyUpdate(doc, state);
   }
 
   if (callback !== undefined) {
@@ -237,7 +237,7 @@ async function getYDoc(
 function readSyncMessage(
   decoder: decoding.Decoder,
   encoder: encoding.Encoder,
-  doc: Y.Doc,
+  doc: YDoc,
   transactionOrigin: Party.Connection,
   readOnly = false
 ) {
@@ -357,7 +357,7 @@ interface CallbackOptions {
 // TODO: Add a runtime check for this
 
 interface HandlerCallbackOptions extends CallbackOptions {
-  handler: (doc: Y.Doc) => void;
+  handler: (doc: YDoc) => void;
   url?: never;
 }
 
@@ -376,7 +376,7 @@ export type YPartyKitOptions = {
   gc?: boolean;
   persist?: boolean;
   callback?: YPartyKitCallbackOptions;
-  load?: () => Promise<Y.Doc>;
+  load?: () => Promise<YDoc>;
   readOnly?: boolean;
 };
 
