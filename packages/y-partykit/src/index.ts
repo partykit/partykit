@@ -186,6 +186,9 @@ async function getYDoc(
     return doc;
   }
 
+  // capture options before applying defaults to ensure we're comparing the right thing
+  const hashedOptions = hashOptions(options);
+
   if (options.gc && options.persist) {
     throw new Error("Cannot use gc and persist at the same time");
   }
@@ -275,7 +278,7 @@ async function getYDoc(
   }
 
   docs.set(room.id, doc);
-  opts.set(doc, hashOptions(options));
+  opts.set(doc, hashedOptions);
 
   return doc;
 }
