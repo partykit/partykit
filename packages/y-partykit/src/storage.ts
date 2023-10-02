@@ -1,6 +1,20 @@
-import * as Y from "yjs";
-import * as encoding from "lib0/encoding";
-import * as decoding from "lib0/decoding";
+import {
+  Doc as YDoc,
+  applyUpdate,
+  encodeStateAsUpdate,
+  encodeStateVector,
+} from "yjs";
+import {
+  createEncoder as encodingCreateEncoder,
+  writeVarUint as encodingWriteVarUint,
+  writeVarUint8Array as encodingWriteVarUint8Array,
+  toUint8Array as encodingToUint8Array,
+} from "lib0/encoding";
+import {
+  createDecoder as decodingCreateDecoder,
+  readVarUint as decodingReadVarUint,
+  readVarUint8Array as decodingReadVarUint8Array,
+} from "lib0/decoding";
 
 import type * as Party from "partykit/server";
 
@@ -304,13 +318,13 @@ function mergeUpdates(updates: Array<Uint8Array>): {
   update: Uint8Array;
   sv: Uint8Array;
 } {
-  const ydoc = new Y.Doc();
+  const ydoc = new YDoc();
   ydoc.transact(() => {
     for (let i = 0; i < updates.length; i++) {
-      Y.applyUpdate(ydoc, updates[i]);
+      applyUpdate(ydoc, updates[i]);
     }
   });
-  return { update: Y.encodeStateAsUpdate(ydoc), sv: Y.encodeStateVector(ydoc) };
+  return { update: encodeStateAsUpdate(ydoc), sv: encodeStateVector(ydoc) };
 }
 
 async function writeStateVector(
@@ -319,13 +333,13 @@ async function writeStateVector(
   sv: Uint8Array, // state vector
   clock: number // current clock of the document so we can determine when this statevector was created
 ) {
-  const encoder = encoding.createEncoder();
-  encoding.writeVarUint(encoder, clock);
-  encoding.writeVarUint8Array(encoder, sv);
+  const encoder = encodingCreateEncoder();
+  encodingWriteVarUint(encoder, clock);
+  encodingWriteVarUint8Array(encoder, sv);
   await levelPut(
     db,
     createDocumentStateVectorKey(docName),
-    encoding.toUint8Array(encoder)
+    encodingToUint8Array(encoder)
   );
 }
 
@@ -333,9 +347,9 @@ function decodeLeveldbStateVector(buf: Uint8Array): {
   sv: Uint8Array;
   clock: number;
 } {
-  const decoder = decoding.createDecoder(buf);
-  const clock = decoding.readVarUint(decoder);
-  const sv = decoding.readVarUint8Array(decoder);
+  const decoder = decodingCreateDecoder(buf);
+  const clock = decodingReadVarUint(decoder);
+  const sv = decodingReadVarUint8Array(decoder);
   return { sv, clock };
 }
 
@@ -368,9 +382,9 @@ async function storeUpdate(
   const clock = await getCurrentUpdateClock(db, docName);
   if (clock === -1) {
     // make sure that a state vector is aways written, so we can search for available documents
-    const ydoc = new Y.Doc();
-    Y.applyUpdate(ydoc, update);
-    const sv = Y.encodeStateVector(ydoc);
+    const ydoc = new YDoc();
+    applyUpdate(ydoc, update);
+    const sv = encodeStateVector(ydoc);
     await writeStateVector(db, docName, sv, 0);
   }
   await levelPut(db, createDocumentUpdateKey(docName, clock + 1), update);
@@ -425,21 +439,21 @@ export class YPartyKitStorage {
     });
   }
 
-  async getYDoc(docName: string): Promise<Y.Doc> {
+  async getYDoc(docName: string): Promise<YDoc> {
     return this._transact(async (db) => {
       const updates = await getLevelUpdates(db, docName);
-      const ydoc = new Y.Doc();
+      const ydoc = new YDoc();
       ydoc.transact(() => {
         for (let i = 0; i < updates.length; i++) {
-          Y.applyUpdate(ydoc, updates[i].value);
+          applyUpdate(ydoc, updates[i].value);
         }
       });
       if (updates.length > PREFERRED_TRIM_SIZE) {
         await flushDocument(
           db,
           docName,
-          Y.encodeStateAsUpdate(ydoc),
-          Y.encodeStateVector(ydoc)
+          encodeStateAsUpdate(ydoc),
+          encodeStateVector(ydoc)
         );
       }
       return ydoc;
