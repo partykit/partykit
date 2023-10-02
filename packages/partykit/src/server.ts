@@ -78,6 +78,11 @@ export type Connection = WebSocket & {
   // It's also set as readonly, so we can't set it ourselves.
   // Instead, we'll use the `uri` property.
   uri: string;
+
+  // Underlying cloudflare types specify the type as any, but unknown is safer
+  // as it forces a cast, so let's add a optional generic overload
+  serializeAttachment<T = unknown>(attachment: T): void;
+  deserializeAttachment<T = unknown>(): T | null;
 };
 
 /** Party represents a single, self-contained, long-lived session. */
