@@ -346,8 +346,6 @@ function send(doc: WSSharedDoc, conn: Party.Connection, m: Uint8Array) {
   }
 }
 
-const pingTimeout = 30000;
-
 interface CallbackOptions {
   debounceWait?: number;
   debounceMaxWait?: number;
@@ -424,33 +422,10 @@ export async function onConnect(
     }
   });
 
-  // Check if connection is still alive
-  let pongReceived = true;
-  const pingInterval = setInterval(() => {
-    if (!pongReceived) {
-      if (doc.conns.has(conn)) {
-        closeConn(doc, conn);
-      }
-      clearInterval(pingInterval);
-    } else if (doc.conns.has(conn)) {
-      pongReceived = false;
-      try {
-        conn.send("ping");
-      } catch (e) {
-        closeConn(doc, conn);
-        clearInterval(pingInterval);
-      }
-    }
-  }, pingTimeout);
   conn.addEventListener("close", () => {
     closeConn(doc, conn);
-    clearInterval(pingInterval);
   });
-  conn.addEventListener("message", (message) => {
-    if (message.data === "pong") {
-      pongReceived = true;
-    }
-  });
+
   // put the following in a variables in a block so the interval handlers don't keep in in
   // scope
   {
