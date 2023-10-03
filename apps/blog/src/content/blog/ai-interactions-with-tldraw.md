@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-09-29T10:12:00Z
+pubDatetime: 2023-10-04T11:12:00Z
 title: Exploring AI interaction design and multiplayer with tldraw
 postSlug: ai-interactions-with-tldraw
 featured: false
@@ -11,6 +11,7 @@ tags:
   - interaction design
   - ai
   - tldraw
+  - research-note
 ogImage: TK
 description: How might we interact with AI? I'm exploring this with tldraw, a multiplayer whiteboard app.
 ---
