@@ -372,27 +372,37 @@ Uniquely identifies the connection. Usually an automatically generated GUID, but
 
 The original URI of the connection request.
 
+
+##### Party.Connection.setState
+
+`setState` allows you to store small pieces of data on each connection. 
+
+Unlike  [`Party.storage`](#partystorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
+
+```ts
+connection.setState({ username: "jani" });
+```
+
+:::danger[State size]
+The maximum size of the state you can store on a connection is 2KB. If you try to store values larger than 2KB, `setState` will throw an error. 
+
+For larger state, use  [`Party.storage`](#partystorage) instead.
+:::
+
+##### Party.Connection.state
+
+Read state stored with [`Party.Connection.setState`](#partyconnectionsetstate).
+
+```ts
+const user = connection.state?.username;
+```
+
 ##### Party.Connection.serializeAttachment
 
-Normally, you can store state (e.g. connection metadata) on each connection by simply assigning a value to the `Party.Connection` object. However, when [`options.hibernate`](#partyserveroptionshibernate) is set to `true`, any in-memory state is lost when the server hibernates.
-
-To store state to survive hibernation, store it on the connection using `serializeAttachment`:
-
-```ts
-connection.serializeAttachment({ username: "jani" });
-```
-
-**Related guide:** [Scaling PartyKit Servers with Hibernation](/guides/scaling-partykit-servers-with-hibernation)
-
+**Deprecated**. Use [`Party.Connection.setState`](#partyconnectionsetstate) instead.
 ##### Party.Connection.deserializeAttachment
 
-Read state stored with [`PartyConnection.serializeAttachment`](#partyconnectionserializeattachment).
-
-```ts
-const user = connection.deserializeAttachment() as { username: string };
-```
-
-**Related guide:** [Scaling PartyKit Servers with Hibernation](/guides/scaling-partykit-servers-with-hibernation)
+**Deprecated**. Use [`Party.Connection.state`](#partyconnectionstate) instead.
 
 ## Party.Request
 
