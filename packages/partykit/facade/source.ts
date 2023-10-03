@@ -228,9 +228,9 @@ function createDurable(
             );
           },
         },
-        getConnection<TState = unknown>(id: string) {
+        getConnection(id: string) {
           if (self.connectionManager) {
-            return self.connectionManager.getConnection<TState>(id);
+            return self.connectionManager.getConnection(id);
           }
 
           console.warn(
@@ -239,9 +239,9 @@ function createDurable(
           return undefined;
         },
 
-        getConnections<TState = unknown>(tag?: string) {
+        getConnections(tag?: string) {
           if (self.connectionManager) {
-            return self.connectionManager.getConnections<TState>(tag);
+            return self.connectionManager.getConnections(tag);
           }
 
           console.warn(
@@ -351,7 +351,7 @@ function createDurable(
           socket: serverWebSocket,
           uri: request.url,
           state: null as unknown as Party.ConnectionState<unknown>,
-          setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
+          setState<T = unknown>(setState: T | Party.ConnectionSetStateFn<T>) {
             let state: T;
             if (setState instanceof Function) {
               state = setState(this.state as Party.ConnectionState<T>);
