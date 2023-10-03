@@ -228,9 +228,9 @@ function createDurable(
             );
           },
         },
-        getConnection(id: string) {
+        getConnection<TState = unknown>(id: string) {
           if (self.connectionManager) {
-            return self.connectionManager.getConnection(id);
+            return self.connectionManager.getConnection<TState>(id);
           }
 
           console.warn(
@@ -239,9 +239,9 @@ function createDurable(
           return undefined;
         },
 
-        getConnections(tag?: string) {
+        getConnections<TState = unknown>(tag?: string) {
           if (self.connectionManager) {
-            return self.connectionManager.getConnections(tag);
+            return self.connectionManager.getConnections<TState>(tag);
           }
 
           console.warn(

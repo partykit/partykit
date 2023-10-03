@@ -71,63 +71,89 @@ export const createLazyConnection = (
     return ws;
   }
 
-  const connection = Object.assign(ws, {
-    get id() {
-      return attachments.get(ws).__pk.id;
+  // if state was set on the socket before initializing the connection,
+  // capture it here so we can persist it again
+  let initialState = undefined;
+  if ("state" in ws) {
+    initialState = ws.state;
+    delete ws.state;
+  }
+
+  const connection = Object.defineProperties(ws, {
+    id: {
+      get() {
+        return attachments.get(ws).__pk.id;
+      },
     },
-    get uri() {
-      return attachments.get(ws).__pk.uri;
+    uri: {
+      get() {
+        return attachments.get(ws).__pk.uri;
+      },
     },
-    get socket() {
-      return ws;
+    socket: {
+      get() {
+        return ws;
+      },
     },
-    get state() {
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-      return this.deserializeAttachment() as Party.ConnectionState<unknown>;
+    state: {
+      get() {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+        return this.deserializeAttachment() as Party.ConnectionState<unknown>;
+      },
+    },
+    setState: {
+      value: function setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
+        let state: T;
+        if (setState instanceof Function) {
+          state = setState((this as Party.Connection<T>).state);
+        } else {
+          state = setState;
+        }
+
+        this.serializeAttachment(state);
+        return state as Party.ConnectionState<T>;
+      },
     },
 
-    setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
-      let state: T;
-      if (setState instanceof Function) {
-        state = setState(this.state as Party.ConnectionState<T>);
-      } else {
-        state = setState;
-      }
-
-      // TODO: deepFreeze object?
-
-      this.serializeAttachment(state);
-      return state as Party.ConnectionState<T>;
+    deserializeAttachment: {
+      value: function deserializeAttachment<T = unknown>() {
+        const attachment = attachments.get(ws);
+        return (attachment.__user ?? null) as T;
+      },
     },
 
-    deserializeAttachment<T = unknown>() {
-      const attachment = attachments.get(ws);
-      return (attachment.__user ?? null) as T;
+    serializeAttachment: {
+      value: function serializeAttachment<T = unknown>(attachment: T) {
+        const setting = {
+          ...attachments.get(ws),
+          __user: attachment ?? null,
+        };
+
+        attachments.set(ws, setting);
+      },
     },
-    serializeAttachment<T = unknown>(attachment: T) {
-      attachments.set(ws, {
-        ...attachments.get(ws),
-        __user: attachment ?? null,
-      });
-    },
-  });
+  }) as Party.Connection;
+
+  if (initialState) {
+    connection.setState(initialState);
+  }
 
   connections.add(connection);
   return connection;
 };
 
-class HibernatingConnectionIterator
-  implements IterableIterator<Party.Connection>
+class HibernatingConnectionIterator<T>
+  implements IterableIterator<Party.Connection<T>>
 {
   private index: number = 0;
   private sockets: WebSocket[] | undefined;
   constructor(private state: DurableObjectState, private tag?: string) {}
 
-  [Symbol.iterator](): IterableIterator<Party.Connection> {
+  [Symbol.iterator](): IterableIterator<Party.Connection<T>> {
     return this;
   }
 
-  next(): IteratorResult<Party.Connection, number | undefined> {
+  next(): IteratorResult<Party.Connection<T>, number | undefined> {
     const sockets =
       this.sockets ?? (this.sockets = this.state.getWebSockets(this.tag));
 
@@ -135,7 +161,7 @@ class HibernatingConnectionIterator
     while ((socket = sockets[this.index++])) {
       // only yield open sockets to match non-hibernating behaviour
       if (socket.readyState === WebSocket.READY_STATE_OPEN) {
-        const value = createLazyConnection(socket);
+        const value = createLazyConnection(socket) as Party.Connection<T>;
         return { done: false, value };
       }
     }
@@ -147,8 +173,10 @@ class HibernatingConnectionIterator
 
 export interface ConnectionManager {
   getCount(): number;
-  getConnection(id: string): Party.Connection | undefined;
-  getConnections(tag?: string): IterableIterator<Party.Connection>;
+  getConnection<TState>(id: string): Party.Connection<TState> | undefined;
+  getConnections<TState>(
+    tag?: string
+  ): IterableIterator<Party.Connection<TState>>;
   accept(connection: Party.Connection, tags: string[]): Party.Connection;
 
   // This can be removed when Party.connections is removed
@@ -158,7 +186,7 @@ export interface ConnectionManager {
 /**
  * When not using hibernation, we track active connections manually.
  */
-export class InMemoryConnectionManager implements ConnectionManager {
+export class InMemoryConnectionManager<TState> implements ConnectionManager {
   connections: Map<string, Party.Connection> = new Map();
   tags: WeakMap<Party.Connection, string[]> = new WeakMap();
 
@@ -166,13 +194,15 @@ export class InMemoryConnectionManager implements ConnectionManager {
     return this.connections.size;
   }
 
-  getConnection(id: string) {
-    return this.connections.get(id);
+  getConnection<T = TState>(id: string) {
+    return this.connections.get(id) as Party.Connection<T> | undefined;
   }
 
-  *getConnections(tag?: string): IterableIterator<Party.Connection> {
+  *getConnections<T = TState>(
+    tag?: string
+  ): IterableIterator<Party.Connection<T>> {
     if (!tag) {
-      yield* this.connections.values();
+      yield* this.connections.values() as IterableIterator<Party.Connection<T>>;
       return;
     }
 
@@ -180,7 +210,7 @@ export class InMemoryConnectionManager implements ConnectionManager {
     for (const connection of this.connections.values()) {
       const connectionTags = this.tags.get(connection) ?? [];
       if (connectionTags.includes(tag)) {
-        yield connection;
+        yield connection as Party.Connection<T>;
       }
     }
   }
@@ -214,26 +244,27 @@ export class InMemoryConnectionManager implements ConnectionManager {
 /**
  * When opting into hibernation, the platform tracks connections for us.
  */
-export class HibernatingConnectionManager implements ConnectionManager {
+export class HibernatingConnectionManager<TState> implements ConnectionManager {
   constructor(private controller: DurableObjectState) {}
 
   getCount() {
     return Number(this.controller.getWebSockets().length);
   }
 
-  getConnection(id: string) {
+  getConnection<T = TState>(id: string) {
     // TODO: Should we cache the connections?
     const sockets = this.controller.getWebSockets(id);
     if (sockets.length === 0) return undefined;
-    if (sockets.length === 1) return createLazyConnection(sockets[0]);
+    if (sockets.length === 1)
+      return createLazyConnection(sockets[0]) as Party.Connection<T>;
 
     throw new Error(
       `More than one connection found for id ${id}. Did you mean to use getConnections(tag) instead?`
     );
   }
 
-  getConnections(tag?: string | undefined) {
-    return new HibernatingConnectionIterator(this.controller, tag);
+  getConnections<T = TState>(tag?: string | undefined) {
+    return new HibernatingConnectionIterator<T>(this.controller, tag);
   }
 
   legacy_getConnectionMap() {
