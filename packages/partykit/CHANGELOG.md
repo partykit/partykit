@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.26
+
+### Patch Changes
+
+- [#437](https://github.com/partykit/partykit/pull/437) [`8848863`](https://github.com/partykit/partykit/commit/8848863a2af0ed7c789f281ce628ccd4d529504d) Thanks [@jevakallio](https://github.com/jevakallio)! - Ensure that user attachments don't clobber system attachments used by partykit
+
+- [#454](https://github.com/partykit/partykit/pull/454) [`d9b9076`](https://github.com/partykit/partykit/commit/d9b9076ea9e273b9e994b8aeb8b86197affc667e) Thanks [@threepointone](https://github.com/threepointone)! - make node@18 the minimum version required to run partykit
+
 ## 0.0.25
 
 ### Patch Changes
