@@ -1,5 +1,8 @@
 import type * as Party from "partykit/server";
 
+// Connections can carry optional state, which you can set with .setState()
+type Connection = Party.Connection<{ country: string | undefined }>;
+
 // PartyKit servers now implement PartyServer interface
 export default class Main implements Party.Server {
   // onBefore* handlers that run in the worker nearest the user are now
@@ -37,11 +40,12 @@ export default class Main implements Party.Server {
   }
 
   // You can now tag connections, and retrieve tagged connections using Party.getConnections()
-  getConnectionTags(
-    connection: Party.Connection,
-    ctx: Party.ConnectionContext
-  ) {
-    const country = (ctx.request.cf?.country as string) ?? "unknown";
+  getConnectionTags(connection: Connection, ctx: Party.ConnectionContext) {
+    const country = (ctx.request.cf?.country as string) ?? "somewhere";
+
+    // You can also set state on connection
+    connection.setState({ country });
+
     return [country];
   }
 
@@ -51,7 +55,7 @@ export default class Main implements Party.Server {
       `Party ${this.party.id} has received ${this.messages.length} messages`
     );
   }
-  async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
+  async onConnect(connection: Connection, ctx: Party.ConnectionContext) {
     // You can now read the room state from `this.party` instead.
     this.party.broadcast(
       "A new connection has joined the party! Say hello to " + connection.id
@@ -68,8 +72,8 @@ export default class Main implements Party.Server {
   // Previously onMessage, onError, onClose were only called for hibernating parties.
   // They're now available for all parties, so you no longer need to manually
   // manage event handlers in onConnect!
-  async onMessage(message: string, connection: Party.Connection) {
-    connection.send("Pong!");
+  async onMessage(message: string, connection: Connection) {
+    connection.send(`Pong from ${connection.state?.country}!`);
     this.party.broadcast(message, [connection.id]);
   }
   async onError(connection: Party.Connection, err: Error) {
