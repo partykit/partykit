@@ -65,8 +65,29 @@ export type Lobby = {
 
 export type ExecutionContext = CFExecutionContext;
 
+// https://stackoverflow.com/a/58993872
+type ImmutablePrimitive = undefined | null | boolean | string | number;
+type Immutable<T> = T extends ImmutablePrimitive
+  ? T
+  : T extends Array<infer U>
+  ? ImmutableArray<U>
+  : T extends Map<infer K, infer V>
+  ? ImmutableMap<K, V>
+  : T extends Set<infer M>
+  ? ImmutableSet<M>
+  : ImmutableObject<T>;
+type ImmutableArray<T> = ReadonlyArray<Immutable<T>>;
+type ImmutableMap<K, V> = ReadonlyMap<Immutable<K>, Immutable<V>>;
+type ImmutableSet<T> = ReadonlySet<Immutable<T>>;
+type ImmutableObject<T> = { readonly [K in keyof T]: Immutable<T[K]> };
+
+export type ConnectionState<T> = ImmutableObject<T>;
+export type ConnectionSetStateFn<T> = (
+  prevState: ConnectionState<T> | null
+) => T;
+
 /** A WebSocket connected to the Party */
-export type Connection = WebSocket & {
+export type Connection<TState = unknown> = WebSocket & {
   /** Connection identifier */
   id: string;
 
@@ -79,9 +100,20 @@ export type Connection = WebSocket & {
   // Instead, we'll use the `uri` property.
   uri: string;
 
-  // Underlying cloudflare types specify the type as any, but unknown is safer
-  // as it forces a cast, so let's add a optional generic overload
+  /**
+   * Arbitrary state associated with this connection.
+   * Read-only, use Connection.setState to update the state.
+   */
+  state: ConnectionState<TState> | null;
+
+  setState(
+    state: TState | ConnectionSetStateFn<TState>
+  ): ConnectionState<TState>;
+
+  /** @deprecated use Connection.setState instead */
   serializeAttachment<T = unknown>(attachment: T): void;
+
+  /** @deprecated use Connection.state instead */
   deserializeAttachment<T = unknown>(): T | null;
 };
 
@@ -115,13 +147,13 @@ export type Party = {
   broadcast: (msg: string, without?: string[] | undefined) => void;
 
   /** Get a connection by connection id */
-  getConnection(id: string): Connection | undefined;
+  getConnection<TState = unknown>(id: string): Connection<TState> | undefined;
 
   /**
    * Get all connections. Optionally, you can provide a tag to filter returned connections.
    * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
-  getConnections(tag?: string): Iterable<Connection>;
+  getConnections<TState = unknown>(tag?: string): Iterable<Connection<TState>>;
 };
 
 /* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party
