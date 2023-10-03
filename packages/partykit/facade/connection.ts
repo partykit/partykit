@@ -97,7 +97,6 @@ export const createLazyConnection = (
     },
     state: {
       get() {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         return this.deserializeAttachment() as Party.ConnectionState<unknown>;
       },
     },
