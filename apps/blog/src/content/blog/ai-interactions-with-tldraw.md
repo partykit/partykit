@@ -17,9 +17,15 @@ description: How might we interact with AI? I'm exploring this with tldraw, a mu
 
 One question is: **how might we interact with AIs?**
 
-Something I like to do is to sketch in code to explore different angles in interaction design. The code is scrappy but it takes me to interesting conclusions.
+Something I like to do is to sketch in code to explore different angles in interaction design. You can reach interesting conclusions even with scrappy code.
 
-**There’s also code!** We made a starter kit to get [tldraw](https://tldraw.dev) _(dev docs)_ working with PartyKit, for your own experiments. You’ll find that at the bottom of this post.
+What you’ll find in this post:
+
+- A review of a few of today’s human-AI interaction modes -- and why I think that _multiplayer_ is an approach worth taking too.
+- Some software sketches based on [tldraw](https://tldraw.com), a multiplayer infinite whiteboard web app, with NPC users that can follow commands and proactively offer help.
+- Tentative conclusions in both the design and tech domains.
+
+**There’s also code!** We made a starter kit to get tldraw working with PartyKit, for your own experiments. You’ll find that at the bottom of this post.
 
 _(I delivered a version of this post as [my talk at NEXT23 in Hamburg](https://nextconf.eu/event/playfully-inventing-our-way-into-the-ai-future/) a few weeks ago.)_
 
@@ -29,7 +35,7 @@ Let’s take a look at a few. I’m sure I don’t need to remind anyone what [C
 
 ![A blank ChatGPT chat with a few providing starting points](/content-images/ai-interactions-with-tldraw/chatgpt-screenshot-sm.png)
 
-**~~Affordances.~~** I use ChatGPT daily, it’s amazing. It takes some learning though. From an interaction design point of view, ChatGPT is missing [visual affordances](https://www.interaction-design.org/literature/topics/affordances): like a door handle tells you that you’re look at a door and not a wall, and also provides the possibility of opening it, _‘affordance’_ is the technical term for being able to see what you can do.
+**~~Affordances.~~** I use ChatGPT daily, it’s amazing. It takes some learning though. From an interaction design point of view, ChatGPT is missing [visual affordances](https://www.interaction-design.org/literature/topics/affordances): like a door handle informs you that you’re looking at a door and not a wall, and also provides the possibility of opening it, _‘affordance’_ is the technical term for being able to see what you can do.
 
 Sure, ChatGPT has those hints about where to begin. But let’s say I’m in the middle of writing a blog post and I’m stuck for phrasing: it has no _affordance_ that points the way at exactly how it can help.
 
@@ -43,7 +49,7 @@ Sure, ChatGPT has those hints about where to begin. But let’s say I’m in the
 
 <video autoplay muted loop src="/content-images/ai-interactions-with-tldraw/robin sloan-rnn-example-1.mp4"></video>
 
-One of the best patterns we have is _ghosted text for suggested autocomplete._ This is how [GitHub Copilot](https://github.com/features/copilot/) has worked since in launched in 2021 — another AI that I collaborate with daily.
+One of the best patterns we have is _ghosted text for suggested autocomplete._ This is how [GitHub Copilot](https://github.com/features/copilot/) has worked since it launched in 2021 — another AI that I collaborate with daily.
 
 But the video above is from further back. In [Writing With the Machine](https://www.robinsloan.com/notes/writing-with-the-machine/) (2016!), author Robin Sloan trained a recurrent neural network (RNN) on a corpus of mid-century science fiction short stories. Then he hooked the output up to tab-autocomplete.
 
@@ -53,9 +59,9 @@ Sloan found quickly that this wasn’t a text editor that “writes for you.”
 
 Which is exactly how the rest of us - years later - use Copilot, right?
 
-**~~Multifunctional.~~** Where I’d like to extend both Sloan’s work and Copilot is to somehow have _many_ different functions instead of the same autocomplete all of the time. Think of working on a Google Doc with your human team. You might want a creating sparring partner at the beginning, some critical friends at the midpoint, and a detail-oriented copyeditor at the end. A fact-checker may come and go. But what would be stifling would be a copyeditor dropping comments right at the outset, when you’re still feeling out your topic.
+**~~Multifunctional.~~** Where I’d like to extend both Sloan’s work and Copilot is to somehow have _many_ different functions instead of the same autocomplete all of the time. Think of working on a Google Doc with your human team. Your ideal team changes over time... perhaps you’d pair with a creative sparring partner at the beginning, ask some critical friends to drop by at the midpoint, and a work with a detail-oriented copyeditor at the end. A fact-checker might come and go. But what would be stifling would be a copyeditor dropping comments right at the outset, when you’re still feeling out your topic.
 
-So what would it mean to have AI interactions that are are sophisticated as that human team?
+So what would it mean to have AI interactions that are as sophisticated as that human team?
 
 ## AI as teammate
 
@@ -126,7 +132,7 @@ And if we ask it to draw a house… then it can’t. Maybe AI won’t take our j
 
 I’m taken with a few of the interactions that emerged while I was working on this sketch:
 
-- **Cursor proxemics to show attention.** It’s a powerful pattern, to use the position of a cursor to show where an NPC is paying attention, and distance to allow it to chip in with varying levels of confident. Cursors aren’t a long-term solution (neither smartphones and spatial computing use cursors) but there’s something here to explore.
+- **Cursor proxemics to show attention.** It’s a powerful pattern, to use the position of a cursor to show where an NPC is paying attention, and distance to allow it to chip in with varying levels of confidence. Cursors aren’t an all-purpose solution (neither smartphones nor VR headsets use cursors) but there’s something here to explore.
 - **Multiple helpful AIs, not just one.** As a user, I can have a _”theory of mind”_ about a focused AI that I can’t with a general-purpose copilot. There’s my affordance right there. I can see a world in which we bring in different AIs with different goals at different project stages.
 
 **tl;dr:** AI-as-teammate is an approach that answers some (though not all) of today’s issues in AI interactions. Future solutions will likely combine several approaches; this one has some unique strengths.
@@ -154,11 +160,7 @@ Having built this, I have two technical ~~observations~~ hunches:
 
 You can have a look at the code:
 
-- **Scrappy exploration code:** In the [sketch-dolphin repo](https://github.com/partykit/sketch-dolphin) you’ll find all the my NPC experiments. For example, [here’s the maker NPC with OpenAI function calling](https://github.com/partykit/sketch-dolphin/blob/main/src/partykit/npc-maker.ts). Feel free to browse. I’m not going to link to the playable demo itself… it’s often not reliable.
+- **Scrappy exploration code:** In the repo [sketch-tldraw-npcs](https://github.com/partykit/sketch-tldraw-npcs) on GitHub you’ll find all my NPC experiments. For example, [here’s the maker NPC with OpenAI function calling](https://github.com/partykit/sketch-tldraw-npcs/blob/main/src/partykit/npc-maker.ts). Feel free to browse. _(I’m not going to link to the playable demo itself here… I cut corners making this sketch, and while it’s fine to use to record videos, it’s not robust enough to be used!)_
 - **Starter kit for a multiplayer whiteboard:** In [sketch-tldraw](https://github.com/partykit/sketch-tldraw) you can find a minimal implementation for tldraw with a PartyKit backend, based on the tldraw team’s own work with Yjs (thank you!). Use this as a starting point for your own NPC investigations!
 
 [Let me know](https://twitter.com/genmon) if you do any digging in this direction yourself. I’d love to see.
-
-architecture, download
-
-conclusions
