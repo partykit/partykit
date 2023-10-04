@@ -89,7 +89,7 @@
     "update-notifier": "^6.0.2",
     "which-pm-runs": "^1.1.0",
     "ws": "^8.14.2",
-    "zod": "^3.22.2",
+    "zod": "^3.22.3",
     "zod-to-json-schema": "^3.21.4"
   },
   "files": [
