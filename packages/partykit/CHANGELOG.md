@@ -1,5 +1,29 @@
 # partykit
 
+## 0.0.27
+
+### Patch Changes
+
+- [#458](https://github.com/partykit/partykit/pull/458) [`4b3e0e2`](https://github.com/partykit/partykit/commit/4b3e0e2bb81e406ca1e8e9d97131984406c3b13b) Thanks [@jevakallio](https://github.com/jevakallio)! - Add new `connection.state` and `connection.getState` methods.
+
+  ```ts
+  import type * as Party from "partykit/server";
+
+  // optional: you can provide typescript types for state for additional type safety
+  type Connection = Party.Connection<{ country: string }>;
+
+  class PartyServer {
+    onConnect(connection: Connection, { request }) {
+      // you can .setState to store information on connection
+      connection.setState({ country: request.cf.country });
+    }
+    onMessage(message: string, connection: Connection) {
+      // you can access .state to get information stored with .setState
+      console.log(`${message} from user in ${connection.state?.country}`);
+    }
+  }
+  ```
+
 ## 0.0.26
 
 ### Patch Changes
