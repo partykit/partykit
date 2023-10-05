@@ -275,7 +275,10 @@ function createDurable(
       };
     }
 
-    broadcast = (msg: string | Uint8Array, without: string[] = []) => {
+    broadcast = (
+      msg: string | ArrayBuffer | ArrayBufferView,
+      without: string[] = []
+    ) => {
       if (!this.connectionManager) {
         return;
       }
@@ -461,7 +464,10 @@ function createDurable(
     }
 
     /** Runtime calls webSocketMessage when hibernated connection receives a message  */
-    async webSocketMessage(ws: WebSocket, msg: string | ArrayBuffer) {
+    async webSocketMessage(
+      ws: WebSocket,
+      msg: string | ArrayBuffer | ArrayBufferView
+    ) {
       const connection = createLazyConnection(ws);
       if (!this.worker) {
         // This means the room "woke up" after hibernation
@@ -495,7 +501,7 @@ function createDurable(
 
     async invokeOnMessage(
       connection: Party.Connection,
-      msg: string | ArrayBuffer
+      msg: string | ArrayBuffer | ArrayBufferView
     ) {
       assert(this.worker, "[onMessage] Worker not initialized.");
       return this.worker.onMessage(msg, connection);

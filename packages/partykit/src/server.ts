@@ -144,7 +144,10 @@ export type Party = {
   parties: Context["parties"];
 
   /** Send a message to all connected clients, except connection ids listed `without` */
-  broadcast: (msg: string, without?: string[] | undefined) => void;
+  broadcast: (
+    msg: string | ArrayBuffer | ArrayBufferView,
+    without?: string[] | undefined
+  ) => void;
 
   /** Get a connection by connection id */
   getConnection<TState = unknown>(id: string): Connection<TState> | undefined;
@@ -203,7 +206,7 @@ export type Server = {
    * Called when a WebSocket connection receives a message from a client, or another connected party.
    */
   onMessage?(
-    message: string | ArrayBuffer,
+    message: string | ArrayBuffer | ArrayBufferView,
     sender: Connection
   ): void | Promise<void>;
 
@@ -341,7 +344,7 @@ export type PartyKitServer = {
    * messages, which enables a single server to handle more connections.
    */
   onMessage?: (
-    message: string | ArrayBuffer,
+    message: string | ArrayBuffer | ArrayBufferView,
     connection: Connection,
     party: Party
   ) => void | Promise<void>;
