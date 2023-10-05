@@ -70,4 +70,4 @@ As simple as this sounds, this is a powerful pattern. Being able to access the s
 - messaging between [multiple parties](/guides/using-multiple-parties-per-project/),
 - building room admin APIs.
 
-To learn more common patterns and uses cases, head over to the [Examples](/examples/all-examples/) section.
+To learn more common patterns and uses cases, head over to the [Examples](/examples/) section.
