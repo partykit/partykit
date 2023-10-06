@@ -546,15 +546,28 @@ function assertType(value: unknown, label: string, type: string) {
   }
 }
 
+type Params = Record<string, string>;
+type ParamsProvider = Params | (() => Params | Promise<Params>);
+type BaseProviderOptions = ConstructorParameters<typeof WebsocketProvider>[3];
+
+type YPartyKitProviderOptions = Omit<
+  NonNullable<BaseProviderOptions>,
+  "params"
+> & {
+  connectionId?: string;
+  party?: string;
+  params?: ParamsProvider;
+};
+
 export default class YPartyKitProvider extends WebsocketProvider {
   id: string;
+  #params?: ParamsProvider;
+
   constructor(
     host: string,
     room: string,
     doc?: YDoc,
-    options: ConstructorParameters<typeof WebsocketProvider>[3] & {
-      party?: string;
-    } = {}
+    options: YPartyKitProviderOptions = {}
   ) {
     assertType(host, "host", "string");
     assertType(room, "room", "string");
@@ -562,20 +575,48 @@ export default class YPartyKitProvider extends WebsocketProvider {
     // strip the protocol from the beginning of `host` if any
     host = host.replace(/^(http|https|ws|wss):\/\//, "");
 
+    // strip trailing slash from host if any
+    if (host.endsWith("/")) {
+      host.slice(0, -1);
+    }
+
     const serverUrl = `${
       host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss"
     }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
-    const id = generateUUID();
-    if (options.params === undefined) {
-      options.params = {
-        _pk: id,
-      };
-    } else {
-      options.params._pk = id;
-    }
-    super(serverUrl, room, doc ?? new YDoc(), options);
+
+    // use provided id, or generate a random one
+    const id = options.connectionId ?? generateUUID();
+
+    // don't pass params to WebsocketProvider, we override them in connect()
+    const { params, connect = true, ...rest } = options;
+
+    // don't connect until we've updated the url parameters
+    const baseOptions = { ...rest, connect: false };
+
+    super(serverUrl, room, doc ?? new YDoc(), baseOptions);
+
     this.id = id;
+    this.#params = params;
+
+    if (connect) {
+      void this.connect();
+    }
+  }
+
+  async connect() {
+    // get updated url parameters
+    const params =
+      typeof this.#params === "function" ? await this.#params() : this.#params;
+    const nextUrl = new URL(this.url);
+    nextUrl.search = url.encodeQueryParams({
+      ...params,
+      _pk: this.id,
+    });
+
+    // override current url parameters before connecting
+    this.url = nextUrl.toString();
+    super.connect();
   }
 }
