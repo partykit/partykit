@@ -605,10 +605,10 @@ export default class YPartyKitProvider extends WebsocketProvider {
     }
   }
 
-  async connect() {
+  connect() {
     // get updated url parameters
     Promise.resolve(
-      typeof this.#params === "function" ? await this.#params() : this.#params
+      typeof this.#params === "function" ? this.#params() : this.#params
     )
       .then((nextParams) => {
         // override current url parameters before connecting
