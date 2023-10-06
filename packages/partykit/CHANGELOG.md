@@ -1,5 +1,19 @@
 # partykit
 
+## 0.0.28
+
+### Patch Changes
+
+- [#465](https://github.com/partykit/partykit/pull/465) [`3048a9f`](https://github.com/partykit/partykit/commit/3048a9f7523a4cf5876b59f1f4f1c8aa45f7188f) Thanks [@threepointone](https://github.com/threepointone)! - fix: .send and .broadcast can send ArrayBuffers
+
+  WebSocket messages can be `string | ArrayBuffer | ArrayBufferView`, this patch fixes the types to allow that. The implementation remains the same (and otherwise always worked).
+
+- [#463](https://github.com/partykit/partykit/pull/463) [`1efd862`](https://github.com/partykit/partykit/commit/1efd86242be8e428bdce4b8e9b078d3e79de6dd4) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
+- [#466](https://github.com/partykit/partykit/pull/466) [`e8a8da4`](https://github.com/partykit/partykit/commit/e8a8da4f925d2457e095736ecfb1eacb84831ee1) Thanks [@jevakallio](https://github.com/jevakallio)! - Make connection.setState accept null
+
+- [#461](https://github.com/partykit/partykit/pull/461) [`34eeb03`](https://github.com/partykit/partykit/commit/34eeb032333554f1ab0b4d90a005888c531f9f34) Thanks [@dependabot](https://github.com/apps/dependabot)! - Bump zod from 3.22.2 to 3.22.3
+
 ## 0.0.27
 
 ### Patch Changes
