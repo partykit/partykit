@@ -607,16 +607,25 @@ export default class YPartyKitProvider extends WebsocketProvider {
 
   async connect() {
     // get updated url parameters
-    const params =
-      typeof this.#params === "function" ? await this.#params() : this.#params;
-    const nextUrl = new URL(this.url);
-    nextUrl.search = url.encodeQueryParams({
-      ...params,
-      _pk: this.id,
-    });
+    Promise.resolve(
+      typeof this.#params === "function" ? await this.#params() : this.#params
+    )
+      .then((nextParams) => {
+        // override current url parameters before connecting
+        const nextUrl = new URL(this.url);
+        nextUrl.search = url.encodeQueryParams({
+          ...nextParams,
+          _pk: this.id,
+        });
 
-    // override current url parameters before connecting
-    this.url = nextUrl.toString();
-    super.connect();
+        this.url = nextUrl.toString();
+
+        // finally, connect
+        super.connect();
+      })
+      .catch((err) => {
+        console.error("Failed to open connecton to PartyKit", err);
+        throw new Error(err);
+      });
   }
 }
