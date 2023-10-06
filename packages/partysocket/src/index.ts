@@ -82,7 +82,7 @@ export default class PartySocket extends ReconnectingWebSocket {
     const makeUrl = (query?: Params) =>
       `${baseUrl}?${new URLSearchParams({ ...query, _pk }).toString()}`;
 
-    // allow urls to be
+    // allow urls to be defined as functions
     const urlProvider =
       typeof query === "function"
         ? async () => makeUrl(await query())
