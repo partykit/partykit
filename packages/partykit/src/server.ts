@@ -81,10 +81,8 @@ type ImmutableMap<K, V> = ReadonlyMap<Immutable<K>, Immutable<V>>;
 type ImmutableSet<T> = ReadonlySet<Immutable<T>>;
 type ImmutableObject<T> = { readonly [K in keyof T]: Immutable<T[K]> };
 
-export type ConnectionState<T> = ImmutableObject<T>;
-export type ConnectionSetStateFn<T> = (
-  prevState: ConnectionState<T> | null
-) => T;
+export type ConnectionState<T> = ImmutableObject<T> | null;
+export type ConnectionSetStateFn<T> = (prevState: ConnectionState<T>) => T;
 
 /** A WebSocket connected to the Party */
 export type Connection<TState = unknown> = WebSocket & {
@@ -104,10 +102,10 @@ export type Connection<TState = unknown> = WebSocket & {
    * Arbitrary state associated with this connection.
    * Read-only, use Connection.setState to update the state.
    */
-  state: ConnectionState<TState> | null;
+  state: ConnectionState<TState>;
 
   setState(
-    state: TState | ConnectionSetStateFn<TState>
+    state: TState | ConnectionSetStateFn<TState> | null
   ): ConnectionState<TState>;
 
   /** @deprecated use Connection.setState instead */
@@ -150,7 +148,7 @@ export type Party = {
   ) => void;
 
   /** Get a connection by connection id */
-  getConnection<TState = unknown>(id: string): Connection<TState> | undefined;
+  getConnection<TState = unknown>(id: string): Connection<TState>;
 
   /**
    * Get all connections. Optionally, you can provide a tag to filter returned connections.
