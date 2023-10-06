@@ -1,6 +1,7 @@
 import type * as RWS from "./ws";
 import ReconnectingWebSocket from "./ws";
 
+type Params = Record<string, string>;
 export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   id?: string; // the id of the client
   host: string; // base url for the party
@@ -8,7 +9,7 @@ export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   party?: string; // the party to connect to (defaults to main)
   protocol?: string;
   protocols?: string[];
-  query?: Record<string, string>;
+  query?: Params | (() => Params | Promise<Params>);
   // headers
 };
 
@@ -65,34 +66,46 @@ export default class PartySocket extends ReconnectingWebSocket {
     const _pk = partySocketOptions.id || generateUUID();
 
     // strip the protocol from the beginning of `host` if any
-    const host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
+    let host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
+    // if user provided a trailing slash, remove it
+    if (host.endsWith("/")) {
+      host = host.slice(0, -1);
+    }
 
-    let url = `${
+    const baseUrl = `${
       protocol ||
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss")
     }://${host}/${party ? `parties/${party}` : "party"}/${room}`;
-    if (query) {
-      url += `?${new URLSearchParams({ ...query, _pk }).toString()}`;
-    } else {
-      url += `?_pk=${_pk}`;
-    }
 
-    super(url, protocols, socketOptions);
+    const makeUrl = (query?: Params) =>
+      `${baseUrl}?${new URLSearchParams({ ...query, _pk }).toString()}`;
+
+    // allow urls to be
+    const urlProvider =
+      typeof query === "function"
+        ? async () => makeUrl(await query())
+        : makeUrl(query);
+
+    super(urlProvider, protocols, socketOptions);
     this._pk = _pk;
-    this._pkurl = url;
+    this._pkurl = baseUrl;
 
     this.name = party ?? "main";
     this.room = room;
     this.host = host;
   }
+
   get id() {
     return this._pk;
   }
 
-  // partysocket has a static url, so we can just return that
-  get url(): string {
+  /**
+   * Exposes the static PartyKit room URL without applying query parameters.
+   * To access the currently connected WebSocket url, use PartySocket#url.
+   */
+  get roomUrl(): string {
     return this._pkurl;
   }
 }
