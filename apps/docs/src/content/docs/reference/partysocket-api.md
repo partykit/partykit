@@ -51,6 +51,11 @@ const ws = new PartySocket({
   // optionally, specify the party to connect to.
   // if not provided, will connect to the "main" party defined in partykit.json
   party: "main",
+
+  // optionally, pass an object of query string parameters to add to the request
+  query: async () => ({
+    token: await getAuthToken()
+  })
 });
 ```
 
