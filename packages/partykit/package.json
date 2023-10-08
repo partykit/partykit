@@ -1,6 +1,6 @@
 {
   "name": "partykit",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "PartyKit simplifies developing multiplayer applications. Everything's better with friends.",
   "bin": "dist/bin.mjs",
   "keywords": [

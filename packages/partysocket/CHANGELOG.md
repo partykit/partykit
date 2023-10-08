@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.9
+
+### Patch Changes
+
+- [`ec13e37`](https://github.com/partykit/partykit/commit/ec13e37d16038424e70a9c49bdc0b551a510d0cf) Thanks [@jevakallio](https://github.com/jevakallio)! - Allow passing PartySocket.query as a function
+
 ## 0.0.8
 
 ### Patch Changes
