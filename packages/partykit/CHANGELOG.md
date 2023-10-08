@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.29
+
+### Patch Changes
+
+- [#472](https://github.com/partykit/partykit/pull/472) [`a9b17f9`](https://github.com/partykit/partykit/commit/a9b17f9ccb6a479aa721a2ddc5737c464e399fd2) Thanks [@jevakallio](https://github.com/jevakallio)! - Allow preflight requests when Chrome Private Network Access is enabled
+
+- [#470](https://github.com/partykit/partykit/pull/470) [`cdceba8`](https://github.com/partykit/partykit/commit/cdceba89c7562359e2b8dc21dc2f2085bc24ecc1) Thanks [@dev-badace](https://github.com/dev-badace)! - added missing crypto from node_compat
+
 ## 0.0.28
 
 ### Patch Changes
