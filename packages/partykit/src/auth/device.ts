@@ -34,6 +34,9 @@ export async function signInWithBrowser(mode: "cli" | "token"): Promise<
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Headers", "Authorization");
 
+        // https://developer.chrome.com/blog/private-network-access-preflight/
+        res.setHeader("Access-Control-Allow-Private-Network", "true");
+
         if (req.method === "OPTIONS") {
           res.statusCode = 204;
           res.end();
