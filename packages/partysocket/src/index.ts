@@ -1,7 +1,13 @@
 import type * as RWS from "./ws";
 import ReconnectingWebSocket from "./ws";
 
-type Params = Record<string, string>;
+type Maybe<T> = T | null | undefined;
+type Params = Record<string, Maybe<string>>;
+const valueIsNotNil = <T>(
+  keyValuePair: [string, Maybe<T>]
+): keyValuePair is [string, T] =>
+  keyValuePair[1] !== null && keyValuePair[1] !== undefined;
+
 export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   id?: string; // the id of the client
   host: string; // base url for the party
@@ -79,8 +85,11 @@ export default class PartySocket extends ReconnectingWebSocket {
         : "wss")
     }://${host}/${party ? `parties/${party}` : "party"}/${room}`;
 
-    const makeUrl = (query?: Params) =>
-      `${baseUrl}?${new URLSearchParams({ ...query, _pk }).toString()}`;
+    const makeUrl = (query: Params = {}) =>
+      `${baseUrl}?${new URLSearchParams([
+        ["_pk", _pk],
+        ...Object.entries(query).filter(valueIsNotNil),
+      ])}`;
 
     // allow urls to be defined as functions
     const urlProvider =
