@@ -13,9 +13,9 @@ description: ViteConf attendees sent over 23,000 live reactions using PartyKit.
 
 ---
 
-Last week PartyKit made an appearance at [ViteConf](https://viteconf.org/23), an online conference that celebrates the Vite community, and the web dev community at large.
+Last week PartyKit made an appearance at [ViteConf](https://viteconf.org/23), an online conference that celebrates the Vite community, and the web dev community at large. It is known for its nurturing community vibe ✨ Even though the talks are pre-recorded, the conference Discord is booming with love, jokes, and serious questions.
 
-ViteConf is known for its nurturing community vibe ✨ Even though the talks are pre-recorded, the conference Discord is booming with love, jokes, and serious questions. To further extend this experience, the StackBlitz team wanted to experiment with adding a little interactivity to the conference platform. It is yet another way to enhance the feeling of togetherness at an online event.
+To further extend this experience, the StackBlitz team wanted to experiment with adding a little interactivity to the conference platform. It is yet another way to enhance the feeling of togetherness at an online event.
 
 <img style="width:400px; height: auto;" src="/content-images/partykit-at-viteconf/hearts-go-up.gif" alt='A reaction counter going up'>
 
