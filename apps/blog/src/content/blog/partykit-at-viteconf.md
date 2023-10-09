@@ -1,7 +1,7 @@
 ---
 author: Sylwia Vargas
 pubDatetime: 2023-10-08T14:12:00Z
-title: PartyKit's debut at ViteConf
+title: PartyKit at ViteConf 2023
 postSlug: partykit-at-viteconf
 featured: false
 draft: false
