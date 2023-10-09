@@ -33,7 +33,7 @@ Behind the scenes, each talk was connected to its own PartyKit server (called "a
 
 Each spike indicates the beginning of a new talk (when a new PartyKit room was created). In this way, reactions for each talk were kept separately. Important to mention, switching the rooms was imperceivable on the UI.
 
-This experience could further be extended by adding animation, making the reaction heart float on the screen (or in the player), or giving the participants a way to draw something together as the talks progress.
+This experience could further be extended by adding animation, making the reaction heart float on the screen (or in the player), or giving the participants a way to draw something together as the talks progress. Given that PartyKit can handle up to 32,000 concurrent events, you're limited only by your imagination.
 
 🎈 **I'd love to help you bring real-time interactivity to your event! Find me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>** 🎈
 
