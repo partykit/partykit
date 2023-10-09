@@ -546,7 +546,7 @@ function assertType(value: unknown, label: string, type: string) {
   }
 }
 
-type Params = Record<string, string>;
+type Params = Record<string, string | null | undefined>;
 type ParamsProvider = Params | (() => Params | Promise<Params>);
 type BaseProviderOptions = ConstructorParameters<typeof WebsocketProvider>[3];
 
@@ -612,12 +612,18 @@ export default class YPartyKitProvider extends WebsocketProvider {
     )
       .then((nextParams) => {
         // override current url parameters before connecting
-        const nextUrl = new URL(this.url);
-        nextUrl.search = url.encodeQueryParams({
-          ...nextParams,
-          _pk: this.id,
-        });
+        const urlParams = new URLSearchParams([["_pk", this.id]]);
+        if (nextParams) {
+          for (const [key, value] of Object.entries(nextParams)) {
+            // filter out null/undefined values
+            if (value !== null && value !== undefined) {
+              urlParams.append(key, value);
+            }
+          }
+        }
 
+        const nextUrl = new URL(this.url);
+        nextUrl.search = urlParams.toString();
         this.url = nextUrl.toString();
 
         // finally, connect
