@@ -30,7 +30,7 @@ Knowing when to use ephemeral client-local state, in-party storage, or a cloud d
 
 Our first demo using the Fireproof PartyKit connector is even simpler. It’s a magnetic poetry app, based on [Matt Webb’s excellent mosaic drawing app](https://blog.partykit.io/posts/wisdom-of-crowds), that allows you to collaborate on word tile arrangements and save your beautiful word paintings, masterpieces that they are, for posterity! Drag and drop tile motion is shared in PartyKit, and poems are saved and loaded from Fireproof. [Try out the magnetic poetry app here](https://magnetic-poetry.use-fireproof.com/), or continue reading to run your own copy and start adapting the code for your own purposes.
 
-![Screenshot of magnetic poetry app](https://lh5.googleusercontent.com/OiZwVisnQSfF9UhxU5sITZ3CKtYxwRgpsAJCmDgF5eSx9_YUBgGlLEVZ52pgPEyVMf7ObcT2pqXQaGJxIChJeu5Rn0y7B8SuxrdlTptOdFUWsEoqtJyWT1_AoNfSPHJPkhl5CB55nof3g07PFPJd3bo)
+![Screenshot of magnetic poetry app](/content-images/fireproof-database-connector/screenshot.png)
 
 To try it out, just paste this into your CLI: 
 
@@ -49,6 +49,6 @@ There’s a [tour of the code in the README](https://github.com/partykit/sketch-
 
 SHOW US WHAT YOU GOT
 
-![SHOW ME WHAT YOU GOT meme](https://lh3.googleusercontent.com/mK0UCebhjWDY3Z0crUivTveuKHUlrwH9kYfb42tsuNxD9k_mdmwBVb2kHr4Ng-2sD2wjL1uH2OIY3QyeVzxTelj7zHWVkskRnTwVJ5f__Bvl76qG4su2p2rBSjI_USCWxM-UMWnhqGL9suF8PKIuKAY)
+![SHOW ME WHAT YOU GOT meme](/content-images/fireproof-database-connector/meme.png)
 
 Fireproof is open source and ready for your apps. [Check out the developer docs](https://use-fireproof.com/docs/welcome) and join the [GitHub discussions](https://github.com/fireproof-storage/fireproof/discussions) and [Fireproof Discord](https://discord.gg/3cGbju6W) to talk to other builders. Let us know what you build, and we will feature it in our app showcase. We love to share what people do, so tell us about your sketches, demos, games, toys, apps, giant robots, interstellar spacecraft, etc. We hang out in PartyKit’s discord, you can also [join the Fireproof discord here](https://discord.gg/3cGbju6W)!
