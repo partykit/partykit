@@ -39,7 +39,7 @@
     ],
     "dts": true
   },
-  "dependencies": {
+  "optionalDependencies": {
     "react": "^18.2.0"
   },
   "scripts": {
