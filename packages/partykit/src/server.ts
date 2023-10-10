@@ -37,7 +37,9 @@ export interface Storage extends DurableObjectStorage {}
 export type ConnectionContext = { request: CFRequest };
 
 export type Stub = {
+  /** @deprecated Use `await socket()` instead */
   connect: () => WebSocket;
+  socket: () => Promise<WebSocket>;
   fetch: (init?: RequestInit) => Promise<Response>;
 };
 

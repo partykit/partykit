@@ -49,7 +49,7 @@ export default {
     console.log(room.context.parties);
     const res = await room.context.parties.xyz.get("some-id").fetch();
     console.log("gottt", await res.text());
-    const wssss = room.context.parties.xyz.get("some-id").connect();
+    const wssss = await room.context.parties.xyz.get("some-id").socket();
     wssss.addEventListener("message", (evt) => {
       console.log("got a message from xyz", evt.data);
     });
