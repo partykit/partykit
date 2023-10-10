@@ -138,10 +138,21 @@ class WSSharedDoc extends YDoc {
       });
     });
   }
+  /**
+   * Appends the entire document state as an update to the update log.
+   */
   async writeState() {
     assert(this.storage, "Storage not set");
     const newUpdates = encodeStateAsUpdate(this);
     await this.storage.storeUpdate(this.name, newUpdates);
+  }
+
+  /**
+   * Replaces the current update log with the current state of the document.
+   */
+  async flushDocument() {
+    assert(this.storage, "Storage not set");
+    await this.storage.flushDocument(this.name);
   }
 }
 
@@ -356,7 +367,7 @@ function closeConn(doc: WSSharedDoc, conn: Party.Connection): void {
     );
     if (doc.conns.size === 0 && doc.persist) {
       // if persisted, we store state and destroy ydocument
-      doc.writeState().then(
+      doc.flushDocument().then(
         () => {
           doc.destroy();
         },
