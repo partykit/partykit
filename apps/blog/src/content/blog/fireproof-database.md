@@ -35,7 +35,7 @@ Our first demo using the Fireproof PartyKit connector is even simpler. It’s a 
 To try it out, just paste this into your CLI: 
 
 ```sh
-git clone <https://github.com/partykit/sketch-magnetic-poetry> 
+git clone https://github.com/partykit/sketch-magnetic-poetry
 cd sketch-magnetic-poetry
 npm install
 cp .env.example .env  # tell the app where to find the partyserver
