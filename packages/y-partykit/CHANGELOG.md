@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.9
+
+### Patch Changes
+
+- [#475](https://github.com/partykit/partykit/pull/475) [`73dac94`](https://github.com/partykit/partykit/commit/73dac9473ac26d776ad0d7c150dcf3c7a3a195b8) Thanks [@jevakallio](https://github.com/jevakallio)! - Filter out null/undefined parameters when constructing query string
+
 ## 0.0.8
 
 ### Patch Changes
