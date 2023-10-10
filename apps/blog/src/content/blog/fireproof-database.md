@@ -1,6 +1,6 @@
 ---
 author: J Chris Anderson
-pubDatetime: 2023-09-21T16:00:00Z
+pubDatetime: 2023-10-10T10:00:00Z
 title: Multi-user database collaboration made easy
 postSlug: fireproof-database-connector
 featured: false
