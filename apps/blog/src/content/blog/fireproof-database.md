@@ -14,7 +14,7 @@ ogImage: "/content-images/fireproof-database-connector/og.jpg"
 description: PartyKit’s effortless connections are the perfect complement to 🔥 Fireproof’s immutable storage
 ---
 
-_[J Chris Anderson](https://github.com/jchris)’s relentless pursuit of the vision of a simple programming model for event driven apps running near the user led to his early success with Apache CouchDB and Couchbase Mobile, and now to his creation of [Fireproof](https://use-fireproof.com/)._
+_[J Chris Anderson](https://github.com/jchris)’s relentless pursuit of simple programming models for event driven apps running near the user led to his early success with Apache CouchDB and Couchbase Mobile, and now to his creation of [Fireproof](https://use-fireproof.com/)._
 
 When your database is a source of truth, hard things become easy and the impossible becomes reachable. I created the Fireproof database to empower web developers – just write a simple UI in your usual style and end up with a multi-user data-driven application. Once the data is in Fireproof, you can securely reference it from any backend or cloud.
 
