@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.10
+
+### Patch Changes
+
+- [#478](https://github.com/partykit/partykit/pull/478) [`daddf12`](https://github.com/partykit/partykit/commit/daddf122d5ea32bf52a925ec2aa083cd97113773) Thanks [@marekhrabe](https://github.com/marekhrabe)! - React is no longer a direct dependency of partysocket
+
 ## 0.0.9
 
 ### Patch Changes
