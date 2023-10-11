@@ -39,47 +39,34 @@ Each spike indicates the beginning of a new talk (when attendees joined a design
 The whole code needed to implement the feature is this:
 
 ```ts
-export default class ReactionServer implements Party.Server {
-  options: Party.ServerOptions = { hibernate: true };
-  constructor(readonly party: Party.Party) {}
-  reactions: Record<string, number> = {};
+import type * as Party from "partykit/server";
 
+export default class ReactionServer implements Party.Server {
+  reactions: Record<string, number> = {};
+  constructor(readonly party: Party.Party) {}
+
+  // load the reactions from built-in key-value storage
   async onStart() {
-    // load reactions from storage on startup
     this.reactions = (await this.party.storage.get("reactions")) ?? {};
   }
 
-  async onRequest(req: Party.Request) {
-    // for all HTTP requests, respond with the current reaction counts
-    return json(createUpdateMessage(this.reactions));
-  }
-
+  // when user connects, send them the current reaction counts
   onConnect(conn: Party.Connection) {
-    // on WebSocket connection, send the current reaction counts
-    conn.send(createUpdateMessage(this.reactions));
+    conn.send(JSON.stringify(this.reactions));
   }
 
-  onMessage(message: string, sender: Party.Connection) {
-    // rate limit incoming messages
-    rateLimit(sender, 100, () => {
-      // client sends WebSocket message: update reaction count
-      const parsed = parseReactionMessage(message);
-      this.updateAndBroadcastReactions(parsed.kind);
-    });
-  }
-
-  updateAndBroadcastReactions(kind: string) {
-    // update stored reaction counts
+  // when user sends a reaction, update the count
+  onMessage(message: string) {
+    const { kind } = JSON.parse(message);
     this.reactions[kind] = (this.reactions[kind] ?? 0) + 1;
-    // send updated counts to all connected listeners
-    this.party.broadcast(createUpdateMessage(this.reactions));
-    // save reactions to disk (fire and forget)
     this.party.storage.put("reactions", this.reactions);
+    // broadcast the updated counts to all users
+    this.party.broadcast(JSON.stringify(this.reactions));
   }
 }
 ```
 
-Explore it further [on GitHub](https://github.com/partykit/example-reactions) or see [other example apps](https://docs.partykit.io/examples) in our docs.
+Want to see more? Explore it further [on GitHub](https://github.com/partykit/example-reactions) or see [other example apps](https://docs.partykit.io/examples) in our docs 💕
 
 ## Making online spaces cozier one connection at a time
 
@@ -95,8 +82,10 @@ Meanwhile, we've prepared [an examples page](https://docs.partykit.io/examples) 
 
 If you've missed ViteConf, don't worry, you can still watch the talks on [the conference platform](https://viteconf.org/23/replay). There are a lot of gems there.
 
-My personal favorite was Sarah Rainsberger's talk on [contributing to docs](https://viteconf.org/23/replay/docs) which featured a lot of birds 🐦
+My personal favorite was Sarah Rainsberger's [talk on contributing to docs](https://viteconf.org/23/replay/docs) which featured a lot of birds 🐦
+
+<a href="https://viteconf.org/23/replay/docs" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/partykit-at-viteconf/sarahs-talk.png" alt="Sarah's slide with a bird as a background. The slide reads: 'Are your docs helpful? Is this helping someone get started with my project? Figure out what my project is or does? Evaluate whether it's right for them? Accomplish a specific goal? Avoid common pitfalls? Troubleshoot? Experiment? Update?"></a>
 
 Otherwise, everyone will find something for themselves as the all-star lineup included [Matias Capeletto](https://viteconf.org/23/replay/vite_philosophy), [the StackBlitz team](https://viteconf.org/23/replay/stackblitz_keynote), [Daniel Roe](https://viteconf.org/23/replay/nuxt), [Fred K. Schott](https://viteconf.org/23/replay/astro), [Kent C. Dodds](https://viteconf.org/23/replay/vite_react_router), [Ryan Carniato](https://viteconf.org/23/replay/solid), and many others.
 
-The preparations for ViteConf 2024 have already started. Follow [ViteConf](https://twitter.com/ViteConf) on Twitter for more information. See you there next year!
+Meanwhile, the preparations for ViteConf 2024 have already started. You can follow [ViteConf](https://twitter.com/ViteConf) on Twitter to stay up to date. See you there next year!
