@@ -483,7 +483,7 @@ export type YPartyKitPersistenceStrategy =
 
 export type YPartyKitOptions = {
   /**
-   * disable gc when using persist or persistStrategy!
+   * disable gc when using persist!
    * */
   gc?: boolean;
 
