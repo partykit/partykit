@@ -453,11 +453,33 @@ export class YPartyKitStorage {
     };
   }
 
-  async flushDocument(docName: string): Promise<void> {
+  async compactUpdateLog(
+    docName: string,
+    maxUpdates: number,
+    maxBytes: number
+  ): Promise<void> {
     return this._transact(async (db) => {
       const updates = await getLevelUpdates(db, docName);
-      const { update, sv } = mergeUpdates(updates.map((u) => u.value));
-      await flushDocument(db, docName, update, sv);
+      const flush = async () => {
+        const { update, sv } = mergeUpdates(updates.map((u) => u.value));
+        await flushDocument(db, docName, update, sv);
+      };
+
+      // total number of updates is too large -> flush
+      if (!maxUpdates || updates.length > maxUpdates) {
+        return flush();
+      }
+
+      // total update log size is too large -> flush
+      if (
+        !maxBytes ||
+        updates.reduce((size, u) => size + u.value.byteLength, 0) > maxBytes
+      ) {
+        return flush();
+      }
+
+      // no need to flush
+      return Promise.resolve();
     });
   }
 
