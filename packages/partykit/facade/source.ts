@@ -101,12 +101,31 @@ function createMultiParties(
                 );
               },
               connect: () => {
-                // wish there was a way to create a websocket from a durable object
                 return new WebSocket(
                   key === "main"
                     ? `ws://${options.host}/party/${name}`
                     : `ws://${options.host}/parties/${key}/${name}`
                 );
+              },
+              async socket() {
+                // This method is better because it doesn't go via the internet
+                // and doesn't get 522/404/ get caught in CF firewall
+                const res = await stub.fetch(
+                  key === "main"
+                    ? `http://${options.host}/party/${name}`
+                    : `http://${options.host}/parties/${key}/${name}`,
+                  {
+                    headers: {
+                      upgrade: "websocket",
+                    },
+                  }
+                );
+                const ws = res.webSocket;
+                if (!ws) {
+                  throw new Error("Expected a websocket response");
+                }
+                ws.accept();
+                return ws;
               },
             };
           },

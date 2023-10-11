@@ -1,6 +1,6 @@
 {
   "name": "partysocket",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "party hotline",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -38,9 +38,6 @@
       "cjs"
     ],
     "dts": true
-  },
-  "dependencies": {
-    "react": "^18.2.0"
   },
   "scripts": {
     "clean": "shx rm -rf dist *.d.ts",
