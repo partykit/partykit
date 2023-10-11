@@ -1,6 +1,6 @@
 {
   "name": "partysocket",
-  "version": "0.0.8",
+  "version": "0.0.10",
   "description": "party hotline",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -39,7 +39,7 @@
     ],
     "dts": true
   },
-  "dependencies": {
+  "optionalDependencies": {
     "react": "^18.2.0"
   },
   "scripts": {

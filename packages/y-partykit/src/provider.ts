@@ -546,15 +546,28 @@ function assertType(value: unknown, label: string, type: string) {
   }
 }
 
+type Params = Record<string, string | null | undefined>;
+type ParamsProvider = Params | (() => Params | Promise<Params>);
+type BaseProviderOptions = ConstructorParameters<typeof WebsocketProvider>[3];
+
+type YPartyKitProviderOptions = Omit<
+  NonNullable<BaseProviderOptions>,
+  "params"
+> & {
+  connectionId?: string;
+  party?: string;
+  params?: ParamsProvider;
+};
+
 export default class YPartyKitProvider extends WebsocketProvider {
   id: string;
+  #params?: ParamsProvider;
+
   constructor(
     host: string,
     room: string,
     doc?: YDoc,
-    options: ConstructorParameters<typeof WebsocketProvider>[3] & {
-      party?: string;
-    } = {}
+    options: YPartyKitProviderOptions = {}
   ) {
     assertType(host, "host", "string");
     assertType(room, "room", "string");
@@ -562,20 +575,63 @@ export default class YPartyKitProvider extends WebsocketProvider {
     // strip the protocol from the beginning of `host` if any
     host = host.replace(/^(http|https|ws|wss):\/\//, "");
 
+    // strip trailing slash from host if any
+    if (host.endsWith("/")) {
+      host.slice(0, -1);
+    }
+
     const serverUrl = `${
       host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss"
     }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
-    const id = generateUUID();
-    if (options.params === undefined) {
-      options.params = {
-        _pk: id,
-      };
-    } else {
-      options.params._pk = id;
-    }
-    super(serverUrl, room, doc ?? new YDoc(), options);
+
+    // use provided id, or generate a random one
+    const id = options.connectionId ?? generateUUID();
+
+    // don't pass params to WebsocketProvider, we override them in connect()
+    const { params, connect = true, ...rest } = options;
+
+    // don't connect until we've updated the url parameters
+    const baseOptions = { ...rest, connect: false };
+
+    super(serverUrl, room, doc ?? new YDoc(), baseOptions);
+
     this.id = id;
+    this.#params = params;
+
+    if (connect) {
+      void this.connect();
+    }
+  }
+
+  connect() {
+    // get updated url parameters
+    Promise.resolve(
+      typeof this.#params === "function" ? this.#params() : this.#params
+    )
+      .then((nextParams) => {
+        // override current url parameters before connecting
+        const urlParams = new URLSearchParams([["_pk", this.id]]);
+        if (nextParams) {
+          for (const [key, value] of Object.entries(nextParams)) {
+            // filter out null/undefined values
+            if (value !== null && value !== undefined) {
+              urlParams.append(key, value);
+            }
+          }
+        }
+
+        const nextUrl = new URL(this.url);
+        nextUrl.search = urlParams.toString();
+        this.url = nextUrl.toString();
+
+        // finally, connect
+        super.connect();
+      })
+      .catch((err) => {
+        console.error("Failed to open connecton to PartyKit", err);
+        throw new Error(err);
+      });
   }
 }

@@ -1,5 +1,37 @@
 # partykit
 
+## 0.0.30
+
+### Patch Changes
+
+- [#476](https://github.com/partykit/partykit/pull/476) [`ad6be5b`](https://github.com/partykit/partykit/commit/ad6be5b7085ccf4bd7533af98141caea9040de65) Thanks [@threepointone](https://github.com/threepointone)! - await multiparties.socket()
+
+  This introduces a new method `.socket()` to the multiparties bag. Much like the .fetch() method() on the bag, this now uses an internal api to connect with a websocket to the party, instead of using a URL and connecting via the internet. Importantly, this also works from inside onFetch() handlers. This patch also deprecates the previous `.connect()` method.
+
+- [#473](https://github.com/partykit/partykit/pull/473) [`cf8cb27`](https://github.com/partykit/partykit/commit/cf8cb27e6a934f34c0266bbdae3f9f3b091aaa50) Thanks [@jevakallio](https://github.com/jevakallio)! - Fix login on WebKit (Safari)
+
+## 0.0.29
+
+### Patch Changes
+
+- [#472](https://github.com/partykit/partykit/pull/472) [`a9b17f9`](https://github.com/partykit/partykit/commit/a9b17f9ccb6a479aa721a2ddc5737c464e399fd2) Thanks [@jevakallio](https://github.com/jevakallio)! - Allow preflight requests when Chrome Private Network Access is enabled
+
+- [#470](https://github.com/partykit/partykit/pull/470) [`cdceba8`](https://github.com/partykit/partykit/commit/cdceba89c7562359e2b8dc21dc2f2085bc24ecc1) Thanks [@dev-badace](https://github.com/dev-badace)! - added missing crypto from node_compat
+
+## 0.0.28
+
+### Patch Changes
+
+- [#465](https://github.com/partykit/partykit/pull/465) [`3048a9f`](https://github.com/partykit/partykit/commit/3048a9f7523a4cf5876b59f1f4f1c8aa45f7188f) Thanks [@threepointone](https://github.com/threepointone)! - fix: .send and .broadcast can send ArrayBuffers
+
+  WebSocket messages can be `string | ArrayBuffer | ArrayBufferView`, this patch fixes the types to allow that. The implementation remains the same (and otherwise always worked).
+
+- [#463](https://github.com/partykit/partykit/pull/463) [`1efd862`](https://github.com/partykit/partykit/commit/1efd86242be8e428bdce4b8e9b078d3e79de6dd4) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
+- [#466](https://github.com/partykit/partykit/pull/466) [`e8a8da4`](https://github.com/partykit/partykit/commit/e8a8da4f925d2457e095736ecfb1eacb84831ee1) Thanks [@jevakallio](https://github.com/jevakallio)! - Make connection.setState accept null
+
+- [#461](https://github.com/partykit/partykit/pull/461) [`34eeb03`](https://github.com/partykit/partykit/commit/34eeb032333554f1ab0b4d90a005888c531f9f34) Thanks [@dependabot](https://github.com/apps/dependabot)! - Bump zod from 3.22.2 to 3.22.3
+
 ## 0.0.27
 
 ### Patch Changes

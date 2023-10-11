@@ -37,7 +37,9 @@ export interface Storage extends DurableObjectStorage {}
 export type ConnectionContext = { request: CFRequest };
 
 export type Stub = {
+  /** @deprecated Use `await socket()` instead */
   connect: () => WebSocket;
+  socket: () => Promise<WebSocket>;
   fetch: (init?: RequestInit) => Promise<Response>;
 };
 
@@ -148,7 +150,7 @@ export type Party = {
   ) => void;
 
   /** Get a connection by connection id */
-  getConnection<TState = unknown>(id: string): Connection<TState>;
+  getConnection<TState = unknown>(id: string): Connection<TState> | undefined;
 
   /**
    * Get all connections. Optionally, you can provide a tag to filter returned connections.

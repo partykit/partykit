@@ -1,5 +1,17 @@
 # y-partykit
 
+## 0.0.9
+
+### Patch Changes
+
+- [#475](https://github.com/partykit/partykit/pull/475) [`73dac94`](https://github.com/partykit/partykit/commit/73dac9473ac26d776ad0d7c150dcf3c7a3a195b8) Thanks [@jevakallio](https://github.com/jevakallio)! - Filter out null/undefined parameters when constructing query string
+
+## 0.0.8
+
+### Patch Changes
+
+- [#468](https://github.com/partykit/partykit/pull/468) [`7778127`](https://github.com/partykit/partykit/commit/7778127c50cbdd2af0f6c99469edf3a1da6c30b1) Thanks [@jevakallio](https://github.com/jevakallio)! - Allow passing a function to YPartyKitProvider options.params
+
 ## 0.0.7
 
 ### Patch Changes

@@ -82,16 +82,21 @@ const provider = new YPartyKitProvider(
 
 You can add additional options to the provider:
 
-```ts
+```tsx
+
 // ...
+const getAuthToken = () => { /* ... */ };
 const provider = new YPartyKitProvider(
   "localhost:1999",
   "my-document-name",
   yDoc,
   {
     connect: false, // do not connect immediately, use provider.connect() when required
-    params: { token: "my-secret-token" }, // adds to the query string of the websocket connection
     awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
+    // adds to the query string of the websocket connection, useful for e.g. auth tokens
+    params: async () => ({ 
+      token: await getAuthToken() 
+    });
   }
 );
 ```

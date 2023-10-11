@@ -23,17 +23,19 @@ Every PartyKit server accepts WebSocket connections by default.
 To ensure that only authorized users can connect to your server, you should pass a session token to the initial connection request. The most convenient way to do this is to pass the token as a query string parameter:
 
 ```ts
-// get an auth token using your authentication client library
-const token = getToken();
 const partySocket = new PartySocket({
   host: PARTYKIT_HOST,
   room: "room-id",
-  // pass the token to PartyKit in the query string
-  query: {
-    token,
-  },
+  // attach the token to PartyKit in the query string
+  query: async () => ({
+    // get an auth token using your authentication client library
+    token: await getToken()
+  })
 });
 ```
+
+The `query` parameter can an object of key-value pairs, or an (optionally) asynchronous
+function that returns one.
 
 You can then verify your user's identity in a `static onBeforeConnect` method:
 
