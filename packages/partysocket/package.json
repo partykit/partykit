@@ -42,7 +42,7 @@
   "scripts": {
     "clean": "shx rm -rf dist *.d.ts",
     "post-build": "shx mv dist/*.d.ts* .",
-    "build": "npm run clean && tsup && npm run post-build",
+    "build": "npm run clean && tsup --external react && npm run post-build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
