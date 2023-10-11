@@ -22,7 +22,7 @@ To make the space cozier and even more communal, the organizers added a little i
 
 <img style="width:400px; height: auto;" src="/content-images/partykit-at-viteconf/hearts-go-up.gif" alt='A reaction counter going up'>
 
-A week before the conference, Matias Capeletto, a Vite core maintainer, added a real-time reaction counter to the platform using [our example](https://github.com/partykit/example-reactions) as reference. In his words:
+A week before the conference, Matias Capeletto, a Vite core maintainer, added a real-time reaction counter to the platform using [our example](https://github.com/partykit/example-reactions) as reference. At first, the team wasn't sure if they would be able to implement real-time features in such a short timeframe, but using the examples, they had a working prototype in less than a day. In Matias' words:
 
 <a href="https://twitter.com/patak_dev/status/1708849034201268561" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/partykit-at-viteconf/patak-partykit.png" alt='Pataks tweet: "I finally got an opportunity to try PartyKit. It works like a charm. A true pleasure to use 💜 Youll play with it this week at the ViteConf party 🍿"'></a>
 
