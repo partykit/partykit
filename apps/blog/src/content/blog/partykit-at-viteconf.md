@@ -42,6 +42,7 @@ The whole code needed to implement the feature is this:
 import type * as Party from "partykit/server";
 
 export default class ReactionServer implements Party.Server {
+  options: Party.ServerOptions = { hibernate: true };
   reactions: Record<string, number> = {};
   constructor(readonly party: Party.Party) {}
 
