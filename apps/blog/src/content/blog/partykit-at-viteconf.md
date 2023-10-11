@@ -79,13 +79,13 @@ export default class ReactionServer implements Party.Server {
 }
 ```
 
-Feel free to explore it further [on GitHub](https://github.com/partykit/example-reactions) or see [other example apps](https://docs.partykit.io/examples) in our docs.
+Explore it further [on GitHub](https://github.com/partykit/example-reactions) or see [other example apps](https://docs.partykit.io/examples) in our docs.
 
 ## Making online spaces cozier one connection at a time
 
-This experience could further be extended by adding animation whenever someone clicks the button making the reaction heart float on the screen (or in the player).
+Reaction buttons could further be extended by adding animation whenever someone clicks the button or even going extra showing the waterfall of the reaction hearts on the screen (or in the video player).
 
-Or, you could go an entirely different direction - for example, by giving the participants a way to draw something together as the talks progress. Given that PartyKit can handle up to 32,000 concurrent events, you're limited only by your imagination.
+One could also go an entirely different direction - for example, by giving the participants a way to draw something together as the talks progress. Given that **PartyKit can handle up to 32,000 concurrent events**, you're limited only by your imagination.
 
 🎈 **I'd love to help you bring real-time interactivity to your event! Find me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>** 🎈
 
