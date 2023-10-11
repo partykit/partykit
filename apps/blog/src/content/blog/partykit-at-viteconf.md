@@ -1,6 +1,6 @@
 ---
 author: Sylwia Vargas
-pubDatetime: 2023-10-08T14:12:00Z
+pubDatetime: 2023-11-08T14:12:00Z
 title: PartyKit at ViteConf 2023
 postSlug: partykit-at-viteconf
 featured: false
@@ -26,7 +26,7 @@ A week before the conference, Matias Capeletto, a Vite core maintainer, added a 
 
 <a href="https://twitter.com/patak_dev/status/1708849034201268561" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/partykit-at-viteconf/patak-partykit.png" alt='Pataks tweet: "I finally got an opportunity to try PartyKit. It works like a charm. A true pleasure to use 💜 Youll play with it this week at the ViteConf party 🍿"'></a>
 
-In this way, the attendees were able to show their love and reward the speakers as the talks progressed 💕 Every time a participant clicked on the button, their joy was broadcasted to everyone else -- you were able to see the counter go up in real time. Some talks gathered over 2k reactions and the most popular one, [Evan You's Vite keynote](https://viteconf.org/23/replay/vite_keynote) was *hearted* 4,7k times! In total, ViteConf participants shared their love <nobr>🎈 **23,311 times** 🎈.</nobr>
+In this way, the attendees were able to show their love and reward the speakers as the talks progressed 💕 Every time a participant clicked on the button, their joy was broadcasted to everyone else -- you were able to see the counter go up in real time. Some talks gathered over 2k reactions and the most popular one, [Evan You's Vite keynote](https://viteconf.org/23/replay/vite_keynote) was *hearted* 4.7k times! In total, ViteConf participants shared their love <nobr>🎈 **23,311 times** 🎈.</nobr>
 
 ## Real-time audience experience
 
@@ -72,7 +72,7 @@ Want to see more? Explore it further [on GitHub](https://github.com/partykit/exa
 
 Reaction buttons could further be extended by adding animation that would fire up whenever someone clicks the button. Or, why stop there? Imagine a waterfall of floating hearts appearing in the corner of the window.
 
-One could also go an entirely different direction - for example, by giving the participants a way to create (code, draw?) something together as the talks progress. Given that **PartyKit can handle up to 32,000 concurrent events**, you're limited only by your imagination.
+One could also go an entirely different direction - for example, by giving the participants a way to create (code, draw?) something together as the talks progress. Given that **PartyKit can handle up to 32,000 concurrent connections**, you're limited only by your imagination.
 
 🎈 **I'd love to help you bring real-time interactivity to your event! Find me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>** 🎈
 
