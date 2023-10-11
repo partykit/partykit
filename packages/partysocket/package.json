@@ -39,9 +39,6 @@
     ],
     "dts": true
   },
-  "optionalDependencies": {
-    "react": "^18.2.0"
-  },
   "scripts": {
     "clean": "shx rm -rf dist *.d.ts",
     "post-build": "shx mv dist/*.d.ts* .",
