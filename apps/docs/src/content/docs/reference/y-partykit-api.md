@@ -130,9 +130,9 @@ export default class YjsServer implements Party.Server {
 
 By default, PartyKit maintains a copy of the Yjs document as long as at least one client is connected to the server. When all clients disconnect, the document state may be lost.
 
-To persists the Yjs document state, you can use the built-in PartyKit room storage by enabling the `persist` option. 
+To persists the Yjs document state between sessions, you can use the built-in PartyKit storage by enabling the `persist` option. 
 
-`y-partykit` supports two modes of persistence: **snapshots**, and **history**.
+`y-partykit` supports two modes of persistence: **snapshot**, and **history**.
 
 #### Persisting snapshots (recommended)
 
@@ -154,7 +154,7 @@ The `snapshot` mode is optimal for most applications that do not need to support
 
 In `history` mode, PartyKit stores the full edit history of the document.
 
-This is useful when multiple clients are expected to be able to work while offline, and synchronise their changes later.
+This is useful when multiple clients are expected to be able to change the document while offline, and synchronise their changes later.
 
 ```ts
 onConnect(connection, party, {
@@ -190,12 +190,10 @@ Once either limit is reached, the document is snapshotted, and history tracking 
 In previous versions, PartyKit only had one persistence mode:
 
 ```ts
-onConnect(connection, party, {
-  persist: true
-})
+onConnect(connection, party, { persist: true })
 ```
 
-This is equivalent to setting the value to `{ mode: "history" }`, but you will see a warning.
+This is functionally equivalent to setting the value to `{ mode: "history" }`.
 
 This option is still supported for backwards compatibility reasons, but will be removed in a future version of `y-partykit`. 
 
