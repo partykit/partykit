@@ -70,9 +70,9 @@ Want to see more? Explore it further [on GitHub](https://github.com/partykit/exa
 
 ## Making online spaces cozier one connection at a time
 
-Reaction buttons could further be extended by adding animation whenever someone clicks the button or even going extra showing the waterfall of the reaction hearts on the screen (or in the video player).
+Reaction buttons could further be extended by adding animation that would fire up whenever someone clicks the button. Or, why stop there? Imagine a waterfall of floating hearts appearing in the corner of the window.
 
-One could also go an entirely different direction - for example, by giving the participants a way to draw something together as the talks progress. Given that **PartyKit can handle up to 32,000 concurrent events**, you're limited only by your imagination.
+One could also go an entirely different direction - for example, by giving the participants a way to create (code, draw?) something together as the talks progress. Given that **PartyKit can handle up to 32,000 concurrent events**, you're limited only by your imagination.
 
 🎈 **I'd love to help you bring real-time interactivity to your event! Find me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>** 🎈
 
