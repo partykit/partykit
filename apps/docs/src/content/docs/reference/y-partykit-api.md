@@ -173,7 +173,7 @@ onConnect(connection, party, {
   persist: { 
     mode: "history",
     // Maximum size in bytes. 
-    // You can set this value to any number 10MB (10_000_000 bytes).
+    // You can set this value to any number below 10MB (10_000_000 bytes).
     maxBytes: 10_000_000,
 
     // Maximum number of updates. 

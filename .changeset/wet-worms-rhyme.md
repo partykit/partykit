@@ -12,7 +12,7 @@ By default, PartyKit maintains a copy of the Yjs document as long as at least on
 
 To persists the Yjs document state between sessions, you can use the built-in PartyKit storage by enabling the `persist` option. 
 
-This release fixes known performance and scaling issue with the existing `persist: true` option, and deprecates it in favour of two separate persistence strategies: **snapshot**, and **history**.
+This release fixes known performance and scaling issues with the existing `persist: true` option, and deprecates it in favour of two separate persistence strategies: **snapshot**, and **history**.
 
 ####  Persisting snapshots (recommended)
 
@@ -44,9 +44,7 @@ onConnect(connection, party, {
 })
 ```
 
-For long-lived documents, the edit history would grow indefinitely, eventually reaching the practical limits of a single PartyKit server instance.
-
-To prevent unbounded growth, PartyKit applies a 10MB maximum limit to the edit history. 
+For long-lived documents, the edit history could grow indefinitely, eventually reaching the practical limits of a single PartyKit server instance. To prevent unbounded growth, PartyKit applies a 10MB maximum limit to the edit history. 
 
 You can customise these limits as follows:
 
@@ -55,7 +53,7 @@ onConnect(connection, party, {
   persist: { 
     mode: "history",
     // Maximum size in bytes. 
-    // You can set this value to any number 10MB (10_000_000 bytes).
+    // You can set this value to any number below 10MB (10_000_000 bytes).
     maxBytes: 10_000_000,
 
     // Maximum number of updates. 
