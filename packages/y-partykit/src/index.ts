@@ -14,7 +14,8 @@ function assert(condition: unknown, message: string): asserts condition {
   }
 }
 
-const MAX_PERSIST_BYTES = 10_000_000;
+const MAX_BYTES = 10_000_000;
+const MAX_UPDATES = Number.MAX_SAFE_INTEGER;
 
 const wsReadyStateConnecting = 0;
 const wsReadyStateOpen = 1;
@@ -67,6 +68,8 @@ class WSSharedDoc extends YDoc {
   awareness: awarenessProtocol.Awareness;
   storage: YPartyKitStorage | undefined;
   persist: YPartyKitPersistenceStrategy | undefined;
+  persistMaxBytes = MAX_BYTES;
+  persistMaxUpdates = MAX_UPDATES;
   gc: boolean;
 
   constructor(room: Party.Party, options: YPartyKitOptions) {
@@ -79,18 +82,24 @@ class WSSharedDoc extends YDoc {
         console.warn(
           "y-partykit: Using deprecated option `persist: true`. Choose an explicit persistence strategy instead. See: https://docs.partykit.io/reference/y-partykit-api/#persistence"
         );
-        this.persist = { mode: "history", maxBytes: MAX_PERSIST_BYTES };
+        this.persist = {
+          mode: "history",
+          maxBytes: MAX_BYTES,
+          maxUpdates: MAX_UPDATES,
+        };
       } else if (options.persist?.mode === "history") {
-        if ((options.persist.maxBytes ?? 0) > MAX_PERSIST_BYTES) {
+        if ((options.persist.maxBytes ?? 0) > MAX_BYTES) {
           console.warn(
             "y-partykit: `persist.maxBytes` exceeds maximum allowed value 10_000_000 (10MB). Using default value instead. See: https://docs.partykit.io/reference/y-partykit-api/#persistence"
           );
         }
-        const maxBytes = Math.min(
-          MAX_PERSIST_BYTES,
-          options.persist.maxBytes || MAX_PERSIST_BYTES
-        );
-        this.persist = { ...options.persist, maxBytes };
+
+        const { maxBytes, maxUpdates } = options.persist;
+        this.persist = {
+          mode: "history",
+          maxBytes: Math.min(MAX_BYTES, maxBytes || MAX_BYTES),
+          maxUpdates: Math.min(MAX_UPDATES, maxUpdates || MAX_UPDATES),
+        };
       } else {
         this.persist = options.persist;
       }
@@ -151,8 +160,6 @@ class WSSharedDoc extends YDoc {
   async bindState() {
     assert(this.storage, "Storage not set");
     const persistedYdoc = await this.storage.getYDoc(this.name);
-    const newUpdates = encodeStateAsUpdate(this);
-    await this.storage.storeUpdate(this.name, newUpdates);
     applyUpdate(this, encodeStateAsUpdate(persistedYdoc));
     this.on("update", (update) => {
       assert(this.storage, "Storage not set");
@@ -240,7 +247,7 @@ async function getYDoc(
     options.persist = false;
   }
 
-  if (options.gc === undefined && options.persist === true) {
+  if (options.gc === undefined && options.persist) {
     options.gc = false;
   }
 

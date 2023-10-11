@@ -18,9 +18,9 @@ import {
 
 import type * as Party from "partykit/server";
 
-const PREFERRED_TRIM_SIZE = 300;
-
 const BINARY_BITS_32 = 0xffffffff;
+const TRACE_ENABLED = false;
+const trace = (...args: unknown[]) => TRACE_ENABLED && console.log(...args);
 
 type StorageKey = DocumentStateVectorKey | DocumentUpdateKey;
 
@@ -461,24 +461,41 @@ export class YPartyKitStorage {
     return this._transact(async (db) => {
       const updates = await getLevelUpdates(db, docName);
       const flush = async () => {
+        trace("[compactUpdateLog]", "Compacting document update log!");
         const { update, sv } = mergeUpdates(updates.map((u) => u.value));
+
         await flushDocument(db, docName, update, sv);
       };
 
+      trace("[compactUpdateLog]", { docName, maxUpdates, maxBytes });
+      trace("[compactUpdateLog]", "Current update count:", updates.length);
+
       // total number of updates is too large -> flush
-      if (!maxUpdates || updates.length > maxUpdates) {
+      if (updates.length > maxUpdates) {
+        trace(
+          "[compactUpdateLog]",
+          `Update count exceeds maximum allowed: ${updates.length} > ${maxUpdates}`
+        );
         return flush();
       }
 
-      // total update log size is too large -> flush
-      if (
-        !maxBytes ||
-        updates.reduce((size, u) => size + u.value.byteLength, 0) > maxBytes
-      ) {
+      const totalBytes = updates.reduce(
+        (size, u) => size + u.value.byteLength,
+        0
+      );
+      trace("[compactUpdateLog]", "Current update size:", totalBytes);
+
+      // total update log size is too large -> flush (unless it's already a single update)
+      if (totalBytes > maxBytes && updates.length > 1) {
+        trace(
+          "[compactUpdateLog]",
+          `Update total size exceeds maximum allowed: ${totalBytes} > ${maxBytes}`
+        );
         return flush();
       }
 
       // no need to flush
+      trace("[compactUpdateLog]", "Skipping compacting update log...");
       return Promise.resolve();
     });
   }
@@ -492,14 +509,7 @@ export class YPartyKitStorage {
           applyUpdate(ydoc, updates[i].value);
         }
       });
-      if (updates.length > PREFERRED_TRIM_SIZE) {
-        await flushDocument(
-          db,
-          docName,
-          encodeStateAsUpdate(ydoc),
-          encodeStateVector(ydoc)
-        );
-      }
+
       return ydoc;
     });
   }
