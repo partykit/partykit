@@ -16,17 +16,17 @@ description: ViteConf attendees sent over 23,000 live reactions using PartyKit.
 
 Last week PartyKit made an appearance at [ViteConf](https://viteconf.org/23), an online conference that celebrates Vite and the web dev ecosystem at large, hosted by [StackBlitz](https://stackblitz.com/).
 
-The conference is known for its friendly vibe, which is no small feat as most online conferences fail to recreate that special communal space online. ViteConf organizers, however, managed to bring the in-person conference joy onto Discord and Twitter, which are booming with love, jokes, and serious questions.
+The conference is known for its friendly vibe, which is no small feat as most online conferences fail to recreate that special communal space online. ViteConf organizers, however, managed to bring the in-person conference joy onto Discord and Twitter, which are booming with love, jokes, and serious questions 💕
 
-To make the space even cozier and communal, the organizers further extended this experience by adding a little interactivity to the conference platform to enhance the feeling of togetherness among the participants.
+To make the space cozier and even more communal, the organizers added a little interactivity to the conference platform to help the participants feel that they are experiencing the talks together.
 
 <img style="width:400px; height: auto;" src="/content-images/partykit-at-viteconf/hearts-go-up.gif" alt='A reaction counter going up'>
 
-A week before the conference, Matias Capeletto, a Vite core maintainer, added a real-time reaction counter to the platform using our [example](https://github.com/partykit/example-reactions) as reference. In his words:
+A week before the conference, Matias Capeletto, a Vite core maintainer, added a real-time reaction counter to the platform using [our example](https://github.com/partykit/example-reactions) as reference. In his words:
 
 <a href="https://twitter.com/patak_dev/status/1708849034201268561" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/partykit-at-viteconf/patak-partykit.png" alt='Pataks tweet: "I finally got an opportunity to try PartyKit. It works like a charm. A true pleasure to use 💜 Youll play with it this week at the ViteConf party 🍿"'></a>
 
-In this way, the attendees were able to show their love and reward the speakers 💕 Every time a participant clicked on the button, their joy was broadcasted to everyone else -- you were able to see the counter go up in real time. Some talks gathered over 2k reactions and the most popular one, [Evan You's Vite keynote](https://viteconf.org/23/replay/vite_keynote) was *hearted* 4,7k times! In total, ViteConf participants shared their joy in real time <nobr>🎈 **23,311 times** 🎈.</nobr>
+In this way, the attendees were able to show their love and reward the speakers as the talks progressed 💕 Every time a participant clicked on the button, their joy was broadcasted to everyone else -- you were able to see the counter go up in real time. Some talks gathered over 2k reactions and the most popular one, [Evan You's Vite keynote](https://viteconf.org/23/replay/vite_keynote) was *hearted* 4,7k times! In total, ViteConf participants shared their love <nobr>🎈 **23,311 times** 🎈.</nobr>
 
 ## Real-time audience experience
 
