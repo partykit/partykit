@@ -18,9 +18,9 @@ import {
 
 import type * as Party from "partykit/server";
 
-const PREFERRED_TRIM_SIZE = 300;
-
 const BINARY_BITS_32 = 0xffffffff;
+const TRACE_ENABLED = false;
+const trace = (...args: unknown[]) => TRACE_ENABLED && console.log(...args);
 
 type StorageKey = DocumentStateVectorKey | DocumentUpdateKey;
 
@@ -122,6 +122,14 @@ function groupBy<T>(arr: T[], fn: (el: T) => string): Map<string, T[]> {
   return map;
 }
 
+function chunk<T>(arr: T[], size: number): T[][] {
+  const chunks = [];
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size));
+  }
+  return chunks;
+}
+
 /**
  * A "bulkier" implementation of getting keys and/or values.
  */
@@ -168,6 +176,28 @@ export async function getLevelBulkData(
   }
 
   return result;
+}
+
+/**
+ * Return the actual encoded keys in a range of keys
+ */
+export async function getLevelKeyRangeAsEncoded(
+  db: Party.Storage,
+  opts: {
+    gte: StorageKey;
+    lt: StorageKey;
+    reverse?: boolean;
+    limit?: number;
+  }
+): Promise<string[]> {
+  const res = await db.list<Uint8Array>({
+    start: keyEncoding.encode(opts.gte),
+    end: keyEncoding.encode(opts.lt),
+    reverse: opts.reverse,
+    limit: opts.limit,
+  });
+
+  return [...res.keys()];
 }
 
 /**
@@ -223,22 +253,14 @@ export async function clearRange(
   gte: StorageKey, // Greater than or equal
   lt: StorageKey // lower than (not equal)
 ): Promise<void> {
-  const datums = await getLevelBulkData(db, {
-    values: false,
-    keys: true,
+  const keys = await getLevelKeyRangeAsEncoded(db, {
     gte,
     lt,
   });
 
-  // We delete in batches of 128
-  const arr = [];
-  for (const [index, datum] of datums.entries()) {
-    arr.push(keyEncoding.encode(datum.key));
-    if (arr.length === 128 || index === datums.length - 1) {
-      await db.delete(arr);
-      arr.length = 0;
-    }
-  }
+  await db.transaction(() =>
+    Promise.all(chunk(keys, 128).map((keysToDelete) => db.delete(keysToDelete)))
+  );
 }
 
 async function clearUpdatesRange(
@@ -370,7 +392,7 @@ async function flushDocument(
 ): Promise<number> /* returns the clock of the flushed doc */ {
   const clock = await storeUpdate(db, docName, stateAsUpdate);
   await writeStateVector(db, docName, stateVector, clock);
-  await clearUpdatesRange(db, docName, 0, clock); // intentionally not waiting for the promise to resolve!
+  void clearUpdatesRange(db, docName, 0, clock); // intentionally not waiting for the promise to resolve!
   return clock;
 }
 
@@ -431,11 +453,50 @@ export class YPartyKitStorage {
     };
   }
 
-  async flushDocument(docName: string): Promise<void> {
+  async compactUpdateLog(
+    docName: string,
+    maxUpdates: number,
+    maxBytes: number
+  ): Promise<void> {
     return this._transact(async (db) => {
       const updates = await getLevelUpdates(db, docName);
-      const { update, sv } = mergeUpdates(updates.map((u) => u.value));
-      await flushDocument(db, docName, update, sv);
+      const flush = async () => {
+        trace("[compactUpdateLog]", "Compacting document update log!");
+        const { update, sv } = mergeUpdates(updates.map((u) => u.value));
+
+        await flushDocument(db, docName, update, sv);
+      };
+
+      trace("[compactUpdateLog]", { docName, maxUpdates, maxBytes });
+      trace("[compactUpdateLog]", "Current update count:", updates.length);
+
+      // total number of updates is too large -> flush
+      if (updates.length > maxUpdates) {
+        trace(
+          "[compactUpdateLog]",
+          `Update count exceeds maximum allowed: ${updates.length} > ${maxUpdates}`
+        );
+        return flush();
+      }
+
+      const totalBytes = updates.reduce(
+        (size, u) => size + u.value.byteLength,
+        0
+      );
+      trace("[compactUpdateLog]", "Current update size:", totalBytes);
+
+      // total update log size is too large -> flush (unless it's already a single update)
+      if (totalBytes > maxBytes && updates.length > 1) {
+        trace(
+          "[compactUpdateLog]",
+          `Update total size exceeds maximum allowed: ${totalBytes} > ${maxBytes}`
+        );
+        return flush();
+      }
+
+      // no need to flush
+      trace("[compactUpdateLog]", "Skipping compacting update log...");
+      return Promise.resolve();
     });
   }
 
@@ -448,14 +509,7 @@ export class YPartyKitStorage {
           applyUpdate(ydoc, updates[i].value);
         }
       });
-      if (updates.length > PREFERRED_TRIM_SIZE) {
-        await flushDocument(
-          db,
-          docName,
-          encodeStateAsUpdate(ydoc),
-          encodeStateVector(ydoc)
-        );
-      }
+
       return ydoc;
     });
   }
