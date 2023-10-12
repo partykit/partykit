@@ -1,6 +1,6 @@
 ---
 author: Sylwia Vargas
-pubDatetime: 2023-11-08T14:12:00Z
+pubDatetime: 2023-10-12T14:12:00Z
 title: PartyKit at ViteConf 2023
 postSlug: partykit-at-viteconf
 featured: false
