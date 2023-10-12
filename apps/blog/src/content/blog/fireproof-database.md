@@ -32,7 +32,7 @@ Knowing when to use ephemeral client-local state, in-party storage, or a cloud d
 
 Our first demo using the Fireproof PartyKit connector is even simpler. It’s a magnetic poetry app, based on [Matt Webb’s excellent mosaic drawing app](https://blog.partykit.io/posts/wisdom-of-crowds), that allows you to collaborate on word tile arrangements and save your beautiful word paintings, masterpieces that they are, for posterity! Drag and drop tile motion is shared in PartyKit, and poems are saved and loaded from Fireproof. [Try out the magnetic poetry app here](https://magnetic-poetry.use-fireproof.com/), or continue reading to run your own copy and start adapting the code for your own purposes.
 
-![Screenshot of magnetic poem](/content-images/fireproof-database-connector/screenshot-poem.png)
+<img src="/content-images/fireproof-database-connector/screenshot-poem.png" width="400">
 
 The poem editor drag and drop is accomplished simply via PartyKit, based almost exactly on the code in Matt Webb's mosaic collaborative drawing app. Here you can see how the onDrag coordinates are broadcast to the party via the socket:
 
@@ -66,15 +66,15 @@ this.party.broadcast(JSON.stringify(update), [connection.id]);
 
 These snippets come from [`MagenticPoem.tsx`](https://github.com/partykit/sketch-magnetic-poetry/blob/main/src/app/MagneticPoem.tsx), [`Room.tsx`](https://github.com/partykit/sketch-magnetic-poetry/blob/main/src/app/Room.tsx), and [`partykit/server.ts`](https://github.com/partykit/sketch-magnetic-poetry/blob/main/src/partykit/server.ts) respectively.
 
-![Screenshot of save button and saved poems](/content-images/fireproof-database-connector/screenshot-save.png)
+<img src="/content-images/fireproof-database-connector/screenshot-save.png" width="600">
 
 Below the poem area is the save button. Each time you click it, the current state of the poem is saved to a local Fireproof first, and then replicated to S3, and all the other page vistors. Amongst the gory details is this gem -- the data itself is encrypted end-to-end (even at rest in the browser) and can only be decrpyted by a key managed by your PartyKit party. This means you can write the data files pretty much anywhere. In the near future we plan to offer party-local data via R2. [Read more about Fireproof connection options here.](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect/README.md#connectors)
 
 Finally, if you click the import button, you'll be taken to a snapshot of your data in the Fireproof data dashboard. This allows you to view and edit the data, and work with it from other applications. You can also collect data from across multiple apps in your personal dashboard.
 
-![Screenshot of Fireproof dashboard](/content-images/fireproof-database-connector/screenshot-dashboard.png)
+<img src="/content-images/fireproof-database-connector/screenshot-dashboard.png" width="600">
 
-To try it out, just paste this into your CLI: 
+To try out the lightweight React Next.js codebase locally, just paste this into your CLI: 
 
 ```sh
 git clone https://github.com/partykit/sketch-magnetic-poetry
