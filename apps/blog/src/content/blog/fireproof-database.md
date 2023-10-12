@@ -70,6 +70,19 @@ These snippets come from [`MagenticPoem.tsx`](https://github.com/partykit/sketch
 
 Below the poem area is the save button. Each time you click it, the current state of the poem is saved to a local Fireproof first, and then replicated to S3, and all the other page vistors. Amongst the gory details is this gem -- the data itself is encrypted end-to-end (even at rest in the browser) and can only be decrpyted by a key managed by your PartyKit party. This means you can write the data files pretty much anywhere. In the near future we plan to offer party-local data via R2. [Read more about Fireproof connection options here.](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect/README.md#connectors)
 
+The actual code to load the list of saved poems, and to save the poem to the database looks like this (inside the Room component, using Fireproof's [live query React hook](https://use-fireproof.com/docs/react-hooks/use-live-query)). When `put` is called `useLiveQuery` will automatically redraw the list of saved poems in both the local and remote UIs.
+
+```ts
+const { database, useLiveQuery } = useFireproof('poetry-party')
+const savedPoems = useLiveQuery('startedAt', { descending: true, limit: 50 }).docs as Poem[]
+
+const handleSave = () => {
+  database.put(poem)
+}
+```
+
+Sync amongst the party is handled by [a simple (less than 30 loc) PartyKit server](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect-partykit/src/server.ts) that your run alongside your own PartyKit app, sort of as a sidecar. You can [see how it is configured in the magnetic poetry app here.](https://github.com/partykit/sketch-magnetic-poetry/blob/main/partykit.json)
+
 Finally, if you click the import button, you'll be taken to a snapshot of your data in the Fireproof data dashboard. This allows you to view and edit the data, and work with it from other applications. You can also collect data from across multiple apps in your personal dashboard.
 
 <img src="/content-images/fireproof-database-connector/screenshot-dashboard.png" width="600">
