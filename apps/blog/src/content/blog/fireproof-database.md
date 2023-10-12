@@ -34,7 +34,7 @@ Our first demo using the Fireproof PartyKit connector is even simpler. It’s a 
 
 <img src="/content-images/fireproof-database-connector/screenshot-poem.png" width="400">
 
-The poem editor drag and drop is accomplished simply via PartyKit, based almost exactly on the code in Matt Webb's mosaic collaborative drawing app. Here you can see how the onDrag coordinates are broadcast to the party via the socket:
+The poem editor drag and drop is accomplished simply via PartyKit, based almost exactly on the code in Matt Webb's mosaic collaborative drawing app. Here you can see how the `onDrag` coordinates are broadcast to the party via the socket:
 
 ```ts
 // the event source in the inner component
@@ -68,9 +68,9 @@ These snippets come from [`MagenticPoem.tsx`](https://github.com/partykit/sketch
 
 <img src="/content-images/fireproof-database-connector/screenshot-save.png" width="600">
 
-Below the poem area is the save button. Each time you click it, the current state of the poem is saved to a local Fireproof first, and then replicated to S3, and all the other page vistors. Amongst the gory details is this gem -- the data itself is encrypted end-to-end (even at rest in the browser) and can only be decrpyted by a key managed by your PartyKit party. This means you can write the data files pretty much anywhere. In the near future we plan to offer party-local data via R2. [Read more about Fireproof connection options here.](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect/README.md#connectors)
+Below the poem area is the save button. Each time you click it the current state of the poem is saved to a local Fireproof first, and then replicated to S3, and broadcast to all the other room members. Amongst the gory details is this gem -- the data itself is encrypted end-to-end (even at rest in the browser) and can only be decrypted using a key managed by your PartyKit party. This means you can write the data files pretty much anywhere, as they are encrypted and self-verifying, so we have pluggable storage connectors. In the near future we plan to offer party-local data via R2. [Read more about Fireproof connection options here.](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect/README.md#connectors)
 
-The actual code to load the list of saved poems, and to save the poem to the database looks like this (inside the Room component, using Fireproof's [live query React hook](https://use-fireproof.com/docs/react-hooks/use-live-query)). When `put` is called `useLiveQuery` will automatically redraw the list of saved poems in both the local and remote UIs.
+The actual code to load the list of saved poems, and to save the poem to the database looks like this (inside the Room component, using Fireproof's [live query React hook](https://use-fireproof.com/docs/react-hooks/use-live-query)). When `put` is called to save a new poem, `useLiveQuery` will automatically redraw the list of saved poems in both the local and remote UIs.
 
 ```ts
 const { database, useLiveQuery } = useFireproof('poetry-party')
@@ -109,4 +109,4 @@ There’s a [tour of the code in the README](https://github.com/partykit/sketch-
 
 ![SHOW ME WHAT YOU GOT meme](/content-images/fireproof-database-connector/meme.png)
 
-Fireproof is open source and ready for your apps. [Check out the developer docs](https://use-fireproof.com/docs/welcome) and join the [GitHub discussions](https://github.com/fireproof-storage/fireproof/discussions) and [Fireproof Discord](https://discord.gg/3cGbju6W) to talk to other builders. Let us know what you build, and we will feature it in our app showcase. We love to share what people do, so tell us about your sketches, demos, games, toys, apps, giant robots, interstellar spacecraft, etc. We hang out in PartyKit’s discord, you can also [join the Fireproof discord here](https://discord.gg/3cGbju6W)!
+Fireproof is open source (Apache 2.0 & MIT) and ready for your apps. [Check out the developer docs](https://use-fireproof.com/docs/welcome) and join the [GitHub discussions](https://github.com/fireproof-storage/fireproof/discussions) and [Fireproof Discord](https://discord.gg/3cGbju6W) to talk to other builders. Let us know what you build, and we will feature it in our app showcase. We love to share what people do, so tell us about your sketches, demos, games, toys, apps, giant robots, interstellar spacecraft, etc. We hang out in PartyKit’s discord, you can also [join the Fireproof discord here](https://discord.gg/3cGbju6W)!
