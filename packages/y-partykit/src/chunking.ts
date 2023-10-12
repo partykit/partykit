@@ -103,31 +103,36 @@ export const handleChunked = (
 
       if (marker.type === "end") {
         if (batch) {
-          // validate start and end markers match
-          assertEquality(start?.id, marker.id, "client id");
-          assertEquality(start?.count, marker.count, "client counts");
-          assertEquality(start?.size, marker.size, "client size");
+          try {
+            // validate start and end markers match
+            assertEquality(start?.id, marker.id, "client id");
+            assertEquality(start?.count, marker.count, "client counts");
+            assertEquality(start?.size, marker.size, "client size");
 
-          // combine chunks into single buffer
-          const size = batch.reduce(
-            (sum, buffer) => sum + buffer.byteLength,
-            0
-          );
-          const bytes = new Uint8Array(size);
-          let bytesWritten = 0;
-          for (const chunk of batch) {
-            bytes.set(new Uint8Array(chunk), bytesWritten);
-            bytesWritten += chunk.byteLength;
+            // combine chunks into single buffer
+            const size = batch.reduce(
+              (sum, buffer) => sum + buffer.byteLength,
+              0
+            );
+            const bytes = new Uint8Array(size);
+            let bytesWritten = 0;
+            for (const chunk of batch) {
+              bytes.set(new Uint8Array(chunk), bytesWritten);
+              bytesWritten += chunk.byteLength;
+            }
+
+            // validate data as read matches expected
+            assertEquality(marker.count, batch.length, "received batch count");
+            assertEquality(marker.size, bytesWritten, "client size");
+
+            receive(bytes);
+          } catch (e) {
+            console.error(e);
+            throw e;
+          } finally {
+            batch = undefined;
+            start = undefined;
           }
-
-          // validate data as read matches expected
-          assertEquality(marker.count, batch.length, "received batch count");
-          assertEquality(marker.size, bytesWritten, "client size");
-
-          batch = undefined;
-          start = undefined;
-
-          receive(bytes);
         }
       }
     } else if (batch) {
@@ -164,9 +169,11 @@ export function parseBatchMarker(msg: string) {
   if (sentinel !== BATCH_SENTINEL) {
     throw new Error("Unexpected batch marker: " + msg);
   }
+
   const batch = JSON.parse(data) as Batch;
   if (batch.type !== "start" && batch.type !== "end") {
     throw new Error("Unexpected batch data: " + msg);
   }
+
   return batch;
 }
