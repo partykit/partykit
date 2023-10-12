@@ -7,6 +7,7 @@ import * as decoding from "lib0/decoding";
 import debounce from "lodash.debounce";
 import type * as Party from "partykit/server";
 import { YPartyKitStorage } from "./storage";
+import { handleChunked } from "./chunking";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -529,18 +530,21 @@ export async function onConnect(
   const doc = await getYDoc(room, options);
   doc.conns.set(conn, new Set());
   // listen and reply to events
-  conn.addEventListener("message", (message) => {
-    if (typeof message.data !== "string") {
-      return messageListener(
-        conn,
-        doc,
-        new Uint8Array(message.data),
-        options.readOnly ?? false
-      );
-    } else {
-      // silently ignore anything else
-    }
-  });
+  conn.addEventListener(
+    "message",
+    handleChunked((data) => {
+      if (typeof data !== "string") {
+        return messageListener(
+          conn,
+          doc,
+          new Uint8Array(data),
+          options.readOnly ?? false
+        );
+      } else {
+        // silently ignore anything else
+      }
+    })
+  );
 
   conn.addEventListener("close", () => {
     closeConn(doc, conn);
