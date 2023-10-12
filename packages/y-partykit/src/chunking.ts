@@ -1,4 +1,4 @@
-// This file contains a shared implmentation of chunking logic for binary
+// This file contains a shared implementation of chunking logic for binary
 // WebSocket messages. Because the PartyKit platform limits individual
 // WebSocket messages to 1MB, we need to split larger messages into chunks.
 export const CHUNK_MAX_SIZE = 1_000_000;
