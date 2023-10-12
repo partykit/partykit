@@ -14,7 +14,10 @@ const getToken = (): Promise<Record<string, string>> => {
   });
 };
 
-const provider = new YProvider(PARTYKIT_HOST, "yjs-demo", doc, {
+const room =
+  new URLSearchParams(window.location.search).get("room") ?? "yjs-demo";
+
+const provider = new YProvider(PARTYKIT_HOST, room, doc, {
   connect: false,
   // disable broadcast channel for this demo, so syncing only happens via the partykit server
   // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
