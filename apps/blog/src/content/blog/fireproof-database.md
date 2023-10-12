@@ -74,10 +74,13 @@ The actual code to load the list of saved poems, and to save the poem to the dat
 
 ```ts
 const { database, useLiveQuery } = useFireproof('poetry-party')
-const savedPoems = useLiveQuery('startedAt', { descending: true, limit: 50 }).docs as Poem[]
+const savedPoems = useLiveQuery('startedAt', {
+        descending: true,
+        limit: 50
+    }).docs as Poem[]
 
 const handleSave = () => {
-  database.put(poem)
+    database.put(poem)
 }
 ```
 
