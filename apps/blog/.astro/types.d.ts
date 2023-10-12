@@ -195,6 +195,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"ai-interactions-with-tldraw.md": {
+	id: "ai-interactions-with-tldraw.md";
+  slug: "ai-interactions-with-tldraw";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "astro-paper-2.md": {
 	id: "astro-paper-2.md";
   slug: "astro-paper-2";
@@ -261,6 +268,13 @@ declare module 'astro:content' {
 "live-polls-with-stencil.md": {
 	id: "live-polls-with-stencil.md";
   slug: "live-polls-with-stencil";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"partykit-at-viteconf.md": {
+	id: "partykit-at-viteconf.md";
+  slug: "partykit-at-viteconf";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
