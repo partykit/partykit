@@ -81,7 +81,7 @@ const handleSave = () => {
 }
 ```
 
-Sync amongst the party is handled by [a simple (less than 30 loc) PartyKit server](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect-partykit/src/server.ts) that your run alongside your own PartyKit app, sort of as a sidecar. You can [see how it is configured in the magnetic poetry app here.](https://github.com/partykit/sketch-magnetic-poetry/blob/main/partykit.json)
+Sync amongst the party is handled by [a simple (less than 30 loc) PartyKit server](https://github.com/fireproof-storage/fireproof/blob/main/packages/connect-partykit/src/server.ts) that you run as a sidecar with your own PartyKit app. You can [see how it is configured in the magnetic poetry app here.](https://github.com/partykit/sketch-magnetic-poetry/blob/main/partykit.json)
 
 Finally, if you click the import button, you'll be taken to a snapshot of your data in the Fireproof data dashboard. This allows you to view and edit the data, and work with it from other applications. You can also collect data from across multiple apps in your personal dashboard.
 
