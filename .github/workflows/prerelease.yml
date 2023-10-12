@@ -49,11 +49,6 @@ jobs:
       - run: npm publish --tag beta
         env:
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        working-directory: packages/partykit.io
-
-      - run: npm publish --tag beta
-        env:
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         working-directory: packages/partymix
 
       - run: npm publish --tag beta

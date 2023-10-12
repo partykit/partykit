@@ -6,6 +6,8 @@ import type {
   DurableObjectNamespace,
   DurableObjectState,
   ExecutionContext,
+  RequestInfo,
+  RequestInit,
 } from "@cloudflare/workers-types";
 import fetchStaticAsset from "./fetch-static-asset";
 import {
@@ -81,7 +83,7 @@ function createMultiParties(
   options: {
     host: string;
   }
-) {
+): Party.Party["context"]["parties"] {
   if (!parties) {
     parties = {};
     for (const [key, value] of Object.entries(namespaces)) {
@@ -92,21 +94,96 @@ function createMultiParties(
             const id = value.idFromString(docId);
             const stub = value.get(id);
             return {
-              fetch(init?: RequestInit) {
-                return stub.fetch(
-                  key === "main"
-                    ? `http://${options.host}/party/${name}`
-                    : `http://${options.host}/parties/${key}/${name}`,
-                  init
-                );
+              fetch(
+                pathOrInit?: string | RequestInit,
+                maybeInit?: RequestInit
+              ) {
+                let path: RequestInfo | undefined;
+                let init: RequestInit | undefined;
+                if (pathOrInit) {
+                  if (typeof pathOrInit === "string") {
+                    path = pathOrInit;
+                    init = maybeInit;
+                    if (path[0] !== "/") {
+                      throw new Error("Path must start with /");
+                    }
+                    return stub.fetch(
+                      `http://${options.host}/parties/${key}/${name}${path}`,
+                      init
+                    );
+                  } else {
+                    init = pathOrInit;
+                    return stub.fetch(
+                      `http://${options.host}/parties/${key}/${name}`,
+                      init
+                    );
+                  }
+                } else {
+                  return stub.fetch(
+                    `http://${options.host}/parties/${key}/${name}`
+                  );
+                }
               },
               connect: () => {
-                // wish there was a way to create a websocket from a durable object
                 return new WebSocket(
-                  key === "main"
-                    ? `ws://${options.host}/party/${name}`
-                    : `ws://${options.host}/parties/${key}/${name}`
+                  `ws://${options.host}/parties/${key}/${name}`
                 );
+              },
+              async socket(
+                pathOrInit?: string | RequestInit,
+                maybeInit?: RequestInit
+              ) {
+                let res: Response;
+                // This method is better because it doesn't go via the internet
+                // and doesn't get 522/404/ get caught in CF firewall
+                let path: RequestInfo | undefined;
+                let init: RequestInit | undefined;
+                if (pathOrInit) {
+                  if (typeof pathOrInit === "string") {
+                    path = pathOrInit;
+                    init = maybeInit;
+                    if (path[0] !== "/") {
+                      throw new Error("Path must start with /");
+                    }
+                    res = await stub.fetch(
+                      `http://${options.host}/parties/${key}/${name}${path}`,
+                      {
+                        ...init,
+                        headers: {
+                          upgrade: "websocket",
+                          ...init?.headers,
+                        },
+                      }
+                    );
+                  } else {
+                    init = pathOrInit;
+                    res = await stub.fetch(
+                      `http://${options.host}/parties/${key}/${name}`,
+                      {
+                        ...init,
+                        headers: {
+                          upgrade: "websocket",
+                          ...init?.headers,
+                        },
+                      }
+                    );
+                  }
+                } else {
+                  res = await stub.fetch(
+                    `http://${options.host}/parties/${key}/${name}`,
+                    {
+                      headers: {
+                        upgrade: "websocket",
+                      },
+                    }
+                  );
+                }
+                const ws = res.webSocket;
+                if (!ws) {
+                  throw new Error("Expected a websocket response");
+                }
+                ws.accept();
+                return ws as WebSocket;
               },
             };
           },

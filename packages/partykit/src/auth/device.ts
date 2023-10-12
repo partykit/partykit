@@ -34,16 +34,18 @@ export async function signInWithBrowser(mode: "cli" | "token"): Promise<
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.setHeader("Access-Control-Allow-Headers", "Authorization");
 
+        // https://developer.chrome.com/blog/private-network-access-preflight/
+        res.setHeader("Access-Control-Allow-Private-Network", "true");
+
         if (req.method === "OPTIONS") {
           res.statusCode = 204;
           res.end();
         }
 
-        if (req.method === "POST") {
+        if (req.method === "POST" || req.method === "GET") {
           try {
             // "host" is arbitrary here, added just so we can parse the url
             const url = new URL(`http://host${req.url}`);
-
             const error = url.searchParams.get("error");
             if (error) {
               res.statusCode = 200;
@@ -53,8 +55,32 @@ export async function signInWithBrowser(mode: "cli" | "token"): Promise<
               const token = url.searchParams.get("token");
               const teamId = url.searchParams.get("teamId");
               if (token && teamId) {
-                res.statusCode = 200;
-                res.end("OK");
+                if (req.method === "POST") {
+                  // by default, the browser tries to perform the callback as a fetch POST request,
+                  // in which case we can just respond with a 200 OK, and the caller will decide
+                  // whether to redirect
+                  //
+                  // NOTE: If we ever need to return an error from here, we need to make sure not
+                  // to kill the server, as the client is likely to follow up with a fallback GET request
+                  res.statusCode = 200;
+                  res.end("You are now logged in.");
+                } else {
+                  // handle a fallback get request, which happens as a browser navigation event, so
+                  // we redirect the user back to the success page.
+                  //
+                  // if we the client didn't provide a redirect url, we redirect to the dashboard home
+                  let successRedirectUrl =
+                    url.searchParams.get("redirect") ?? "";
+                  if (!successRedirectUrl.startsWith("/")) {
+                    successRedirectUrl = `/${successRedirectUrl}`;
+                  }
+                  res
+                    .writeHead(302, {
+                      Location: `${DASHBOARD_BASE}${successRedirectUrl}`,
+                    })
+                    .end();
+                }
+
                 resolve({ token, teamId });
               } else {
                 res.statusCode = 400;

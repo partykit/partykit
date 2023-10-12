@@ -4,8 +4,22 @@ import * as Y from "yjs";
 declare const PARTYKIT_HOST: string;
 
 const doc = new Y.Doc();
+
+// example for attaching query string parameters to the request
+const getToken = (): Promise<Record<string, string>> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ token: Date.now().toString() });
+    }, 100);
+  });
+};
+
 const provider = new YProvider(PARTYKIT_HOST, "yjs-demo", doc, {
   connect: false,
+  // disable broadcast channel for this demo, so syncing only happens via the partykit server
+  // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
+  disableBc: true,
+  params: getToken,
 });
 const yMessage: Y.Text = doc.getText("message");
 const awareness = provider.awareness;
