@@ -5,21 +5,33 @@ description: Setting up a Github Action for deploying a PartyKit project on ever
 
 This page provides a walkthrough on setting up a [Github Action](https://github.com/features/actions) for deploying a PartyKit project on every commit to the `main` branch.
 
-To do so, you will first create a GitHub token and then set up a GitHub action.
+To do so, you will first create a PartyKit token and then set up a GitHub action.
 
-### 1. Create a GitHub Token
+### 1. Create a PartyKit Access Token
 
-Create a GitHub Personal Access Token from [https://github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new). You can give it a name & expiration, and leave the other inputs as is.
+On your local machine, run the following PartyKit CLI command:
 
-Copy the token and add it to the project repository by going to "Settings" from the top menu of the repository. Then, find "Secrets and variables" in the sidebar and choose "Actions" from the submenu. Finally, click "New repository secret" to add the token.
+```sh
+npx partykit@latest token generate
+```
 
-:::note
-For the purpose of this guide, let's assume that you have saved the token as `PARTYKIT_GITHUB_TOKEN`.
+This will open a new browser window to authorize you, and then generate a new long-lived session token:
+
+```ts
+PARTYKIT_LOGIN=your_username
+PARTYKIT_TOKEN=eyJhb...YR7Bw
+```
+
+### 2. Create Secrets in GitHub Actions
+
+Provide the `PARTYKIT_LOGIN` and `PARTYKIT_TOKEN` values you generated in the previous step to GitHub actions securely following the official [Using Secrets in GitHub guide](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+
+
+:::caution[Storing secrets]
+The `PARTYKIT_TOKEN` will allow anyone to deploy to PartyKit your behalf, so do not share it publically or commit it to source control.
 :::
 
-Your token is encrypted by GitHub and the action won't print it into logs.
-
-### 2. Create a Github Action
+### 3. Create a Github Action
 
 Create a `.github/workflows` directory in your project's root directory. There, create a new file called `deploy.yml` with the following contents:
 
@@ -45,8 +57,8 @@ jobs:
       - run: npm ci
       - run: npx partykit deploy
         env:
-          GITHUB_TOKEN: ${{ secrets.PARTYKIT_GITHUB_TOKEN }}
-          GITHUB_LOGIN: threepointone # use your GitHub username
+          PARTYKIT_TOKEN: ${{ secrets.PARTYKIT_TOKEN }}
+          PARTYKIT_LOGIN: ${{ secrets.PARTYKIT_LOGIN  }}
 ```
 
 Notice that the above GitHub action deploys the PartyKit project on every push to the `main` branch.
