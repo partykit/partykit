@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-10-12T15:01:00Z
+pubDatetime: 2023-10-13T11:12:00Z
 title: A single-serving waterhole in the Namib Desert using Remix
 postSlug: single-serving-waterhole
 featured: false
@@ -30,26 +30,26 @@ There’s something about the ambient sound too? You can hear the wind! There’
 
 ![Multiple browser windows showing the YouTube video at different aspect ratios. The video always fills the viewport.](/content-images/single-serving-waterhole/tiled.jpg)
 
-YouTube itself, though, looks like a website. It feels more like a _portal to another place_ when the live stream is full bleed. Look at the way the video covers the viewport as the browser changes size. Pretty sweet if I say so myself.
+But! YouTube itself looks and feels like a website. It feels more like a _portal to another place_ when the live stream is full bleed. Look at the way the video covers the viewport as the browser changes size. Pretty sweet if I say so myself.
 
 And, **togetherness.** Ephemeral chat slowly ticks away. Messages aren’t retained, only shared in real time. It’s enough to give a sense of presence.
 
-(The _“4 here”_ badge in the bottom right is something I drop into many of my PartyKit projects as a quick check that that websocket is live.)
+(The _“6 here”_ badge in the bottom right is something I drop into many of my PartyKit projects as a quick check that that websocket is live.)
 
 ## PartyKit x Remix
 
 This single-serving website is hosted entirely on PartyKit. Look at the URL: `waterhole.genmon.partykit.dev`.
 
-It is built with [Remix](https://remix.run/), the full stack web framework for React apps.
+The site is built with [Remix](https://remix.run/), a full stack web framework for React apps.
 
-To get going, I used [PartyKit’s Remix starter kit](https://github.com/partykit/remix-starter). That gave me a template, then added my own code and deployed. Done! PartyKit handles the multiplayer aspect (the chat) and also serves up the assets.
+To get going, I used [PartyKit’s Remix starter kit](https://github.com/partykit/remix-starter). That gave me a template, then I added my own code and deployed. Done! PartyKit handles the multiplayer aspect (the chat) and also serves up the assets.
 
 There is something… lightweight? …quick? …empowering? about being able to go from idea to deployed like this. So few moving parts.
 
 ## Here’s the code
 
-You can check out the code: [sketch-waterhole on GitHub](https://github.com/partykit/sketch-waterhole).
+The code is open. See: [sketch-waterhole on GitHub](https://github.com/partykit/sketch-waterhole).
 
-Please feel free to fork and modify. Everyone has their own fave waterhole to hang out at. ([lofi hip hop radio](https://www.youtube.com/watch?v=jfKfPfyJRdk) used to be my go-to.)
+Please feel free to fork and modify. Everyone has their own fave waterhole for hanging out. ([lofi hip hop radio](https://www.youtube.com/watch?v=jfKfPfyJRdk) used to be my go-to.)
 
 Behind the scenes you'll see we're using [react-player](https://github.com/CookPete/react-player). This is a React component that wraps the YouTube player and others, and it provides a lot of control that isn’t being used here. So, for example, it would be pretty easy to make a shared jukebox, by using PartyKit to sync playback state and the video URL between all clients. A project for another day!
