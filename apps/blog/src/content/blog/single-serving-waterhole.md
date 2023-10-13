@@ -10,7 +10,7 @@ tags:
   - residency
   - demos
   - remix
-ogImage: "/content-images/single-serving-waterhole/social.png"
+ogImage: "/content-images/single-serving-waterhole/social.jpg"
 description: I work with a window open to a YouTube live stream of a waterhole in Namibia, animals and all. Now it’s multiplayer and hosted on PartyKit using the Remix starter kit.
 ---
 
