@@ -25,10 +25,10 @@
   },
   "devDependencies": {
     "@types/random-words": "^1.1.2",
-    "@types/react": "^18.2.24",
+    "@types/react": "^18.2.28",
     "@types/which-pm-runs": "^1.0.0",
     "chalk": "^5.3.0",
-    "commander": "^11.0.0",
+    "commander": "^11.1.0",
     "esbuild": "0.19.4",
     "execa": "^8.0.1",
     "find-up": "^6.3.0",
@@ -39,7 +39,7 @@
     "random-words": "^2.0.0",
     "react": "^18.2.0",
     "typescript": "^5.2.2",
-    "undici": "^5.25.4",
+    "undici": "^5.26.3",
     "which-pm-runs": "^1.1.0"
   }
 }
