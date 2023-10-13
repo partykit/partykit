@@ -1,5 +1,17 @@
 # partykit
 
+## 0.0.31
+
+### Patch Changes
+
+- [#496](https://github.com/partykit/partykit/pull/496) [`fb62640`](https://github.com/partykit/partykit/commit/fb626408733be07ca9edc233c4f6f37c1a30fb7e) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
+- [#489](https://github.com/partykit/partykit/pull/489) [`6276a29`](https://github.com/partykit/partykit/commit/6276a29f6fda1aa8b6232011814388c8ebafbe89) Thanks [@threepointone](https://github.com/threepointone)! - partykit bin field should be an object
+
+- [#481](https://github.com/partykit/partykit/pull/481) [`731fea7`](https://github.com/partykit/partykit/commit/731fea78392e1e0ea675c3568bb32b5d0814e964) Thanks [@threepointone](https://github.com/threepointone)! - pass sub path/init during subparty .fetch()/.socket()
+
+  This lets you pass a "sub" path to a sub party `.fetch()` or `.socket()` (and adds being able to pass a RequestInit to `.socket()`). This make it possible to do routing more cleanly inside sub parties, making them more versatile.
+
 ## 0.0.30
 
 ### Patch Changes

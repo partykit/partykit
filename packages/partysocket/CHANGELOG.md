@@ -1,5 +1,17 @@
 # partysocket
 
+## 0.0.11
+
+### Patch Changes
+
+- [#487](https://github.com/partykit/partykit/pull/487) [`2e802f3`](https://github.com/partykit/partykit/commit/2e802f37d8b2d4e76325c42c481ad20b70462f35) Thanks [@threepointone](https://github.com/threepointone)! - don't mark react as a dependency for partysocket
+
+  This dependency causes way too many issues, especially since react doesn't work with multiple versions. Let's see if removing it helps.
+
+- [#490](https://github.com/partykit/partykit/pull/490) [`96df6d9`](https://github.com/partykit/partykit/commit/96df6d9b51271445611a9cff72452f37b80da0a8) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: don't bundle react into the built assets
+
+  tsup ignores pnly dependencies marked in package.json under dependencies/devDependencies. Since we don't have react in here, it was bundling it into partysocket/react, leading to multiple versions being loaded into the same space. This explicity excludes react from the bundle.
+
 ## 0.0.10
 
 ### Patch Changes
