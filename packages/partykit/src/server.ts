@@ -3,6 +3,7 @@ import type {
   ExecutionContext as CFExecutionContext,
   WebSocket,
   Request as CFRequest,
+  WebSocketRequestResponsePair,
 } from "@cloudflare/workers-types";
 
 export type StaticAssetsManifestType = {
@@ -163,6 +164,27 @@ export type Party = {
    * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
   getConnections<TState = unknown>(tag?: string): Iterable<Connection<TState>>;
+
+  /**
+   * Sets an application level auto response that does not wake hibernated WebSockets.
+   * `party.setWebSocketAutoResponse` receives `(request, response)`
+   * as an argument, enabling any WebSocket that was accepted in hibernation mode
+   * to automatically reply with response when it receives the specified request.
+   * More: https://developers.cloudflare.com/durable-objects/api/websockets/#setwebsocketautoresponse
+   */
+  setWebSocketAutoResponse: (request: string, response: string) => void;
+  /**
+   * Gets the `WebSocketRequestResponsePair(request, response)` currently set,
+   * or `null` if there is none.
+   * More: https://developers.cloudflare.com/durable-objects/api/websockets/#getwebsocketautoresponse
+   */
+  getWebSocketAutoResponse: () => WebSocketRequestResponsePair | null;
+  /**
+   * Gets the most recent Date when the Connection received an auto-response request,
+   * or null if the given WebSocket never received an auto-response request.
+   * More: https://developers.cloudflare.com/durable-objects/api/websockets/#getwebsocketautoresponsetimestamp
+   */
+  getWebSocketAutoResponseTimestamp: (connection: Connection) => Date | null;
 };
 
 /* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party

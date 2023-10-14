@@ -349,6 +349,29 @@ function createDurable(
           );
           return this.context.parties;
         },
+
+        setWebSocketAutoResponse(req?: string, res?: string) {
+          if (req && res) {
+            return self.controller.setWebSocketAutoResponse(
+              new WebSocketRequestResponsePair(req, res)
+            );
+          } else {
+            if (req || res) {
+              throw new Error(
+                "You must provide either both a request and response, or nothing, to setWebSocketAutoResponse"
+              );
+            }
+            return self.controller.setWebSocketAutoResponse(undefined);
+          }
+        },
+
+        getWebSocketAutoResponse() {
+          return self.controller.getWebSocketAutoResponse();
+        },
+
+        getWebSocketAutoResponseTimestamp(conn: Party.Connection) {
+          return self.controller.getWebSocketAutoResponseTimestamp(conn);
+        },
       };
     }
 
