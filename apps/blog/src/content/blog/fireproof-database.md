@@ -1,6 +1,6 @@
 ---
 author: J Chris Anderson
-pubDatetime: 2023-10-12T15:29:00Z
+pubDatetime: 2023-10-16T10:01:00Z
 title: Multi-user database collaboration made easy with Fireproof
 postSlug: fireproof-database-connector
 featured: false
@@ -107,6 +107,6 @@ There’s a [tour of the code in the README](https://github.com/partykit/sketch-
 
 ## Show us what you got!
 
-![SHOW ME WHAT YOU GOT meme](/content-images/fireproof-database-connector/meme.png)
+![SHOW ME WHAT YOU GOT meme](/content-images/fireproof-database-connector/meme.jpg)
 
 Fireproof is open source (Apache 2.0 & MIT) and ready for your apps. [Check out the developer docs](https://use-fireproof.com/docs/welcome) and join the [GitHub discussions](https://github.com/fireproof-storage/fireproof/discussions) and [Fireproof Discord](https://discord.gg/3cGbju6W) to talk to other builders. Let us know what you build, and we will feature it in our app showcase. We love to share what people do, so tell us about your sketches, demos, games, toys, apps, giant robots, interstellar spacecraft, etc. We hang out in PartyKit’s discord, you can also [join the Fireproof discord here](https://discord.gg/3cGbju6W)!
