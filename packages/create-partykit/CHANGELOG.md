@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.16
+
+### Patch Changes
+
+- [#496](https://github.com/partykit/partykit/pull/496) [`fb62640`](https://github.com/partykit/partykit/commit/fb626408733be07ca9edc233c4f6f37c1a30fb7e) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
 ## 0.0.15
 
 ### Patch Changes
