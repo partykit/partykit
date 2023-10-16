@@ -34,7 +34,7 @@ const partySocket = new PartySocket({
 });
 ```
 
-The `query` parameter can an object of key-value pairs, or an (optionally) asynchronous
+The `query` parameter can be an object of key-value pairs, or an (optionally) asynchronous
 function that returns one.
 
 You can then verify your user's identity in a `static onBeforeConnect` method:
