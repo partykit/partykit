@@ -35,10 +35,10 @@ function getRoomAndPartyFromPathname(pathname: string): {
   room: string;
   party: string;
 } | null {
+  // NOTE: keep in sync with ./source.ts
   // TODO: use a URLPattern here instead
-  // TODO: might want to introduce a real router too
   if (pathname.startsWith("/party/")) {
-    const [_, roomId] = pathname.split("/party/");
+    const [_, __, roomId] = pathname.split("/");
     return {
       room: roomId,
       party: "main",
