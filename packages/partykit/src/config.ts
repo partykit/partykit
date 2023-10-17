@@ -88,17 +88,8 @@ export async function getUser(
       },
     });
 
-    const sessionToken = await clerk.session?.getToken({
-      leewayInSeconds: 30,
-    });
-
-    if (!sessionToken) {
-      throw new Error("Session expired. Please log in again.");
-    }
-
     return {
       ...userConfig,
-      access_token: sessionToken,
       async getSessionToken() {
         // For Clerk logins, get a session token from the client token.
         // The session tokens are valid for 1 minute, but we want to make sure
@@ -108,12 +99,8 @@ export async function getUser(
           leewayInSeconds: 30,
         });
 
-        console.log("got session token", sessionToken);
-
         if (!sessionToken) {
-          throw new Error(
-            "Unable to authenticate user session: No active session found, or no token received for session."
-          );
+          throw new Error("Session expired. Please log in again.");
         }
 
         return sessionToken;
