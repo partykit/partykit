@@ -10,7 +10,7 @@ tags:
   - local-first
   - collaboration
   - fireproof
-ogImage: "/content-images/fireproof-database-connector/og.jpg"
+ogImage: "/content-images/fireproof-database-connector/og.png"
 description: PartyKit’s effortless connections are the perfect complement to 🔥 Fireproof’s immutable storage
 ---
 
