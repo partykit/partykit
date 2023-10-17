@@ -8,6 +8,8 @@ import * as crypto from "crypto";
 import WebSocket from "ws";
 import type { RawData } from "ws";
 import { onExit } from "signal-exit";
+import limit from "p-limit";
+import retry from "p-retry";
 
 import InkTable from "./ink-table";
 import SelectInput from "ink-select-input";
@@ -434,6 +436,7 @@ export async function deploy(options: {
     edgeTTL: assetsConfig.edgeTTL,
     singlePageApp: assetsConfig.singlePageApp,
     assets: {},
+    assetInfo: {},
   };
 
   const assetsBuild =
@@ -476,12 +479,27 @@ export async function deploy(options: {
 
   const esbuild = await import("esbuild");
 
-  if (assetsPath) {
-    const params = options?.preview
-      ? `?${new URLSearchParams({ preview: options.preview })}`
-      : "";
-    const assetsApiPath = `/parties/${user.login}/${config.name}/assets${params}`;
+  const assetsApiParams = options?.preview
+    ? `?${new URLSearchParams({
+        preview: options.preview,
+        // notify that the client has attempted to call prepare_assets,
+        // so that each upload process doesn't need to do it
+        prepare: "true",
+      })}`
+    : "";
 
+  const assetsApiPath = `/parties/${user.login}/${config.name}/assets${assetsApiParams}`;
+  const prepareAssetsApiPath = `/parties/${user.login}/${config.name}/prepare_assets${assetsApiParams}`;
+
+  const filesToUpload: {
+    file: string;
+    filePath: string;
+    fileName: string;
+  }[] = [];
+
+  //
+
+  if (assetsPath) {
     // do a build
     esbuild.buildSync(esbuildAssetOptions);
 
@@ -495,38 +513,44 @@ export async function deploy(options: {
       },
     });
 
-    const filesToUpload: {
-      file: string;
-      filePath: string;
-      fileName: string;
-    }[] = [];
-
     for (const file of findAllFiles(assetsPath)) {
       const filePath = path.join(assetsPath, file);
 
       // throw an error if it's bigger than 10mb
 
-      if (fs.statSync(filePath).size > 20 * 1024 * 1024) {
-        throw new Error(
-          `Asset ${file} is larger than 20mb, please reduce its size`
-        );
-      }
-
+      const fileSize = fs.statSync(filePath).size;
       const fileHash = crypto
         .createHash("sha1")
         .update(fs.readFileSync(filePath))
         .digest("hex");
+
+      const sourceName = `${path.basename(
+        file,
+        path.extname(file)
+      )}${path.extname(file)}`;
+
       const fileName = `${path.basename(
         file,
         path.extname(file)
       )}-${fileHash}${path.extname(file)}`;
 
-      newAssetsMap.assets[
-        file.replace(
-          /\\/g, // windows
-          "/"
-        )
-      ] = fileName;
+      if (fileSize > 20 * 1024 * 1024) {
+        throw new Error(
+          `Asset ${file} is larger than 20mb, please reduce its size`
+        );
+      }
+
+      const key = file.replace(
+        /\\/g, // windows
+        "/"
+      );
+
+      newAssetsMap.assets[key] = fileName;
+      newAssetsMap.assetInfo[key] = {
+        fileHash,
+        fileSize,
+        fileName: sourceName,
+      };
 
       // if the file is already uploaded, skip it
       if (
@@ -544,42 +568,6 @@ export async function deploy(options: {
         });
       }
     }
-
-    if (filesToUpload.length > 0) {
-      logger.log(
-        `Uploading ${filesToUpload.length} file${
-          filesToUpload.length > 1 ? "s" : ""
-        }...`
-      );
-
-      for (const file of filesToUpload) {
-        await fetchResult(assetsApiPath, {
-          user,
-          method: "PUT",
-          body: fs.createReadStream(file.filePath),
-          headers: {
-            ContentType: "application/octet-stream",
-            "X-PartyKit-Asset-Name": file.fileName,
-          },
-          duplex: "half",
-        });
-        logger.log(
-          `Uploaded ${file.file.replace(
-            /\\/g, // windows
-            "/"
-          )}`
-        );
-      }
-    }
-
-    await fetchResult(assetsApiPath, {
-      user,
-      method: "POST",
-      body: JSON.stringify(newAssetsMap),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
   }
 
   const wasmModules: Record<string, Buffer> = {};
@@ -644,6 +632,71 @@ export const ${name} = ${name}Party;
     })
   ).outputFiles![0].text;
 
+  if (filesToUpload.length > 0) {
+    logger.log(
+      `Preparing ${filesToUpload.length} asset${
+        filesToUpload.length > 1 ? "s" : ""
+      } for upload...`
+    );
+
+    // preflight to make sure we're good to receive the assets
+    await fetchResult(prepareAssetsApiPath, {
+      method: "POST",
+      body: JSON.stringify(newAssetsMap),
+      user,
+    });
+
+    logger.log(
+      `Uploading ${filesToUpload.length} asset${
+        filesToUpload.length > 1 ? "s" : ""
+      }...`
+    );
+
+    const withConcurrencyLimits = limit(20);
+    const withRetries = (fn: () => Promise<void>) =>
+      retry(fn, {
+        maxRetryTime: 10_000,
+        retries: 2,
+      });
+
+    await Promise.all(
+      filesToUpload.map((file) =>
+        withConcurrencyLimits(() =>
+          withRetries(() =>
+            fetchResult(assetsApiPath, {
+              user,
+              method: "PUT",
+              body: fs.createReadStream(file.filePath),
+              headers: {
+                ContentType: "application/octet-stream",
+                "X-PartyKit-Asset-Name": file.fileName,
+              },
+              duplex: "half",
+            }).then(() => {
+              logger.log(
+                `Uploaded ${file.file.replace(
+                  /\\/g, // windows
+                  "/"
+                )}`
+              );
+            })
+          )
+        )
+      )
+    );
+
+    logger.log(`Updating asset index...`);
+
+    await fetchResult(assetsApiPath, {
+      user,
+      method: "POST",
+      body: JSON.stringify(newAssetsMap),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   const form = new FormData();
   form.set("code", code);
 
@@ -694,6 +747,8 @@ or by passing it in via the CLI
   if (options.preview) {
     urlSearchParams.set("preview", options.preview);
   }
+
+  console.log("Deploying...");
 
   const deployRes = await fetchResult<{
     result: { is_initial_deploy: boolean };
