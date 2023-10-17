@@ -497,7 +497,7 @@ export async function deploy(options: {
     fileName: string;
   }[] = [];
 
-  //
+  // prepare static assets to be uploaded
 
   if (assetsPath) {
     // do a build
@@ -570,6 +570,8 @@ export async function deploy(options: {
     }
   }
 
+  // before starting upload, let's build the source files (fail fast)
+
   const wasmModules: Record<string, Buffer> = {};
 
   const code = (
@@ -631,6 +633,8 @@ export const ${name} = ${name}Party;
       ],
     })
   ).outputFiles![0].text;
+
+  // starting upload. first, uploading assets...
 
   if (filesToUpload.length > 0) {
     logger.log(
@@ -697,6 +701,8 @@ export const ${name} = ${name}Party;
     });
   }
 
+  // then, prepare the deploy request
+
   const form = new FormData();
   form.set("code", code);
 
@@ -747,6 +753,8 @@ or by passing it in via the CLI
   if (options.preview) {
     urlSearchParams.set("preview", options.preview);
   }
+
+  // finally, deploy the code...
 
   console.log("Deploying...");
 
