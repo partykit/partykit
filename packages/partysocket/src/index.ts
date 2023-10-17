@@ -15,6 +15,7 @@ export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   party?: string; // the party to connect to (defaults to main)
   protocol?: string;
   protocols?: string[];
+  path?: string;
   query?: Params | (() => Params | Promise<Params>);
   // headers
 };
@@ -58,6 +59,7 @@ export default class PartySocket extends ReconnectingWebSocket {
   name: string;
   room: string;
   host: string;
+  path: string;
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const {
@@ -67,6 +69,7 @@ export default class PartySocket extends ReconnectingWebSocket {
       protocol,
       query,
       protocols,
+      path: rawPath,
       ...socketOptions
     } = partySocketOptions;
     const _pk = partySocketOptions.id || generateUUID();
@@ -78,12 +81,17 @@ export default class PartySocket extends ReconnectingWebSocket {
       host = host.slice(0, -1);
     }
 
+    if (rawPath && rawPath.startsWith("/")) {
+      throw new Error("path must not start with a slash");
+    }
+    const path = rawPath ? `/${rawPath}` : "";
+
     const baseUrl = `${
       protocol ||
       (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
         ? "ws"
         : "wss")
-    }://${host}/${party ? `parties/${party}` : "party"}/${room}`;
+    }://${host}/${party ? `parties/${party}` : "party"}/${room}${path}`;
 
     const makeUrl = (query: Params = {}) =>
       `${baseUrl}?${new URLSearchParams([
@@ -104,6 +112,7 @@ export default class PartySocket extends ReconnectingWebSocket {
     this.name = party ?? "main";
     this.room = room;
     this.host = host;
+    this.path = path;
   }
 
   get id() {
