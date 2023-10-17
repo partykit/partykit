@@ -8,16 +8,26 @@ import type * as Party from "../src/server";
 declare const StaticAssetManifest: Party.StaticAssetsManifestType;
 
 // The roomId is /party/[roomId] or /parties/[partyName]/[roomId]
-function getRoomIdFromPathname(pathname: string) {
+function getRoomAndPartyFromPathname(pathname: string): {
+  room: string;
+  party: string;
+} | null {
+  // NOTE: keep in sync with ./source.ts
   // TODO: use a URLPattern here instead
-  // TODO: might want to introduce a real router too
   if (pathname.startsWith("/party/")) {
-    const [_, roomId] = pathname.split("/party/");
-    return roomId;
+    const [_, __, roomId] = pathname.split("/");
+    return {
+      room: roomId,
+      party: "main",
+    };
   } else if (pathname.startsWith("/parties/")) {
-    const [_, __, _partyName, roomId] = pathname.split("/");
-    return roomId;
+    const [_, __, partyName, roomId] = pathname.split("/");
+    return {
+      room: roomId,
+      party: partyName,
+    };
   }
+  return null;
 }
 
 export default async function fetchStaticAsset<Env>(
@@ -51,7 +61,7 @@ export default async function fetchStaticAsset<Env>(
 
   if (StaticAssetManifest.singlePageApp === true && response === null) {
     // if path starts with /party/:id or /parties/:name/:id, we should skip
-    const roomId = getRoomIdFromPathname(`/${filePath}`);
+    const { room: roomId } = getRoomAndPartyFromPathname(`/${filePath}`) || {};
 
     if (!roomId) {
       response = await fetch(
