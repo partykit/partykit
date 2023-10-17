@@ -57,3 +57,5 @@ export default function usePartySocket(options: UsePartySocketOptions) {
 }
 
 export { useWebSocketImpl as useWebSocket };
+// TODO: remove the default export in a future breaking change
+export { usePartySocket };
