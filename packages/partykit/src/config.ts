@@ -36,18 +36,22 @@ export const userConfigSchema = z.object({
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
+export type UserSession = UserConfig & {
+  getSessionToken(): Promise<string>;
+};
+
 export type LoginMethod = UserConfig["type"];
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
 export async function getUser(
   loginMethod?: LoginMethod,
   exact: boolean = false
-): Promise<UserConfig> {
+): Promise<UserSession> {
   const flags = getFlags();
   const method = loginMethod ?? flags.defaultLoginMethod;
 
   // load persisted config, or create a new session if valid session doesn't exist
-  let userConfig;
+  let userConfig: UserConfig;
 
   try {
     userConfig = getUserConfig();
@@ -84,18 +88,46 @@ export async function getUser(
       },
     });
 
-    const sessionToken = await clerk?.session?.getToken();
+    const sessionToken = await clerk.session?.getToken({
+      leewayInSeconds: 30,
+    });
+
     if (!sessionToken) {
       throw new Error("Session expired. Please log in again.");
     }
 
-    userConfig = {
+    return {
       ...userConfig,
       access_token: sessionToken,
+      async getSessionToken() {
+        // For Clerk logins, get a session token from the client token.
+        // The session tokens are valid for 1 minute, but we want to make sure
+        // that long-running API calls have time to make the subrequests they need
+        // so we will refresh the token every 30 seconds.
+        const sessionToken = await clerk.session?.getToken({
+          leewayInSeconds: 30,
+        });
+
+        console.log("got session token", sessionToken);
+
+        if (!sessionToken) {
+          throw new Error(
+            "Unable to authenticate user session: No active session found, or no token received for session."
+          );
+        }
+
+        return sessionToken;
+      },
+    };
+  } else {
+    return {
+      ...userConfig,
+      async getSessionToken() {
+        // for GitHub logins, we use the access token as auth token directly
+        return userConfig.access_token;
+      },
     };
   }
-
-  return userConfig;
 }
 
 export function readUserConfig(path: string): UserConfig | null {
