@@ -1,6 +1,6 @@
-import type { V2_MetaFunction } from "partymix";
+import type { MetaFunction } from "partymix";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     { title: "New Partymix App" },
     { name: "description", content: "Welcome to Remix!" },
