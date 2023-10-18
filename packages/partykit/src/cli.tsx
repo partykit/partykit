@@ -546,7 +546,7 @@ export async function deploy(options: {
       );
 
       newAssetsMap.assets[key] = fileName;
-      newAssetsMap.assetInfo[key] = {
+      newAssetsMap.assetInfo![key] = {
         fileHash,
         fileSize,
         fileName: sourceName,
@@ -754,7 +754,7 @@ or by passing it in via the CLI
     urlSearchParams.set("preview", options.preview);
   }
 
-  // finally, deploy the code...
+  // finally, deploy the code
 
   console.log("Deploying...");
 
