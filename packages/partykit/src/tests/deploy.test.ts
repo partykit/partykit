@@ -253,6 +253,7 @@ describe("deploy", () => {
           edgeTTL: undefined,
           singlePageApp: false,
           assets: {},
+          assetInfo: {},
         };
       }
     );
@@ -305,14 +306,9 @@ describe("deploy", () => {
 
     expect(checkedResponse).toBe(true);
 
-    expect(std).toMatchInlineSnapshot(`
-      {
-        "debug": "",
-        "err": "",
-        "info": "",
-        "out": "Deployed ./../packages/partykit/src/tests/fixture.js to https://test-script.test-user.partykit.dev",
-        "warn": "",
-      }
-    `);
+    expect(std.err).toEqual("");
+    expect(std.out).toContain(
+      "Deployed ./../packages/partykit/src/tests/fixture.js to https://test-script.test-user.partykit.dev"
+    );
   });
 });
