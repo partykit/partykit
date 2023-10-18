@@ -27,6 +27,7 @@ export type PartyFetchOptions = {
   path?: string; // the path to fetch from
   protocol?: "http" | "https";
   query?: Params | (() => Params | Promise<Params>);
+  fetch?: typeof fetch;
 };
 
 function generateUUID(): string {
@@ -55,6 +56,67 @@ function generateUUID(): string {
   });
 }
 
+function getPartyInfo(
+  partySocketOptions: PartySocketOptions | PartyFetchOptions,
+  defaultProtocol: "http" | "ws",
+  defaultParams: Record<string, string> = {}
+) {
+  const {
+    host: rawHost,
+    path: rawPath,
+    protocol: rawProtocol,
+    room,
+    party,
+    query,
+  } = partySocketOptions;
+
+  // strip the protocol from the beginning of `host` if any
+  let host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
+  // if user provided a trailing slash, remove it
+  if (host.endsWith("/")) {
+    host = host.slice(0, -1);
+  }
+
+  if (rawPath && rawPath.startsWith("/")) {
+    throw new Error("path must not start with a slash");
+  }
+  const name = party ?? "main";
+  const path = rawPath ? `/${rawPath}` : "";
+  const protocol =
+    rawProtocol ||
+    (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
+      ? // http / ws
+        defaultProtocol
+      : // https / wss
+        defaultProtocol + "s");
+
+  const baseUrl = `${protocol}://${host}/${
+    party ? `parties/${party}` : "party"
+  }/${room}${path}`;
+
+  const makeUrl = (query: Params = {}) =>
+    `${baseUrl}?${new URLSearchParams([
+      ...Object.entries(defaultParams),
+      ...Object.entries(query).filter(valueIsNotNil),
+    ])}`;
+
+  // allow urls to be defined as functions
+  const urlProvider =
+    typeof query === "function"
+      ? async () => makeUrl(await query())
+      : makeUrl(query);
+
+  return {
+    host,
+    path,
+    room,
+    name,
+    protocol,
+    partyUrl: baseUrl,
+    urlProvider,
+  };
+}
+
 // things that nathanboktae/robust-websocket claims are better:
 // doesn't do anything in offline mode (?)
 // "natively aware of error codes"
@@ -71,56 +133,27 @@ export default class PartySocket extends ReconnectingWebSocket {
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
     const {
-      host: rawHost,
-      room,
-      party,
-      protocol,
-      query,
+      id,
+      host: _host,
+      path: _path,
+      party: _party,
+      room: _room,
+      protocol: _protocol,
+      query: _query,
       protocols,
-      path: rawPath,
       ...socketOptions
     } = partySocketOptions;
-    const _pk = partySocketOptions.id || generateUUID();
 
-    // strip the protocol from the beginning of `host` if any
-    let host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
-    // if user provided a trailing slash, remove it
-    if (host.endsWith("/")) {
-      host = host.slice(0, -1);
-    }
+    const _pk = id || generateUUID();
+    const party = getPartyInfo(partySocketOptions, "ws", { _pk });
 
-    if (rawPath && rawPath.startsWith("/")) {
-      throw new Error("path must not start with a slash");
-    }
-    const path = rawPath ? `/${rawPath}` : "";
-
-    const baseUrl = `${
-      protocol ||
-      (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
-        ? "ws"
-        : "wss")
-    }://${host}/${party ? `parties/${party}` : "party"}/${room}${path}`;
-
-    const makeUrl = (query: Params = {}) =>
-      `${baseUrl}?${new URLSearchParams([
-        ["_pk", _pk],
-        ...Object.entries(query).filter(valueIsNotNil),
-      ])}`;
-
-    // allow urls to be defined as functions
-    const urlProvider =
-      typeof query === "function"
-        ? async () => makeUrl(await query())
-        : makeUrl(query);
-
-    super(urlProvider, protocols, socketOptions);
+    super(party.urlProvider, protocols, socketOptions);
     this._pk = _pk;
-    this._pkurl = baseUrl;
-
-    this.name = party ?? "main";
-    this.room = room;
-    this.host = host;
-    this.path = path;
+    this._pkurl = party.partyUrl;
+    this.name = party.name;
+    this.room = party.room;
+    this.host = party.host;
+    this.path = party.path;
   }
 
   get id() {
@@ -140,48 +173,13 @@ export default class PartySocket extends ReconnectingWebSocket {
     options: PartyFetchOptions,
     init?: RequestInit
   ): Promise<Response> {
-    const {
-      host: rawHost,
-      room,
-      party,
-      protocol,
-      query,
-      path: rawPath,
-    } = options;
-    // strip the protocol from the beginning of `host` if any
-    let host = rawHost.replace(/^(http|https|ws|wss):\/\//, "");
-    // if user provided a trailing slash, remove it
-    if (host.endsWith("/")) {
-      host = host.slice(0, -1);
-    }
-
-    if (rawPath && rawPath.startsWith("/")) {
-      throw new Error("path must not start with a slash");
-    }
-    const path = rawPath ? `/${rawPath}` : "";
-
-    const baseUrl = `${
-      protocol ||
-      (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
-        ? "http"
-        : "https")
-    }://${host}/${party ? `parties/${party}` : "party"}/${room}${path}`;
-
-    const makeUrl = (query: Params = {}) =>
-      `${baseUrl}?${new URLSearchParams([
-        ...Object.entries(query).filter(valueIsNotNil),
-      ])}`;
-
-    // allow urls to be defined as functions
-    const urlProvider =
-      typeof query === "function"
-        ? async () => makeUrl(await query())
-        : makeUrl(query);
-
+    const party = getPartyInfo(options, "http");
     const url =
-      typeof urlProvider === "string" ? urlProvider : await urlProvider();
-
-    return fetch(url, init);
+      typeof party.urlProvider === "string"
+        ? party.urlProvider
+        : await party.urlProvider();
+    const doFetch = options.fetch ?? fetch;
+    return doFetch(url, init);
   }
 }
 
