@@ -48,6 +48,8 @@
     "clipboardy": "3.0.0",
     "esbuild": "0.19.5",
     "miniflare": "3.20231010.0",
+    "p-limit": "^4.0.0",
+    "p-retry": "^6.1.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
