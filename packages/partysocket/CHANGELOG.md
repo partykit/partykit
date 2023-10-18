@@ -1,5 +1,19 @@
 # partysocket
 
+## 0.0.12
+
+### Patch Changes
+
+- [#510](https://github.com/partykit/partykit/pull/510) [`d9e8c74`](https://github.com/partykit/partykit/commit/d9e8c7454d7447d0b41d0214efc66334624961d7) Thanks [@threepointone](https://github.com/threepointone)! - PartySocket.fetch: a fetch method with party options
+
+  This adds `PartySocket.fetch()`, that constructs the URL with options similar to `new PartySocket()`. This makes it easier to fetch to parties without having to construct the URL yourself.
+
+- [#508](https://github.com/partykit/partykit/pull/508) [`c64c58d`](https://github.com/partykit/partykit/commit/c64c58dc6c0c9cf1d5e31ad04820f0d983c417ed) Thanks [@kentcdodds](https://github.com/kentcdodds)! - feat: add named usePartySocket export
+
+- [#499](https://github.com/partykit/partykit/pull/499) [`6cc9437`](https://github.com/partykit/partykit/commit/6cc9437ab83b6962cd139d4a9867ac1e1c6647c1) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: add subpath support
+
+  This patch lets you add `path: string` to `new PartySocket({...})` and point to a subpath in a room. This is a client side analog to the recent subpath support we added to multiparty `.fetch()`/`.socket()`
+
 ## 0.0.11
 
 ### Patch Changes
