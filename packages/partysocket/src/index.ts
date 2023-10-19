@@ -168,16 +168,26 @@ export default class PartySocket extends ReconnectingWebSocket {
     return this._pkurl;
   }
 
-  // a `fetch` method that uses (almost) the same options as `PartySocket`
+  /**
+   * Generates a PartyKit room URL with query parameters applied.
+   */
+  static async url(
+    options: PartySocketOptions | PartyFetchOptions
+  ): Promise<string> {
+    const { urlProvider } = getPartyInfo(options, "http");
+    return typeof urlProvider === "string" ? urlProvider : urlProvider();
+  }
+
+  /**
+   * Makes a HTTP request to a PartyKit room.
+   * You can use Party.Server#onRequest to handle the request:
+   * https://docs.partykit.io/guides/responding-to-http-requests/
+   **/
   static async fetch(
     options: PartyFetchOptions,
     init?: RequestInit
   ): Promise<Response> {
-    const party = getPartyInfo(options, "http");
-    const url =
-      typeof party.urlProvider === "string"
-        ? party.urlProvider
-        : await party.urlProvider();
+    const url = await PartySocket.url(options);
     const doFetch = options.fetch ?? fetch;
     return doFetch(url, init);
   }
