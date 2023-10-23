@@ -28,6 +28,7 @@ export const schema = z
     account: z.string().optional(),
     name: z.string().optional(),
     main: z.string().optional(),
+    ip: z.string().optional(),
     port: z.number().optional(),
     preview: z.string().optional(),
     serve: z

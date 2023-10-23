@@ -215,6 +215,7 @@ function useHotkeys(props: {
 
 export type DevProps = {
   main?: string;
+  ip?: string;
   port?: number;
   serve?: string;
   config?: string;
@@ -309,7 +310,8 @@ function* findAllFiles(
 
 function useAssetServer(
   options: Config["serve"],
-  defines: Record<string, string>
+  defines: Record<string, string>,
+  ipForAssetsServer: string
 ) {
   const theOptions: Config["serve"] =
     typeof options === "string" ? { path: options } : options || {};
@@ -367,7 +369,7 @@ function useAssetServer(
 
   const [assetsMap, setAssetsMap] = useState<StaticAssetsManifestType>(() => {
     const assetsMap: StaticAssetsManifestType = {
-      devServer: `http://127.0.0.1:${portForAssetsServer}`,
+      devServer: `http://${ipForAssetsServer}:${portForAssetsServer}`,
       browserTTL: theOptions.browserTTL,
       edgeTTL: theOptions.edgeTTL,
       singlePageApp: theOptions.singlePageApp,
@@ -464,6 +466,7 @@ function useDev(options: DevProps): {
         vars: options.vars,
         define: options.define,
         serve: options.serve,
+        ip: options.ip,
         port: options.port,
         persist: options.persist,
         compatibilityDate: options.compatibilityDate,
@@ -474,6 +477,7 @@ function useDev(options: DevProps): {
   );
 
   const portForServer = config.port ?? getPortForServer("dev", 1999);
+  const ipForServer = config.ip ?? "127.0.0.1";
 
   const portForRuntimeInspector = getPortForServer("runtime-inspector");
   // ^ no preferred port for the runtime inspector, in fact it's better if
@@ -487,13 +491,13 @@ function useDev(options: DevProps): {
 
   const assetDefines = useMemo(
     () => ({
-      PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
+      PARTYKIT_HOST: `"${ipForServer}:${portForServer}"`,
       ...config.define,
     }),
-    [config.define, portForServer]
+    [config.define, portForServer, ipForServer]
   );
 
-  const { assetsMap } = useAssetServer(config.serve, assetDefines);
+  const { assetsMap } = useAssetServer(config.serve, assetDefines, ipForServer);
 
   if (!config.main) {
     throw new Error(
@@ -577,7 +581,7 @@ Workers["${name}"] = ${name};
         external: ["__STATIC_ASSETS_MANIFEST__"],
         metafile: true,
         define: {
-          PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
+          PARTYKIT_HOST: `"${ipForServer}:${portForServer}"`,
           ...esbuildOptions.define,
           ...config.define,
         },
@@ -659,6 +663,7 @@ Workers["${name}"] = ${name};
                         "nodejs_compat",
                         ...(config.compatibilityFlags || []),
                       ],
+                      host: ipForServer,
                       port: portForServer,
                       bindings: {
                         ...(config.vars
@@ -811,6 +816,7 @@ Workers["${name}"] = ${name};
     config,
     server,
     assetsMap,
+    ipForServer,
     portForServer,
     portForRuntimeInspector,
     options.config,

@@ -98,6 +98,7 @@ program
   .command("dev")
   .description("Run a project in development mode")
   .argument("[script]", "Path to the project to run")
+  .option("--ip <address>", "IP address to run the server on")
   .option("-p, --port <number>", "Port to run the server on")
   .option("--serve <path>", "Serve this directory of static assets")
   .addOption(
@@ -128,6 +129,7 @@ program
       <Dev
         main={scriptPath}
         unstable_outdir={options.unstable_outdir}
+        ip={options.ip}
         port={options.port ? parseInt(options.port) : undefined}
         persist={options.persist}
         config={options.config}

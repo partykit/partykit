@@ -5,7 +5,7 @@ declare const PARTYKIT_HOST: string;
 document.getElementById("app")!.innerText = location.href;
 
 const partySocket = new PartySocket({
-  host: PARTYKIT_HOST,
+  host: window.location.host,
   room: "some-room",
 });
 
