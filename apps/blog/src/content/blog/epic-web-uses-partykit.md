@@ -104,7 +104,7 @@ export default class Server implements Party.Server {
 Server satisfies Party.Worker
 ```
 
-Kent also improved the UX a little bit to also group the users according to how close in the specific lesson they are.
+Kent later improved the UX a little bit to also group the users according to their progress.
 
 <a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
 
