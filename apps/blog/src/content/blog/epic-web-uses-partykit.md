@@ -14,11 +14,11 @@ description: Kent C. Dodds used PartyKit to show users' presence on course pages
 
 ---
 
-Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it consists of 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been celebrated enthusiastically by the web dev community ever since.
+Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it consists of 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been celebrated enthusiastically by the web dev community.
 
 <a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
 
-We couldn't be prouder to be a part of this amazing feat. Right before the launch, Kent and Sunil, our CEO, added *presence* to the course platform (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like in Figma), the place in text they are (like in Google Docs), or by featuring your users' avatars, which is what Kent went with.
+We couldn't be prouder to be a part of this amazing feat. Right before the launch we worked with Kent and added *presence* to the course platform (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like in Figma), the place in text they are (like in Google Docs), or by featuring your users' avatars, which is what Kent went with.
 
 <a href="https://twitter.com/kentcdodds/status/1715569320141713749" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-loves-presence.png" alt="Kent's tweet: 'I just love this presence feature. It makes you feel like you're not learning alone. Learning is better together. Thanks for making this feature so easy to add PartyKit!'"></a>
 
@@ -32,9 +32,11 @@ When you open the sidebar, you can see all the avatars as well:
 
 <img style="width:800px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-2.png" alt="A screenshot of one of the lessons with the sidebar unfolded showing the avatars of others working on this lesson along you">
 
+Since the launch, the platform has been sending over 100,000 events a day to PartyKit - a testament to how popular the course is.
+
 ## Adding avatars to your website
 
-All PartyKit server code that was needed to add the real-time avatars feature to Kent's cours was the following:
+All PartyKit server code that was needed to implement the real-time avatars feature to Kent's course was the following:
 
 ```ts
 import type * as Party from 'partykit/server'
@@ -104,15 +106,18 @@ export default class Server implements Party.Server {
 Server satisfies Party.Worker
 ```
 
-Kent later improved the UX a little bit to also group the users according to their progress.
+Kent later improved the UX to also group the users according to their progress.
 
 <a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
 
+Moreover, as privacy is an important consideration, he implemented an option to opt out of avatars, taking full advantage of that PartyKit allows you to write your own business logic.
+
 You can see the full code here:
 
-- [presence - server code](https://github.com/epicweb-dev/kcdshop/blob/main/packages/presence/src/server.ts)
-- [presence - UI code](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/utils/presence.ts)
+- [server](https://github.com/epicweb-dev/kcdshop/blob/main/packages/presence/src/server.ts)
+- [UI](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/utils/presence.ts)
 - [tooltip](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/components/ui/tooltip.tsx)
+- [user settings](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/routes/_app+/account.tsx)
 
 ## Reactions to presence
 
@@ -121,8 +126,6 @@ Learning online often feels like a lonely journey so realtime features added to 
 Responses to Kent's tweets were enthusiatic and positive:
 
 <a href="https://x.com/PaoloRicciuti/status/1715677367799079059?s=20" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-feedback-1.png" alt="Two tweets. First from Paolo Ricciuti: 'This is also something I was pleasantly surprised with, very good touch'. Second from Afan Khan: 'Learning with others and through their mistakes is the best way to learn.'"></a>
-
-Among other enthusiasts of the idea was Josh W. Comeau, author of popular courses like *CSS for JavaScript Developers*.
 
 Presence features like avatars, cursors, visible highlighting of the text or chat are generally a well-received idea. Websites, apps, courses, and online experiences in general no longer feel as lonely and isolated if you know that they are others sharing this moment with you.
 
@@ -137,7 +140,7 @@ I'd love to help you make your website or app feel more familiar. Reach out to m
 Alternatively, we also have some code examples for you to get inspired:
 
 - [realtime reactions counter](https://docs.partykit.io/examples/#realtime-reaction-counters)
-- [live coursors with country flags](https://docs.partykit.io/examples/#cursors-with-country-flags)
+- [live cursors with country flags](https://docs.partykit.io/examples/#cursors-with-country-flags)
 - [live polls](https://docs.partykit.io/examples/#live-polls)
 - [YouTube watch party](https://docs.partykit.io/examples/#the-namib-desert-watering-hole-livestream)
 
