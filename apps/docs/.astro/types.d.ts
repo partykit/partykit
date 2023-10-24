@@ -457,23 +457,23 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/0-before-you-begin.md": {
-	id: "tutorial/0-before-you-begin.md";
-  slug: "tutorial/0-before-you-begin";
+"tutorials/0-before-you-begin.md": {
+	id: "tutorials/0-before-you-begin.md";
+  slug: "tutorials/0-before-you-begin";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/1-build-a-realtime-chat-app.md": {
-	id: "tutorial/1-build-a-realtime-chat-app.md";
-  slug: "tutorial/1-build-a-realtime-chat-app";
+"tutorials/2-adding-realtime-cursors.md": {
+	id: "tutorials/2-adding-realtime-cursors.md";
+  slug: "tutorials/2-adding-realtime-cursors";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/2-adding-realtime-cursors.md": {
-	id: "tutorial/2-adding-realtime-cursors.md";
-  slug: "tutorial/2-adding-realtime-cursors";
+"tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

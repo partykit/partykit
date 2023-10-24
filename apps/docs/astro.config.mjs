@@ -65,6 +65,23 @@ export default defineConfig({
             },
           },
           {
+            label: "Tutorials",
+            collapsed: true,
+            items: [
+              {
+                label: "Before you begin",
+                link: "tutorials/before-you-begin.md"
+              },
+              {
+                label: "Add PartyKit to a Next.js app",
+                collapsed: true,
+                autogenerate: {
+                  directory: "tutorials/add-partykit-to-a-nextjs-app",
+                },
+              },
+            ]
+          },
+          {
             label: "API Reference",
             collapsed: true,
             autogenerate: {
