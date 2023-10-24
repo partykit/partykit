@@ -230,13 +230,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"epic-web-uses-partykit.md": {
-	id: "epic-web-uses-partykit.md";
-  slug: "epic-web-uses-partykit";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "everything-is-better-with-friends.md": {
 	id: "everything-is-better-with-friends.md";
   slug: "everything-is-better-with-friends";
@@ -296,6 +289,13 @@ declare module 'astro:content' {
 "partykit-meet-tinybase.md": {
 	id: "partykit-meet-tinybase.md";
   slug: "partykit-meet-tinybase";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"partykit-powers-realtime-avatars-in-epic-web.md": {
+	id: "partykit-powers-realtime-avatars-in-epic-web.md";
+  slug: "partykit-powers-realtime-avatars-in-epic-web";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
