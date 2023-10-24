@@ -32,24 +32,6 @@ When you open the sidebar, you can see their avatars as well:
 
 <img style="width:1000px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-2.png" alt="A screenshot of one of the lessons with the sidebar unfolded showing the avatars of others working on this lesson along you">
 
-Then, Kent improved the UX a little bit to also group the users according to how close in the specific lesson they are:
-
-<a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
-
-## Reactions to presence
-
-Learning online often feels like a lonely journey so realtime features added to online courses can help students enjoy the ride a little more.
-
-Responses to Kent's tweets were enthusiatic and positive:
-
-<a href="https://x.com/PaoloRicciuti/status/1715677367799079059?s=20" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-feedback-1.png" alt="Two tweets. First from Paolo Ricciuti: 'This is also something I was pleasantly surprised with, very good touch'. Second from Afan Khan: 'Learning with others and through their mistakes is the best way to learn.'"></a>
-
-Josh W. Comeau, author of popular courses like *CSS for JavaScript Developers*, also liked the idea:
-
-<a href="https://twitter.com/JoshWComeau/status/1715740299207594015" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-feedback-2.png" alt="Tweet from Josh W. Comeau: 'This is super cool!'"></a>
-
-Presence features like avatars, cursors, visible highlighting of the text or chat are generally a well-received idea. Websites, apps, courses, and online experiences in general no longer feel as lonely and isolated if you know that they are others sharing this moment with you.
-
 ## Adding avatars to your website
 
 All PartyKit server code that was needed to add the real-time avatars feature to Kent's cours was the following:
@@ -122,10 +104,27 @@ export default class Server implements Party.Server {
 Server satisfies Party.Worker
 ```
 
-Afterwards, Kent added logic to sort the avatars based on their progress on a given lesson. You can see the full code here:
+Kent also improved the UX a little bit to also group the users according to how close in the specific lesson they are.
+
+<a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
+
+You can see the full code here:
+
 - [presence - server code](https://github.com/epicweb-dev/kcdshop/blob/main/packages/presence/src/server.ts)
 - [presence - UI code](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/utils/presence.ts)
 - [tooltip](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/components/ui/tooltip.tsx)
+
+## Reactions to presence
+
+Learning online often feels like a lonely journey so realtime features added to online courses can help students enjoy the ride a little more.
+
+Responses to Kent's tweets were enthusiatic and positive:
+
+<a href="https://x.com/PaoloRicciuti/status/1715677367799079059?s=20" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-feedback-1.png" alt="Two tweets. First from Paolo Ricciuti: 'This is also something I was pleasantly surprised with, very good touch'. Second from Afan Khan: 'Learning with others and through their mistakes is the best way to learn.'"></a>
+
+Among other enthusiasts of the idea was Josh W. Comeau, author of popular courses like *CSS for JavaScript Developers*.
+
+Presence features like avatars, cursors, visible highlighting of the text or chat are generally a well-received idea. Websites, apps, courses, and online experiences in general no longer feel as lonely and isolated if you know that they are others sharing this moment with you.
 
 ## Let's make the web friendlier!
 
@@ -139,6 +138,5 @@ Alternatively, we also have some code examples for you to get inspired:
 - [live coursors with country flags](https://docs.partykit.io/examples/#cursors-with-country-flags)
 - [live polls](https://docs.partykit.io/examples/#live-polls)
 - [YouTube watch party](https://docs.partykit.io/examples/#the-namib-desert-watering-hole-livestream)
-- [collaborative game](https://docs.partykit.io/examples/#mosaic---realtime-collaborative-game)
 
 Let's make the web friendlier 🥰
