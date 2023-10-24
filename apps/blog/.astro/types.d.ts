@@ -230,9 +230,23 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"epic-web-uses-partykit.md": {
+	id: "epic-web-uses-partykit.md";
+  slug: "epic-web-uses-partykit";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "everything-is-better-with-friends.md": {
 	id: "everything-is-better-with-friends.md";
   slug: "everything-is-better-with-friends";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"fireproof-database.md": {
+	id: "fireproof-database.md";
+  slug: "fireproof-database";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -317,6 +331,13 @@ declare module 'astro:content' {
 "rec-2.md": {
 	id: "rec-2.md";
   slug: "rec-2";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"single-serving-waterhole.md": {
+	id: "single-serving-waterhole.md";
+  slug: "single-serving-waterhole";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
