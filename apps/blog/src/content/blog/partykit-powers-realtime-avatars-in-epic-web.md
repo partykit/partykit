@@ -53,20 +53,9 @@ type Message =
 	| { type: 'presence'; payload: { users: Array<UserPayload> } }
 
 export default class Server implements Party.Server {
-	options: Party.ServerOptions = {
-		hibernate: true,
-	}
-
-	constructor(readonly party: Party.Party) {
+	options: Party.ServerOptions = { hibernate: true }
+	constructor(party: Party.Party) {
 		this.party = party
-	}
-
-	onClose() {
-		this.updateUsers()
-	}
-
-	onError() {
-		this.updateUsers()
 	}
 
 	updateUsers() {
@@ -78,12 +67,10 @@ export default class Server implements Party.Server {
 
 	getPresenceMessage(): Message {
 		const users = new Map<string, UserPayload>()
-
 		for (const connection of this.party.getConnections<UserPayload>()) {
 			const user = connection.state
 			if (user) users.set(user.id, user)
 		}
-
 		return {
 			type: 'presence',
 			payload: { users: Array.from(users.values()) },
@@ -92,7 +79,6 @@ export default class Server implements Party.Server {
 
 	onMessage(message: string, sender: Party.Connection<UserPayload>) {
 		const user = JSON.parse(message) as Message
-
 		if (user.type === 'add-user') {
 			sender.setState(user.payload)
 			this.updateUsers()
@@ -101,9 +87,15 @@ export default class Server implements Party.Server {
 			this.updateUsers()
 		}
 	}
-}
 
-Server satisfies Party.Worker
+	onClose() {
+		this.updateUsers()
+	}
+	
+	onError() {
+		this.updateUsers()
+	}
+}
 ```
 
 Kent later improved the UX to also group the users according to their progress.
@@ -127,7 +119,7 @@ Responses to Kent's tweets were enthusiatic and positive:
 
 <a href="https://x.com/PaoloRicciuti/status/1715677367799079059?s=20" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/partykit-powers-realtime-avatars-in-epic-web/kent-feedback-1.png" alt="Two tweets. First from Paolo Ricciuti: 'This is also something I was pleasantly surprised with, very good touch'. Second from Afan Khan: 'Learning with others and through their mistakes is the best way to learn.'"></a>
 
-Presence features like avatars, cursors, visible highlighting of the text or chat are generally a well-received idea. Websites, apps, courses, and online experiences in general no longer feel as lonely and isolated if you know that they are others sharing this moment with you.
+Presence features like avatars, cursors, chat, or visible text highlighting are generally a well-received idea. Websites, apps, courses, and online experiences feel less lonely and isolated if you know that there are others sharing this moment with you.
 
 ## Let's make the web friendlier!
 
