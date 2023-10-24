@@ -106,10 +106,10 @@ Moreover, as privacy is an important consideration, he implemented an option to 
 
 You can see the full code here:
 
-- [server](https://github.com/epicweb-dev/kcdshop/blob/main/packages/presence/src/server.ts)
-- [UI](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/utils/presence.ts)
-- [tooltip](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/components/ui/tooltip.tsx)
-- [user settings](https://github.com/epicweb-dev/kcdshop/blob/main/packages/workshop-app/app/routes/_app+/account.tsx)
+- [server](https://github.com/epicweb-dev/kcdshop/blob/ab590025aab758a832b98dfd4fc91fab639b4b3a/packages/presence/src/server.ts)
+- [UI](https://github.com/epicweb-dev/kcdshop/blob/ab590025aab758a832b98dfd4fc91fab639b4b3a/packages/workshop-app/app/utils/presence.ts)
+- [tooltip](https://github.com/epicweb-dev/kcdshop/blob/ab590025aab758a832b98dfd4fc91fab639b4b3a/packages/workshop-app/app/components/ui/tooltip.tsx)
+- [user settings](https://github.com/epicweb-dev/kcdshop/blob/ab590025aab758a832b98dfd4fc91fab639b4b3a/packages/workshop-app/app/routes/_app+/account.tsx)
 
 ## Reactions to presence
 
