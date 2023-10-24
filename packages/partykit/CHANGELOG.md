@@ -1,5 +1,21 @@
 # partykit
 
+## 0.0.32
+
+### Patch Changes
+
+- [#509](https://github.com/partykit/partykit/pull/509) [`77ce4b4`](https://github.com/partykit/partykit/commit/77ce4b4ed2f180081afcab283a29dce5e47802cc) Thanks [@jevakallio](https://github.com/jevakallio)! - Parallellize asset uploads + fail fast
+
+- [#506](https://github.com/partykit/partykit/pull/506) [`c57b51b`](https://github.com/partykit/partykit/commit/c57b51bd238dac0a0d4ca0d816c181242a730df8) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
+  Of note, this fixes partymix, our remix adapter
+
+- [#503](https://github.com/partykit/partykit/pull/503) [`dbd7c3b`](https://github.com/partykit/partykit/commit/dbd7c3b130852b61726e1c29c4e118928dd4a0c3) Thanks [@threepointone](https://github.com/threepointone)! - fix: get proper room id from `/party/:id/*`
+
+  We had a bug when picking out the room name from `/party/:id/*`, it would pick the whole subpath instead. This fixes it.
+
+- [#504](https://github.com/partykit/partykit/pull/504) [`80c147f`](https://github.com/partykit/partykit/commit/80c147ff9fbffe5d435213db15d9b0d28a860d14) Thanks [@jevakallio](https://github.com/jevakallio)! - partykit cli: fix session expiration for long-running deployments
+
 ## 0.0.31
 
 ### Patch Changes
