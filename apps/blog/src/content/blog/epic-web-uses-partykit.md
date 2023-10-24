@@ -14,7 +14,7 @@ description: Kent C. Dodds used PartyKit to show users' presence on course pages
 
 ---
 
-Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it comprises 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been since celebrated very enthusiastically by the web dev community.
+Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it consists of 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been celebrated enthusiastically by the web dev community ever since.
 
 <a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
 
