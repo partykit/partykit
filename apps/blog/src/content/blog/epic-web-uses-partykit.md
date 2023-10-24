@@ -16,21 +16,21 @@ description: Kent C. Dodds used PartyKit to show users' presence on course pages
 
 Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it comprises 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been since celebrated very enthusiastically by the web dev community.
 
-<a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
+<a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
 
 We couldn't be prouder to be a part of this amazing feat. Right before the launch, Kent and Sunil, our CEO, added *presence* (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like Figma), the place in text they are (like Google Docs), or by featuring your users' avatars, which is what Kent went with.
 
-<a href="https://twitter.com/kentcdodds/status/1715569320141713749" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-loves-presence.png" alt="Kent's tweet: 'I just love this presence feature. It makes you feel like you're not learning alone. Learning is better together. Thanks for making this feature so easy to add PartyKit!'"></a>
+<a href="https://twitter.com/kentcdodds/status/1715569320141713749" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-loves-presence.png" alt="Kent's tweet: 'I just love this presence feature. It makes you feel like you're not learning alone. Learning is better together. Thanks for making this feature so easy to add PartyKit!'"></a>
 
 ## Presence in Epic Web
 
 Once logged into the course platform, the left side of the screen, a user can see their own profile, and above it, a number of other users working on the same lesson -- even though the app runs on `localhost`:
 
-<img style="width:1000px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-1.png" alt="A screenshot of one of the lessons with an icon showing '+8' and a tooltip describing it as 'Epic Web devs working now'">
+<img style="width:800px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-1.png" alt="A screenshot of one of the lessons with an icon showing '+8' and a tooltip describing it as 'Epic Web devs working now'">
 
 When you open the sidebar, you can see their avatars as well:
 
-<img style="width:1000px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-2.png" alt="A screenshot of one of the lessons with the sidebar unfolded showing the avatars of others working on this lesson along you">
+<img style="width:800px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-2.png" alt="A screenshot of one of the lessons with the sidebar unfolded showing the avatars of others working on this lesson along you">
 
 ## Adding avatars to your website
 
@@ -106,7 +106,7 @@ Server satisfies Party.Worker
 
 Kent also improved the UX a little bit to also group the users according to how close in the specific lesson they are.
 
-<a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
+<a href="https://twitter.com/kentcdodds/status/1715734434539032870" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-highlighted.png" alt="Kent's tweet: 'Now people are highlighted based on how closely to you they're working'"></a>
 
 You can see the full code here:
 
@@ -130,7 +130,9 @@ Presence features like avatars, cursors, visible highlighting of the text or cha
 
 The web was created to connect people and yet, it often feels like a lonely place. We're here to help because everything's better with friends 🥰
 
-I'd love to help you make your website or app feel more familiar 🎈 Find me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>
+<a href="https://twitter.com/kentcdodds/status/1714993075934863488" target="_blank" rel="noopener noreferrer"><img style="width:650px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-partykit-easy.png" alt="Kent's tweet: 'What they say is true. PartyKit is ridiculously easy and fun to use.'"></a>
+
+I'd love to help you make your website or app feel more familiar. Reach out to me on <a href="https://discord.gg/8RXNx7ED3j" target="_blank" rel="noopener noreferrer">PartyKit Discord</a> or reach out to me on <a href="https://twitter.com/sylwiavargas" target="_blank" rel="noopener noreferrer">Twitter!</a>
 
 Alternatively, we also have some code examples for you to get inspired:
 
@@ -139,4 +141,4 @@ Alternatively, we also have some code examples for you to get inspired:
 - [live polls](https://docs.partykit.io/examples/#live-polls)
 - [YouTube watch party](https://docs.partykit.io/examples/#the-namib-desert-watering-hole-livestream)
 
-Let's make the web friendlier 🥰
+Let's make the web friendlier!
