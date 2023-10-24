@@ -18,17 +18,17 @@ Last week Kent C. Dodds launched his magnum opus, a fullstack web development co
 
 <a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
 
-We couldn't be prouder to be a part of this amazing feat. Right before the launch, Kent and Sunil, our CEO, added *presence* (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like Figma), the place in text they are (like Google Docs), or by featuring your users' avatars, which is what Kent went with.
+We couldn't be prouder to be a part of this amazing feat. Right before the launch, Kent and Sunil, our CEO, added *presence* to the course platform (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like in Figma), the place in text they are (like in Google Docs), or by featuring your users' avatars, which is what Kent went with.
 
 <a href="https://twitter.com/kentcdodds/status/1715569320141713749" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-loves-presence.png" alt="Kent's tweet: 'I just love this presence feature. It makes you feel like you're not learning alone. Learning is better together. Thanks for making this feature so easy to add PartyKit!'"></a>
 
 ## Presence in Epic Web
 
-Once logged into the course platform, the left side of the screen, a user can see their own profile, and above it, a number of other users working on the same lesson -- even though the app runs on `localhost`:
+On the left side of the platform screen, users can see their own profile and a number of other users working on the same lesson -- even though the app runs on `localhost`:
 
 <img style="width:800px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-1.png" alt="A screenshot of one of the lessons with an icon showing '+8' and a tooltip describing it as 'Epic Web devs working now'">
 
-When you open the sidebar, you can see their avatars as well:
+When you open the sidebar, you can see all the avatars as well:
 
 <img style="width:800px; height: auto;" src="/content-images/epic-web-uses-partykit/kent-UI-2.png" alt="A screenshot of one of the lessons with the sidebar unfolded showing the avatars of others working on this lesson along you">
 
