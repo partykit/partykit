@@ -11,6 +11,14 @@ export type StaticAssetsManifestType = {
   edgeTTL: number | undefined;
   singlePageApp: boolean | undefined;
   assets: Record<string, string>;
+  assetInfo?: Record<
+    string,
+    {
+      fileSize: number;
+      fileHash: string;
+      fileName: string;
+    }
+  >;
 };
 
 type StandardRequest = globalThis.Request;

@@ -1,5 +1,13 @@
 # create-partykit
 
+## 0.0.17
+
+### Patch Changes
+
+- [#506](https://github.com/partykit/partykit/pull/506) [`c57b51b`](https://github.com/partykit/partykit/commit/c57b51bd238dac0a0d4ca0d816c181242a730df8) Thanks [@threepointone](https://github.com/threepointone)! - update deps
+
+  Of note, this fixes partymix, our remix adapter
+
 ## 0.0.16
 
 ### Patch Changes
