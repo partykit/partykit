@@ -13,7 +13,9 @@ While you don't need separate repositories for the client and the PartyKit serve
 
 In the case of this specific Next.js app, you will most probably deploy it to Vercel, in which case you can follow [the Vercel deployment guide](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy).
 
-Please remember to also set the environment variables mentioned (such as `PARTYKIT_URL`). To do so, you can follow [the Vercel guide on secrets management](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables).
+Please remember to also set the environment variables mentioned (such as `NEXT_PUBLIC_PARTYKIT_HOST`). To do so, you can follow [the Vercel guide on secrets management](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables).
+
+In the example repository, we've included an `.env.example` file that contains the environment variables you need to set.
 
 ## Deploy PartyKit server
 
