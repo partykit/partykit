@@ -1,6 +1,6 @@
 ---
 title: Party.Server (Server API)
-description: PartyKit enables you to create real-time collaborative applications.
+description: PartyKit enables you to create real-time collaborative applications
 sidebar:
   order: 3
 ---
@@ -222,7 +222,7 @@ Related reading: [How PartyKit works](/how-partykit-works)
 
 ### `static` onFetch
 
-Runs on any HTTP request that does not match a Party URL or a static asset. Useful for running lightweight HTTP endpoints that don't need access to the [`Party`]() state.
+Runs on any HTTP request that does not match a Party URL or a static asset. Useful for running lightweight HTTP endpoints that don't need access to the `Party` state.
 
 Receives an instance of [`Party.Request`](#partyrequest), and is expected to either return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
@@ -291,7 +291,7 @@ Related reading: [Managing environment variables with PartyKit](/guides/managing
 
 ### Party.storage
 
-A per-party, asyncronous key-value storage.
+A per-party, asynchronous key-value storage.
 
 - The key must be a string with a max size of 2,048 bytes.
 - The value can be any type supported by the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), limited to 128 KiB (131,072 bytes) per value
@@ -375,7 +375,7 @@ The original URI of the connection request.
 
 ##### Party.Connection.setState
 
-`setState` allows you to store small pieces of data on each connection. 
+`setState` allows you to store small pieces of data on each connection.
 
 Unlike  [`Party.storage`](#partystorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
 
@@ -384,7 +384,7 @@ connection.setState({ username: "jani" });
 ```
 
 :::danger[State size]
-The maximum size of the state you can store on a connection is 2KB. If you try to store values larger than 2KB, `setState` will throw an error. 
+The maximum size of the state you can store on a connection is 2KB. If you try to store values larger than 2KB, `setState` will throw an error.
 
 For larger state, use  [`Party.storage`](#partystorage) instead.
 :::

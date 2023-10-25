@@ -1,6 +1,6 @@
 ---
 title: Setting up CI/CD with Github Actions
-description: Setting up a Github Action for deploying a PartyKit project on every commit to the `main` branch.
+description: Setting up a Github Action for deploying a PartyKit project on every commit to the `main` branch
 ---
 
 This page provides a walkthrough on setting up a [Github Action](https://github.com/features/actions) for deploying a PartyKit project on every commit to the `main` branch.

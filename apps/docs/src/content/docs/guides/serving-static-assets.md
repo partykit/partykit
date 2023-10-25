@@ -1,9 +1,9 @@
 ---
 title: Serving static assets
-description: You can serve static assets from a PartyKit project.
+description: You can serve static assets (HTML, CSS, JavaScript, images, and others) from a PartyKit project
 ---
 
-This page provides a walkthrough on serving static assets (HTML, CSS, JavaScript, images, and so on) from a PartyKit project.
+This page provides a walkthrough on serving static assets (HTML, CSS, JavaScript, images, and others) from a PartyKit project.
 
 :::danger[Experimental]
 This feature is still in development. It may change.

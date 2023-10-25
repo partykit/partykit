@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Bring realtime collaboration to your app with PartyKit.
+description: Bring realtime collaboration to your app with PartyKit
 ---
 
 Follow this quickstart guide to create and deploy your first PartyKit app in just a few minutes.

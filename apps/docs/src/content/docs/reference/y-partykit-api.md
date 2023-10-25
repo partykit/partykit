@@ -1,6 +1,6 @@
 ---
 title: Y-PartyKit (Yjs API)
-description: Y-PartyKit is an addon library designed to host backends for Yjs.
+description: Y-PartyKit is an addon library designed to host backends for Yjs
 sidebar:
   order: 5
 ---
@@ -125,12 +125,11 @@ export default class YjsServer implements Party.Server {
 }
 ```
 
-
 ### Persistence
 
 By default, PartyKit maintains a copy of the Yjs document as long as at least one client is connected to the server. When all clients disconnect, the document state may be lost.
 
-To persists the Yjs document state between sessions, you can use the built-in PartyKit storage by enabling the `persist` option. 
+To persists the Yjs document state between sessions, you can use the built-in PartyKit storage by enabling the `persist` option.
 
 `y-partykit` supports two modes of persistence: **snapshot**, and **history**.
 
@@ -195,7 +194,7 @@ onConnect(connection, party, { persist: true })
 
 This is functionally equivalent to setting the value to `{ mode: "history" }`.
 
-This option is still supported for backwards compatibility reasons, but will be removed in a future version of `y-partykit`. 
+This option is still supported for backwards compatibility reasons, but will be removed in a future version of `y-partykit`.
 
 #### Persisting to an external service
 
