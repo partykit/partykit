@@ -1,6 +1,6 @@
 ---
 title: Mosaic - collaborative game
-description: ...
+description: This is a multiplayer drawing challenge web toy
 ---
 
 This is a multiplayer drawing challenge web toy from [Matt Webb](https://twitter.com/genmon).

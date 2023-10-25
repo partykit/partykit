@@ -1,6 +1,6 @@
 ---
 title: Game starter (Next.js + Redux)
-description: ...
+description: A community starter template for turn-based multiplayer games with Next.js, Redux, and PartyKit
 ---
 
 A community starter template for turn-based multiplayer games with Next.js, Redux, and PartyKit by [Swen Mulderij](https://twitter.com/Swendude).

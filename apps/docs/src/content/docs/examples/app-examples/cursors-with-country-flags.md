@@ -1,6 +1,6 @@
 ---
 title: Cursors with country flags
-description: ...
+description: Cursors indicate presence and movement on the demo, which helps your users get a sense that they are together in one rooms
 ---
 
 [Matt Webb's](https://twitter.com/genmon) 'Voronoi' app features cursors with country flags on a colorful, ever-changing background. Cursors indicate presence and movement on the demo, which helps your users get a sense that they are together in one room.

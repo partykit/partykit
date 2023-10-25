@@ -1,6 +1,6 @@
 ---
 title: Multiplayer text editor
-description: ...
+description: A multiplayer text editor built with PartyKit, Yjs, Tiptap, and Supabase
 ---
 
 A multiplayer text editor built with PartyKit, Yjs, Tiptap, and Supabase.

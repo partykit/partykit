@@ -1,6 +1,6 @@
 ---
 title: TinyBase starter
-description: ...
+description: A community starter template for a local-first data store app built with TinyBase, TypeScript, React, and PartyKit
 ---
 
 ![TinyBase app](../../../../assets/tinybase-app.png)

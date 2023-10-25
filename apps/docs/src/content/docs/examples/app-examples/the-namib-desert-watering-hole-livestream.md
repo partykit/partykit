@@ -1,6 +1,6 @@
 ---
 title: The Namib Desert watering hole livestream
-description: ...
+description: This Remix app features a livestream with an ephemeral chat window
 ---
 
 This Remix app features a livestream from the Namib Desert with an ephemeral chat window. Built by [Matt Webb](https://twitter.com/genmon).

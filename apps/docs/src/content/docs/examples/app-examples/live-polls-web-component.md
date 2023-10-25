@@ -1,6 +1,6 @@
 ---
 title: Live polls (web component)
-description: ...
+description: A web component with live polls that respond in real-time to user's choices
 ---
 
 A web component with live polls that respond in real-time to user's choices by [Matt Webb](https://twitter.com/genmon).

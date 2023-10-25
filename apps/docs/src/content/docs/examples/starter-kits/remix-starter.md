@@ -1,6 +1,6 @@
 ---
 title: Remix starter
-description: ...
+description: A starter template for Remix and PartyKit
 ---
 
 A starter template for Remix and PartyKit.

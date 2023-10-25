@@ -1,9 +1,9 @@
 ---
 title: Chat app with user avatars, AI agents, and auth (Next.js)
-description: ...
+description: The official PartyKit Next.js template features multiple chatrooms with chat history, avatars, and AI NPCs interacting with your users
 ---
 
-Our Next.js template features multiple chatrooms with chat history, avatars, and AI NPCs interacting with your users.
+The official PartyKit Next.js template features multiple chatrooms with chat history, avatars, and AI NPCs interacting with your users.
 
 ![chat app](../../../../assets/chat-app.png)
 
