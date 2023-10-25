@@ -77,17 +77,17 @@ Since each poll will be its own room, you can keep our poll data in-memory. You 
 Next, is the `onRequest` method, which receives a regular HTTP request:
 
 ```ts
- if (req.method === "POST") {
-      const poll = (await req.json()) as Poll;
-      this.poll = { ...poll, votes: poll.options.map(() => 0) };
-    }
+if (req.method === "POST") {
+  const poll = (await req.json()) as Poll;
+  this.poll = { ...poll, votes: poll.options.map(() => 0) };
+}
 
- if (this.poll) {
-    return new Response(JSON.stringify(this.poll), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
+if (this.poll) {
+  return new Response(JSON.stringify(this.poll), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
+}
 ```
 
 We will create the poll in a Next.js server action, and we cannot make a WebSocket connection from the server component. Fortunately, PartyKit accepts also HTTP requests so when a user creates a poll, the _submit_ button will send a `POST` request to the PartyKit server and a new poll will be created.
