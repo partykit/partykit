@@ -31,7 +31,7 @@ npx partykit dev
 
 If it works correctly, you should see an output similar to the following:
 
-![A screenshot of the terminal"](/src/assets/tutorials/add-partykit-to-a-nextjs-app/page2-1.png)
+![A screenshot of the terminal"](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page2-1.png)
 
 ## Set up the server
 

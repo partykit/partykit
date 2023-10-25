@@ -513,13 +513,6 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build.md": {
-	id: "tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build.md";
-  slug: "tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
 "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md": {
 	id: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md";
   slug: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server";
@@ -534,9 +527,9 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets copy.md": {
-	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets copy.md";
-  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets-copy";
+"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
@@ -558,6 +551,13 @@ declare module 'astro:content' {
 "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md": {
 	id: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md";
   slug: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/index.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/index.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

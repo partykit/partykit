@@ -9,11 +9,11 @@ In this tutorial, you'll add a real-time feature to a Next.js app. To get a feel
 
 Here's the poll app with two pages. The first page lets you create a poll.
 
-![A screenshot of the form for generating the poll](/src/assets/tutorials/add-partykit-to-a-nextjs-app/page1-1.png)
+![A screenshot of the form for generating the poll](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-1.png)
 
 And the second page features the created poll that you can share with your  friends.
 
-![A screenshot of the page featuring the poll with the question: "Are pierogi an empanada?"](/src/assets/tutorials/add-partykit-to-a-nextjs-app/page1-2.png)
+![A screenshot of the page featuring the poll with the question: "Are pierogi an empanada?"](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-2.png)
 
 ## How does real-time work here?
 
