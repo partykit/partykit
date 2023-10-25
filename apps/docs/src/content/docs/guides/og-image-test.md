@@ -7,7 +7,9 @@ head:
     - tag: meta
       attrs:
         name: "twitter:image"
-        content: "https://og-examples.vercel.sh/api/dynamic-image?username=threepointone"
+        content: "https://partykit-og-images.vercel.app/api/og
+            ?title=Page title
+            &description=This page is about something, but also something else"
 ---
 
 Just testing some stuff
