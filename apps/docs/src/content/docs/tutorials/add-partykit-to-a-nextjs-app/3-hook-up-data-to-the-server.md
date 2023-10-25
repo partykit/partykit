@@ -42,7 +42,7 @@ So now you need to send it to PartyKit with an HTTP request to the server:
     });
 ```
 
-In the above code snippet, the `PARTYKIT_URL` variable is already defined in the app. Please remember to set this environment variable in your Next.js environment (for example, on Vercel).
+In the example project, we've already defined the `PARTYKIT_URL` variable and set it to the default PartyKit development server address. In the final step of this tutorial, we'll deploy your project to PartyKit and set this variable's value to your project's address.
 
 :::tip[New id, new room]
 Please note the randomly generated `id` in the code above. Every new `id` results in a new PartyKit room (or, PartyKit server) created, which means that every poll will be connected to its own room.
