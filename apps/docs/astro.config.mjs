@@ -70,7 +70,7 @@ export default defineConfig({
             items: [
               {
                 label: "Before you begin",
-                link: "tutorials/before-you-begin.md"
+                link: "/tutorials/before-you-begin"
               },
               {
                 label: "Add PartyKit to a Next.js app",
@@ -81,7 +81,7 @@ export default defineConfig({
               },
               {
                 label: "Deploy your PartyKit server",
-                link: "tutorials/deploy-your-partykit-server.md"
+                link: "/tutorials/deploy-your-partykit-server"
               },
             ]
           },

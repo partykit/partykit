@@ -12,3 +12,4 @@ Please note that to run PartyKit, you need to have Node v. 17 or higher installe
 ```bash
 node -v
 ```
+
