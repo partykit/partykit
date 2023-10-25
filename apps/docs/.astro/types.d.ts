@@ -338,6 +338,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/og-image-test-5.md": {
+	id: "guides/og-image-test-5.md";
+  slug: "guides/og-image-test-5";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/persisting-state-into-storage.md": {
 	id: "guides/persisting-state-into-storage.md";
   slug: "guides/persisting-state-into-storage";
