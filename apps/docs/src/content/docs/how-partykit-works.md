@@ -66,7 +66,7 @@ export default class Server implements PartyServer {
   }
 ```
 
-PartyKit allows you to write your own business logic, or use industry-standard open source packages to implement common use cases and workflows - unlike most hosted real-time platforms offer limited or no customisability of the server-side behaviour.
+PartyKit allows you to write your own business logic, or use industry-standard open source packages to implement common use cases and workflows - unlike most hosted real-time platforms offer limited or no customisability of the server-side behavior.
 
 ### On-demand
 

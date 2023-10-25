@@ -3,7 +3,7 @@ title: Configuration (partykit.json)
 description: PartyKit Configuration reference
 ---
 
-This is a reference of all the fields you can add to your `partykit.json` file to configure the behaviour of your project.
+This is a reference of all the fields you can add to your `partykit.json` file to configure the behavior of your project.
 
 ## Project configuration
 
@@ -21,7 +21,7 @@ Alternately, you can pass this as an argument to the `dev` or `deploy` commands,
 
 ### main
 
-The entrypoint for your project. This is where you'd define a default export as specified by the [PartyKit API](/reference/partyserver-api/). For example:
+The entry point for your project. This is where you'd define a default export as specified by the [PartyKit API](/reference/partyserver-api/). For example:
 
 ```json
 {
@@ -31,7 +31,7 @@ The entrypoint for your project. This is where you'd define a default export as 
 
 ### parties
 
-In addition to the [main](#main) entrypoint, each PartyKit project can host multiple independent parties:
+In addition to the [main](#main) entry point, each PartyKit project can host multiple independent parties:
 
 ```json
 {

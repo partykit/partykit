@@ -43,7 +43,7 @@ export default {
 
 #### **_onConnect_**
 
-This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `connection` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and recieve messages to/from the client (with a couple of additional properties).
+This function `onConnect` will be called whenever a new client (usually a browser, but it can be any device that can make WebSocket connections) connects to your project. The `connection` argument is a [WebSocket](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket) object that you can use to send and receive messages to/from the client (with a couple of additional properties).
 
 #### **_onRequest_**
 
@@ -75,7 +75,6 @@ A map of all the environment variables that you've set for your project. See the
 **_internalID_**: _string_
 
 This too is a string that uniquely identifies the room, but it's not meant to be directly used by your application. It's used internally by the PartyKit platform to identify the room.
-
 
 ### Further reading
 

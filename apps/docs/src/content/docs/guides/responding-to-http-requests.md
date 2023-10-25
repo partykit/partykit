@@ -1,6 +1,6 @@
 ---
 title: Responding to HTTP requests
-description: ...
+description: n addition to serving real-time WebSocket traffic, PartyKit servers can respond to regular HTTP requests
 ---
 
 In addition to [serving real-time WebSocket traffic](/guides/building-a-real-time-websocket-server/), PartyKit servers can respond to regular HTTP requests.

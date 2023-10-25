@@ -1,6 +1,6 @@
 ---
 title: PartySocket (Client API)
-description: PartySocket is a TypeScript client library for connecting to PartyKit servers via WebSockets.
+description: PartySocket is a TypeScript client library for connecting to PartyKit servers via WebSockets
 
 sidebar:
   order: 4
@@ -263,5 +263,5 @@ CLOSED     3 The connection is closed or couldn't be opened.
 ## Acknowledgements
 
 :::note[Open Source]
-PartySocket is a fork of the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes.
+PartySocket is a fork of the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bug fixes.
 :::

@@ -9,7 +9,7 @@ export default defineConfig({
     starlight(
       {
         title: "PartyKit Docs",
-        description: "Collaborative applications are the future of software.",
+        description: "Collaborative applications are the future of software",
         customCss: ["./src/styles/custom.css"],
         head: [
           {

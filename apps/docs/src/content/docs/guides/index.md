@@ -1,6 +1,6 @@
 ---
 title: Building a WebSocket server
-description: ...
+description: This guide provides an overview of building a PartyKit server
 ---
 
 :::note[Run it yourself]
