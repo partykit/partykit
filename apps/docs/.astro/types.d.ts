@@ -352,9 +352,9 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"guides/deploy-your-partykit-server.md": {
-	id: "guides/deploy-your-partykit-server.md";
-  slug: "guides/deploy-your-partykit-server";
+"guides/deploying-your-partykit-server.md": {
+	id: "guides/deploying-your-partykit-server.md";
+  slug: "guides/deploying-your-partykit-server";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

@@ -48,7 +48,7 @@ In the above code snippet, the `PARTYKIT_URL` variable is already defined in the
 Please note the randomly generated `id` in the code above. Every new `id` results in a new PartyKit room (or, PartyKit server) created, which means that every poll will be connected to its own room.
 :::
 
-To test if the code you wrote works, try creating a new poll in the browser. Your form creates a poll but there's a problem. As you see, the data is static so let's change that.
+To test if the code you wrote works, try creating a new poll in the browser. Your form creates a poll but there's a problem. The data is static so let's change that.
 
 ## Connect the poll page
 
@@ -79,4 +79,4 @@ Time to validate that your poll page works. Go to the page and see if you are th
 
 # Next steps
 
-Congratulations! This page works so let's make it better. Let's make the votes update in real-time.
+Congratulations! This page works so let's make it better. Let's make the votes [update in real time](./4-add-websockets).

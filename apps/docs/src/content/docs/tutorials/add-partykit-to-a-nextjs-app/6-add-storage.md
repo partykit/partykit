@@ -75,4 +75,4 @@ To learn more about the Storage API, check [our docs](https://docs.partykit.io/g
 
 ## Nest steps
 
-Congratulations! Your polling app is working and now it's time to [deploy it](./7-deploy-your-app.md) 🥳
+Congratulations! Your polling app is working and now it's time to [deploy it](./7-deploy-your-app) 🥳

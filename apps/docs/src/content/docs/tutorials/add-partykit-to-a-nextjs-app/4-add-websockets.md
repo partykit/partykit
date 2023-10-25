@@ -45,4 +45,4 @@ Now that you have started a WebSocket connection, modify the existing sendVote f
 
 ## Next steps
 
-The votes are now recorded in real time but the point of the app is to also show the new votes immediately. In the next step, you will [broadcast them to all connected users](./5-broadcast-the-change.md).
+The votes are now recorded in real time but the point of the app is to also show the new votes immediately. In the next step, you will [broadcast them to all connected users](./5-broadcast-the-change).

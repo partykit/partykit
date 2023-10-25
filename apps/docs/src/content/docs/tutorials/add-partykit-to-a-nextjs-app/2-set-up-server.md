@@ -100,4 +100,4 @@ Finally, if the poll exists, the method will return its data; otherwise, it will
 
 ## Next steps
 
-With the PartyKit server ready to receive messages, you can now [connect it to the UI](./3-hook-up-data-to-the-server.md).
+With the PartyKit server ready to receive messages, you can now [connect it to the UI](./3-hook-up-data-to-the-server).

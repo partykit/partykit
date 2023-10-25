@@ -31,4 +31,4 @@ Now test it by opening the same poll page in two (or more) tabs and see the chan
 
 ## Next steps
 
-Now that your app works as intended, it's time to store data somewhere. In the next step, you will [enable your server to store the votes](./6-add-storage.md).
+Now that your app works as intended, it's time to store data somewhere. In the next step, you will [enable your server to store the votes](./6-add-storage).
