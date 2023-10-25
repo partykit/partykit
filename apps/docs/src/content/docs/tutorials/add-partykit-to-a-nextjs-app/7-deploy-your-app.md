@@ -33,8 +33,10 @@ In the example repository, we've included an `.env.example` file that contains t
 
 Congratulations! You've finished the tutorial and built your first PartyKit app.
 
-Explore PartyKit by:
+You may have noticed that your users can vote multiple times. To keep this tutorial short, we have omitted integrating authentication. However, we have prepared a reference for you in [this GitHub pull request](https://github.com/partykit/partypoll/pull/1).
 
-- consulting our [API reference](/reference/)
+Alternatively, you can also explore PartyKit by:
+
+- reading our [API reference](/reference/)
 - browsing [examples](/examples/) built by our community
 - sharing your thoughts, ideas, projects, and feedback [on Discord](https://discord.gg/KDZb7J4uxJ)

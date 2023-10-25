@@ -27,7 +27,7 @@ As soon as the poll is created, its link is shareable. When new users visit the 
 
 ## Get started
 
-To get started, clone the [the barebone app code]() and follow these steps:
+To get started, clone the [the barebone app code](https://github.com/partykit/partypoll) and follow these steps:
 
 1. Run `npm install` inside the project repository
 2. Run `npm run dev`
