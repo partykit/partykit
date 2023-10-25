@@ -75,7 +75,7 @@ Finally, read the response from the server and replace the mock data:
   const poll = (await req.json()) as Poll;
 ```
 
-Time to validate that your poll page works. Go to the page and see if you are the data you entered in the form renders now on the new poll page.
+Time to validate that your poll page works. Go to the page and see if the data you entered in the form renders now on the new poll page.
 
 # Next steps
 
