@@ -27,7 +27,7 @@ As soon as the poll is created, its link is shareable. When new users visit the 
 
 ## Get started
 
-To get started, clone the [the barebone app code](https://github.com/partykit/partypoll) and follow these steps:
+To get started, clone the [the barebone app code](https://github.com/partykit/tutorial-starter-partypoll) and follow these steps:
 
 1. Run `npm install` inside the project repository
 2. Run `npm run dev`
@@ -39,5 +39,5 @@ To get started, clone the [the barebone app code](https://github.com/partykit/pa
 You're now ready to begin your adventure with PartyKit. You will first [set up the PartyKit server](./2-set-up-server).
 
 :::tip[Finished code]
-We've also prepared [the finished code]() in a separate folder so whenever you're curious about the finished code.
+We've also prepared [the finished code](https://github.com/partykit/partypoll) in a separate folder so whenever you're curious about the finished code.
 :::

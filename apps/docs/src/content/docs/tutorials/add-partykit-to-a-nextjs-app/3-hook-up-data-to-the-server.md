@@ -9,7 +9,7 @@ In the previous step, you've set up the PartyKit server to handle messages. In t
 
 ## Connect the poll form
 
-Navigate to `page.tsx`, in the `app` directory, which generates the poll.
+Navigate to `page.tsx`, in the `app` directory (see online in [the starter](https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/page.tsx) or [the finished code](https://github.com/partykit/partypoll/blob/main/app/page.tsx)), which generates the poll.
 
 Take a look at the file. You'll notice that we've already included the code to get the data from the form in the server action:
 
@@ -52,7 +52,7 @@ To test if the code you wrote works, try creating a new poll in the browser. You
 
 ## Connect the poll page
 
-Navigate to the file which renders the poll page, `page.tsx` in the `app/[poll_id]` directory.
+Navigate to the file which renders the poll page, `page.tsx` in the `app/[poll_id]` directory (see online in [the starter](https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx) or [the finished code](https://github.com/partykit/partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx)).
 
 In the previous step of this tutorial, your `onRequest` method returned the poll data. You can now use it to render the poll on the server:
 

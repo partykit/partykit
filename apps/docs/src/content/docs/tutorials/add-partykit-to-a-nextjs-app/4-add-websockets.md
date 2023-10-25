@@ -9,7 +9,7 @@ In the previous step, you've connected your PartyKit server and the UI. In this 
 
 ## Establish a WebSocket connection
 
-Navigate to the `PollUI` file, which renders the poll. Since it is not a server component, the connection will be established directly from the user's device.
+Navigate to the `PollUI` file (see online in [the starter](https://github.com/partykit/tutorial-starter-partypoll/blob/main/components/PollUI.tsx) or [the finished code](https://github.com/partykit/partypoll/blob/main/components/PollUI.tsx)), which renders the poll. Since it is not a server component, the connection will be established directly from the user's device.
 
 Add this hook between the state setters and `sendVote` method:
 
