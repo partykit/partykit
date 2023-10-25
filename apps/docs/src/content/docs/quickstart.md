@@ -47,7 +47,7 @@ To deploy your app, run the following command in your terminal in your project's
 npx partykit deploy
 ```
 
-If you're running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page where you can paste the code that was automatically copied to your clipboard from the terminal output.
+If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page.
 
 Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your `partykit.dev` domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
 
