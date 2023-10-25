@@ -5,7 +5,7 @@ sidebar:
 description: In this step you will broadcast the changes immediately to all connected clients
 ---
 
-Your app now records the votes in real time but they are not immediately visible to other users. In this step you will broadcast the changes immediately to all connected clients.
+Your app now records the votes in real time, but users won't be able to see the votes without refreshing the page. In this step you will broadcast the changes immediately to all connected clients.
 
 ## Add `broadcast`
 
