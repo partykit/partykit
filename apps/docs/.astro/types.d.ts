@@ -457,13 +457,6 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/0-before-you-begin.md": {
-	id: "tutorials/0-before-you-begin.md";
-  slug: "tutorials/0-before-you-begin";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
 "tutorials/2-adding-realtime-cursors.md": {
 	id: "tutorials/2-adding-realtime-cursors.md";
   slug: "tutorials/2-adding-realtime-cursors";
@@ -471,9 +464,37 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app.md": {
-	id: "tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app.md";
-  slug: "tutorials/add-partykit-to-a-nextjs-app/1-build-a-realtime-chat-app";
+"tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/1-what-you-will-build";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/before-you-begin.md": {
+	id: "tutorials/before-you-begin.md";
+  slug: "tutorials/before-you-begin";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

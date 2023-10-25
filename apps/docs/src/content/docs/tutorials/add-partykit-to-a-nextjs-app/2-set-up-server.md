@@ -1,7 +1,7 @@
 ---
-title: Setting up PartyKit server
+title: Set up PartyKit server
 sidebar:
-    label: 2. Setting up PartyKit server
+    label: 2. Set up PartyKit server
 description: ...
 ---
 
