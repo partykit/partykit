@@ -198,6 +198,13 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"docs": {
+"add-to-existing-project.md": {
+	id: "add-to-existing-project.md";
+  slug: "add-to-existing-project";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "enterprise.md": {
 	id: "enterprise.md";
   slug: "enterprise";
