@@ -33,7 +33,7 @@ The `onMessage` method tells the server what to do when it receives a message. I
 
 ## Send the votes when the user clicks the button
 
-Now that you have enabled a WebSocket connection, add code that will enable the button to send a vote message when the user clicks the option:
+Now that you have started a WebSocket connection, add code that will enable the button to send vote data when the user chooses an option:
 
 ```ts
   const sendVote = (option: number) => {

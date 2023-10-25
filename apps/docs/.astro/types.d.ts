@@ -485,9 +485,23 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md": {
-	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md";
-  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets";
+"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets copy.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets copy.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets-copy";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/6-add-storage.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/6-add-storage.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/6-add-storage";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
@@ -495,6 +509,20 @@ declare module 'astro:content' {
 "tutorials/before-you-begin.md": {
 	id: "tutorials/before-you-begin.md";
   slug: "tutorials/before-you-begin";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/deploy-your-PartyKit-server.md": {
+	id: "tutorials/deploy-your-PartyKit-server.md";
+  slug: "tutorials/deploy-your-partykit-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/deploy-your-partykit-server.md": {
+	id: "tutorials/deploy-your-partykit-server.md";
+  slug: "tutorials/deploy-your-partykit-server";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

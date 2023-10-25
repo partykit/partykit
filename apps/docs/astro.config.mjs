@@ -79,6 +79,10 @@ export default defineConfig({
                   directory: "tutorials/add-partykit-to-a-nextjs-app",
                 },
               },
+              {
+                label: "Deploy your PartyKit server",
+                link: "tutorials/deploy-your-partykit-server.md"
+              },
             ]
           },
           {
