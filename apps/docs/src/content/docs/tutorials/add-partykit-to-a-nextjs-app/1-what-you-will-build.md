@@ -36,7 +36,7 @@ To get started, clone the [the barebone app code]() and follow these steps:
 
 ## Next steps
 
-You're now ready to begin your adventure with PartyKit. You will first set up the PartyKit server.
+You're now ready to begin your adventure with PartyKit. You will first [set up the PartyKit server](./2-set-up-server.md).
 
 :::tip[Finished code]
 We've also prepared [the finished code]() in a separate folder so whenever you're curious about the finished code.
