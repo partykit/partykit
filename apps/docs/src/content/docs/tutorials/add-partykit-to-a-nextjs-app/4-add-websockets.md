@@ -32,7 +32,7 @@ The `onMessage` callback is called when we receive a WebSocket message from the 
 
 ## Send the votes when the user clicks the button
 
-Now that you have started a WebSocket connection, modify the existing sendVote function and add the code that will enable the button to send vote data when the user chooses an option:
+Now that you have started a WebSocket connection, modify the existing `sendVote` function and add the code that will enable the button to send vote data when the user chooses an option:
 
 ```ts
   const sendVote = (option: number) => {
