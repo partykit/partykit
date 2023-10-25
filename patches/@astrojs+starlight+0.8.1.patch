@@ -1,5 +1,5 @@
 diff --git a/node_modules/@astrojs/starlight/components/HeadSEO.astro b/node_modules/@astrojs/starlight/components/HeadSEO.astro
-index d187bd9..f26bf24 100644
+index d187bd9..a37b1ac 100644
 --- a/node_modules/@astrojs/starlight/components/HeadSEO.astro
 +++ b/node_modules/@astrojs/starlight/components/HeadSEO.astro
 @@ -17,6 +17,13 @@ const { data, lang } = Astro.props;
