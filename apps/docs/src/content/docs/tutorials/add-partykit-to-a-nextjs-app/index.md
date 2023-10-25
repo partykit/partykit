@@ -5,7 +5,7 @@ sidebar:
 description: In this tutorial, you'll add a real-time feature to a Next.js app
 ---
 
-In this tutorial, you'll add a real-time feature to a Next.js app. To get a feel of the app, you can play with the [live demo](https://partypoll.vercel.app/).
+In this tutorial, you'll add a real-time feature to a Next.js app. To get a feel of the app, you can play with the <a href="https://partypoll.vercel.app/" target="_blank" rel="noopener noreferrer">live demo</a>.
 
 Here's the poll app with two pages. The first page lets you create a poll.
 
@@ -27,7 +27,7 @@ As soon as the poll is created, its link is shareable. When new users visit the 
 
 ## Get started
 
-To get started, clone the [the barebone app code](https://github.com/partykit/tutorial-starter-partypoll) and follow these steps:
+To get started, clone the <a href="https://github.com/partykit/tutorial-starter-partypoll" target="_blank" rel="noopener noreferrer">the barebone app code</a> and follow these steps:
 
 1. Run `npm install` inside the project repository
 2. Run `npm run dev`
@@ -36,8 +36,8 @@ To get started, clone the [the barebone app code](https://github.com/partykit/tu
 
 ## Next steps
 
-You're now ready to begin your adventure with PartyKit. You will first [set up the PartyKit server](./2-set-up-server).
-
 :::tip[Finished code]
-We've also prepared [the finished code](https://github.com/partykit/partypoll) in a separate folder so whenever you're curious about the finished code.
+We've also prepared <a href="https://github.com/partykit/partypoll" target="_blank" rel="noopener noreferrer">the finished code</a> in a separate repository so you can compare your code to the end result of this tutorial.
 :::
+
+You're now ready to begin your adventure with PartyKit. You will first [set up the PartyKit server](/tutorials/add-partykit-to-a-nextjs-app/2-set-up-server/).

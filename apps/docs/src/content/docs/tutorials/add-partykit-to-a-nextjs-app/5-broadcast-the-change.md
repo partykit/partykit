@@ -31,4 +31,6 @@ Now test it by opening the same poll page in two (or more) tabs and see the chan
 
 ## Next steps
 
-Now that your app works as intended, it's time to store data somewhere. In the next step, you will [enable your server to store the votes](./6-add-storage).
+🎈 If you'd like to check how your code compares to the finished app, check <a href="https://github.com/partykit/partypoll/blob/main/party/index.ts#L26-L35" target="_blank" rel="noopener noreferrer">the finished code</a> online 🎈
+
+Now that your app works as intended, it's time to store data somewhere. In the next step, you will [enable your server to store the votes](/tutorials/add-partykit-to-a-nextjs-app/6-add-storage).

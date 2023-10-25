@@ -70,9 +70,11 @@ and in `onMessage` to save the poll when user votes:
 And - that's it! You are now persisting data on the PartyKit server.
 
 :::tip[Learn more about storage]
-To learn more about the Storage API, check [our docs](https://docs.partykit.io/guides/persisting-state-into-storage/).
+To learn more about the Storage API, check <a href="https://docs.partykit.io/guides/persisting-state-into-storage/" target="_blank" rel="noopener noreferrer">our docs</a>.
 :::
 
 ## Nest steps
 
-Congratulations! Your polling app is working and now it's time to [deploy it](./7-deploy-your-app) 🥳
+🎈 If you'd like to check how your code compares to the finished app, check <a href="https://github.com/partykit/partypoll/blob/main/party/index.ts" target="_blank" rel="noopener noreferrer">the finished code</a> online 🎈
+
+Congratulations! Your polling app is working and now it's time to [deploy it](/tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app) 🥳

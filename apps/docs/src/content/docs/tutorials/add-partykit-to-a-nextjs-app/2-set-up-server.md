@@ -100,4 +100,7 @@ Finally, if the poll exists, the method will return its data; otherwise, it will
 
 ## Next steps
 
-With the PartyKit server ready to receive messages, you can now [connect it to the UI](./3-hook-up-data-to-the-server).
+🎈 If you'd like to check how your code compares to the finished app, check <a href="https://github.com/partykit/partypoll/blob/main/party/index.ts#L1-L25" target="_blank" rel="noopener noreferrer">the finished code</a> online 🎈
+
+With the PartyKit server ready to receive messages, you can now [connect it to the UI](/tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server).
+

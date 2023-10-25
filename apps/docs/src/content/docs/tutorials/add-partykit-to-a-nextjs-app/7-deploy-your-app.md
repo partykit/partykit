@@ -19,24 +19,26 @@ npm partykit deploy
 
 When the deployment completes, you will have your PartyKit URL (which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`). You will need this URL when deploying your Next.js app.
 
-To read more about deploying PartyKit apps, check [our guide](/guides/deploy-your-partykit-server).
+To read more about deploying PartyKit apps, check <a href="/guides/deploying-your-partykit-server/" target="_blank" rel="noopener noreferrer">our guide</a>.
 
 ## Deploy Next.js app
 
-In the case of this specific Next.js app, you will most probably deploy it to Vercel, in which case you can follow [the Vercel deployment guide](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy).
+In the case of this specific Next.js app, you will most probably deploy it to Vercel, in which case you can follow <a href="https://nextjs.org/learn/basics/deploying-nextjs-app/deploy" target="_blank" rel="noopener noreferrer">the Vercel deployment guide</a>.
 
-Please remember to also set the environment variables mentioned (such as `NEXT_PUBLIC_PARTYKIT_HOST` with the URL generated when deploying the PartyKit server in the previous step). To do so, you can follow [the Vercel guide on secrets management](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables).
+Please remember to also set the environment variables mentioned (such as `NEXT_PUBLIC_PARTYKIT_HOST` with the URL generated when deploying the PartyKit server in the previous step). To do so, you can follow <a href="https://nextjs.org/docs/app/building-your-application/configuring/environment-variables" target="_blank" rel="noopener noreferrer">the Vercel guide on secrets management</a>.
 
 In the example repository, we've included an `.env.example` file that contains the environment variables you need to set.
 
 ## Next steps
 
-Congratulations! You've finished the tutorial and built your first PartyKit app.
+Congratulations! You've finished the tutorial and built your first PartyKit app 🥳
 
-You may have noticed that your users can vote multiple times. To keep this tutorial short, we have omitted integrating authentication. However, we have prepared a reference for you in [this GitHub pull request](https://github.com/partykit/partypoll/pull/1).
+You may have noticed that your users can vote multiple times. To keep this tutorial short, we have omitted integrating authentication. However, we have prepared a reference for you in <a href="https://github.com/partykit/partypoll/pull/1" target="_blank" rel="noopener noreferrer">this GitHub pull request</a>.
 
-Alternatively, you can also explore PartyKit by:
+🎈 You can also explore PartyKit by:
 
-- reading our [API reference](/reference/)
-- browsing [examples](/examples/) built by our community
-- sharing your thoughts, ideas, projects, and feedback [on Discord](https://discord.gg/KDZb7J4uxJ)
+- browsing <a href="/examples/" target="_blank" rel="noopener noreferrer">examples</a> built by our community
+- reading our <a href="/reference/" target="_blank" rel="noopener noreferrer">API reference</a>
+- sharing your thoughts, ideas, projects, and feedback <a href="https://discord.gg/KDZb7J4uxJ" target="_blank" rel="noopener noreferrer">on Discord</a>
+
+Thank you for coming along on this journey with us 🥰

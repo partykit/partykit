@@ -9,7 +9,7 @@ In the previous step, you've set up the PartyKit server to handle messages. In t
 
 ## Connect the poll form
 
-Navigate to `page.tsx`, in the `app` directory (see online in [the starter](https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/page.tsx) or [the finished code](https://github.com/partykit/partypoll/blob/main/app/page.tsx)), which generates the poll.
+Navigate to `page.tsx`, in the `app` directory (see online in <a href="https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/page.tsx#L30" target="_blank" rel="noopener noreferrer">the starter</a> or <a href="https://github.com/partykit/partypoll/blob/main/app/page.tsx#L30-L36" target="_blank" rel="noopener noreferrer">the finished code</a>), which generates the poll.
 
 Take a look at the file. You'll notice that we've already included the code to get the data from the form in the server action:
 
@@ -52,7 +52,7 @@ To test if the code you wrote works, try creating a new poll in the browser. You
 
 ## Connect the poll page
 
-Navigate to the file which renders the poll page, `page.tsx` in the `app/[poll_id]` directory (see online in [the starter](https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx) or [the finished code](https://github.com/partykit/partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx)).
+Navigate to the file which renders the poll page, `page.tsx` in the `app/[poll_id]` directory (see online in <a href="https://github.com/partykit/tutorial-starter-partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx#L14-L16" target="_blank" rel="noopener noreferrer">the starter</a> or <a href="https://github.com/partykit/partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx#L15C11-L30" target="_blank" rel="noopener noreferrer">the finished code</a>).
 
 In the previous step of this tutorial, your `onRequest` method returned the poll data. You can now use it to render the poll on the server:
 
@@ -63,6 +63,14 @@ In the previous step of this tutorial, your `onRequest` method returned the poll
       revalidate: 0,
     },
   });
+
+  if (!req.ok) {
+    if (req.status === 404) {
+      notFound();
+    } else {
+      throw new Error("Something went wrong.");
+    }
+  }
 ```
 
 :::tip[Caching]
@@ -79,4 +87,6 @@ Time to validate that your poll page works. Go to the page and see if the data y
 
 # Next steps
 
-Congratulations! This page works so let's make it better. Let's make the votes [update in real time](./4-add-websockets).
+🎈 If you'd like to check how your code compares to the finished app, check the finished code (<a href="https://github.com/partykit/partypoll/blob/main/app/page.tsx#L30-L36" target="_blank" rel="noopener noreferrer"><code>app/page.tsx</code></a> and <a href="https://github.com/partykit/partypoll/blob/main/app/%5Bpoll_id%5D/page.tsx#L15C11-L30" target="_blank" rel="noopener noreferrer"><code>app/[poll_id]/page.tsx</code></a>) online 🎈
+
+Congratulations! This page works so let's make it better. Let's make the votes [update in real time](/tutorials/add-partykit-to-a-nextjs-app/4-add-websockets).
