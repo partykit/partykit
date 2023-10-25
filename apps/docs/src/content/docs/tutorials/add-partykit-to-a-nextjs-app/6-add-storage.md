@@ -2,10 +2,10 @@
 title: Add storage
 sidebar:
     label: 6. Add storage
-description: ...
+description: In this step, you will enable your server to store the votes
 ---
 
-PartyKit rooms come with a key-value storage, which make it easy to persist data without the need for an external database. It is also a good way to ensure that your data will persist in case of, for example, server restart or app redeployment.
+PartyKit rooms come with a key-value storage, which make it easy to persist data without the need for an external database. It is also a good way to ensure that your data will persist in case of, for example, server restart or app redeployment. In this step, you will enable your server to store the votes.
 
 ## Loading data on start
 
@@ -75,4 +75,4 @@ To learn more about the Storage API, check [our docs](https://docs.partykit.io/g
 
 ## Nest steps
 
-Congratulations! Your polling app is working and now it's time to deploy it.
+Congratulations! Your polling app is working and now it's time to deploy it 🥳

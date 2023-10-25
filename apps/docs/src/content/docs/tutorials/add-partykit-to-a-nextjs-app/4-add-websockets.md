@@ -2,11 +2,10 @@
 title: Add WebSockets
 sidebar:
     label: 4. Add WebSockets
-description: ...
+description: In this step you'll add WebSockets connection into the mix
 ---
 
-INTRO
-When the user submits the poll form, the Next.js app will send it to your PartyKit server.
+In the previous step, you've connected your PartyKit server and the UI. In this step you'll add WebSockets connection into the mix.
 
 ## Establish a WebSocket connection
 
@@ -43,3 +42,7 @@ Now that you have started a WebSocket connection, modify the existing sendVote f
     }
   };
 ```
+
+## Next steps
+
+The votes are now recorded in real time but the point of the app is to also show the new votes immediately. In the next step, you will broadcast them to all connected users.

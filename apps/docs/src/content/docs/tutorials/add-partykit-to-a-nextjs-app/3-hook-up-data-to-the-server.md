@@ -2,11 +2,10 @@
 title: Hook up data to the server
 sidebar:
     label: 3. Hook up data to the server
-description: ...
+description: In this step you will connect UI and the PartyKit server
 ---
 
-INTRO
-When the user submits the poll form, the Next.js app will send it to your PartyKit server.
+In the previous step, you've set up the PartyKit server to handle messages. In this step you will connect it to the UI. When the user submits the poll form, the Next.js app will send it to your PartyKit server.
 
 ## Connect the poll form
 
@@ -49,11 +48,7 @@ In the above code snippet, the `PARTYKIT_URL` variable is already defined in the
 Please note the randomly generated `id` in the code above. Every new `id` results in a new PartyKit room (or, PartyKit server) created, which means that every poll will be connected to its own room.
 :::
 
-To test if the code you wrote works, try creating a new poll in the browser. You should see a behavior similar to this one:
-
-<!-- screen recording -->
-
-As you see, the data is static so let's change that.
+To test if the code you wrote works, try creating a new poll in the browser. Your form creates a poll but there's a problem. As you see, the data is static so let's change that.
 
 ## Connect the poll page
 
@@ -80,8 +75,8 @@ Finally, read the response from the server and replace the mock data:
   const poll = (await req.json()) as Poll;
 ```
 
-Time to validate that your poll page works. Go to the page and see if you are getting the data from the form on the new poll page:
+Time to validate that your poll page works. Go to the page and see if you are the data you entered in the form renders now on the new poll page.
 
-<!-- screen recording -->
+# Next steps
 
-This page works but the votes are still not real-time. Let's change that.
+Congratulations! This page works so let's make it better. Let's make the votes update in real-time.

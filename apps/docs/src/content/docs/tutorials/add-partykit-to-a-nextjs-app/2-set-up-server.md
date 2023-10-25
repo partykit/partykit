@@ -5,7 +5,7 @@ sidebar:
 description: The first step is to set up your PartyKit server to handle HTTP requests
 ---
 
-INTRO
+In this step you will set up your PartyKit server to handle HTTP requests.
 
 ## Install PartyKit
 
@@ -31,7 +31,7 @@ npx partykit dev
 
 If it works correctly, you should see an output similar to the following:
 
-<!-- output -->
+![A screenshot of the terminal"](/src/assets/tutorials/add-partykit-to-a-nextjs-app/page2-1.png)
 
 ## Set up the server
 
@@ -97,3 +97,7 @@ Finally, if the poll exists, the method will return its data; otherwise, it will
 ```ts
  return new Response("Not found", { status: 404 });
 ```
+
+## Next steps
+
+With the PartyKit server ready to receive messages, you can now connect it to the UI.
