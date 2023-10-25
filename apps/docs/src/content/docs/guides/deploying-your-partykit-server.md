@@ -16,11 +16,11 @@ In your project directory, run the following command in the terminal:
 npm partykit deploy
 ```
 
-If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page where you can paste the code that was automatically copied to your clipboard from the terminal output.
+If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page.
 
 Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your `partykit.dev` domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
 
-After the domain has been provisioned (up to two minutes), share the link with your friends and play with it live 🥳
+After the domain has been provisioned (up to two minutes), you can share the link with your friends and play with it live 🥳
 
 ## Deploying with environment variables
 

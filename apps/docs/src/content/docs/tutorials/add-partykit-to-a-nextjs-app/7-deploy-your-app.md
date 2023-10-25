@@ -9,17 +9,25 @@ PartyKit hosts the real-time server but you can host your website at any deploym
 
 While you don't need separate repositories for the client and the PartyKit server, you will need to deploy them separately.
 
+## Deploy PartyKit server
+
+Next, deploy your PartyKit server:
+
+```bash
+npm partykit deploy
+```
+
+When the deployment completes, you will have your PartyKit URL (which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`). You will need this URL when deploying your Next.js app.
+
+To read more about deploying PartyKit apps, check [our guide](/guides/deploy-your-partykit-server).
+
 ## Deploy Next.js app
 
 In the case of this specific Next.js app, you will most probably deploy it to Vercel, in which case you can follow [the Vercel deployment guide](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy).
 
-Please remember to also set the environment variables mentioned (such as `NEXT_PUBLIC_PARTYKIT_HOST`). To do so, you can follow [the Vercel guide on secrets management](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables).
+Please remember to also set the environment variables mentioned (such as `NEXT_PUBLIC_PARTYKIT_HOST` with the URL generated when deploying the PartyKit server in the previous step). To do so, you can follow [the Vercel guide on secrets management](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables).
 
 In the example repository, we've included an `.env.example` file that contains the environment variables you need to set.
-
-## Deploy PartyKit server
-
-Next, deploy your PartyKit server with a one-line command following [our deployment guide](/guides/deploy-your-partykit-server).
 
 ## Next steps
 
