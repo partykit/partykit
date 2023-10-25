@@ -205,41 +205,97 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/auth.md": {
-	id: "examples/auth.md";
-  slug: "examples/auth";
+"examples/app-examples/active-user-avatars.md": {
+	id: "examples/app-examples/active-user-avatars.md";
+  slug: "examples/app-examples/active-user-avatars";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/avatars-presence.mdx": {
-	id: "examples/avatars-presence.mdx";
-  slug: "examples/avatars-presence";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".mdx"] };
-"examples/chat-app.mdx": {
-	id: "examples/chat-app.mdx";
-  slug: "examples/chat-app";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".mdx"] };
-"examples/collaborative-text-editor.md": {
-	id: "examples/collaborative-text-editor.md";
-  slug: "examples/collaborative-text-editor";
+"examples/app-examples/chat-app-with-ai-and-auth.md": {
+	id: "examples/app-examples/chat-app-with-ai-and-auth.md";
+  slug: "examples/app-examples/chat-app-with-ai-and-auth";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/cursors-presence.mdx": {
-	id: "examples/cursors-presence.mdx";
-  slug: "examples/cursors-presence";
+"examples/app-examples/connection-counter.md": {
+	id: "examples/app-examples/connection-counter.md";
+  slug: "examples/app-examples/connection-counter";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
-} & { render(): Render[".mdx"] };
+} & { render(): Render[".md"] };
+"examples/app-examples/cursors-with-country-flags.md": {
+	id: "examples/app-examples/cursors-with-country-flags.md";
+  slug: "examples/app-examples/cursors-with-country-flags";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/falling-sand-game-three-js.md": {
+	id: "examples/app-examples/falling-sand-game-three-js.md";
+  slug: "examples/app-examples/falling-sand-game-three-js";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/live-polls-web-component.md": {
+	id: "examples/app-examples/live-polls-web-component.md";
+  slug: "examples/app-examples/live-polls-web-component";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/mosaic-realtime-game.md": {
+	id: "examples/app-examples/mosaic-realtime-game.md";
+  slug: "examples/app-examples/mosaic-realtime-game";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/multiplayer-ai-chat-rooms.md": {
+	id: "examples/app-examples/multiplayer-ai-chat-rooms.md";
+  slug: "examples/app-examples/multiplayer-ai-chat-rooms";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/multiplayer-text-editor.md": {
+	id: "examples/app-examples/multiplayer-text-editor.md";
+  slug: "examples/app-examples/multiplayer-text-editor";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/realtime-reaction-counter.md": {
+	id: "examples/app-examples/realtime-reaction-counter.md";
+  slug: "examples/app-examples/realtime-reaction-counter";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/the-namib-desert-watering-hole-livestream.md": {
+	id: "examples/app-examples/the-namib-desert-watering-hole-livestream.md";
+  slug: "examples/app-examples/the-namib-desert-watering-hole-livestream";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/two-way-hyperlinks-and-social-webpages.md": {
+	id: "examples/app-examples/two-way-hyperlinks-and-social-webpages.md";
+  slug: "examples/app-examples/two-way-hyperlinks-and-social-webpages";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"examples/app-examples/youtube-watch-party.md": {
+	id: "examples/app-examples/youtube-watch-party.md";
+  slug: "examples/app-examples/youtube-watch-party";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "examples/index.mdx": {
 	id: "examples/index.mdx";
   slug: "examples";
@@ -247,44 +303,30 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".mdx"] };
-"examples/multiplayer-code-editor.md": {
-	id: "examples/multiplayer-code-editor.md";
-  slug: "examples/multiplayer-code-editor";
+"examples/starter-kits/game-starter-nextjs-redux.md": {
+	id: "examples/starter-kits/game-starter-nextjs-redux.md";
+  slug: "examples/starter-kits/game-starter-nextjs-redux";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/multiplayer-whiteborad.md": {
-	id: "examples/multiplayer-whiteborad.md";
-  slug: "examples/multiplayer-whiteborad";
+"examples/starter-kits/remix-starter.md": {
+	id: "examples/starter-kits/remix-starter.md";
+  slug: "examples/starter-kits/remix-starter";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/next-js.md": {
-	id: "examples/next-js.md";
-  slug: "examples/next-js";
+"examples/starter-kits/replicache-starter.md": {
+	id: "examples/starter-kits/replicache-starter.md";
+  slug: "examples/starter-kits/replicache-starter";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"examples/secret-management.mdx": {
-	id: "examples/secret-management.mdx";
-  slug: "examples/secret-management";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".mdx"] };
-"examples/syncedstore.md": {
-	id: "examples/syncedstore.md";
-  slug: "examples/syncedstore";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
-"examples/tinybase.md": {
-	id: "examples/tinybase.md";
-  slug: "examples/tinybase";
+"examples/starter-kits/tinybase-starter.md": {
+	id: "examples/starter-kits/tinybase-starter.md";
+  slug: "examples/starter-kits/tinybase-starter";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

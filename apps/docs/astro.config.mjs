@@ -9,7 +9,7 @@ export default defineConfig({
     starlight(
       {
         title: "PartyKit Docs",
-        description: "Collaborative applications are the future of software.",
+        description: "Collaborative applications are the future of software",
         customCss: ["./src/styles/custom.css"],
         head: [
           {
@@ -60,9 +60,25 @@ export default defineConfig({
           {
             label: "Examples",
             collapsed: true,
-            autogenerate: {
-              directory: "examples",
+            items: [ {
+              label: "All PartyKit Examples",
+              link: "/examples/",
             },
+            {
+              label: "App examples",
+              collapsed: true,
+              autogenerate: {
+                directory: "examples/app-examples",
+              },
+            },
+            {
+              label: "Starter kits",
+              collapsed: true,
+              autogenerate: {
+                directory: "examples/starter-kits",
+              },
+            },
+          ]
           },
           {
             label: "API Reference",

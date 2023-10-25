@@ -133,4 +133,4 @@ Alternatively, you can consider these authentication methods:
 
 - For server-to-server communication, you can use a shared secret. Read about [managing environment variables with PartyKit](/guides/managing-environment-variables).
 
-- For client-to-server connections, you can pass any type of session token, and verify it against your session service. For an example with [NextAuth.js](https://next-auth.js.org/), see the [PartyKit Next.js example app](/examples/next-js).
+- For client-to-server connections, you can pass any type of session token, and verify it against your session service. For an example with [NextAuth.js](https://next-auth.js.org/), see the [PartyKit Next.js example app](/examples/app-examples/chat-app-with-ai-and-auth).

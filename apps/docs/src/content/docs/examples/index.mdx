@@ -1,142 +1,41 @@
 ---
-title: PartyKit App Examples
+title: All PartyKit Examples
 description: Explore collaborative, multiplayer, and realtime apps built with PartyKit
 ---
 
 import { Card, CardGrid } from "@astrojs/starlight/components";
 
-Here are examples of apps built with PartyKit.
-
 :::tip[Share your project!]
 Are you using PartyKit? We want to hear from you! Share your project with us on [Discord](https://discord.gg/KDZb7J4uxJ) or [Twitter](https://twitter.com/partykit_io)!
 ::: 
 
-## Realtime Reaction Counters
+## App examples
 
-![reactions](../../../assets/reactions.gif)
+Here are examples of apps built with PartyKit:
 
-See your friends react in real time. As soon as someone reacts to your content, the counter is updated on all connected clients. You can **create a new room with its own counter** by appending any room name to the URL. This means that you can easily implement separate counters for any subpage or section (for example, for any blog post or video on your website). Every time you use a new identifier, a new room is automatically created - and every room is its own API, which you can access.
+- [Active user avatars](/examples/app-examples/active-user-avatars/)
+- [Chat app with user avatars, AI agents, and auth (Next.js)](/examples/app-examples/chat-app-with-ai-and-auth/)
+- [Connection Counter](/examples/app-examples/connection-counter/)
+- [Cursors with country flags](/examples/app-examples/cursors-with-country-flags/)
+- [Falling sand game (three.js)](/examples/app-examples/falling-sand-game-three-js/)
+- [Live polls (web component)](/examples/app-examples/live-polls-web-component/)
+- [Active user avatars](/examples/app-examples/mosaic-realtime-game/)
+- [Multiplayer AI chat rooms](/examples/app-examples/multiplayer-ai-chat-rooms/)
+- [Multiplayer text editor](/examples/app-examples/multiplayer-text-editor/)
+- [Realtime reaction counter](/examples/app-examples/realtime-reaction-counter/)
+- [The Namib Desert watering hole livestream](/examples/app-examples/the-namib-desert-watering-hole-livestream/)
+- [Two-way hyperlinks and social webpages](/examples/app-examples/two-way-hyperlinks-and-social-webpages/)
+- [YouTube watch party](/examples/app-examples/youtube-watch-party/)
 
-This example contains a barebones HTML page and an SSR version built with Next.js. The server was written to accommodate both approaches.
+## Starter kits
 
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/example-reactions) | [live demo](https://example-reactions.jevakallio.partykit.dev/) | [blog post](https://blog.partykit.io/posts/partykit-at-viteconf)
+Our community created also starter kits for your favorite frameworks:
 
-## Cursors with country flags
+- [Game starter (Next.js + Redux)](/examples/starter-kits/game-starter-nextjs-redux/)
+- [Remix starter](/examples/starter-kits/remix-starter/)
+- [Replicache starter](/examples/starter-kits/replicache-starter/)
+- [TinyBase starter](/examples/starter-kits/tinybase-starter/)
 
-![cursors](../../../assets/voronoi.png)
-
-[Matt Webb's](https://twitter.com/genmon) 'Voronoi' app features cursors with country flags on a colorful, ever-changing background. Cursors indicate presence and movement on the demo, which helps your users get a sense that they are together in one room.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-voronoi) | [live demo](https://multicursor-sketch.vercel.app/) | [blog post](https://blog.partykit.io/posts/dancing-cursors-and-voronoi-diagrams)
-
-## Multiplayer AI chat rooms
-
-![AI chat room](../../../assets/spatial-chat.png)
-
-This app features multiplayer chat rooms connected spatially in a simple map, each inhabited by a helpful AI chatbot. It was built by [Matt Webb](https://twitter.com/genmon) using Yjs, PartyKit, and OpenAI.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-spatial-chat) | [live demo](https://i-am-chatting-in-a-room.vercel.app/) | [blog post](https://blog.partykit.io/posts/thinking-hats-and-spatial-chat)
-
-## Active user avatars
-
-![AI chat room](../../../assets/avatars.png)
-
-For his new course platform, [Kent C. Dodds](https://twitter.com/kentcdodds) used PartyKit to power the real-time avatars of the users who are currently working through the course. His implementation is open source, and contains considerations for privacy, as well as sorting avatars according to how close they are in their course progress.
-
-🎈 **Explore:** [course platform](https://www.epicweb.dev/) | [blog post](https://blog.partykit.io/posts/partykit-powers-realtime-avatars-in-epic-web) | [GitHub repository](https://github.com/epicweb-dev/kcdshop/blob/ab590025aab758a832b98dfd4fc91fab639b4b3a/packages/presence/src/server.ts)
-
-
-## Connection Counter
-
-![connection counter](../../../assets/connection-counter.gif)
-
-This example shows how many people are currently viewing any of the pages linked from the the current one - the counter placed near the links increases or decreases as users move around the app. It is a demo of an advanced use of [multi-party communication](https://docs.partykit.io/guides/using-multiple-parties-per-project/).
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/example-link-counter) | [live demo](https://connection-counter.jevakallio.partykit.dev/pages/a)
-
-## Next.js chat app with user avatars, AI agents, and auth
-
-![chat app](../../../assets/chat-app.png)
-
-Our Next.js template features multiple chatrooms with chat history, avatars, and AI NPCs interacting with your users.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/partykit-nextjs-chat-template) | [live demo](https://partykit-nextjs-chat-template.vercel.app/)
-
-## Multiplayer text editor
-
-![text editor](../../../assets/text-editor.gif)
-
-A multiplayer text editor built with PartyKit, Yjs, Tiptap, and Supabase.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/partykit-text-editor-example)
-
-## Live polls
-
-![live polls](../../../assets/poll.gif)
-
-A web component with live polls that respond in real-time to user's choices by [Matt Webb](https://twitter.com/genmon).
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-polls) | [live demo](https://partykit.github.io/sketch-polls/) | [blog post](https://blog.partykit.io/posts/live-polls-with-stencil)
-
-## YouTube watch party
-
-![youtube watch party](../../../assets/youtube-watch-party.png)
-
-A YouTube watch party with a chat by [Matt Webb](https://twitter.com/genmon). Share the joy of watching your favorite YouTube videos with your friends.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-youtube) | [live demo](https://youtube-party-seven.vercel.app/)
-
-## The Namib Desert watering hole livestream
-
-![The Namib Desert watering hole livestream](../../../assets/waterhole.jpg)
-
-This Remix app features a livestream from the Namib Desert with an ephemeral chat window. Built by [Matt Webb](https://twitter.com/genmon).
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-waterhole) | [live demo](https://waterhole.genmon.partykit.dev/) | [blog post ](https://blog.partykit.io/posts/single-serving-waterhole)
-
-## Remix starter
-
-A starter template for Remix and PartyKit.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/remix-starter)
-
-## TinyBase starter
-
-![TinyBase app](../../../assets/tinybase-app.png)
-
-A community starter template for a local-first data store app. Built with TinyBase, TypeScript, React, and PartyKit by [James Pearce](https://twitter.com/jamespearce).
-
-🎈 **Explore:** [GitHub repository](https://github.com/tinyplex/tinybase-ts-react-partykit)
-
-## Replicache starter
-
-A community starter template for a local-first chat app. Built with Replicache and PartyKit by [Alex Anderson](https://twitter.com/ralex1993),
-
-🎈 **Explore:** [GitHub repository](https://github.com/alexanderson1993/partykit-replicache)
-
-## Game starter
-
-A community starter template for turn-based multiplayer games with Next.js, Redux, and PartyKit by [Swen Mulderij](https://twitter.com/Swendude).
-
-🎈 **Explore:** [GitHub repository](https://github.com/Swendude/partykit-starter)
-
-## Mosaic - realtime collaborative game
-
-![mosaic game](../../../assets/mosaic.png)
-
-This is a multiplayer drawing challenge web toy from [Matt Webb](https://twitter.com/genmon).
-
-Each turn, a user is asked whether a random tile should be black or white according to a given challenge. All users see the same mosaic, and all users play at the same time. It's fun to see how quickly the image converges... or doesn't.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-mosaic) | [live demo](https://mosaic-party.vercel.app/) | [blog post](https://blog.partykit.io/posts/wisdom-of-crowds)
-
-## Two-way hyperlinks and social webpages
-
-![hyperlinks](../../../assets/hyperlinks.png)
-
-Three web components from [Matt Webb](https://twitter.com/genmon): the first one badges all internal links on a site with how many people are present at the other end. Another tells you if a hyperlink has been used, in realtime, while you're using the page. A third adds multiplayer cursors to any webpage, as if the cursors are sitting behind the content, through frosted glass.
-
-🎈 **Explore:** [GitHub repository](https://github.com/partykit/sketch-disco)
 
 ---
 

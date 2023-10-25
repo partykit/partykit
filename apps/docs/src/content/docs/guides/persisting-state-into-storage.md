@@ -1,6 +1,6 @@
 ---
 title: Persisting state into storage
-description: Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance.
+description: Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance
 ---
 
 Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance. This page provides an overview on what Storage API is, its data format, and programming.
@@ -72,7 +72,7 @@ const keys = [...(await this.party.storage.list()).keys()];
 
 ## Storing large amounts of data
 
-There is no practical limit to how many keys each Party can store, so with thoughful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
+There is no practical limit to how many keys each Party can store, so with thoughtful data model design, you can store large amounts of data in a Party by sharding across multiple keys.
 
 ```ts
 type AllItems = Record<string, any>;
@@ -155,7 +155,7 @@ Alternatively, you can read data from `storage` as you need it. The Storage API 
 
 This pattern is especially helpful when your app features **frequent writes and less frequent reads**, or when your **read-write ratio is balanced**.
 
-The tradeoff is that the programming model is less ergonomic, because you need to perform an asynchronous read from storage every time you access your state.
+The trade-off is that the programming model is less ergonomic, because you need to perform an asynchronous read from storage every time you access your state.
 
 ```ts
 export default class Main implements Party.Server {
