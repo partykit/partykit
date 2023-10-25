@@ -10,9 +10,9 @@ When the user submits the poll form, the Next.js app will send it to your PartyK
 
 ## Add `broadcast`
 
-Navigate to the server file (`party/index.ts`).
+Now that we are done with the client side, let's move back to the server code. Navigate to the server file (`party/index.ts`).
 
-Your file doesn't currently have a way to interact with the incoming WebSocket messages. To change that, add `onMessage` method:
+Your PartyKit server currently receives WebSocket messages from the client, but it doesn't yet do anything with the incoming messages. To change that, add `onMessage` method:
 
 ```ts
   async onMessage(message: string) {
@@ -22,7 +22,6 @@ Your file doesn't currently have a way to interact with the incoming WebSocket m
     if (event.type === "vote") {
       this.poll.votes![event.option] += 1;
       this.party.broadcast(JSON.stringify(this.poll));
-      this.savePoll();
     }
   }
 ```

@@ -12,7 +12,7 @@ When the user submits the poll form, the Next.js app will send it to your PartyK
 
 Navigate to the `PollUI` file, which renders the poll. Since it is not a server component, the connection will be established directly from the user's device.
 
-Add this code to the file:
+Add this hook between the state setters and `sendVote` method:
 
 ```ts
   const socket = usePartySocket({
@@ -29,11 +29,11 @@ Add this code to the file:
 
 Let's go over the code above. PartyKit comes with [`usePartySocket`](https://docs.partykit.io/reference/partysocket-api/#usage-with-react), a React hook for WebSockets. Notice that the `id` is a prop containing the the same poll `id` created a moment ago so the WebSocket will connect to the right poll.
 
-The `onMessage` method tells the server what to do when it receives a message. In this case, we'd want the vote counter to be updated. To do so, you will parse the message from the server and update the local component state, which will trigger the UI update.
+The `onMessage` callback is called when we receive a WebSocket message from the PartyKit server. In this case, we'd want the vote counter to be updated. To do so, you will parse the message from the server and update the local component state, which will trigger the UI update.
 
 ## Send the votes when the user clicks the button
 
-Now that you have started a WebSocket connection, add code that will enable the button to send vote data when the user chooses an option:
+Now that you have started a WebSocket connection, modify the existing sendVote function and add the code that will enable the button to send vote data when the user chooses an option:
 
 ```ts
   const sendVote = (option: number) => {

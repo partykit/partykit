@@ -2,7 +2,7 @@
 title: Set up PartyKit server
 sidebar:
     label: 2. Set up PartyKit server
-description: ...
+description: The first step is to set up your PartyKit server to handle HTTP requests
 ---
 
 INTRO
@@ -23,7 +23,7 @@ This command added three things:
 
 ## Run dev servers
 
-In the previous step started the Next.js dev server. Now open a new tab in your terminal to run PartyKit dev server alongside it:
+In the previous step you started the Next.js dev server. Now open a new tab in your terminal to run PartyKit dev server alongside it:
 
 ```bash
 npx partykit dev
@@ -68,8 +68,32 @@ Server satisfies Party.Worker;
 
 Let's go over this code.
 
-Since each poll will be its own room, you can keep our poll data in-memory. You can also use the TypeScript types from our Next.js app.
+Since each poll will be its own room, you can keep our poll data in-memory. You can also use the TypeScript types from our Next.js app:
 
-Next, is the `onRequest` method, which receives a regular HTTP request. Given that the poll creation page is rendered on the server, WebSocket connection is not possible. Fortunately, PartyKit accepts also HTTP requests so when a user creates a poll, the _submit_ button will send a `POST` request to the PartyKit server and a new poll will be created.
+```ts
+  poll: Poll | undefined;
+```
 
-Finally, if the poll exists, the method will return its data; otherwise, it will error out.
+Next, is the `onRequest` method, which receives a regular HTTP request:
+
+```ts
+ if (req.method === "POST") {
+      const poll = (await req.json()) as Poll;
+      this.poll = { ...poll, votes: poll.options.map(() => 0) };
+    }
+
+ if (this.poll) {
+    return new Response(JSON.stringify(this.poll), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+```
+
+We will create the poll in a Next.js server action, and we cannot make a WebSocket connection from the server component. Fortunately, PartyKit accepts also HTTP requests so when a user creates a poll, the _submit_ button will send a `POST` request to the PartyKit server and a new poll will be created.
+
+Finally, if the poll exists, the method will return its data; otherwise, it will error out:
+
+```ts
+ return new Response("Not found", { status: 404 });
+```

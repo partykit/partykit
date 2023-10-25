@@ -2,14 +2,14 @@
 title: Deploy your PartyKit server
 sidebar:
     label: Deploying your PartyKit server
-description: ...
+description: Deploy your PartyKit app and debug live apps after deployment
 ---
 
-Congratulations! You've created your app, now it's time to deploy it to the PartyKit platform 🎈
+This page provides an overview of how to deploy your PartyKit app and how to debug live apps after deployment.
 
 ## First deployment
 
-In your project directory, run the following comand in the terminal:
+In your project directory, run the following command in the terminal:
 
 ```bash
 npm partykit deploy
@@ -17,7 +17,7 @@ npm partykit deploy
 
 If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page where you can paste the code that was automatically copied to your clipboard from the terminal output.
 
-Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your partykit.dev domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
+Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your `partykit.dev` domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
 
 After the domain has been provisioned (up to two minutes), share the link with your friends and play with it live 🥳
 

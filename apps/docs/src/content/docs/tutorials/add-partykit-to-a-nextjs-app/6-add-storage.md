@@ -29,13 +29,14 @@ Next, give your app possibility to also add data to storage. Create a helper met
   }
 ```
 
-And then invoke it in `onRequest` (for communication with the SSR components):
+And then invoke it in `onRequest` to save the poll when it's created by adding just one line of code:
 
 ```ts
   async onRequest(req: Party.Request) {
     if (req.method === "POST") {
       const poll = (await req.json()) as Poll;
       this.poll = { ...poll, votes: poll.options.map(() => 0) };
+      // ADD THIS LINE:
       this.savePoll();
     }
 
@@ -50,7 +51,7 @@ And then invoke it in `onRequest` (for communication with the SSR components):
   }
 ```
 
-and in `onMessage` (for the WebSockets connection):
+and in `onMessage` to save the poll when user votes:
 
 ```ts
   async onMessage(message: string) {
@@ -60,6 +61,7 @@ and in `onMessage` (for the WebSockets connection):
     if (event.type === "vote") {
       this.poll.votes![event.option] += 1;
       this.party.broadcast(JSON.stringify(this.poll));
+      // ADD THIS LINE:
       this.savePoll();
     }
   }
@@ -71,3 +73,6 @@ And - that's it! You are now persisting data on the PartyKit server.
 To learn more about the Storage API, check [our docs](https://docs.partykit.io/guides/persisting-state-into-storage/).
 :::
 
+## Nest steps
+
+Congratulations! Your polling app is working and now it's time to deploy it.

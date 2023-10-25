@@ -10,9 +10,9 @@ When the user submits the poll form, the Next.js app will send it to your PartyK
 
 ## Connect the poll form
 
-In this step you will work with the file, which generates the poll, `page.tsx`, in the `app` directory.
+Navigate to `page.tsx`, in the `app` directory, which generates the poll.
 
-If you take a look at the file, you'll notice that there is already the code to get the data from the form in the server action:
+Take a look at the file. You'll notice that we've already included the code to get the data from the form in the server action:
 
 ```ts
     const title = formData.get("title")?.toString() ?? "Anonymous poll";
@@ -42,6 +42,8 @@ So now you need to send it to PartyKit with an HTTP request to the server:
       },
     });
 ```
+
+In the above code snippet, the `PARTYKIT_URL` variable is already defined in the app. Please remember to set this environment variable in your Next.js environment (for example, on Vercel).
 
 :::tip[New id, new room]
 Please note the randomly generated `id` in the code above. Every new `id` results in a new PartyKit room (or, PartyKit server) created, which means that every poll will be connected to its own room.

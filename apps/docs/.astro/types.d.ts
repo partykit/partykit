@@ -310,6 +310,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/deploy-your-partykit-server.md": {
+	id: "guides/deploy-your-partykit-server.md";
+  slug: "guides/deploy-your-partykit-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/index.md": {
 	id: "guides/index.md";
   slug: "guides";
@@ -506,16 +513,9 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorials/before-you-begin.md": {
-	id: "tutorials/before-you-begin.md";
-  slug: "tutorials/before-you-begin";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
-"tutorials/deploy-your-partykit-server.md": {
-	id: "tutorials/deploy-your-partykit-server.md";
-  slug: "tutorials/deploy-your-partykit-server";
+"tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
