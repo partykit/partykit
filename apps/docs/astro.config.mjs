@@ -52,6 +52,19 @@ export default defineConfig({
             ],
           },
           {
+            label: "Tutorials",
+            collapsed: true,
+            items: [
+              {
+                label: "Add PartyKit to a Next.js app",
+                collapsed: true,
+                autogenerate: {
+                  directory: "tutorials/add-partykit-to-a-nextjs-app",
+                },
+              },
+            ]
+          },
+          {
             label: "Guides",
             autogenerate: {
               directory: "guides",
@@ -66,7 +79,6 @@ export default defineConfig({
             },
             {
               label: "App examples",
-              collapsed: true,
               autogenerate: {
                 directory: "examples/app-examples",
               },
@@ -79,19 +91,6 @@ export default defineConfig({
               },
             },
           ]
-          },
-          {
-            label: "Tutorials",
-            collapsed: true,
-            items: [
-              {
-                label: "Add PartyKit to a Next.js app",
-                collapsed: true,
-                autogenerate: {
-                  directory: "tutorials/add-partykit-to-a-nextjs-app",
-                },
-              },
-            ]
           },
           {
             label: "API Reference",
