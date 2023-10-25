@@ -237,6 +237,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"fireproof-database.md": {
+	id: "fireproof-database.md";
+  slug: "fireproof-database";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "how-to-add-an-estimated-reading-time.md": {
 	id: "how-to-add-an-estimated-reading-time.md";
   slug: "how-to-add-an-estimated-reading-time";
@@ -286,6 +293,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"partykit-powers-realtime-avatars-in-epic-web.md": {
+	id: "partykit-powers-realtime-avatars-in-epic-web.md";
+  slug: "partykit-powers-realtime-avatars-in-epic-web";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more.md": {
 	id: "partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more.md";
   slug: "partykit-raises-a-pre-seed-round-from-sequoia-remote-first-and-more";
@@ -317,6 +331,13 @@ declare module 'astro:content' {
 "rec-2.md": {
 	id: "rec-2.md";
   slug: "rec-2";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"single-serving-waterhole.md": {
+	id: "single-serving-waterhole.md";
+  slug: "single-serving-waterhole";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
