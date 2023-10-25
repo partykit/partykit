@@ -12,7 +12,7 @@ index d187bd9..f26bf24 100644
 +if (description && description !== "...") {
 +  og.set("description", description);
 +}
-+const ogImage = `https://partykit-og-images.vercel.app/api/og?${og}`;
++const ogImage = `https://og.partykit.io/api/og?${og}`;
  
  const headDefaults: z.input<ReturnType<typeof HeadConfigSchema>> = [
  	{ tag: 'meta', attrs: { charset: 'utf-8' } },
