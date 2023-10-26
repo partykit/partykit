@@ -359,6 +359,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/deploying-your-partykit-server.md": {
+	id: "guides/deploying-your-partykit-server.md";
+  slug: "guides/deploying-your-partykit-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/index.md": {
 	id: "guides/index.md";
   slug: "guides";
@@ -513,23 +520,65 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/0-before-you-begin.md": {
-	id: "tutorial/0-before-you-begin.md";
-  slug: "tutorial/0-before-you-begin";
+"tutorials/2-adding-realtime-cursors.md": {
+	id: "tutorials/2-adding-realtime-cursors.md";
+  slug: "tutorials/2-adding-realtime-cursors";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/1-build-a-realtime-chat-app.md": {
-	id: "tutorial/1-build-a-realtime-chat-app.md";
-  slug: "tutorial/1-build-a-realtime-chat-app";
+"tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/2-set-up-server";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
-"tutorial/2-adding-realtime-cursors.md": {
-	id: "tutorial/2-adding-realtime-cursors.md";
-  slug: "tutorial/2-adding-realtime-cursors";
+"tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/3-hook-up-data-to-the-server";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/4-add-websockets";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/5-broadcast-the-change";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/6-add-storage.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/6-add-storage.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/6-add-storage";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/add-partykit-to-a-nextjs-app/index.md": {
+	id: "tutorials/add-partykit-to-a-nextjs-app/index.md";
+  slug: "tutorials/add-partykit-to-a-nextjs-app";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"tutorials/index.md": {
+	id: "tutorials/index.md";
+  slug: "tutorials";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
