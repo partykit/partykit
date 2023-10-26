@@ -5,13 +5,15 @@ sidebar:
     badge: New
 ---
 
-A real-time poll app consisting of two pages: a form (SSR)
+A real-time poll app built wit hNext.js and PartyKit. It consists of two pages: a form (SSR)
 
 ![poll form](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-1.png)
 
-and a poll (client-side rendered)
+and a real-time poll (client-side rendered)
 
 ![live poll page](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-2.png)
+
+The repository also includes a PR with authentication.
 
 ## Explore
 
