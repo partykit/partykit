@@ -10,7 +10,7 @@ There are two ways to manage environment variables in PartyKit.
 
 ## Deploying secrets to PartyKit
 
-You can store your app's secrets on PartyKit. To do so, run the following command in your project directory (here we assume that the variable name is `API_KEY`):
+PartyKit can stor your app's secrets. To do so, run the following command in your project directory (here we assume that the variable name is `API_KEY`):
 
 ```bash
 npx partykit env add API_KEY
@@ -38,7 +38,7 @@ npx partykit deploy --with-vars
 
 Please note that this command will take precendence over any previously deployed secrets, overriding their values for this particular deployment.
 
-If you are not using `.env` file, you can specify the variable values by using the following command (here we assume that we are deploying two variables: `API_KEY` and `HOST`, which correspond to your locally set variables):
+If you are not using `.env` file, you can specify the variable values by using the following command (here we assume that we are deploying two variables: `API_KEY` and `HOST`, which correspond to your variables which were set locally):
 
 ```bash
 npx partykit deploy --var API_KEY=$API_KEY --var HOST=$HOST
