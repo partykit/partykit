@@ -247,6 +247,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"examples/app-examples/live-polls-app.md": {
+	id: "examples/app-examples/live-polls-app.md";
+  slug: "examples/app-examples/live-polls-app";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "examples/app-examples/live-polls-web-component.md": {
 	id: "examples/app-examples/live-polls-web-component.md";
   slug: "examples/app-examples/live-polls-web-component";
@@ -390,13 +397,6 @@ declare module 'astro:content' {
 "guides/managing-environment-variables.md": {
 	id: "guides/managing-environment-variables.md";
   slug: "guides/managing-environment-variables";
-  body: string;
-  collection: "docs";
-  data: InferEntrySchema<"docs">
-} & { render(): Render[".md"] };
-"guides/og-image-test-5.md": {
-	id: "guides/og-image-test-5.md";
-  slug: "guides/og-image-test-5";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
