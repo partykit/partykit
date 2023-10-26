@@ -38,12 +38,17 @@ export default defineConfig({
             label: "Get Started",
             items: [
               {
+                label: "Quickstart",
+                link: "/quickstart/",
+              },
+              {
                 label: "What is PartyKit",
                 link: "/",
               },
               {
-                label: "Quickstart",
-                link: "/quickstart/",
+                label: "Add to existing project",
+                badge: "New",
+                link: "/add-to-existing-project/",
               },
               {
                 label: "How PartyKit works",

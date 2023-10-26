@@ -1,6 +1,6 @@
 ---
 title: Quickstart
-description: Bring realtime collaboration to your app with PartyKit
+description: Build a collaborative realtime application with PartyKit
 ---
 
 Follow this quickstart guide to create and deploy your first PartyKit app in just a few minutes.
@@ -21,14 +21,6 @@ To create a PartyKit project faster, you can pass arguments to the `create` comm
 
 That's it! Navigate to your project's directory, and explore your first PartyKit app 🥳
 
-### Add PartyKit to an existing app
-
-Alternatively, you can add PartyKit to your existing project using the following command in the project's root directory:
-
-```bash
-npx partykit@latest init
-```
-
 ## Run a dev server
 
 To see PartyKit in action, run the following command in your terminal in your project's directory:
@@ -41,15 +33,13 @@ Once the server is running, open localhost with the designated port (defaulting 
 
 ## Deploy your app
 
-To deploy your app, run the following command in your terminal in your project's directory:
+Next, deploy your PartyKit server:
 
 ```bash
 npx partykit deploy
 ```
 
-If you're running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page where you can paste the code that was automatically copied to your clipboard from the terminal output.
-
-Next, you will be asked to grant permissions to PartyKit. Once you do that, your app will be deployed to your `partykit.dev` domain, which will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
+To read more about deploying PartyKit apps, check <a href="/guides/deploying-your-partykit-server/" target="_blank" rel="noopener noreferrer">our guide</a>.
 
 After the domain has been provisioned (up to two minutes), **share the link with your friends and play with it live** 🥳
 
