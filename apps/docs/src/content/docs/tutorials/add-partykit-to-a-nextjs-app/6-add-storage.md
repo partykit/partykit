@@ -9,7 +9,7 @@ PartyKit rooms come with a key-value storage, which make it easy to persist data
 
 ## Loading data on start
 
-Navigate to the server file (`party/index.ts`) and add a new method called `onStart`, which will be triggered when the first connection is made to the PartyKit room or after the server restarts:
+Navigate to the server file (`party/index.ts`) and add a new method called `onStart`. This method will be triggered when the first connection is made to the PartyKit room or after the server restarts:
 
 ```ts
   async onStart() {
@@ -29,7 +29,7 @@ Next, give your app possibility to also add data to storage. Create a helper met
   }
 ```
 
-And then invoke it in `onRequest` to save the poll when it's created by adding just one line of code:
+And then invoke it in `onRequest` (to save the poll when it's created) by adding just one line of code:
 
 ```ts
   async onRequest(req: Party.Request) {
@@ -51,7 +51,7 @@ And then invoke it in `onRequest` to save the poll when it's created by adding j
   }
 ```
 
-and in `onMessage` to save the poll when user votes:
+and invoke it again in `onMessage` to save the poll when user votes:
 
 ```ts
   async onMessage(message: string) {
@@ -69,12 +69,12 @@ and in `onMessage` to save the poll when user votes:
 
 And - that's it! You are now persisting data on the PartyKit server.
 
-:::tip[Learn more about storage]
+:::tip[Storage API]
 To learn more about the Storage API, check <a href="https://docs.partykit.io/guides/persisting-state-into-storage/" target="_blank" rel="noopener noreferrer">our docs</a>.
 :::
 
 ## Nest steps
 
-🎈 If you'd like to check how your code compares to the finished app, check <a href="https://github.com/partykit/partypoll/blob/main/party/index.ts" target="_blank" rel="noopener noreferrer">the finished code</a> online 🎈
+Congratulations! Your polling app is working! Now it's time to [deploy it](/tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app) 🥳
 
-Congratulations! Your polling app is working and now it's time to [deploy it](/tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app) 🥳
+🎈 If you'd like to check how your code compares to the finished app, check <a href="https://github.com/partykit/partypoll/blob/main/party/index.ts" target="_blank" rel="noopener noreferrer">the finished code</a> online 🎈
