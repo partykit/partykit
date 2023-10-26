@@ -198,6 +198,13 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"docs": {
+"add-to-existing-project.md": {
+	id: "add-to-existing-project.md";
+  slug: "add-to-existing-project";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "enterprise.md": {
 	id: "enterprise.md";
   slug: "enterprise";
@@ -383,6 +390,13 @@ declare module 'astro:content' {
 "guides/managing-environment-variables.md": {
 	id: "guides/managing-environment-variables.md";
   slug: "guides/managing-environment-variables";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guides/og-image-test-5.md": {
+	id: "guides/og-image-test-5.md";
+  slug: "guides/og-image-test-5";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
