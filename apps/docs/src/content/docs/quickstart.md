@@ -36,7 +36,7 @@ Once the server is running, open localhost with the designated port (defaulting 
 Next, deploy your PartyKit server:
 
 ```bash
-npm partykit deploy
+npx partykit deploy
 ```
 
 To read more about deploying PartyKit apps, check <a href="/guides/deploying-your-partykit-server/" target="_blank" rel="noopener noreferrer">our guide</a>.

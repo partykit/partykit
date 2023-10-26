@@ -38,7 +38,7 @@ Add desired behavior to your server, and connect it to the UI.
 Lastly, deploy your PartyKit server:
 
 ```bash
-npm partykit deploy
+npx partykit deploy
 ```
 
 To read more about deploying PartyKit server, check <a href="/guides/deploying-your-partykit-server/" target="_blank" rel="noopener noreferrer">our deployment guide</a>.
