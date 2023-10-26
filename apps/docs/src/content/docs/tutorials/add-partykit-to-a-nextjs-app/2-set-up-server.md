@@ -12,7 +12,7 @@ In this step you will set up your PartyKit server to handle HTTP requests.
 To add PartyKit to a new app, run the following command in the terminal in your app directory:
 
 ```bash
-npm partykit@latest init
+npx partykit@latest init
 ```
 
 This command adds three things:
