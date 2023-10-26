@@ -42,13 +42,13 @@ export default defineConfig({
                 link: "/quickstart/",
               },
               {
-                label: "What is PartyKit",
-                link: "/",
-              },
-              {
                 label: "Add to existing project",
                 badge: "New",
                 link: "/add-to-existing-project/",
+              },
+              {
+                label: "What is PartyKit",
+                link: "/",
               },
               {
                 label: "How PartyKit works",

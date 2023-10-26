@@ -7,6 +7,10 @@ Follow this quickstart guide to create and deploy your first PartyKit app in jus
 
 Note that to run PartyKit, you need to have Node v. 17 or higher installed.
 
+:::tip[Prefer a tutorial?]
+If you'd prefer an in-depth walkthrough, consider following our [tutorial](/tutorials/add-partykit-to-a-nextjs-app).
+:::
+
 ## Create a PartyKit app
 
 To start your adventure, run the following command in your terminal to create a new PartyKit project:

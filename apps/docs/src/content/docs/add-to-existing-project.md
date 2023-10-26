@@ -5,11 +5,11 @@ description: Bring realtime collaboration to your app with PartyKit
 
 Follow this quick guide to add PartyKit to your existing app, and deploy it in just a few minutes.
 
+Note that to run PartyKit, you need to have Node v. 17 or higher installed.
+
 :::tip[Prefer a tutorial?]
 If you'd prefer an in-depth walkthrough, consider following our [tutorial](/tutorials/add-partykit-to-a-nextjs-app).
 :::
-
-Note that to run PartyKit, you need to have Node v. 17 or higher installed.
 
 ### Add PartyKit to an existing app
 
@@ -29,7 +29,7 @@ Run the following command in your terminal in your project's directory to start 
 npx partykit dev
 ```
 
-## Develop your server further
+## Develop your server
 
 Add desired behavior to your server, and connect it to the UI.
 
