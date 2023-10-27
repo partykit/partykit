@@ -47,14 +47,10 @@ export type ConnectionContext = { request: CFRequest };
 export type Stub = {
   /** @deprecated Use `await socket()` instead */
   connect: () => WebSocket;
-  socket: (
-    pathOrInit?: string | RequestInit,
-    maybeInit?: RequestInit
-  ) => Promise<WebSocket>;
-  fetch: (
-    pathOrInit?: string | RequestInit,
-    maybeInit?: RequestInit
-  ) => Promise<Response>;
+  socket(pathOrInit: string | RequestInit): Promise<WebSocket>;
+  socket(path: string, init: RequestInit): Promise<WebSocket>;
+  fetch(pathOrInit: string | RequestInit | ReturnRequest): Promise<Response>;
+  fetch(path: string, init: RequestInit | ReturnRequest): Promise<Response>;
 };
 
 /** Additional information about other resources in the current project */

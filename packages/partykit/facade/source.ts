@@ -89,17 +89,17 @@ function createMultiParties(
     for (const [key, value] of Object.entries(namespaces)) {
       if (typeof value.idFromName === "function") {
         parties[key] ||= {
-          get: (name: string) => {
+          get: (name: string): Party.Stub => {
             const docId = value.idFromName(name).toString();
             const id = value.idFromString(docId);
             const stub = value.get(id);
             return {
               fetch(
-                pathOrInit?: string | RequestInit,
-                maybeInit?: RequestInit
+                pathOrInit?: string | RequestInit | Request,
+                maybeInit?: RequestInit | Request
               ) {
                 let path: RequestInfo | undefined;
-                let init: RequestInit | undefined;
+                let init: RequestInit | Request | undefined;
                 if (pathOrInit) {
                   if (typeof pathOrInit === "string") {
                     path = pathOrInit;
