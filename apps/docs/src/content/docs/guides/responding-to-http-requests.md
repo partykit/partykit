@@ -6,17 +6,35 @@ description: n addition to serving real-time WebSocket traffic, PartyKit servers
 In addition to [serving real-time WebSocket traffic](/guides/building-a-real-time-websocket-server/), PartyKit servers can respond to regular HTTP requests.
 
 :::note[About Party URLs]
-Parties accept requests at `/parties/:party/:room-id`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](/guides/using-multiple-parties-per-project/).
+Parties accept requests at `/parties/:party/:roomId`. The default `party` in each project is called `"main"`, but you can define [multiple parties per project](/guides/using-multiple-parties-per-project/).
 :::
 
 Let's send a request to the room's public URL:
 
 ```ts
-fetch(`${PARTYKIT_HOST}/parties/main/${roomId}`, {
+fetch(`https://${PARTYKIT_HOST}/parties/main/${roomId}`, {
   method: "POST",
-  body: JSON.stringify({
-    message: "Hello!",
-  }),
+  body: JSON.stringify({ message: "Hello!" })
+});
+```
+
+The PartyKit hosting environment uses the `https` protocol by default, but in local development you are most likely using `http`, so in practice, your code might look something like this:
+```ts
+const protocol = PARTYKIT_HOST.startsWith("localhost")
+  ? "http" 
+  : "https";
+fetch(`${protocol}://${PARTYKIT_HOST}/parties/main/${roomId}`, {
+  method: "POST",
+  body: JSON.stringify({ message: "Hello!" })
+});
+```
+
+To make this easier, the [`partysocket`](/reference/partysocket-api) package exports a `PartySocket.fetch` utility that constructs the correct URL for you:
+
+```ts
+PartySocket.fetch({ host: PARTYKIT_HOST, room: roomId }, {
+  method: "POST",
+  body: JSON.stringify({ message: "Hello!" })
 });
 ```
 
