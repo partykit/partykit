@@ -19,7 +19,7 @@ export default function usePartySocket(options: UsePartySocketOptions) {
     createSocket: (options) => new PartySocket(options),
     createSocketMemoKey: (options) =>
       JSON.stringify([
-        // NOTE: if query is defined as a function, the code
+        // NOTE: if query is defined as a function, the socket
         // won't reconnect when you change the function identity
         options.query,
         options.id,
