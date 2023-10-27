@@ -13,7 +13,7 @@ Every PartyKit server accepts WebSocket connections by default:
 // server.ts
 import type * as Party from "partykit/server";
 
-export default class WebSocket implements Party.Server {}
+export default class WebSocketServer implements Party.Server {}
 ```
 
 You can connect to it using the [`PartySocket`](/reference/partysocket-api/) client library.

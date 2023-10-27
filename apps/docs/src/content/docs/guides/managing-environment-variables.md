@@ -2,7 +2,7 @@
 title: Managing environment variables
 description: Guide for managing environment variables and secrets in PartyKit
 sidebar:
-    label: Managing env vars
+    label: Managing env variables
     badge: New
 ---
 

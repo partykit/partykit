@@ -33,6 +33,10 @@ npx partykit dev
 
 Add desired behavior to your server, and connect it to the UI.
 
+:::tip[Where to start?]
+If you don't now where to start, follow our [guide to building a WebSocket server](/guides).
+:::
+
 ## Deploy your app
 
 Lastly, deploy your PartyKit server:
