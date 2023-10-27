@@ -97,7 +97,7 @@ onConnect() {
 }
 ```
 
-However, `Party.context.parties` is not available inside `onAlarm`, so the above conde snippet would throw and error!
+However, `Party.context.parties` is not available inside `onAlarm`, so the above code snippet would throw and error!
 
 As a workaround, you can `fetch` to the other parties using their public address.
 
@@ -121,14 +121,14 @@ Sometimes, you may want to persist room storage for a limited period, and clean 
 A handy patters is to keep updating an alarm every time you save data to storage. If the alarm ever rings, you know that the room has not been accessed for that time, and you can safely remove unused storage:
 ```ts
 
-const EXPIRY_PERIOD_MILLSECONDS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const EXPIRY_PERIOD_MILLISECONDS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 export default class UserSession implements Party.Server {
   onMessage(message: string) {
     const data = JSON.parse(message);
     // do something, and save to storage
     await this.party.storage.put(data.id, data);
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLSECONDS);  
+    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);  
   }
 
   onAlarm() {
@@ -144,6 +144,6 @@ The above example deletes the data after it has not been changed for 30 days. If
   onConnect(connection: Party.Connection) {
     // do something, and save to storage
     connection.send(await this.party.storage.get(data.id));
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLSECONDS);  
+    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);  
   }
 ```

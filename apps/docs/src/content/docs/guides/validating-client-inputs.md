@@ -3,7 +3,7 @@ title: Validating client inputs
 description: Make sure you only accept well-formed data from the clients
 ---
 
-PartyKit is flexible, when it comes to data it accepts. You can send your PartyKit server arbirary strings or binary data over WebSockets or in HTTP request bodies. 
+PartyKit is flexible, when it comes to data it accepts. You can send your PartyKit server arbitrary strings or binary data over WebSockets or in HTTP request bodies. 
 
 This is handy, but sometimes, you may receive something you don't expect! Let's handle those cases by validating our inputs.
 

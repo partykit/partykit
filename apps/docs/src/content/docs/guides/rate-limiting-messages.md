@@ -7,7 +7,7 @@ sidebar:
 
 PartyKit is very fast, and can process hundreds of messages per second from a single WebSocket connection, and thousands per second per room.
 
-However, this is not always a desired behaviour! For example, a connected client may misbehave accidentally or on purpose, and spam the room with messages on a loop. If you're a security expert, you may be thinking of spambots. If you're a React developer, you may be thinking of a runaway `useEffect` with a missing `memo` variable.
+However, this is not always a desired behavior! For example, a connected client may misbehave accidentally or on purpose, and spam the room with messages on a loop. If you're a security expert, you may be thinking of spambots. If you're a React developer, you may be thinking of a runaway `useEffect` with a missing `memo` variable.
 
 You can prevent both scenarios by applying rate limiting to your connections.
 

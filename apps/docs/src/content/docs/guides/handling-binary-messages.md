@@ -13,7 +13,7 @@ onMessage(message: string) {
 }
 ```
 
-Similarly, we often see the server responding with stringified JSON:
+Similarly, you'll often see the server responding with stringified JSON:
 
 ```ts
 onConnect(connection: Party.Connection) {
@@ -21,7 +21,7 @@ onConnect(connection: Party.Connection) {
 }
 ```
 
-These examples are simplified, because in reality, both incoming and outcoming messages can be either strings, or generic raw binary data buffers:
+These examples are simplified, because in reality, both incoming and outgoing messages can be either strings, or generic raw binary data buffers:
 
 ```ts
 onMessage(message: string | ArrayBufferLike) {
@@ -62,7 +62,7 @@ import { unpack, pack } from 'msgpackr';
 class Server implements Party.Server {
   onConnect(connection: Party.Connection) {
     const data = { type: "join", id: connection.id };
-//  const message = JSON.stringfy(data);
+//  const message = JSON.stringify(data);
     const message = pack(data);
     this.party.broadcast(message);
   }
@@ -94,11 +94,11 @@ socket.addEventListener((event) => {
 
 MessagePack is easy to use, but it doesn't necessarily make it a good idea. 
 
-We chose the `msgpackr` implementation for this guide because it's fast, but because `JSON.parse` and `JSON.stringify` are built natively into the JavaScript runtime, they are very fast too, so you may not realise the type of performance gains you want.
+We chose the `msgpackr` implementation for this guide because it's fast, but because `JSON.parse` and `JSON.stringify` are built natively into the JavaScript runtime, they are very fast too, so you may not realize the type of performance gains you want.
 
 Additionally, if you use the `msgpackr` library on the client size, you are adding nearly 10 kB of code to you JavaScript bundle.
 
-Choosing to use a binary encodng is a tradeoff, but typically, generic binary encodings make sense when you are sending in large data payloads, and may not make sense for smaller messages.
+Choosing to use a binary encoding is a tradeoff, but typically, generic binary encodings make sense when you are sending in large data payloads, and may not make sense for smaller messages.
 
 ### Mix both JSON and MessagePack encodings
 
