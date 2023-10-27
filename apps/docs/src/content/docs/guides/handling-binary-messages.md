@@ -5,7 +5,7 @@ sidebar:
     badge: New
 ---
 
-Most PartyKit examples you see will assume WebSocket messages are strings, and more specifically, JSON strings:
+Most PartyKit examples you see assume WebSocket messages are strings, and more specifically, JSON strings:
 
 ```ts
 onMessage(message: string) {
@@ -21,7 +21,7 @@ onConnect(connection: Party.Connection) {
 }
 ```
 
-These examples are simplified, because in reality, both incoming and outgoing messages can be either strings, or generic raw binary data buffers:
+These examples are simplified, because in reality, both incoming and outgoing messages can be either strings or generic raw binary data buffers:
 
 ```ts
 onMessage(message: string | ArrayBufferLike) {
@@ -39,16 +39,15 @@ Read [Lin Clark's cartoon guide](https://hacks.mozilla.org/2017/06/a-cartoon-int
 
 ## Why ArrayBuffers?
 
-Strings are convenient, but they are not a good format for representing non-textual data, such as images, video, WASM bundles, and so on. In fact, often in JavaScript programs we [`Base64` encode](https://developer.mozilla.org/en-US/docs/Glossary/Base64) binary data in order to coerce it into a string, which is both slow and consumes a lot of memory and network bandwidth.
+Strings are convenient, but they are not a good format for representing non-textual data, such as images, video, WASM bundles, and others. In fact, in JavaScript programs we often use [`Base64` encode](https://developer.mozilla.org/en-US/docs/Glossary/Base64) binary data in order to coerce it into a string. This approach is both slow and consumes a lot of memory and network bandwidth.
 
-Even when handling text data, strings can be inefficient. These days, most web servers compress HTTP responses using compression algorithms like `gzip`, but WebSocket messages aren't compressed by default. So if you are sending over large amounts of textual data (for example large JSON structures), you may be wasting a lot of bytes.
+Even when handling textual data, strings can be inefficient. These days, most web servers compress HTTP responses using compression algorithms like `gzip`. However, WebSocket messages are not compressed by default. This means that if you are sending over large amounts of textual data (for example large JSON structures), you may be wasting a lot of bytes.
 
-ArrayBuffers allow you to represent data as low-level arrays of binary data: `0`s and `1`s. This gives you the flexibility to send any data you'd like, and represent, encode, and compress it in any format you want.
-
+ArrayBuffers allow you to represent data as low-level arrays of binary data: `0`s and `1`s. This gives you the flexibility to send any data, and represent, encode, and compress it in any format.
 
 ## Binary encoding JavaScript objects using MessagePack
 
-When it comes to encoding your data in a binary format, there is no one-size-fits-all approach. Depending on the shape of your data, you will find different binary encodings provide different benefits and tradeoffs.
+When it comes to encoding your data in a binary format, there is no one-size-fits-all approach. Depending on the shape of your data, you will find that different binary encodings provide different benefits and trade-offs.
 
 In this example, we'll use the [MessagePack](https://msgpack.org/) format and the [`msgpackr`](https://www.npmjs.com/package/msgpackr) library to pack (encode) and unpack (decode) our objects to a binary format.
 
@@ -92,13 +91,13 @@ socket.addEventListener((event) => {
 
 ### Measure before you pack
 
-MessagePack is easy to use, but it doesn't necessarily make it a good idea. 
+MessagePack is easy to use, but that alone doesn't necessarily make it a good idea.
 
-We chose the `msgpackr` implementation for this guide because it's fast, but because `JSON.parse` and `JSON.stringify` are built natively into the JavaScript runtime, they are very fast too, so you may not realize the type of performance gains you want.
+We chose the `msgpackr` implementation for this guide because it's fast. However, given that `JSON.parse` and `JSON.stringify` are built natively into the JavaScript runtime, they are very fast too. This means that you may not realize the type of performance gains you want.
 
 Additionally, if you use the `msgpackr` library on the client size, you are adding nearly 10 kB of code to you JavaScript bundle.
 
-Choosing to use a binary encoding is a tradeoff, but typically, generic binary encodings make sense when you are sending in large data payloads, and may not make sense for smaller messages.
+Choosing to use a binary encoding is a trade-off, but typically, generic binary encodings make sense when you are sending large data payloads. For smaller messages, they may not make sense.
 
 ### Mix both JSON and MessagePack encodings
 
@@ -130,10 +129,10 @@ socket.addEventListener((event) => {
 }
 ```
 
-With this approach, you can use MessagePack for large messages, such as syncing over large sets of data at once, while still use JSON for smaller messages.
+With this approach, you can use MessagePack for large messages, such as syncing over large sets of data at once, and still use JSON for smaller messages.
 
 ## Validating binary data
 
-Encoding libraries like MessagePack will usually validate that the data conforms to a format, but are agnostic to the _content_ of the message.
+Encoding libraries like MessagePack will usually validate that the data conforms to a format, but they are agnostic to the _content_ of the message.
 
-To learn about validating data against a schema, read our [Validating client inputs](/guides/validating-client-inputs) guide.
+To learn about validating data against a schema, read our guide on [validating client inputs](/guides/validating-client-inputs) guide.
