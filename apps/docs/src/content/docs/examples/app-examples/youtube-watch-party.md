@@ -12,4 +12,4 @@ A YouTube watch party with a live chat by [Matt Webb](https://twitter.com/genmon
 Explore this example:
 
 - [GitHub repository](https://github.com/partykit/sketch-youtube)
-- [live demo](https://youtube-party-seven.vercel.app/)
+- [live demo](https://waterhole.genmon.partykit.dev/)

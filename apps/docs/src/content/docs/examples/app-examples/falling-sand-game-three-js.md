@@ -16,4 +16,4 @@ Made by [Brian Jordan](https://twitter.com/bcjordan)
 Explore this example:
 
 - [GitHub repository](https://github.com/bcjordan/falling-sand-partykit)
-- [live demo](sand.graphics)
+- [live demo](https://sand.graphics)
