@@ -1,11 +1,13 @@
 ---
 title: Validating client inputs
 description: Make sure you only accept well-formed data from the clients
+sidebar:
+  badge: New
 ---
 
-PartyKit is flexible, when it comes to data it accepts. You can send your PartyKit server arbitrary strings or binary data over WebSockets or in HTTP request bodies. 
+PartyKit is flexible, when it comes to data it accepts. You can send arbitrary strings or binary data over WebSockets or in HTTP request bodies to your PartyKit server.
 
-This is handy, but sometimes, you may receive something you don't expect! Let's handle those cases by validating our inputs.
+This is handy, but sometimes it may result in receiving unexpected data.
 
 ## Data schemas
 
@@ -31,10 +33,9 @@ const Message = z.union([
 
 In the above example, the `Message` schema can be used to validate all allowed message shapes.
 
-
 ## Validating WebSocket messages
 
-Once you have your schema, you can validate inputs in a type-safe way. In the below example, if the incoming `message` does not conform to the `Message` schema, the message is simply ignored:
+Once you specified the schema, you can validate inputs in a type-safe way. In the below example, if the incoming `message` does not conform to the `Message` schema, the message is ignored:
 
 ```ts
 
@@ -55,7 +56,7 @@ onMessage(message: string) {
 }
 ```
 
-In addition to runtime validation, `zod` uses TypeScript type inference to add an additional layer of type safety to your program, so in the `switch` statement, each type of message:
+In addition to runtime validation, `zod` uses TypeScript type inference to add an additional layer of type safety to your program, so in the above `switch` statement, each type of message is typed based on its schema like below:
 
 ```ts
 case "remove":
@@ -84,7 +85,7 @@ await onRequest(req: Party.Request) {
 
 Because `zod` works in any standard JavaScript environment, we can use the same library on the client side to validate that the server-sent responses are valid.
 
-Define a schema in a shared file, e.g. `schema.ts`:
+Define a schema in a shared file, for example in `schema.ts`:
 
 ```ts
 import z from "zod";
@@ -105,6 +106,7 @@ socket.addEventListener((event) => {
 ```
 
 If you want to ensure that the server can never accidentally send a response that doesn't conform to the schema, you can optionally also validate the response data before you send or broadcast it:
+
 ```ts
 onConnect(connection: Party.Connection) {
   const message = ReplyMessage.parse({ type: "join", id: connection.id });
@@ -114,7 +116,7 @@ onConnect(connection: Party.Connection) {
 
 ## Validating binary messages
 
-In the above examples, we assumed that the WebSocket messages are JSON strings. However, PartyKit supports sending raw binary data, too.
+The above examples assume that the WebSocket messages are JSON strings. However, PartyKit supports [sending raw binary data](./guides/handling-binary-messages/) as well.
 
 `zod` is agnostic to the data serialization and encoding formats. In all above examples, we have first called `JSON.parse` to parse the data to plain JavaScript objects before validating the format.
 
