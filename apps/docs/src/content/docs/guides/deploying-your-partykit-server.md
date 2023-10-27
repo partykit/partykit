@@ -1,8 +1,8 @@
 ---
 title: Deploy your PartyKit server
 sidebar:
-    label: Deploying a PartyKit server
-    badge: New
+  label: Deploying a PartyKit server
+  badge: New
 description: Deploy your PartyKit app and debug live apps after deployment
 ---
 
@@ -24,7 +24,7 @@ After the domain has been provisioned (up to two minutes), you can use the link 
 
 ## Deploying with environment variables
 
-There are two ways to manage secrets in PartyKit - read our guide on [managing secrets](../guides/managing-environment-variables).
+There are two ways to manage secrets in PartyKit - read our guide on [managing secrets](../managing-environment-variables).
 
 ## Debugging live apps after deployment
 
