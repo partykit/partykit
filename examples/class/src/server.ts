@@ -7,7 +7,12 @@ type Connection = Party.Connection<{ country: string | undefined }>;
 export default class Main implements Party.Server {
   // onBefore* handlers that run in the worker nearest the user are now
   // explicitly marked static, because they have no access to Party state
-  static async onBeforeRequest(req: Party.Request) {
+  static async onBeforeRequest(req: Party.Request, lobby: Party.Lobby) {
+    await lobby.parties.main.get(lobby.id).fetch("/foo");
+    await lobby.parties.main.get(lobby.id).fetch(req);
+
+    await lobby.parties.main.get(lobby.id).fetch(req.url, req);
+
     return req;
   }
   static async onBeforeConnect(req: Party.Request) {
