@@ -56,22 +56,22 @@ In this example, we'll use the [MessagePack](https://msgpack.org/) format and th
 
 At its simplest, MessagePack is a drop-in replacement for JSON:
 
-```diff
-+ import { unpack, pack } from 'msgpackr';
+```ts
+import { unpack, pack } from 'msgpackr';
 
 class Server implements Party.Server {
   onConnect(connection: Party.Connection) {
     const data = { type: "join", id: connection.id };
--    const message = JSON.stringfy(data);
-+    const message = pack(data);
+//  const message = JSON.stringfy(data);
+    const message = pack(data);
     this.party.broadcast(message);
   }
 
   onMessage(message: string | ArrayBufferLike) {
--    if (typeof message === string) {
-+    if (typeof message !== string) {
--      const data = JSON.parse(message);
-+      const data = unpack(message);
+//  if (typeof message === string) {
+    if (typeof message !== string) {
+//   const data = JSON.parse(message);
+     const data = unpack(message);
     }
   }
 }
@@ -81,12 +81,12 @@ class Server implements Party.Server {
 
 On the client, you can also use the same library to unpack server responses:
 
-```diff
-+ import { unpack } from 'msgpackr/unpack';
+```ts
+import { unpack } from 'msgpackr/unpack';
 
 socket.addEventListener((event) => {
--  const message = JSON.parse(event.data);
-+  const message = unpack(event.data);
+//const message = JSON.parse(event.data);
+  const message = unpack(event.data);
 });
 ```
 
