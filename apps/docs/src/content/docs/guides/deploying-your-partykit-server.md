@@ -13,7 +13,7 @@ This page provides an overview of how to deploy your PartyKit server and how to 
 In your project directory, run the following command in the terminal:
 
 ```bash
-npm partykit deploy
+npx partykit deploy
 ```
 
 If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page.
