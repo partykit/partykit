@@ -30,7 +30,7 @@ There are two ways to manage secrets in PartyKit - read our guide on [managing s
 
 If you're encountering any issues with your server, run the following command in your project directory to get live traffic logs and errors:
 
-```ts
+```bash
 npx partykit tail
 ```
 
