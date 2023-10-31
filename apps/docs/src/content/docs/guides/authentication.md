@@ -83,7 +83,7 @@ To ensure that only authorized users can make requests to your server, you shoul
 The recommended way is to pass it as an `Authorization` header:
 
 ```ts
-fetch(`${PARTYKIT_HOST}/party/${roomId}`, {
+fetch(`https://${PARTYKIT_HOST}/party/${roomId}`, {
   headers: {
     // get an auth token using your authentication client library
     Authorization: getToken(),

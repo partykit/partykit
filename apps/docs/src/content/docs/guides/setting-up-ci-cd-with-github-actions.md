@@ -28,7 +28,7 @@ Provide the `PARTYKIT_LOGIN` and `PARTYKIT_TOKEN` values you generated in the pr
 
 
 :::caution[Storing secrets]
-The `PARTYKIT_TOKEN` will allow anyone to deploy to PartyKit your behalf, so do not share it publically or commit it to source control.
+The `PARTYKIT_TOKEN` will allow anyone to deploy to PartyKit your behalf, so do not share it publicly or commit it to source control.
 :::
 
 ### 3. Create a Github Action

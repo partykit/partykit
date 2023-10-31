@@ -2,7 +2,7 @@
 title: Managing environment variables
 description: Guide for managing environment variables and secrets in PartyKit
 sidebar:
-    label: Managing env vars
+    label: Managing env variables
     badge: New
 ---
 
@@ -36,7 +36,7 @@ Next, use the following command:
 npx partykit deploy --with-vars
 ```
 
-Please note that this command will take precendence over any previously deployed secrets, overriding their values for this particular deployment.
+Please note that this command will take precedence over any previously deployed secrets, overriding their values for this particular deployment.
 
 If you are not using `.env` file, you can specify the variable values by using the following command (here we assume that we are deploying two variables: `API_KEY` and `HOST`, which correspond to your variables which were set locally):
 

@@ -1,8 +1,8 @@
 ---
 title: Deploy your PartyKit server
 sidebar:
-    label: Deploying a PartyKit server
-    badge: New
+  label: Deploying a PartyKit server
+  badge: New
 description: Deploy your PartyKit app and debug live apps after deployment
 ---
 
@@ -13,7 +13,7 @@ This page provides an overview of how to deploy your PartyKit server and how to 
 In your project directory, run the following command in the terminal:
 
 ```bash
-npm partykit deploy
+npx partykit deploy
 ```
 
 If you’re running PartyKit for the first time, you will be prompted to log in using GitHub. A new browser window will open with a device activation page.
@@ -24,13 +24,13 @@ After the domain has been provisioned (up to two minutes), you can use the link 
 
 ## Deploying with environment variables
 
-There are two ways to manage secrets in PartyKit - read our guide on [managing secrets](../guides/managing-environment-variables).
+There are two ways to manage secrets in PartyKit - read our guide on [managing secrets](../managing-environment-variables).
 
 ## Debugging live apps after deployment
 
 If you're encountering any issues with your server, run the following command in your project directory to get live traffic logs and errors:
 
-```ts
+```bash
 npx partykit tail
 ```
 
