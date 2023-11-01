@@ -386,6 +386,13 @@ export function getConfig(
     console.warn('Configuration field "account" is not yet operational');
   }
 
+  if (config.name) {
+    const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$")
+    if (!validPathRegex.test(config.name)) {
+      throw new ConfigurationError("Project name must be a valid url path")
+    }
+  }
+
   if (config.main) {
     if (overrides.main) {
       const absoluteMainPath = path.isAbsolute(overrides.main)
