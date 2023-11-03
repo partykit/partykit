@@ -24,6 +24,7 @@ export default function usePartySocket(options: UsePartySocketOptions) {
         options.query,
         options.id,
         options.host,
+        options.room,
         options.party,
         options.path,
         options.protocol,
