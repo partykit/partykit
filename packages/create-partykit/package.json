@@ -1,6 +1,6 @@
 {
   "name": "create-partykit",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "Scaffolding for PartyKit projects",
   "bin": "dist/index.mjs",
   "scripts": {
