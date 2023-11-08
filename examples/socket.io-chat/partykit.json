@@ -1,0 +1,9 @@
+{
+  "name": "socket-io-chat",
+  "main": "src/server.ts",
+  "compatibilityDate": "2023-10-18",
+  "serve": {
+    "path": "public",
+    "build": "src/client.ts"
+  }
+}
