@@ -293,6 +293,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"partykit-orchestrates-stately.md": {
+	id: "partykit-orchestrates-stately.md";
+  slug: "partykit-orchestrates-stately";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partykit-powers-realtime-avatars-in-epic-web.md": {
 	id: "partykit-powers-realtime-avatars-in-epic-web.md";
   slug: "partykit-powers-realtime-avatars-in-epic-web";
