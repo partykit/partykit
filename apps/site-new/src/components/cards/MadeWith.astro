@@ -1,4 +1,7 @@
 ---
+import "../../styles/variables.css";
+import Button from "../atoms/Button.astro";
+
 interface Props {
   title: string;
   by: string;
@@ -16,12 +19,12 @@ const { title, by, url, github } = Astro.props;
   </header>
   <div>
     <slot />
-    <a class="button github" href={github}>Fork on GitHub</a>
+    <Button variant="github" url={github}>Fork on GitHub</Button>
   </div>
 </div>
 
 <style>
-    .example {
+  .example {
     display: grid;
     grid-template-columns: 100%;
     padding: var(--box-padding);

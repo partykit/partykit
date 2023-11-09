@@ -1,0 +1,48 @@
+---
+import "../../styles/variables.css";
+
+interface Props {
+  url: string;
+  variant?: null | "invert" | "github";
+}
+
+const { url, variant = null } = Astro.props;
+---
+
+<a class={variant} href={url}><slot /></a>
+
+<style>
+  a {
+    padding: var(--box-padding);
+    border: none;
+    border-radius: 2em;
+    text-align: center;
+    background: var(--color-feature-2);
+    color: var(--color-page);
+    font-variation-settings: "wght" 400;
+    max-width: var(--atom-width);
+    cursor: pointer;
+  }
+
+  a:after {
+    content: "→";
+    margin-left: var(--character-width);
+  }
+
+  a.invert {
+    background: transparent;
+    color: inherit;
+    border: 1.5px solid;
+    font-variation-settings: "wght" 550;
+    color: var(--color-feature-2);
+  }
+
+  a.github {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    border-width: 1px;
+    color: inherit;
+    border-color: rgba(160, 160, 160, 0.1);
+    background: rgba(160, 160, 160, 0.2);
+  }
+</style>

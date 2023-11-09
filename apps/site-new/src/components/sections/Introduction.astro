@@ -2,6 +2,7 @@
 import Hero from "../Hero.astro";
 import Terminal from "../Terminal.astro";
 import MadeWith from "../cards/MadeWith.astro";
+import Button from "../atoms/Button.astro";
 ---
 
 <section id="introduction">
@@ -10,8 +11,8 @@ import MadeWith from "../cards/MadeWith.astro";
   <Terminal />
 
   <nav id="get-started">
-    <a class="button" href="#">Developer docs</a>
-    <a class="button" href="#">Discord</a>
+    <Button url="#">Developer docs</Button>
+    <Button url="#">Discord</Button>
   </nav>
 
   <div id="compatibility">
@@ -114,7 +115,21 @@ import MadeWith from "../cards/MadeWith.astro";
     </div>
 
     <nav>
-      <a class="button invert" href="#">More examples</a>
+      <Button variant="invert" url="#">More examples</Button>
     </nav>
   </div>
 </section>
+
+<style>
+  #get-started {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #get-started {
+      grid-column: 2 / 10;
+      justify-content: start;
+      margin-top: calc(var(--whitespace) * 0.5);
+    }
+  }
+</style>

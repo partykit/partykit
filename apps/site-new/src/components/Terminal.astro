@@ -1,12 +1,13 @@
 ---
-
+import "../styles/variables.css";
+import Button from "./atoms/Button.astro";
 ---
 
 <div id="terminal">
   <div id="terminal-tabs">
     <span>New project</span>
     <span>Add to existing project</span>
-    <a class="button github" href="#">Fork on GitHub</a>
+    <Button variant="github" url="#">Fork on GitHub</Button>
   </div>
 
   <figure>
