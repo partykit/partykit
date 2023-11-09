@@ -1,0 +1,95 @@
+---
+interface Props {
+  title: string;
+  by: string;
+  url: string;
+  github: string;
+}
+
+const { title, by, url, github } = Astro.props;
+---
+
+<div class="example">
+  <header>
+    <h4><a href={url}>{title}</a></h4>
+    <p>by {by}</p>
+  </header>
+  <div>
+    <slot />
+    <a class="button github" href={github}>Fork on GitHub</a>
+  </div>
+</div>
+
+<style>
+    .example {
+    display: grid;
+    grid-template-columns: 100%;
+    padding: var(--box-padding);
+    background: var(--color-feature-1);
+    border-radius: var(--box-radius);
+  }
+
+  @media (min-width: 760px) {
+    .example {
+      grid-column: span 2;
+      grid-row: span 3;
+    }
+  }
+
+  .example:nth-child(2) ~ .example {
+    display: none;
+  }
+
+  @media (min-width: 760px) {
+    .example:nth-child(2) ~ .example {
+      display: grid;
+    }
+    .example:nth-child(1) {
+      grid-row: 1 / 4;
+    }
+    .example:nth-child(2) {
+      grid-row: 2 / 5;
+    }
+    .example:nth-child(3) {
+      grid-row: 1 / 4;
+    }
+    .example:nth-child(4) {
+      grid-row: 2 / 5;
+    }
+    .example:nth-child(5) {
+      grid-row: 1 / 4;
+    }
+  }
+
+  .example:after {
+    content: " ";
+    grid-column: 1 / 2;
+    grid-row: 1 / 3;
+    padding-top: 160%;
+  }
+
+  .example header {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+
+  .example header h4 {
+    display: inline;
+  }
+
+  .example header p {
+    display: inline-block;
+  }
+
+  .example div {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    align-self: end;
+  }
+
+  .example .github {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    color: var(--color-feature-2);
+  }
+</style>
