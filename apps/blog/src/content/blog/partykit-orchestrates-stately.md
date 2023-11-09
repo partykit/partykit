@@ -42,9 +42,9 @@ PartyKit not only addressed our orchestration needs but also added features like
 
 ### Deployment
 
-But we needed to solve our second challenge before Sky could become a reality: Since our users are building the state machines in the editor, we don't know what they will look like until they are done. We needed a way to deploy the state machines dynamically.
+But we needed to solve our second challenge before Sky could become a reality: Because our users are building state machines live in our editor, we don't know what they will look like until they are done. We needed a way to deploy the state machine code dynamically.
 
-Since we don't know what the code will look like up until the point where the user wants to deploy we can't really provision any infrastructure in advance. We need to be able to deploy the state machines dynamically. We also need to be able to deploy them in a way that is secure and scalable without resorting to questionable methods like using [`eval`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval).
+And since we don't know what the code will look like up until the point where the user wants to deploy we can't really provision any infrastructure in advance. We need to be able to deploy the state machines dynamically. We also need to be able to deploy them in a way that is secure and scalable without resorting to questionable methods like using [`eval`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval).
 
 We explored various options for this, but we didn't find any satisfactory off-the-shelf solutions that met our requirement for both safety and quick deployment.
 
@@ -52,23 +52,23 @@ We explored various options for this, but we didn't find any satisfactory off-th
 
 Since PartyKit was solving our multiplayer problem so easily, it felt natural to talk to the PartyKit team about our deployment problem. We had a chat with Sunil, and he brainstormed a solution codenamed `machinehub`.
 
-Given Sunil's extensive knowledge about Cloudflare, he suggested that we use [Workers for Platforms](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/) to solve the problem.
-
-This collaboration was a breakthrough, providing us with a way to deploy state machines dynamically, swiftly, and securely, and we are very grateful to Sunil for his help!
+Given Sunil's extensive knowledge about Cloudflare, he suggested that we use [Workers for Platforms](https://developers.cloudflare.com/cloudflare-for-platforms/workers-for-platforms/) to solve the problem. This collaboration was a breakthrough, providing us with a way to deploy state machines dynamically, swiftly, and securely, and we are very grateful to Sunil for his help!
 
 ## What can you build with Stately Sky
 
 You can think of Stately Sky as a _multiplayer-enabled app logic-as-a-service_ platform. That's quite the mouthful. If you already know XState, it might be easier to think of it as _state machines in the cloud_ (or the Sky in our case 😅).
 
-Turns out, this is super convenient for building many different types of apps. Only the imagination sets the limit. Let me show you a very basic example of how to build a shared counter in React using Stately Sky.
+Turns out, this is super convenient for building many different types of apps. Only the imagination sets the limit.
 
 #### Counter example
 
-We'll start by building a simple counter machine in the Stately Studio visual editor. It looks like this ([see it in the editor](https://sky.stately.ai/Wu5gAj)):
+Let's look at a very basic example of how to build a shared counter in React using Stately Sky.
+
+We'll start by building the simple counter machine in the Stately Studio visual editor. When finished, it looks like this ([see it in the editor](https://sky.stately.ai/Wu5gAj)):
 
 <img src="/content-images/partykit-orchestrates-stately/counter-machine.png" alt="Counter machine shown in the Stately Studio visual editor" width="600">
 
-Lets have a look at the code you would need inside your own app to connect to this machine:
+Now, lets have a look at the code you would need inside your own app to connect to this machine:
 
 ```tsx
 import { useStatelyActor } from "@statelyai/sky-react";
@@ -108,15 +108,13 @@ export default function Counter() {
 ```
 
 That's it, you now have a shared counter in your app. Fully multiplayer enabled and ready to go.
-You can see the full example code [here](https://github.com/statelyai/sky-starter-app/blob/main/src/examples/counter.tsx), and play with a deployed version [here](https://sky-starter.stately.ai/?page=counter).
-
-### Links
-
-- [Try the Stately visual editor](https://state.new)
-- [Read more about Sky and Stately at our blog](https://stately.ai/blog)
+You can see the full example code [here](https://github.com/statelyai/sky-starter-app/blob/main/src/examples/counter.tsx), and test a deployed version [here](https://sky-starter.stately.ai/?page=counter).
 
 ## The future of Stately Sky
 
 We can't wait to see what you will build with the current release of Sky! And we are super excited about the future of Sky. We have a lot of ideas for how to make it even better, especially when it comes to AI. We see a lot of potential for state machines to improve the results you get from using LLMs.
+
+- [Try the Stately visual editor](https://state.new)
+- [Read more about Sky and Stately at our blog](https://stately.ai/blog)
 
 Thanks for reading, hope to see you in the Sky!
