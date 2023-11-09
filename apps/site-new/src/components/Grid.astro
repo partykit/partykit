@@ -1,0 +1,19 @@
+---
+
+---
+
+<div><slot /></div>
+
+<style>
+  div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+  }
+
+  @media (min-width: 760px) {
+    div {
+      grid-template-columns: repeat(10, 1fr);
+    }
+  }
+</style>

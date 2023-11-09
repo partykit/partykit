@@ -1,8 +1,11 @@
 ---
-import Hero from "../Hero.astro";
-import Terminal from "../Terminal.astro";
+import Hero from "./introduction/Hero.astro";
+import Terminal from "./introduction/Terminal.astro";
 import MadeWith from "../cards/MadeWith.astro";
 import Button from "../atoms/Button.astro";
+import Compatibility from "./introduction/Compatibility.astro";
+import Limiter from "../Limiter.astro";
+import SectionNav from "../SectionNav.astro";
 ---
 
 <section id="introduction">
@@ -15,39 +18,12 @@ import Button from "../atoms/Button.astro";
     <Button url="#">Discord</Button>
   </nav>
 
-  <div id="compatibility">
-    <div id="compatibility-frameworks">
-      <h3>Add PartyKit to&nbsp;everything</h3>
-      <p>
-        It works well with with popular collaboration frameworks and libraries.
-        Y.js, Automerge, Replicache, XState, tldraw, TinyBase, they all Just
-        Work™.
-      </p>
-    </div>
-
-    <div id="compatibility-platforms">
-      <h3>It's platform agnostic</h3>
-      <p>
-        PartyKit integrates with your current setup. Plays nicely with Vercel,
-        Netlify, AWS, Cloudflare, fly.io, or wherever you host your app. No big
-        rewrite needed.
-      </p>
-    </div>
-
-    <div id="compatibility-standards">
-      <h3>And standards based</h3>
-      <p>
-        WebSockets, Fetch, Request-Response, Wasm. PartyKit uses web standards
-        to guarantee interoperability with all your tools, now and in the
-        future.
-      </p>
-    </div>
-  </div>
+  <Compatibility />
 
   <h2 id="examples-header">Made with PartyKit</h2>
 
   <div id="examples">
-    <div class="limiter">
+    <Limiter>
       <MadeWith
         title="SitGPT"
         url="https://sitegpt.ai"
@@ -112,11 +88,11 @@ import Button from "../atoms/Button.astro";
       <MadeWith title="Another example" url="#" by="Another Legend" github="#">
         <p>Does Cool Thing X, integrates with Service Y</p>
       </MadeWith>
-    </div>
+    </Limiter>
 
-    <nav>
+    <SectionNav>
       <Button variant="invert" url="#">More examples</Button>
-    </nav>
+    </SectionNav>
   </div>
 </section>
 
@@ -130,6 +106,33 @@ import Button from "../atoms/Button.astro";
       grid-column: 2 / 10;
       justify-content: start;
       margin-top: calc(var(--whitespace) * 0.5);
+    }
+  }
+
+  #examples-header {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #examples-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #examples {
+    grid-column: 1 / 3;
+    padding-top: 0.5rem;
+  }
+
+  @media (min-width: 760px) {
+    #examples {
+      grid-column: 1 / 11;
+    }
+  }
+
+  @media (min-width: 760px) {
+    #examples .limiter {
+      height: 50vw;
     }
   }
 </style>

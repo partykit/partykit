@@ -1,12 +1,15 @@
 ---
 import BlogPost from "../cards/BlogPost.astro";
+import Button from "../atoms/Button.astro";
+import Limiter from "../Limiter.astro";
+import SectionNav from "../SectionNav.astro";
 ---
 
 <section id="company">
   <h2 id="blog-header">Blog posts</h2>
 
   <div id="blog-posts">
-    <div class="limiter">
+    <Limiter>
       <BlogPost
         title="Multi-user database collaboration made easy with Fireproof"
         url="#"
@@ -73,10 +76,26 @@ import BlogPost from "../cards/BlogPost.astro";
           our span-seed round, as well as general availability of our platform!
         </p>
       </BlogPost>
-    </div>
+    </Limiter>
 
-    <nav>
-      <a class="button invert" href="#">More posts</a>
-    </nav>
+    <SectionNav>
+      <Button variant="invert" url="#">More posts</Button>
+    </SectionNav>
   </div>
 </section>
+
+<style>
+  #blog-posts {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #blog-posts {
+      grid-column: 1 / 11;
+    }
+  }
+
+  #blog-posts .limiter {
+    grid-template-columns: 100%;
+  }
+</style>

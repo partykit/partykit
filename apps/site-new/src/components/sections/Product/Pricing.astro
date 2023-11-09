@@ -1,0 +1,158 @@
+---
+import "../../../styles/variables.css";
+import Button from "../../atoms/Button.astro";
+---
+
+<>
+  <h2 id="pricing-header">Pricing</h2>
+
+  <div id="pricing">
+    <h3 class="pricing-plan">Individual</h3>
+
+    <p class="pricing-price">&dollar;0</p>
+
+    <ul class="pricing-features">
+      <li>'npx partykit deploy' to partykit.dev</li>
+      <li>Dashboard and insights</li>
+      <li>Live logs</li>
+      <li>Community support</li>
+    </ul>
+
+    <ul class="pricing-limitations">
+      <li>Max 10 deployed projects</li>
+      <li>Generous bundled usage</li>
+    </ul>
+
+    <Button url="#">Get started</Button>
+
+    <hr />
+
+    <h3 class="pricing-plan">Pro</h3>
+
+    <p class="pricing-price">&dollar;10/developer/mo</p>
+
+    <ul class="pricing-features">
+      <li>Team subdomain</li>
+      <li>GitHub app</li>
+      <li>Staging and environments</li>
+      <li>Logs and error reporting</li>
+      <li>Usage analytics</li>
+      <li>Email support</li>
+    </ul>
+
+    <ul class="pricing-limitations">
+      <li>No project cap per team</li>
+      <li>Higher bundled usage</li>
+    </ul>
+
+    <Button url="#">Sign up</Button>
+
+    <hr />
+
+    <h3 class="pricing-plan">Enterprise</h3>
+
+    <p class="pricing-price">Custom</p>
+
+    <ul class="pricing-features">
+      <li>Custom domain</li>
+      <li>Deploy to your own Cloudflare account with no usage cap</li>
+    </ul>
+
+    <ul class="pricing-limitations">
+      <li>Minimum 10 developers</li>
+    </ul>
+
+    <Button url="#">Contact us</Button>
+  </div>
+</>
+
+<style>
+  #pricing-header {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #pricing-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #pricing {
+    grid-column: 1 / 3;
+  }
+
+  #pricing li {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  #pricing li + li {
+    margin-top: 0.5rem;
+  }
+
+  #pricing li:before {
+    content: "";
+    display: inline-block;
+    margin-left: -2rem;
+    width: 2rem;
+    color: var(--color-feature-2);
+  }
+
+  #pricing .pricing-limitations li:before {
+    content: "→";
+  }
+
+  @media (min-width: 760px) {
+    #pricing {
+      grid-column: 1 / 11;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-content: space-between;
+      justify-content: space-between;
+      gap: 0 1rem;
+      height: 30em;
+    }
+
+    #pricing hr {
+      height: 100%;
+      width: 1px;
+      border: none;
+      background: var(--color-feature-1);
+    }
+
+    .pricing-plan {
+      margin-bottom: 0;
+      width: 100%;
+      max-width: var(--atom-width);
+    }
+
+    .pricing-price {
+      color: var(--color-feature-2);
+      width: 100%;
+      max-width: var(--atom-width);
+    }
+
+    .pricing-features {
+      width: 100%;
+      max-width: var(--atom-width);
+      margin-top: 2rem;
+    }
+
+    .pricing-limitations {
+      width: 100%;
+      max-width: var(--atom-width);
+      margin-top: auto;
+    }
+
+    #pricing .button {
+      margin-top: 2rem;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    #pricing {
+      grid-column: 2 / 10;
+    }
+  }
+  </style>
