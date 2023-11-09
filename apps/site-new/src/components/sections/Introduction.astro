@@ -1,4 +1,5 @@
 ---
+import Terminal from "../Terminal.astro";
 import MadeWith from "../cards/MadeWith.astro";
 ---
 
@@ -15,41 +16,7 @@ import MadeWith from "../cards/MadeWith.astro";
     </div>
   </div>
 
-  <div id="terminal">
-    <div id="terminal-tabs">
-      <span>New project</span>
-      <span>Add to existing project</span>
-      <a class="button github" href="#">Fork on GitHub</a>
-    </div>
-
-    <figure>
-      <span>npm install partykit</span>
-      <figcaption>Install with npm</figcaption>
-    </figure>
-
-    <figure is:raw>
-      <span>export default class Server {<br> onMessage(message, websocket)
-      {<br> websocket.send("pong");<br> }<br> onRequest(request) {<br> return
-      new Response(`This is room ${party.id}`);<br> }<br> }</span>
-      <figcaption>Write your code</figcaption>
-    </figure>
-
-    <figure>
-      <span>npx partykit dev server.js</span>
-      <figcaption>Develop on localhost</figcaption>
-    </figure>
-
-    <figure>
-      <span>npx partykit deploy server.js --name first-party</span>
-      <figcaption>Deploy to the edge</figcaption>
-    </figure>
-
-    <figure is:raw>
-      <span>curl
-      https://first-party.{yourname}.partykit.dev/party/my-room</span>
-      <figcaption>Try it out</figcaption>
-    </figure>
-  </div>
+  <Terminal />
 
   <nav id="get-started">
     <a class="button" href="#">Developer docs</a>
