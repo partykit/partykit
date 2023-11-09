@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable deprecation/deprecation */
 import "./styles.css";
 
 import $ from "jquery";
@@ -39,6 +41,7 @@ let username: string;
 let connected = false;
 let typing = false;
 let lastTypingTime: number;
+
 let $currentInput = $usernameInput.focus();
 
 const addParticipantsMessage = (data: any) => {
@@ -53,7 +56,7 @@ const addParticipantsMessage = (data: any) => {
 
 // Sets the client's username
 const setUsername = () => {
-  username = cleanInput(($usernameInput!.val() as string).trim());
+  username = cleanInput(($usernameInput.val() as string).trim());
 
   // If the username is valid
   if (username) {
@@ -82,6 +85,7 @@ const sendMessage = () => {
 };
 
 // Log a message
+
 const log = (message: string, options?: any) => {
   const $el = $("<li>").addClass("log").text(message);
   addMessageElement($el, options);
@@ -193,7 +197,7 @@ const updateTyping = () => {
 
 // Gets the 'X is typing' messages of a user
 const getTypingMessages = (data: ChatData) => {
-  return $(".typing.message").filter(function (i) {
+  return $(".typing.message").filter(function (_i) {
     return $(this).data("username") === data.username;
   });
 };

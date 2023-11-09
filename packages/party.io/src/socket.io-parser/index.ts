@@ -1,4 +1,5 @@
-// deno-lint-ignore-file
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// TODO
 
 import { type RawData } from "../engine.io-parser";
 import { EventEmitter } from "../event-emitter";
@@ -91,6 +92,7 @@ function extractAttachments(data: any, attachments: Attachments[]) {
         const elem = data[key];
         if (isAttachment(elem)) {
           data[key] = { _placeholder: true, num: attachments.length };
+
           attachments.push(elem);
         } else {
           extractAttachments(data[key], attachments);
@@ -100,7 +102,7 @@ function extractAttachments(data: any, attachments: Attachments[]) {
   }
 }
 
-function isAttachment(data: unknown): boolean {
+function isAttachment(data: any): boolean {
   return (
     data instanceof ArrayBuffer ||
     ArrayBuffer.isView(data) ||
@@ -171,7 +173,7 @@ export class Decoder extends EventEmitter<
 function decodeString(str: string): Packet | null {
   const packet: Partial<Packet> = {};
 
-  const type = parseInt(str.charAt(0), 10);
+  const type = parseInt(str.charAt(0), 10) as PacketType;
   if (PacketType[type] === undefined) {
     getLogger("socket.io").debug(`[parser] unknown packet type: ${type}`);
     return null;
@@ -218,6 +220,7 @@ function decodeString(str: string): Packet | null {
   if (str.charAt(++i)) {
     let payload;
     try {
+      // eslint-disable-next-line deprecation/deprecation
       payload = JSON.parse(str.substr(i));
     } catch (err) {
       getLogger("socket.io").debug(`[parser] invalid payload: ${err}`);

@@ -134,6 +134,7 @@ function encodeBlobAsBase64(
   data: Blob,
   callback: (encodedPacket: RawData) => void
 ) {
+  // @ts-expect-error TODO
   const fileReader = new FileReader();
   fileReader.onload = function () {
     const content = (fileReader.result as string).split(",")[1];

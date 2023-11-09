@@ -1,7 +1,7 @@
 import { assertEquals, describe, it } from "vitest";
 import { Server } from "../lib/server";
 import { eioPoll, enableLogs, runHandshake, waitFor } from "misc/util.test";
-import { Socket } from "../lib/socket";
+import type { Socket } from "../lib/socket";
 import { setup } from "./setup.test";
 
 await enableLogs();
@@ -48,7 +48,7 @@ describe("broadcast", () => {
       io.of("/custom");
 
       io.once("connection", (socket) => {
-        socket.join("room1");
+        void socket.join("room1");
       });
 
       const [sid1] = await runHandshake(port);

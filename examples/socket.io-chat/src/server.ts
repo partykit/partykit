@@ -1,10 +1,11 @@
 import { createServer, type Socket } from "party.io";
 import type * as Party from "partykit/server";
 
-const Server = createServer((io, req, lobby, ctx) => {
+const Server = createServer((io, req, lobby, _ctx) => {
   // Chatroom
 
   io.on("connection", (socket: Socket) => {
+    // @ts-expect-error TODO
     const partyName = io._nsps.get("/")!.adapter.partyName;
 
     let username: string;
@@ -33,10 +34,7 @@ const Server = createServer((io, req, lobby, ctx) => {
 
       // we store the username in the socket session for this client
       username = newUsername;
-      await lobby.parties.main.get(partyName).fetch("/user-count", {
-        method: "POST",
-        body: (numUsers + 1).toString(),
-      });
+
       // ++numUsers;
       addedUser = true;
       socket.emit("login", {
@@ -65,7 +63,7 @@ const Server = createServer((io, req, lobby, ctx) => {
 
     // when the user disconnects.. perform this
     socket.on("disconnect", async () => {
-      let numUsers = parseInt(
+      const numUsers = parseInt(
         await lobby.parties.main
           .get(partyName)
           .fetch("/user-count")
@@ -73,11 +71,6 @@ const Server = createServer((io, req, lobby, ctx) => {
         10
       );
       if (addedUser) {
-        await lobby.parties.main.get(partyName).fetch("/user-count", {
-          method: "POST",
-          body: (numUsers - 1).toString(),
-        });
-
         // echo globally that this client has left
         socket.broadcast.emit("user left", {
           username,
@@ -89,20 +82,14 @@ const Server = createServer((io, req, lobby, ctx) => {
 });
 
 export default class extends Server {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   onFetch = Server.onFetch;
 
   async onRequest(req: Party.Request): Promise<Response> {
     const url = new URL(req.url);
-    if (url.pathname.endsWith(`/user-count`)) {
-      if (req.method === "GET") {
-        return new Response(
-          ((await this.party.storage.get<number>("user-count")) || 0).toString()
-        );
-      } else if (req.method === "POST") {
-        const count = parseInt(await req.text(), 10);
-        await this.party.storage.put("user-count", count);
-        return new Response(count.toString());
-      }
+    if (url.pathname.endsWith(`/user-count`) && req.method === "GET") {
+      console.log("user-count", [...this.party.getConnections()].length);
+      return new Response([...this.party.getConnections()].length.toString());
     }
     return super.onRequest(req);
   }

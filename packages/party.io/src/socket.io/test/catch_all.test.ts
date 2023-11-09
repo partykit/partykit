@@ -1,7 +1,7 @@
 import { assertEquals, describe, fail, it } from "vitest";
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { Socket } from "../lib/socket";
+import type { Socket } from "../lib/socket";
 import {
   eioPoll,
   eioPush,

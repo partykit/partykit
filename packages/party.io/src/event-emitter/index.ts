@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * An events map is an interface that maps event names to their value, which represents the type of the `on` listener.
  */
@@ -107,7 +108,7 @@ abstract class BaseEventEmitter<
     event: Ev,
     listener: ReservedOrUserListener<ReservedEvents, ListenEvents, Ev>
   ): this {
-    // @ts-ignore force listener type
+    // @ts-expect-error force listener type
     const onceListener: ReservedOrUserListener<
       ReservedEvents,
       ListenEvents,

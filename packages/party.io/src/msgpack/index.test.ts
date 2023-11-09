@@ -1,8 +1,14 @@
-import { assertEquals, describe, it } from "vitest";
+import { describe, it } from "vitest";
 import { decode, encode } from ".";
 
-function array(length: number) {
-  const arr = new Array(length);
+function assertEquals(actual: unknown, expected: unknown) {
+  if (actual !== expected) {
+    throw new Error(`Expected ${expected}, got ${actual}`);
+  }
+}
+
+function array(length: number): number[] {
+  const arr = new Array<number>(length);
   for (let i = 0; i < arr.length; i++) {
     arr[i] = 0;
   }
@@ -343,14 +349,14 @@ describe("msgpack", () => {
   });
 
   it("toJSON for BigInt", function () {
-    // @ts-ignore custom encoding
+    // @ts-expect-error custom encoding
     BigInt.prototype.toJSON = function () {
       return String(this);
     };
     try {
       checkEncode(BigInt(1234), "a431323334");
     } finally {
-      // @ts-ignore custom encoding
+      // @ts-expect-error custom encoding
       delete BigInt.prototype.toJSON;
     }
   });

@@ -74,9 +74,9 @@ import { createAdapter } from "./socket.io/lib/party-adapter";
 
 import {
   type DefaultEventsMap,
-  EventEmitter,
-  type EventNames,
-  type EventParams,
+  // EventEmitter,
+  // type EventNames,
+  // type EventParams,
   type EventsMap,
 } from "./event-emitter";
 

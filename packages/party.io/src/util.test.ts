@@ -1,5 +1,6 @@
 import * as log from "../test_deps";
-import { EventEmitter, type EventsMap } from "@/event-emitter";
+import type { EventEmitter } from "./event-emitter";
+import { type EventsMap } from "./event-emitter";
 
 export function enableLogs() {
   return log.setup({

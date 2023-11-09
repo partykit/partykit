@@ -14,17 +14,17 @@ describe("socket", () => {
         assertEquals(socket.rooms.size, 1);
         assertEquals(socket.rooms.has(socket.id), true);
 
-        socket.join("room1");
+        void socket.join("room1");
 
         assertEquals(socket.rooms.size, 2);
         assertEquals(socket.rooms.has("room1"), true);
 
-        socket.leave("room1");
+        void socket.leave("room1");
 
         assertEquals(socket.rooms.size, 1);
         assertEquals(socket.rooms.has("room1"), false);
 
-        socket.join("room2");
+        void socket.join("room2");
 
         socket.on("disconnecting", () => {
           assertEquals(socket.rooms.has("room2"), true);

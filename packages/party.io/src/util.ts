@@ -14,6 +14,14 @@ export function upgradeWebSocket(req: Request): {
     // Create the websocket pair for the client
     const { 0: clientWebSocket, 1: serverWebSocket } = new WebSocketPair();
     serverWebSocket.accept();
+    clientWebSocket.addEventListener("close", () => {
+      console.log("closing server websocket on close");
+      serverWebSocket.close();
+    });
+    clientWebSocket.addEventListener("error", () => {
+      console.log("closing server websocket on error");
+      serverWebSocket.close();
+    });
     return {
       response: new Response(null, { status: 101, webSocket: clientWebSocket }),
       socket: serverWebSocket,

@@ -20,6 +20,7 @@ export class WS extends Transport {
     for (const packet of packets) {
       Parser.encodePacket(packet, true, (data: RawData) => {
         if (this.writable) {
+          // @ts-expect-error TODO
           this.socket?.send(data);
         }
       });

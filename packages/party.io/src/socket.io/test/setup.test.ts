@@ -1,4 +1,4 @@
-import { Server } from "../lib/server";
+import type { Server } from "../lib/server";
 import { serve } from "vitest";
 import { createPartialDone } from "misc/util.test";
 
