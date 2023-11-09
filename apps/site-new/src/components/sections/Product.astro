@@ -3,11 +3,12 @@ import Button from "../atoms/Button.astro";
 import Quote from "../cards/Quote.astro";
 import Limiter from "../Limiter.astro";
 import SectionNav from "../SectionNav.astro";
-import Pricing from "./product/Pricing.astro";
-import Features from "./product/Features.astro";
+import Pricing from "../content/Pricing.astro";
+import Features from "../content/Features.astro";
+import Grid from "../Grid.astro";
 ---
 
-<section id="product">
+<Grid>
   <Features />
 
   <Pricing />
@@ -16,70 +17,101 @@ import Features from "./product/Features.astro";
 
   <div id="quotes">
     <Limiter>
-      <Quote
-        name="Brandon Dail"
-        url="#"
-        role="Staff Engineer, Discord"
-        variant="M"
-      >
-        I did a bunch of work recently with Y.js and PartyKit and can confirm it
-        made some of the most difficult parts a breeze. You should 100% try it
-        out at least if it’s relevant to what you’re building.
-      </Quote>
+      <Grid>
+        <Quote
+          name="Brandon Dail"
+          url="#"
+          role="Staff Engineer, Discord"
+          variant="M"
+        >
+          I did a bunch of work recently with Y.js and PartyKit and can confirm
+          it made some of the most difficult parts a breeze. You should 100% try
+          it out at least if it’s relevant to what you’re building.
+        </Quote>
 
-      <Quote variant="S" name="David Khourshid" url="#" role="Founder, Stately">
-        It's the future of workflows.
-      </Quote>
+        <Quote
+          variant="S"
+          name="David Khourshid"
+          url="#"
+          role="Founder, Stately"
+        >
+          It's the future of workflows.
+        </Quote>
 
-      <Quote
-        variant="M"
-        name="Yousef El-Dardiry"
-        url="#"
-        role="Maintainer, BlockNote.js"
-      >
-        A breeze to set up 🙂 Just takes less than 40 lines of code to do!
-        Looking forward to the future of PartyKit!
-      </Quote>
+        <Quote
+          variant="M"
+          name="Yousef El-Dardiry"
+          url="#"
+          role="Maintainer, BlockNote.js"
+        >
+          A breeze to set up 🙂 Just takes less than 40 lines of code to do!
+          Looking forward to the future of PartyKit!
+        </Quote>
 
-      <Quote
-        variant="S"
-        name="Adam Janiš"
-        url="#"
-        role="Staff Engineer, Kiwi.com"
-      >
-        Oh&nbsp;god this is&nbsp;so easy
-      </Quote>
+        <Quote
+          variant="S"
+          name="Adam Janiš"
+          url="#"
+          role="Staff Engineer, Kiwi.com"
+        >
+          Oh&nbsp;god this is&nbsp;so easy
+        </Quote>
 
-      <Quote
-        variant="M"
-        name="Anders Bech Mellson"
-        url="#"
-        role="Developer, Stately"
-      >
-        We've been having a blast using PartyKit at StatelyAI for a little
-        while. It makes implementing real-time a breeze. Try it on your next
-        thing 🎉
-      </Quote>
+        <Quote
+          variant="M"
+          name="Anders Bech Mellson"
+          url="#"
+          role="Developer, Stately"
+        >
+          We've been having a blast using PartyKit at StatelyAI for a little
+          while. It makes implementing real-time a breeze. Try it on your next
+          thing 🎉
+        </Quote>
 
-      <Quote variant="L" name="Bhanu Teja P" url="#" role="Founder, SiteGPT">
-        I have been trying to solve a real-time sync problem for SiteGPT for
-        months now. I tried everything and nothing seemed to work properly.
-        Sunil solved my entire problem using PartyKit in around 10 lines of code
-        🤯 10 lines... and I am not even exaggerating 😅 PartyKit is awesome!!
-      </Quote>
+        <Quote variant="L" name="Bhanu Teja P" url="#" role="Founder, SiteGPT">
+          I have been trying to solve a real-time sync problem for SiteGPT for
+          months now. I tried everything and nothing seemed to work properly.
+          Sunil solved my entire problem using PartyKit in around 10 lines of
+          code 🤯 10 lines... and I am not even exaggerating 😅 PartyKit is
+          awesome!!
+        </Quote>
 
-      <Quote
-        variant="S"
-        name="Adam Janiš"
-        url="#"
-        role="Staff Engineer, Kiwi.com"
-      >
-        A&plus;
-      </Quote>
+        <Quote
+          variant="S"
+          name="Adam Janiš"
+          url="#"
+          role="Staff Engineer, Kiwi.com"
+        >
+          A&plus;
+        </Quote>
+      </Grid>
     </Limiter>
 
     <SectionNav>
       <Button variant="invert" url="#">More quotes</Button>
     </SectionNav>
   </div>
-</section>
+</Grid>
+
+<style>
+  #quotes-header {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #quotes-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #quotes {
+    grid-column: 1 / 3;
+    padding-top: 0.5rem;
+  }
+
+  @media (min-width: 760px) {
+    #quotes {
+      grid-column: 1 / 11;
+    }
+  }
+</style>

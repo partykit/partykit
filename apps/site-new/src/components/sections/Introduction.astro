@@ -1,14 +1,15 @@
 ---
-import Hero from "./introduction/Hero.astro";
-import Terminal from "./introduction/Terminal.astro";
+import Hero from "../content/Hero.astro";
+import Terminal from "../content/Terminal.astro";
 import MadeWith from "../cards/MadeWith.astro";
 import Button from "../atoms/Button.astro";
-import Compatibility from "./introduction/Compatibility.astro";
+import Compatibility from "../content/Compatibility.astro";
+import Grid from "../Grid.astro";
 import Limiter from "../Limiter.astro";
 import SectionNav from "../SectionNav.astro";
 ---
 
-<section id="introduction">
+<Grid>
   <Hero />
 
   <Terminal />
@@ -24,77 +25,104 @@ import SectionNav from "../SectionNav.astro";
 
   <div id="examples">
     <Limiter>
-      <MadeWith
-        title="SitGPT"
-        url="https://sitegpt.ai"
-        by="Username"
-        github="#"
-      >
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+      <Grid>
+        <MadeWith
+          title="SitGPT"
+          url="https://sitegpt.ai"
+          by="Username"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith
-        title="Stately"
-        url="https://stately.ai"
-        by="Username"
-        github="#"
-      >
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Stately"
+          url="https://stately.ai"
+          by="Username"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith
-        title="Epic Web"
-        url="https://www.epicweb.dev"
-        by="Username"
-        github="#"
-      >
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Epic Web"
+          url="https://www.epicweb.dev"
+          by="Username"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith
-        title="ViteConf"
-        url="https://viteconf.org/23/replay"
-        by="Username"
-        github="#"
-      >
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="ViteConf"
+          url="https://viteconf.org/23/replay"
+          by="Username"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith
-        title="Live conference feedback app"
-        url="https://twitter.com/thymikee/status/1709857955070333125?s=20"
-        by="Michał Pierzchała"
-        github="#"
-      >
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Live conference feedback app"
+          url="https://twitter.com/thymikee/status/1709857955070333125?s=20"
+          by="Michał Pierzchała"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith title="Another example" url="#" by="Another Legend" github="#">
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Another example"
+          url="#"
+          by="Another Legend"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith title="Another example" url="#" by="Another Legend" github="#">
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Another example"
+          url="#"
+          by="Another Legend"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith title="Another example" url="#" by="Another Legend" github="#">
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Another example"
+          url="#"
+          by="Another Legend"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith title="Another example" url="#" by="Another Legend" github="#">
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Another example"
+          url="#"
+          by="Another Legend"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
 
-      <MadeWith title="Another example" url="#" by="Another Legend" github="#">
-        <p>Does Cool Thing X, integrates with Service Y</p>
-      </MadeWith>
+        <MadeWith
+          title="Another example"
+          url="#"
+          by="Another Legend"
+          github="#"
+        >
+          <p>Does Cool Thing X, integrates with Service Y</p>
+        </MadeWith>
+      </Grid>
     </Limiter>
 
     <SectionNav>
       <Button variant="invert" url="#">More examples</Button>
     </SectionNav>
   </div>
-</section>
+</Grid>
 
 <style>
   #get-started {

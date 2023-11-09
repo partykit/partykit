@@ -1,4 +1,6 @@
 ---
+import Grid from "../Grid.astro";
+
 interface Props {
   title: string;
   url: string;
@@ -8,12 +10,61 @@ interface Props {
 const { title, url, date } = Astro.props;
 ---
 
-<div class="post">
+<Grid>
   <h3>
     <a href={url}>{title}</a>
   </h3>
   <p>{date}</p>
   <slot />
-</div>
+</Grid>
 
-<style></style>
+<style>
+  @media (min-width: 760px) {
+    :root:after {
+      content: " ";
+      grid-column: 2 / 10;
+      height: 1px;
+      background: var(--color-feature-1);
+      margin: calc(var(--whitespace) * 0.5) 0
+        calc(var(--whitespace) * 0.5 - 2rem);
+    }
+    :root:last-child:after {
+      content: none;
+    }
+  }
+
+  h3 {
+    grid-column: span 2;
+  }
+
+  @media (min-width: 760px) {
+    h3 {
+      grid-column: 4 / 10;
+      grid-row: 1 / 2;
+    }
+  }
+
+  :root p:nth-child(2) {
+    grid-column: span 2;
+    color: var(--color-feature-2);
+  }
+
+  @media (min-width: 760px) {
+    :root p:nth-child(2) {
+      grid-column: 2 / 4;
+      grid-row: 1 / 2;
+      padding-top: 1rem;
+    }
+  }
+
+  :root p:nth-child(3) {
+    grid-column: span 2;
+  }
+
+  @media (min-width: 760px) {
+    :root p:nth-child(3) {
+      grid-column: 4 / 9;
+      grid-row: 2 / 3;
+    }
+  }
+</style>
