@@ -1,0 +1,90 @@
+---
+interface Props {
+  name: string;
+  url: string;
+  role: string;
+  variant: "S" | "M" | "L";
+}
+
+const { name, url, role, variant } = Astro.props;
+---
+
+<div class={`quote quote-${variant}`}>
+  <blockquote>
+    <slot />
+  </blockquote>
+  <cite>
+    <a href={url}>{name}</a>
+    <span>{role}</span>
+  </cite>
+</div>
+
+<style>
+  .quote {
+    grid-column: span 2;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+
+  @media (min-width: 760px) {
+    .quote-M {
+      grid-column: span 3;
+    }
+    .quote-L {
+      grid-column: span 5;
+    }
+  }
+
+  .quote blockquote {
+    position: relative;
+    padding: var(--box-padding);
+    background: var(--color-feature-1);
+    border-radius: var(--box-radius);
+    flex-grow: 2;
+  }
+
+  @media (min-width: 760px) {
+    blockquote {
+      min-height: var(--whitespace);
+    }
+  }
+
+  .quote blockquote:before {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    content: " ";
+    top: 100%;
+    right: calc(100% - 1.75rem);
+    border-style: solid;
+    border-width: 0.5rem 0.5rem 0.5rem 0;
+    border-color: transparent var(--color-feature-1) transparent transparent;
+    transform: rotate(45deg);
+    transform-origin: top right;
+  }
+
+  .quote cite {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 1rem 1rem 0 0;
+    gap: var(--character-width);
+  }
+
+  .quote cite:before {
+    content: " ";
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    background-image: url(/assets/user.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>

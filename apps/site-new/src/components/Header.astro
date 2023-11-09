@@ -1,4 +1,5 @@
 ---
+
 ---
 
 <header>
@@ -54,3 +55,197 @@
     </div>
   </nav>
 </header>
+
+<style>
+  nav {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-evenly;
+    gap: 1rem;
+  }
+
+  @media (min-width: 760px) {
+    nav {
+      justify-content: center;
+    }
+  }
+
+  nav.icons {
+    justify-content: start;
+    gap: 1rem;
+  }
+
+  nav .button {
+    flex-grow: 2;
+  }
+  header nav {
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 2rem;
+    margin: 0 -2rem;
+    background: var(--color-page);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
+  }
+
+  header nav h1 {
+    position: relative;
+    height: 40px;
+    width: 70px;
+    background-image: url(/assets/PK_Logo_Full.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+    text-indent: -5000%;
+    top: 1px;
+  }
+
+  @media (min-width: 760px) {
+    header nav {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+    }
+
+    header nav h1 {
+      grid-column: 2 / 4;
+    }
+  }
+
+  #nav-button {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    height: 12px;
+    width: 20px;
+    overflow: hidden;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    appearance: none;
+  }
+
+  #nav-button:before {
+    content: " ";
+    position: absolute;
+    display: block;
+    width: 100%;
+    top: calc(50% - 1px);
+    left: 0;
+    border-top: 2px solid;
+  }
+
+  #nav-button:checked {
+    right: 2px;
+    height: 16px;
+    width: 16px;
+    border: none;
+  }
+
+  #nav-button:checked:before {
+    width: 150%;
+    left: -25%;
+    transform: rotate(-45deg);
+    transform-origin: center;
+  }
+
+  #nav-button:checked:after {
+    content: " ";
+    position: absolute;
+    display: block;
+    top: calc(50% - 1px);
+    border-top: 2px solid;
+    width: 150%;
+    left: -25%;
+    transform: rotate(45deg);
+    transform-origin: center;
+  }
+
+  #nav-button:checked ~ #nav-panel {
+    display: flex;
+  }
+
+  @media (min-width: 760px) {
+    #nav-button {
+      display: none;
+    }
+  }
+
+  #nav-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -2rem;
+    right: -2rem;
+    height: calc(100vh - 50px);
+    padding: var(--padding);
+    background: rgba(255, 255, 255, 0.8);
+    flex-direction: column;
+  }
+
+  @media (min-width: 760px) {
+    #nav-panel {
+      grid-column: 4 / 11;
+      align-items: center;
+      justify-content: end;
+      display: flex;
+      position: relative;
+      top: auto;
+      left: auto;
+      right: auto;
+      height: auto;
+      padding: 0;
+      background: transparent;
+      flex-direction: row;
+      gap: 1rem;
+    }
+  }
+
+  #nav-panel a {
+    padding-right: var(--character-width);
+  }
+
+  #nav-panel a:before {
+    padding-right: calc(var(--character-width) * 0.5);
+  }
+
+  #nav-panel a:nth-child(1):before {
+    content: " ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a:nth-child(2):before {
+    content: "➁ ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a:nth-child(3):before {
+    content: " ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a:nth-child(4):before {
+    content: " ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a:nth-child(5):before {
+    content: "➄ ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a:nth-child(6):before {
+    content: " ";
+    color: var(--color-feature-2);
+  }
+
+  #nav-panel a.icon {
+    padding-right: 0;
+  }
+
+  #nav-panel a.icon:before {
+    content: none;
+  }
+</style>
