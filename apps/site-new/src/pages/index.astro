@@ -5,9 +5,11 @@ import Introduction from "../components/sections/Introduction.astro";
 import Product from "../components/sections/Product.astro";
 import Company from "../components/sections/Company.astro";
 import Footer from "../components/Footer.astro";
+import RoomContainer from "../interactive/RoomContainer";
 ---
 
 <Layout title="🎈✌🏻 PartyKit Homepage Sketch v.2.7">
+  <RoomContainer client:load />
   <Header />
   <main>
     <Introduction />
