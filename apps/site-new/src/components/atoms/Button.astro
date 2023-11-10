@@ -3,7 +3,7 @@ import "../../styles/variables.css";
 
 interface Props {
   url: string;
-  variant?: null | "invert" | "github";
+  variant?: null | "outline" | "github";
 }
 
 const { url, variant = null } = Astro.props;
@@ -29,12 +29,13 @@ const { url, variant = null } = Astro.props;
     margin-left: var(--character-width);
   }
 
-  a.invert {
+  a.outline {
     background: transparent;
     color: inherit;
     border: 1.5px solid;
     font-variation-settings: "wght" 550;
     color: var(--color-feature-2);
+    outline-style: none;
   }
 
   a.github {
