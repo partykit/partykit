@@ -21,7 +21,7 @@ _[Anders Bech Mellson](https://github.com/mellson) and the [Stately team](https:
 
 State machines provide a robust framework for structuring application logic, making our code predictable and straightforward. This insight drives us at [Stately](https://stately.ai), a company brought to life by [David Khourshid](https://twitter.com/DavidKPiano). David also created [XState](https://github.com/statelyai/xstate), the popular library for managing and orchestrating state anywhere JavaScript runs.
 
-TODO: ![Image of a state machine in editor]()
+<img src="/content-images/partykit-orchestrates-stately/credit-check-machine.png" alt="Section of a credit check state machine shown in the Stately Studio visual editor. It checks a microservice actor and only transitions to the startApplication state if the condition scoreOverThreshold is met." width="600">
 
 Our [Stately visual editor](https://state.new) is a game-changer—you can use it to:
 
@@ -76,7 +76,7 @@ Let's look at a very basic example of how to build a shared counter in React usi
 
 We'll start by building the simple counter machine in the Stately Studio visual editor. When finished, it looks like this ([view the machine in our editor](https://sky.stately.ai/Wu5gAj)):
 
-<img src="/content-images/partykit-orchestrates-stately/counter-machine.png" alt="Counter machine shown in the Stately Studio visual editor" width="600">
+<img src="/content-images/partykit-orchestrates-stately/counter-machine.png" alt="A counter machine shown in the Stately Studio visual editor. It has one idle state and three self-transitions with events. The first event is increment, which has an entry action that increments the context count value by 1. The second event is simiar but with decrement. The third event is reset and has an entry action which resets the context value to 0." width="600">
 
 Now, let's have a look at the code you would need inside your app to connect to this machine:
 
