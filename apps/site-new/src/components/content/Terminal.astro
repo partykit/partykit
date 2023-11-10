@@ -1,4 +1,5 @@
 ---
+import { Code } from "astro:components";
 import "../../styles/variables.css";
 import Button from "../atoms/Button.astro";
 ---
@@ -10,32 +11,34 @@ import Button from "../atoms/Button.astro";
     <Button variant="github" url="#">Fork on GitHub</Button>
   </div>
 
-  <figure>
-    <span>npm install partykit</span>
-    <figcaption>Install with npm</figcaption>
-  </figure>
+  <div id="terminal-console">
+    <Code
+      code={`// 1. Install with npm
+npm install partykit
 
-  <figure is:raw>
-    <span>export default class Server {<br> onMessage(message, websocket) {<br>
-    websocket.send("pong");<br> }<br> onRequest(request) {<br> return new
-    Response(`This is room ${party.id}`);<br> }<br> }</span> <figcaption>Write
-    your code</figcaption>
-  </figure>
+// 2. Write your code
+export default class Server {
+  onMessage(message, websocket) {
+    websocket.send("pong");
+  }
+  onRequest(request) {
+    return new Response(\`This is room \${party.id}\`);
+  }
+}
 
-  <figure>
-    <span>npx partykit dev server.js</span>
-    <figcaption>Develop on localhost</figcaption>
-  </figure>
+// 3. Develop on localhost
+npx partykit dev server.js
 
-  <figure>
-    <span>npx partykit deploy server.js --name first-party</span>
-    <figcaption>Deploy to the edge</figcaption>
-  </figure>
+// 4. Deploy to the edge
+npx partykit deploy server.js --name first-party
 
-  <figure is:raw>
-    <span>curl https://first-party.{yourname}.partykit.dev/party/my-room</span>
-    <figcaption>Try it out</figcaption>
-  </figure>
+// 5. Try it out
+curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
+`}
+      lang="js"
+      theme="dark-plus"
+    />
+  </div>
 </div>
 
 <style>
@@ -49,12 +52,10 @@ import Button from "../atoms/Button.astro";
     padding: calc(40px + 4rem) 2rem 4rem 4rem;
     overflow: hidden;
     border-radius: 0 var(--box-radius) var(--box-radius) 0;
-    background: rgba(20, 20, 20, 1);
+    background: #1e1e1e; /* to match Code theme background */
     color: white;
     font-variation-settings: "wght" 300;
     box-shadow: 0 30px 40px rgba(0, 0, 0, 0.5);
-    counter-set: figcaption;
-    counter-reset: figcaption;
   }
 
   @media (min-width: 760px) {
@@ -113,21 +114,9 @@ import Button from "../atoms/Button.astro";
     color: var(--color-feature-2);
   }
 
-  #terminal figure {
+  #terminal-console {
     font-family: monospace;
     line-height: 1.5;
-    font-size: 90%;
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-
-  #terminal figcaption {
-    counter-increment: figcaption;
-    opacity: 0.5;
-  }
-
-  #terminal figcaption:before {
-    content: "// " counter(figcaption) ". ";
+    font-size: 80%;
   }
 </style>
