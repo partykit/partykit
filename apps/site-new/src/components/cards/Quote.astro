@@ -16,8 +16,11 @@ const { name, url, role, variant } = Astro.props;
     <slot />
   </blockquote>
   <cite>
-    <a href={url}>{name}</a>
-    <span>{role}</span>
+    <div class="avatar"></div>
+    <div class="author">
+      <a href={url}>{name}</a>
+      <span>{role}</span>
+    </div>
   </cite>
 </div>
 
@@ -65,7 +68,7 @@ const { name, url, role, variant } = Astro.props;
     }
   }
 
-  .quote blockquote:before {
+  blockquote:before {
     position: absolute;
     display: block;
     width: 0;
@@ -80,18 +83,17 @@ const { name, url, role, variant } = Astro.props;
     transform-origin: top right;
   }
 
-  .quote cite {
+  cite {
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    flex-wrap: wrap;
     padding: 1rem 1rem 0 0;
-    gap: var(--character-width);
+    gap: 0 1rem;
+    font-size: 80%;
   }
 
-  .quote cite:before {
-    content: " ";
+  .avatar {
     display: block;
     width: 2rem;
     height: 2rem;
@@ -100,5 +102,14 @@ const { name, url, role, variant } = Astro.props;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+  }
+  
+  .author {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 0 var(--character-width);
   }
 </style>
