@@ -96,7 +96,16 @@ import Grid from "../Grid.astro";
 <style>
   #quotes-header {
     grid-column: 1 / -1;
-    text-align: center;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (min-width: 760px) {
+    #quotes-header {
+      max-width: 100%;
+    }
   }
 
   @media (min-width: 1100px) {

@@ -19,7 +19,7 @@ import "../../styles/variables.css";
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    padding: var(--whitespace) 0;
+    padding: calc(var(--whitespace) + 50px) 0 var(--whitespace);
     gap: var(--whitespace);
   }
   
@@ -28,7 +28,8 @@ import "../../styles/variables.css";
   }
   
   h1 strong {
-    font-variation-settings: "wght" 600;
+    font-variation-settings: "wght" 700;
+    letter-spacing: -0.02em;
     font-weight: inherit;
   }
 
