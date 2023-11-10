@@ -244,6 +244,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"flow-and-partykit-collaboration.md": {
+	id: "flow-and-partykit-collaboration.md";
+  slug: "flow-and-partykit-collaboration";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "how-to-add-an-estimated-reading-time.md": {
 	id: "how-to-add-an-estimated-reading-time.md";
   slug: "how-to-add-an-estimated-reading-time";

@@ -14,11 +14,13 @@ tags:
 ogImage: "/content-images/flow-and-partykit-collaboration/og.png"
 description: Making the browser multiplayer is difficult. However, Flow and Partykit's collaboration brings multiplayer to a single website.
 ---
+
 You know that magic moment when everything clicks? When you finally figure out the answer to a tricky question after hours of study or discover a brilliant workaround that fixes a knotty bug you've wrestled with all day. Flow embodies those "aha" moments and makes sharing your breakthroughs with others effortless.
 
 We've all used the word 'Flow' at some point, expressing the seamless interchange of ideas and thoughts. Flow is woven into our daily interactions, fostering collective wisdom, like individual streams merging to form an expansive, dynamic ocean.
 
-![](../../../public/content-images/flow-and-partykit-collaboration/screenshot.png)
+<img src="/content-images/flow-and-partykit-collaboration/screenshot.png"/>
+
 ## Flow and PartyKit: Sculpting Collaboration
 
 Flow isn't merely an app - it's your playground for exploration and a haven for idea exchange. It transcends vanilla comparisons to 'a toned-down version of Notion or Apple Notes.' Flow sets itself apart as an enabler, sparking productive conversations and facilitating seamless collaborations.
@@ -75,7 +77,7 @@ export default class Server implements PartyKitServer {
     const party = this.party;
     const db = new Kysely<DB>({
       dialect: new PlanetScaleDialect({
-// a hack that is required for partykit to work with planetscale
+        // a hack that is required for partykit to work with planetscale
         url: this.party.env.DATABASE_URL as string,
         fetch: (url: string, init: any) => {
           delete init.cache; // Remove cache header
@@ -105,7 +107,7 @@ export default class Server implements PartyKitServer {
 
             const buffer = Buffer.from(stateBuffer.toString(), "utf-8");
             const uint8Array = new Uint8Array(
-              Object.values(JSON.parse(buffer.toString())),
+              Object.values(JSON.parse(buffer.toString()))
             );
 
             logger.info("Loading existing document");
@@ -124,15 +126,15 @@ export default class Server implements PartyKitServer {
         return doc;
       },
       callback: {
-        handler: async (doc) => {
+        handler: async doc => {
           try {
             const state = Y.encodeStateAsUpdate(doc);
             const stateBuffer = Buffer.from(JSON.stringify(state));
-            
+
             await db
               .updateTable("Note")
               .set({
-                document: stateBuffer,            
+                document: stateBuffer,
               })
               .where("Note.id", "=", party.id)
               .execute();
@@ -149,11 +151,11 @@ export default class Server implements PartyKitServer {
 }
 ```
 
-The code above solves the duplication problem and is one of the most used codes in the codebase right now! 
+The code above solves the duplication problem and is one of the most used codes in the codebase right now!
 
 ## Breakdown
 
-The whole server code is split into two parts: transforming and storing. 
+The whole server code is split into two parts: transforming and storing.
 
 ### Transforming (How to save YDoc into our database?)
 
@@ -164,7 +166,7 @@ const state = Y.encodeStateAsUpdate(doc);
 const stateBuffer = Buffer.from(JSON.stringify(state));
 ```
 
-That will be the only two lines you need! 
+That will be the only two lines you need!
 
 `encodeStateAsUpdate`
 
@@ -178,7 +180,7 @@ This line is what we use during `onConnect` to apply what we have in the databas
 
 ## Database (Storing)
 
-`kysely` is the database selection here because it supports native fetch. DrizzleORM would work as well! 
+`kysely` is the database selection here because it supports native fetch. DrizzleORM would work as well!
 
 ⚠️ **Prisma would not work here (Without their acceleration service)**. You need to find a way to write to the database without prisma.
 
@@ -189,4 +191,3 @@ Users were shocked. Despite having lousy internet, they can collaborate in real 
 ## Appreciation
 
 Flow would not be this special if not for Sunil and the rest of the party's team. Their enthusiasm is unique, and working alongside them to make the web more collaborative and friendly is incredible.
-
