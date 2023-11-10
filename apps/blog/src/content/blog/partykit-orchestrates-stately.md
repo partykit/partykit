@@ -21,15 +21,15 @@ _[Anders Bech Mellson](https://github.com/mellson) and the [Stately team](https:
 
 State machines provide a robust framework for structuring application logic, making our code predictable and straightforward. This insight drives us at [Stately](https://stately.ai), a company brought to life by [David Khourshid](https://twitter.com/DavidKPiano). David also created [XState](https://github.com/statelyai/xstate), the popular library for managing and orchestrating state anywhere JavaScript runs.
 
-TODO: ![Image of a state machine in editor]()
+<img src="/content-images/partykit-orchestrates-stately/example-machine.png" alt="Image of a state machine in the Stately Studio visual editor" >
 
 Our [Stately visual editor](https://state.new) is a game-changer—you can use it to:
 
-- construct app logic visually with drag-and-drop
-- speedily generate logic from text descriptions using AI
-- collaborate on your logic in a format your whole team understands
-- simulate your logic to discover unreachable states and unwanted transitions quickly
-- effortlessly turn your state machine diagrams into code, test paths, and more
+- construct app logic visually with drag-and-drop.
+- speedily generate logic from text descriptions using AI.
+- collaborate on your logic in a format your whole team understands.
+- simulate your logic to discover unreachable states and unwanted transitions quickly.
+- effortlessly turn your state machine diagrams into code, test paths, and more.
 
 To further bridge the gap, we offer a [VS Code extension](https://marketplace.visualstudio.com/items?itemName=statelyai.stately-vscode), which syncs with the visual editor, ensuring a smooth transition between visual and code views.
 
@@ -76,7 +76,7 @@ Let's look at a very basic example of how to build a shared counter in React usi
 
 We'll start by building the simple counter machine in the Stately Studio visual editor. When finished, it looks like this ([view the machine in our editor](https://sky.stately.ai/Wu5gAj)):
 
-<img src="/content-images/partykit-orchestrates-stately/counter-machine.png" alt="Counter machine shown in the Stately Studio visual editor" width="600">
+<img src="/content-images/partykit-orchestrates-stately/counter-machine.png" alt="Counter machine shown in the Stately Studio visual editor" >
 
 Now, let's have a look at the code you would need inside your app to connect to this machine:
 
@@ -122,11 +122,11 @@ You can [find the full example code in our docs](https://github.com/statelyai/sk
 
 ## The future of Stately Sky
 
-We are super excited about Sky's future! Imagine creating complex event-driven systems where the webserver lifecycle and orchestration are handled for you—picture deploying workflows and long-running processes to the edge without cumbersome development environments. We have even more ideas for how to make it better when it comes to AI; state machines can be incredibly valuable in improving the results you get when using LLMs. 
+There's so much to be excited about with Stately Sky. Imagine creating any type of event-driven workflow, no matter how complex, and deploying it at the click of a button.
 
-We can't wait to see what you will build with the current release:
+Sky isn't the limit though; we have even more plans for using state machines and AI to intelligently assist in the creation and improvement of the workflows you create.
+
+We can't wait to see what you will build with Stately Sky!
 
 - [Try the Stately visual editor](https://state.new)
 - [Read more about Sky and Stately on our blog](https://stately.ai/blog)
-
-Thanks for reading; we hope to see you in the Sky!
