@@ -727,40 +727,6 @@ function randomId(): string {
 }
 
 /**
- * This function converts a message serialised as a devtools event
- * into arguments suitable to be called by a console method, and
- * then actually calls the method with those arguments. Effectively,
- * we're just doing a little bit of the work of the devtools console,
- * directly in the terminal.
- */
-
-export const mapConsoleAPIMessageTypeToConsoleMethod: {
-  [key in Protocol.Runtime.ConsoleAPICalledEvent["type"]]: Exclude<
-    keyof Console,
-    "Console"
-  >;
-} = {
-  log: "log",
-  debug: "debug",
-  info: "info",
-  warning: "warn",
-  error: "error",
-  dir: "dir",
-  dirxml: "dirxml",
-  table: "table",
-  trace: "trace",
-  clear: "clear",
-  count: "count",
-  assert: "assert",
-  profile: "profile",
-  profileEnd: "profileEnd",
-  timeEnd: "timeEnd",
-  startGroup: "group",
-  startGroupCollapsed: "groupCollapsed",
-  endGroup: "groupEnd",
-};
-
-/**
  * Opens the chrome debugger
  */
 export const openInspector = async (

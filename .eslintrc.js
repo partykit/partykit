@@ -22,6 +22,7 @@ module.exports = {
     ".eslintrc.js",
     "*.d.ts",
     "packages/partykit/init/index.js",
+    "packages/party.io/**/*.test.ts",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",

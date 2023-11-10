@@ -1,5 +1,17 @@
 # partysocket
 
+## 0.0.14
+
+### Patch Changes
+
+- [#540](https://github.com/partykit/partykit/pull/540) [`0e82337`](https://github.com/partykit/partykit/commit/0e82337bb1123637b996bf57018258ed7cbeb958) Thanks [@andrew-r-thomas](https://github.com/andrew-r-thomas)! - adding room validation to partysocket
+
+## 0.0.13
+
+### Patch Changes
+
+- [#529](https://github.com/partykit/partykit/pull/529) [`1f5d5d9`](https://github.com/partykit/partykit/commit/1f5d5d9494e2b115c66deb87457e41e58807cf1e) Thanks [@jevakallio](https://github.com/jevakallio)! - Improvements to usePartySocket and useWebSocket hook reliability
+
 ## 0.0.12
 
 ### Patch Changes

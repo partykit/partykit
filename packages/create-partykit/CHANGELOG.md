@@ -1,5 +1,19 @@
 # create-partykit
 
+## 0.0.19
+
+### Patch Changes
+
+- [#542](https://github.com/partykit/partykit/pull/542) [`ad4f8e5`](https://github.com/partykit/partykit/commit/ad4f8e518aedfa6c9a4877261b9dbf684aeded26) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
+## 0.0.18
+
+### Patch Changes
+
+- [#521](https://github.com/partykit/partykit/pull/521) [`0e5a1b6`](https://github.com/partykit/partykit/commit/0e5a1b68e41200f1ebbcff907644742a1aceed7b) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+  Of note, this now uses miniflare's new coloured logging, so we can start deprecating our weird inspector layer
+
 ## 0.0.17
 
 ### Patch Changes

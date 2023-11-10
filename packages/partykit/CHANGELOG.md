@@ -1,5 +1,27 @@
 # partykit
 
+## 0.0.34
+
+### Patch Changes
+
+- [#542](https://github.com/partykit/partykit/pull/542) [`ad4f8e5`](https://github.com/partykit/partykit/commit/ad4f8e518aedfa6c9a4877261b9dbf684aeded26) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
+## 0.0.33
+
+### Patch Changes
+
+- [#534](https://github.com/partykit/partykit/pull/534) [`da3947e`](https://github.com/partykit/partykit/commit/da3947eb91373cb93410bc339aecf14f327c6cfb) Thanks [@andrew-r-thomas](https://github.com/andrew-r-thomas)! - Assert that names of parties in partykit.json are lowercase
+
+- [#521](https://github.com/partykit/partykit/pull/521) [`0e5a1b6`](https://github.com/partykit/partykit/commit/0e5a1b68e41200f1ebbcff907644742a1aceed7b) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+  Of note, this now uses miniflare's new coloured logging, so we can start deprecating our weird inspector layer
+
+- [#512](https://github.com/partykit/partykit/pull/512) [`059c133`](https://github.com/partykit/partykit/commit/059c133f1540b5eca6df325769017674a9d5cac5) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
+- [#530](https://github.com/partykit/partykit/pull/530) [`12fc02a`](https://github.com/partykit/partykit/commit/12fc02ace0f08e80306a71e8807aedcf82588233) Thanks [@jevakallio](https://github.com/jevakallio)! - Allow passing request directly to stub.fetch
+
+- [#539](https://github.com/partykit/partykit/pull/539) [`fd0e379`](https://github.com/partykit/partykit/commit/fd0e3797897c26ff51c0ceffe214f4043b7c1ae6) Thanks [@andrew-r-thomas](https://github.com/andrew-r-thomas)! - validating project name in config
+
 ## 0.0.32
 
 ### Patch Changes
