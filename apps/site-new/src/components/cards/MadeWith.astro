@@ -34,8 +34,13 @@ const { title, by, url, github } = Astro.props;
 
   @media (min-width: 760px) {
     .example {
-      grid-column: span 2;
       grid-row: span 3;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .example {
+      grid-column: span 2;
     }
   }
 
@@ -44,6 +49,21 @@ const { title, by, url, github } = Astro.props;
   }
 
   @media (min-width: 760px) {
+    .example:nth-child(2) ~ .example {
+      display: grid;
+    }
+    .example:nth-child(1) {
+      grid-row: 1 / 4;
+    }
+    .example:nth-child(2) {
+      grid-row: 2 / 5;
+    }
+    .example:nth-child(3) {
+      grid-row: 1 / 4;
+    }
+  }
+
+  @media (min-width: 1100px) {
     .example:nth-child(2) ~ .example {
       display: grid;
     }

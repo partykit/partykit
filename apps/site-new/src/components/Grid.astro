@@ -11,6 +11,7 @@ const { variant = null } = Astro.props;
 
 <style>
   div {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
@@ -26,4 +27,12 @@ const { variant = null } = Astro.props;
       grid-template-columns: repeat(10, 1fr);
     }
   }
+
+  @media (min-width: 760px) and (max-width: 1100px) {
+    div.nested {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  
 </style>

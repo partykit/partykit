@@ -6,7 +6,7 @@ import "../../styles/variables.css";
   <h2 id="product-header">Why PartyKit?</h2>
 
   <div id="product-features">
-    <div id="product-flexibility">
+    <div class="feature">
       <h3>More flexible</h3>
       <p>
         You bring the code, we do the hosting. Use any package from npm, or
@@ -14,7 +14,7 @@ import "../../styles/variables.css";
       </p>
     </div>
 
-    <div id="product-functionality">
+    <div class="feature">
       <h3>More functional</h3>
       <p>
         Analytics, staging environments, secrets management, logging. All the
@@ -22,7 +22,7 @@ import "../../styles/variables.css";
       </p>
     </div>
 
-    <div id="product-speed">
+    <div class="feature">
       <h3>More fast</h3>
       <p>
         A worldwide edge network with low latency, anywhere on Earth. We enable
@@ -34,17 +34,17 @@ import "../../styles/variables.css";
 
 <style>
   #product-header {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
   }
 
-  @media (min-width: 760px) {
+  @media (min-width: 1100px) {
     #product-header {
       grid-column: 2 / 10;
     }
   }
 
   #product-features {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -55,23 +55,24 @@ import "../../styles/variables.css";
   @media (min-width: 760px) {
     #product-features {
       flex-direction: row;
-      grid-column: 2 / 10;
       grid-row: 2 / 3;
     }
   }
 
-  #product-flexibility,
-  #product-functionality,
-  #product-speed {
+  @media (min-width: 1100px) {
+    #product-features {
+      grid-column: 2 / 10;
+    }
+  }
+
+  .feature {
     width: 100%;
     max-width: var(--atom-width);
     margin: 0 auto;
   }
 
   @media (min-width: 760px) {
-    #product-flexibility,
-    #product-functionality,
-    #product-speed {
+    .feature {
       margin: 0;
     }
   }

@@ -27,10 +27,21 @@ const { name, url, role, variant } = Astro.props;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
+    padding-bottom: 1rem;
   }
 
   @media (min-width: 760px) {
+    .quote {
+      grid-column: span 1;
+    }
+  }
+  
+  @media (min-width: 1100px) {
+    .quote {
+      min-height: 100%;
+      padding-bottom: 0;
+      grid-column: span 2;
+    }
     .quote-M {
       grid-column: span 3;
     }
@@ -42,6 +53,7 @@ const { name, url, role, variant } = Astro.props;
   .quote blockquote {
     position: relative;
     padding: var(--box-padding);
+    padding-bottom: 2rem;
     background: var(--color-feature-1);
     border-radius: var(--box-radius);
     flex-grow: 2;
