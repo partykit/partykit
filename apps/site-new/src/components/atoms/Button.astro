@@ -3,7 +3,7 @@ import "../../styles/variables.css";
 
 interface Props {
   url: string;
-  variant?: null | "outline" | "github";
+  variant?: null | "outline" | "github" | "pricingCTA";
 }
 
 const { url, variant = null } = Astro.props;
@@ -22,6 +22,7 @@ const { url, variant = null } = Astro.props;
     font-variation-settings: "wght" 400;
     max-width: var(--atom-width);
     cursor: pointer;
+    flex-grow: 2;
   }
 
   a:after {
@@ -45,5 +46,10 @@ const { url, variant = null } = Astro.props;
     color: inherit;
     border-color: rgba(160, 160, 160, 0.1);
     background: rgba(160, 160, 160, 0.2);
+  }
+  
+  a.pricingCTA {
+    flex-grow: 0;
+    margin-top: 2rem;
   }
 </style>

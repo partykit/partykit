@@ -14,7 +14,7 @@ import SectionNav from "../SectionNav.astro";
 
   <Terminal />
 
-  <nav id="get-started">
+  <nav class="get-started">
     <Button url="#">Developer docs</Button>
     <Button url="#">Discord</Button>
   </nav>
@@ -125,14 +125,18 @@ import SectionNav from "../SectionNav.astro";
 </Grid>
 
 <style>
-  #get-started {
+  .get-started {
     grid-column: 1 / 3;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: start;
+    gap: 1rem;
   }
 
   @media (min-width: 760px) {
-    #get-started {
-      grid-column: 2 / 10;
-      justify-content: start;
+    .get-started {
+      grid-column: 2 / 7;
       margin-top: calc(var(--whitespace) * 0.5);
     }
   }
