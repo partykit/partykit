@@ -16,7 +16,6 @@ description: Making the browser multiplayer is difficult. However, Flow and Part
 ---
 You know that magic moment when everything clicks? When you finally figure out the answer to a tricky question after hours of study or discover a brilliant workaround that fixes a knotty bug you've wrestled with all day. Flow embodies those "aha" moments and makes sharing your breakthroughs with others effortless.
 
-<<<<<<< HEAD
 We've all used the word 'Flow' at some point, expressing the seamless interchange of ideas and thoughts. Flow is woven into our daily interactions, fostering collective wisdom, like individual streams merging to form an expansive, dynamic ocean.
 
 ![](../../../public/content-images/flow-and-partykit-collaboration/screenshot.png)
@@ -28,20 +27,6 @@ From the onset, our alliance with PartyKit laid the cornerstone for this ardent 
 
 Flow has grown and evolved with each milestone - not just as an application, but as a vessel for igniting collective creativity. We're making collaboration more accessible, engaging, inspiring, and enjoyable. Join us on this journey with [Flow](https://flowapp.so).
 
-=======
-You know that magic moment when everything clicks? When you finally figure out the answer to a tricky question after hours of study or discover a brilliant workaround that fixes a knotty bug you've wrestled with all day. Flow embodies those "aha" moments and makes sharing your breakthroughs with others effortless.
-
-We've all used the word 'Flow' at some point, expressing the seamless interchange of ideas and thoughts. Flow is woven into our daily interactions, fostering collective wisdom, like individual streams merging to form an expansive, dynamic ocean.
-
-## Flow and PartyKit: Sculpting Collaboration
-
-Flow isn't merely an app - it's your playground for exploration and a haven for idea exchange. It transcends vanilla comparisons to 'a toned-down version of Notion or Apple Notes.' Flow sets itself apart as an enabler, sparking productive conversations and facilitating seamless collaborations.
-
-From the onset, our alliance with PartyKit laid the cornerstone for this ardent mission. Our goal was to create a platform streamlining brainstorming and resource sharing. It was through this collaboration that Flow began to take shape, interweaving intuitive usability with a rich feature set to simplify and enhance your note-taking experience.
-
-Flow has grown and evolved with each milestone - not just as an application, but as a vessel for igniting collective creativity. We're making collaboration more accessible, engaging, inspiring, and enjoyable. Join us on this journey with [Flow](https://flowapp.so).
-
->>>>>>> 43c2e810c1480fc948651e3a7019025635591fad
 ## Not Just Whiteboards and Notes
 
 Flow narrows the gap between fleeting thoughts and tangible outcomes, continuously evolving with every hurdle it overcomes and every connection it forms.
