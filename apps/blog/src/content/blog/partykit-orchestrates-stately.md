@@ -118,7 +118,7 @@ export default function Counter() {
 ```
 
 That's it, and you now have a shared counter in your app. Fully multiplayer enabled and ready to go.
-You can [find the full example code in our docs](https://github.com/statelyai/sky-starter-app/blob/main/src/examples/counter.tsx), and [test our deployed demo](https://sky-starter.stately.ai/?page=counter).
+You can [find the full example code in the starter repo](https://github.com/statelyai/sky-starter-app/blob/main/src/examples/counter.tsx), and [test our deployed demo](https://sky-starter.stately.ai/?page=counter).
 
 ## The future of Stately Sky
 
