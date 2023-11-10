@@ -1,0 +1,34 @@
+{
+  "name": "party.io",
+  "version": "0.0.1",
+  "description": "Socket.IO server for PartyKit",
+  "main": "./dist/index.js",
+  "types": "./types/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check": "npx tsc",
+    "build": "npm run bundle && npm run types",
+    "bundle": "npx esbuild src/index.ts --bundle --platform=neutral --format=esm --outdir=dist --sourcemap",
+    "types": "rm -rf types && npx tsc -p tsconfig.extract.json --noEmit false --emitDeclarationOnly --declaration --declarationMap --outDir types || echo \"Types generation failed\""
+  },
+  "bugs": {
+    "url": "https://github.com/partykit/party.io/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/partykit/party.io.git"
+  },
+  "files": [
+    "README.md",
+    "dist",
+    "types",
+    "tsconfig.json"
+  ],
+  "keywords": [],
+  "author": "PartyKit, Inc. <contact@partykit.io>",
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/workers-types": "4.20231025.0",
+    "esbuild": "0.19.5"
+  }
+}

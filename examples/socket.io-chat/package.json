@@ -1,0 +1,17 @@
+{
+  "name": "@partykit/examples-socket.io",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "partykit dev",
+    "deploy": "partykit deploy"
+  },
+  "dependencies": {
+    "jquery": "^3.7.1",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.23",
+    "typescript": "^5.2.2"
+  }
+}
