@@ -17,9 +17,12 @@ const { title, by, url, github } = Astro.props;
     <h4><a href={url}>{title}</a></h4>
     <p>by {by}</p>
   </header>
-  <div>
+  <div class="metadata">
     <slot />
     <Button variant="github" url={github}>Fork on GitHub</Button>
+  </div>
+  <div class="image">
+    <img src="/assets/waterhole.jpg" />
   </div>
 </div>
 
@@ -30,6 +33,7 @@ const { title, by, url, github } = Astro.props;
     padding: var(--box-padding);
     background: var(--color-feature-1);
     border-radius: var(--box-radius);
+    overflow: hidden;
   }
 
   @media (min-width: 760px) {
@@ -91,28 +95,39 @@ const { title, by, url, github } = Astro.props;
     padding-top: 160%;
   }
 
-  .example header {
+  header {
     grid-column: 1 / 2;
     grid-row: 1 / 2;
+    z-index: 10;
   }
 
-  .example header h4 {
-    display: inline;
-  }
-
-  .example header p {
+  header p {
     display: inline-block;
   }
 
-  .example div {
+  .metadata {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
     align-self: end;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem 0 0.5rem;
+    font-size: 80%;
   }
-
-  .example .github {
-    display: block;
-    margin: 1rem 0 0.5rem;
-    color: var(--color-feature-2);
+  
+  .image {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    margin: -0.725rem -1rem -0.775rem;
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 2rem, rgba(0,0,0,0.2) 4rem, rgba(0,0,0,1) 10rem);
+    overflow: hidden;
+    display: none;
+  }
+  
+  .image img {
+    min-height: 100%;
+    min-width: 100%;
+    object-fit: cover;
   }
 </style>
