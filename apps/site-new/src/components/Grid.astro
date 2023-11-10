@@ -1,15 +1,24 @@
 ---
+interface Props {
+  variant?: null | "nested";
+}
+
+const { variant = null } = Astro.props;
 
 ---
 
-<div><slot /></div>
+<div class={variant}><slot /></div>
 
 <style>
   div {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0 1rem;
+    gap: 1rem;
     padding: var(--padding);
+  }
+  
+  div.nested {
+    padding: 0;
   }
 
   @media (min-width: 760px) {
