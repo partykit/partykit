@@ -188,8 +188,5 @@ Users were shocked. Despite having lousy internet, they can collaborate in real 
 
 ## Appreciation
 
-<<<<<<< HEAD
 Flow would not be this special if not for Sunil and the rest of the party's team. Their enthusiasm is unique, and working alongside them to make the web more collaborative and friendly is incredible.
-=======
-Flow would not be this special if not for Sunil and the rest of the party's team. Their enthusiasm is unique, and working alongside them to make the web more collaborative and friendly is incredible.
->>>>>>> 43c2e810c1480fc948651e3a7019025635591fad
+
