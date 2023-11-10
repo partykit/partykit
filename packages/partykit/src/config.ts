@@ -267,8 +267,8 @@ function removeUndefinedKeys(obj: Record<string, unknown> | undefined) {
   return obj === undefined
     ? obj
     : Object.fromEntries(
-        Object.entries(obj).filter(([, value]) => value !== undefined)
-      );
+      Object.entries(obj).filter(([, value]) => value !== undefined)
+    );
 }
 
 export function getConfig(
@@ -386,6 +386,13 @@ export function getConfig(
     console.warn('Configuration field "account" is not yet operational');
   }
 
+  if (config.name) {
+    const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$")
+    if (!validPathRegex.test(config.name)) {
+      throw new ConfigurationError("Project name must be a valid url path")
+    }
+  }
+
   if (config.main) {
     if (overrides.main) {
       const absoluteMainPath = path.isAbsolute(overrides.main)
@@ -415,6 +422,9 @@ export function getConfig(
   }
   if (config.parties) {
     for (const [name, party] of Object.entries(config.parties)) {
+      if (name !== name.toLowerCase()) {
+        throw new ConfigurationError(`Party names must be lowercase`)
+      }
       const absolutePartyPath = path.isAbsolute(party)
         ? party
         : path.join(path.dirname(configPath), party);
