@@ -24,10 +24,15 @@ const { title, url, date } = Astro.props;
 
   h3 {
     grid-column: span 2;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (min-width: 760px) {
     h3 {
+      max-width: 100%;
       grid-column: 2 / 4;
       grid-row: 1 / 2;
     }
@@ -35,17 +40,22 @@ const { title, url, date } = Astro.props;
 
   @media (min-width: 1100px) {
     h3 {
-      grid-column: 4 / 10;
+      grid-column: 4 / 9;
     }
   }
 
   p:nth-child(2) {
     grid-column: span 2;
     color: var(--color-feature-2);
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (min-width: 760px) {
     p:nth-child(2) {
+      max-width: 100%;
       grid-column: 1 / 2;
       grid-row: 1 / 2;
       padding-top: 0.5rem;
@@ -60,17 +70,22 @@ const { title, url, date } = Astro.props;
   
   .extract {
     grid-column: 1 / -1;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (min-width: 760px) {
     .extract {
+      max-width: 100%;
       grid-column: 2 / 4;
     }
   }  
 
   @media (min-width: 1100px) {
     .extract {
-      grid-column: 4 / 10;
+      grid-column: 4 / 8;
     }
   }  
   

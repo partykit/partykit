@@ -17,11 +17,21 @@ import Scene from "../../interactive/Scene";
 
 <style>
   #hero {
-    grid-column: 1 / 3;
+    grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    padding: var(--whitespace) 0;
+    padding: calc(var(--whitespace) + 50px) 0 var(--whitespace);
     gap: var(--whitespace);
+  }
+  
+  h1 {
+    text-align: center;
+  }
+  
+  h1 strong {
+    font-variation-settings: "wght" 700;
+    letter-spacing: -0.02em;
+    font-weight: inherit;
   }
 
   @media (min-width: 760px) {
@@ -33,14 +43,14 @@ import Scene from "../../interactive/Scene";
       justify-content: center;
       padding: calc(var(--whitespace) * 0.5) 0;
     }
-    #hero h1 {
+    h1 {
       grid-column: 1 / 2;
       grid-row: 1 / 2;
       display: flex;
       flex-direction: column;
       justify-content: center;
     }
-    #hero h1 + h1 {
+    h1 + h1 {
       display: none;
     }
   }

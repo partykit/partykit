@@ -132,17 +132,33 @@ import SectionNav from "../SectionNav.astro";
     align-items: stretch;
     justify-content: start;
     gap: 1rem;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
   }
 
   @media (min-width: 760px) {
     .get-started {
-      grid-column: 2 / 7;
+      grid-column: 2 / 10;
       margin-top: calc(var(--whitespace) * 0.5);
+      justify-content: center;
+      max-width: 100%;
     }
   }
 
   #examples-header {
     grid-column: 1 / -1;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (min-width: 760px) {
+    #examples-header {
+      max-width: 100%;
+    }
   }
 
   @media (min-width: 1100px) {
