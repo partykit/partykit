@@ -17,8 +17,11 @@ import Voronoi from "../../interactive/Voronoi";
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #hero {
+    @include demo-mixin;
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
