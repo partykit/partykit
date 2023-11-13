@@ -23,11 +23,11 @@ import Scene from "../../interactive/Scene";
     padding: calc(var(--whitespace) + 50px) 0 var(--whitespace);
     gap: var(--whitespace);
   }
-  
+
   h1 {
     text-align: center;
   }
-  
+
   h1 strong {
     font-variation-settings: "wght" 700;
     letter-spacing: -0.02em;
@@ -81,6 +81,9 @@ import Scene from "../../interactive/Scene";
       z-index: 10;
       transform: translateX(var(--demo-offset-X))
         translateY(var(--demo-offset-Y));
+      background-image: url("/assets/PK_Logo_Layers_Flat.png");
+      background-size: cover;
+      background-position: center;
     }
 
     #hero #browser:before {

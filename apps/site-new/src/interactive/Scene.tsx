@@ -60,10 +60,12 @@ function Light(props: { x: number; y: number; z: number; color: string }) {
 }
 
 function BackgroundPlane() {
+  //const loader = new THREE.TextureLoader();
   return (
     <mesh rotation={[0, 0, 0]} position={[0, 0, -0.5]} receiveShadow>
       <planeGeometry attach="geometry" args={[20, 20]} />
       <meshPhongMaterial
+        //map={loader.load("/assets/PK_Logo_Layers_Flat.png")}
         attach="material"
         color="white"
         opacity={0.5}
@@ -80,7 +82,6 @@ function CurrentUserLight(props: {
   const [offset, setOffset] = useState({ left: 0, top: 0 });
   const { canvasRef } = props;
   const color = presence?.spotlightColor;
-  console.log("color", color);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -152,7 +153,10 @@ export default function Scene() {
 
   return (
     <Canvas
-      style={{ width: "100%", height: "100%" }}
+      style={{
+        width: "100%",
+        height: "100%",
+      }}
       ref={rCanvas}
       onMouseEnter={() => setMouseInCanvas(true)}
       onMouseLeave={() => setMouseInCanvas(false)}
