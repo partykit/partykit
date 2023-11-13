@@ -169,7 +169,7 @@ export default function Voronoi() {
     };
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     // Add the class 'overflow-hidden' on body to prevent scrolling
     document.body.classList.add("overflow-hidden");
     // Scroll to top
@@ -177,7 +177,7 @@ export default function Voronoi() {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, []);
+  }, []);*/
 
   //const count = Object.keys(others).length + (self ? 1 : 0);
   const count = 0;
