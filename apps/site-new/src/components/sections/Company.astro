@@ -3,6 +3,7 @@ import BlogPost from "../cards/BlogPost.astro";
 import Button from "../atoms/Button.astro";
 import Grid from "../Grid.astro";
 import SectionNav from "../SectionNav.astro";
+import blogposts from "../../blog.json";
 ---
 
 <Grid>
@@ -10,72 +11,17 @@ import SectionNav from "../SectionNav.astro";
 
   <div id="blog-posts">
     <div id="blog-posts-list">
-      <BlogPost
-        title="Multi-user database collaboration made easy with Fireproof"
-        url="#"
-        date="16 October 2023"
-      >
-        <p>
-          PartyKit’s effortless connections are the perfect complement to 🔥
-          Fireproof’s immutable storage
-        </p>
-      </BlogPost>
-
-      <BlogPost
-        title="A single-serving waterhole in the Namib Desert using Remix"
-        url="#"
-        date="13 October 2023"
-      >
-        <p>
-          I work with a window open to a YouTube live stream of a waterhole in
-          Namibia, animals and all. Now it’s multiplayer and hosted on PartyKit
-          using the Remix starter kit
-        </p>
-      </BlogPost>
-
-      <BlogPost
-        title="PartyKit at ViteConf 2023"
-        url="#"
-        date="12 October 2023"
-      >
-        <p>
-          ViteConf attendees sent over 23,000 live reactions using PartyKit.
-        </p>
-      </BlogPost>
-
-      <BlogPost
-        title="Exploring AI interaction design and multiplayer with tldraw"
-        url="#"
-        date="4 October 2023"
-      >
-        <p>
-          How might we interact with AI? I'm exploring this with tldraw, a
-          multiplayer whiteboard app.
-        </p>
-      </BlogPost>
-
-      <BlogPost
-        title="Using Stencil to make a live poll Web Component"
-        url="#"
-        date="29 September 2023"
-      >
-        <p>
-          Building a live poll Web Component with Stencil and PartyKit, plus a
-          meditation on the art of maintenance.
-        </p>
-      </BlogPost>
-
-      <BlogPost
-        title="PartyKit raises a span-seed round of $2.5M from Sequoia, Remote First, and more"
-        url="#"
-        date="26 September 2023"
-      >
-        <p>
-          We're building the developer-friendly, real-time platform for
-          human-to-human and human-to-AI collaboration. Today we're announcing
-          our span-seed round, as well as general availability of our platform!
-        </p>
-      </BlogPost>
+      {
+        blogposts.map((post) => (
+          <BlogPost
+            title={post.title}
+            url={post.link}
+            date={new Date(post.pubDate).toDateString()}
+          >
+            <p>{post.description}</p>
+          </BlogPost>
+        ))
+      }
     </div>
 
     <SectionNav>
