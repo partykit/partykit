@@ -1,0 +1,207 @@
+/*
+TODO:
+
+- track cursor position only within a provided element
+- use msgpack
+- provide a default room name from the href
+*/
+
+import { useEffect, createContext } from "react";
+import usePartySocket from "partysocket/react";
+import { create } from "zustand";
+import {
+  type Presence,
+  type User,
+  type ClientMessage,
+  type PartyMessage,
+  decodeMessage,
+  encodeClientMessage,
+  partyMessageSchema,
+} from "./presence-schema";
+
+type UserMap = Map<string, User>;
+
+type PresenceStoreType = {
+  myId: string | null;
+  myself: User | null;
+  otherUsers: UserMap;
+  setMyId: (myId: string) => void;
+  setUsers: (users: UserMap) => void;
+  addUser: (id: string, user: User) => void;
+  removeUser: (id: string) => void;
+  updateUser: (id: string, presence: Presence) => void;
+  pendingUpdate: Partial<Presence> | null;
+  updatePresence: (partial: Partial<Presence>) => void;
+  clearPendingUpdate: () => void;
+};
+
+const mergeMyself = (local: User | null, remote: User | null) => {
+  // Prioritise local presence
+  if (!local) return remote;
+  return { ...remote, presence: local.presence } as User;
+};
+
+export const usePresence = create<PresenceStoreType>((set) => ({
+  myId: null,
+  myself: null,
+  setMyId: (myId: string) => set({ myId }),
+  pendingUpdate: null,
+  clearPendingUpdate: () => set({ pendingUpdate: null }),
+  updatePresence: (partial: Partial<Presence>) =>
+    set((state) => {
+      // Optimistically update myself, and also set a pending update
+      // Can only be used once myself has been set
+      const presence = {
+        ...state.myself?.presence,
+        ...partial,
+      } as Presence;
+      const myself = {
+        metadata: state.myself?.metadata ?? {},
+        presence,
+      } as User;
+      return { myself, pendingUpdate: partial };
+    }),
+
+  otherUsers: new Map() as UserMap,
+  setUsers: (users: UserMap) =>
+    set((state) => {
+      let otherUsers = new Map<string, User>();
+      users.forEach((user, id) => {
+        if (id === state.myId) return;
+        otherUsers.set(id, user);
+      });
+      // For myself, only accept the metadata from the server, not the presence
+      const myself = state.myId
+        ? mergeMyself(state.myself, users.get(state.myId) ?? null)
+        : null;
+      return { myself, otherUsers };
+    }),
+  addUser: (id: string, user: User) => {
+    set((state) => {
+      if (id === state.myId) {
+        return { myself: mergeMyself(state.myself, user) };
+      }
+      const otherUsers = new Map(state.otherUsers);
+      otherUsers.set(id, user);
+      return { otherUsers };
+    });
+  },
+  removeUser: (id: string) => {
+    set((state) => {
+      if (id === state.myId) {
+        return { myself: null };
+      }
+      const otherUsers = new Map(state.otherUsers);
+      otherUsers.delete(id);
+      return { otherUsers };
+    });
+  },
+  updateUser: (id: string, presence: Presence) => {
+    set((state) => {
+      if (id === state.myId) {
+        // Don't accept remote presence updates to myself
+        return {};
+      }
+      const otherUsers = new Map(state.otherUsers);
+      const user = otherUsers.get(id);
+      if (!user) return { otherUsers };
+      otherUsers.set(id, { ...user, presence });
+      return { otherUsers };
+    });
+  },
+}));
+
+export const PresenceContext = createContext({});
+
+export default function PresenceProvider(props: {
+  host: string;
+  room: string;
+  presence: Presence; // current user's initial presence
+  children: React.ReactNode;
+}) {
+  const {
+    setMyId,
+    setUsers,
+    addUser,
+    updateUser,
+    removeUser,
+    pendingUpdate,
+    clearPendingUpdate,
+  } = usePresence();
+
+  const updateUsers = (message: PartyMessage) => {
+    if (message.type !== "changes") return;
+    if (message.add) {
+      for (const [id, user] of Object.entries(message.add)) {
+        addUser(id, user);
+      }
+    }
+    if (message.presence) {
+      for (const [id, presence] of Object.entries(message.presence)) {
+        updateUser(id, presence);
+      }
+    }
+    if (message.remove) {
+      for (const id of message.remove) {
+        removeUser(id);
+      }
+    }
+  };
+
+  const handleMessage = async (event: MessageEvent) => {
+    //const message = JSON.parse(event.data) as PartyMessage;
+    const data =
+      event.data instanceof Blob
+        ? // byte array -> msgpack
+          decodeMessage(await event.data.arrayBuffer())
+        : // string -> json
+          JSON.parse(event.data);
+
+    const result = partyMessageSchema.safeParse(data);
+    if (!result.success) return;
+    const message = result.data;
+
+    switch (message.type) {
+      case "sync":
+        // create Map from message.users (which is id -> User)
+        setUsers(new Map<string, User>(Object.entries(message.users)));
+        break;
+      case "changes":
+        updateUsers(message);
+        break;
+    }
+  };
+
+  const socket = usePartySocket({
+    host: props.host,
+    party: "presence",
+    room: props.room,
+    onMessage: (event) => handleMessage(event),
+  });
+
+  // Send "join" message when the socket connects
+  useEffect(() => {
+    if (socket) {
+      setMyId(socket.id);
+      const message: ClientMessage = {
+        type: "join",
+        presence: props.presence,
+      };
+      socket.send(encodeClientMessage(message));
+    }
+  }, [props.presence, socket]);
+
+  useEffect(() => {
+    if (!pendingUpdate) return;
+    if (!socket) return;
+    const message: ClientMessage = { type: "update", presence: pendingUpdate };
+    socket.send(encodeClientMessage(message));
+    clearPendingUpdate();
+  }, [socket, pendingUpdate]);
+
+  return (
+    <PresenceContext.Provider value={{}}>
+      {props.children}
+    </PresenceContext.Provider>
+  );
+}

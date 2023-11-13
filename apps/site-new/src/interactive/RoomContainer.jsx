@@ -4,7 +4,7 @@ import Room from "./Room";
 export default function RoomContainer() {
   return (
   <PresenceProvider
-  host="sketch-presence.genmon.partykit.dev"
+  host="partykit-site.genmon.partykit.dev"
   room="default"
   presence={{
     cursor: null,

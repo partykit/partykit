@@ -22,23 +22,47 @@ import {
 type UserMap = Map<string, User>;
 
 type PresenceStoreType = {
+  // The current user. The ID is the socket connection ID.
+  // myself if set initially in a "sync" PartyMessage, and then
+  // updated locally, optimistically. It is not updated remotely.
   myId: string | null;
   myself: User | null;
-  otherUsers: UserMap;
   setMyId: (myId: string) => void;
+
+  // Flag to indicate whether the "sync" message has been received
+  synced: boolean;
+  setSynced: (synced: boolean) => void;
+
+  // A local update to the presence of the current user,
+  // ready to the sent to the server as an "update" ClientMessage
+  pendingUpdate: Partial<Presence> | null;
+  clearPendingUpdate: () => void;
+
+  // Makes an optimistic local update of the presence of the current user,
+  // and also queues an update to be sent to the server
+  updatePresence: (partial: Partial<Presence>) => void;
+
+  // Other users in the room. Set by an initial "sync" PartyMessage
+  // and updated in "changes" messages.
+  otherUsers: UserMap;
+
+  // Used by the initial "sync" PartyMessage. Will replace both myself and otherUsers.
   setUsers: (users: UserMap) => void;
+
+  // Used by the "changes" PartyMessage. Will update otherUsers but *not* myself.
   addUser: (id: string, user: User) => void;
   removeUser: (id: string) => void;
   updateUser: (id: string, presence: Presence) => void;
-  pendingUpdate: Partial<Presence> | null;
-  updatePresence: (partial: Partial<Presence>) => void;
-  clearPendingUpdate: () => void;
 };
 
 export const usePresence = create<PresenceStoreType>((set) => ({
   myId: null,
   myself: null,
   setMyId: (myId: string) => set({ myId }),
+
+  synced: false,
+  setSynced: (synced: boolean) => set({ synced }),
+
   pendingUpdate: null,
   clearPendingUpdate: () => set({ pendingUpdate: null }),
   updatePresence: (partial: Partial<Presence>) =>
@@ -58,6 +82,7 @@ export const usePresence = create<PresenceStoreType>((set) => ({
     }),
 
   otherUsers: new Map() as UserMap,
+
   setUsers: (users: UserMap) =>
     set((state) => {
       let otherUsers = new Map<string, User>();
@@ -68,10 +93,11 @@ export const usePresence = create<PresenceStoreType>((set) => ({
       const myself = state.myId ? users.get(state.myId) : null;
       return { myself, otherUsers };
     }),
+
   addUser: (id: string, user: User) => {
     set((state) => {
       if (id === state.myId) {
-        return { myself: user };
+        return {};
       }
       const otherUsers = new Map(state.otherUsers);
       otherUsers.set(id, user);
@@ -81,7 +107,7 @@ export const usePresence = create<PresenceStoreType>((set) => ({
   removeUser: (id: string) => {
     set((state) => {
       if (id === state.myId) {
-        return { myself: null };
+        return {};
       }
       const otherUsers = new Map(state.otherUsers);
       otherUsers.delete(id);
@@ -90,13 +116,8 @@ export const usePresence = create<PresenceStoreType>((set) => ({
   },
   updateUser: (id: string, presence: Presence) => {
     set((state) => {
-      if (id === state.myId && state.myself !== null) {
-        return {
-          myself: {
-            ...state.myself,
-            presence,
-          },
-        };
+      if (id === state.myId) {
+        return {};
       }
       const otherUsers = new Map(state.otherUsers);
       const user = otherUsers.get(id);
@@ -123,6 +144,7 @@ export default function PresenceProvider(props: {
     removeUser,
     pendingUpdate,
     clearPendingUpdate,
+    setSynced,
   } = usePresence();
 
   const updateUsers = (message: PartyMessage) => {
@@ -161,6 +183,7 @@ export default function PresenceProvider(props: {
       case "sync":
         // create Map from message.users (which is id -> User)
         setUsers(new Map<string, User>(Object.entries(message.users)));
+        setSynced(true);
         break;
       case "changes":
         updateUsers(message);

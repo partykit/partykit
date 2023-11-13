@@ -13,6 +13,7 @@ export type Presence = {
   message: string | null;
   name: string;
   color: string;
+  spotlightColor?: string;
 };
 
 // set on the server, read-only for the duration of the session
@@ -63,6 +64,7 @@ export const presenceSchema = z.object({
   message: z.string().nullable(),
   name: z.string(),
   color: z.string(),
+  spotlightColor: z.string().optional(),
 });
 
 export const metadataSchema = z.object({
