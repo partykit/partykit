@@ -73,7 +73,7 @@ And - that's it! You are now persisting data on the PartyKit server.
 To learn more about the Storage API, check <a href="https://docs.partykit.io/guides/persisting-state-into-storage/" target="_blank" rel="noopener noreferrer">our docs</a>.
 :::
 
-## Nest steps
+## Next steps
 
 Congratulations! Your polling app is working! Now it's time to [deploy it](/tutorials/add-partykit-to-a-nextjs-app/7-deploy-your-app) 🥳
 

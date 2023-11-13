@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "fetch-blog-entries": "node -r esbuild-register scripts/fetch-blog-entries.js",
+    "build": "npm run fetch-blog-entries && astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -28,6 +29,8 @@
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
-    "prettier-plugin-astro": "^0.12.1"
+    "@types/xml2json": "^0.11.6",
+    "prettier-plugin-astro": "^0.12.1",
+    "xml2json": "^0.12.0"
   }
 }
