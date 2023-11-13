@@ -12,6 +12,7 @@ import Voronoi from "../../interactive/Voronoi";
   <div id="browser">
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
     <Voronoi client:load />
+    <div id="partydemo"></div>
     <p>Because everything's better with friends</p>
   </div>
 </div>
@@ -119,7 +120,10 @@ import Voronoi from "../../interactive/Voronoi";
       background-size: 130% auto;
       background-repeat: no-repeat;
       background-position: center;
-      flex-grow: 2;
+      /*flex-grow: 2;*/
+      position: absolute;
+      width: 100%;
+      height: 100%;
     }
 
     #hero #browser p {

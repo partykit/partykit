@@ -9,6 +9,8 @@ import { Delaunay } from "d3-delaunay";
 
 type Point = [number, number, string]; // [x, y, id]
 
+const SPILL = 40;
+
 function Diagram(props: {
   svgRef: React.RefObject<SVGSVGElement>;
   containerDimensions: {
@@ -37,8 +39,8 @@ function Diagram(props: {
 
       const x = user.presence.cursor.x - containerDimensions.left;
       const y = user.presence.cursor.y - containerDimensions.top;
-      if (x < 0 || x > containerDimensions.width) return;
-      if (y < 0 || y > containerDimensions.height) return;
+      if (x < -SPILL || x > containerDimensions.width + SPILL) return;
+      if (y < -SPILL || y > containerDimensions.height + SPILL) return;
 
       points.push([x, y, id]);
     });
@@ -48,7 +50,7 @@ function Diagram(props: {
       points.push([
         containerDimensions.width / 2,
         containerDimensions.height / 2,
-        "dummy",
+        "dummy-07",
       ] as Point);
     }
 
@@ -59,13 +61,14 @@ function Diagram(props: {
 
       if (
         !(
-          x < 0 ||
-          x > containerDimensions.width ||
-          y < 0 ||
-          y > containerDimensions.height
+          x < -SPILL ||
+          x > containerDimensions.width + SPILL ||
+          y < -SPILL ||
+          y > containerDimensions.height + SPILL
         )
       ) {
-        points.push([x, y, myId] as Point);
+        const id = "self-03"; // don't use myId so we can control the color
+        points.push([x, y, id] as Point);
       }
     }
     setPoints(points);
