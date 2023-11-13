@@ -34,7 +34,7 @@ function Diagram(props: {
 
     // Build the list of points from the other users
     Array.from(otherUsers.entries()).map(([id, user]) => {
-      console.log("building");
+      //console.log("building");
       if (!user.presence.cursor) return;
 
       const x = user.presence.cursor.x - containerDimensions.left;
@@ -67,7 +67,7 @@ function Diagram(props: {
           y > containerDimensions.height + SPILL
         )
       ) {
-        const id = "self-03"; // don't use myId so we can control the color
+        const id = "self-08"; // don't use myId so we can control the color
         points.push([x, y, id] as Point);
       }
     }
@@ -93,11 +93,11 @@ function Diagram(props: {
       containerDimensions.height,
     ]);
 
-    const pattern = (i: number) => {
+    /*const pattern = (i: number) => {
       return i % 2 === 0
         ? "url(#diagonal-stripe-1)"
         : "url(#diagonal-stripe-4)";
-    };
+    };*/
 
     function stringToHash(str: string): number {
       let hash = 0;
@@ -127,7 +127,7 @@ function Diagram(props: {
       .data(points.map((d, i) => ({ cell: voronoi.renderCell(i), point: d })))
       .join("path")
       .attr("d", (d) => d.cell)
-      .style("fill", (d, i) => pastel(d.point[2]))
+      .style("fill", (d) => pastel(d.point[2]))
       .style("opacity", 0.8)
       .style("stroke", "white")
       .style("stroke-opacity", 0.9);

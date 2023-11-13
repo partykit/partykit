@@ -104,7 +104,7 @@ export default function useCursorTracking(
     };
     window.addEventListener("touchmove", onTouchMove);
 
-    const onTouchEnd = (e: TouchEvent) => {
+    const onTouchEnd = () => {
       setWindowCursor(null);
       if (within === "document") {
         setDocumentCursor(null);

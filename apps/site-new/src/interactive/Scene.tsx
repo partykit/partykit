@@ -2,14 +2,15 @@
 // https://github.com/pmndrs/react-three-fiber/issues/2963
 
 import * as THREE from "three";
-import { useRef, useState, useMemo, Suspense, useEffect } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useHelper, PerspectiveCamera } from "@react-three/drei";
+import { useRef, useState, Suspense, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
+//import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { PerspectiveCamera } from "@react-three/drei";
 import Logo, { Loader } from "./Logo";
 import { usePresenceWithCursors } from "./presence/use-cursors";
 import { usePresence } from "./presence/presence-context";
-import type { Presence } from "./presence/presence-schema";
 
+/*
 function Box(props: any) {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [hovered, setHover] = useState(false);
@@ -36,6 +37,7 @@ function CameraComponent(props) {
 
   return <perspectiveCamera ref={ref} {...props} />;
 }
+*/
 
 function Light(props: { x: number; y: number; z: number; color: string }) {
   const rLight = useRef<THREE.SpotLight>(null!);
@@ -115,8 +117,8 @@ function CurrentUserLight(props: {
 
 export default function Scene() {
   const rCanvas = useRef<HTMLCanvasElement>(null!);
-  const [mouseInCanvas, setMouseInCanvas] = useState(false);
-  const [offset, setOffset] = useState({ left: 0, top: 0 });
+  //const [mouseInCanvas, setMouseInCanvas] = useState(false);
+  //const [offset, setOffset] = useState({ left: 0, top: 0 });
   const { otherPresence } = usePresenceWithCursors((state) => ({
     otherPresence: Object.fromEntries(
       Array.from(state.otherUsers.entries()).map(([id, user]) => [
@@ -138,18 +140,18 @@ export default function Scene() {
     updatePresence({ spotlightColor: color });
   }, [synced, updatePresence]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!rCanvas.current) return;
     const { left, top } = rCanvas.current.getBoundingClientRect();
     setOffset({ left, top });
-  }, [rCanvas.current]);
+  }, [rCanvas.current]);*/
 
-  const lightPosition = (x: number, y: number) => {
+  /*const lightPosition = (x: number, y: number) => {
     const { left, top } = offset;
     const posX = x || 0 - left;
     const posY = y || 0 - top;
     return { x: -5 + posX / 70, y: 5 - posY / 70, z: 10 };
-  };
+  };*/
 
   return (
     <Canvas
@@ -158,8 +160,8 @@ export default function Scene() {
         height: "100%",
       }}
       ref={rCanvas}
-      onMouseEnter={() => setMouseInCanvas(true)}
-      onMouseLeave={() => setMouseInCanvas(false)}
+      //onMouseEnter={() => setMouseInCanvas(true)}
+      //onMouseLeave={() => setMouseInCanvas(false)}
       shadows
     >
       <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={10} />

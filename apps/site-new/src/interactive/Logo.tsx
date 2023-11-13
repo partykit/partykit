@@ -1,8 +1,7 @@
 // How to load models
 // https://docs.pmnd.rs/react-three-fiber/tutorials/loading-models
 
-import React, { useRef } from "react";
-import { useGLTF } from "@react-three/drei";
+//import { useGLTF } from "@react-three/drei";
 import { Html, useProgress } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
