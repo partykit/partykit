@@ -1,6 +1,7 @@
 ---
 import "../../styles/variables.css";
 import Scene from "../../interactive/Scene";
+import Voronoi from "../../interactive/Voronoi";
 ---
 
 <div id="hero">
@@ -10,7 +11,7 @@ import Scene from "../../interactive/Scene";
   <h1>Because everything's <br />better with friends</h1>
   <div id="browser">
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
-    <Scene client:load />
+    <Voronoi client:load />
     <p>Because everything's better with friends</p>
   </div>
 </div>
@@ -81,7 +82,7 @@ import Scene from "../../interactive/Scene";
       z-index: 10;
       transform: translateX(var(--demo-offset-X))
         translateY(var(--demo-offset-Y));
-      background-image: url("/assets/PK_Logo_Layers_Flat.png");
+      /*background-image: url("/assets/PK_Logo_Layers_Flat.png");*/
       background-size: cover;
       background-position: center;
     }
