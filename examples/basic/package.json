@@ -5,7 +5,7 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "partykit dev --var A=456 B=789=123 --define SOME_GLOBAL=88888"
+    "start": "partykit dev --with-env --var A=456 B=789 --define SOME_GLOBAL=88888"
   },
   "keywords": [],
   "author": "",

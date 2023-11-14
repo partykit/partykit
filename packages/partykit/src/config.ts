@@ -267,34 +267,44 @@ function removeUndefinedKeys(obj: Record<string, unknown> | undefined) {
   return obj === undefined
     ? obj
     : Object.fromEntries(
-      Object.entries(obj).filter(([, value]) => value !== undefined)
-    );
+        Object.entries(obj).filter(([, value]) => value !== undefined)
+      );
 }
+
+let loggedAboutReadingDotEnv = false;
+let loggedAboutReadingDotEnvLocal = false;
+let loggedAboutReadingPackageJson = false;
 
 export function getConfig(
   configPath: string | undefined | null,
   overrides: ConfigOverrides = {},
-  options?: { readEnvLocal?: boolean }
+  options?: { readEnvLocal?: boolean; withEnv?: boolean }
 ): Config {
   const envPath = findUpSync(".env");
   const envLocalPath = findUpSync(".env.local");
   let envVars: Record<string, string> = {};
   if (envPath) {
-    console.log(
-      `Loading environment variables from ${path.relative(
-        process.cwd(),
-        envPath
-      )}`
-    );
+    if (loggedAboutReadingDotEnv === false) {
+      console.log(
+        `Loading environment variables from ${path.relative(
+          process.cwd(),
+          envPath
+        )}`
+      );
+      loggedAboutReadingDotEnv = true;
+    }
     envVars = dotenv.parse(fs.readFileSync(envPath, "utf8"));
   }
   if (envLocalPath && options?.readEnvLocal) {
-    console.log(
-      `Loading environment variables from ${path.relative(
-        process.cwd(),
-        envLocalPath
-      )}`
-    );
+    if (!loggedAboutReadingDotEnvLocal) {
+      console.log(
+        `Loading environment variables from ${path.relative(
+          process.cwd(),
+          envLocalPath
+        )}`
+      );
+      loggedAboutReadingDotEnvLocal = true;
+    }
     envVars = {
       ...envVars,
       ...dotenv.parse(fs.readFileSync(envLocalPath, "utf8")),
@@ -318,12 +328,15 @@ export function getConfig(
         JSON.parse(fs.readFileSync(packageJsonPath, "utf8")).partykit || {};
       // @ts-expect-error partykit is our special field in package.json
       if (packageJsonConfig.partykit) {
-        logger.debug(
-          `Loading config from ${path.relative(
-            process.cwd(),
-            packageJsonPath
-          )}#partykit`
-        );
+        if (!loggedAboutReadingPackageJson) {
+          logger.debug(
+            `Loading config from ${path.relative(
+              process.cwd(),
+              packageJsonPath
+            )}#partykit`
+          );
+          loggedAboutReadingPackageJson = true;
+        }
       }
     }
 
@@ -337,6 +350,7 @@ export function getConfig(
         ...removeUndefinedKeys(overrides.vars),
       },
       define: {
+        ...(options?.withEnv ? { ...envVars } : {}),
         ...removeUndefinedKeys(packageJsonConfig.define),
         ...removeUndefinedKeys(overrides.define),
       },
@@ -377,6 +391,7 @@ export function getConfig(
       ...removeUndefinedKeys(overrides.vars),
     },
     define: {
+      ...(options?.withEnv ? { ...envVars } : {}),
       ...removeUndefinedKeys(parsedConfig.define),
       ...removeUndefinedKeys(overrides.define),
     },
@@ -387,9 +402,9 @@ export function getConfig(
   }
 
   if (config.name) {
-    const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$")
+    const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$");
     if (!validPathRegex.test(config.name)) {
-      throw new ConfigurationError("Project name must be a valid url path")
+      throw new ConfigurationError("Project name must be a valid url path");
     }
   }
 
@@ -423,7 +438,7 @@ export function getConfig(
   if (config.parties) {
     for (const [name, party] of Object.entries(config.parties)) {
       if (name !== name.toLowerCase()) {
-        throw new ConfigurationError(`Party names must be lowercase`)
+        throw new ConfigurationError(`Party names must be lowercase`);
       }
       const absolutePartyPath = path.isAbsolute(party)
         ? party
