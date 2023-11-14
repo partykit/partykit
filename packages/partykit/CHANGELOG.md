@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.35
+
+### Patch Changes
+
+- [#555](https://github.com/partykit/partykit/pull/555) [`f652575`](https://github.com/partykit/partykit/commit/f6525757a0b4aadae3773d384b00f0c838321937) Thanks [@threepointone](https://github.com/threepointone)! - use `--with-env` to define .env vars as globals in the project
+
+- [#557](https://github.com/partykit/partykit/pull/557) [`5a7fdcf`](https://github.com/partykit/partykit/commit/5a7fdcfaccc5a9851cf3cdb5779e21b437ff8f1f) Thanks [@threepointone](https://github.com/threepointone)! - wrap .env values with quotes when inlining
+
 ## 0.0.34
 
 ### Patch Changes
