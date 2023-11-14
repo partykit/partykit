@@ -2,7 +2,12 @@ import type { PartyKitServer } from "partykit/server";
 
 declare global {
   const SOME_GLOBAL: string;
+  const TEST_DEFINE_NUMBER: number;
+  const TEST_DEFINE_STRING: string;
 }
+
+console.log(TEST_DEFINE_NUMBER, typeof TEST_DEFINE_NUMBER);
+console.log(TEST_DEFINE_STRING, typeof TEST_DEFINE_STRING);
 
 export default {
   onConnect(ws, room) {
@@ -56,7 +61,12 @@ export default {
 
     console.log(SOME_GLOBAL);
     return new Response(
-      "Hello world:" + req.headers.get("x-foo") + " " + room.id
+      "Hello world:" +
+        req.headers.get("x-foo") +
+        " " +
+        room.id +
+        " " +
+        TEST_DEFINE_NUMBER
     );
   },
 } satisfies PartyKitServer;
