@@ -377,20 +377,25 @@ export async function deploy(options: {
   vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
+  withEnv: boolean | undefined;
   withVars: boolean | undefined;
   compatibilityDate: string | undefined;
   compatibilityFlags: string[] | undefined;
   minify: boolean | undefined;
 }): Promise<void> {
-  const config = getConfig(options.config, {
-    main: options.main,
-    name: options.name,
-    serve: options.serve,
-    vars: options.vars,
-    define: options.define,
-    compatibilityDate: options.compatibilityDate,
-    compatibilityFlags: options.compatibilityFlags,
-  });
+  const config = getConfig(
+    options.config,
+    {
+      main: options.main,
+      name: options.name,
+      serve: options.serve,
+      vars: options.vars,
+      define: options.define,
+      compatibilityDate: options.compatibilityDate,
+      compatibilityFlags: options.compatibilityFlags,
+    },
+    { withEnv: options.withEnv }
+  );
 
   if (!config.main) {
     throw new ConfigurationError(MissingEntryPointError);
