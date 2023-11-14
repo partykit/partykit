@@ -175,6 +175,14 @@ export function getUserConfig(): UserConfig {
 //   return false;
 // }
 
+function wrapValuesWithQuotes(obj: Record<string, unknown>) {
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => {
+      return [key, `"${value}"`];
+    })
+  );
+}
+
 import process from "process";
 
 export async function createClerkSession({
@@ -350,7 +358,7 @@ export function getConfig(
         ...removeUndefinedKeys(overrides.vars),
       },
       define: {
-        ...(options?.withEnv ? { ...envVars } : {}),
+        ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
         ...removeUndefinedKeys(packageJsonConfig.define),
         ...removeUndefinedKeys(overrides.define),
       },
@@ -391,7 +399,7 @@ export function getConfig(
       ...removeUndefinedKeys(overrides.vars),
     },
     define: {
-      ...(options?.withEnv ? { ...envVars } : {}),
+      ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
       ...removeUndefinedKeys(parsedConfig.define),
       ...removeUndefinedKeys(overrides.define),
     },
