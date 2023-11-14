@@ -30,7 +30,7 @@ function Diagram(props: {
   const [svgPath, setSvgPath] = useState<string>("");
 
   useEffect(() => {
-    let points: Point[] = [];
+    const points: Point[] = [];
 
     // Build the list of points from the other users
     Array.from(otherUsers.entries()).map(([id, user]) => {
@@ -84,7 +84,7 @@ function Diagram(props: {
       `0 0 ${containerDimensions.width} ${containerDimensions.height}`,
     );
 
-    // @ts-ignore
+    // @ts-expect-error it's fine, we're passing an array
     const delaunay = Delaunay.from(points);
     const voronoi = delaunay.voronoi([
       0,

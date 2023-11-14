@@ -85,7 +85,7 @@ export const usePresence = create<PresenceStoreType>((set) => ({
 
   setUsers: (users: UserMap) =>
     set((state) => {
-      let otherUsers = new Map<string, User>();
+      const otherUsers = new Map<string, User>();
       users.forEach((user, id) => {
         if (id === state.myId) return;
         otherUsers.set(id, user);
@@ -208,7 +208,7 @@ export default function PresenceProvider(props: {
       };
       socket.send(encodeClientMessage(message));
     }
-  }, [props.presence, socket]);
+  }, [props.presence, setMyId, socket]);
 
   useEffect(() => {
     if (!pendingUpdate) return;
@@ -216,7 +216,7 @@ export default function PresenceProvider(props: {
     const message: ClientMessage = { type: "update", presence: pendingUpdate };
     socket.send(encodeClientMessage(message));
     clearPendingUpdate();
-  }, [socket, pendingUpdate]);
+  }, [socket, pendingUpdate, clearPendingUpdate]);
 
   return (
     <PresenceContext.Provider value={{}}>

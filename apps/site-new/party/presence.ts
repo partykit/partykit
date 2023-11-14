@@ -28,7 +28,6 @@ const CORS = {
 
 // server.ts
 export default class PresenceServer implements Party.Server {
-  // eslint-disable-next-line no-useless-constructor
   constructor(public party: Party.Party) {}
   options: Party.ServerOptions = {
     hibernate: true,
@@ -128,12 +127,16 @@ export default class PresenceServer implements Party.Server {
       }
     }
 
-    this.broadcast(); // don't await
+    this.broadcast().catch((err) => {
+      console.error(err);
+    });
   }
 
   onClose(connection: ConnectionWithUser): void | Promise<void> {
     this.enqueueRemove(connection.id);
-    this.broadcast();
+    this.broadcast().catch((err) => {
+      console.error(err);
+    });
   }
 
   async broadcast() {

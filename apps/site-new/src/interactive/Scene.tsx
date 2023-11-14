@@ -1,7 +1,7 @@
 // The basic demo is needs adjusting (light intensity) to work
 // https://github.com/pmndrs/react-three-fiber/issues/2963
 
-import * as THREE from "three";
+import type * as THREE from "three";
 import { useRef, useState, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 //import { Canvas, useFrame, useThree } from "@react-three/fiber";
@@ -89,7 +89,7 @@ function CurrentUserLight(props: {
     if (!canvasRef.current) return;
     const { left, top } = canvasRef.current.getBoundingClientRect();
     setOffset({ left, top });
-  }, [canvasRef.current]);
+  }, [canvasRef]);
 
   if (!presence?.cursor) return null;
   if (!canvasRef.current) return null;

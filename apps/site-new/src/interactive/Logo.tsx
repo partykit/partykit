@@ -14,6 +14,7 @@ export function Loader() {
 export default function Logo() {
   const gltf = useLoader(GLTFLoader, "/assets/PK_Balloon.gltf");
   //const gltf = useLoader(GLTFLoader, "/PK-Balloon_logo.gltf");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   gltf.scene.traverse((child: any) => {
     if (child.isMesh) {
       child.castShadow = true;
