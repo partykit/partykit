@@ -76,7 +76,7 @@ import "../styles/variables.css";
 
   h1 {
     position: relative;
-    height: 36px;
+    height: 32px;
     width: 70px;
     background-image: url(/assets/PK_Logo_Full.png);
     background-size: contain;
@@ -84,6 +84,12 @@ import "../styles/variables.css";
     background-position: left center;
     text-indent: -5000%;
     top: 1px;
+  }
+
+  @media (min-width: 760px) {
+    h1 {
+      height: 36px;
+    }
   }
 
   #nav-button {
