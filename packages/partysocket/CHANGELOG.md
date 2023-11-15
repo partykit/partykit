@@ -1,5 +1,15 @@
 # partysocket
 
+## 0.0.15
+
+### Patch Changes
+
+- [#558](https://github.com/partykit/partykit/pull/558) [`79dfe8f`](https://github.com/partykit/partykit/commit/79dfe8fc60e7a3c2d2c2360c666d20279d1848da) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: fix node usage
+
+  When cloning websocket events in node, it looks like it misses the `data` field for messages. This patch adds it on to the cloned event.
+
+- [#560](https://github.com/partykit/partykit/pull/560) [`34f5f9f`](https://github.com/partykit/partykit/commit/34f5f9f49bfa09090e9467cf84e9ee2b003b8c0d) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: fix node usage (error, closes, messages)
+
 ## 0.0.14
 
 ### Patch Changes
