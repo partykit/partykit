@@ -36,7 +36,7 @@
     sans-serif,
     "Apple Color Emoji",
     "Segoe UI Emoji";
-  font-variation-settings: "wght" 320;
+  font-variation-settings: "wght" 380;
   font-feature-settings:
     "ss01" 1,
     "ss02" 1,
@@ -46,6 +46,7 @@
   letter-spacing: 0;
   @media (min-width: 760px) {
     font-size: 16px;
+    font-variation-settings: "wght" 320;
   }
 }
 
