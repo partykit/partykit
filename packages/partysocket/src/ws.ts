@@ -77,8 +77,27 @@ function cloneEventBrowser(e: Event) {
 
 function cloneEventNode(e: Event) {
   const evt = new Event(e.type, e);
-  // @ts-expect-error we need to fix event/listener types
-  evt.data = e.data;
+
+  if ("data" in e) {
+    // @ts-expect-error we need to fix event/listener types
+    evt.data = e.data;
+  }
+
+  if ("code" in e) {
+    // @ts-expect-error we need to fix event/listener types
+    evt.code = e.code;
+  }
+
+  if ("reason" in e) {
+    // @ts-expect-error we need to fix event/listener types
+    evt.reason = e.reason;
+  }
+
+  if ("error" in e) {
+    // @ts-expect-error we need to fix event/listener types
+    evt.error = e.error;
+  }
+
   return evt;
 }
 
