@@ -8,7 +8,7 @@ import Button from "../atoms/Button.astro";
   <div id="terminal-tabs">
     <span>New project</span>
     <span>Add to existing project</span>
-    <Button variant="github" url="#">Fork on GitHub</Button>
+    <Button variant="terminal-github" url="#">Fork on GitHub</Button>
   </div>
 
   <div id="terminal-console">
@@ -41,7 +41,9 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #terminal {
     grid-column: 1 / 3;
     position: relative;
@@ -80,7 +82,7 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
   }
 
   #terminal #terminal-tabs {
-    font-size: 80%;
+    @include font-S();
     position: absolute;
     top: 0;
     left: 2rem;
@@ -108,10 +110,6 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
 
   #terminal #terminal-tabs span + span:hover {
     color: inherit;
-  }
-
-  #terminal #terminal-tabs .button {
-    color: var(--color-feature-2);
   }
 
   #terminal-console {

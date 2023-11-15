@@ -1,5 +1,94 @@
 @charset "UTF-8";
 
-@mixin demo-mixin {
-  background: white;
+@font-face {
+  font-family: "PKSans";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/assets/Inter.var.woff2") format("woff2");
 }
+
+@mixin font-hero {
+  font-variation-settings: "wght" 220;
+  font-size: 7.25vw;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-align: center;
+  @media (min-width: 760px) {
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  strong {
+    font-variation-settings: "wght" 700;
+    letter-spacing: -0.02em;
+    font-weight: inherit;
+  }
+}
+
+@mixin font-core {
+  font-family:
+    PKSans,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+  font-variation-settings: "wght" 320;
+  font-feature-settings:
+    "ss01" 1,
+    "ss02" 1,
+    "ss03" 01;
+  font-size: 14px;
+  line-height: 1.4;
+  letter-spacing: 0;
+  @media (min-width: 760px) {
+    font-size: 16px;
+  }
+}
+
+@mixin font-XL {
+  font-variation-settings: "wght" 220;
+  font-size: 7.25vw;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  @media (min-width: 760px) {
+    font-size: 63px;
+    letter-spacing: -0.04em;
+  }
+}
+
+@mixin font-L {
+  font-variation-settings: "wght" 220;
+  font-size: 7.25vw;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  @media (min-width: 760px) {
+    font-size: 32px;
+    letter-spacing: -0.015em;
+  }
+}
+
+@mixin font-S {
+  font-size: 12px;
+  letter-spacing: 0;
+  font-variation-settings: "wght" 350;
+  @media (min-width: 760px) {
+    font-size: 13px;
+  }
+}
+
+
+
+@mixin atom {
+  width: 100%;
+  max-width: var(--atom-width);
+  margin-left: auto;
+  margin-right: auto;
+  @media (min-width: 500px) and (max-width: 760px) {
+    max-width: 30rem;
+  }
+}
+

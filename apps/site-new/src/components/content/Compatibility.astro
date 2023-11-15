@@ -30,7 +30,9 @@ import "../../styles/variables.css";
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #compatibility {
     grid-column: 1 / 3;
     display: flex;
@@ -38,10 +40,12 @@ import "../../styles/variables.css";
     align-items: stretch;
     justify-content: space-between;
     gap: 4rem;
+    padding-top: var(--whitespace);
   }
 
   @media (min-width: 760px) {
     #compatibility {
+      padding-top: 0;
       grid-column: 7 / 11;
       grid-row: 2 / 3;
     }
@@ -50,8 +54,6 @@ import "../../styles/variables.css";
   #compatibility-frameworks,
   #compatibility-platforms,
   #compatibility-standards {
-    width: 100%;
-    max-width: var(--atom-width);
-    margin: 0 auto;
+    @include atom();
   }
 </style>

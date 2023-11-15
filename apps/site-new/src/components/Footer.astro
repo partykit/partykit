@@ -48,7 +48,9 @@ import Grid from "./Grid.astro";
   </Grid>
 </footer>
 
-<style>
+<style lang="scss">
+  @import "../styles/shared.scss";
+
   footer {
     z-index: 3;
     padding: var(--padding);
@@ -61,10 +63,7 @@ import Grid from "./Grid.astro";
     margin-top: 0;
     grid-column: 1 / -1;
     margin-bottom: 4rem;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -85,10 +84,7 @@ import Grid from "./Grid.astro";
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -113,10 +109,7 @@ import Grid from "./Grid.astro";
     justify-content: center;
     gap: 1rem;
     margin: 4rem 0;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {

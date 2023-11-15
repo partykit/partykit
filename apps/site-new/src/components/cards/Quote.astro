@@ -24,7 +24,9 @@ const { name, url, role, variant } = Astro.props;
   </cite>
 </div>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   .quote {
     grid-column: span 2;
     overflow: hidden;
@@ -84,13 +86,13 @@ const { name, url, role, variant } = Astro.props;
   }
 
   cite {
+    @include font-S();
     display: flex;
     flex-direction: row;
     justify-content: start;
     align-items: center;
     padding: 1rem 1rem 0 0;
     gap: 0 1rem;
-    font-size: 80%;
   }
 
   .avatar {

@@ -30,13 +30,12 @@ import blogposts from "../../blog.json";
   </div>
 </Grid>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #blog-header {
     grid-column: 1 / -1;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {

@@ -3,7 +3,7 @@ import "../../styles/variables.css";
 
 interface Props {
   url: string;
-  variant?: null | "outline" | "github" | "pricingCTA";
+  variant?: null | "outline" | "github" | "terminal-github" | "pricingCTA";
 }
 
 const { url, variant = null } = Astro.props;
@@ -43,9 +43,20 @@ const { url, variant = null } = Astro.props;
     padding-top: 0.4em;
     padding-bottom: 0.4em;
     border-width: 1px;
+    max-width: 100%;
     color: var(--color-feature-2);
     border-color: rgba(160, 160, 160, 0.1);
     background: rgba(160, 160, 160, 0.2);
+  }
+
+  a.terminal-github {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    border-width: 1px;
+    color: var(--color-feature-2);
+    border-color: rgba(160, 160, 160, 0.1);
+    background: rgba(160, 160, 160, 0.2);
+    flex-grow: 0;
   }
   
   a.pricingCTA {

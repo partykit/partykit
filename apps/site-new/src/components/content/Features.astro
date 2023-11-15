@@ -32,13 +32,12 @@ import "../../styles/variables.css";
   </div>
 </>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #product-header {
     grid-column: 1 / -1;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -76,9 +75,7 @@ import "../../styles/variables.css";
   }
 
   .feature {
-    width: 100%;
-    max-width: var(--atom-width);
-    margin: 0 auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {

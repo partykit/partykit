@@ -152,7 +152,9 @@ import SectionNav from "../SectionNav.astro";
   </div>
 </Grid>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   .get-started {
     grid-column: 1 / 3;
     display: flex;
@@ -160,10 +162,7 @@ import SectionNav from "../SectionNav.astro";
     align-items: stretch;
     justify-content: start;
     gap: 1rem;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -177,10 +176,7 @@ import SectionNav from "../SectionNav.astro";
 
   #examples-header {
     grid-column: 1 / -1;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {

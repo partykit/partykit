@@ -20,14 +20,12 @@ const { title, url, date } = Astro.props;
 
 <hr>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
 
   h3 {
     grid-column: span 2;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -47,10 +45,7 @@ const { title, url, date } = Astro.props;
   p:nth-child(2) {
     grid-column: span 2;
     color: var(--color-feature-2);
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -70,10 +65,7 @@ const { title, url, date } = Astro.props;
   
   .extract {
     grid-column: 1 / -1;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -90,8 +82,9 @@ const { title, url, date } = Astro.props;
   }  
   
   hr {
-    margin: 4rem auto;
-    width: 100%;
+    @include atom();
+    margin-top: 4rem;
+    margin-bottom: 4rem;
     height: 1px;
     background: var(--color-feature-1);
     border: none;
@@ -100,6 +93,7 @@ const { title, url, date } = Astro.props;
   @media (min-width: 760px) {
     hr {
       width: 80%;
+      max-width: 100%;
     }
   }  
   

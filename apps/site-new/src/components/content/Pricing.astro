@@ -80,13 +80,12 @@ import Button from "../atoms/Button.astro";
   </div>
 </>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   #pricing-header {
     grid-column: 1 / -1;
-    width: 100%;
-    max-width: var(--atom-width);
-    margin-left: auto;
-    margin-right: auto;
+    @include atom();
   }
 
   @media (min-width: 760px) {
@@ -129,9 +128,7 @@ import Button from "../atoms/Button.astro";
   }
   
   .pricing-plan {
-    width: 100%;
-    max-width: var(--atom-width);
-    margin: 0 auto;
+    @include atom();
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -148,9 +145,7 @@ import Button from "../atoms/Button.astro";
   }
   
   hr {
-    width: 100%;
-    max-width: var(--atom-width);
-    margin: 0 auto;
+    @include atom();
     height: 1px;
     border: none;
     background: var(--color-feature-1);
@@ -164,6 +159,7 @@ import Button from "../atoms/Button.astro";
   }
   
   .pricing-price {
+    @include font-L();
     color: var(--color-feature-2);
   }
   

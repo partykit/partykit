@@ -21,7 +21,6 @@ import Voronoi from "../../interactive/Voronoi";
   @import "../../styles/shared.scss";
 
   #hero {
-    @include demo-mixin;
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
@@ -30,13 +29,10 @@ import Voronoi from "../../interactive/Voronoi";
   }
 
   h1 {
-    text-align: center;
-  }
-
-  h1 strong {
-    font-variation-settings: "wght" 700;
-    letter-spacing: -0.02em;
-    font-weight: inherit;
+    @include font-hero();
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   @media (min-width: 760px) {
@@ -73,7 +69,7 @@ import Voronoi from "../../interactive/Voronoi";
       grid-row: 1 / 2;
       margin: auto;
       width: 700px;
-      height: 600px;
+      height: 550px;
       border-radius: var(--box-radius);
       background: rgba(245, 245, 245, 0.5);
       -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(7px);
@@ -130,6 +126,7 @@ import Voronoi from "../../interactive/Voronoi";
     }
 
     #hero #browser p {
+      @include font-L();
       position: absolute;
       left: 2rem;
       right: 2rem;

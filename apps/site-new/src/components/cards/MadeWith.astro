@@ -26,7 +26,9 @@ const { title, by, url, github } = Astro.props;
   </div>
 </div>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   .example {
     display: grid;
     grid-template-columns: 100%;
@@ -106,6 +108,7 @@ const { title, by, url, github } = Astro.props;
   }
 
   .metadata {
+    @include font-S();
     grid-column: 1 / 2;
     grid-row: 2 / 3;
     align-self: end;
@@ -113,7 +116,6 @@ const { title, by, url, github } = Astro.props;
     flex-direction: column;
     gap: 1rem;
     padding: 2rem 0 0.5rem;
-    font-size: 80%;
   }
   
   .image {
