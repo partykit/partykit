@@ -113,5 +113,14 @@ const { name, url, role, variant } = Astro.props;
     align-items: start;
     flex-wrap: wrap;
     gap: 0 var(--character-width);
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+      &:focus {
+        text-decoration: underline;
+        color: var(--color-feature-2);
+      }
+    }
   }
 </style>

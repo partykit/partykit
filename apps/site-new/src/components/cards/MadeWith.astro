@@ -102,6 +102,13 @@ const { title, by, url, github } = Astro.props;
     grid-row: 1 / 2;
     z-index: 10;
   }
+  
+  header a {
+    text-decoration: underline;
+    &:focus {
+      color: var(--color-feature-2);
+    }
+  }
 
   header p {
     display: inline-block;

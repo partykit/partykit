@@ -26,6 +26,15 @@ const { title, url, date } = Astro.props;
   h3 {
     grid-column: span 2;
     @include atom();
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+      &:focus {
+        text-decoration: underline;
+        color: var(--color-feature-2);
+      }
+    }
   }
 
   @media (min-width: 760px) {
