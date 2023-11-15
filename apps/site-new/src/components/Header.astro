@@ -30,7 +30,9 @@ import "../styles/variables.css";
   </nav>
 </header>
 
-<style>
+<style lang="scss">
+  @import "../styles/shared.scss";
+
   header {
     position: sticky;
     top: 0;
@@ -74,7 +76,7 @@ import "../styles/variables.css";
 
   h1 {
     position: relative;
-    height: 40px;
+    height: 36px;
     width: 70px;
     background-image: url(/assets/PK_Logo_Full.png);
     background-size: contain;
@@ -192,6 +194,7 @@ import "../styles/variables.css";
       line-height: inherit;
       letter-spacing: inherit;
       gap: 1rem;
+      @include font-S();
     }
   }
   

@@ -18,8 +18,8 @@
     letter-spacing: -0.04em;
   }
   strong {
-    font-variation-settings: "wght" 700;
-    letter-spacing: -0.02em;
+    font-variation-settings: "wght" 640;
+    letter-spacing: -0.03em;
     font-weight: inherit;
   }
 }
@@ -50,12 +50,12 @@
 }
 
 @mixin font-XL {
-  font-variation-settings: "wght" 220;
+  font-variation-settings: "wght" 500;
   font-size: 7.25vw;
   line-height: 1.1;
   letter-spacing: -0.03em;
   @media (min-width: 760px) {
-    font-size: 63px;
+    font-size: 70px;
     letter-spacing: -0.04em;
   }
 }
@@ -72,11 +72,12 @@
 }
 
 @mixin font-S {
-  font-size: 12px;
-  letter-spacing: 0;
-  font-variation-settings: "wght" 350;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  font-variation-settings: "wght" 400;
   @media (min-width: 760px) {
-    font-size: 13px;
+    font-size: 12px;
   }
 }
 

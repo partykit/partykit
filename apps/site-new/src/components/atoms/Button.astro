@@ -24,10 +24,22 @@ const { url, variant = null } = Astro.props;
     cursor: pointer;
     flex-grow: 2;
   }
+  
+  a:focus {
+    outline: none;  
+  }
 
   a:after {
     content: "→";
+    position: relative;
+    left: 0;
     margin-left: var(--character-width);
+    transition: 0.3s ease 0.3s;
+  }
+
+  a:hover:after,
+  a:focus:after  {
+    left: 0.25em;
   }
 
   a.outline {
@@ -37,6 +49,10 @@ const { url, variant = null } = Astro.props;
     font-variation-settings: "wght" 550;
     color: var(--color-feature-2);
     outline-style: none;
+  }
+  
+  a.outline:after {
+    content: none;
   }
 
   a.github {
