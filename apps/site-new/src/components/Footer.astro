@@ -62,13 +62,14 @@ import Grid from "./Grid.astro";
   h2 {
     margin-top: 0;
     grid-column: 1 / -1;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     text-align: left;
     @include atom();
   }
 
   @media (min-width: 760px) {
     h2 {
+      margin-bottom: 4rem;
       max-width: 100%;
     }
   }
@@ -109,12 +110,13 @@ import Grid from "./Grid.astro";
     align-items: stretch;
     justify-content: center;
     gap: 1rem;
-    margin: 4rem 0;
+    margin: 2rem 0;
     @include atom();
   }
 
   @media (min-width: 760px) {
     .get-started {
+      margin: 4rem 0;
       max-width: 100%;
       grid-column: 1 / -1;
       grid-row: 3 / 4;

@@ -53,7 +53,7 @@
 @mixin font-XL {
   font-variation-settings: "wght" 500;
   font-size: 9vw;
-  line-height: 1.1;
+  line-height: 1.05;
   letter-spacing: -0.03em;
   @media (min-width: 760px) {
     font-size: 70px;
@@ -64,7 +64,7 @@
 @mixin font-L {
   font-variation-settings: "wght" 220;
   font-size: 7.25vw;
-  line-height: 1.2;
+  line-height: 1.15;
   letter-spacing: -0.03em;
   @media (min-width: 760px) {
     font-size: 32px;
