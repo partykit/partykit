@@ -9,7 +9,7 @@
 
 @mixin font-hero {
   font-variation-settings: "wght" 220;
-  font-size: 7.25vw;
+  font-size: 8vw;
   line-height: 1.1;
   letter-spacing: -0.03em;
   text-align: center;
@@ -67,7 +67,7 @@
   line-height: 1.15;
   letter-spacing: -0.03em;
   @media (min-width: 760px) {
-    font-variation-settings: "wght" 220;
+    font-variation-settings: "wght" 240;
     font-size: 32px;
     letter-spacing: -0.015em;
   }

@@ -8,12 +8,11 @@ import Voronoi from "../../interactive/Voronoi";
   <h1>
     Turn everything into a <br /><strong>realtime multiplayer app</strong>
   </h1>
-  <h1>Everything’s <br />better with friends</h1>
   <div id="browser">
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
     <Voronoi client:load />
     <div id="partydemo"></div>
-    <p>Everything’s better with friends</p>
+    <p>Because everything’s better&nbsp;with friends</p>
   </div>
 </div>
 
@@ -22,116 +21,120 @@ import Voronoi from "../../interactive/Voronoi";
 
   #hero {
     grid-column: 1 / -1;
-    display: flex;
-    flex-direction: column;
-    padding: calc(var(--whitespace) + 50px) 0 var(--whitespace);
-    gap: var(--whitespace);
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr;
+    height: 85vh;
+    padding-top: 0;
+  }
+  
+  @media (min-width: 900px) {
+    #hero {
+      padding-top: 50px;
+    }
   }
 
   h1 {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    z-index: 10;
     @include font-hero();
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    justify-content: start;
+    padding-top: calc(50px + 2rem);
   }
-
-  @media (min-width: 760px) {
-    #hero {
-      grid-column: 1 / 11;
-      height: 87.5vh;
-      display: grid;
-      grid-template-columns: 100%;
-      justify-content: center;
-      padding: calc(var(--whitespace) * 0.5) 0;
-    }
+  
+  @media (min-width: 900px) {
     h1 {
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      display: flex;
-      flex-direction: column;
+      z-index: 1;
       justify-content: center;
-    }
-    h1 + h1 {
-      display: none;
+      padding-top: 0;
     }
   }
 
   #hero #browser {
-    display: none;
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 -2rem -1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
   }
-
-  @media (min-width: 760px) {
+  
+  @media (min-width: 900px) {
     #hero #browser {
-      position: relative;
-      box-sizing: border-box;
       z-index: 10;
-      grid-column: 1 / 2;
-      grid-row: 1 / 2;
-      margin: auto;
       width: 700px;
       height: 550px;
-      border-radius: var(--box-radius);
-      background: rgba(245, 245, 245, 0.5);
-      -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(7px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: start;
+      max-height: 90%;
+      margin: auto;
       overflow: hidden;
-      z-index: 10;
-      transform: translateX(var(--demo-offset-X))
-        translateY(var(--demo-offset-Y));
-      /*background-image: url("/assets/PK_Logo_Layers_Flat.png");*/
+      border-radius: var(--box-radius);
+      background: rgba(245, 245, 245, 0);
+      -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
       background-size: cover;
       background-position: center;
     }
+  }
 
-    #hero #browser:before {
-      content: " ";
-      position: absolute;
-      top: 0.5px;
-      left: 0.5px;
-      right: 0.5px;
-      bottom: 0.5px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-top-color: rgba(255, 255, 255, 0.4);
-      border-radius: calc(var(--box-radius) - 1px);
-    }
+  #hero #browser:before {
+    content: " ";
+    position: absolute;
+    top: 0.5px;
+    left: 0.5px;
+    right: 0.5px;
+    bottom: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.4);
+    border-radius: calc(var(--box-radius) - 1px);
+  }
 
+  #hero #browser #browser-toolbar {
+    @include font-S();
+    position: relative;
+    z-index: 20;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    background: rgba(30, 30, 30, 0.7);
+    border-bottom: 1px solid rgba(50, 50, 50, 0.3);
+    color: white;
+    -webkit-user-select: none;
+  }
+  
+  @media (min-width: 900px) {
     #hero #browser #browser-toolbar {
-      @include font-S();
-      position: relative;
-      z-index: 20;
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      height: 52px;
-      background: rgba(30, 30, 30, 0.7);
-      border-bottom: 1px solid rgba(50, 50, 50, 0.3);
-      color: white;
-      -webkit-user-select: none;
     }
+  }
 
-    #hero #browser #partydemo {
-      background-image: url(/assets/PK_Logo_Balloon_3D.png);
-      background-size: 130% auto;
-      background-repeat: no-repeat;
-      background-position: center;
-      /*flex-grow: 2;*/
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
 
-    #hero #browser p {
-      @include font-L();
-      position: absolute;
-      left: 2rem;
-      right: 2rem;
-      bottom: 2rem;
-      text-align: center;
-    }
+  #hero #browser #partydemo {
+    background-image: url(/assets/PK_Logo_Balloon_3D.png);
+    background-size: 130% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    /*flex-grow: 2;*/
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  #hero #browser p {
+    @include font-L();
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    bottom: 2rem;
+    text-align: center;
   }
 </style>
