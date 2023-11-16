@@ -50,7 +50,7 @@ function Diagram(props: {
       points.push([
         containerDimensions.width / 2,
         containerDimensions.height / 2,
-        "dummy-07",
+        "dummy-08",
       ] as Point);
     }
 

@@ -165,7 +165,7 @@ export default function Scene() {
       shadows
     >
       <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={10} />
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.8} />
       <CurrentUserLight canvasRef={rCanvas} />
       <Suspense fallback={<Loader />}>
         <Logo />
