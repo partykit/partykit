@@ -5,10 +5,11 @@ interface Props {
   name: string;
   url: string;
   role: string;
+  img: string;
   variant: "S" | "M" | "L";
 }
 
-const { name, url, role, variant } = Astro.props;
+const { name, url, role, variant, img } = Astro.props;
 ---
 
 <div class={`quote quote-${variant}`}>
@@ -16,7 +17,7 @@ const { name, url, role, variant } = Astro.props;
     <slot />
   </blockquote>
   <cite>
-    <div class="avatar"></div>
+    <div class="avatar"><img src={img} /></div>
     <div class="author">
       <a href={url}>{name}</a>
       <span>{role}</span>
@@ -97,13 +98,19 @@ const { name, url, role, variant } = Astro.props;
 
   .avatar {
     display: block;
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
     border-radius: 100%;
     background-image: url(/assets/user.jpg);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
+    img {
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+    }
   }
   
   .author {
