@@ -42,7 +42,7 @@ import Grid from "./Grid.astro";
         </a>
       </nav>
 
-      <p class="legal">&copy; 2023 PartyKit. All rights reserved.</p>
+      <p class="legal">&copy; 2023 PartyKit. All rights reserved. <a href="/privacy">Privacy&nbsp;statement</a>.</p>
       
       </div>
   </Grid>
@@ -138,6 +138,12 @@ import Grid from "./Grid.astro";
     flex-direction: column;
     align-items: stretch;
     gap: 2rem;
+    a {
+      text-decoration: underline;
+      &:hover, &:focus {
+        color: var(--color-feature-2);
+      }
+    }
   }
     
   @media (min-width: 760px) {
