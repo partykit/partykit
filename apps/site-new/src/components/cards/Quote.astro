@@ -41,6 +41,11 @@ const { name, url, role, variant, img } = Astro.props;
       grid-column: span 1;
     }
   }
+  @media (min-width: 760px) and (max-width: 1100px) {
+    .quote:nth-child(6) ~ .quote {
+      display: none;
+    }
+  }
   
   @media (min-width: 1100px) {
     .quote {

@@ -16,7 +16,6 @@ import Grid from "../Grid.astro";
   <h2 id="quotes-header">What people say about PartyKit</h2>
 
   <div id="quotes">
-    <Limiter>
       <Grid variant="nested">
         <Quote
           name="Brandon Dail"
@@ -97,11 +96,6 @@ import Grid from "../Grid.astro";
           A&plus;
         </Quote>
       </Grid>
-    </Limiter>
-
-    <SectionNav>
-      <Button variant="outline" url="#">More quotes</Button>
-    </SectionNav>
   </div>
 </Grid>
 
@@ -137,4 +131,11 @@ import Grid from "../Grid.astro";
       margin: 0;
     }
   }
+  
+  @media (min-width: 760px) and (max-width: 1100px) {
+    #quotes .quote:nth-child(6) ~ .quote {
+      display: none;
+    }
+  }
+
 </style>
