@@ -10,7 +10,7 @@ export default function OtherCursors() {
     <div
       className={`${
         within === "window" ? "fixed" : "absolute"
-      } z-30 top-0 left-0 w-full h-full pointer-events-none`}
+      } z-20 top-0 left-0 right-0 bottom-0 pointer-events-none overflow-clip`}
     >
       {otherUserIds.map((id) => {
         return <Cursor key={id} userId={id} fill={"#00f"} />;
