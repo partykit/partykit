@@ -1,12 +1,12 @@
 [
   {
-    "title": "What is Flow, and Why is Partykit being a crucial player?",
+    "title": "What is Flow, and why is Partykit being a crucial player?",
     "link": "https://blog.partykit.io/posts/flow-and-partykit-collaboration/",
     "guid": {
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/flow-and-partykit-collaboration/"
     },
-    "description": "Making the browser multiplayer is difficult. However, Flow and Partykit's collaboration brings multiplayer to a single website.",
+    "description": "Making the browser multiplayer is difficult. However, Flow and Partykit’s collaboration brings multiplayer to a single website.",
     "pubDate": "Fri, 27 Oct 2023 19:36:06 GMT"
   },
   {
@@ -16,7 +16,7 @@
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/partykit-powers-realtime-avatars-in-epic-web/"
     },
-    "description": "Kent C. Dodds used PartyKit for users' presence on his course platform.",
+    "description": "Kent C. Dodds used PartyKit for users’ presence on his course platform.",
     "pubDate": "Tue, 24 Oct 2023 14:12:00 GMT"
   },
   {
@@ -56,7 +56,7 @@
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/ai-interactions-with-tldraw/"
     },
-    "description": "How might we interact with AI? I'm exploring this with tldraw, a multiplayer whiteboard app.",
+    "description": "How might we interact with AI? I’m exploring this with tldraw, a multiplayer whiteboard app.",
     "pubDate": "Wed, 04 Oct 2023 14:12:00 GMT"
   },
   {
@@ -76,7 +76,7 @@
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/partykit-raises-a-pre-seed-round-2-5-m-from-sequoia-remote-first-and-more/"
     },
-    "description": "We're building the developer-friendly, real-time platform for human-to-human and human-to-AI collaboration. Today we're announcing our pre-seed round, as well as general availability of our platform!",
+    "description": "We’re building the developer-friendly, real-time platform for human-to-human and human-to-AI collaboration. Today we’re announcing our pre-seed round, as well as general availability of our platform!",
     "pubDate": "Tue, 26 Sep 2023 13:00:00 GMT"
   },
   {
@@ -96,7 +96,7 @@
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/partykit-meet-tinybase/"
     },
-    "description": "We're excited to announce TinyBase v4.3, and its integration with PartyKit! 🎈",
+    "description": "We’re excited to announce TinyBase v4.3, and its integration with PartyKit! 🎈",
     "pubDate": "Thu, 21 Sep 2023 16:00:00 GMT"
   },
   {
@@ -126,11 +126,11 @@
       "isPermaLink": "true",
       "$t": "https://blog.partykit.io/posts/partyserver-api/"
     },
-    "description": "Why we reimagined PartyKit's API, and how to use it.",
+    "description": "Why we reimagined PartyKit’s API, and how to use it.",
     "pubDate": "Tue, 12 Sep 2023 15:00:00 GMT"
   },
   {
-    "title": "Everything is Better with Friends",
+    "title": "Everything is better with Friends",
     "link": "https://blog.partykit.io/posts/everything-is-better-with-friends/",
     "guid": {
       "isPermaLink": "true",
