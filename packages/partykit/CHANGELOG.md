@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.37
+
+### Patch Changes
+
+- [#563](https://github.com/partykit/partykit/pull/563) [`0a92715`](https://github.com/partykit/partykit/commit/0a92715a972e15429aa246fd2226d93f4bae0234) Thanks [@threepointone](https://github.com/threepointone)! - revert sigil fix
+
 ## 0.0.36
 
 ### Patch Changes
