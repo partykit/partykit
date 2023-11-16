@@ -91,6 +91,17 @@
   }
 }
 
+@mixin font-S-bold {
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+  font-variation-settings: "wght" 650;
+  @media (min-width: 760px) {
+    font-size: 12px;
+    font-variation-settings: "wght" 620;
+  }
+}
+
 
 
 @mixin atom {

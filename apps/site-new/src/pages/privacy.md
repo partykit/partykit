@@ -2,12 +2,12 @@
 title: Privacy Policy
 layout: ../layouts/Document.astro
 seo:
-  title: Privacy Policy
+  title: Privacy policy
   description: PartyKit's privacy policy
 updated_date: 2023-07-24
 ---
 
-# Privacy Policy
+# Privacy policy
 
 Effective as of <time datetime='2023-07-24'>24 July 2023</time>.
 
@@ -355,7 +355,7 @@ When we no longer require the personal information, we have collected about you,
 
 **Security**. We have put in place procedures designed to deal with breaches of personal information. In the event of such breaches, we have procedures in place to work with applicable regulators. In addition, in certain circumstances (including where we are legally required to do so), we may notify you of breaches affecting your personal information.
 
-<u>Your rights</u>
+### Your rights
 
 **General.** European data protection laws give you certain additional rights regarding your personal information. If you are located in Europe, you may ask us to take any of the following actions in relation to your personal information that we hold:
 
@@ -385,7 +385,7 @@ Tel. [+44 303 123 1113](tel:+44-303-123-1113)
 
 Website: [ico.org.uk/make-a-complaint/](https://ico.org.uk/make-a-complaint/)
 
-Data processing outside Europe
+#### Data processing outside Europe
 
 We are a US-based company and many of our service providers, advisers, partners or other recipients of data are also based in the US. This means that, if you use the Services, your personal information will necessarily be accessed and processed in the US. It may also be provided to recipients in other countries outside Europe.
 
@@ -483,7 +483,7 @@ Strictly necessary cookies do not require your consent. For analytics cookies, w
 
 If you do not wish to give consent or wish to withdraw your consent to any performance or targeting and functionality cookies at any time, you will need to delete, and block or disable cookies via your browser settings; see below for more information on how to do this. Please note that disabling these cookies will affect the functionality of the Site and may prevent you from being able to access certain features on the Site.
 
-#### 7. What type of cookies do we use and why?
+### 7. What type of cookies do we use and why?
 
 We use “analytics” and “strictly necessary” cookies:
 
@@ -562,10 +562,3 @@ We may need to update our cookie notice from time to time if we decide to use co
 For more information about how we process personal information collected from cookies please refer to our website [privacy policy](https://partykit.io/privacy).
 
 If you have any questions or would like more information about the ways we use cookies please contact us at [contact@partykit.io](mailto:contact@partykit.io).
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>

@@ -14,7 +14,137 @@ const { title } = Astro.props;
 <Layout title={title}>
   <Header />
   <main>
-    <slot />
+    <Grid>
+      <slot />
+    </Grid>
   </main>
   <Footer />
 </Layout>
+
+<style is:global lang="scss">
+  @import "../styles/shared.scss";
+
+  main h1,
+  main h2 {
+    grid-column: 1 / -1;
+  }
+  
+  main h3,
+  main h4,
+  main h5, 
+  main h6, 
+  main p,
+  main ul,
+  main ol {
+    grid-column: 1 / -1;
+    @include atom();
+    @media (min-width: 760px) {
+      max-width: 40rem;
+      grid-column: 4 / 10;
+    }
+  }
+  
+  main h1 {
+    @include font-hero();
+    margin: calc(var(--whitespace) + 50px) 0 var(--whitespace);
+  }
+  
+  main h3 {
+    margin-top: calc(var(--whitespace) *0.5);
+  }
+  
+  main h4 {
+    @include font-core-bold();
+    margin-top: 4rem;
+  }
+  
+  main h5,
+  main h6 {
+    margin-top: 4rem;
+  }
+  
+  main strong,
+  main b {
+    @include font-core-bold();
+    font-weight: inherit;
+  }
+  
+  main a {
+    text-decoration: underline;
+    &:hover,
+    &:focus {
+      color: var(--color-feature-2);
+    }
+  }
+  
+  main ul {
+    li {
+      position: relative;
+      list-style: none;
+      padding-left: 1.5rem;
+      &:before {
+        content: "●";
+        display: inline-block;
+        width: 1.5rem;
+        margin-left: -1.5rem;
+      }
+      li:before {
+        content: "○";
+      }
+      li li:before {
+        content: "→";
+      }
+
+    }
+  }
+  
+  main div div {
+    width: 100%;
+    grid-column: 1 / -1;
+    margin: 4rem 0;
+    @media (min-width: 1100px) {
+      grid-column: 2 / 10;
+    }
+  }
+  
+  main table {
+    width: 100%;
+    @include font-S();
+    @media (min-width: 1100px) {
+      @include font-core();
+    }
+    th, strong, b {
+      @include font-S-bold();
+      @media (min-width: 1100px) {
+        @include font-core-bold();
+      }
+    }
+    th {
+      text-align: left;
+      padding: var(--box-padding);
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+    td {
+      border-top: 1px solid var(--color-feature-1);
+      padding: var(--box-padding);
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        padding-right: 0;
+      }
+    }
+    p {
+      max-width: 100%;
+      & + p {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+</style>
