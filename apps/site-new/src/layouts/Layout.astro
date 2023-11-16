@@ -45,6 +45,12 @@ const { title } = Astro.props;
     background: var(--color-page);
     @include font-core();
   }
+  
+  @media (max-width: 759px) {
+    body.nav-open {
+      overflow: hidden;
+    }
+  }
 
   h2 {
     @include font-XL();
