@@ -10,7 +10,7 @@ async function fetchBlogEntries() {
   const data = JSON.parse(json);
   fs.writeFileSync(
     "src/blog.json",
-    JSON.stringify(data.rss.channel.item, null, 2) + "\n",
+    JSON.stringify(data.rss.channel.item.slice(0, 10), null, 2) + "\n",
   );
 }
 
