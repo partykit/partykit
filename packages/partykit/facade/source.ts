@@ -499,15 +499,16 @@ function createDurable(
     }
 
     async #initializeWorker() {
-      this.worker = isClassAPI
+      const worker = isClassAPI
         ? new ClassWorker(Worker, this.room)
         : new ModuleWorker(Worker, this.room);
 
-      this.connectionManager = this.worker.supportsHibernation
+      this.connectionManager = worker.supportsHibernation
         ? new HibernatingConnectionManager(this.controller)
         : new InMemoryConnectionManager();
 
-      return this.worker.onStart();
+      await worker.onStart();
+      this.worker = worker;
     }
 
     async attachSocketEventHandlers(connection: Party.Connection) {
