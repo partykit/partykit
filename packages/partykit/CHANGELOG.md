@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.36
+
+### Patch Changes
+
+- [#561](https://github.com/partykit/partykit/pull/561) [`70dbd60`](https://github.com/partykit/partykit/commit/70dbd6076c18fd6f703235bd3e7eaae957cfd1ae) Thanks [@threepointone](https://github.com/threepointone)! - fix: set this.worker sigil only after onStart has finished
+
 ## 0.0.35
 
 ### Patch Changes
