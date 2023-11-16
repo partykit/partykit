@@ -1,6 +1,6 @@
 ---
 import "../../styles/variables.css";
-//import Scene from "../../interactive/Scene";
+import Scene from "../../interactive/Scene";
 import Voronoi from "../../interactive/Voronoi";
 ---
 
@@ -10,7 +10,7 @@ import Voronoi from "../../interactive/Voronoi";
   </h1>
   <div id="browser">
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
-    <Voronoi client:load />
+    <Scene client:load />
     <div id="partydemo"></div>
     <p>Because everything’s better&nbsp;with friends</p>
   </div>
@@ -121,7 +121,7 @@ import Voronoi from "../../interactive/Voronoi";
 
 
   #hero #browser #partydemo {
-    background-image: url(/assets/PK_Logo_Balloon_3D.png);
+    //background-image: url(/assets/PK_Logo_Balloon_3D.png);
     background-size: 130% auto;
     background-repeat: no-repeat;
     background-position: center;
