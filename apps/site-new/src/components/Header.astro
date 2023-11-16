@@ -31,10 +31,24 @@ import "../styles/variables.css";
 </header>
 
 <script>
+  const navButton = document.getElementById("nav-button") as HTMLInputElement | null;
+
+  const onNavChange = () => {
+    if (!navButton) return;
+    if (navButton.checked) {
+      document.body.classList.add("nav-open");
+    } else {
+      document.body.classList.remove("nav-open");
+    }
+  };
+
+  if (navButton) {
+    navButton.addEventListener("change", onNavChange);
+  }
+
   const dismiss = () => {
-    const showNav = document.getElementById("nav-button");
-    if (!showNav) return;
-    (showNav as HTMLInputElement).checked = false;
+    if (!navButton) return;
+    navButton.checked = false;
   };
 
   const dismissNav = document.querySelectorAll("[data-dismiss-nav]");
