@@ -24,19 +24,7 @@ import SectionNav from "../SectionNav.astro";
   <h2 id="examples-header">Made with PartyKit</h2>
 
   <div id="examples">
-    <Limiter>
       <Grid variant="nested">
-        <MadeWith
-          title="SiteGPT"
-          url="https://sitegpt.ai"
-          by="Username"
-          github="#"
-          img="/assets/made-with/product_sitegpt.png"
-          imgShade="light"
-        >
-          <p>Make AI your expert customer support agent</p>
-        </MadeWith>
-
         <MadeWith
           title="Stately Sky"
           url="https://stately.ai"
@@ -46,6 +34,17 @@ import SectionNav from "../SectionNav.astro";
           imgShade="dark"
         >
           <p>Deploy State Machines to the Edge with Stately Sky</p>
+        </MadeWith>
+
+        <MadeWith
+          title="SiteGPT"
+          url="https://sitegpt.ai"
+          by="Username"
+          github="#"
+          img="/assets/made-with/product_sitegpt.png"
+          imgShade="light"
+        >
+          <p>Make AI your expert customer support agent</p>
         </MadeWith>
 
         <MadeWith
@@ -59,6 +58,17 @@ import SectionNav from "../SectionNav.astro";
           <p>
             Everything you need to know to ship modern full-stack web applications
           </p>
+        </MadeWith>
+
+        <MadeWith 
+          title="Flow" 
+          url="#" 
+          by="Min Chun Fu" 
+          github="#"
+          img="/assets/made-with/product_flow.png"
+          imgShade="light"
+        >
+          <p>Collaborate. Innovate. Celebrate.</p>
         </MadeWith>
 
         <MadeWith
@@ -82,61 +92,7 @@ import SectionNav from "../SectionNav.astro";
         >
           <p>Does Cool Thing X, integrates with Service Y</p>
         </MadeWith>
-
-        <MadeWith title="Flow" url="#" by="Min Chun Fu" github="#">
-          <img src="/assets/made-with/flowapp.svg" alt="Flowapp" />
-          <p>Collaborate. Innovate. Celebrate.</p>
-        </MadeWith>
-
-        <MadeWith
-          title="Another example"
-          url="#"
-          by="Another Legend"
-          github="#"
-          img="/assets/made-with/product_stately.png"
-          imgShade="dark"
-        >
-          <p>Does Cool Thing X, integrates with Service Y</p>
-        </MadeWith>
-
-        <MadeWith
-          title="Another example"
-          url="#"
-          by="Another Legend"
-          github="#"
-          img="/assets/made-with/product_stately.png"
-          imgShade="dark"
-        >
-          <p>Does Cool Thing X, integrates with Service Y</p>
-        </MadeWith>
-
-        <MadeWith
-          title="Another example"
-          url="#"
-          by="Another Legend"
-          github="#"
-          img="/assets/made-with/product_stately.png"
-          imgShade="dark"
-        >
-          <p>Does Cool Thing X, integrates with Service Y</p>
-        </MadeWith>
-
-        <MadeWith
-          title="Another example"
-          url="#"
-          by="Another Legend"
-          github="#"
-          img="/assets/made-with/product_stately.png"
-          imgShade="dark"
-        >
-          <p>Does Cool Thing X, integrates with Service Y</p>
-        </MadeWith>
       </Grid>
-    </Limiter>
-
-    <SectionNav>
-      <Button variant="outline" url="#">More examples</Button>
-    </SectionNav>
   </div>
 </Grid>
 
