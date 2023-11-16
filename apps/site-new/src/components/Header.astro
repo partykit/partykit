@@ -9,7 +9,7 @@ import "../styles/variables.css";
     <div id="nav-panel">
       <div id="nav-pages">
         <a href="https://docs.partykit.io"><span>Docs</span></a>
-        <a href="#pricing-header"><span>Pricing</span></a>
+        <a href="#pricing-header" data-dismiss-nav><span>Pricing</span></a>
         <a href="https://blog.partykit.io"><span>Blog</span></a>
       </div>
       <div id="nav-icons">
@@ -29,6 +29,19 @@ import "../styles/variables.css";
     </div>
   </nav>
 </header>
+
+<script>
+  const dismiss = () => {
+    const showNav = document.getElementById("nav-button");
+    if (!showNav) return;
+    (showNav as HTMLInputElement).checked = false;
+  };
+
+  const dismissNav = document.querySelectorAll("[data-dismiss-nav]");
+  dismissNav.forEach((el) => {
+    el.addEventListener("click", dismiss);
+  });
+</script>
 
 <style lang="scss">
   @import "../styles/shared.scss";
