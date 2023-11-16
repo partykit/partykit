@@ -49,6 +49,15 @@
   }
 }
 
+@mixin font-core-bold {
+  @include font-core();
+  font-variation-settings: "wght" 650;
+  @media (min-width: 760px) {
+    font-size: 16px;
+    font-variation-settings: "wght" 620;
+  }
+}
+
 @mixin font-XL {
   font-variation-settings: "wght" 500;
   font-size: 9vw;

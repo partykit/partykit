@@ -7,22 +7,24 @@ interface Props {
   by: string;
   url: string;
   github: string;
+  img: string;
+  imgShade: string;
 }
 
-const { title, by, url, github } = Astro.props;
+const { title, by, url, github, img, imgShade } = Astro.props;
 ---
 
-<div class="example">
+<div class="example" {imgShade}>
   <header>
     <h4><a href={url}>{title}</a></h4>
     <p>by {by}</p>
   </header>
   <div class="metadata">
     <slot />
-    <Button variant="github" url={github}>Fork on GitHub</Button>
+    <Button variant="github" url={github}>Read more</Button>
   </div>
   <div class="image">
-    <img src="/assets/waterhole.jpg" />
+    <img src={img} />
   </div>
 </div>
 
@@ -32,7 +34,6 @@ const { title, by, url, github } = Astro.props;
   .example {
     display: grid;
     grid-template-columns: 100%;
-    padding: var(--box-padding);
     background: var(--color-feature-1);
     border-radius: var(--box-radius);
     overflow: hidden;
@@ -50,14 +51,13 @@ const { title, by, url, github } = Astro.props;
     }
   }
 
-  .example:nth-child(2) ~ .example {
-    display: none;
+  @media (min-width: 1100px) {
+    .example:nth-child(5) ~ .example {
+      display: none;
+    }
   }
 
   @media (min-width: 760px) {
-    .example:nth-child(2) ~ .example {
-      display: grid;
-    }
     .example:nth-child(1) {
       grid-row: 1 / 4;
     }
@@ -70,9 +70,6 @@ const { title, by, url, github } = Astro.props;
   }
 
   @media (min-width: 1100px) {
-    .example:nth-child(2) ~ .example {
-      display: grid;
-    }
     .example:nth-child(1) {
       grid-row: 1 / 4;
     }
@@ -93,7 +90,7 @@ const { title, by, url, github } = Astro.props;
   .example:after {
     content: " ";
     grid-column: 1 / 2;
-    grid-row: 1 / 3;
+    grid-row: 1 / 4;
     padding-top: 160%;
   }
 
@@ -101,11 +98,24 @@ const { title, by, url, github } = Astro.props;
     grid-column: 1 / 2;
     grid-row: 1 / 2;
     z-index: 10;
+    padding: var(--box-padding);
+    padding-bottom: 4rem;
+    background: linear-gradient(var(--color-feature-1) calc(100% - 6rem), transparent 100%);
+    text-align: center;
+  }
+  
+  [imgShade="dark"] header {
+    background: linear-gradient(var(--color-text) calc(100% - 6rem), transparent 100%);
+    color: var(--color-page);
   }
   
   header a {
-    text-decoration: underline;
+    @include font-core-bold();
+    &:hover {
+      text-decoration: underline;
+    }
     &:focus {
+      text-decoration: underline;
       color: var(--color-feature-2);
     }
   }
@@ -116,27 +126,38 @@ const { title, by, url, github } = Astro.props;
 
   .metadata {
     @include font-S();
+    text-align: center;
     grid-column: 1 / 2;
-    grid-row: 2 / 3;
+    grid-row: 3 / 4;
     align-self: end;
     display: flex;
+    z-index: 10;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem 0 0.5rem;
+    padding: var(--box-padding);
+    padding-bottom: 1rem;
+    padding-top: 4rem;
+    background: linear-gradient(transparent 0, var(--color-feature-1) 50%);
+  }
+  
+  [imgShade="dark"] .metadata {
+    background: linear-gradient(transparent 0, var(--color-text) 50%);
+    color: var(--color-page);
   }
   
   .image {
     grid-column: 1 / 2;
-    grid-row: 1 / 2;
-    margin: -0.725rem -1rem -0.775rem;
-    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 2rem, rgba(0,0,0,0.2) 4rem, rgba(0,0,0,1) 10rem);
+    grid-row: 1 / 4;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    display: none;
+    border-radius: calc(var(--box-radius) + 1px) calc(var(--box-radius) + 1px) 0 0;
   }
   
   .image img {
     min-height: 100%;
     min-width: 100%;
     object-fit: cover;
+    object-position: center;
   }
 </style>
