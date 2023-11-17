@@ -40,6 +40,7 @@ const { title } = Astro.props;
     @include atom();
     @media (min-width: 760px) {
       max-width: 40rem;
+      margin: 0;
       grid-column: 4 / 10;
     }
   }
@@ -144,6 +145,59 @@ const { title } = Astro.props;
       & + p {
         margin-top: 1rem;
       }
+    }
+  }
+  
+  main table div {
+    white-space: nowrap;
+    overflow: hidden;
+    &#brand-element-font {
+      font-size: 3.5vw;
+    }
+    &#brand-element-font-hero {
+      @include font-hero();
+      text-align: left;
+      line-height: 1.2!important;
+    }
+    &#brand-element-font-xl {
+      @include font-XL();
+      line-height: 1.2!important;
+    }
+    &#brand-element-font-l {
+      @include font-L();
+      line-height: 1.2!important;
+    }
+    &#brand-element-font-core {
+      @include font-core();
+    }
+    &#brand-element-font-core-bold {
+      @include font-core-bold();
+    }
+    &#brand-element-font-small {
+      @include font-S();
+    }
+    &#brand-element-font-small-bold {
+      @include font-S-bold();
+    }
+    &[id^="brand-element-color"] {
+      min-height: 20vw;
+      margin: 1rem 0;
+    }
+    &#brand-element-color-page {
+      background: var(--color-page);
+      border: 2px solid #eee;
+    }
+    &#brand-element-color-text {
+      background: var(--color-text);
+    }
+    &#brand-element-color-feature-1 {
+      background: var(--color-feature-1);
+    }
+    &#brand-element-color-feature-2 {
+      background: var(--color-feature-2);
+    }
+    &#brand-element-color-feature-3 {
+      background: var(--color-feature-3);
     }
   }
 

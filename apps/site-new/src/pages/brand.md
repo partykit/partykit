@@ -1,0 +1,341 @@
+---
+title: PartyKit brand elements
+layout: ../layouts/Document.astro
+seo:
+  title: PartyKit brand elements
+  description: PartyKit brand elements
+updated_date: 2023-11-16
+---
+
+# PartyKit brand elements
+
+## PartyKit Logo
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>PartyKit Logo (3D)</th>
+      <th>PartyKit Logo</th>
+      </header>
+      <tr>
+      <td><img src="/assets/logo/PK_Logo_Full_3D.png" /></td>
+      <td><img src="/assets/logo/PK_Logo_Full.png" /></td>
+    </tr>
+    <tr>
+      <td>file: PK_Logo_Full_3D.png</td>
+      <td>file: PK_Logo_Full.png</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>PartyKit Logo (Mini 3D)</th>
+      <th>PartyKit Logo (Mini)</th>
+    </header>
+    <tr>
+      <td><img src="/assets/logo/PK_Logo_Mini_3D.png" /></td>
+      <td><img src="/assets/logo/PK_Logo_Mini.png" /></td>
+    </tr>
+    <tr>
+      <td>file: PK_Logo_Mini_3D.png</td>
+      <td>file: PK_Logo_Mini.png</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>PartyKit Logo (Balloon 3D)</th>
+      <th>PartyKit Logo (Balloon)</th>
+    </header>
+    <tr>
+      <td><img src="/assets/logo/PK_Logo_Balloon_3D.png" /></td>
+      <td><img src="/assets/logo/PK_Logo_Balloon.png" /></td>
+    </tr>
+    <tr>
+      <td>file: PK_Logo_Balloon_3D.png</td>
+      <td>file: PK_Logo_Balloon.png</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Typeface
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Inter Variable</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        file: Inter.var.woff2 <br>
+        opentype settings: stylistic set 01 (alternate digits), stylistic set 02 (disambiguation)
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+### SCSS mixins
+
+**Important** The PartyKit opentype alternate stylistic sets are set in the <code>font-core()</code> SCSS mixin only, so be sure to apply that style to either your document <code>html</code>, <code>body</code> or <code>:root</code>.
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Font Hero</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-hero">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-hero();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Font Extra Large</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-xl">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-xl();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Font Large</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-l">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-large();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Font Core</th>
+      <th>Font Core Bold</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-core">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+      <td>
+        <div id="brand-element-font-core-bold">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-core();</code> <br>
+        defined in shared.scss
+      </td>
+      <td>
+        <code>@include font-core-bold();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Font Small</th>
+      <th>Font Small Bold</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-small">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+      <td>
+        <div id="brand-element-font-small-bold">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-s();</code> <br>
+        defined in shared.scss
+      </td>
+      <td>
+        <code>@include font-s-bold();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Colors
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Page colour</th>
+      <th>Text colour</th>
+      <th></th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-color-page"></div>
+      </td>
+      <td>
+        <div id="brand-element-color-text"></div>
+      </td>
+      <td>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>var(--color-page)</code> <br>
+        defined in variables.scss
+      </td>
+      <td>
+        <code>var(--color-page)</code> <br>
+        defined in variables.scss
+      </td>
+      <td>
+      </td>
+    </tr>
+    <header>
+      <th>Feature colour 01</th>
+      <th>Feature colour 02</th>
+      <th>Feature colour 03</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-color-feature-1"></div>
+      </td>
+      <td>
+        <div id="brand-element-color-feature-2"></div>
+      </td>
+      <td>
+        <div id="brand-element-color-feature-3"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>var(--color-feature-1)</code> <br>
+        defined in variables.scss
+      </td>
+      <td>
+        <code>var(--color-feature-2)</code> <br>
+        defined in variables.scss
+      </td>
+      <td>
+        <code>var(--color-feature-3)</code> <br>
+        defined in variables.scss
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Buttons
