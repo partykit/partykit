@@ -21,8 +21,8 @@ updated_date: 2023-11-16
       <td><img src="/assets/logo/PK_Logo_Full.png" /></td>
     </tr>
     <tr>
-      <td>file: PK_Logo_Full_3D.png</td>
-      <td>file: PK_Logo_Full.png</td>
+      <td>file: <a href="/assets/logo/PK_Logo_Full_3D.png" download>PK_Logo_Full_3D.png</a></td>
+      <td>file: <a href="/assets/logo/PK_Logo_Full.png" download>PK_Logo_Full.png</a></td>
     </tr>
   </tbody>
 </table>
@@ -40,8 +40,8 @@ updated_date: 2023-11-16
       <td><img src="/assets/logo/PK_Logo_Mini.png" /></td>
     </tr>
     <tr>
-      <td>file: PK_Logo_Mini_3D.png</td>
-      <td>file: PK_Logo_Mini.png</td>
+      <td>file: <a href="/assets/logo/PK_Logo_Mini_3D.png" download>PK_Logo_Mini_3D.png</a></td>
+      <td>file: <a href="/assets/logo/PK_Logo_Mini.png" download>PK_Logo_Mini.png</a></td>
     </tr>
   </tbody>
 </table>
@@ -59,8 +59,8 @@ updated_date: 2023-11-16
       <td><img src="/assets/logo/PK_Logo_Balloon.png" /></td>
     </tr>
     <tr>
-      <td>file: PK_Logo_Balloon_3D.png</td>
-      <td>file: PK_Logo_Balloon.png</td>
+      <td>file: <a href="/assets/logo/PK_Logo_Balloon_3D.png" download>PK_Logo_Balloon_3D.png</a></td>
+      <td>file: <a href="/assets/logo/PK_Logo_Balloon.png" download>PK_Logo_Balloon.png</a></td>
     </tr>
   </tbody>
 </table>
