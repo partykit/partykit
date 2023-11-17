@@ -14,7 +14,7 @@ interface Props {
 const { title, by, url, github, img, imgShade } = Astro.props;
 ---
 
-<div class="example" {imgShade}>
+<div class="example" data-imgShade={imgShade}>
   <header>
     <h4><a href={url}>{title}</a></h4>
     <p>by {by}</p>
@@ -100,15 +100,21 @@ const { title, by, url, github, img, imgShade } = Astro.props;
     z-index: 10;
     padding: var(--box-padding);
     padding-bottom: 4rem;
-    background: linear-gradient(var(--color-feature-1) calc(100% - 6rem), transparent 100%);
+    background: linear-gradient(
+      var(--color-feature-1) calc(100% - 6rem),
+      transparent 100%
+    );
     text-align: center;
   }
-  
-  [imgShade="dark"] header {
-    background: linear-gradient(var(--color-text) calc(100% - 6rem), transparent 100%);
+
+  [data-imgShade="dark"] header {
+    background: linear-gradient(
+      var(--color-text) calc(100% - 6rem),
+      transparent 100%
+    );
     color: var(--color-page);
   }
-  
+
   header a {
     @include font-core-bold();
     &:hover {
@@ -139,21 +145,22 @@ const { title, by, url, github, img, imgShade } = Astro.props;
     padding-top: 4rem;
     background: linear-gradient(transparent 0, var(--color-feature-1) 50%);
   }
-  
-  [imgShade="dark"] .metadata {
+
+  [data-imgShade="dark"] .metadata {
     background: linear-gradient(transparent 0, var(--color-text) 50%);
     color: var(--color-page);
   }
-  
+
   .image {
     grid-column: 1 / 2;
     grid-row: 1 / 4;
     height: 100%;
     width: 100%;
     overflow: hidden;
-    border-radius: calc(var(--box-radius) + 1px) calc(var(--box-radius) + 1px) 0 0;
+    border-radius: calc(var(--box-radius) + 1px) calc(var(--box-radius) + 1px) 0
+      0;
   }
-  
+
   .image img {
     min-height: 100%;
     min-width: 100%;
