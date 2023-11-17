@@ -9,8 +9,6 @@ updated_date: 2023-11-16
 
 # PartyKit brand elements
 
-## PartyKit Logo
-
 <div class='overflow-x-auto'>
 <table>
   <tbody>
