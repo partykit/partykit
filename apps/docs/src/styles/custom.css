@@ -7,44 +7,83 @@
 /* base styles we can override */
 /* https://github.com/withastro/starlight/blob/main/packages/starlight/style/props.css */
 :root {
-  font-size: 19px;
-
+  font-size: 16px;
+  --sl-font:
+    PKSans,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans",
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji";
+  --sl-text-xs: 12px;
+  --sl-text-sm: 14px;
+  --sl-text-base: 16px;
+  --sl-text-lg: 16px;
+  --sl-text-xl: 16px;
+  --sl-text-2xl: 16px;
+  --sl-text-3xl: 16px;
+  --sl-text-4xl: 16px;
+  --sl-text-5xl: 16px;
+  --sl-text-6xl: 16px;
+  
+  --sl-line-height: 1.4;
+  --sl-line-height-headings: 1;
+    
+  --sl-nav-height: 50px;
+  --sl-nav-pad-x: 2rem;
+  --sl-mobile-toc-height: 50px;
+  --sl-sidebar-width: 20vw;
+  --sl-sidebar-pad-x: 1.5rem;
+  --sl-content-width: 60vw;
+  --sl-content-pad-x: 4rem;
+  --sl-menu-button-size: 30px;
+  --sl-nav-gap: 4rem;
+  /* Offset required to show outline inside an element instead of round the outside */
+  --sl-outline-offset-inside: 0;    
+    
+    
+    
+    
   /* Dark mode colors. */
-  --sl-color-accent-low: #131e4f;
-  --sl-color-accent: #3447ff;
-  --sl-color-accent-high: #b3c7ff;
+  --sl-color-accent-low: #252525;
+  --sl-color-accent: #ff0f0f;
+  --sl-color-accent-high: #f3f3f3;
   --sl-color-white: #ffffff;
   --sl-color-gray-1: #eceef2;
   --sl-color-gray-2: #c0c2c7;
   --sl-color-gray-3: #888b96;
   --sl-color-gray-4: #545861;
-  --sl-color-gray-5: #353841;
-  --sl-color-gray-6: #24272f;
-  --sl-color-black: #17181c;
+  --sl-color-gray-5: var(--sl-color-accent-low);
+  --sl-color-gray-6: var(--sl-color-accent-low);
+  --sl-color-black: #121212;
 }
 
 /* Light mode colors. */
 :root[data-theme="light"] {
-  --sl-color-accent-low: #c7d6ff;
-  --sl-color-accent: #364bff;
-  --sl-color-accent-high: #182775;
-  --sl-color-white: #000000;
-  --sl-color-gray-1: #24272f;
-  --sl-color-gray-2: #353841;
-  --sl-color-gray-3: #545861;
-  --sl-color-gray-4: #888b96;
-  --sl-color-gray-5: #c0c2c7;
-  --sl-color-gray-6: #eceef2;
-  --sl-color-gray-7: #f5f6f8;
+  --sl-color-accent-low: #f3f3f3;
+  --sl-color-accent: #ff0f0f;
+  --sl-color-accent-high: var(--sl-color-accent);
+  --sl-color-white: #252525;
+  --sl-color-gray-1: var(--sl-color-white);
+  --sl-color-gray-2: var(--sl-color-white);
+  --sl-color-gray-3: var(--sl-color-white);
+  --sl-color-gray-4: #bdc1c0;
+  --sl-color-gray-5: var(--sl-color-gray-4);
+  --sl-color-gray-6: var(--sl-color-accent-low);
+  --sl-color-gray-7: var(--sl-color-accent-low);
   --sl-color-black: #ffffff;
 }
 
 :root,
 :root[data-theme="light"] {
-  --sl-nav-height: 3.8rem;
+/*   --sl-nav-height: 4rem;
   --sl-color-bg-nav: var(--sl-color-bg);
   --sl-color-bg-sidebar: var(--sl-color-bg);
-  --sl-color-text: var(--sl-color-white);
+  --sl-color-text: var(--sl-color-white); */
 
   /* --sl-color-text-accent: var(--sl-color-accent-high); */
   /* --sl-color-text-invert: var(--sl-color-accent-low); */

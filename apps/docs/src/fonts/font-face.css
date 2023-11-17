@@ -1,0 +1,19 @@
+@font-face {
+  font-family: "PKSans";
+  font-style: normal;
+  font-weight: 380;
+  font-feature-settings:
+    "ss01" 01,
+    "ss02" 01;
+  src: url("./Inter.var.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "PKSans";
+  font-style: bold;
+  font-weight: 620;
+  font-feature-settings:
+    "ss01" 01,
+    "ss02" 01;
+  src: url("./Inter.var.woff2") format("woff2");
+}
