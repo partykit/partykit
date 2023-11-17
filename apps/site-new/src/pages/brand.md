@@ -6,6 +6,7 @@ seo:
   description: PartyKit brand elements
 updated_date: 2023-11-16
 ---
+import Button from "../atoms/Button.astro";
 
 # PartyKit brand elements
 
@@ -96,7 +97,7 @@ updated_date: 2023-11-16
 </table>
 </div>
 
-### SCSS mixins
+### PartyKit font mixins
 
 **Important** The PartyKit opentype alternate stylistic sets are set in the <code>font-core()</code> SCSS mixin only, so be sure to apply that style to either your document <code>html</code>, <code>body</code> or <code>:root</code>.
 
@@ -337,3 +338,42 @@ updated_date: 2023-11-16
 </div>
 
 ## Buttons
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Default button</th>
+      <th>Inverted button</th>
+      <th>Github button</th>
+    </header>
+    <tr>
+      <td>
+        <Button url="#">Button</Button>
+      </td>
+      <td>
+        <Button variant="inverted" url="#">Inverted button</Button>
+      </td>
+      <td>
+        <Button variant="github" url="#">Github button</Button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        component default <br>
+        defined in Button.astro
+      </td>
+      <td>
+        add attribute <code>variant="inverted"</code> <br>
+        defined in Button.astro
+      </td>
+      <td>
+        add attribute <code>variant="github"</code> <br>
+        defined in Button.astro
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+## Cards

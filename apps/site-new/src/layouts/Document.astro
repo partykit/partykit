@@ -3,6 +3,7 @@ import Layout from "./Layout.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import Grid from "../components/Grid.astro";
+import Button from "../atoms/Button.astro";
 
 interface Props {
   title: string;
@@ -22,6 +23,7 @@ const { title } = Astro.props;
 </Layout>
 
 <style is:global lang="scss">
+  @import "../styles/variables.scss";
   @import "../styles/shared.scss";
 
   main h1,
@@ -182,22 +184,45 @@ const { title } = Astro.props;
     &[id^="brand-element-color"] {
       min-height: 20vw;
       margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      justify-content: end;
+      padding: var(--box-padding);
     }
     &#brand-element-color-page {
       background: var(--color-page);
       border: 0.5px solid var(--color-feature-3);
     }
+    &#brand-element-color-page:before {
+      content: "#{$color-page}";
+    }
     &#brand-element-color-text {
       background: var(--color-text);
+    }
+    &#brand-element-color-text:before {
+      content: "#{$color-text}";
+      color: var(--color-page);
     }
     &#brand-element-color-feature-1 {
       background: var(--color-feature-1);
     }
+    &#brand-element-color-feature-1:before {
+      content: "#{$color-feature-1}";
+    }
     &#brand-element-color-feature-2 {
       background: var(--color-feature-2);
     }
+    &#brand-element-color-feature-2:before {
+      content: "#{$color-feature-2}";
+      color: var(--color-page);
+    }
     &#brand-element-color-feature-3 {
       background: var(--color-feature-3);
+    }
+    &#brand-element-color-feature-3:before {
+      content: "#{$color-feature-3}";
+      color: var(--color-page);
     }
   }
 
