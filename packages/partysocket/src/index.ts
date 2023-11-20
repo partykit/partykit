@@ -80,24 +80,20 @@ function getPartyInfo(
   if (rawPath && rawPath.startsWith("/")) {
     throw new Error("path must not start with a slash");
   }
-  if (room) {
-    const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$")
-    if (!validPathRegex.test(room)) {
-      throw new Error("room name must be a valid path segment")
-    }
-  }
+
   const name = party ?? "main";
   const path = rawPath ? `/${rawPath}` : "";
   const protocol =
     rawProtocol ||
     (host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
       ? // http / ws
-      defaultProtocol
+        defaultProtocol
       : // https / wss
-      defaultProtocol + "s");
+        defaultProtocol + "s");
 
-  const baseUrl = `${protocol}://${host}/${party ? `parties/${party}` : "party"
-    }/${room}${path}`;
+  const baseUrl = `${protocol}://${host}/${
+    party ? `parties/${party}` : "party"
+  }/${room}${path}`;
 
   const makeUrl = (query: Params = {}) =>
     `${baseUrl}?${new URLSearchParams([
