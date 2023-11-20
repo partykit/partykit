@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.38
+
+### Patch Changes
+
+- [#566](https://github.com/partykit/partykit/pull/566) [`81a943e`](https://github.com/partykit/partykit/commit/81a943e446cd7e7910a5a3c10ed5a6a997bae634) Thanks [@threepointone](https://github.com/threepointone)! - add support for team deploys
+
 ## 0.0.37
 
 ### Patch Changes
