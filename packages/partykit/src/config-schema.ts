@@ -25,7 +25,7 @@ const loaders = [
 export const schema = z
   .object({
     $schema: z.string().optional(),
-    account: z.string().optional(),
+    team: z.string().optional(),
     name: z.string().optional(),
     main: z.string().optional(),
     port: z.number().optional(),

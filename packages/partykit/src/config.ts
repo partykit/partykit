@@ -325,10 +325,6 @@ export function getConfig(
   configSchema.parse(overrides);
 
   if (!configPath) {
-    if (overrides.account) {
-      console.warn('configuration field "account" is not yet operational');
-    }
-
     let packageJsonConfig = {} as ConfigOverrides;
     const packageJsonPath = findUpSync("package.json");
     if (packageJsonPath) {
@@ -404,10 +400,6 @@ export function getConfig(
       ...removeUndefinedKeys(overrides.define),
     },
   });
-
-  if (config.account) {
-    console.warn('Configuration field "account" is not yet operational');
-  }
 
   if (config.name) {
     const validPathRegex = new RegExp("^[a-zA-Z0-9-]+$");
