@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.16
+
+### Patch Changes
+
+- [#568](https://github.com/partykit/partykit/pull/568) [`a6bfedc`](https://github.com/partykit/partykit/commit/a6bfedc79dc21d7c701a950eb02d45c604fef8dd) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: remove room name validation
+
 ## 0.0.15
 
 ### Patch Changes
