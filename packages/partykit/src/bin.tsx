@@ -186,6 +186,7 @@ program
 
 program
   .command("list")
+  .option("-c, --config <path>", "Path to config file")
   .description("List all deployed projects")
   .addOption(
     new Option("-f, --format <format>")
