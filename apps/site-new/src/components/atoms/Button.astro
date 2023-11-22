@@ -25,9 +25,11 @@ const { url, variant = null } = Astro.props;
     background: var(--color-feature-2);
     color: var(--color-page);
     font-variation-settings: "wght" 350;
-    max-width: var(--atom-width);
     cursor: pointer;
     flex-grow: 2;
+    @media (min-width: 760px) {
+      max-width: var(--atom-width);
+    }
   }
   
   a:focus {
