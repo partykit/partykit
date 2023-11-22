@@ -12,7 +12,7 @@ import Voronoi from "../../interactive/Voronoi";
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
     <div id="partydemo" class="demo-scene"></div>
     <Scene client:load />
-    <p>Because everything’s better&nbsp;with friends</p>
+    <p>Because everythin<span>g’</span>s be<span>tt</span>er&nbsp;with friends</p>
   </div>
 </div>
 
@@ -24,7 +24,7 @@ import Voronoi from "../../interactive/Voronoi";
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 1fr;
-    height: 75vh;
+    height: 85vh;
     padding-top: 0;
   }
 
@@ -39,7 +39,7 @@ import Voronoi from "../../interactive/Voronoi";
     grid-column: 1 / -1;
     grid-row: 1 / 2;
     position: relative;
-    z-index: 10;
+    z-index: 50;
     @include font-L();
     text-align: center;
     display: flex;
@@ -91,8 +91,8 @@ import Voronoi from "../../interactive/Voronoi";
       margin: auto;
       overflow: hidden;
       border-radius: var(--box-radius);
-      background: rgba(245, 245, 245, 0);
-      -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(6px);
+      background: rgba(245, 245, 245, 0.5);
+      -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(7px);
       box-shadow: var(--window-shadow);
       background-size: cover;
       background-position: center;
@@ -145,13 +145,6 @@ import Voronoi from "../../interactive/Voronoi";
     background-position: center center;
   }
 
-  #partydemo.demo-scene {
-    background-image: url(/assets/PK_Logo_Layers_Flat.png);
-    background-size: 130% auto;
-    background-repeat: no-repeat;
-    background-position: center 16px;
-  }
-
   #hero #browser p {
     @include font-L();
     position: absolute;
@@ -159,11 +152,16 @@ import Voronoi from "../../interactive/Voronoi";
     right: 2rem;
     bottom: 2.5rem;
     text-align: center;
+    z-index: 50;
   }
 
   @media (min-width: 900px) {
     #hero #browser p {
       bottom: 2rem;
+      span {
+        position: relative;
+        z-index: 20;
+      }
     }
   }
 </style>

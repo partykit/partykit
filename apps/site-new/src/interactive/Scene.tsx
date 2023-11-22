@@ -48,9 +48,9 @@ function Light(props: { x: number; y: number; z: number; color: string }) {
       <spotLight
         ref={rLight}
         position={[props.x, props.y, 5]}
-        angle={0.5}
+        angle={0.9}
         penumbra={1}
-        intensity={1000}
+        intensity={300}
         color={props.color}
         castShadow
         shadow-mapSize-width={1024}
@@ -64,13 +64,13 @@ function Light(props: { x: number; y: number; z: number; color: string }) {
 function BackgroundPlane() {
   //const loader = new THREE.TextureLoader();
   return (
-    <mesh rotation={[0, 0, 0]} position={[0, 0, -0.5]} receiveShadow>
+    <mesh rotation={[0, 0, 0]} position={[0, 0, -0.8]} receiveShadow>
       <planeGeometry attach="geometry" args={[20, 20]} />
       <meshPhongMaterial
         //map={loader.load("/assets/PK_Logo_Layers_Flat.png")}
         attach="material"
         color="white"
-        opacity={0.5}
+        opacity={0}
         transparent
       />
     </mesh>
@@ -135,7 +135,7 @@ export default function Scene() {
   useEffect(() => {
     if (!synced) return;
 
-    const colors = ["red", "blue", "green", "yellow"];
+    const colors = ["white", "white", "white", "white"];
     const color = colors[Math.floor(Math.random() * colors.length)];
     updatePresence({ spotlightColor: color });
   }, [synced, updatePresence]);
@@ -158,6 +158,7 @@ export default function Scene() {
       style={{
         width: "100%",
         height: "100%",
+        zIndex: "15",
       }}
       ref={rCanvas}
       //onMouseEnter={() => setMouseInCanvas(true)}
@@ -165,7 +166,7 @@ export default function Scene() {
       shadows
     >
       <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={10} />
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1.5} />
       <CurrentUserLight canvasRef={rCanvas} />
       <Suspense fallback={<Loader />}>
         <Logo />
@@ -175,8 +176,8 @@ export default function Scene() {
           presence?.cursor && (
             <Light
               key={id}
-              x={-5 + presence.cursor.x / 70}
-              y={5 - presence.cursor.y / 70}
+              x={-5 + presence.cursor.x / 50}
+              y={5 - presence.cursor.y / 50}
               z={10}
               color={presence.spotlightColor ?? "white"}
             />

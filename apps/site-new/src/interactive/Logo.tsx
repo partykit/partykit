@@ -12,7 +12,7 @@ export function Loader() {
 }
 
 export default function Logo() {
-  const gltf = useLoader(GLTFLoader, "/assets/PK_Balloon.gltf");
+  const gltf = useLoader(GLTFLoader, "/assets/PK_Balloon_w_String.gltf");
   //const gltf = useLoader(GLTFLoader, "/PK-Balloon_logo.gltf");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   gltf.scene.traverse((child: any) => {
@@ -24,8 +24,8 @@ export default function Logo() {
   return (
     <primitive
       object={gltf.scene}
-      scale={[45, 45, 45]}
-      position={[0, 0.3, 0]}
+      scale={[130, 130, 130]}
+      position={[3.5, -0.5, 0]}
     />
   );
 }
