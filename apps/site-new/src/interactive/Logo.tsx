@@ -25,7 +25,7 @@ export default function Logo() {
     <primitive
       object={gltf.scene}
       scale={[130, 130, 130]}
-      position={[3.5, -0.5, 0]}
+      position={[3.5, -0.5, -0.2]}
     />
   );
 }

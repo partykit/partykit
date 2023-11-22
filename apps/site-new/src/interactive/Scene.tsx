@@ -66,13 +66,14 @@ function BackgroundPlane() {
   return (
     <mesh rotation={[0, 0, 0]} position={[0, 0, -0.8]} receiveShadow>
       <planeGeometry attach="geometry" args={[20, 20]} />
-      <meshPhongMaterial
+      <shadowMaterial attach="material" opacity={0.1} />
+      {/*<meshPhongMaterial
         //map={loader.load("/assets/PK_Logo_Layers_Flat.png")}
         attach="material"
         color="white"
         opacity={0}
         transparent
-      />
+      />*/}
     </mesh>
   );
 }
@@ -135,7 +136,7 @@ export default function Scene() {
   useEffect(() => {
     if (!synced) return;
 
-    const colors = ["white", "white", "white", "white"];
+    const colors = ["#ff0f0f"];
     const color = colors[Math.floor(Math.random() * colors.length)];
     updatePresence({ spotlightColor: color });
   }, [synced, updatePresence]);
@@ -166,7 +167,7 @@ export default function Scene() {
       shadows
     >
       <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={10} />
-      <ambientLight intensity={1.5} />
+      <ambientLight intensity={1.2} />
       <CurrentUserLight canvasRef={rCanvas} />
       <Suspense fallback={<Loader />}>
         <Logo />
