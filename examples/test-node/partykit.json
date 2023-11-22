@@ -1,0 +1,5 @@
+{
+  "name": "test-node",
+  "main": "src/server.ts",
+  "compatibilityDate": "2023-09-28"
+}

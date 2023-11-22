@@ -1,5 +1,37 @@
 # partykit
 
+## 0.0.39
+
+### Patch Changes
+
+- [#569](https://github.com/partykit/partykit/pull/569) [`a09c544`](https://github.com/partykit/partykit/commit/a09c544d92d6c0f34ce4faa84a4af536bb53cf0c) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+## 0.0.38
+
+### Patch Changes
+
+- [#566](https://github.com/partykit/partykit/pull/566) [`81a943e`](https://github.com/partykit/partykit/commit/81a943e446cd7e7910a5a3c10ed5a6a997bae634) Thanks [@threepointone](https://github.com/threepointone)! - add support for team deploys
+
+## 0.0.37
+
+### Patch Changes
+
+- [#563](https://github.com/partykit/partykit/pull/563) [`0a92715`](https://github.com/partykit/partykit/commit/0a92715a972e15429aa246fd2226d93f4bae0234) Thanks [@threepointone](https://github.com/threepointone)! - revert sigil fix
+
+## 0.0.36
+
+### Patch Changes
+
+- [#561](https://github.com/partykit/partykit/pull/561) [`70dbd60`](https://github.com/partykit/partykit/commit/70dbd6076c18fd6f703235bd3e7eaae957cfd1ae) Thanks [@threepointone](https://github.com/threepointone)! - fix: set this.worker sigil only after onStart has finished
+
+## 0.0.35
+
+### Patch Changes
+
+- [#555](https://github.com/partykit/partykit/pull/555) [`f652575`](https://github.com/partykit/partykit/commit/f6525757a0b4aadae3773d384b00f0c838321937) Thanks [@threepointone](https://github.com/threepointone)! - use `--with-env` to define .env vars as globals in the project
+
+- [#557](https://github.com/partykit/partykit/pull/557) [`5a7fdcf`](https://github.com/partykit/partykit/commit/5a7fdcfaccc5a9851cf3cdb5779e21b437ff8f1f) Thanks [@threepointone](https://github.com/threepointone)! - wrap .env values with quotes when inlining
+
 ## 0.0.34
 
 ### Patch Changes

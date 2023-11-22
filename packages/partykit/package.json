@@ -1,6 +1,6 @@
 {
   "name": "partykit",
-  "version": "0.0.34",
+  "version": "0.0.39",
   "description": "PartyKit simplifies developing multiplayer applications. Everything's better with friends.",
   "bin": {
     "partykit": "dist/bin.mjs"
@@ -46,9 +46,9 @@
   "dependencies": {
     "@cloudflare/workers-types": "4.20231025.0",
     "clipboardy": "4.0.0",
-    "esbuild": "0.19.5",
-    "miniflare": "3.20231025.1",
-    "p-limit": "^4.0.0",
+    "esbuild": "0.19.7",
+    "miniflare": "3.20231030.0",
+    "p-limit": "^5.0.0",
     "p-retry": "^6.1.0",
     "yoga-wasm-web": "0.3.3"
   },
@@ -58,23 +58,23 @@
   "devDependencies": {
     "@clerk/clerk-js": "4.59.1",
     "@types/gradient-string": "^1.1.5",
-    "@types/mime": "^3.0.3",
-    "@types/node": "^20.8.10",
+    "@types/mime": "^3.0.4",
+    "@types/node": "^20.9.3",
     "@types/object-hash": "^3.0.6",
-    "@types/polka": "^0.5.6",
-    "@types/prompts": "^2.4.7",
-    "@types/update-notifier": "^6.0.6",
-    "@types/ws": "^8.5.8",
+    "@types/polka": "^0.5.7",
+    "@types/prompts": "^2.4.9",
+    "@types/update-notifier": "^6.0.8",
+    "@types/ws": "^8.5.10",
     "chalk": "^5.3.0",
     "chokidar": "^3.5.3",
     "commander": "^11.1.0",
     "detect-indent": "^7.0.1",
-    "devtools-protocol": "^0.0.1220723",
+    "devtools-protocol": "^0.0.1227218",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "execa": "^8.0.1",
-    "find-up": "^6.3.0",
+    "find-up": "^7.0.0",
     "get-port": "^7.0.0",
     "gradient-string": "^2.0.2",
     "http-terminator": "^3.2.0",
@@ -94,7 +94,7 @@
     "which-pm-runs": "^1.1.0",
     "ws": "^8.14.2",
     "zod": "^3.22.4",
-    "zod-to-json-schema": "^3.21.4"
+    "zod-to-json-schema": "^3.22.0"
   },
   "files": [
     "dist",

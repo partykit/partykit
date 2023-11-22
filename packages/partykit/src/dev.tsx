@@ -220,6 +220,7 @@ export type DevProps = {
   config?: string;
   persist?: boolean | string;
   vars?: Record<string, string>;
+  withEnv?: boolean;
   verbose?: boolean;
   unstable_outdir?: string;
   define?: Record<string, string>;
@@ -469,7 +470,7 @@ function useDev(options: DevProps): {
         compatibilityDate: options.compatibilityDate,
         compatibilityFlags: options.compatibilityFlags,
       },
-      { readEnvLocal: true }
+      { readEnvLocal: true, withEnv: options.withEnv }
     )
   );
 
