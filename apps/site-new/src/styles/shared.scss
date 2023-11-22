@@ -3,24 +3,40 @@
 @font-face {
   font-family: "PKSans";
   font-style: normal;
-  font-weight: 300;
-  src: url("/assets/Inter.var.woff2") format("woff2");
+  font-weight: 400;
+  src: url("/assets/InterVariable.woff2") format("woff2");
 }
 
 @mixin font-hero {
   font-variation-settings: "wght" 220;
+  font-feature-settings:
+    "calt" 01,
+    "dlig" 00,
+    "case" 01,
+    "ss01" 01,
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
   font-size: 8vw;
   line-height: 1.1;
   letter-spacing: -0.04em;
   text-align: center;
   @media (min-width: 760px) {
     line-height: 1;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.02em;
   }
-  strong {
+}
+
+@mixin font-hero-bold {
+  @include font-hero();
+  font-weight: inherit;
+  font-variation-settings: "wght" 640;
+  letter-spacing: -0.035em;
+  @media (min-width: 760px) {
     font-variation-settings: "wght" 640;
-    letter-spacing: -0.03em;
-    font-weight: inherit;
+    letter-spacing: -0.035em;
   }
 }
 
@@ -38,14 +54,21 @@
     "Segoe UI Emoji";
   font-variation-settings: "wght" 380;
   font-feature-settings:
+    "calt" 01,
+    "dlig" 01,
+    "case" 01,
     "ss01" 01,
-    "ss02" 01;
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
   font-size: 14px;
   line-height: 1.4;
   letter-spacing: 0;
   @media (min-width: 760px) {
     font-size: 16px;
-    font-variation-settings: "wght" 320;
+    font-variation-settings: "wght" 310;
   }
 }
 
@@ -53,51 +76,79 @@
   @include font-core();
   font-variation-settings: "wght" 650;
   @media (min-width: 760px) {
-    font-size: 16px;
     font-variation-settings: "wght" 620;
   }
 }
 
 @mixin font-XL {
   font-variation-settings: "wght" 500;
+  font-feature-settings:
+    "calt" 01,
+    "dlig" 00,
+    "case" 01,
+    "ss01" 01,
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
   font-size: 9vw;
   line-height: 1.05;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
   @media (min-width: 760px) {
+    font-variation-settings: "wght" 460;
     font-size: 70px;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.01em;
   }
 }
 
 @mixin font-L {
   font-variation-settings: "wght" 260;
+  font-feature-settings:
+    "calt" 01,
+    "dlig" 00,
+    "case" 01,
+    "ss01" 01,
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
   font-size: 7.25vw;
   line-height: 1.15;
-  letter-spacing: -0.03em;
+  letter-spacing: 0.02em;
   @media (min-width: 760px) {
-    font-variation-settings: "wght" 240;
+    font-variation-settings: "wght" 230;
     font-size: 32px;
-    letter-spacing: -0.015em;
+    letter-spacing: 0.025em;
   }
 }
 
 @mixin font-S {
+  font-variation-settings: "wght" 350;
+  font-feature-settings:
+    "calt" 01,
+    "dlig" 01,
+    "case" 01,
+    "ss01" 01,
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
   font-size: 11px;
   line-height: 1.5;
   letter-spacing: 0.01em;
-  font-variation-settings: "wght" 400;
   @media (min-width: 760px) {
     font-size: 12px;
+    font-variation-settings: "wght" 350;
   }
 }
 
 @mixin font-S-bold {
-  font-size: 11px;
-  line-height: 1.5;
-  letter-spacing: 0.01em;
   font-variation-settings: "wght" 650;
+  @include font-S();
   @media (min-width: 760px) {
-    font-size: 12px;
     font-variation-settings: "wght" 620;
   }
 }

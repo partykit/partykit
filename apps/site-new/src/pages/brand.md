@@ -29,7 +29,7 @@ import Button from "../atoms/Button.astro";
 </table>
 </div>
 
-<div class='overflow-x-auto'>
+<div>
 <table>
   <tbody>
     <header>
@@ -89,7 +89,7 @@ import Button from "../atoms/Button.astro";
     </tr>
     <tr>
       <td>
-        file: Inter.var.woff2 <br>
+        file: InterVariable.woff2 <br>
         opentype settings: stylistic set 01 (alternate digits), stylistic set 02 (disambiguation)
       </td>
     </tr>
@@ -122,6 +122,27 @@ import Button from "../atoms/Button.astro";
     <tr>
       <td>
         <code>@include font-hero();</code> <br>
+        defined in shared.scss
+      </td>
+    </tr>
+    <header>
+      <th>Font Hero Bold</th>
+    </header>
+    <tr>
+      <td>
+        <div id="brand-element-font-hero-bold">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br>
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br>
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br>
+          <br>
+          •●○→©®™ <br>
+          (.,:;?!¿¡) [£&@#] {- – ‒ —}
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>@include font-hero-bold();</code> <br>
         defined in shared.scss
       </td>
     </tr>
