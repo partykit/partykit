@@ -241,8 +241,8 @@ import "../styles/variables.scss";
       font-variation-settings: inherit;
       line-height: inherit;
       letter-spacing: inherit;
-      gap: 1rem;
-      @include font-S();
+      gap: 1.5rem;
+      @include font-core();
     }
   }
   
@@ -272,36 +272,6 @@ import "../styles/variables.scss";
 
   #nav-panel a:before {
     padding-right: calc(var(--character-width) * 0.5);
-  }
-
-  #nav-panel a:nth-child(1):before {
-    content: " ";
-    color: var(--color-feature-2);
-  }
-
-  #nav-panel a:nth-child(2):before {
-    content: "➁ ";
-    color: var(--color-feature-2);
-  }
-
-  #nav-panel a:nth-child(3):before {
-    content: " ";
-    color: var(--color-feature-2);
-  }
-
-  #nav-panel a:nth-child(4):before {
-    content: " ";
-    color: var(--color-feature-2);
-  }
-
-  #nav-panel a:nth-child(5):before {
-    content: "➄ ";
-    color: var(--color-feature-2);
-  }
-
-  #nav-panel a:nth-child(6):before {
-    content: " ";
-    color: var(--color-feature-2);
   }
 
   #nav-panel a.icon {
