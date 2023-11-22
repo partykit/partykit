@@ -10,8 +10,8 @@ import Voronoi from "../../interactive/Voronoi";
   </h1>
   <div id="browser">
     <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
+    <div id="partydemo" class="demo-scene"></div>
     <Scene client:load />
-    <div id="partydemo"></div>
     <p>Because everything’s better&nbsp;with friends</p>
   </div>
 </div>
@@ -27,7 +27,7 @@ import Voronoi from "../../interactive/Voronoi";
     height: 75vh;
     padding-top: 0;
   }
-  
+
   @media (min-width: 900px) {
     #hero {
       height: 90vh;
@@ -51,7 +51,7 @@ import Voronoi from "../../interactive/Voronoi";
       @include font-hero-bold();
     }
   }
-  
+
   @media (min-width: 900px) {
     h1 {
       z-index: 1;
@@ -71,7 +71,7 @@ import Voronoi from "../../interactive/Voronoi";
     align-items: stretch;
     justify-content: start;
   }
-  
+
   @media (min-width: 900px) {
     #hero #browser {
       z-index: 10;
@@ -115,23 +115,31 @@ import Voronoi from "../../interactive/Voronoi";
     color: white;
     -webkit-user-select: none;
   }
-  
+
   @media (min-width: 900px) {
     #hero #browser #browser-toolbar {
       display: flex;
     }
   }
 
-
   #hero #browser #partydemo {
-    //background-image: url(/assets/PK_Logo_Balloon_3D.png);
-    background-size: 130% auto;
-    background-repeat: no-repeat;
-    background-position: center;
-    /*flex-grow: 2;*/
     position: absolute;
     width: 100%;
     height: 100%;
+  }
+
+  #partydemo.demo-voronoi {
+    background-image: url(/assets/PK_Logo_Balloon_3D.png);
+    background-size: 130% auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  #partydemo.demo-scene {
+    background-image: url(/assets/PK_Logo_Layers_Flat.png);
+    background-size: 130% auto;
+    background-repeat: no-repeat;
+    background-position: center 16px;
   }
 
   #hero #browser p {
@@ -142,7 +150,7 @@ import Voronoi from "../../interactive/Voronoi";
     bottom: 2.5rem;
     text-align: center;
   }
-  
+
   @media (min-width: 900px) {
     #hero #browser p {
       bottom: 2rem;

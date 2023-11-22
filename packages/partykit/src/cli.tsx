@@ -377,20 +377,25 @@ export async function deploy(options: {
   vars: Record<string, string> | undefined;
   define: Record<string, string> | undefined;
   preview: string | undefined;
+  withEnv: boolean | undefined;
   withVars: boolean | undefined;
   compatibilityDate: string | undefined;
   compatibilityFlags: string[] | undefined;
   minify: boolean | undefined;
 }): Promise<void> {
-  const config = getConfig(options.config, {
-    main: options.main,
-    name: options.name,
-    serve: options.serve,
-    vars: options.vars,
-    define: options.define,
-    compatibilityDate: options.compatibilityDate,
-    compatibilityFlags: options.compatibilityFlags,
-  });
+  const config = getConfig(
+    options.config,
+    {
+      main: options.main,
+      name: options.name,
+      serve: options.serve,
+      vars: options.vars,
+      define: options.define,
+      compatibilityDate: options.compatibilityDate,
+      compatibilityFlags: options.compatibilityFlags,
+    },
+    { withEnv: options.withEnv }
+  );
 
   if (!config.main) {
     throw new ConfigurationError(MissingEntryPointError);
@@ -461,7 +466,9 @@ export async function deploy(options: {
     sourcemap: assetsBuild?.sourcemap ?? true,
     external: assetsBuild?.external,
     define: {
-      PARTYKIT_HOST: `"${config.name}.${user.login}.partykit.dev"`,
+      PARTYKIT_HOST: `"${config.name}.${
+        config.team || user.login
+      }.partykit.dev"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -488,8 +495,12 @@ export async function deploy(options: {
       })}`
     : "";
 
-  const assetsApiPath = `/parties/${user.login}/${config.name}/assets${assetsApiParams}`;
-  const prepareAssetsApiPath = `/parties/${user.login}/${config.name}/prepare_assets${assetsApiParams}`;
+  const assetsApiPath = `/parties/${config.team || user.login}/${
+    config.name
+  }/assets${assetsApiParams}`;
+  const prepareAssetsApiPath = `/parties/${config.team || user.login}/${
+    config.name
+  }/prepare_assets${assetsApiParams}`;
 
   const filesToUpload: {
     file: string;
@@ -597,7 +608,9 @@ export const ${name} = ${name}Party;
       ...esbuildOptions,
       minify: options.minify,
       define: {
-        PARTYKIT_HOST: `"${config.name}.${user.login}.partykit.dev"`,
+        PARTYKIT_HOST: `"${config.name}.${
+          config.team || user.login
+        }.partykit.dev"`,
         ...esbuildOptions.define,
         ...config.define,
       },
@@ -761,7 +774,7 @@ or by passing it in via the CLI
   const deployRes = await fetchResult<{
     result: { is_initial_deploy: boolean };
   }>(
-    `/parties/${user.login}/${config.name}${
+    `/parties/${config.team || user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
@@ -774,7 +787,7 @@ or by passing it in via the CLI
   logger.log(
     `Deployed ${config.main} to https://${`${
       options.preview ? `${options.preview}.` : ""
-    }${config.name}.${user.login.toLowerCase()}.partykit.dev`}`
+    }${config.name}.${config.team || user.login.toLowerCase()}.partykit.dev`}`
   );
   if (deployRes.result.is_initial_deploy) {
     logger.log(
@@ -821,8 +834,10 @@ export async function _delete(rawOptions: {
                 Are you sure you want to delete{" "}
                 {chalk.bold(
                   options.preview
-                    ? `${options.preview}.${config.name}.${user.login}.partykit.dev`
-                    : `${config.name}.${user.login}.partykit.dev`
+                    ? `${options.preview}.${config.name}.${
+                        config.team || user.login
+                      }.partykit.dev`
+                    : `${config.name}.${config.team || user.login}.partykit.dev`
                 )}
                 ?
               </Text>
@@ -856,7 +871,7 @@ export async function _delete(rawOptions: {
   }
 
   await fetchResult(
-    `/parties/${user.login}/${config.name}${
+    `/parties/${config.team || user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
@@ -866,8 +881,10 @@ export async function _delete(rawOptions: {
   );
 
   const displayName = options.preview
-    ? `${options.preview}.${config.name}.${user.login}.partykit.dev`
-    : `${config.name}.${user.login}.partykit.dev`;
+    ? `${options.preview}.${config.name}.${
+        config.team || user.login
+      }.partykit.dev`
+    : `${config.name}.${config.team || user.login}.partykit.dev`;
 
   logger.log(`Deleted ${chalk.bold(displayName)}`);
 }
@@ -926,7 +943,7 @@ export async function tail(options: {
   const {
     result: { id: tailId, url: websocketUrl, expires_at: expiration },
   } = await fetchResult<TailCreationApiResponse>(
-    `/parties/${user.login}/${config.name}/tail${
+    `/parties/${config.team || user.login}/${config.name}/tail${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
@@ -944,7 +961,7 @@ export async function tail(options: {
 
   async function deleteTail() {
     await fetchResult(
-      `/parties/${user.login}/${config.name}/tail/${tailId}${
+      `/parties/${config.team || user.login}/${config.name}/tail/${tailId}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
@@ -1015,12 +1032,17 @@ export async function tail(options: {
   });
 }
 
-export async function list(options: { format: "json" | "pretty" }) {
+export async function list(options: {
+  config: string | undefined;
+  format: "json" | "pretty";
+}) {
   // get user details
   const user = await getUser();
 
+  const config = getConfig(options.config);
+
   const res = await fetchResult<{ name: string; url: string }[]>(
-    `/parties/${user.login}`,
+    `/parties/${config.team || user.login}`,
     { user }
   );
 
@@ -1085,7 +1107,9 @@ export const env = {
     }
 
     const res = await fetchResult<string[]>(
-      `/parties/${user.login}/${config.name}/env?${urlSearchParams.toString()}`,
+      `/parties/${config.team || user.login}/${
+        config.name
+      }/env?${urlSearchParams.toString()}`,
       { user }
     );
 
@@ -1115,7 +1139,7 @@ export const env = {
     }
 
     const res = await fetchResult(
-      `/parties/${user.login}/${config.name}/env${
+      `/parties/${config.team || user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       { user }
@@ -1169,7 +1193,7 @@ export const env = {
     }
 
     await fetchResult(
-      `/parties/${user.login}/${config.name}/env${
+      `/parties/${config.team || user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
@@ -1239,7 +1263,7 @@ export const env = {
     }
 
     await fetchResult(
-      `/parties/${user.login}/${config.name}/env/${key}${
+      `/parties/${config.team || user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
@@ -1289,7 +1313,7 @@ export const env = {
         return;
       } else {
         await fetchResult(
-          `/parties/${user.login}/${config.name}/env${
+          `/parties/${config.team || user.login}/${config.name}/env${
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
           {
@@ -1303,7 +1327,7 @@ export const env = {
     }
 
     await fetchResult(
-      `/parties/${user.login}/${config.name}/env/${key}${
+      `/parties/${config.team || user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {

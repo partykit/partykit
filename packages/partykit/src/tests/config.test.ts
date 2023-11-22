@@ -228,32 +228,32 @@ describe("config", () => {
     );
   });
 
-  // account
-  describe("account", () => {
-    it("should not error on a string account", () => {
+  // team
+  describe("team", () => {
+    it("should not error on a string team", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          account: "test",
+          team: "test",
         })
       );
       const config = getConfig(undefined, undefined);
       expect(config).toMatchInlineSnapshot(`
-          {
-            "account": "test",
-            "define": {},
-            "main": "./script.js",
-            "vars": {},
-          }
-        `);
+        {
+          "define": {},
+          "main": "./script.js",
+          "team": "test",
+          "vars": {},
+        }
+      `);
     });
 
-    it("should error on a non-string account", () => {
+    it("should error on a non-string team", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
-          account: 1,
+          team: 1,
         })
       );
       expect(() =>
@@ -266,7 +266,7 @@ describe("config", () => {
               \\"expected\\": \\"string\\",
               \\"received\\": \\"number\\",
               \\"path\\": [
-                \\"account\\"
+                \\"team\\"
               ],
               \\"message\\": \\"Expected string, received number\\"
             }

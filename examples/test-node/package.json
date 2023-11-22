@@ -1,13 +1,16 @@
 {
-  "name": "@partykit/examples-basic",
+  "name": "@partykit/examples-test-node",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "partykit dev --with-env --var A=456 B=789 --define SOME_GLOBAL=88888"
+    "start": "partykit dev"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^8.14.2"
+  }
 }

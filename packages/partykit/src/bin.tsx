@@ -121,6 +121,7 @@ program
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
   .option("--minify", "Minify the script")
+  .option("--with-env", "Define all variables in the deployment")
   .option("--verbose", "Verbose debugging output")
   .action(async (scriptPath, options) => {
     await printBanner();
@@ -133,6 +134,7 @@ program
         config={options.config}
         vars={getArrayKVOption(options.var)}
         define={getArrayKVOption(options.define)}
+        withEnv={options.withEnv}
         compatibilityDate={options.compatibilityDate}
         compatibilityFlags={options.compatibilityFlags}
         minify={options.minify}
@@ -161,6 +163,7 @@ program
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
   .option("--minify", "Minify the script")
   .option("--with-vars", "Include all variables in the deployment")
+  .option("--with-env", "Define all variables in the deployment")
   .option("-n, --name <name>", "Name of the project")
   .option("--preview [name]", "Deploy to preview environment")
   .action(async (scriptPath, options) => {
@@ -177,11 +180,13 @@ program
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
       minify: options.minify,
+      withEnv: options.withEnv,
     });
   });
 
 program
   .command("list")
+  .option("-c, --config <path>", "Path to config file")
   .description("List all deployed projects")
   .addOption(
     new Option("-f, --format <format>")
