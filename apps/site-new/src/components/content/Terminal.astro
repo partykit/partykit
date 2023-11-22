@@ -6,9 +6,9 @@ import Button from "../atoms/Button.astro";
 
 <div id="terminal">
   <div id="terminal-tabs">
-    <span>New project</span>
-    <span>Add to existing project</span>
-    <Button variant="terminal-github" url="#">Fork on GitHub</Button>
+    <span>Add PartyKit to a new project</span>
+    <!-- <span>Add to existing project</span> -->
+    <!-- <Button variant="terminal-github" url="#">Fork on GitHub</Button> -->
   </div>
 
   <div id="terminal-console">
@@ -51,8 +51,7 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
     flex-direction: column;
     gap: 2rem;
     margin: 0 -1rem 4rem -3rem;
-    padding: calc(40px + 4rem) 2rem 4rem 4rem;
-    overflow: hidden;
+    padding: 40px 0 0;
     border-radius: 0 var(--box-radius) var(--box-radius) 0;
     background: #1e1e1e; /* to match Code theme background */
     color: white;
@@ -93,14 +92,14 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: start;
+    justify-content: center;
     flex-wrap: wrap;
   }
 
   #terminal #terminal-tabs span {
     line-height: 38px;
     padding: 2px 2rem 0;
-    cursor: pointer;
+    // cursor: pointer;
   }
 
   #terminal #terminal-tabs span + span {
@@ -116,5 +115,6 @@ curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
     font-family: monospace;
     line-height: 1.5;
     font-size: 80%;
+    padding: 4rem 2rem 4rem 4rem;
   }
 </style>
