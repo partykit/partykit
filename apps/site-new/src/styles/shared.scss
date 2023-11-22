@@ -65,7 +65,6 @@
     "cv13" 00;
   font-size: 14px;
   line-height: 1.4;
-  letter-spacing: 0;
   @media (min-width: 760px) {
     font-size: 16px;
     font-variation-settings: "wght" 310;
@@ -74,6 +73,7 @@
 
 @mixin font-core-bold {
   @include font-core();
+  font-weight: inherit;
   font-variation-settings: "wght" 650;
   @media (min-width: 760px) {
     font-variation-settings: "wght" 620;
@@ -103,7 +103,7 @@
 }
 
 @mixin font-L {
-  font-variation-settings: "wght" 260;
+  font-variation-settings: "wght" 240;
   font-feature-settings:
     "calt" 01,
     "dlig" 00,
@@ -116,11 +116,20 @@
     "cv13" 00;
   font-size: 7.25vw;
   line-height: 1.15;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   @media (min-width: 760px) {
     font-variation-settings: "wght" 230;
     font-size: 32px;
     letter-spacing: 0.025em;
+  }
+}
+
+@mixin font-L-bold {
+  @include font-L();
+  font-weight: inherit;
+  font-variation-settings: "wght" 500;
+  @media (min-width: 760px) {
+    font-variation-settings: "wght" 460;
   }
 }
 
@@ -146,8 +155,9 @@
 }
 
 @mixin font-S-bold {
-  font-variation-settings: "wght" 650;
   @include font-S();
+  font-weight: inherit;
+  font-variation-settings: "wght" 650;
   @media (min-width: 760px) {
     font-variation-settings: "wght" 620;
   }

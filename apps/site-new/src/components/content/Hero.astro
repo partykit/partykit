@@ -40,7 +40,8 @@ import Voronoi from "../../interactive/Voronoi";
     grid-row: 1 / 2;
     position: relative;
     z-index: 10;
-    @include font-hero();
+    @include font-L();
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -48,7 +49,16 @@ import Voronoi from "../../interactive/Voronoi";
     padding-top: calc(50px + 2rem);
     margin: 0 -2rem;
     strong {
-      @include font-hero-bold();
+      @include font-L-bold();
+    }
+  }
+  
+  @media (min-width: 750px) {
+    h1 {
+      @include font-hero();
+      strong {
+        @include font-hero-bold();
+      }
     }
   }
 
