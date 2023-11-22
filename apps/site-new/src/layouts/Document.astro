@@ -116,6 +116,9 @@ const { title } = Astro.props;
     @media (min-width: 1100px) {
       @include font-core();
     }
+    &.equal-columns {
+      table-layout : fixed;
+    }
     th, strong, b {
       @include font-S-bold();
       @media (min-width: 1100px) {

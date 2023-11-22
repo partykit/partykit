@@ -11,12 +11,17 @@ const { url, variant = null } = Astro.props;
 
 <a class={variant} href={url}><slot /></a>
 
-<style>
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
   a {
+    display: inline-block;
     padding: var(--box-padding);
+    width: 100%;
     border: none;
     border-radius: 2em;
     text-align: center;
+    text-decoration: none;
     background: var(--color-feature-2);
     color: var(--color-page);
     font-variation-settings: "wght" 350;
@@ -37,8 +42,13 @@ const { url, variant = null } = Astro.props;
     transition: 0.3s ease 0.3s;
   }
 
+  a:hover,
+  a:focus {
+    color: var(--color-page);
+  }
+
   a:hover:after,
-  a:focus:after  {
+  a:focus:after {
     left: 0.25em;
   }
 
@@ -63,6 +73,7 @@ const { url, variant = null } = Astro.props;
     color: var(--color-feature-2);
     border-color: rgba(160, 160, 160, 0.1);
     background: rgba(160, 160, 160, 0.2);
+    @include font-S();
   }
 
   a.terminal-github {
@@ -73,6 +84,7 @@ const { url, variant = null } = Astro.props;
     border-color: rgba(160, 160, 160, 0.1);
     background: rgba(160, 160, 160, 0.2);
     flex-grow: 0;
+    @include font-S();
   }
   
   a.pricingCTA {
