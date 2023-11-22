@@ -176,6 +176,7 @@ import Button from "../components/atoms/Button.astro";
   <tbody>
     <header>
       <th>Font Extra Large</th>
+      <th>Font Extra Large Bold</th>
     </header>
     <tr>
       <td>
@@ -188,10 +189,34 @@ import Button from "../components/atoms/Button.astro";
           (.,:;?!¿¡) [£&@#] \{- – ‒ —}
         </div>
       </td>
+      <td>
+        <div id="brand-element-font-xl-bold">
+          Aa Bb Cc Dd Ee Ff Gg Hh Ii Jj Kk Ll Mm <br />
+          Nn Oo Pp Qq Rr Ss Tt Uu Vv Ww Xx Yy Zz <br />
+          1¹ 2² 3³ 4⁴ 5⁵ 6⁶ 7⁷ 8⁸ 9⁹ 0⁰ <br />
+          <br />
+          •●○→©®™ <br />
+          (.,:;?!¿¡) [£&@#] \{- – ‒ —}
+        </div>
+      </td>
     </tr>
     <tr>
       <td>
         <code>@include font-xl();</code> <br />
+        font-feature-settings:
+    "calt" 01,
+    "dlig" 00,
+    "case" 01,
+    "ss01" 01,
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;  <br />
+        defined in shared.scss
+      </td>
+      <td>
+        <code>@include font-xl-bold();</code> <br />
         font-feature-settings:
     "calt" 01,
     "dlig" 00,
