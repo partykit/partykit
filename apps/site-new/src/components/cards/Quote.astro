@@ -6,7 +6,7 @@ interface Props {
   url: string;
   role: string;
   img: string;
-  variant: "S" | "M" | "L";
+  variant: "S" | "M" | "L" | "S-test" | "M-test" | "L-test";
 }
 
 const { name, url, role, variant, img } = Astro.props;
@@ -42,7 +42,7 @@ const { name, url, role, variant, img } = Astro.props;
         width: 25%;
       }
       &.quote-L {
-        width: 33%;
+        width: 35%;
       }
       &:nth-child(5n-4) {
         padding-top: var(--whitespace);
@@ -53,7 +53,28 @@ const { name, url, role, variant, img } = Astro.props;
        &:nth-child(7n-3) {
         align-self: end;
       }
-   }
+      &.quote-S-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 12em;
+        }
+      }
+      &.quote-M-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 20em;
+        }
+      }
+      &.quote-L-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 28em;
+        }
+      }
+    }
   }
 
   .quote blockquote {

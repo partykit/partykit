@@ -153,6 +153,12 @@ const { title } = Astro.props;
     }
   }
   
+  td.reset * {
+    @include reset();
+    white-space: normal;
+  }
+
+  
   main table div {
     white-space: nowrap;
     overflow: hidden;

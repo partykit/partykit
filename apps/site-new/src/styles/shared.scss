@@ -7,6 +7,22 @@
   src: url("/assets/InterVariable.woff2") format("woff2");
 }
 
+@mixin reset {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-weight: inherit;
+  font-variation-settings: inherit;
+  line-height: inherit;
+  list-style: none;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+
 @mixin font-hero {
   font-variation-settings: "wght" 220;
   font-feature-settings:

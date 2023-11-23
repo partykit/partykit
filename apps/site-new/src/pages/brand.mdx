@@ -9,6 +9,7 @@ updated_date: 2023-11-16
 
 import Button from "../components/atoms/Button.astro";
 import MadeWith from "../components/cards/MadeWith.astro";
+import Quote from "../components/cards/Quote.astro";
 
 
 # PartyKit brand elements
@@ -548,7 +549,7 @@ import MadeWith from "../components/cards/MadeWith.astro";
       <th>Made with PartyKit card (Dark)</th>
     </header>
     <tr>
-      <td class="card">
+      <td class="reset">
         <MadeWith
           title="SiteGPT"
           url="https://sitegpt.ai"
@@ -560,7 +561,7 @@ import MadeWith from "../components/cards/MadeWith.astro";
           <p>Make AI your expert customer support agent</p>
         </MadeWith>
       </td>
-      <td class="card">
+      <td class="reset">
         <MadeWith
           title="Epic Web Dev"
           url="https://www.epicweb.dev"
@@ -582,6 +583,67 @@ import MadeWith from "../components/cards/MadeWith.astro";
       </td>
       <td>
         add attribute <code>variant="inverted"</code> <br />
+        defined in Button.astro
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<div class='overflow-x-auto'>
+<table>
+  <tbody>
+    <header>
+      <th>Quote Small</th>
+      <th>Quote Medium</th>
+      <th>Quote Large</th>
+    </header>
+    <tr>
+      <td class="reset">
+        <Quote
+          variant="S-test"
+          name="David Khourshid"
+          url="https://twitter.com/DavidKPiano"
+          role="Founder, Stately"
+          img="/assets/users/davidk.jpeg"
+        >
+          It&rsquo;s the future of workflows.
+        </Quote>
+      </td>
+      <td class="reset">
+        <Quote
+          variant="M-test"
+          name="David Khourshid"
+          url="https://twitter.com/DavidKPiano"
+          role="Founder, Stately"
+          img="/assets/users/davidk.jpeg"
+        >
+          A breeze to set up 🙂 Just takes less than 40 lines of code to do! Looking forward to the future of PartyKit!
+        </Quote>
+      </td>
+      <td class="reset">
+        <Quote
+          variant="L-test"
+          name="David Khourshid"
+          url="https://twitter.com/DavidKPiano"
+          role="Founder, Stately"
+          img="/assets/users/davidk.jpeg"
+        >
+          I have been trying to solve a real-time sync problem for SiteGPT for months now. I tried everything and nothing seemed to work properly. Sunil solved my entire problem using PartyKit in around 10 lines of code 🤯 10 lines... and I am not even exaggerating 😅 PartyKit is awesome!!
+        </Quote>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        add attribute <code>variant="M"</code> <br />
+        defined in Quote.astro
+      </td>
+      <td>
+        add attribute <code>variant="M"</code> <br />
+        defined in Button.astro
+      </td>
+      <td>
+        add attribute <code>variant="L"</code> <br />
         defined in Button.astro
       </td>
     </tr>

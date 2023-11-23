@@ -129,6 +129,7 @@ const { title, by, url, github, img, imgShade } = Astro.props;
   }
 
   .image {
+    position: relative;
     grid-column: 1 / 2;
     grid-row: 1 / 4;
     height: 100%;
@@ -139,8 +140,12 @@ const { title, by, url, github, img, imgShade } = Astro.props;
   }
 
   .image img {
+    position: absolute;
+    display: block;
     min-height: 100%;
     min-width: 100%;
+    height: auto;
+    width: auto;
     object-fit: cover;
     object-position: center;
   }
