@@ -32,11 +32,13 @@ const { title, by, url, github, img, imgShade } = Astro.props;
   @import "../../styles/shared.scss";
 
   .example {
+    position: relative;
     display: grid;
     grid-template-columns: 100%;
     background: var(--color-feature-1);
     border-radius: var(--box-radius);
     overflow: hidden;
+    max-width: 20vw;
   }
 
   @media (min-width: 760px) {

@@ -8,6 +8,8 @@ updated_date: 2023-11-16
 ---
 
 import Button from "../components/atoms/Button.astro";
+import MadeWith from "../components/cards/MadeWith.astro";
+
 
 # PartyKit brand elements
 
@@ -30,7 +32,7 @@ import Button from "../components/atoms/Button.astro";
 </table>
 </div>
 
-<div>
+<div class='overflow-x-auto'>
 <table class="equal-columns">
   <tbody>
     <header>
@@ -538,3 +540,51 @@ import Button from "../components/atoms/Button.astro";
 
 ## Cards
 
+<div class='overflow-x-auto'>
+<table class="equal-columns">
+  <tbody>
+    <header>
+      <th>Made with PartyKit card (Light)</th>
+      <th>Made with PartyKit card (Dark)</th>
+    </header>
+    <tr>
+      <td class="card">
+        <MadeWith
+          title="SiteGPT"
+          url="https://sitegpt.ai"
+          by="Username"
+          github="https://sitegpt.ai/demo"
+          img="/assets/made-with/product_sitegpt.png"
+          imgShade="light"
+        >
+          <p>Make AI your expert customer support agent</p>
+        </MadeWith>
+      </td>
+      <td class="card">
+        <MadeWith
+          title="Epic Web Dev"
+          url="https://www.epicweb.dev"
+          by="Kent C Dodds"
+          github="https://www.epicweb.dev"
+          img="/assets/made-with/product_epicweb.png"
+          imgShade="dark"
+        >
+          <p>
+            Everything you need to know to ship modern full-stack web applications
+          </p>
+        </MadeWith>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        component default <br />
+        defined in Button.astro
+      </td>
+      <td>
+        add attribute <code>variant="inverted"</code> <br />
+        defined in Button.astro
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
