@@ -24,6 +24,7 @@ const { name, url, role, variant, img } = Astro.props;
     </div>
   </cite>
 </div>
+<div class="quote-whitespace-gif"></div>
 
 <style lang="scss">
   @import "../../styles/shared.scss";
@@ -60,33 +61,26 @@ const { name, url, role, variant, img } = Astro.props;
       &.quote-L {
         grid-column-end: span 5;
       }
-      &:nth-child(1) {
+      &:nth-child(7n-6) {
         grid-column-start: 1;
-        grid-row: 3 / 5;
       }
-      &:nth-child(2) {
+      &:nth-child(7n-5) {
         grid-column-start: 4;
-        grid-row: 1 / 2;
       }
-      &:nth-child(3) {
+      &:nth-child(7n-4) {
         grid-column-start: 6;
-        grid-row: 2 / 3;
       }
-      &:nth-child(4) {
+      &:nth-child(7n-3) {
         grid-column-start: 9;
-        grid-row: 4 / 5;
       }
-      &:nth-child(5) {
+      &:nth-child(7n-2) {
         grid-column-start: 1;
-        grid-row: 7 / 8;
       }
-      &:nth-child(6) {
+      &:nth-child(7n-1) {
         grid-column-start: 4;
-        grid-row: 6 / 7;
       }
-      &:nth-child(7) {
+      &:nth-child(7n) {
         grid-column-start: 9;
-        grid-row: 7 / 8;
       }
     }
   }
