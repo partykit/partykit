@@ -3,7 +3,7 @@ import "../../styles/variables.scss";
 
 interface Props {
   url: string;
-  variant?: null | "outline" | "github" | "terminal-github" | "pricingCTA";
+  variant?: null | "outline" | "inverted" | "github" | "terminal-github" | "pricingCTA";
 }
 
 const { url, variant = null } = Astro.props;
@@ -52,6 +52,11 @@ const { url, variant = null } = Astro.props;
   a:hover:after,
   a:focus:after {
     left: 0.25em;
+  }
+  
+  a.inverted {
+    background: var(--color-page);
+    color: var(--color-feature-2);
   }
 
   a.outline {

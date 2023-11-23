@@ -496,12 +496,16 @@ import Button from "../components/atoms/Button.astro";
   <tbody>
     <header>
       <th>Default button</th>
+      <th>Inverted button</th>
       <th>Outlined button</th>
       <th>Github button</th>
     </header>
     <tr>
       <td>
         <Button url="#">Button</Button>
+      </td>
+      <td style="background: var(--color-feature-2)">
+        <Button variant="inverted" url="#">Inverted button</Button>
       </td>
       <td>
         <Button variant="outline" url="#">Outlined button</Button>
@@ -513,6 +517,10 @@ import Button from "../components/atoms/Button.astro";
     <tr>
       <td>
         component default <br />
+        defined in Button.astro
+      </td>
+      <td>
+        add attribute <code>variant="inverted"</code> <br />
         defined in Button.astro
       </td>
       <td>

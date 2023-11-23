@@ -43,6 +43,7 @@ const { title } = Astro.props;
   html {
     color: var(--color-text);
     background: var(--color-page);
+    background: linear-gradient(var(--color-feature-2) 50%, var(--color-page) 51%);
     @include font-core();
   }
   
@@ -127,6 +128,8 @@ const { title } = Astro.props;
     align-items: stretch;
     width: 100%;
     overflow: hidden;
+    padding-bottom: calc(var(--whitespace) *0.5);
+    background: var(--color-page);
   }
 
   section {
