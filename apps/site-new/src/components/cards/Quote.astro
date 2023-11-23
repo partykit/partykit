@@ -29,7 +29,7 @@ const { name, url, role, variant, img } = Astro.props;
   @import "../../styles/shared.scss";
 
   .quote {
-    overflow: hidden;
+    overflow: visible;
     display: flex;
     flex-direction: column;
     padding-bottom: 1rem;
@@ -85,12 +85,20 @@ const { name, url, role, variant, img } = Astro.props;
     display: flex;
     flex-direction: row;
     justify-content: start;
-    align-items: center;
+    align-items: start;
     padding: 1rem 1rem 0 0;
     gap: 0 1rem;
+    @media (min-width: 760px) {
+      white-space: no-wrap;
+      width: 200%;
+    }
+    @media (min-width: 1100px) {
+      @include font-L();
+    }
   }
 
   .avatar {
+    position: relative;
     display: block;
     width: 2.25rem;
     height: 2.25rem;
@@ -100,6 +108,9 @@ const { name, url, role, variant, img } = Astro.props;
     background-repeat: no-repeat;
     background-size: cover;
     overflow: hidden;
+    @media (min-width: 1100px) {
+      top: 0.1rem;
+    }
     img {
       min-width: 100%;
       min-height: 100%;
