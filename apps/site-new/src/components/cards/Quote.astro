@@ -24,65 +24,36 @@ const { name, url, role, variant, img } = Astro.props;
     </div>
   </cite>
 </div>
-<div class="quote-whitespace-gif"></div>
 
 <style lang="scss">
   @import "../../styles/shared.scss";
 
   .quote {
-    grid-column: span 2;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     padding-bottom: 1rem;
-  }
-
-  @media (min-width: 760px) {
-    .quote {
-      grid-column: span 1;
-    }
-  }
-  @media (min-width: 760px) and (max-width: 1100px) {
-    .quote:nth-child(6) ~ .quote {
-      display: none;
-    }
-  }
-  
-  @media (min-width: 1100px) {
-    .quote {
+    @media (min-width: 760px) {
       padding-bottom: 0;
-      padding-left: 2rem;
-      padding-right: 2rem;
-      grid-column-end: span 2;
-      align-self: start;
+      &.quote-S {
+        width: 15%;
+      }
       &.quote-M {
-        grid-column-end: span 3;
+        width: 25%;
       }
       &.quote-L {
-        grid-column-end: span 5;
+        width: 33%;
       }
-      &:nth-child(7n-6) {
-        grid-column-start: 1;
+      &:nth-child(5n-4) {
+        padding-top: var(--whitespace);
       }
-      &:nth-child(7n-5) {
-        grid-column-start: 4;
+      &:nth-child(3n) {
+        padding-top: calc(var(--whitespace) *0.5);
       }
-      &:nth-child(7n-4) {
-        grid-column-start: 6;
+       &:nth-child(7n-3) {
+        align-self: end;
       }
-      &:nth-child(7n-3) {
-        grid-column-start: 9;
-      }
-      &:nth-child(7n-2) {
-        grid-column-start: 1;
-      }
-      &:nth-child(7n-1) {
-        grid-column-start: 4;
-      }
-      &:nth-child(7n) {
-        grid-column-start: 9;
-      }
-    }
+   }
   }
 
   .quote blockquote {
