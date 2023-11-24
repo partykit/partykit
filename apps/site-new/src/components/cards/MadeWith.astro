@@ -38,7 +38,6 @@ const { title, by, url, github, img, imgShade } = Astro.props;
     background: var(--color-feature-1);
     border-radius: var(--box-radius);
     overflow: hidden;
-    max-width: 20vw;
   }
 
   @media (min-width: 760px) {
@@ -50,6 +49,7 @@ const { title, by, url, github, img, imgShade } = Astro.props;
   @media (min-width: 1100px) {
     .example {
       grid-column: span 2;
+      max-width: 20vw;
     }
   }
 
