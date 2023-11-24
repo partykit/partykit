@@ -106,67 +106,67 @@ import Voronoi from "../../interactive/Voronoi";
       transform: translateY(0);
     }
     9% {
-      transform: translateY(-1em);
+      transform: translateY(-2em);
     }
     16% {
-      transform: translateY(-1em);
+      transform: translateY(-2em);
     }
     18% {
-      transform: translateY(-2em);
+      transform: translateY(-4em);
     }
     25% {
-      transform: translateY(-2em);
+      transform: translateY(-4em);
     }
     27% {
-      transform: translateY(-3em);
+      transform: translateY(-6em);
     }
     34% {
-      transform: translateY(-3em);
+      transform: translateY(-6em);
     }
     36% {
-      transform: translateY(-4em);
+      transform: translateY(-8em);
     }
     43% {
-      transform: translateY(-4em);
+      transform: translateY(-8em);
     }
     45% {
-      transform: translateY(-5em);
+      transform: translateY(-10em);
     }
     52% {
-      transform: translateY(-5em);
+      transform: translateY(-10em);
     }
     54% {
-      transform: translateY(-6em);
+      transform: translateY(-12em);
     }
     61% {
-      transform: translateY(-6em);
+      transform: translateY(-12em);
     }
     63% {
-      transform: translateY(-7em);
+      transform: translateY(-14em);
     }
     70% {
-      transform: translateY(-7em);
+      transform: translateY(-14em);
     }
     72% {
-      transform: translateY(-8em);
+      transform: translateY(-16em);
     }
     79% {
-      transform: translateY(-8em);
+      transform: translateY(-16em);
     }
     81% {
-      transform: translateY(-9em);
+      transform: translateY(-18em);
     }
     88% {
-      transform: translateY(-9em);
+      transform: translateY(-18em);
     }
     90% {
-      transform: translateY(-10em);
+      transform: translateY(-20em);
     }
     98% {
-      transform: translateY(-10em);
+      transform: translateY(-20em);
     }
     100% {
-      transform: translateY(-11em);
+      transform: translateY(-22em);
     }
   }
   
@@ -180,14 +180,18 @@ import Voronoi from "../../interactive/Voronoi";
     }
     .animation-block {
       position: absolute;
+      top: 0.125em;
       left: 0;
-      margin: -0.125em 0;
-      padding: 0.125em 0;
-      height: 1.25em;
+      margin: -0.25em 0;
+      padding: 0.25em 0;
+      height: 1.5em;
       overflow: hidden;
-      mask-image: linear-gradient(to bottom, transparent 0.2em, #000 0.25em, #000 95%, transparent 95%);
+      mask-image: linear-gradient(to bottom, transparent 0, #000 0.25em, #000 calc(100% - 0.25em), transparent 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.9925em;
       .animation-item {
-      transform: translateY(0);
+        transform: translateY(0);
         animation: hero-loop 20s ease-out 1s infinite;
    -moz-animation: hero-loop 20s ease-out 1s infinite;
 -webkit-animation: hero-loop 20s ease-out 1s infinite;
