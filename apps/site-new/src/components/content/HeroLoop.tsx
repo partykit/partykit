@@ -1,5 +1,6 @@
 import * as TextLoopComponent from "react-text-loop-next-18";
 const TextLoop =
+  // @ts-expect-error ignore
   TextLoopComponent.TextLoop || TextLoopComponent.default.TextLoop;
 
 export default function HeroLoop() {
