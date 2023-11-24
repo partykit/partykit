@@ -10,7 +10,24 @@ import Voronoi from "../../interactive/Voronoi";
   <div id="voronoi">
     <Voronoi client:load />
   </div>
-  <p><strong>Because everything’s <br />better with <span><em>friends</em></span></strong></p>
+  <p><strong>Because everything’s <br />better with 
+    <span class="animation-frame">
+      <span class="animation-block">
+        <span class="animation-item">friends </span>
+        <span class="animation-item">collaboration </span>
+        <span class="animation-item">realtime </span>
+        <span class="animation-item">AI chatbots </span>
+        <span class="animation-item">websockets </span>
+        <span class="animation-item">multiplayer </span>
+        <span class="animation-item">AI agents </span>
+        <span class="animation-item">edge computing </span>
+        <span class="animation-item">CRDTs </span>
+        <span class="animation-item">local-first apps </span>
+        <span class="animation-item">LLMs </span>
+        <span class="animation-item">friends </span>
+      </span>
+    </span>
+  </strong></p>
 </div>
 
 <style lang="scss">
@@ -79,19 +96,109 @@ import Voronoi from "../../interactive/Voronoi";
         @include font-hero-bold();
       }
     }
-    span {
-      position: relative;
-      overflow: visible;
-      &:before {
-        content: "friends";
-        color: transparent;
-        user-select: none;
-      }
-      em {
-        position: absolute;
-        left: 0;
+  }
+  
+  @keyframes hero-loop {
+    0% {
+      transform: translateY(0);
+    }
+    7% {
+      transform: translateY(0);
+    }
+    9% {
+      transform: translateY(-1em);
+    }
+    16% {
+      transform: translateY(-1em);
+    }
+    18% {
+      transform: translateY(-2em);
+    }
+    25% {
+      transform: translateY(-2em);
+    }
+    27% {
+      transform: translateY(-3em);
+    }
+    34% {
+      transform: translateY(-3em);
+    }
+    36% {
+      transform: translateY(-4em);
+    }
+    43% {
+      transform: translateY(-4em);
+    }
+    45% {
+      transform: translateY(-5em);
+    }
+    52% {
+      transform: translateY(-5em);
+    }
+    54% {
+      transform: translateY(-6em);
+    }
+    61% {
+      transform: translateY(-6em);
+    }
+    63% {
+      transform: translateY(-7em);
+    }
+    70% {
+      transform: translateY(-7em);
+    }
+    72% {
+      transform: translateY(-8em);
+    }
+    79% {
+      transform: translateY(-8em);
+    }
+    81% {
+      transform: translateY(-9em);
+    }
+    88% {
+      transform: translateY(-9em);
+    }
+    90% {
+      transform: translateY(-10em);
+    }
+    98% {
+      transform: translateY(-10em);
+    }
+    100% {
+      transform: translateY(-11em);
+    }
+  }
+  
+  .animation-frame {
+    position: relative;
+    overflow: visible;
+    &:before {
+      content: "friends";
+      color: transparent;
+      user-select: none;
+    }
+    .animation-block {
+      position: absolute;
+      left: 0;
+      margin: -0.125em 0;
+      padding: 0.125em 0;
+      height: 1.25em;
+      overflow: hidden;
+      mask-image: linear-gradient(to bottom, transparent 0.2em, #000 0.25em, #000 95%, transparent 95%);
+      .animation-item {
+      transform: translateY(0);
+        animation: hero-loop 20s ease-out 1s infinite;
+   -moz-animation: hero-loop 20s ease-out 1s infinite;
+-webkit-animation: hero-loop 20s ease-out 1s infinite;
+     -o-animation: hero-loop 20s ease-out 1s infinite;
+        display: block;
+        width: 100%;
+        text-align: left;
+        white-space: nowrap;
       }
     }
   }
+
 
 </style>
