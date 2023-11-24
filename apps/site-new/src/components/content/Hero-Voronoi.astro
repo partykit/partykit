@@ -10,7 +10,7 @@ import Voronoi from "../../interactive/Voronoi";
   <div id="voronoi">
     <Voronoi client:load />
   </div>
-  <p><strong>Because everything’s <br />better with 
+  <p><strong>Everything is <br />better with 
     <span class="animation-frame">
       <span class="animation-block">
         <span class="animation-item">friends </span>
@@ -39,28 +39,37 @@ import Voronoi from "../../interactive/Voronoi";
     margin: 0 -2rem -15vh;
     display: grid;
     grid-template-columns: 100%;
-    grid-template-rows: 1fr;
+    grid-template-rows: 1fr 1fr;
     height: 100vh;
     padding-top: 0;
-    --animation-whitespace: 1.05em;
+    --animation-whitespace: 1.2em;
+    @media (min-width: 760px) {
+      --animation-whitespace: 1.05em;
+    }
   }
 
   h1 {
     grid-column: 1 / -1;
-    grid-row: 1 / 2;
+    grid-row: 2 / 3;
     position: relative;
     z-index: 50;
-    @include font-L();
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: start;
-    align-self: center;
+    align-self: start;
     margin: 0 auto;
     max-width: 20em;
+    @include font-core();
+    strong {
+      @include font-core-bold();
+    }
+    @media (min-width: 760px) {
+    @include font-L();
     strong {
       @include font-L-bold();
+    }
     }
   }
   
@@ -72,7 +81,7 @@ import Voronoi from "../../interactive/Voronoi";
   
  p {
     grid-column: 1 / -1;
-    grid-row: 2 / 3;
+    grid-row: 1 / 2;
     position: relative;
     z-index: 50;
     @include font-L();
@@ -81,12 +90,12 @@ import Voronoi from "../../interactive/Voronoi";
     flex-direction: column;
     align-items: stretch;
     justify-content: start;
-    align-self: end;
-    padding-bottom: calc(15vh + 3rem);
+    align-self: center;
+    padding-top: 50px;
     strong {
       @include font-L-bold();
     }
-    @media (min-width: 750px) {
+    @media (min-width: 760px) {
       @include font-XL();
       strong {
         @include font-XL-bold();
@@ -183,7 +192,7 @@ import Voronoi from "../../interactive/Voronoi";
       overflow: hidden;
       mask-image: linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%);
       .animation-item {
-        margin: 0 0 var(--animation-whitespace) 0;
+        margin: 0 0 calc(var(--animation-whitespace) * 0.9975) 0;
         transform: translateY(0);
         animation: hero-loop 20s ease-out 1s infinite;
    -moz-animation: hero-loop 20s ease-out 1s infinite;
