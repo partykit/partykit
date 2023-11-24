@@ -47,7 +47,7 @@
     "@cloudflare/workers-types": "4.20231025.0",
     "clipboardy": "4.0.0",
     "esbuild": "0.19.7",
-    "miniflare": "3.20231030.0",
+    "miniflare": "3.20231030.1",
     "p-limit": "^5.0.0",
     "p-retry": "^6.1.0",
     "yoga-wasm-web": "0.3.3"
