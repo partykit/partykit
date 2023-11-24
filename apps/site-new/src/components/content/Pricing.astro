@@ -10,20 +10,18 @@ import Button from "../atoms/Button.astro";
   
     <div class="pricing-plan">
 
-      <h3>Free</h3>
+      <h3>Individual</h3>
     
-      <p class="pricing-price">&dollar;0</p>
+      <p class="pricing-price">Free</p>
     
       <ul class="pricing-features">
-        <li>First 500,000 requests free, <br />&dollar;1 per million after that</li>
+        <li>Deploy to our global edge platform</li>
+        <li>Generous bundled usage</li>
         <li>Live logging</li>
-        <li>24hr analytics, logging and error&nbsp;retention</li>
       </ul>
       
       <ul class="pricing-limitations">
-        <li>Individual user</li>
-        <li>Up to 10 projects</li>
-        <li class="support">Community support</li>
+        <li>Up to 10 live projects</li>
       </ul>
       
       <Button variant="pricingCTA" url="https://docs.partykit.io/quickstart/">Get started</Button>
@@ -34,25 +32,22 @@ import Button from "../atoms/Button.astro";
   
     <div class="pricing-plan">
 
-      <h3>Team</h3>
+      <h3>Pro</h3>
     
-      <p class="pricing-price">&dollar;10 per person</p>
+      <p class="pricing-price">&dollar;10 <small>per developer / month</small></p>
     
       <ul class="pricing-features">
-        <li>First 500,000 requests free, <br />&dollar;1 per million after that</li>
-        <li>Live logging</li>
-        <li>1 week analytics, logging and error&nbsp;retention</li>
-        <li>Up to 10 previews per project</li>
-        <li>1 custom domain</li>
+        <li>Everything from Individual</li>
+        <li>Team deployments</li>
+        <li>Bundled + usage-based pricing</li>
+        <li>Custom wildcard domain</li>
+        <li><i>More...</i></li>
       </ul>
-      
+          
       <ul class="pricing-limitations">
-        <li>Up to 10 developers</li>
-        <li>Up to 100 projects</li>
-        <li class="support">Support within 3 days</li>
       </ul>
-      
-      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Contact</Button>
+
+      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Schedule a call</Button>
     
     </div>
 
@@ -65,21 +60,14 @@ import Button from "../atoms/Button.astro";
       <p class="pricing-price">Call us</p>
     
       <ul class="pricing-features">
-        <li>First 500,000 requests free, <br />&dollar;1 per million after that</li>
-        <li>Live logging</li>
-        <li>1 month analytics, logging and error&nbsp;retention</li>
-        <li>Unlimited previews per project</li>
-        <li>Unlimited custom domains</li>
-        <li>Cloud Prem</li>
+        <li>Everything from Pro</li>
+        <li>Custom infrastructure</li>
       </ul>
-      
+
       <ul class="pricing-limitations">
-        <li>For large teams</li>
-        <li>Unlimited projects</li>
-        <li class="support">Same day support</li>
       </ul>
-      
-      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Contact</Button>
+
+      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Schedule a call</Button>
       
     </div>
     
@@ -123,7 +111,7 @@ import Button from "../atoms/Button.astro";
       align-content: stretch;
       justify-content: space-between;
       gap: 1rem;
-      height: 33em;
+      height: 26em;
     }
   }
 
@@ -170,6 +158,12 @@ import Button from "../atoms/Button.astro";
     margin-bottom: 2rem;
   }
   
+  .pricing-price small {
+    @include font-core();
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
   .pricing-features {
     margin: 0.5rem 0 2rem 0;
   }
