@@ -1,38 +1,47 @@
 ---
 import "../../styles/variables.scss";
 import Voronoi from "../../interactive/Voronoi";
+//import HeroLoop from "./HeroLoop";
+// Use by putting
+// <span id="looper"><HeroLoop client:load /></span>
+// in place of the looping text
 ---
 
 <div id="hero">
   <h1>
-    PartyKit is an open source deployment platform for AI agents, multiplayer and local-first apps, games and websites.
+    PartyKit is an open source deployment platform for AI agents, multiplayer
+    and local-first apps, games and websites.
   </h1>
   <div id="voronoi">
     <Voronoi client:load />
   </div>
-  <p><strong>Everything is better <br />with 
-    <span class="animation-frame">
-      <span class="animation-block">
-        <span class="animation-item">friends </span>
-        <span class="animation-item" aria-hidden="true">collaboration </span>
-        <span class="animation-item" aria-hidden="true">realtime </span>
-        <span class="animation-item" aria-hidden="true">AI chatbots </span>
-        <span class="animation-item" aria-hidden="true">websockets </span>
-        <span class="animation-item" aria-hidden="true">multiplayer </span>
-        <span class="animation-item" aria-hidden="true">AI agents </span>
-        <span class="animation-item" aria-hidden="true">edge computing </span>
-        <span class="animation-item" aria-hidden="true">CRDTs </span>
-        <span class="animation-item" aria-hidden="true">local-first apps </span>
-        <span class="animation-item" aria-hidden="true">LLMs </span>
-        <span class="animation-item" aria-hidden="true">friends </span>
+  <p>
+    <strong
+      >Everything is better <br />with
+      <span class="animation-frame">
+        <span class="animation-block">
+          <span class="animation-item">friends</span>
+          <span class="animation-item" aria-hidden="true">collaboration</span>
+          <span class="animation-item" aria-hidden="true">realtime</span>
+          <span class="animation-item" aria-hidden="true">AI chatbots</span>
+          <span class="animation-item" aria-hidden="true">websockets</span>
+          <span class="animation-item" aria-hidden="true">multiplayer</span>
+          <span class="animation-item" aria-hidden="true">AI agents</span>
+          <span class="animation-item" aria-hidden="true">edge computing</span>
+          <span class="animation-item" aria-hidden="true">CRDTs</span>
+          <span class="animation-item" aria-hidden="true"
+            >local-first apps
+          </span>
+          <span class="animation-item" aria-hidden="true">LLMs</span>
+          <span class="animation-item" aria-hidden="true">friends</span>
+        </span>
       </span>
-    </span>
-  </strong></p>
+    </strong>
+  </p>
 </div>
 
 <style lang="scss">
   @import "../../styles/shared.scss";
-  
 
   #hero {
     grid-column: 1 / -1;
@@ -66,20 +75,20 @@ import Voronoi from "../../interactive/Voronoi";
       @include font-core-bold();
     }
     @media (min-width: 760px) {
-    @include font-L();
-    strong {
-      @include font-L-bold();
-    }
+      @include font-L();
+      strong {
+        @include font-L-bold();
+      }
     }
   }
-  
+
   #voronoi {
     grid-column: 1 / -1;
     grid-row: 1 / 3;
     mask-image: linear-gradient(to bottom, #000 50%, transparent 95%);
   }
-  
- p {
+
+  p {
     grid-column: 1 / -1;
     grid-row: 1 / 2;
     position: relative;
@@ -102,7 +111,15 @@ import Voronoi from "../../interactive/Voronoi";
       }
     }
   }
-  
+
+  #looper {
+    display: inline-block;
+    position: relative;
+    overflow: visible;
+    width: 6em;
+    text-align: left;
+  }
+
   @keyframes hero-loop {
     0% {
       transform: translateY(0);
@@ -174,7 +191,7 @@ import Voronoi from "../../interactive/Voronoi";
       transform: translateY(calc(var(--animation-whitespace) * -22));
     }
   }
-  
+
   .animation-frame {
     position: relative;
     overflow: visible;
@@ -190,14 +207,20 @@ import Voronoi from "../../interactive/Voronoi";
       padding: 20px 0;
       height: calc(var(--animation-whitespace) + 20px + 20px);
       overflow: hidden;
-      mask-image: linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%);
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 20px,
+        #000 calc(100% - 20px),
+        transparent 100%
+      );
       .animation-item {
         margin: 0 0 calc(var(--animation-whitespace) * 0.9975) 0;
         transform: translateY(0);
         animation: hero-loop 20s ease-out 1s infinite;
-   -moz-animation: hero-loop 20s ease-out 1s infinite;
--webkit-animation: hero-loop 20s ease-out 1s infinite;
-     -o-animation: hero-loop 20s ease-out 1s infinite;
+        -moz-animation: hero-loop 20s ease-out 1s infinite;
+        -webkit-animation: hero-loop 20s ease-out 1s infinite;
+        -o-animation: hero-loop 20s ease-out 1s infinite;
         display: block;
         width: 100%;
         text-align: left;
@@ -208,6 +231,4 @@ import Voronoi from "../../interactive/Voronoi";
       }
     }
   }
-
-
 </style>

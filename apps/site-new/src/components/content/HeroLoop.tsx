@@ -1,23 +1,19 @@
 import { TextLoop } from "react-text-loop-next-18";
 
-// use like:
-// import HeroLoop from "./HeroLoop";
-// <HeroLoop client:load />
-
 export default function HeroLoop() {
   return (
     <TextLoop interval={1000}>
-      <span>Collaboration</span>
-      <span>Realtime</span>
-      <span>AI Chatbots</span>
-      <span>WebSockets</span>
-      <span>Multiplayer</span>
-      <span>AI Agents</span>
-      <span>Edge Computing</span>
+      <span>collaboration</span>
+      <span>realtime</span>
+      <span>AI chatbots</span>
+      <span>websockets</span>
+      <span>multiplayer</span>
+      <span>AI agents</span>
+      <span>edge computing</span>
       <span>CRDTs</span>
-      <span>Local-First Apps</span>
+      <span>local-first apps</span>
       <span>LLMs</span>
-      <span>Friends</span>
+      <span>friends</span>
     </TextLoop>
   );
 }
