@@ -1,8 +1,6 @@
 ---
 title: Validating client inputs
 description: Make sure you only accept well-formed data from the clients
-sidebar:
-  badge: New
 ---
 
 PartyKit is flexible, when it comes to data it accepts. You can send arbitrary strings or binary data over WebSockets or in HTTP request bodies to your PartyKit server.
@@ -20,15 +18,15 @@ In this guide, we'll use [`zod`](https://github.com/colinhacks/zod).
 `zod` allows you to define expected message types using a declarative schema language:
 
 ```ts
-
 import z from "zod";
 
-const AddMessage = z.object({ type: z.literal("add"), id: z.string(), item: z.string() });
+const AddMessage = z.object({
+  type: z.literal("add"),
+  id: z.string(),
+  item: z.string(),
+});
 const RemoveMessage = z.object({ type: z.literal("remove"), id: z.number() });
-const Message = z.union([
-  AddMessage,
-  RemoveMessage
-]);
+const Message = z.union([AddMessage, RemoveMessage]);
 ```
 
 In the above example, the `Message` schema can be used to validate all allowed message shapes.
@@ -60,7 +58,7 @@ In addition to runtime validation, `zod` uses TypeScript type inference to add a
 
 ```ts
 case "remove":
-  // @ts-expect-error RemoveMessage does not have `item` 
+  // @ts-expect-error RemoveMessage does not have `item`
   data.item;
   break;
 ```
@@ -102,7 +100,7 @@ socket.addEventListener((event) => {
       console.log(result.data.id);
     }
   }
-})
+});
 ```
 
 If you want to ensure that the server can never accidentally send a response that doesn't conform to the schema, you can optionally also validate the response data before you send or broadcast it:

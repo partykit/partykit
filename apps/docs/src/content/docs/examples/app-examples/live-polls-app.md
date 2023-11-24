@@ -1,8 +1,6 @@
 ---
 title: Live polls (a Next.js app)
 description: Get to know what your friends really think
-sidebar:
-    badge: New
 ---
 
 A real-time poll app built wit hNext.js and PartyKit. It consists of two pages: a form (SSR)

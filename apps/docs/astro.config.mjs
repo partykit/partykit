@@ -46,7 +46,6 @@ export default defineConfig({
               },
               {
                 label: "Add to existing project",
-                badge: "New",
                 link: "/add-to-existing-project/",
               },
               {

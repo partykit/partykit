@@ -25,10 +25,10 @@
   --sl-text-lg: 16px;
   --sl-text-xl: 16px;
   --sl-text-2xl: 16px;
-  --sl-text-3xl: 16px;
-  --sl-text-4xl: 16px;
-  --sl-text-5xl: 16px;
-  --sl-text-6xl: 16px;
+  --sl-text-3xl: 32px;
+  --sl-text-4xl: 32px;
+  --sl-text-5xl: 32px;
+  --sl-text-6xl: 32px;
   
   --sl-line-height: 1.4;
   --sl-line-height-headings: 1;

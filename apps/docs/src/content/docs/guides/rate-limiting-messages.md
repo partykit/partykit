@@ -1,8 +1,6 @@
 ---
 title: Rate limiting messages
 description: Preventing connections from flooding a room with messages
-sidebar:
-    badge: New
 ---
 
 PartyKit is very fast, and can process hundreds of messages per second from a single WebSocket connection, and thousands per second per room.
@@ -20,7 +18,7 @@ onMessage(message: string, sender: Party.Connection<{ lastMessageTime?: number }
 
   const now = Date.now();
   const prev = sender.state?.lastMessageTime;
-  
+
   if (prev && now < (prev + 1000)) {
     // if previous message was less than 1 second ago, remove them from the room!
     sender.close();
@@ -36,6 +34,7 @@ The above example is rather unfriendly. You are welcome to implement a rate-limi
 Our live reaction counter example contains [a simple, incremental back-off rate limiter](https://github.com/partykit/example-reactions/blob/main/src/limiter.ts), which sends the client warnings before terminating the connection.
 
 You can use it as follows:
+
 ```ts
 onMessage(message: string, sender: Party.Connection) {
   // rate limit incoming messages to every 100ms with an incremental back-off
@@ -46,7 +45,7 @@ onMessage(message: string, sender: Party.Connection) {
 ```
 
 :::tip[Expect reconnections]
-If your rate limiter removes users from the room by closing their connection, they are likely to reconnect again. The `partysocket` library does this by default. You can instruct the client to not reconnect by sending a specific error code, and checking for it on the client. 
+If your rate limiter removes users from the room by closing their connection, they are likely to reconnect again. The `partysocket` library does this by default. You can instruct the client to not reconnect by sending a specific error code, and checking for it on the client.
 
 Alternatively, you can also **shadow-ban connections** by not closing them, but simply not broadcasting their messages to others. This way, they themselves will see their own messages, but others won't.
 :::
@@ -54,7 +53,3 @@ Alternatively, you can also **shadow-ban connections** by not closing them, but 
 ## Fine-grained rate limiting
 
 To implement more sophisticated rate-limiting algorithms, you can implement your own, or reach for an open source library like the [rate-limiter-flexible package on npm](https://www.npmjs.com/package/rate-limiter-flexible).
-
-
-
-

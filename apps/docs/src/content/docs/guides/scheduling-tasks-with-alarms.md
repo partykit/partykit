@@ -1,8 +1,6 @@
 ---
 title: Scheduling tasks with Alarms
 description: Perform recurring tasks, scheduled jobs, or clean up unused rooms
-sidebar:
-    badge: New
 ---
 
 PartyKit allows you to schedule an alarm some time in the future, and will wake up your room at the scheduled time. This is especially helpful for tasks like:
@@ -122,7 +120,6 @@ Sometimes, you may want to persist [room storage](./persisting-state-into-storag
 A handy pattern is to keep updating an alarm every time you save data to storage. If the alarm ever rings, you know that the room has not been accessed for that time, and you can safely remove unused storage:
 
 ```ts
-
 const EXPIRY_PERIOD_MILLISECONDS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 export default class UserSession implements Party.Server {
@@ -130,7 +127,7 @@ export default class UserSession implements Party.Server {
     const data = JSON.parse(message);
     // do something, and save to storage
     await this.party.storage.put(data.id, data);
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);  
+    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
   }
 
   onAlarm() {
@@ -146,6 +143,6 @@ The above example deletes the data after it has not been changed for 30 days. If
   onConnect(connection: Party.Connection) {
     // do something, and save to storage
     connection.send(await this.party.storage.get(data.id));
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);  
+    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
   }
 ```
