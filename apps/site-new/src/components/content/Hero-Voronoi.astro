@@ -1,0 +1,97 @@
+---
+import "../../styles/variables.scss";
+import Voronoi from "../../interactive/Voronoi";
+---
+
+<div id="hero">
+  <h1>
+    Turn everything into a <br /><strong>realtime multiplayer app</strong>
+  </h1>
+  <div id="voronoi">
+    <Voronoi client:load />
+  </div>
+  <p><strong>Because everything’s <br />better with <span><em>friends</em></span></strong></p>
+</div>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  #hero {
+    grid-column: 1 / -1;
+    margin: 0 -2rem -15vh;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    padding-top: 0;
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    z-index: 50;
+    @include font-L();
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
+    align-self: start;
+    padding-top: calc(50px + 3rem);
+    margin: 0 -2rem;
+    strong {
+      @include font-L-bold();
+    }
+    @media (min-width: 750px) {
+      @include font-hero();
+      strong {
+        @include font-hero-bold();
+      }
+    }
+  }
+  
+  #voronoi {
+    grid-column: 1 / -1;
+    grid-row: 1 / 3;
+    mask-image: linear-gradient(to bottom, #000 50%, transparent 95%);
+  }
+  
+ p {
+    grid-column: 1 / -1;
+    grid-row: 2 / 3;
+    position: relative;
+    z-index: 50;
+    @include font-L();
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
+    align-self: end;
+    padding-bottom: calc(15vh + 3rem);
+    strong {
+      @include font-L-bold();
+    }
+    @media (min-width: 750px) {
+      @include font-hero();
+      strong {
+        @include font-hero-bold();
+      }
+    }
+    span {
+      position: relative;
+      overflow: visible;
+      &:before {
+        content: "friends";
+        color: transparent;
+        user-select: none;
+      }
+      em {
+        position: absolute;
+        left: 0;
+      }
+    }
+  }
+
+</style>
