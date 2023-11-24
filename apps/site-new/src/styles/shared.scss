@@ -122,11 +122,11 @@
 @mixin font-XL-bold {
   @include font-XL();
   font-weight: inherit;
-  font-variation-settings: "wght" 500;
-  letter-spacing: -0.005em;
+  font-variation-settings: "wght" 640;
+  letter-spacing: -0.025em;
   @media (min-width: 760px) {
-    font-variation-settings: "wght" 460;
-    letter-spacing: -0.005em;
+    font-variation-settings: "wght" 640;
+    letter-spacing: -0.025em;
   }
 }
 
@@ -154,9 +154,11 @@
 @mixin font-L-bold {
   @include font-L();
   font-weight: inherit;
-  font-variation-settings: "wght" 500;
+  font-variation-settings: "wght" 600;
+  letter-spacing: -0.0125em;
   @media (min-width: 760px) {
-    font-variation-settings: "wght" 460;
+    font-variation-settings: "wght" 600;
+    letter-spacing: -0.0125em;
   }
 }
 

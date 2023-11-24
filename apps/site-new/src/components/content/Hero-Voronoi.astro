@@ -5,7 +5,7 @@ import Voronoi from "../../interactive/Voronoi";
 
 <div id="hero">
   <h1>
-    Turn everything into a <br /><strong>realtime multiplayer app</strong>
+    PartyKit is an open source deployment platform for AI agents, multiplayer and local-first apps, games and websites.
   </h1>
   <div id="voronoi">
     <Voronoi client:load />
@@ -32,6 +32,7 @@ import Voronoi from "../../interactive/Voronoi";
 
 <style lang="scss">
   @import "../../styles/shared.scss";
+  
 
   #hero {
     grid-column: 1 / -1;
@@ -41,6 +42,7 @@ import Voronoi from "../../interactive/Voronoi";
     grid-template-rows: 1fr;
     height: 100vh;
     padding-top: 0;
+    --animation-whitespace: 1.05em;
   }
 
   h1 {
@@ -54,17 +56,11 @@ import Voronoi from "../../interactive/Voronoi";
     flex-direction: column;
     align-items: stretch;
     justify-content: start;
-    align-self: start;
-    padding-top: calc(50px + 3.5rem);
-    margin: 0 -2rem;
+    align-self: center;
+    margin: 0 auto;
+    max-width: 20em;
     strong {
       @include font-L-bold();
-    }
-    @media (min-width: 750px) {
-      @include font-hero();
-      strong {
-        @include font-hero-bold();
-      }
     }
   }
   
@@ -91,9 +87,9 @@ import Voronoi from "../../interactive/Voronoi";
       @include font-L-bold();
     }
     @media (min-width: 750px) {
-      @include font-hero();
+      @include font-XL();
       strong {
-        @include font-hero-bold();
+        @include font-XL-bold();
       }
     }
   }
@@ -106,67 +102,67 @@ import Voronoi from "../../interactive/Voronoi";
       transform: translateY(0);
     }
     9% {
-      transform: translateY(-2em);
+      transform: translateY(calc(var(--animation-whitespace) * -2));
     }
     16% {
-      transform: translateY(-2em);
+      transform: translateY(calc(var(--animation-whitespace) * -2));
     }
     18% {
-      transform: translateY(-4em);
+      transform: translateY(calc(var(--animation-whitespace) * -4));
     }
     25% {
-      transform: translateY(-4em);
+      transform: translateY(calc(var(--animation-whitespace) * -4));
     }
     27% {
-      transform: translateY(-6em);
+      transform: translateY(calc(var(--animation-whitespace) * -6));
     }
     34% {
-      transform: translateY(-6em);
+      transform: translateY(calc(var(--animation-whitespace) * -6));
     }
     36% {
-      transform: translateY(-8em);
+      transform: translateY(calc(var(--animation-whitespace) * -8));
     }
     43% {
-      transform: translateY(-8em);
+      transform: translateY(calc(var(--animation-whitespace) * -8));
     }
     45% {
-      transform: translateY(-10em);
+      transform: translateY(calc(var(--animation-whitespace) * -10));
     }
     52% {
-      transform: translateY(-10em);
+      transform: translateY(calc(var(--animation-whitespace) * -10));
     }
     54% {
-      transform: translateY(-12em);
+      transform: translateY(calc(var(--animation-whitespace) * -12));
     }
     61% {
-      transform: translateY(-12em);
+      transform: translateY(calc(var(--animation-whitespace) * -12));
     }
     63% {
-      transform: translateY(-14em);
+      transform: translateY(calc(var(--animation-whitespace) * -14));
     }
     70% {
-      transform: translateY(-14em);
+      transform: translateY(calc(var(--animation-whitespace) * -14));
     }
     72% {
-      transform: translateY(-16em);
+      transform: translateY(calc(var(--animation-whitespace) * -16));
     }
     79% {
-      transform: translateY(-16em);
+      transform: translateY(calc(var(--animation-whitespace) * -16));
     }
     81% {
-      transform: translateY(-18em);
+      transform: translateY(calc(var(--animation-whitespace) * -18));
     }
     88% {
-      transform: translateY(-18em);
+      transform: translateY(calc(var(--animation-whitespace) * -18));
     }
     90% {
-      transform: translateY(-20em);
+      transform: translateY(calc(var(--animation-whitespace) * -20));
     }
     98% {
-      transform: translateY(-20em);
+      transform: translateY(calc(var(--animation-whitespace) * -20));
     }
     100% {
-      transform: translateY(-22em);
+      transform: translateY(calc(var(--animation-whitespace) * -22));
     }
   }
   
@@ -180,17 +176,14 @@ import Voronoi from "../../interactive/Voronoi";
     }
     .animation-block {
       position: absolute;
-      top: 0.125em;
       left: 0;
-      margin: -0.25em 0;
-      padding: 0.25em 0;
-      height: 1.5em;
+      margin: -20px 0;
+      padding: 20px 0;
+      height: calc(var(--animation-whitespace) + 20px + 20px);
       overflow: hidden;
-      mask-image: linear-gradient(to bottom, transparent 0, #000 0.25em, #000 calc(100% - 0.25em), transparent 100%);
-      display: flex;
-      flex-direction: column;
-      gap: 0.9925em;
+      mask-image: linear-gradient(to bottom, transparent 0, #000 20px, #000 calc(100% - 20px), transparent 100%);
       .animation-item {
+        margin: 0 0 var(--animation-whitespace) 0;
         transform: translateY(0);
         animation: hero-loop 20s ease-out 1s infinite;
    -moz-animation: hero-loop 20s ease-out 1s infinite;
