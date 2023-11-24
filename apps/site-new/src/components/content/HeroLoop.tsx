@@ -1,6 +1,4 @@
-import * as TextLoopComponent from "react-text-loop-next-18";
-const TextLoop =
-  TextLoopComponent.TextLoop || TextLoopComponent.default.TextLoop;
+import { TextLoop } from "react-text-loop-next-18";
 
 export default function HeroLoop() {
   return (
