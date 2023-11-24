@@ -1,0 +1,152 @@
+---
+import "../../styles/variables.scss";
+import Button from "../atoms/Button.astro";
+
+interface Props {
+  title: string;
+  by: string;
+  url: string;
+  github: string;
+  img: string;
+  imgShade: string;
+}
+
+const { title, by, url, github, img, imgShade } = Astro.props;
+---
+
+<div class="example" data-imgShade={imgShade}>
+  <header>
+    <h4><a href={url}>{title}</a></h4>
+    <p>by {by}</p>
+  </header>
+  <div class="metadata">
+    <slot />
+    <Button variant="github" url={github}>Read more</Button>
+  </div>
+  <div class="image">
+    <img src={img} />
+  </div>
+</div>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  .example {
+    position: relative;
+    display: grid;
+    grid-template-columns: 100%;
+    background: var(--color-feature-1);
+    border-radius: var(--box-radius);
+    overflow: hidden;
+  }
+
+  @media (min-width: 760px) {
+    .example {
+      grid-row: span 3;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .example {
+      grid-column: span 2;
+      max-width: 20vw;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .example:nth-child(3) {
+      margin: -1.5rem;
+      z-index: 30;
+      box-shadow: var(--window-shadow);
+    }
+    .example:nth-child(5) ~ .example {
+      display: none;
+    }
+  }
+
+  .example:after {
+    content: " ";
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+    padding-top: 160%;
+  }
+
+  header {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    z-index: 10;
+    padding: var(--box-padding);
+    padding-bottom: 4rem;
+    background: linear-gradient(
+      var(--color-feature-1) calc(100% - 6rem),
+      transparent 100%
+    );
+    text-align: center;
+  }
+
+  [data-imgShade="dark"] header {
+    background: linear-gradient(
+      var(--color-text) calc(100% - 6rem),
+      transparent 100%
+    );
+    color: var(--color-page);
+  }
+
+  header a {
+    @include font-core-bold();
+    &:hover {
+      text-decoration: underline;
+    }
+    &:focus {
+      text-decoration: underline;
+      color: var(--color-feature-2);
+    }
+  }
+
+  header p {
+    display: inline-block;
+  }
+
+  .metadata {
+    @include font-S();
+    text-align: center;
+    grid-column: 1 / 2;
+    grid-row: 3 / 4;
+    align-self: end;
+    display: flex;
+    z-index: 10;
+    flex-direction: column;
+    gap: 1rem;
+    padding: var(--box-padding);
+    padding-bottom: 1rem;
+    padding-top: 4rem;
+    background: linear-gradient(transparent 0, var(--color-feature-1) 50%);
+  }
+
+  [data-imgShade="dark"] .metadata {
+    background: linear-gradient(transparent 0, var(--color-text) 50%);
+    color: var(--color-page);
+  }
+
+  .image {
+    position: relative;
+    grid-column: 1 / 2;
+    grid-row: 1 / 4;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    border-radius: calc(var(--box-radius) + 1px) calc(var(--box-radius) + 1px) 0
+      0;
+  }
+
+  .image img {
+    position: absolute;
+    display: block;
+    min-height: 100%;
+    min-width: 100%;
+    height: auto;
+    width: auto;
+    object-fit: cover;
+    object-position: center;
+  }
+</style>

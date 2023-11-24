@@ -10,7 +10,10 @@ export default defineConfig({
       {
         title: "PartyKit Docs",
         description: "Collaborative applications are the future of software",
-        customCss: ["./src/styles/custom.css"],
+        customCss: [
+          "./src/fonts/font-face.css",
+          "./src/styles/custom.css"
+        ],
         head: [
           {
             tag: 'script',
@@ -43,7 +46,6 @@ export default defineConfig({
               },
               {
                 label: "Add to existing project",
-                badge: "New",
                 link: "/add-to-existing-project/",
               },
               {

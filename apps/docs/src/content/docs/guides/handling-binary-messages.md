@@ -1,8 +1,6 @@
 ---
 title: Handling binary messages
 description: Send raw binary data over the wire
-sidebar:
-    badge: New
 ---
 
 Most PartyKit examples you see assume WebSocket messages are strings, and more specifically, JSON strings:
@@ -56,21 +54,21 @@ In this example, we'll use the [MessagePack](https://msgpack.org/) format and th
 At its simplest, MessagePack is a drop-in replacement for JSON:
 
 ```ts
-import { unpack, pack } from 'msgpackr';
+import { unpack, pack } from "msgpackr";
 
 class Server implements Party.Server {
   onConnect(connection: Party.Connection) {
     const data = { type: "join", id: connection.id };
-//  const message = JSON.stringify(data);
+    //  const message = JSON.stringify(data);
     const message = pack(data);
     this.party.broadcast(message);
   }
 
   onMessage(message: string | ArrayBufferLike) {
-//  if (typeof message === string) {
+    //  if (typeof message === string) {
     if (typeof message !== string) {
-//   const data = JSON.parse(message);
-     const data = unpack(message);
+      //   const data = JSON.parse(message);
+      const data = unpack(message);
     }
   }
 }
@@ -81,10 +79,10 @@ class Server implements Party.Server {
 On the client, you can also use the same library to unpack server responses:
 
 ```ts
-import { unpack } from 'msgpackr/unpack';
+import { unpack } from "msgpackr/unpack";
 
 socket.addEventListener((event) => {
-//const message = JSON.parse(event.data);
+  //const message = JSON.parse(event.data);
   const message = unpack(event.data);
 });
 ```
@@ -118,6 +116,7 @@ onMessage(message: string | ArrayBuffer) {
 ```
 
 And do the same on the client:
+
 ```ts
 socket.addEventListener((event) => {
   const data =

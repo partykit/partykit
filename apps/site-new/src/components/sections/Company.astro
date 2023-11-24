@@ -1,83 +1,81 @@
 ---
+import BlogPost from "../cards/BlogPost.astro";
+import Button from "../atoms/Button.astro";
+import Grid from "../Grid.astro";
+import SectionNav from "../SectionNav.astro";
+import blogposts from "../../blog.json";
 ---
 
-<section id="company">
-  <h2 id="blog-header">Blog posts</h2>
+<Grid>
+  <h2 id="blog-header">Blog</h2>
 
   <div id="blog-posts">
-    <div class="limiter">
-      <div class="post">
-        <h3>
-          <a href="#"
-            >Multi-user database collaboration made easy with Fireproof</a
+    <div id="blog-posts-list">
+      {
+        blogposts.map((post) => (
+          <BlogPost
+            title={post.title}
+            url={post.link}
+            date={new Date(post.pubDate).toDateString()}
           >
-        </h3>
-        <p>16 October 2023</p>
-        <p>
-          PartyKit’s effortless connections are the perfect complement to 🔥
-          Fireproof’s immutable storage
-        </p>
-      </div>
-
-      <div class="post">
-        <h3>
-          <a href="#"
-            >A single-serving waterhole in the Namib Desert using Remix</a>
-        </h3>
-        <p>13 October 2023</p>
-        <p>
-          I work with a window open to a YouTube live stream of a waterhole in
-          Namibia, animals and all. Now it’s multiplayer and hosted on PartyKit
-          using the Remix starter kit
-        </p>
-      </div>
-
-      <div class="post">
-        <h3><a href="#">PartyKit at ViteConf 2023</a></h3>
-        <p>12 October 2023</p>
-        <p>
-          ViteConf attendees sent over 23,000 live reactions using PartyKit.
-        </p>
-      </div>
-
-      <div class="post">
-        <h3>
-          <a href="#"
-            >Exploring AI interaction design and multiplayer with tldraw</a>
-        </h3>
-        <p>4 October 2023</p>
-        <p>
-          How might we interact with AI? I'm exploring this with tldraw, a
-          multiplayer whiteboard app.
-        </p>
-      </div>
-
-      <div class="post">
-        <h3><a href="#">Using Stencil to make a live poll Web Component</a></h3>
-        <p>29 September 2023</p>
-        <p>
-          Building a live poll Web Component with Stencil and PartyKit, plus a
-          meditation on the art of maintenance.
-        </p>
-      </div>
-
-      <div class="post">
-        <h3>
-          <a href="#"
-            >PartyKit raises a span-seed round of $2.5M from Sequoia, Remote
-            First, and more</a>
-        </h3>
-        <p>26 September 2023</p>
-        <p>
-          We're building the developer-friendly, real-time platform for
-          human-to-human and human-to-AI collaboration. Today we're announcing
-          our span-seed round, as well as general availability of our platform!
-        </p>
-      </div>
+            <p>{post.description}</p>
+          </BlogPost>
+        ))
+      }
     </div>
-
-    <nav>
-      <a class="button invert" href="#">More posts</a>
-    </nav>
   </div>
-</section>
+  
+  <div id="blog-link">
+    <Button url="https://blog.partykit.io/">
+      More blog posts
+    </Button>
+  </div>
+  
+</Grid>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  #blog-header {
+    grid-column: 1 / -1;
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    #blog-header {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #blog-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #blog-posts {
+    grid-column: 1 / 3;
+  }
+
+  @media (min-width: 760px) {
+    #blog-posts {
+      grid-column: 1 / 11;
+    }
+  }
+  
+  #blog-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4rem;
+    grid-column: 1 / -1;
+    @include atom();
+    @media (min-width: 1100px) {
+      grid-column: 4 / 9;
+      justify-content: start;
+      margin-left: inherit;
+      margin-right: inherit;
+    }
+  }
+</style>

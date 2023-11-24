@@ -1,0 +1,159 @@
+---
+import "../../styles/variables.scss";
+
+interface Props {
+  name: string;
+  url: string;
+  role: string;
+  img: string;
+  variant: "S" | "M" | "L" | "S-test" | "M-test" | "L-test";
+}
+
+const { name, url, role, variant, img } = Astro.props;
+---
+
+<div class={`quote quote-${variant}`}>
+  <blockquote>
+    <slot />
+  </blockquote>
+  <cite>
+    <div class="avatar"><img src={img} /></div>
+    <div class="author">
+      <a href={url}>{name}</a>
+      <span>{role}</span>
+    </div>
+  </cite>
+</div>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  .quote {
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    @media (min-width: 760px) {
+      padding-bottom: 0;
+      &.quote-S {
+        width: 15%;
+      }
+      &.quote-M {
+        width: 25%;
+      }
+      &.quote-L {
+        width: 35%;
+      }
+      &:nth-child(5n-4) {
+        padding-top: var(--whitespace);
+      }
+      &:nth-child(3n) {
+        padding-top: calc(var(--whitespace) *0.5);
+      }
+       &:nth-child(7n-3) {
+        align-self: end;
+      }
+      &.quote-S-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 12em;
+        }
+      }
+      &.quote-M-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 20em;
+        }
+      }
+      &.quote-L-test {
+        padding-top: 0!important;
+        overflow: hidden;
+        blockquote {
+          width: 28em;
+        }
+      }
+    }
+  }
+
+  .quote blockquote {
+    position: relative;
+    padding: var(--box-padding);
+    padding-bottom: 2rem;
+    background: var(--color-feature-1);
+    border-radius: var(--box-radius);
+    flex-grow: 2;
+  }
+
+  blockquote:before {
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    content: " ";
+    top: 100%;
+    right: calc(100% - 1.75rem);
+    border-style: solid;
+    border-width: 0.5rem 0.5rem 0.5rem 0;
+    border-color: transparent var(--color-feature-1) transparent transparent;
+    transform: rotate(45deg);
+    transform-origin: top right;
+  }
+
+  cite {
+    @include font-S();
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    padding: 1rem 1rem 0 0;
+    gap: 0 1rem;
+    @media (min-width: 760px) {
+      white-space: no-wrap;
+      width: 200%;
+    }
+    @media (min-width: 1100px) {
+      @include font-L();
+    }
+  }
+
+  .avatar {
+    position: relative;
+    display: block;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 100%;
+    background-image: url(/assets/user.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    @media (min-width: 1100px) {
+      top: 0.1rem;
+    }
+    img {
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+    }
+  }
+  
+  .author {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 0 var(--character-width);
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+      &:focus {
+        text-decoration: underline;
+        color: var(--color-feature-2);
+      }
+    }
+  }
+</style>

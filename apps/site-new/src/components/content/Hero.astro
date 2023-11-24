@@ -1,0 +1,169 @@
+---
+import "../../styles/variables.scss";
+import Scene from "../../interactive/Scene";
+import Voronoi from "../../interactive/Voronoi";
+---
+
+<div id="hero">
+  <h1>
+    Turn everything into a <br /><strong>realtime multiplayer app</strong>
+  </h1>
+  <div id="browser">
+    <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
+    <div id="partydemo" class="demo-scene"></div>
+    <Scene client:load />
+    <p>Because everythin<span>g’</span>s be<span>tt</span>er&nbsp;with friends</p>
+  </div>
+</div>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  #hero {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr;
+    height: 85vh;
+    padding-top: 0;
+  }
+
+  @media (min-width: 900px) {
+    #hero {
+      height: 90vh;
+      padding-top: 50px;
+    }
+  }
+
+  h1 {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    z-index: 50;
+    @include font-L();
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
+    padding-top: calc(50px + 2rem);
+    margin: 0 -2rem;
+    strong {
+      @include font-L-bold();
+    }
+  }
+  
+  @media (min-width: 750px) {
+    h1 {
+      @include font-hero();
+      strong {
+        @include font-hero-bold();
+      }
+    }
+  }
+
+  @media (min-width: 900px) {
+    h1 {
+      z-index: 1;
+      justify-content: center;
+      padding-top: 0;
+    }
+  }
+
+  #hero #browser {
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
+    position: relative;
+    box-sizing: border-box;
+    margin: 0 -2rem -1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: start;
+  }
+
+  @media (min-width: 900px) {
+    #hero #browser {
+      z-index: 10;
+      width: 640px;
+      height: 450px;
+      max-height: 90%;
+      margin: auto;
+      overflow: hidden;
+      border-radius: var(--box-radius);
+      background: rgba(245, 245, 245, 0.5);
+      -webkit-backdrop-filter: contrast(50%) brightness(125%) blur(7px);
+      backdrop-filter: contrast(50%) brightness(125%) blur(7px);
+      box-shadow: var(--window-shadow);
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  #hero #browser:before {
+    content: " ";
+    position: absolute;
+    top: 0.5px;
+    left: 0.5px;
+    right: 0.5px;
+    bottom: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.4);
+    border-radius: calc(var(--box-radius) - 1px);
+  }
+
+  #hero #browser #browser-toolbar {
+    @include font-S();
+    position: relative;
+    z-index: 20;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    background: rgba(30, 30, 30, 0.7);
+    border-bottom: 1px solid rgba(50, 50, 50, 0.3);
+    color: white;
+    -webkit-user-select: none;
+  }
+
+  @media (min-width: 900px) {
+    #hero #browser #browser-toolbar {
+      display: flex;
+    }
+  }
+
+  #hero #browser #partydemo {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  #partydemo.demo-voronoi {
+    background-image: url(/assets/PK_Logo_Balloon_3D.png);
+    background-size: 130% auto;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  #hero #browser p {
+    @include font-L();
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    bottom: 2.5rem;
+    text-align: center;
+    z-index: 50;
+  }
+
+  @media (min-width: 900px) {
+    #hero #browser p {
+      bottom: 2rem;
+      z-index: auto;
+      span {
+        position: relative;
+        z-index: 20;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,59 @@
+---
+import "../../styles/variables.scss";
+---
+
+<div id="compatibility">
+  <div id="compatibility-frameworks">
+    <h3>Add PartyKit to&nbsp;everything</h3>
+    <p>
+      It works well with with popular collaboration frameworks and libraries.
+      Y.js, Automerge, Replicache, XState, tldraw, TinyBase, they all Just
+      Work™.
+    </p>
+  </div>
+
+  <div id="compatibility-platforms">
+    <h3>It’s platform agnostic</h3>
+    <p>
+      PartyKit integrates with your current setup. Plays nicely with Vercel,
+      Netlify, AWS, Cloudflare, fly.io, or wherever you host your app. No big
+      rewrite needed.
+    </p>
+  </div>
+
+  <div id="compatibility-standards">
+    <h3>And standards based</h3>
+    <p>
+      WebSockets, Fetch, Request-Response, Wasm. PartyKit uses web standards to
+      guarantee interoperability with all your tools, now and in the future.
+    </p>
+  </div>
+</div>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  #compatibility {
+    grid-column: 1 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 4rem;
+    padding-top: calc(var(--whitespace) *0.5);
+  }
+
+  @media (min-width: 760px) {
+    #compatibility {
+      padding-top: 0;
+      grid-column: 7 / 11;
+      grid-row: 2 / 3;
+    }
+  }
+
+  #compatibility-frameworks,
+  #compatibility-platforms,
+  #compatibility-standards {
+    @include atom();
+  }
+</style>

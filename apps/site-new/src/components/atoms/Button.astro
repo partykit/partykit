@@ -1,0 +1,101 @@
+---
+import "../../styles/variables.scss";
+
+interface Props {
+  url: string;
+  variant?: null | "outline" | "inverted" | "github" | "terminal-github" | "pricingCTA";
+}
+
+const { url, variant = null } = Astro.props;
+---
+
+<a class={variant} href={url}><slot /></a>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  a {
+    display: inline-block;
+    padding: var(--box-padding);
+    width: 100%;
+    border: none;
+    border-radius: 2em;
+    text-align: center;
+    text-decoration: none;
+    background: var(--color-feature-2);
+    color: var(--color-page);
+    font-variation-settings: "wght" 350;
+    cursor: pointer;
+    flex-grow: 2;
+    @media (min-width: 760px) {
+      max-width: var(--atom-width);
+    }
+  }
+  
+  a:focus {
+    outline: none;  
+  }
+
+  a:after {
+    content: "→";
+    position: relative;
+    left: 0;
+    margin-left: var(--character-width);
+    transition: 0.3s ease 0.3s;
+  }
+
+  a:hover,
+  a:focus {
+    color: var(--color-page);
+  }
+
+  a:hover:after,
+  a:focus:after {
+    left: 0.25em;
+  }
+  
+  a.inverted {
+    background: var(--color-page);
+    color: var(--color-feature-2);
+  }
+
+  a.outline {
+    background: transparent;
+    color: inherit;
+    border: 1.5px solid;
+    font-variation-settings: "wght" 550;
+    color: var(--color-feature-2);
+    outline-style: none;
+  }
+  
+  a.outline:after {
+    content: none;
+  }
+
+  a.github {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    border-width: 1px;
+    max-width: 100%;
+    color: var(--color-feature-2);
+    border-color: rgba(160, 160, 160, 0.1);
+    background: rgba(160, 160, 160, 0.2);
+    @include font-S();
+  }
+
+  a.terminal-github {
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    border-width: 1px;
+    color: var(--color-feature-2);
+    border-color: rgba(160, 160, 160, 0.1);
+    background: rgba(160, 160, 160, 0.2);
+    flex-grow: 0;
+    @include font-S();
+  }
+  
+  a.pricingCTA {
+    flex-grow: 0;
+    margin-top: 2rem;
+  }
+</style>

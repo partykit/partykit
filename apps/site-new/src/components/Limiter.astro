@@ -1,0 +1,17 @@
+---
+
+---
+
+<div class="limiter"><slot /></div>
+
+<style>
+  .limiter {
+    gap: 1rem;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      #000 calc(100% - 8rem),
+      transparent calc(100% - 1px)
+    );
+  }
+</style>

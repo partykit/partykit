@@ -2,7 +2,6 @@
 title: Deploy your PartyKit server
 sidebar:
   label: Deploying a PartyKit server
-  badge: New
 description: Deploy your PartyKit app and debug live apps after deployment
 ---
 

@@ -1,210 +1,156 @@
 ---
+import Hero from "../content/Hero-Voronoi.astro";
+import Terminal from "../content/Terminal.astro";
+import MadeWith from "../cards/MadeWith.astro";
+import Button from "../atoms/Button.astro";
+import Compatibility from "../content/Compatibility.astro";
+import Grid from "../Grid.astro";
+import Limiter from "../Limiter.astro";
+import SectionNav from "../SectionNav.astro";
 ---
 
-<section id="introduction">
-  <div id="hero">
-    <h1>
-      Turn everything into a <br /><strong>realtime multiplayer app</strong>
-    </h1>
-    <h1>Because everything's <br />better with friends</h1>
-    <div id="browser">
-      <div id="browser-toolbar">PartyKit_Homepage_Demo.html</div>
-      <div id="partydemo"></div>
-      <p>Because everything's better with friends</p>
-    </div>
-  </div>
+<Grid>
+  <Hero />
 
-  <div id="terminal">
-    <div id="terminal-tabs">
-      <span>New project</span>
-      <span>Add to existing project</span>
-      <a class="button github" href="#">Fork on GitHub</a>
-    </div>
+  <Terminal />
 
-    <figure>
-      <span>npm install partykit</span>
-      <figcaption>Install with npm</figcaption>
-    </figure>
-
-    <figure is:raw>
-      <span>export default class Server {<br> onMessage(message, websocket)
-      {<br> websocket.send("pong");<br> }<br> onRequest(request) {<br> return
-      new Response(`This is room ${party.id}`);<br> }<br> }</span>
-      <figcaption>Write your code</figcaption>
-    </figure>
-
-    <figure>
-      <span>npx partykit dev server.js</span>
-      <figcaption>Develop on localhost</figcaption>
-    </figure>
-
-    <figure>
-      <span>npx partykit deploy server.js --name first-party</span>
-      <figcaption>Deploy to the edge</figcaption>
-    </figure>
-
-    <figure is:raw>
-      <span>curl https://first-party.{yourname}.partykit.dev/party/my-room</span
-      > <figcaption>Try it out</figcaption>
-    </figure>
-  </div>
-
-  <nav id="get-started">
-    <a class="button" href="#">Developer docs</a>
-    <a class="button" href="#">Discord</a>
+  <nav class="get-started">
+    <Button url="https://docs.partykit.io/quickstart">Developer docs</Button>
+    <Button url="https://discord.gg/g5uqHQJc3z">Join our Discord</Button>
   </nav>
 
-  <div id="compatibility">
-    <div id="compatibility-frameworks">
-      <h3>Add PartyKit to&nbsp;everything</h3>
-      <p>
-        It works well with with popular collaboration frameworks and libraries.
-        Y.js, Automerge, Replicache, XState, tldraw, TinyBase, they all Just
-        Work™.
-      </p>
-    </div>
-
-    <div id="compatibility-platforms">
-      <h3>It's platform agnostic</h3>
-      <p>
-        PartyKit integrates with your current setup. Plays nicely with Vercel,
-        Netlify, AWS, Cloudflare, fly.io, or wherever you host your app. No big
-        rewrite needed.
-      </p>
-    </div>
-
-    <div id="compatibility-standards">
-      <h3>And standards based</h3>
-      <p>
-        WebSockets, Fetch, Request-Response, Wasm. PartyKit uses web standards
-        to guarantee interoperability with all your tools, now and in the
-        future.
-      </p>
-    </div>
-  </div>
+  <Compatibility />
 
   <h2 id="examples-header">Made with PartyKit</h2>
 
   <div id="examples">
-    <div class="limiter">
-      <div class="example">
-        <header>
-          <h4><a href="https://sitegpt.ai">SiteGPT</a></h4>
-          <p>by Username</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
+      <Grid variant="nested">
+        <MadeWith
+          title="Stately Sky"
+          url="https://stately.ai"
+          by="Stately"
+          github="https://stately.ai/blog/2023-11-13-introducing-stately-sky"
+          img="/assets/made-with/product_stately.png"
+          imgShade="dark"
+        >
+          <p>Deploy State Machines to the Edge with Stately Sky</p>
+        </MadeWith>
 
-      <div class="example">
-        <header>
-          <h4><a href="https://stately.ai">Stately</a></h4>
-          <p>by Username</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
+        <MadeWith
+          title="SiteGPT"
+          url="https://sitegpt.ai"
+          by="Username"
+          github="https://sitegpt.ai/demo"
+          img="/assets/made-with/product_sitegpt.png"
+          imgShade="light"
+        >
+          <p>Make AI your expert customer support agent</p>
+        </MadeWith>
 
-      <div class="example">
-        <header>
-          <h4><a href="https://www.epicweb.dev">Epic Web</a></h4>
-          <p>by Username</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
+        <MadeWith
+          title="Epic Web Dev"
+          url="https://www.epicweb.dev"
+          by="Kent C Dodds"
+          github="https://www.epicweb.dev"
+          img="/assets/made-with/product_epicweb.png"
+          imgShade="dark"
+        >
+          <p>
+            Everything you need to know to ship modern full-stack web applications
+          </p>
+        </MadeWith>
 
-      <div class="example">
-        <header>
-          <h4><a href="https://viteconf.org/23/replay">ViteConf</a></h4>
-          <p>by Username</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
+        <MadeWith 
+          title="Flow" 
+          url="https://www.flowapp.so" 
+          by="Min Chun Fu" 
+          github="https://www.flowapp.so/value"
+          img="/assets/made-with/product_flow.png"
+          imgShade="light"
+        >
+          <p>Collaborate. Innovate. Celebrate.</p>
+        </MadeWith>
 
-      <div class="example">
-        <header>
-          <h4>
-            <a
-              href="https://twitter.com/thymikee/status/1709857955070333125?s=20"
-              >Live conference feedback app</a
-            >
-          </h4>
-          <p>by Michał Pierzchała</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
+        <MadeWith
+          title="ViteConf"
+          url="https://viteconf.org/23/replay"
+          by="StackBlitz"
+          github="https://viteconf.org/23/"
+          img="/assets/made-with/product_viteconf.png"
+          imgShade="dark"
+        >
+          <p>An immersive and interactive online event loved by tens of thousands of frontend developers.</p>
+        </MadeWith>
 
-      <div class="example">
-        <header>
-          <h4><a href="#">Another example</a></h4>
-          <p>by Another Legend</p>
-        </header>
-        <div>
+        <MadeWith
+          title="Live conference feedback app"
+          url="https://twitter.com/thymikee/status/1709857955070333125?s=20"
+          by="Michał Pierzchała"
+          github="#"
+          img="/assets/made-with/product_pierzchała.png"
+          imgShade="dark"
+        >
           <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
-
-      <div class="example">
-        <header>
-          <h4><a href="#">Another example</a></h4>
-          <p>by Another Legend</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
-
-      <div class="example">
-        <header>
-          <h4><a href="#">Another example</a></h4>
-          <p>by Another Legend</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
-
-      <div class="example">
-        <header>
-          <h4><a href="#">Another example</a></h4>
-          <p>by Another Legend</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
-
-      <div class="example">
-        <header>
-          <h4><a href="#">Another example</a></h4>
-          <p>by Another Legend</p>
-        </header>
-        <div>
-          <p>Does Cool Thing X, integrates with Service Y</p>
-          <a class="button github" href="#">Fork on GitHub</a>
-        </div>
-      </div>
-    </div>
-
-    <nav>
-      <a class="button invert" href="#">More examples</a>
-    </nav>
+        </MadeWith>
+      </Grid>
   </div>
-</section>
+</Grid>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  .get-started {
+    grid-column: 1 / 3;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: start;
+    gap: 1rem;
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    .get-started {
+      grid-column: 2 / 10;
+      margin-top: calc(var(--whitespace) * 0.5);
+      justify-content: center;
+      max-width: 100%;
+    }
+  }
+
+  #examples-header {
+    grid-column: 1 / -1;
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    #examples-header {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #examples-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #examples {
+    grid-column: 1 / 3;
+    padding-top: 0.5rem;
+    margin: 0 -1rem;
+  }
+
+  @media (min-width: 760px) {
+    #examples {
+      grid-column: 1 / 11;
+      margin: 0;
+    }
+  }
+
+  @media (min-width: 760px) {
+    #examples .limiter {
+      height: 50vw;
+    }
+  }
+</style>

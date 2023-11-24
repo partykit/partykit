@@ -1,0 +1,86 @@
+---
+import "../../styles/variables.scss";
+---
+
+<>
+  <h2 id="product-header">Why PartyKit?</h2>
+
+  <div id="product-features">
+    <div class="feature">
+      <h3>More flexible</h3>
+      <p>
+        You bring the code, we do the hosting. Use any package from npm, or
+        write your own servers from scratch.
+      </p>
+    </div>
+
+    <div class="feature">
+      <h3>More functional</h3>
+      <p>
+        Analytics, staging environments, secrets management, logging. All the
+        tools your team needs to build production apps.
+      </p>
+    </div>
+
+    <div class="feature">
+      <h3>More fast</h3>
+      <p>
+        A worldwide edge network with low latency, anywhere on Earth. We enable
+        your ambition, from your first user to millions.
+      </p>
+    </div>
+  </div>
+</>
+
+<style lang="scss">
+  @import "../../styles/shared.scss";
+
+  #product-header {
+    grid-column: 1 / -1;
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    #product-header {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #product-header {
+      grid-column: 2 / 10;
+    }
+  }
+
+  #product-features {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  @media (min-width: 760px) {
+    #product-features {
+      flex-direction: row;
+      grid-row: 2 / 3;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #product-features {
+      grid-column: 2 / 10;
+    }
+  }
+
+  .feature {
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    .feature {
+      margin: 0;
+    }
+  }
+</style>

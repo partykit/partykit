@@ -373,6 +373,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/handling-binary-messages.md": {
+	id: "guides/handling-binary-messages.md";
+  slug: "guides/handling-binary-messages";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/index.md": {
 	id: "guides/index.md";
   slug: "guides";
@@ -404,6 +411,13 @@ declare module 'astro:content' {
 "guides/persisting-state-into-storage.md": {
 	id: "guides/persisting-state-into-storage.md";
   slug: "guides/persisting-state-into-storage";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guides/rate-limiting-messages.md": {
+	id: "guides/rate-limiting-messages.md";
+  slug: "guides/rate-limiting-messages";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">
@@ -446,6 +460,13 @@ declare module 'astro:content' {
 "guides/using-multiple-parties-per-project.md": {
 	id: "guides/using-multiple-parties-per-project.md";
   slug: "guides/using-multiple-parties-per-project";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
+"guides/validating-client-inputs.md": {
+	id: "guides/validating-client-inputs.md";
+  slug: "guides/validating-client-inputs";
   body: string;
   collection: "docs";
   data: InferEntrySchema<"docs">

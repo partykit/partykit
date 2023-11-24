@@ -1,5 +1,15 @@
 [
   {
+    "title": "PartyKit orchestrates Stately's machines in the Sky",
+    "link": "https://blog.partykit.io/posts/partykit-orchestrates-stately/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/partykit-orchestrates-stately/"
+    },
+    "description": "Anders Bech Mellson explains how PartyKit has enabled bringing state machines to the Stately Sky 🌤️",
+    "pubDate": "Wed, 15 Nov 2023 11:00:00 GMT"
+  },
+  {
     "title": "What is Flow, and Why is Partykit being a crucial player?",
     "link": "https://blog.partykit.io/posts/flow-and-partykit-collaboration/",
     "guid": {
@@ -88,55 +98,5 @@
     },
     "description": "Real-time multiplayer cursors on the PartyKit homepage drive an interactive Voronoi diagram. Here’s how it works.",
     "pubDate": "Mon, 25 Sep 2023 13:26:00 GMT"
-  },
-  {
-    "title": "PartyKit, meet TinyBase",
-    "link": "https://blog.partykit.io/posts/partykit-meet-tinybase/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/partykit-meet-tinybase/"
-    },
-    "description": "We're excited to announce TinyBase v4.3, and its integration with PartyKit! 🎈",
-    "pubDate": "Thu, 21 Sep 2023 16:00:00 GMT"
-  },
-  {
-    "title": "AI chatbots for Edward De Bono’s Six Thinking Hats",
-    "link": "https://blog.partykit.io/posts/thinking-hats-and-spatial-chat/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/thinking-hats-and-spatial-chat/"
-    },
-    "description": "AI chatbots with personality, for group teams. The code uses Yjs and is open for you to customise.",
-    "pubDate": "Tue, 19 Sep 2023 15:16:00 GMT"
-  },
-  {
-    "title": "The wisdom of crowds a.k.a. doing your own experiments",
-    "link": "https://blog.partykit.io/posts/wisdom-of-crowds/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/wisdom-of-crowds/"
-    },
-    "description": "Building a simple multiplayer drawing challenge, and what I learnt.",
-    "pubDate": "Thu, 14 Sep 2023 14:03:00 GMT"
-  },
-  {
-    "title": "Party.Server — New API for a programmable primitive",
-    "link": "https://blog.partykit.io/posts/partyserver-api/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/partyserver-api/"
-    },
-    "description": "Why we reimagined PartyKit's API, and how to use it.",
-    "pubDate": "Tue, 12 Sep 2023 15:00:00 GMT"
-  },
-  {
-    "title": "Everything is Better with Friends",
-    "link": "https://blog.partykit.io/posts/everything-is-better-with-friends/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/everything-is-better-with-friends/"
-    },
-    "description": "Announcing the PartyKit founding team!",
-    "pubDate": "Thu, 07 Sep 2023 15:00:00 GMT"
   }
 ]

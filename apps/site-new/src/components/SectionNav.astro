@@ -1,0 +1,24 @@
+---
+
+---
+
+<nav><slot /></nav>
+
+<style>
+  nav {
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  @media (min-width: 760px) {
+    nav {
+      margin-left: auto;
+      margin-right: auto;
+      width: calc(80% - 0.333rem);
+    }
+  }
+</style>
