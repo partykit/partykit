@@ -9,6 +9,8 @@ import Grid from "./Grid.astro";
     <h2>Turn anything into&nbsp;a <br><strong>real-time collaborative web&nbsp;app</strong></h2>
 
     <div class="copy">
+      
+      <p>The future of the internet is collaborative, and we believe in making it possible for every developer to be part of that future.</p>
 
       <p>
          &ldquo;The Web doesn't just connect machines, it connects people&rdquo; <br><a href="https://webfoundation.org/about/community/knight-2008-tbl-speech/">Tim Berners-Lee</a>
@@ -89,10 +91,14 @@ import Grid from "./Grid.astro";
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 2rem;
     @include atom();
     text-align: center;
     margin: calc(var(--whitespace) *0.5) auto;
+    p {
+      max-width: 28em;
+      margin: 0 auto;
+    }
     a {
       text-decoration: underline;
       &:hover, &:focus {
