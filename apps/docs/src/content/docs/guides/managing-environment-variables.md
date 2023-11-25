@@ -9,7 +9,7 @@ There are two ways to manage environment variables in PartyKit.
 
 ## Deploying secrets to PartyKit
 
-PartyKit can stor your app's secrets. To do so, run the following command in your project directory (here we assume that the variable name is `API_KEY`):
+PartyKit can store your app's secrets. To do so, run the following command in your project directory (here we assume that the variable name is `API_KEY`):
 
 ```bash
 npx partykit env add API_KEY
