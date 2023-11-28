@@ -108,9 +108,11 @@ export function decodeMessage(message: string | ArrayBufferLike) {
 
 // creates a msgpack message
 export function encodePartyMessage(data: z.infer<typeof partyMessageSchema>) {
-  return encode(partyMessageSchema.parse(data));
+  //return encode(partyMessageSchema.parse(data));
+  return encode(data);
 }
 
 export function encodeClientMessage(data: z.infer<typeof clientMessageSchema>) {
-  return encode(clientMessageSchema.parse(data));
+  //return encode(clientMessageSchema.parse(data));
+  return encode(data);
 }
