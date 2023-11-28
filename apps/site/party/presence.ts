@@ -78,7 +78,7 @@ export default class PresenceServer implements Party.Server {
 
   makeSyncMessage() {
     // Build users list
-    let users = <Record<string, User>>{};
+    const users = <Record<string, User>>{};
     for (const connection of this.party.getConnections()) {
       const user = this.getUser(connection);
       users[connection.id] = user;
