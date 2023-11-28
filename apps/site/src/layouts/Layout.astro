@@ -15,6 +15,7 @@ const { title } = Astro.props;
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
   </head>
   <body style="position: relative;">
     <slot />
@@ -31,10 +32,13 @@ const { title } = Astro.props;
   html {
     color: var(--color-text);
     background: var(--color-page);
-    background: linear-gradient(var(--color-feature-2) 50%, var(--color-page) 51%);
+    background: linear-gradient(
+      var(--color-feature-2) 50%,
+      var(--color-page) 51%
+    );
     @include font-core();
   }
-  
+
   @media (max-width: 759px) {
     body.nav-open {
       overflow: hidden;
@@ -47,12 +51,12 @@ const { title } = Astro.props;
     flex-direction: column;
     align-items: stretch;
     text-align: center;
-    margin: var(--whitespace) 0 calc(var(--whitespace) *0.5);
+    margin: var(--whitespace) 0 calc(var(--whitespace) * 0.5);
     strong {
       @include font-XL-bold();
     }
   }
-  
+
   @media (min-width: 760px) {
     h2 {
       margin-bottom: var(--whitespace);
@@ -69,13 +73,13 @@ const { title } = Astro.props;
       @include font-L-bold();
     }
   }
-  
+
   @media (min-width: 760px) {
     h3 {
       margin-top: 0;
     }
   }
-  
+
   a {
     text-decoration-thickness: 1px;
     text-underline-offset: 0.1em;
@@ -91,7 +95,7 @@ const { title } = Astro.props;
       transition: inherit;
     }
   }
-  
+
   .icon {
     display: inline-flex;
     flex-direction: column;
@@ -125,7 +129,7 @@ const { title } = Astro.props;
     align-items: stretch;
     width: 100%;
     overflow: hidden;
-    padding-bottom: calc(var(--whitespace) *0.5);
+    padding-bottom: calc(var(--whitespace) * 0.5);
     background: var(--color-page);
   }
 
