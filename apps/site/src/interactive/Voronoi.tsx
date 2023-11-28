@@ -46,7 +46,7 @@ function Diagram(props: {
     });
 
     // If there aren't any other points, put a virtual point in the center of the window so the user has something to play with
-    if (points.length <= 1) {
+    if (points.length < 1) {
       points.push([
         containerDimensions.width / 2,
         containerDimensions.height / 2,
@@ -198,7 +198,7 @@ export default function Voronoi() {
       }}
     >
       {count > 0 && (
-        <div className="absolute pt-16 right-4 pointer-events-none flex items-center">
+        <div className="absolute pt-20 md:pt-16 right-2 pointer-events-none flex items-center">
           <span className="text-2xl">{count}&times;</span>
           <span className="text-5xl">🎈</span>
         </div>
