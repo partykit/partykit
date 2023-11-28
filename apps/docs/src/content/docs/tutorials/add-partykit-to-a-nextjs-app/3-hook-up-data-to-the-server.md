@@ -5,7 +5,7 @@ sidebar:
 description: In this step you will connect UI and the PartyKit server
 ---
 
-In the previous step you've set up the PartyKit server to handle messages.In this step you will connect it to the UI. When the user submits the poll form, the Next.js app will send it to your PartyKit server.
+In the previous step, you've set up the PartyKit server to handle messages. In this step, you will connect it to the UI. When the user submits the poll form, the Next.js app will send it to your PartyKit server.
 
 ## Connect the poll form
 
