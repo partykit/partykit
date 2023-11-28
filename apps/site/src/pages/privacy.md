@@ -1,13 +1,13 @@
 ---
 title: Privacy Policy
-layout: ../layouts/Markup.astro
+layout: ../layouts/Document.astro
 seo:
-  title: Privacy Policy
+  title: Privacy policy
   description: PartyKit's privacy policy
 updated_date: 2023-07-24
 ---
 
-# Privacy Policy
+# Privacy policy
 
 Effective as of <time datetime='2023-07-24'>24 July 2023</time>.
 
@@ -73,7 +73,7 @@ We employ a number of technical, organizational and physical safeguards designed
 
 We are headquartered in the United States and may use service providers that operate in other countries. Your personal information may be transferred to the United States or other locations where privacy laws may not be as protective as those in your state, province, or country.
 
-#### Children 
+#### Children
 
 The Service is not intended for use by anyone under 16 years of age. If you are a parent or guardian of a child from whom you believe we have collected personal information in a manner prohibited by law, please contact us. If we learn that we have collected personal information through the Service from a child without the consent of the child’s parent or guardian as required by law, we will comply with applicable legal requirements to delete the information.
 
@@ -137,7 +137,7 @@ We may use your personal information for the following purposes or as otherwise 
 
 **Research and development.** We may use your personal information for research and development purposes, including to analyze and improve the Service and our business and to develop new products and services. As part of these activities, we may create aggregated, de-identified and/or anonymized data from personal information we collect. We make personal information into de-identified or anonymized data by removing information that makes the data personally identifiable to you. We may use this aggregated, de-identified or otherwise anonymized data and share it with third parties for our lawful business purposes, including to analyze and improve the Service and promote our business.
 
-**Direct marketing.** We and our service providers may send you PartyKit-related or other direct marketing communications as permitted by law, including by email. You may opt-out of our marketing communications as described in the <a href="privacy#your-choices">**Opt-out of marketing**</a> section below.  
+**Direct marketing.** We and our service providers may send you PartyKit-related or other direct marketing communications as permitted by law, including by email. You may opt-out of our marketing communications as described in the <a href="privacy#your-choices">**Opt-out of marketing**</a> section below.
 
 **Service improvement and analytics.** We may use your personal information to analyze your usage of the Service, improve the Service, improve the rest of our business, help us understand user activity on the Service, including which pages are most and least visited and how visitors move around the Service, as well as user interactions with our emails, and to develop new products and services.
 
@@ -347,7 +347,7 @@ When we no longer require the personal information, we have collected about you,
 
 #### Other information
 
-**No obligation to provide personal information.** You do not have to provide personal information to us. However where we *need* to process your personal information either to comply with applicable law or to deliver our Service to you, and you fail to provide that personal information when requested, we may not be able to provide some or all of our Service to you. We will notify you if this is the case at the time.
+**No obligation to provide personal information.** You do not have to provide personal information to us. However where we _need_ to process your personal information either to comply with applicable law or to deliver our Service to you, and you fail to provide that personal information when requested, we may not be able to provide some or all of our Service to you. We will notify you if this is the case at the time.
 
 **No sensitive personal information.** We ask that you not provide us with any sensitive personal information (e.g., social security numbers, information related to racial or ethnic origin, political opinions, religion or other beliefs, health, biometrics or genetic characteristics, criminal background or trade union membership) on or through the Service, or otherwise to us. If you provide us with any sensitive personal information to us when you use the Service, you must consent to our processing and use of such sensitive personal information in accordance with this Privacy Policy. If you do not consent to our processing and use of such sensitive personal information, you must not submit such sensitive personal information through our Service.
 
@@ -355,7 +355,7 @@ When we no longer require the personal information, we have collected about you,
 
 **Security**. We have put in place procedures designed to deal with breaches of personal information. In the event of such breaches, we have procedures in place to work with applicable regulators. In addition, in certain circumstances (including where we are legally required to do so), we may notify you of breaches affecting your personal information.
 
-<u>Your rights</u>
+### Your rights
 
 **General.** European data protection laws give you certain additional rights regarding your personal information. If you are located in Europe, you may ask us to take any of the following actions in relation to your personal information that we hold:
 
@@ -375,17 +375,17 @@ When we no longer require the personal information, we have collected about you,
 - For users in the UK – the contact information for the UK data protection regulator is below:
 
 The Information Commissioner’s Office<br>
-Water Lane<br> 
+Water Lane<br>
 Wycliffe House<br>
 Wilmslow<br>
-Cheshire<br> 
+Cheshire<br>
 SK9 5AFA
 
 Tel. [+44 303 123 1113](tel:+44-303-123-1113)
 
 Website: [ico.org.uk/make-a-complaint/](https://ico.org.uk/make-a-complaint/)
 
-Data processing outside Europe
+#### Data processing outside Europe
 
 We are a US-based company and many of our service providers, advisers, partners or other recipients of data are also based in the US. This means that, if you use the Services, your personal information will necessarily be accessed and processed in the US. It may also be provided to recipients in other countries outside Europe.
 
@@ -395,16 +395,16 @@ Where we share your personal information with third parties who are based outsid
 
 - **Transfers to territories with an adequacy decision.** We may transfer your personal information to countries or territories whose laws have been deemed to provide an adequate level of protection for personal information by the European Commission or UK Government (as and where applicable) (from time to time).
 - **Transfers to territories without an adequacy decision.**
-    - We may transfer your personal information to countries or territories whose laws have **not been deemed to provide such an adequate level of protection (e.g., the US, see above).
-    - However, in these cases:
-        - we may use specific appropriate safeguards, which are designed to give personal information effectively the same protection it has in Europe – for example, standard-form contracts approved by relevant authorities for this purpose; or
-        - in limited circumstances, we may rely on an exception, or ‘derogation’, which permits us to transfer your personal information to such country despite the absence of an ‘adequacy decision’ or ‘appropriate safeguards’ – for example, reliance on your explicit consent to that transfer.
+  - We may transfer your personal information to countries or territories whose laws have \*\*not been deemed to provide such an adequate level of protection (e.g., the US, see above).
+  - However, in these cases:
+    - we may use specific appropriate safeguards, which are designed to give personal information effectively the same protection it has in Europe – for example, standard-form contracts approved by relevant authorities for this purpose; or
+    - in limited circumstances, we may rely on an exception, or ‘derogation’, which permits us to transfer your personal information to such country despite the absence of an ‘adequacy decision’ or ‘appropriate safeguards’ – for example, reliance on your explicit consent to that transfer.
 
 You may contact us if you want further information on the specific mechanism used by us when transferring your personal information out of Europe.
 
 ## Cookie Notice
 
-*Notice last updated: <time>24 July 2023</time>.*
+_Notice last updated: <time>24 July 2023</time>._
 
 ### 1. Information on how we use cookies.
 
@@ -483,7 +483,7 @@ Strictly necessary cookies do not require your consent. For analytics cookies, w
 
 If you do not wish to give consent or wish to withdraw your consent to any performance or targeting and functionality cookies at any time, you will need to delete, and block or disable cookies via your browser settings; see below for more information on how to do this. Please note that disabling these cookies will affect the functionality of the Site and may prevent you from being able to access certain features on the Site.
 
-#### 7. What type of cookies do we use and why?
+### 7. What type of cookies do we use and why?
 
 We use “analytics” and “strictly necessary” cookies:
 
@@ -547,11 +547,11 @@ A cookie or similar technology will exist for different periods of time dependin
 
 In addition to cookies, our Sites may use other technologies, such as Flash technology to pixel tags to collect information automatically.
 
-*Browser Web Storage*
+_Browser Web Storage_
 
 We may use browser web storage (including via HTML5), also known as locally stored objects (“LSOs”), for similar purposes as cookies. Browser web storage enables the storage of a larger amount of data than cookies. Your web browser may provide functionality to clear your browser web storage.
 
-*Web Beacons*
+_Web Beacons_
 
 We may also use web beacons (which are also known as pixel tags and clear GIFs) on our Sites and in our HTML formatted emails to track the actions of users on our Sites and interactions with our emails. Unlike cookies, which are stored on the hard drive of your computer or mobile device by a website, pixel tags are embedded invisibly on webpages or within HTML formatted emails. Pixel tags are used to demonstrate that a webpage was accessed or that certain content was viewed, typically to measure the success of our marketing campaigns or engagement with our emails and to compile statistics about usage of the Sites, so that we can manage our content more effectively.
 
@@ -562,11 +562,3 @@ We may need to update our cookie notice from time to time if we decide to use co
 For more information about how we process personal information collected from cookies please refer to our website [privacy policy](https://partykit.io/privacy).
 
 If you have any questions or would like more information about the ways we use cookies please contact us at [contact@partykit.io](mailto:contact@partykit.io).
-
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
