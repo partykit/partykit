@@ -48,7 +48,7 @@ export type ClientMessage =
     }
   | {
       type: "update";
-      presence: Partial<Presence>;
+      presence: Presence;
     };
 
 // Schema created with https://transform.tools/typescript-to-zod
@@ -96,7 +96,7 @@ export const clientMessageSchema = z.union([
   }),
   z.object({
     type: z.literal("update"),
-    presence: presenceSchema.partial(),
+    presence: presenceSchema,
   }),
 ]);
 
@@ -108,9 +108,11 @@ export function decodeMessage(message: string | ArrayBufferLike) {
 
 // creates a msgpack message
 export function encodePartyMessage(data: z.infer<typeof partyMessageSchema>) {
-  return encode(partyMessageSchema.parse(data));
+  //return encode(partyMessageSchema.parse(data));
+  return encode(data);
 }
 
 export function encodeClientMessage(data: z.infer<typeof clientMessageSchema>) {
-  return encode(clientMessageSchema.parse(data));
+  //return encode(clientMessageSchema.parse(data));
+  return encode(data);
 }

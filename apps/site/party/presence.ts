@@ -30,7 +30,7 @@ const CORS = {
 export default class PresenceServer implements Party.Server {
   constructor(public party: Party.Party) {}
   options: Party.ServerOptions = {
-    hibernate: true,
+    hibernate: false,
   };
 
   // pending updates are stored in memory and sent every tick
@@ -47,10 +47,13 @@ export default class PresenceServer implements Party.Server {
   ): void | Promise<void> {
     const metadata = { country: request.cf?.country ?? null } as Metadata;
 
-    // Stash the metdata on the websocket
-    connection.setState({ metadata });
+    // Stash the metadata on the websocket
+    connection.setState((prevState: User) => ({ ...prevState, metadata }));
 
-    //console.log("onConnect", this.party.id, connection.id, country);
+    const sync = this.makeSyncMessage();
+    connection.send(encodePartyMessage(sync));
+
+    //console.log("onConnect", this.party.id, connection.id, request.cf?.country);
   }
 
   enqueueAdd(id: string, user: User) {
@@ -71,6 +74,20 @@ export default class PresenceServer implements Party.Server {
       presence: connection.state?.presence ?? ({} as Presence),
       metadata: connection.state?.metadata ?? ({} as Metadata),
     };
+  }
+
+  makeSyncMessage() {
+    // Build users list
+    const users = <Record<string, User>>{};
+    for (const connection of this.party.getConnections()) {
+      const user = this.getUser(connection);
+      users[connection.id] = user;
+    }
+
+    return {
+      type: "sync",
+      users,
+    } satisfies PartyMessage;
   }
 
   onMessage(
@@ -96,28 +113,19 @@ export default class PresenceServer implements Party.Server {
         }));
         this.enqueueAdd(connection.id, this.getUser(connection));
         // Reply with the current presence of all connections, including self
-        const sync = {
-          type: "sync",
-          users: [...this.party.getConnections()].reduce(
-            (acc, user) => ({ ...acc, [user.id]: this.getUser(user) }),
-            {},
-          ),
-        } satisfies PartyMessage;
+        const sync = this.makeSyncMessage();
         //connection.send(JSON.stringify(sync));
+        //console.log("sync", JSON.stringify(sync, null, 2));
         connection.send(encodePartyMessage(sync));
         break;
       }
       case "update": {
-        // A presence update
+        // A presence update, replacing the existing presence
         connection.setState((prevState) => {
-          const presence = {
-            ...(prevState?.presence ?? ({} as Presence)),
-            ...message.presence,
-          };
-          this.enqueuePresence(connection.id, presence);
+          this.enqueuePresence(connection.id, message.presence);
           return {
             ...prevState,
-            presence,
+            presence: message.presence,
           };
         });
         break;
