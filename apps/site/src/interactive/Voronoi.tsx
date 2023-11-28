@@ -153,8 +153,9 @@ export default function Voronoi() {
 
   const count = usePresenceWithCursors(
     (state) =>
-      [...state.otherUsers.keys()].length +
-      (state.myself?.presence?.cursor ? 1 : 0),
+      Array.from(state.otherUsers.values()).filter(
+        (user) => user.presence?.cursor,
+      ).length + (state.myself?.presence?.cursor ? 1 : 0),
   );
 
   useEffect(() => {
