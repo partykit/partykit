@@ -6,7 +6,7 @@ export default function RoomContainer() {
   <PresenceProvider
   host="partykit-site.genmon.partykit.dev"
   //host="127.0.0.1:1999"
-  room="default"
+  room="default-20231128"
   presence={{
     cursor: null,
     message: null,
