@@ -7,57 +7,60 @@ import Button from "../atoms/Button.astro";
   <h2 id="pricing-header">Pricing</h2>
 
   <div id="pricing">
-  
     <div class="pricing-plan">
-
       <h3>Individual</h3>
-    
+
       <p class="pricing-price">Free</p>
-    
+
       <ul class="pricing-features">
         <li>Deploy to our global edge platform</li>
         <li>Generous bundled usage</li>
       </ul>
-      
+
       <ul class="pricing-limitations">
         <li>Up to 10 live projects</li>
       </ul>
-      
-      <Button variant="pricingCTA" url="https://docs.partykit.io/quickstart/">Get started</Button>
-      
+
+      <Button variant="pricingCTA" url="https://docs.partykit.io/quickstart/">
+        Get started
+      </Button>
     </div>
 
     <hr />
-  
-    <div class="pricing-plan">
 
+    <div class="pricing-plan">
       <h3>Pro</h3>
-    
-      <p class="pricing-price">&dollar;10 <small>per developer / month</small></p>
-    
+
+      <p class="pricing-price">
+        &dollar;10 <small>per developer / month</small>
+      </p>
+
       <ul class="pricing-features">
         <li>Everything from Individual</li>
         <li>Team deployments</li>
         <li>Bundled + usage-based pricing</li>
         <li>Custom domains</li>
       </ul>
-          
+
       <ul class="pricing-limitations">
         <li>Up to 100 live projects</li>
       </ul>
 
-      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Schedule a call</Button>
-    
+      <Button
+        variant="pricingCTA"
+        url="https://cal.com/threepointone/welcome-to-the-party"
+      >
+        Schedule a call
+      </Button>
     </div>
 
     <hr />
-  
-    <div class="pricing-plan">
 
+    <div class="pricing-plan">
       <h3>Enterprise</h3>
-    
+
       <p class="pricing-price">Call us</p>
-    
+
       <ul class="pricing-features">
         <li>Everything from Pro</li>
         <li>Custom infrastructure</li>
@@ -67,10 +70,13 @@ import Button from "../atoms/Button.astro";
         <li>Unlimited projects</li>
       </ul>
 
-      <Button variant="pricingCTA" url="mailto:contact@partykit.io?subject=Let's Party!">Schedule a call</Button>
-      
+      <Button
+        variant="pricingCTA"
+        url="https://cal.com/threepointone/welcome-to-the-party"
+      >
+        Schedule a call
+      </Button>
     </div>
-    
   </div>
 </>
 
@@ -120,7 +126,7 @@ import Button from "../atoms/Button.astro";
       grid-column: 2 / 10;
     }
   }
-  
+
   .pricing-plan {
     @include atom();
     display: flex;
@@ -133,11 +139,11 @@ import Button from "../atoms/Button.astro";
       margin: 0;
     }
   }
-  
+
   h3 {
     margin-bottom: 0;
   }
-  
+
   hr {
     @include atom();
     height: 0.5px;
@@ -151,13 +157,13 @@ import Button from "../atoms/Button.astro";
       height: 100%;
     }
   }
-  
+
   .pricing-price {
     @include font-L();
     color: var(--color-feature-2);
     margin-bottom: 2rem;
   }
-  
+
   .pricing-price small {
     @include font-core();
     color: var(--color-text);
@@ -167,7 +173,7 @@ import Button from "../atoms/Button.astro";
   .pricing-features {
     margin: 0.5rem 0 2rem 0;
   }
-  
+
   .pricing-limitations {
     margin-top: auto;
   }
@@ -192,9 +198,8 @@ import Button from "../atoms/Button.astro";
   .pricing-limitations li:before {
     content: "";
   }
-  
+
   .pricing-limitations li.support:before {
     content: "";
   }
-
 </style>

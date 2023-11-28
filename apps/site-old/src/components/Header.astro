@@ -1,0 +1,40 @@
+---
+import NavLink from "./NavLink.astro";
+import IconTwitter from "./IconTwitter.astro";
+import IconGitHub from "./IconGitHub.astro";
+import IconDiscord from "./IconDiscord.astro";
+import HeaderBanner from "./HeaderBanner.astro";
+const { title, subtitle, text, variant = 1 } = Astro.props;
+---
+
+{
+  variant === 1 && (
+    <>
+      <header class="gray-0 px3 py1 flex items-center justify-between">
+        <a href="/" class="py3 pl3 pr2 link gray-0 fw6 f-logo">
+          PartyKit
+        </a>
+        <nav class="g2 g3-s py3 pr3 pl2 flex">
+          <NavLink href="https://docs.partykit.io">
+            <span class="fw6">Docs</span>
+          </NavLink>
+          <div style="width: 1px; background-color: #212121;" />
+          <NavLink href="https://blog.partykit.io">
+            <span class="fw6">Blog</span>
+          </NavLink>
+          <div style="width: 1px; background-color: #212121;" />
+          <NavLink href="https://twitter.com/partykit_io">
+            <IconTwitter />
+          </NavLink>
+          <NavLink href="https://github.com/partykit/partykit/">
+            <IconGitHub />
+          </NavLink>
+          <NavLink href="https://discord.gg/GJwKKTcQ7W">
+            <IconDiscord />
+          </NavLink>
+        </nav>
+      </header>
+      <HeaderBanner />
+    </>
+  )
+}
