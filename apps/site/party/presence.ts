@@ -153,11 +153,11 @@ export default class PresenceServer implements Party.Server {
     });
   }
 
-  onClose(connection: ConnectionWithUser): void | Promise<void> {
+  onClose(connection: ConnectionWithUser) {
     this.leave(connection);
   }
 
-  onError(connection: ConnectionWithUser, err: Error): void | Promise<void> {
+  onError(connection: ConnectionWithUser) {
     this.leave(connection);
   }
 
