@@ -29,7 +29,7 @@ type PresenceStoreType = {
   myself: User | null;
   setMyId: (myId: string) => void;
 
-  // Flag to indicate whether the "sync" message has been received
+  // Flag to indicate whether a "sync" message has been received
   synced: boolean;
   setSynced: (synced: boolean) => void;
 
@@ -133,7 +133,7 @@ export const PresenceContext = createContext({});
 export default function PresenceProvider(props: {
   host: string;
   room: string;
-  presence: Presence; // current user's initial presence
+  presence: Presence; // current user's initial presence, only name and color
   children: React.ReactNode;
 }) {
   const {
@@ -144,6 +144,7 @@ export default function PresenceProvider(props: {
     removeUser,
     pendingUpdate,
     clearPendingUpdate,
+    synced,
     setSynced,
   } = usePresence();
 
@@ -181,6 +182,7 @@ export default function PresenceProvider(props: {
 
     switch (message.type) {
       case "sync":
+        setMyId(socket.id);
         // create Map from message.users (which is id -> User)
         setUsers(new Map<string, User>(Object.entries(message.users)));
         setSynced(true);
@@ -195,20 +197,24 @@ export default function PresenceProvider(props: {
     host: props.host,
     party: "presence",
     room: props.room,
+    // Initial presence is sent in the query string
+    query: { name: props.presence.name, color: props.presence.color },
     onMessage: (event) => handleMessage(event),
   });
 
-  // Send "join" message when the socket connects
+  // Send initial presence when syncing
   useEffect(() => {
     if (socket) {
       setMyId(socket.id);
-      const message: ClientMessage = {
-        type: "join",
-        presence: props.presence,
-      };
-      socket.send(encodeClientMessage(message));
+      if (!synced) {
+        const message: ClientMessage = {
+          type: "update",
+          presence: props.presence,
+        };
+        socket.send(encodeClientMessage(message));
+      }
     }
-  }, [props.presence, setMyId, socket]);
+  }, [props.presence, setMyId, synced, socket]);
 
   useEffect(() => {
     if (!pendingUpdate) return;

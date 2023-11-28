@@ -30,7 +30,7 @@ const CORS = {
 export default class PresenceServer implements Party.Server {
   constructor(public party: Party.Party) {}
   options: Party.ServerOptions = {
-    hibernate: false,
+    hibernate: true,
   };
 
   // pending updates are stored in memory and sent every tick
@@ -47,11 +47,20 @@ export default class PresenceServer implements Party.Server {
   ): void | Promise<void> {
     const metadata = { country: request.cf?.country ?? null } as Metadata;
 
-    // Stash the metadata on the websocket
-    connection.setState((prevState: User) => ({ ...prevState, metadata }));
+    // The client may set name and color (from the presence object) in the query string
+    const params = new URLSearchParams(request.url.split("?")[1]);
+    const presence = {
+      name: params.get("name") ?? undefined,
+      color: params.get("color") ?? undefined,
+    } as Presence;
 
-    const sync = this.makeSyncMessage();
-    connection.send(encodePartyMessage(sync));
+    // Stash the metadata and the presence on the websocket
+    connection.setState((prevState: User) => ({
+      presence: { ...prevState?.presence, ...presence },
+      metadata,
+    }));
+
+    this.join(connection);
 
     //console.log("onConnect", this.party.id, connection.id, request.cf?.country);
   }
@@ -90,6 +99,27 @@ export default class PresenceServer implements Party.Server {
     } satisfies PartyMessage;
   }
 
+  join(connection: ConnectionWithUser) {
+    // Keep the presence on the websocket. onConnect will add metadata
+    connection.setState((prevState) => ({
+      ...prevState,
+      presence: connection.state?.presence ?? ({} as Presence),
+    }));
+    this.enqueueAdd(connection.id, this.getUser(connection));
+    // Reply with the current presence of all connections, including self
+    const sync = this.makeSyncMessage();
+    //connection.send(JSON.stringify(sync));
+    //console.log("sync", JSON.stringify(sync, null, 2));
+    connection.send(encodePartyMessage(sync));
+  }
+
+  leave(connection: ConnectionWithUser) {
+    this.enqueueRemove(connection.id);
+    this.broadcast().catch((err) => {
+      console.error(err);
+    });
+  }
+
   onMessage(
     msg: string | ArrayBufferLike,
     connection: ConnectionWithUser,
@@ -105,20 +135,6 @@ export default class PresenceServer implements Party.Server {
       JSON.stringify(message, null, 2)
     );*/
     switch (message.type) {
-      case "join": {
-        // Keep the presence on the websocket. onConnect will add metadata
-        connection.setState((prevState) => ({
-          ...prevState,
-          presence: message.presence,
-        }));
-        this.enqueueAdd(connection.id, this.getUser(connection));
-        // Reply with the current presence of all connections, including self
-        const sync = this.makeSyncMessage();
-        //connection.send(JSON.stringify(sync));
-        //console.log("sync", JSON.stringify(sync, null, 2));
-        connection.send(encodePartyMessage(sync));
-        break;
-      }
       case "update": {
         // A presence update, replacing the existing presence
         connection.setState((prevState) => {
@@ -130,9 +146,6 @@ export default class PresenceServer implements Party.Server {
         });
         break;
       }
-      default: {
-        return;
-      }
     }
 
     this.broadcast().catch((err) => {
@@ -141,10 +154,11 @@ export default class PresenceServer implements Party.Server {
   }
 
   onClose(connection: ConnectionWithUser): void | Promise<void> {
-    this.enqueueRemove(connection.id);
-    this.broadcast().catch((err) => {
-      console.error(err);
-    });
+    this.leave(connection);
+  }
+
+  onError(connection: ConnectionWithUser, err: Error): void | Promise<void> {
+    this.leave(connection);
   }
 
   async broadcast() {

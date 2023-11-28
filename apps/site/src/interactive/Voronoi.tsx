@@ -151,6 +151,12 @@ export default function Voronoi() {
   const svgRef = useRef<SVGSVGElement>(null);
   const svgParentRef = useRef<HTMLDivElement>(null);
 
+  const count = usePresenceWithCursors(
+    (state) =>
+      [...state.otherUsers.keys()].length +
+      (state.myself?.presence?.cursor ? 1 : 0),
+  );
+
   useEffect(() => {
     const onResize = () => {
       if (!svgParentRef.current) return;
@@ -180,7 +186,7 @@ export default function Voronoi() {
   }, []);*/
 
   //const count = Object.keys(others).length + (self ? 1 : 0);
-  const count = 0;
+  //const count = 0;
 
   return (
     <div
@@ -192,7 +198,7 @@ export default function Voronoi() {
       }}
     >
       {count > 0 && (
-        <div className="absolute top-4 left-4 pointer-events-none flex items-center">
+        <div className="absolute pt-16 right-4 pointer-events-none flex items-center">
           <span className="text-2xl">{count}&times;</span>
           <span className="text-5xl">🎈</span>
         </div>
