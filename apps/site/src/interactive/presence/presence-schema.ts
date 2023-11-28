@@ -9,10 +9,10 @@ export type Cursor = {
 
 // user-modifiable fields
 export type Presence = {
-  cursor: Cursor | null;
-  message: string | null;
   name: string;
   color: string;
+  cursor?: Cursor | null;
+  message?: string | null;
   spotlightColor?: string;
 };
 
@@ -40,18 +40,13 @@ export type PartyMessage =
       remove?: string[];
     };
 
-export type ClientMessage =
-  | {
-      // joining is explicit so that presence can be initialized
-      type: "join";
-      presence: Presence;
-    }
-  | {
-      type: "update";
-      presence: Presence;
-    };
+export type ClientMessage = {
+  type: "update";
+  presence: Presence;
+};
 
 // Schema created with https://transform.tools/typescript-to-zod
+// and then z.union -> z.discriminatedUnion with an additional "type" as first arg
 
 export const cursorSchema = z.object({
   x: z.number(),
@@ -60,10 +55,10 @@ export const cursorSchema = z.object({
 });
 
 export const presenceSchema = z.object({
-  cursor: cursorSchema.nullable(),
-  message: z.string().nullable(),
   name: z.string(),
   color: z.string(),
+  cursor: cursorSchema.optional().nullable(),
+  message: z.string().optional().nullable(),
   spotlightColor: z.string().optional(),
 });
 
@@ -76,7 +71,7 @@ export const userSchema = z.object({
   metadata: metadataSchema,
 });
 
-export const partyMessageSchema = z.union([
+export const partyMessageSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("sync"),
     users: z.record(userSchema),
@@ -89,16 +84,10 @@ export const partyMessageSchema = z.union([
   }),
 ]);
 
-export const clientMessageSchema = z.union([
-  z.object({
-    type: z.literal("join"),
-    presence: presenceSchema,
-  }),
-  z.object({
-    type: z.literal("update"),
-    presence: presenceSchema,
-  }),
-]);
+export const clientMessageSchema = z.object({
+  type: z.literal("update"),
+  presence: presenceSchema,
+});
 
 // parse incoming message (supports json and msgpack)
 export function decodeMessage(message: string | ArrayBufferLike) {
@@ -108,11 +97,11 @@ export function decodeMessage(message: string | ArrayBufferLike) {
 
 // creates a msgpack message
 export function encodePartyMessage(data: z.infer<typeof partyMessageSchema>) {
-  //return encode(partyMessageSchema.parse(data));
-  return encode(data);
+  return encode(partyMessageSchema.parse(data));
+  //return encode(data);
 }
 
 export function encodeClientMessage(data: z.infer<typeof clientMessageSchema>) {
-  //return encode(clientMessageSchema.parse(data));
-  return encode(data);
+  return encode(clientMessageSchema.parse(data));
+  //return encode(data);
 }
