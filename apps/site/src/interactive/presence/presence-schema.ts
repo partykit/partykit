@@ -48,7 +48,7 @@ export type ClientMessage =
     }
   | {
       type: "update";
-      presence: Partial<Presence>;
+      presence: Presence;
     };
 
 // Schema created with https://transform.tools/typescript-to-zod
@@ -96,7 +96,7 @@ export const clientMessageSchema = z.union([
   }),
   z.object({
     type: z.literal("update"),
-    presence: presenceSchema.partial(),
+    presence: presenceSchema,
   }),
 ]);
 

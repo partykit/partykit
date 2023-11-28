@@ -35,7 +35,7 @@ type PresenceStoreType = {
 
   // A local update to the presence of the current user,
   // ready to the sent to the server as an "update" ClientMessage
-  pendingUpdate: Partial<Presence> | null;
+  pendingUpdate: Presence | null;
   clearPendingUpdate: () => void;
 
   // Makes an optimistic local update of the presence of the current user,
@@ -78,7 +78,7 @@ export const usePresence = create<PresenceStoreType>((set) => ({
         ...state.myself,
         presence,
       };
-      return { myself, pendingUpdate: partial };
+      return { myself, pendingUpdate: presence };
     }),
 
   otherUsers: new Map() as UserMap,
