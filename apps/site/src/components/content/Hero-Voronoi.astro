@@ -32,6 +32,7 @@ import HeroLoop from "./HeroLoop";
     display: grid;
     grid-template-columns: 100%;
     grid-template-rows: 1fr 1fr;
+    gap: 1rem 0;
     height: 100vh;
     padding-top: 0;
     --animation-whitespace: 1.2em;
@@ -43,6 +44,8 @@ import HeroLoop from "./HeroLoop";
   h1 {
     grid-column: 1 / -1;
     grid-row: 2 / 3;
+    height: 100%;
+    box-sizing: border-box;
     position: relative;
     z-index: 50;
     text-align: center;
@@ -51,7 +54,8 @@ import HeroLoop from "./HeroLoop";
     align-items: stretch;
     justify-content: center;
     align-self: center;
-    margin: 0 auto 15vh;
+    margin: 0 auto;
+    padding: 2rem 0 15vh;
     max-width: 20em;
     @include font-core();
     strong {
@@ -59,7 +63,7 @@ import HeroLoop from "./HeroLoop";
     }
     @media (min-width: 760px) {
       @include font-L();
-      align-self: start;
+      justify-content: start;
       strong {
         @include font-L-bold();
       }
@@ -75,6 +79,8 @@ import HeroLoop from "./HeroLoop";
   p {
     grid-column: 1 / -1;
     grid-row: 1 / 2;
+    height: 100%;
+    box-sizing: border-box;
     position: relative;
     z-index: 50;
     @include font-L();
@@ -82,7 +88,7 @@ import HeroLoop from "./HeroLoop";
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: start;
+    justify-content: end;
     align-self: center;
     padding-top: 50px;
     strong {
@@ -90,6 +96,7 @@ import HeroLoop from "./HeroLoop";
     }
     @media (min-width: 760px) {
       @include font-XL();
+      align-self: end;
       strong {
         @include font-XL-bold();
       }
