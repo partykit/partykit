@@ -23,7 +23,7 @@ import HeroLoop from "./HeroLoop";
   </p>
 </div>
 
-<style lang="scss">
+<style lang="scss" is:global>
   @import "../../styles/shared.scss";
 
   #hero {
@@ -49,9 +49,9 @@ import HeroLoop from "./HeroLoop";
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    justify-content: start;
-    align-self: start;
-    margin: 0 auto;
+    justify-content: center;
+    align-self: center;
+    margin: 0 auto 15vh;
     max-width: 20em;
     @include font-core();
     strong {
@@ -59,6 +59,7 @@ import HeroLoop from "./HeroLoop";
     }
     @media (min-width: 760px) {
       @include font-L();
+      align-self: start;
       strong {
         @include font-L-bold();
       }
@@ -179,7 +180,6 @@ import HeroLoop from "./HeroLoop";
     overflow: visible;
     .animation-block {
       position: absolute;
-/*       left: 0; */
       margin: -20px 0;
       padding: 20px 0;
       height: calc(var(--animation-whitespace) + 20px + 20px);
@@ -200,7 +200,6 @@ import HeroLoop from "./HeroLoop";
         -o-animation: hero-loop 20s ease-out 1s infinite;
         display: block;
         width: 100%;
-/*         text-align: left; */
         white-space: nowrap;
         @media (min-width: 760px) {
           margin: 0 0 var(--animation-whitespace) 0;
@@ -208,4 +207,16 @@ import HeroLoop from "./HeroLoop";
       }
     }
   }
+  
+  .TextLoop {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-items: center;
+    div {
+      width: 100%!important;
+    }
+  }
+
 </style>

@@ -5,7 +5,7 @@ const TextLoop =
 
 export default function HeroLoop() {
   return (
-    <TextLoop interval={1000}>
+    <TextLoop className="TextLoop" interval={1000}>
       <span>collaboration</span>
       <span>realtime</span>
       <span>AI chatbots</span>
