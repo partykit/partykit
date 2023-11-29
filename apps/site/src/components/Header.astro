@@ -8,9 +8,9 @@ import "../styles/variables.scss";
     <h1><a href="/"><span>PartyKit</span></a></h1>
     <div id="nav-panel">
       <div id="nav-pages">
-        <a href="https://docs.partykit.io"><span>Docs</span></a>
-        <a href="/#pricing-header" data-dismiss-nav><span>Pricing</span></a>
-        <a href="https://blog.partykit.io"><span>Blog</span></a>
+        <a class="nav-page-item" href="https://docs.partykit.io"><span>Docs</span></a>
+        <a class="nav-page-item" href="/#pricing-header" data-dismiss-nav><span>Pricing</span></a>
+        <a class="nav-page-item" href="https://blog.partykit.io"><span>Blog</span></a>
       </div>
       <div id="nav-icons">
         <a class="icon" href="https://twitter.com/partykit_io">
@@ -85,9 +85,17 @@ import "../styles/variables.scss";
   };
 
   const dismissNav = document.querySelectorAll("[data-dismiss-nav]");
-  dismissNav.forEach((el) => {
+  [...dismissNav].forEach((el) => {
     el.addEventListener("click", dismiss);
   });
+  
+  var navLinks = document.getElementsByClassName("nav-page-item");
+  
+  [...navLinks].forEach(navLink => {
+    navLink.onclick = function () {
+      document.body.classList.remove("nav-open");
+    };
+  })
 </script>
 
 <style lang="scss">
