@@ -58,13 +58,14 @@ import "../../styles/variables.scss";
     flex-direction: column;
     align-items: stretch;
     justify-content: space-between;
-    gap: 4rem;
+    gap: calc(var(--whitespace) * 0.5);
   }
 
   @media (min-width: 760px) {
     #product-features {
       flex-direction: row;
       grid-row: 2 / 3;
+      gap: 4rem;
     }
   }
 

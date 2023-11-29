@@ -109,7 +109,7 @@ import Grid from "../Grid.astro";
     @include atom();
     display: flex;
     flex-direction: column;
-    margin: 4rem auto;
+    margin: calc(var(--whitespace) * 0.5) auto 0;
     gap: 2rem;
     @media (min-width: 760px) {
       grid-column: 1 / 11;
