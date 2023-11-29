@@ -35,11 +35,12 @@
     "ss08" 01,
     "cv10" 01,
     "cv13" 00;
-  font-size: 6vw;
+  font-size: 12vw;
   line-height: 1.05;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.01em;
   text-align: center;
   @media (min-width: 760px) {
+    font-size: 6vw;
     line-height: 1;
     letter-spacing: -0.02em;
   }

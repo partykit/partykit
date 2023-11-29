@@ -16,8 +16,8 @@ import HeroLoop from "./HeroLoop";
     <Voronoi client:load />
   </div>
   <p>
-    <strong
-      >Everything is better <br />with
+    <strong>
+      Everything <br /> is better with <br />
       <span id="looper"><HeroLoop client:load /></span>
     </strong>
   </p>
@@ -85,7 +85,7 @@ import HeroLoop from "./HeroLoop";
     align-self: center;
     padding-top: 50px;
     strong {
-      @include font-L-bold();
+      @include font-hero-bold();
     }
     @media (min-width: 760px) {
       @include font-XL();
@@ -99,8 +99,7 @@ import HeroLoop from "./HeroLoop";
     display: inline-block;
     position: relative;
     overflow: visible;
-    width: 5em;
-    text-align: left;
+    width: 100%;
   }
 
   @keyframes hero-loop {
@@ -178,14 +177,9 @@ import HeroLoop from "./HeroLoop";
   .animation-frame {
     position: relative;
     overflow: visible;
-    &:before {
-      content: "friends";
-      color: transparent;
-      user-select: none;
-    }
     .animation-block {
       position: absolute;
-      left: 0;
+/*       left: 0; */
       margin: -20px 0;
       padding: 20px 0;
       height: calc(var(--animation-whitespace) + 20px + 20px);
@@ -206,7 +200,7 @@ import HeroLoop from "./HeroLoop";
         -o-animation: hero-loop 20s ease-out 1s infinite;
         display: block;
         width: 100%;
-        text-align: left;
+/*         text-align: left; */
         white-space: nowrap;
         @media (min-width: 760px) {
           margin: 0 0 var(--animation-whitespace) 0;

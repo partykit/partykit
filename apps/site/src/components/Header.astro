@@ -254,11 +254,8 @@ import "../styles/variables.scss";
   #nav-pages {
     display: flex;
     flex-direction: column;
-    font-size: 10vw;
     gap: 1em;
-    font-variation-settings: "wght" 260;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    @include font-hero();
     a {
       &:hover span,
       &:focus span {
