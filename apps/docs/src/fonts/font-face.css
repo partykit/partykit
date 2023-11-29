@@ -1,19 +1,26 @@
 @font-face {
   font-family: "PKSans";
   font-style: normal;
-  font-weight: 380;
+  font-weight: 310;
   font-feature-settings:
     "ss01" 01,
     "ss02" 01;
-  src: url("./Inter.var.woff2") format("woff2");
+  src: url("./InterVariable.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "PKSans";
   font-style: bold;
-  font-weight: 620;
+  font-weight: 600;
   font-feature-settings:
+    "calt" 01,
+    "dlig" 00,
+    "case" 01,
     "ss01" 01,
-    "ss02" 01;
-  src: url("./Inter.var.woff2") format("woff2");
+    "ss02" 01,
+    "ss07" 01,
+    "ss08" 01,
+    "cv10" 01,
+    "cv13" 00;
+  src: url("./InterVariable.woff2") format("woff2");
 }
