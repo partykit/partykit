@@ -1,7 +1,7 @@
 ---
 author: Sunil Pai
 pubDatetime: 2023-11-30T10:12:00Z
-title: Party.IO - a socket.io backend for PartyKit
+title: Party.IO - a Socket.IO backend for PartyKit
 postSlug: party-io-a-socket-io-backend-for-partykit
 featured: false
 draft: false
