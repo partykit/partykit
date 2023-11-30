@@ -8,7 +8,8 @@ draft: false
 tags:
   - socket-io
   - realtime
-ogImage: "/content-images/live-polls-with-stencil/social.png"
+  - multiplayer
+ogImage: "/content-images/party-io-og-image.png"
 description: We are super excited to announce the release of Party.IO, a Socket.IO backend for PartyKit!
 ---
 
