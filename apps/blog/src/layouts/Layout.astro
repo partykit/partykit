@@ -1,5 +1,7 @@
 ---
 import { SITE } from "@config";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
 import "@styles/base.css";
 declare global {
   interface Window {
@@ -101,6 +103,8 @@ const socialImageURL = new URL(
     <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body class="font-core">
+    <Header />
     <slot />
+    <Footer />
   </body>
 </html>

@@ -29,12 +29,11 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   ogImage={ogUrl}
   canonicalURL={canonicalURL}
 >
-  <Header />
   <div class="breadcrumb">
     <span onclick="history.back()">Go back</span>
   </div>
   <main id="main-content">
-    <h1 class="mx-auto max-w-4xl font-hero" style="margin: calc(var(--whitespace) - 50px) auto var(--whitespace)">{title}</h1>
+    <h1 class="mx-auto max-w-4xl font-hero" style="margin: calc(var(--whitespace) - 50px) auto calc(var(--whitespace) * 0.5)">{title}</h1>
     <div class="metadata mx-auto max-w-2xl">
       <span>{author ?? "PartyKit Team"}</span>
       <Datetime datetime={pubDatetime} />
@@ -47,16 +46,9 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
       {tags.map(tag => <Tag name={slugifyStr(tag)} />)}
     </ul>
   </main>
-  <Footer />
 </Layout>
 
 <style>
-  main {
-  }
-  .post-title {
-  }
-  .tags-container {
-  }
   .breadcrumb {
     box-sizing: border-box;
     padding-top: 50px;
@@ -86,7 +78,6 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   .breadcrumb span:hover::before {
     left: -0.25em;
   }
-  
   .metadata {
     display: flex;
     flex-direction: row;
@@ -100,6 +91,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     content: ",";
     padding-right: var(--character-width);
   }
+  
   article {
     display: flex;
     flex-direction: column;

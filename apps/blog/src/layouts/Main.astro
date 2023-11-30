@@ -17,13 +17,16 @@ const { pageTitle, pageDesc } = Astro.props;
 </main>
 
 <style>
+  
   #main-content {
-/*     @apply mx-auto w-full max-w-3xl px-4 pb-12; */
+    margin: calc(var(--whitespace) + 50px) 0 calc(var(--whitespace) * 0.5);
   }
-  #main-content h1 {
-/*     @apply text-2xl font-semibold sm:text-3xl; */
+  @media (min-width: 1100px) {
+    #main-content {
+      width: calc(80% - 3rem);
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
-  #main-content p {
-/*     @apply mb-6 mt-2 italic; */
-  }
+
 </style>

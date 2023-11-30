@@ -16,7 +16,6 @@ const { frontmatter } = Astro.props;
 ---
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
-  <Header activeNav="about" />
   <Breadcrumbs />
   <main id="main-content">
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0">
@@ -24,5 +23,4 @@ const { frontmatter } = Astro.props;
       <slot />
     </section>
   </main>
-  <Footer />
 </Layout>

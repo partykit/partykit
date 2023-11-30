@@ -36,7 +36,6 @@ const tagPosts = getPostsByTag(posts, tag);
 ---
 
 <Layout title={`Tag:${tag} | ${SITE.title}`}>
-  <Header activeNav="tags" />
   <Main
     pageTitle={`Tag:${tag}`}
     pageDesc={`All the articles with the tag "${tag}".`}
@@ -49,5 +48,4 @@ const tagPosts = getPostsByTag(posts, tag);
       }
     </ul>
   </Main>
-  <Footer />
 </Layout>

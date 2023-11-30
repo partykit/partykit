@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
 import Header from "@components/Header.astro";
 import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
@@ -16,52 +17,11 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 ---
 
 <Layout>
-  <Header />
-  <main id="main-content">
-    <!-- <section id="hero">
-      <h1>PartyKit</h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="rss-link"
-        aria-label="rss feed"
-        title="RSS Feed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
-          ><path
-            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
-          ></path><path
-            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
-          ></path><circle cx="6" cy="18" r="2"></circle>
-        </svg>
-      </a>
-
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p>
-        Read the blog posts or check
-        <LinkButton
-          className="hover:text-skin-accent underline underline-offset-4 decoration-dashed"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.
-      </p>
-      {
-        // only display if at least one social link is enabled
-        socialCount > 0 && (
-          <div class="social-wrapper">
-            <Socials />
-          </div>
-        )
-      }
-    </section>
-
-    <Hr /> -->
+  <Main id="main-content">
+    <header>
+      <h1 class="font-XL-bold">PartyKit blog</h1>
+      <p class="font-L">Because everything's better with friends.</p>
+    </header>
 
     {
       featuredPosts.length > 0 && (
@@ -84,7 +44,7 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
     }
 
     <section id="recent-posts">
-      <h2>Recent Posts</h2>
+      <h2 class="font-XL">Recent Posts</h2>
       <ul>
         {
           sortedPosts.map(
@@ -102,53 +62,35 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
       <div class="all-posts-btn-wrapper">
         <LinkButton href="/posts">
           All Posts
-          <svg xmlns="http://www.w3.org/2000/svg"
-            ><path
-              d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
-            ></path>
-          </svg>
         </LinkButton>
       </div>
     </section>
-  </main>
+  </Main>
 
-  <Footer />
 </Layout>
 
 <style>
-  /* ===== Hero Section ===== */
-  #hero {
-    @apply pb-6 pt-8;
+
+  header {
+    margin-bottom: var(--whitespace);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
   }
-  #hero h1 {
-    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
-  }
-  #hero .rss-link {
-    @apply mb-6;
-  }
-  #hero .rss-icon {
-    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
-  }
-  #hero p {
-    @apply my-2;
-  }
-  .social-wrapper {
-    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
-  }
-  .social-links {
-    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+  
+  h2 {
+    text-align: center;
+    margin-bottom: calc(var(--whitespace) - 4rem);
+    display: none;
   }
 
-  /* ===== Featured & Recent Posts Sections ===== */
-  #featured,
-  #recent-posts {
-    @apply pb-6 pt-12;
-  }
-  #featured h2,
-  #recent-posts h2 {
-    @apply text-2xl font-semibold tracking-wide;
-  }
   .all-posts-btn-wrapper {
-    @apply my-8 text-center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4rem;
   }
+  
 </style>

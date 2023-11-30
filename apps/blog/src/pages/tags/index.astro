@@ -14,11 +14,21 @@ let tags = getUniqueTags(posts);
 ---
 
 <Layout title={`Tags | ${SITE.title}`}>
-  <Header activeNav="tags" />
-  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
-    <ul>
+  <Main pageTitle="PartyKit blog tags" pageDesc="Because everything is better with metadata.">
+    <ul class="font-XL">
       {tags.map(tag => <Tag name={tag} size="lg" />)}
     </ul>
   </Main>
-  <Footer />
 </Layout>
+
+<style>
+  
+  ul {
+    margin-top: var(--whitespace);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem var(--character-width);
+  }
+  
+</style>

@@ -28,6 +28,22 @@
     --window-shadow: 0 30px 40px rgba(0, 0, 0, 0.5);
   }
   
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
+    font-variation-settings: inherit;
+    line-height: inherit;
+    list-style: none;
+    text-decoration: none;
+    vertical-align: baseline;
+  }
+  
   html {
     color: var(--color-text);
     background: var(--color-page);
@@ -35,6 +51,10 @@
       var(--color-feature-2) 50%,
       var(--color-page) 51%
     );
+  }
+  
+  body {
+    background: var(--color-page);
   }
 
   
@@ -123,7 +143,9 @@
   }
 
     
-  .font-core-bold {
+  .font-core-bold,
+  article strong,
+  article h3 {
     font-family:
       PKSans,
       -apple-system,
@@ -151,7 +173,9 @@
     letter-spacing: 0;
   }
   @media (min-width: 760px) {
-    .font-core-bold {
+    .font-core-bold,
+    article strong,
+    article h3 {
       font-size: 16px;
       font-variation-settings: "wght" 620;
     }
@@ -205,7 +229,8 @@
     }
   }
     
-  .font-L {
+  .font-L,
+  article h2 {
     font-variation-settings: "wght" 240;
     font-feature-settings:
       "calt" 01,
@@ -222,7 +247,8 @@
     letter-spacing: 0;
   }
   @media (min-width: 760px) {
-    .font-L {
+    .font-L,
+    article h2 {
       font-variation-settings: "wght" 230;
       font-size: 32px;
       letter-spacing: 0.025em;
@@ -335,100 +361,153 @@
     left: -1000%;
   }
   
-  :root,
-  html[data-theme="light"] {
-    --color-fill: 255, 255, 255;
-    --color-text-base: 40, 39, 40;
-    --color-accent: 74, 59, 192;
-    --color-card: 230, 230, 230;
-    --color-card-muted: 205, 205, 205;
-    --color-border: 236, 238, 242;
+  .card {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 4rem 0;
   }
-  html[data-theme="dark"] {
-    --color-fill: 23, 24, 28;
-    --color-text-base: 234, 237, 243;
-    --color-accent: 193, 104, 252;
-    --color-accent-lol: rgb(193, 104, 252);
-    --color-card: 52, 63, 96;
-    --color-card-muted: 138, 51, 2;
-    --color-border: 40, 40, 40;
+
+  @media (min-width: 760px) {
+    .card {
+      grid-template-columns: repeat(10, 1fr);
+    }
   }
-  #sun-svg,
-  html[data-theme="dark"] #moon-svg {
-    display: none;
+
+  @media (min-width: 760px) and (max-width: 1100px) {
+    .card {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
-  #moon-svg,
-  html[data-theme="dark"] #sun-svg {
+  
+  .card + .card {
+    border-top: 0.5px solid var(--color-feature-3);
+  }
+  
+  .card > a:first-child {
+    grid-column: 1 / -1;
+    align-self: start;
+    margin-bottom: 1rem;
+  }
+  
+  @media (min-width: 760px) {
+    .card > a:first-child {
+      max-width: 100%;
+      grid-column: 2/4;
+      grid-row: 1/2;
+    }
+  }
+  
+  @media (min-width: 1100px) {
+    .card > a:first-child {
+      grid-column: 4/9;
+    }
+  }
+  
+  .card > div:nth-child(2) {
+    grid-column: span 2;
+    color: var(--color-feature-2);
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .card > p:nth-child(3) {
+    grid-column: 1/-1;
+    width: 100%;
+    max-width: var(--atom-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  @media (min-width: 760px) {
+    .card > p:nth-child(3) {
+      max-width: 100%;
+      grid-column: 2/4;
+    }
+  }
+  
+  @media (min-width: 1100px) {
+    .card > p:nth-child(3) {
+      grid-column: 4/8;
+    }
+  }
+  
+  article h2 {
+    margin-top: calc(var(--whitespace) * 0.5);
+  }
+   
+  article h3 {
+    margin-top: 4rem;
+  }
+ 
+  article img,
+  article video {
     display: block;
+    width: 100%;
+    height: auto;
+    margin: 2rem 0;
   }
-  body {
-    @apply flex min-h-screen flex-col bg-skin-fill text-skin-base 
-    selection:bg-skin-accent selection:bg-opacity-70 selection:text-skin-inverted;
+  
+  article .flex img,
+  article .flex video {
+    margin: 0;
   }
-  section {
-    @apply mx-auto max-w-3xl px-4;
+  
+  article strong {
+    font-weight: inherit;
   }
-  a {
-    @apply outline-2 outline-offset-1 outline-skin-fill 
-    focus-visible:no-underline focus-visible:outline-dashed;
+   
+  article a {
+    text-decoration: underline;
+  } 
+  
+  article a:hover,
+  article a:focus {
+    color: var(--color-feature-2);
   }
-  svg {
-    @apply inline-block h-6 w-6 fill-skin-base group-hover:fill-skin-accent;
+  
+  article li {
+    position: relative;
+    list-style: none;
+    padding-left: 1.5rem;
   }
-  svg.icon-tabler {
-    @apply inline-block h-6 w-6 scale-125 fill-transparent 
-    stroke-current stroke-2 opacity-90 group-hover:fill-transparent 
-    sm:scale-110;
+  
+  article li:before {
+    content: "●";
+    display: inline-block;
+    width: 1.5rem;
+    margin-left: -1.5rem;
   }
-  .prose {
-    @apply prose-headings:!mb-3 prose-headings:!text-skin-base 
-    prose-h3:italic prose-p:!text-skin-base 
-    prose-a:!text-skin-base prose-a:!decoration-dashed prose-a:underline-offset-8
-    hover:prose-a:text-skin-accent prose-blockquote:!border-l-skin-accent
-    prose-blockquote:border-opacity-50 prose-blockquote:opacity-80
-    prose-figcaption:!text-skin-base prose-figcaption:opacity-70
-    prose-strong:!text-skin-base
-
+  
+  article li li:before {
+    content: "○";
+  }
+  
+  article li li li:before {
+    content: "→";
+  }
+  
+  article blockquote {
+    padding-left: calc(1.5rem - 0.5px);
+    border-left: 0.5px solid var(--color-feature-3);
+  }
+  
+  article pre {
+    padding: 1rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 90%;
+  }
+  
+  article hr {
+    display: block;
+    width: 100%;
+    height: 0.5px;
+    border: none;
+    background: var(--color-feature-3);
+    margin: 4rem 0;
+  }
     
-    prose-code:rounded prose-code:bg-skin-card 
-    prose-code:bg-opacity-75 prose-code:p-1 prose-code:!text-skin-base 
-    prose-code:before:!content-[''] prose-code:after:!content-['']
-    prose-pre:!text-skin-base prose-ol:!text-skin-base 
-    prose-ul:overflow-x-clip prose-ul:!text-skin-base prose-li:marker:!text-skin-accent
-    prose-table:text-skin-base prose-th:border
-    prose-th:border-skin-line prose-td:border 
-    prose-td:border-skin-line prose-img:mx-auto 
-    prose-img:!mt-2 prose-img:border-2 
-    prose-img:border-skin-line prose-hr:!border-skin-line;
-  }
-  .prose a {
-    @apply hover:!text-skin-accent;
-  }
-  .prose thead th:first-child,
-  tbody td:first-child,
-  tfoot td:first-child {
-    padding-left: 0.5714286em;
-  }
-  .prose h2#table-of-contents {
-    @apply mb-2;
-  }
-  .prose details {
-    @apply inline-block cursor-pointer select-none text-skin-base;
-  }
-  .prose summary {
-    @apply focus-outline;
-  }
-  .prose h2#table-of-contents + p {
-    @apply hidden;
-  }
-
-}
-
-@layer components {
-  .display-none {
-    @apply hidden;
-  }
-  .focus-outline {
-    @apply outline-2 outline-offset-1 outline-skin-fill focus-visible:no-underline focus-visible:outline-dashed;
-  }
 }

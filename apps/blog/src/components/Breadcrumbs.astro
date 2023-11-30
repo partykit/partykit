@@ -16,7 +16,6 @@ breadcrumbList[0] === "posts" &&
   <ul>
     <li>
       <a href="/">Home</a>
-      <span aria-hidden="true">&#62;</span>
     </li>
     {
       breadcrumbList.map((breadcrumb, index) =>
@@ -33,7 +32,6 @@ breadcrumbList[0] === "posts" &&
         ) : (
           <li>
             <a href={`/${breadcrumb}`}>{breadcrumb}</a>
-            <span aria-hidden="true">&#62;</span>
           </li>
         )
       )
@@ -43,18 +41,40 @@ breadcrumbList[0] === "posts" &&
 
 <style>
   .breadcrumb {
-    @apply mx-auto mb-1 mt-8 w-full max-w-3xl px-4;
+    box-sizing: border-box;
+    padding-top: 50px;
+    height: 100px;
+    border-bottom: 1px solid var(--color-feature-1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
-  .breadcrumb ul li {
-    @apply inline;
+  @media (min-width: 1100px) {
+    .breadcrumb {
+      width: calc(80% - 3rem);
+      margin: 0 auto;
+    }
   }
-  .breadcrumb ul li a {
-    @apply capitalize opacity-70;
+  .breadcrumb ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
-  .breadcrumb ul li span {
-    @apply opacity-70;
+  
+  .breadcrumb li {
+    display: flex;
+    flex-direction: row;
   }
-  .breadcrumb ul li:not(:last-child) a {
-    @apply hover:opacity-100;
+  
+  .breadcrumb li + li::before {
+    content: "/";
+    position: relative;
+    left: 0;
+    padding: 0 var(--character-width);
+    font-variation-settings: "wght" 150;
+  }
+  
+  .breadcrumb a {
+    text-decoration: underline;
   }
 </style>
