@@ -248,6 +248,25 @@ const { activeNav } = Astro.props;
     color: var(--color-feature-2);
   }
 
+  @media (max-width: 759px) {
+    #nav-pages {
+      font-variation-settings: "wght" 220;
+      font-feature-settings:
+        "calt" 01,
+        "dlig" 00,
+        "case" 01,
+        "ss01" 01,
+        "ss02" 01,
+        "ss07" 01,
+        "ss08" 01,
+        "cv10" 01,
+        "cv13" 00;
+      font-size: 12vw;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+  }
 
   @media (min-width: 760px) {
     #nav-pages {
