@@ -286,6 +286,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"party-io-a-socket-io-backend-for-partykit.md": {
+	id: "party-io-a-socket-io-backend-for-partykit.md";
+  slug: "party-io-a-socket-io-backend-for-partykit";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "partykit-at-viteconf.md": {
 	id: "partykit-at-viteconf.md";
   slug: "partykit-at-viteconf";
