@@ -19,7 +19,7 @@ We are super excited to announce the release of Party.IO, a [Socket.IO](https://
 
 Socket.IO is an incredibly popular JavaScript library that enables real-time, bidirectional and event-based communication between web clients and servers. It's commonly used to build interactive applications where data needs to be exchanged frequently and instantly, such as in chat applications, live content updates, and real-time analytics.
 
-Socket.IO was created in 2010 by [Guillermo Rauch](https://twitter.com/rauchg) in 2010, right as browsers were starting to support WebSockets. It has since grown to be one of the most popular libraries for building real-time applications on the web.
+Socket.IO was created in 2010 by [Guillermo Rauch](https://twitter.com/rauchg), right as browsers were starting to support WebSockets. It has since grown to be one of the most popular libraries for building real-time applications on the web.
 
 ### Scaling Socket.IO: Enter PartyKit
 
