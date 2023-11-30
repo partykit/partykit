@@ -93,6 +93,6 @@ const socket = io({
 
 ### Get Started with Socket.IO on PartyKit
 
-Head on to the [Party.IO Readme](https://github.com/partykit/partykit/blob/main/packages/party.io/README.md) and [Socket.IO docs](https://socket.io/docs/v4) to learn more about how to use Socket.IO. You can also see our port of the classic socket.IO chat example here https://github.com/partykit/partykit/tree/main/examples/socket.io-chat.
+Head on to the [Party.IO Readme](https://github.com/partykit/partykit/blob/main/packages/party.io/README.md) and [Socket.IO docs](https://socket.io/docs/v4) to learn more about how to use Socket.IO. You can also see our port of the classic socket.IO chat example [here](https://github.com/partykit/partykit/tree/main/examples/socket.io-chat).
 
 We hope you enjoy using Party.IO! If you have any questions or feedback, please join our [Discord](https://discord.gg/GJwKKTcQ7W) or [Twitter](https://twitter.com/partykit_io)!
