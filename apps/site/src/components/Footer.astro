@@ -112,17 +112,15 @@ import Grid from "./Grid.astro";
     grid-column: 1 / -1;
     @include atom();
     @include font-L();
-  }
-
-  @media (min-width: 760px) {
-    h2 {
+    strong {
+      @include font-L-bold();
+    }
+    @media (min-width: 760px) {
       max-width: 100%;
       @include font-XL();
-    }
-  }
-
-  @media (min-width: 1100px) {
-    h2 {
+      strong {
+        @include font-XL-bold();
+      }
     }
   }
 
