@@ -13,13 +13,15 @@ ogImage: "/content-images/party-io-og-image.png"
 description: We are super excited to announce the release of Party.IO, a Socket.IO backend for PartyKit!
 ---
 
-## 🎈 Party.IO - a socket.io backend for PartyKit
+## 🎈 Party.IO - a new Socket.IO backend for PartyKit
 
 We are super excited to announce the release of Party.IO, a [Socket.IO](https://socket.io/) backend for PartyKit!
 
-Socket.IO is a JavaScript library that enables real-time, bidirectional and event-based communication between web clients and servers. It's commonly used to build interactive applications where data needs to be exchanged frequently and instantly, such as in chat applications, live content updates, and real-time analytics.
+Socket.IO is an incredibly popular JavaScript library that enables real-time, bidirectional and event-based communication between web clients and servers. It's commonly used to build interactive applications where data needs to be exchanged frequently and instantly, such as in chat applications, live content updates, and real-time analytics.
 
 Socket.IO was created in 2010 by [Guillermo Rauch](https://twitter.com/rauchg) in 2010, right as browsers were starting to support WebSockets. It has since grown to be one of the most popular libraries for building real-time applications on the web.
+
+### Scaling Socket.IO: Enter PartyKit
 
 However, deploying and scaling Socket.IO servers can be a challenge. Unlike serverless computing, where you can simply deploy your code and let the cloud provider handle the rest, Socket.IO requires you to manage your own servers and infrastructure. It requires subject matter expertise to provision not just node.js servers, but also Redis servers for scaling and load balancing. You also need to get wide coverage across the planet to guarantee low latency for your users.
 
@@ -76,9 +78,9 @@ $ partykit dev server.ts
 
 ## But wait, there's more
 
-By default, party.io will use a single party instance to coordinate messages between rooms and clients. This should sclae to thousands of concurrent users. However, depending on where this backend instantiates, you might find that users far away from it might face longer latencies than users closer to it.
+By default, party.io will use a single party instance to coordinate messages between rooms and clients. This should scale to thousands of concurrent users. However, depending on where this backend instantiates, you might find that users far away from it might face longer latencies than users closer to it.
 
-We can solve this very easily. When instantiating a client, pass a partyID (that associates with the document of interest in your application; this could be a chat room name, a document id, a game session, etc) into the `query` parameter, and party.io will instantiate a new syncing backend close to that user. It looks like this:
+We can solve this very easily. When instantiating a client, pass a `partyID` that associates with the document of interest in your application into the `query` parameter, and party.io will instantiate a new syncing backend close to that user. For instance, you may use this when you want a distinct backend for every game session, chat room, collaborative drawing document, etc. It looks like this:
 
 ```ts
 const socket = io({
@@ -88,6 +90,8 @@ const socket = io({
   },
 });
 ```
+
+### Get Started with Socket.IO on PartyKit
 
 Head on to the [Party.IO Readme](https://github.com/partykit/partykit/blob/main/packages/party.io/README.md) and [Socket.IO docs](https://socket.io/docs/v4) to learn more about how to use Socket.IO. You can also see our port of the classic socket.IO chat example here https://github.com/partykit/partykit/tree/main/examples/socket.io-chat.
 
