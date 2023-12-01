@@ -6,7 +6,7 @@ export interface Props {
   className?: string;
 }
 
-export default function Datetime({ datetime, size = "sm", className }: Props) {
+export default function Datetime({ datetime }: Props) {
   return (
     <div>
       <span className="sr-only">Posted on:</span>
@@ -31,9 +31,5 @@ const FormattedDatetime = ({ datetime }: { datetime: string | Date }) => {
     minute: "2-digit",
   });
 
-  return (
-    <>
-      {date}
-    </>
-  );
+  return <>{date}</>;
 };
