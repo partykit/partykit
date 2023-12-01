@@ -381,6 +381,8 @@
   @media (min-width: 760px) and (max-width: 1100px) {
     .card {
       grid-template-columns: repeat(3, 1fr);
+      margin: 0 2rem;
+      width: calc(100% - 4rem);
     }
   }
   
@@ -416,7 +418,13 @@
     margin-left: auto;
     margin-right: auto;
   }
-  
+ 
+  @media (min-width: 760px) and (max-width: 1100px) {
+    .card > div:nth-child(2) {
+      grid-column: 1 / 2;
+    }
+  }
+ 
   .card > p:nth-child(3) {
     grid-column: 1/-1;
     width: 100%;
