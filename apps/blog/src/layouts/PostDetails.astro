@@ -1,7 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
 import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
@@ -29,26 +27,16 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   ogImage={ogUrl}
   canonicalURL={canonicalURL}
 >
-  <Header />
-  <div class="mx-auto flex w-full max-w-3xl justify-start px-2">
-    <button
-      class="focus-outline mb-2 mt-8 flex hover:opacity-75"
-      onclick="history.back()"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg"
-        ><path
-          d="M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z"
-        ></path>
-      </svg><span>Go back</span>
-    </button>
+  <div class="breadcrumb">
+    <span onclick="history.back()">Go back</span>
   </div>
   <main id="main-content">
-    <h1 class="post-title">{title}</h1>
-    <div class="my-2 flex space-x-4">
+    <h1 class="font-hero">{title}</h1>
+    <div class="metadata mx-auto max-w-2xl">
       <span>{author ?? "PartyKit Team"}</span>
-      <Datetime datetime={pubDatetime} size="lg" />
+      <Datetime datetime={pubDatetime} />
     </div>
-    <article id="article" role="article" class="prose mx-auto mt-8 max-w-3xl">
+    <article id="article" role="article" class="mx-auto max-w-2xl">
       <Content />
     </article>
 
@@ -56,17 +44,110 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
       {tags.map(tag => <Tag name={slugifyStr(tag)} />)}
     </ul>
   </main>
-  <Footer />
 </Layout>
 
 <style>
-  main {
-    @apply mx-auto w-full max-w-3xl px-4 pb-12;
+  h1 {
+    max-width: 15em;
+    padding: 0 2rem;
+    margin: calc(var(--whitespace) - 50px) auto calc(var(--whitespace) * 0.5);
   }
-  .post-title {
-    @apply text-2xl font-semibold text-skin-accent;
+
+  .breadcrumb {
+    box-sizing: border-box;
+    padding: 50px 1rem 0;
+    height: 100px;
+    border-bottom: 1px solid var(--color-feature-1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
+  @media (min-width: 760px) {
+    .breadcrumb {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  @media (min-width: 1100px) {
+    .breadcrumb {
+      width: calc(80% - 3rem);
+      margin: 0 auto;
+    }
+  }
+  .breadcrumb span {
+    cursor: pointer;
+  }
+  .breadcrumb span:last-child:before {
+    content: "←";
+    position: relative;
+    left: 0;
+    padding-right: var(--character-width);
+    transition: 0.3s ease 0.3s;
+  }
+
+  .breadcrumb span:hover::before {
+    left: -0.25em;
+  }
+  .metadata {
+    padding: 0 3rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    margin-bottom: 1rem;
+    color: var(--color-feature-2);
+  }
+  .metadata:after {
+    content: ".";
+  }
+  .metadata > *:after {
+    content: ",";
+    padding-right: var(--character-width);
+  }
+
+  @media (max-width: 759px) {
+    .metadata {
+      font-size: 16px;
+    }
+  }
+
+  @media (min-width: 760px) {
+    .metadata {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 3rem;
+    padding-bottom: calc(var(--whitespace) * 0.5);
+  }
+
+  @media (min-width: 760px) {
+    article {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+
   .tags-container {
-    @apply my-8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
+    min-height: 50px;
+    padding: 1rem 2rem;
+    border-top: 1px solid var(--color-feature-1);
+  }
+
+  @media (min-width: 1100px) {
+    .tags-container {
+      width: calc(80% - 3rem);
+      margin: 0 auto;
+    }
   }
 </style>

@@ -1,10 +1,4 @@
 ---
-import { LOGO_IMAGE, SITE } from "@config";
-import Hr from "./Hr.astro";
-import LinkButton from "./LinkButton.astro";
-
-import logoSVG from "/public/favicon.svg";
-
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search";
 }
@@ -13,170 +7,299 @@ const { activeNav } = Astro.props;
 ---
 
 <header>
-  <a id="skip-to-content" href="#main-content">Skip to content</a>
-  <div class="nav-container">
-    <div class="top-nav-wrap">
-      <a href="/" class="logo">
-        {
-          LOGO_IMAGE.enable ? (
-            <img
-              src={logoSVG}
-              alt="AstroPaper Logo"
-              width={LOGO_IMAGE.width}
-              height={LOGO_IMAGE.height}
-            />
-          ) : (
-            SITE.title
-          )
-        }
-      </a>
-      <nav id="nav-menu">
-        <button
-          class="hamburger-menu focus-outline"
-          aria-label="Open Menu"
-          aria-expanded="false"
-          aria-controls="menu-items"
+  <nav>
+    <input id="nav-button" type="checkbox" />
+    <h1><a href="https://partykit.io"><span>PartyKit</span></a></h1>
+    <div id="nav-panel">
+      <div id="nav-pages" class="font-core">
+        <a class="nav-page-item" href="https://docs.partykit.io"
+          ><span>Docs</span></a
         >
+        <a
+          class="nav-page-item"
+          href="https://partykit.io/#pricing-header"
+          data-dismiss-nav><span>Pricing</span></a
+        >
+        <a class="nav-page-item" href="https://blog.partykit.io"
+          ><span>Blog</span></a
+        >
+      </div>
+      <div id="nav-icons">
+        <a class="icon" href="https://twitter.com/partykit_io">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
+            fill="currentColor"
             height="24"
+            width="24"
+            aria-hidden="true"
             viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="menu-icon"
           >
-            <line x1="7" y1="12" x2="21" y2="12" class="line"></line>
-            <line x1="3" y1="6" x2="21" y2="6" class="line"></line>
-            <line x1="12" y1="18" x2="21" y2="18" class="line"></line>
-            <line x1="18" y1="6" x2="6" y2="18" class="close"></line>
-            <line x1="6" y1="6" x2="18" y2="18" class="close"></line>
+            <path
+              d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+            ></path>
           </svg>
-        </button>
-        <ul id="menu-items" class="display-none sm:flex">
-          <li>
-            <a class="text-sm pb-2" href="http://docs.partykit.io">Docs</a>
-          </li>
-
-          <li>
-            <LinkButton
-              href="/search"
-              className={`focus-outline p-3 sm:p-1 ${
-                activeNav === "search" ? "active" : ""
-              }`}
-              ariaLabel="search"
-              title="Search"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="scale-125 sm:scale-100"
-                ><path
-                  d="M19.023 16.977a35.13 35.13 0 0 1-1.367-1.384c-.372-.378-.596-.653-.596-.653l-2.8-1.337A6.962 6.962 0 0 0 16 9c0-3.859-3.14-7-7-7S2 5.141 2 9s3.14 7 7 7c1.763 0 3.37-.66 4.603-1.739l1.337 2.8s.275.224.653.596c.387.363.896.854 1.384 1.367l1.358 1.392.604.646 2.121-2.121-.646-.604c-.379-.372-.885-.866-1.391-1.36zM9 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z"
-                ></path>
-              </svg>
-            </LinkButton>
-          </li>
-          <li>
-            {
-              SITE.lightAndDarkMode && (
-                <button
-                  id="theme-btn"
-                  class="focus-outline"
-                  title="Toggles light & dark"
-                  aria-label="auto"
-                  aria-live="polite"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" id="moon-svg">
-                    <path d="M20.742 13.045a8.088 8.088 0 0 1-2.077.271c-2.135 0-4.14-.83-5.646-2.336a8.025 8.025 0 0 1-2.064-7.723A1 1 0 0 0 9.73 2.034a10.014 10.014 0 0 0-4.489 2.582c-3.898 3.898-3.898 10.243 0 14.143a9.937 9.937 0 0 0 7.072 2.93 9.93 9.93 0 0 0 7.07-2.929 10.007 10.007 0 0 0 2.583-4.491 1.001 1.001 0 0 0-1.224-1.224zm-2.772 4.301a7.947 7.947 0 0 1-5.656 2.343 7.953 7.953 0 0 1-5.658-2.344c-3.118-3.119-3.118-8.195 0-11.314a7.923 7.923 0 0 1 2.06-1.483 10.027 10.027 0 0 0 2.89 7.848 9.972 9.972 0 0 0 7.848 2.891 8.036 8.036 0 0 1-1.484 2.059z" />
-                  </svg>
-                  <svg xmlns="http://www.w3.org/2000/svg" id="sun-svg">
-                    <path d="M6.993 12c0 2.761 2.246 5.007 5.007 5.007s5.007-2.246 5.007-5.007S14.761 6.993 12 6.993 6.993 9.239 6.993 12zM12 8.993c1.658 0 3.007 1.349 3.007 3.007S13.658 15.007 12 15.007 8.993 13.658 8.993 12 10.342 8.993 12 8.993zM10.998 19h2v3h-2zm0-17h2v3h-2zm-9 9h3v2h-3zm17 0h3v2h-3zM4.219 18.363l2.12-2.122 1.415 1.414-2.12 2.122zM16.24 6.344l2.122-2.122 1.414 1.414-2.122 2.122zM6.342 7.759 4.22 5.637l1.415-1.414 2.12 2.122zm13.434 10.605-1.414 1.414-2.122-2.122 1.414-1.414z" />
-                  </svg>
-                </button>
-              )
-            }
-          </li>
-        </ul>
-      </nav>
+          <span>Twitter</span>
+        </a>
+        <a class="icon" href="https://github.com/partykit/partykit/">
+          <svg
+            fill="currentColor"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a class="icon" href="https://discord.gg/GJwKKTcQ7W">
+          <svg
+            fill="currentColor"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            viewBox="0 0 135 90"
+          >
+            <path
+              d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"
+            ></path>
+          </svg>
+          <span>Discord</span>
+        </a>
+      </div>
     </div>
-  </div>
-  <Hr />
+  </nav>
 </header>
 
-<style>
-  #skip-to-content {
-    @apply absolute -top-full left-16 z-50 bg-skin-accent px-3 py-2 text-skin-inverted transition-all focus:top-4;
-  }
-  .nav-container {
-    @apply mx-auto flex max-w-3xl flex-col items-center justify-between sm:flex-row;
-  }
-  .top-nav-wrap {
-    @apply relative flex w-full items-start justify-between px-4 sm:items-center;
-    height: 3.5rem;
-  }
-  .logo {
-    @apply absolute py-1 font-medium text-2xl;
-  }
-  .hamburger-menu {
-    @apply self-end p-2 sm:hidden;
-  }
-  .hamburger-menu svg {
-    @apply h-6 w-6 scale-125 fill-skin-base;
+<style lang="scss">
+  header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    z-index: 1000;
+    padding: var(--padding);
+    background: var(--color-page);
   }
 
   nav {
-    @apply flex w-full flex-col items-center bg-skin-fill sm:ml-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0;
-  }
-  nav ul {
-    @apply mt-4 grid w-44 grid-cols-2 grid-rows-4 gap-x-2 gap-y-2 sm:ml-0 sm:mt-0 sm:w-auto sm:gap-x-5 sm:gap-y-0;
-  }
-  nav ul li {
-    @apply col-span-2 flex items-center justify-center;
-  }
-  nav ul li a {
-    @apply w-full px-4 py-3 text-center font-medium hover:text-skin-accent sm:my-0 sm:px-2 sm:py-1;
-  }
-  nav ul li:nth-child(4) a {
-    @apply w-auto;
-  }
-  nav ul li:nth-child(4),
-  nav ul li:nth-child(5) {
-    @apply col-span-1;
-  }
-  nav a.active {
-    @apply underline decoration-wavy decoration-2 underline-offset-4;
-  }
-  nav a.active svg {
-    @apply fill-skin-accent;
+    gap: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 1rem;
+    margin: 0 -2rem;
+    background: var(--color-page);
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.1);
   }
 
-  nav button {
-    @apply p-1;
-  }
-  nav button svg {
-    @apply h-6 w-6 fill-skin-base hover:fill-skin-accent;
-  }
-  #theme-btn {
-    @apply p-3 sm:p-1;
-  }
-  #theme-btn svg {
-    @apply scale-125 hover:rotate-12 sm:scale-100;
+  @media (min-width: 760px) {
+    nav {
+      flex-direction: row;
+      padding: 0 2rem;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+    }
   }
 
-  .menu-icon line {
-    @apply transition-opacity duration-75 ease-in-out;
+  @media (min-width: 1100px) {
+    nav {
+      padding: 0 calc(10% + 2rem);
+    }
   }
-  .menu-icon .close {
-    opacity: 0;
+
+  h1 {
+    position: relative;
+    height: 32px;
+    width: 70px;
+    background-image: url(/assets/PK_Logo_Full.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: left center;
+    text-indent: -5000%;
+    top: 1px;
   }
-  .menu-icon.is-active .line {
-    @apply opacity-0;
+
+  @media (min-width: 760px) {
+    h1 {
+      height: 36px;
+    }
   }
-  .menu-icon.is-active .close {
-    @apply opacity-100;
+
+  h1 a {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: 25px;
+    bottom: -5px;
+  }
+
+  #nav-button {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    height: 12px;
+    width: 20px;
+    overflow: hidden;
+    border-top: 2px solid;
+    border-bottom: 2px solid;
+    border-radius: 0;
+    appearance: none;
+    margin-right: 0.5rem;
+  }
+
+  #nav-button:before {
+    content: " ";
+    position: absolute;
+    display: block;
+    width: 100%;
+    top: calc(50% - 1px);
+    left: 0;
+    border-top: 2px solid;
+  }
+
+  #nav-button:checked {
+    right: 2px;
+    height: 16px;
+    width: 16px;
+    border: none;
+  }
+
+  #nav-button:checked:before {
+    width: 150%;
+    left: -25%;
+    transform: rotate(-45deg);
+    transform-origin: center;
+  }
+
+  #nav-button:checked:after {
+    content: " ";
+    position: absolute;
+    display: block;
+    top: calc(50% - 1px);
+    border-top: 2px solid;
+    width: 150%;
+    left: -25%;
+    transform: rotate(45deg);
+    transform-origin: center;
+  }
+
+  @media (min-width: 760px) {
+    #nav-button {
+      display: none;
+    }
+  }
+
+  #nav-button:checked ~ #nav-panel {
+    display: flex;
+  }
+
+  #nav-panel {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -2rem;
+    right: -2rem;
+    height: calc(100vh - 50px);
+    padding: var(--padding);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+  }
+
+  @media (min-width: 760px) {
+    #nav-panel {
+      position: relative;
+      display: flex;
+      top: auto;
+      left: 0;
+      right: 0;
+      height: 100%;
+      padding: 0;
+      background: transparent;
+      backdrop-filter: none;
+      flex-direction: row;
+      gap: 2rem;
+    }
+  }
+
+  #nav-pages {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  #nav-pages a:hover span,
+  #nav-pages a:focus span {
+    color: var(--color-feature-2);
+  }
+
+  @media (max-width: 759px) {
+    #nav-pages {
+      font-variation-settings: "wght" 220;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
+      font-size: 12vw;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      text-align: center;
+    }
+  }
+
+  @media (min-width: 760px) {
+    #nav-pages {
+      flex-direction: row;
+      font-size: inherit;
+      font-variation-settings: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      gap: 1.5rem;
+    }
+  }
+
+  #nav-icons {
+    display: flex;
+    flex-direction: row;
+    gap: 3em;
+  }
+
+  @media (min-width: 760px) {
+    #nav-icons {
+      gap: 1rem;
+    }
+  }
+
+  #nav-icons svg {
+    width: 50px;
+    height: 50px;
+  }
+
+  @media (min-width: 760px) {
+    #nav-icons svg {
+      width: inherit;
+      height: inherit;
+    }
+  }
+
+  #nav-panel a:before {
+    padding-right: calc(var(--character-width) * 0.5);
+  }
+
+  #nav-panel a.icon {
+    padding-right: 0;
+  }
+
+  #nav-panel a.icon:before {
+    content: none;
   }
 </style>
 

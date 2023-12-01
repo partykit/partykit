@@ -1,7 +1,4 @@
 ---
-import Hr from "./Hr.astro";
-import Socials from "./Socials.astro";
-
 const currentYear = new Date().getFullYear();
 
 export interface Props {
@@ -11,35 +8,322 @@ export interface Props {
 const { noMarginTop = false } = Astro.props;
 ---
 
-<footer class={`${noMarginTop ? "" : "mt-auto"}`}>
-  <Hr noPadding />
-  <div class="footer-wrapper">
-    <Socials centered />
-    <div class="copyright-wrapper">
-      <span>Copyright &#169; {currentYear}</span>
-      <span class="separator">&nbsp;|&nbsp;</span>
-      <span>All rights reserved.</span>
+<footer>
+  <div id="footer-inner">
+    <h2>
+      Turn anything into&nbsp;a <br /><strong
+        >real-time collaborative web&nbsp;app</strong
+      >
+    </h2>
+
+    <div class="copy">
+      <p>
+        The future of the internet is collaborative, and PartyKit is here to
+        help every developer be part of it.
+      </p>
+
+      <p>
+        &ldquo;The Web doesn't just connect machines, it connects people&rdquo; <br
+        /><a
+          href="https://webfoundation.org/about/community/knight-2008-tbl-speech/"
+          >Tim Berners-Lee</a
+        >
+      </p>
+    </div>
+
+    <nav class="get-started">
+      <a class="inverted" href="https://docs.partykit.io/quickstart">
+        Developer docs
+      </a>
+      <a class="inverted" href="https://discord.gg/g5uqHQJc3z">
+        Join our Discord
+      </a>
+    </nav>
+
+    <div id="smallprint">
+      <nav class="icons">
+        <a class="icon" href="https://twitter.com/partykit_io">
+          <svg
+            fill="currentColor"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
+            ></path>
+          </svg>
+          <span>Twitter</span>
+        </a>
+        <a class="icon" href="https://github.com/partykit/partykit/">
+          <svg
+            fill="currentColor"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+              clip-rule="evenodd"></path>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a class="icon" href="https://discord.gg/GJwKKTcQ7W">
+          <svg
+            fill="currentColor"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            viewBox="0 0 135 90"
+          >
+            <path
+              d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"
+            ></path>
+          </svg>
+          <span>Discord</span>
+        </a>
+      </nav>
+
+      <p class="legal">
+        &copy; {currentYear} PartyKit. All rights reserved. <a
+          href="https://partykit.io/privacy">Privacy&nbsp;policy</a
+        >.
+      </p>
     </div>
   </div>
 </footer>
 
 <style>
   footer {
-    @apply w-full;
+    z-index: 3;
+    padding: var(--padding);
+    gap: 1rem;
+    padding-top: calc(var(--whitespace) * 0.5);
+    padding-bottom: 2rem;
+    background: var(--color-feature-2);
+    color: var(--color-page);
   }
-  .footer-wrapper {
-    @apply flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4;
+
+  #footer-inner {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 0;
   }
-  .link-button {
-    @apply my-1 p-2 hover:rotate-6;
+
+  @media (min-width: 760px) {
+    #footer-inner {
+      grid-template-columns: repeat(10, 1fr);
+    }
   }
-  .link-button svg {
-    @apply scale-125;
+
+  @media (min-width: 760px) and (max-width: 1100px) {
+    #footer-inner {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
-  .copyright-wrapper {
-    @apply my-2 flex flex-col items-center whitespace-nowrap sm:flex-row;
+
+  footer h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+    grid-column: 1 / -1;
+    text-align: center;
+    font-variation-settings: "wght" 240;
+    font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01, "ss02" 01,
+      "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
+    font-size: 7.25vw;
+    line-height: 1.2;
+    letter-spacing: 0;
   }
-  .separator {
-    @apply hidden sm:inline;
+  footer h2 strong {
+    font-variation-settings: "wght" 600;
+    letter-spacing: -0.0125em;
+    font-weight: inherit;
+  }
+
+  @media (min-width: 760px) {
+    footer h2 {
+      max-width: 100%;
+      font-variation-settings: "wght" 210;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
+      font-size: 70px;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    footer h2 strong {
+      font-variation-settings: "wght" 640;
+      letter-spacing: -0.025em;
+    }
+  }
+
+  .copy {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    margin: calc(var(--whitespace) * 0.5) auto;
+  }
+  .copy p {
+    max-width: 28em;
+    margin: 0 auto;
+  }
+  .copy a {
+    text-decoration: underline;
+  }
+  .copy a:hover,
+  .copy a:focus {
+    color: var(--color-text);
+  }
+  @media (min-width: 760px) {
+    .copy {
+      grid-column: 1 / -1;
+      max-width: 16em;
+      font-variation-settings: "wght" 230;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
+      font-size: 32px;
+      line-height: 1.2;
+      letter-spacing: 0.025em;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .copy {
+      grid-column: 1 / -1;
+      padding-bottom: 2rem;
+      max-width: 40em;
+    }
+  }
+
+  .get-started {
+    grid-column: 1 / 4;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem -0.5rem;
+    max-width: calc(100% + 1rem);
+  }
+  @media (min-width: 760px) {
+    .get-started {
+      margin: 4rem 0;
+      max-width: 100%;
+      grid-column: 1 / -1;
+      grid-row: 3 / 4;
+      justify-content: center;
+    }
+  }
+  @media (min-width: 1100px) {
+    .get-started {
+      grid-column: 2 / 6;
+      grid-row: 3 / 4;
+      margin: 0;
+    }
+  }
+
+  .get-started a {
+    display: inline-block;
+    padding: var(--box-padding);
+    width: 100%;
+    border: none;
+    border-radius: 2em;
+    text-align: center;
+    text-decoration: none;
+    background: var(--color-page);
+    color: var(--color-feature-2);
+    font-variation-settings: "wght" 350;
+    cursor: pointer;
+    flex-grow: 2;
+  }
+
+  .get-started a:after {
+    content: "→";
+    position: relative;
+    left: 0;
+    margin-left: var(--character-width);
+    transition: 0.3s ease 0.3s;
+  }
+
+  .get-started a:hover,
+  .get-started a:focus {
+    color: var(--color-feature-2);
+  }
+
+  .get-started a:hover:after,
+  .get-started a:focus:after {
+    left: 0.25em;
+  }
+
+  @media (max-width: 759px) {
+    .get-started a {
+      font-size: 95%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  @media (min-width: 760px) {
+    .get-started a {
+      max-width: var(--atom-width);
+    }
+  }
+
+  #smallprint {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  #smallprint a {
+    text-decoration: underline;
+  }
+  #smallprint a:hover,
+  #smallprint a:focus {
+    color: var(--color-text);
+  }
+
+  @media (min-width: 760px) {
+    #smallprint {
+      grid-row: 4 / 5;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #smallprint {
+      grid-column: 6 / 10;
+      grid-row: 3 / 4;
+      justify-content: space-evenly;
+      gap: 1rem;
+    }
+  }
+
+  .icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    gap: 1rem;
+  }
+
+  .icon {
+    color: var(--color-page);
+  }
+
+  .icon * {
+    color: inherit;
+  }
+
+  .legal {
+    align-self: center;
+    text-align: center;
   }
 </style>

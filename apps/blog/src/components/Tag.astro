@@ -7,31 +7,33 @@ export interface Props {
 const { name, size = "sm" } = Astro.props;
 ---
 
-<li
-  class={`inline-block ${
-    size === "sm" ? "my-1" : "my-3 mx-1"
-  }`}
->
-  <a
-    href={`/tags/${name.toLowerCase()}`}
-    class={`${size === "sm" ? "" : "text-lg"} pr-2 group`}
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class=`${size === "sm" ? " scale-[80%]" : "scale-[80%]"}`}
-      ><path
-        d="M16.018 3.815 15.232 8h-4.966l.716-3.815-1.964-.37L8.232 8H4v2h3.857l-.751 4H3v2h3.731l-.714 3.805 1.965.369L8.766 16h4.966l-.714 3.805 1.965.369.783-4.174H20v-2h-3.859l.751-4H21V8h-3.733l.716-3.815-1.965-.37zM14.106 14H9.141l.751-4h4.966l-.752 4z"
-      ></path>
-    </svg>
-    &nbsp;<span class="inline-block ml-1.5">{name.toLowerCase()}</span>
+<li>
+  <a href={`/tags/${name.toLowerCase()}`}>
+    <span>{name.toLowerCase()}</span>
   </a>
 </li>
 
 <style>
+
   a {
-    @apply relative hover:-top-0.5 hover:text-skin-accent focus-visible:p-1;
+    display: flex;
+    flex-direction: row;
+    gap: 0 calc(var(--character-width) * 0.5);
   }
-  a svg {
-    @apply -mr-5 h-6 w-6 scale-95 text-skin-base opacity-80 group-hover:fill-skin-accent;
+
+  a:hover,
+  a:focus {
+    color: var(--color-feature-2);
   }
+  
+  a span {
+    text-decoration: underline;
+  }
+  
+  a:before {
+    content: "🎈";
+    position: relative;
+    top: 0.1em;
+  }
+  
 </style>

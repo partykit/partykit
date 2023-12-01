@@ -13,7 +13,7 @@ const { href, className, ariaLabel, title, disabled = false } = Astro.props;
 <a
   href={disabled ? "#" : href}
   tabindex={disabled ? "-1" : "0"}
-  class={`group inline-block ${className}`}
+  class={`${className}`}
   aria-label={ariaLabel}
   title={title}
   aria-disabled={disabled}
@@ -22,7 +22,52 @@ const { href, className, ariaLabel, title, disabled = false } = Astro.props;
 </a>
 
 <style>
+
   a {
-    @apply hover:text-skin-accent;
+    display: inline-block;
+    padding: var(--box-padding);
+    width: 100%;
+    border: none;
+    border-radius: 2em;
+    text-align: center;
+    text-decoration: none;
+    background: var(--color-feature-2);
+    color: var(--color-page);
+    font-variation-settings: "wght" 350;
+    cursor: pointer;
+    flex-grow: 2;
   }
+  
+  @media (max-width: 759px) {
+    a {
+      font-size: 95%;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  @media (min-width: 760px) {
+    a {
+      max-width: var(--atom-width);
+    }
+  }
+  
+  a:after {
+    content: "→";
+    position: relative;
+    left: 0;
+    margin-left: var(--character-width);
+    transition: 0.3s ease 0.3s;
+  }
+
+  a:hover,
+  a:focus {
+    color: var(--color-page);
+  }
+
+  a:hover:after,
+  a:focus:after {
+    left: 0.25em;
+  }
+
 </style>

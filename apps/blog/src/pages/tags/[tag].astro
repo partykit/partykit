@@ -2,8 +2,6 @@
 import { CollectionEntry, getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import Card from "@components/Card";
 import getUniqueTags from "@utils/getUniqueTags";
 import getPostsByTag from "@utils/getPostsByTag";
@@ -36,7 +34,6 @@ const tagPosts = getPostsByTag(posts, tag);
 ---
 
 <Layout title={`Tag:${tag} | ${SITE.title}`}>
-  <Header activeNav="tags" />
   <Main
     pageTitle={`Tag:${tag}`}
     pageDesc={`All the articles with the tag "${tag}".`}
@@ -49,5 +46,4 @@ const tagPosts = getPostsByTag(posts, tag);
       }
     </ul>
   </Main>
-  <Footer />
 </Layout>
