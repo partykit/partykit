@@ -414,7 +414,6 @@
     grid-column: span 2;
     color: var(--color-feature-2);
     width: 100%;
-    max-width: var(--atom-width);
     margin-left: auto;
     margin-right: auto;
   }
@@ -428,7 +427,6 @@
   .card > p:nth-child(3) {
     grid-column: 1/-1;
     width: 100%;
-    max-width: var(--atom-width);
     margin-left: auto;
     margin-right: auto;
   }
@@ -452,6 +450,25 @@
    
   article h3 {
     margin-top: 4rem;
+  }
+  
+  @media (max-width: 759px) {
+    article h4,
+    article h5,
+    article h6,
+    article p,
+    article ul,
+    article ol {
+      font-size: 16px;
+    }
+    article table h4,
+    article table h5,
+    article table h6,
+    article table p,
+    article table ul,
+    article table ol {
+      font-size: inherit;
+    }
   }
  
   article img,

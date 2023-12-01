@@ -96,6 +96,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     flex-direction: row;
     gap: 0;
     margin-bottom: 1rem;
+    color: var(--color-feature-2);
   }
   .metadata:after {
     content: ".";
@@ -103,6 +104,12 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
   .metadata > *:after {
     content: ",";
     padding-right: var(--character-width);
+  }
+  
+  @media (max-width: 759px) {
+    .metadata {
+      font-size: 16px;
+    }
   }
   
   @media (min-width: 760px) {
