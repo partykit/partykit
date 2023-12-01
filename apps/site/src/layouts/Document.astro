@@ -65,10 +65,31 @@ const { title } = Astro.props;
     margin-top: 4rem;
   }
   
+  
+  @media (max-width: 759px) {
+    main h4,
+    main h5,
+    main h6,
+    main p,
+    main ul,
+    main ol {
+      font-size: 16px;
+    }
+    main table h4,
+    main table h5,
+    main table h6,
+    main table p,
+    main table ul,
+    main table ol {
+      font-size: inherit;
+    }
+  }
+  
   main strong,
   main b {
     @include font-core-bold();
     font-weight: inherit;
+    font-size: inherit;
   }
   
   main a {
