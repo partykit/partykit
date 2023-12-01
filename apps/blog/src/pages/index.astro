@@ -2,8 +2,6 @@
 import { getCollection } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import LinkButton from "@components/LinkButton.astro";
 import Hr from "@components/Hr.astro";
 import Card from "@components/Card";
@@ -60,17 +58,13 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
         }
       </ul>
       <div class="all-posts-btn-wrapper">
-        <LinkButton className={``} href="/posts/2">
-          More posts
-        </LinkButton>
+        <LinkButton className={``} href="/posts/2">More posts</LinkButton>
       </div>
     </section>
   </Main>
-
 </Layout>
 
 <style>
-
   header {
     margin-bottom: calc(var(--whitespace) * 0.5);
     display: flex;
@@ -80,15 +74,14 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
     padding: 0 1rem;
     text-align: center;
   }
-  
-    
+
   @media (min-width: 760px) {
     header {
       margin-bottom: var(--whitespace);
       padding: 0;
     }
   }
-  
+
   h2 {
     text-align: center;
     margin-bottom: calc(var(--whitespace) - 4rem);
@@ -102,11 +95,10 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
     justify-content: center;
     margin: 0 3rem;
   }
-  
+
   @media (min-width: 760px) {
     .all-posts-btn-wrapper {
       margin: 4rem 0;
     }
   }
-  
 </style>
