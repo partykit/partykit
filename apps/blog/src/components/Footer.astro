@@ -1,7 +1,4 @@
 ---
-import Hr from "./Hr.astro";
-import Socials from "./Socials.astro";
-
 const currentYear = new Date().getFullYear();
 
 export interface Props {
@@ -14,7 +11,9 @@ const { noMarginTop = false } = Astro.props;
 <footer>
   <div id="footer-inner">
     <h2>
-      Turn anything into&nbsp;a <br /><strong>real-time collaborative web&nbsp;app</strong>
+      Turn anything into&nbsp;a <br /><strong
+        >real-time collaborative web&nbsp;app</strong
+      >
     </h2>
 
     <div class="copy">
@@ -89,8 +88,8 @@ const { noMarginTop = false } = Astro.props;
       </nav>
 
       <p class="legal">
-        &copy; {currentYear} PartyKit. All rights reserved. <a href="https://partykit.io/privacy"
-          >Privacy&nbsp;policy</a
+        &copy; {currentYear} PartyKit. All rights reserved. <a
+          href="https://partykit.io/privacy">Privacy&nbsp;policy</a
         >.
       </p>
     </div>
@@ -98,7 +97,6 @@ const { noMarginTop = false } = Astro.props;
 </footer>
 
 <style>
-
   footer {
     z-index: 3;
     padding: var(--padding);
@@ -108,7 +106,7 @@ const { noMarginTop = false } = Astro.props;
     background: var(--color-feature-2);
     color: var(--color-page);
   }
-  
+
   #footer-inner {
     width: 100%;
     display: grid;
@@ -116,7 +114,7 @@ const { noMarginTop = false } = Astro.props;
     gap: 1rem;
     padding: 0;
   }
-  
+
   @media (min-width: 760px) {
     #footer-inner {
       grid-template-columns: repeat(10, 1fr);
@@ -135,16 +133,8 @@ const { noMarginTop = false } = Astro.props;
     grid-column: 1 / -1;
     text-align: center;
     font-variation-settings: "wght" 240;
-    font-feature-settings:
-      "calt" 01,
-      "dlig" 00,
-      "case" 01,
-      "ss01" 01,
-      "ss02" 01,
-      "ss07" 01,
-      "ss08" 01,
-      "cv10" 01,
-      "cv13" 00;
+    font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01, "ss02" 01,
+      "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
     font-size: 7.25vw;
     line-height: 1.2;
     letter-spacing: 0;
@@ -159,16 +149,8 @@ const { noMarginTop = false } = Astro.props;
     footer h2 {
       max-width: 100%;
       font-variation-settings: "wght" 210;
-      font-feature-settings:
-        "calt" 01,
-        "dlig" 00,
-        "case" 01,
-        "ss01" 01,
-        "ss02" 01,
-        "ss07" 01,
-        "ss08" 01,
-        "cv10" 01,
-        "cv13" 00;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
       font-size: 70px;
       line-height: 1.05;
       letter-spacing: 0;
@@ -203,16 +185,8 @@ const { noMarginTop = false } = Astro.props;
       grid-column: 1 / -1;
       max-width: 16em;
       font-variation-settings: "wght" 230;
-      font-feature-settings:
-        "calt" 01,
-        "dlig" 00,
-        "case" 01,
-        "ss01" 01,
-        "ss02" 01,
-        "ss07" 01,
-        "ss08" 01,
-        "cv10" 01,
-        "cv13" 00;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
       font-size: 32px;
       line-height: 1.2;
       letter-spacing: 0.025em;
@@ -253,7 +227,7 @@ const { noMarginTop = false } = Astro.props;
       margin: 0;
     }
   }
-  
+
   .get-started a {
     display: inline-block;
     padding: var(--box-padding);
@@ -314,7 +288,6 @@ const { noMarginTop = false } = Astro.props;
   #smallprint a:focus {
     color: var(--color-text);
   }
-  
 
   @media (min-width: 760px) {
     #smallprint {
@@ -340,11 +313,11 @@ const { noMarginTop = false } = Astro.props;
     align-self: center;
     gap: 1rem;
   }
-  
+
   .icon {
     color: var(--color-page);
   }
-  
+
   .icon * {
     color: inherit;
   }
@@ -353,5 +326,4 @@ const { noMarginTop = false } = Astro.props;
     align-self: center;
     text-align: center;
   }
-
 </style>

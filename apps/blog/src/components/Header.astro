@@ -1,10 +1,4 @@
 ---
-import { LOGO_IMAGE, SITE } from "@config";
-import Hr from "./Hr.astro";
-import LinkButton from "./LinkButton.astro";
-
-import logoSVG from "/public/favicon.svg";
-
 export interface Props {
   activeNav?: "posts" | "tags" | "about" | "search";
 }
@@ -21,8 +15,10 @@ const { activeNav } = Astro.props;
         <a class="nav-page-item" href="https://docs.partykit.io"
           ><span>Docs</span></a
         >
-        <a class="nav-page-item" href="https://partykit.io/#pricing-header" data-dismiss-nav
-          ><span>Pricing</span></a
+        <a
+          class="nav-page-item"
+          href="https://partykit.io/#pricing-header"
+          data-dismiss-nav><span>Pricing</span></a
         >
         <a class="nav-page-item" href="https://blog.partykit.io"
           ><span>Blog</span></a
@@ -78,7 +74,6 @@ const { activeNav } = Astro.props;
 </header>
 
 <style lang="scss">
-
   header {
     position: sticky;
     top: 0;
@@ -242,7 +237,7 @@ const { activeNav } = Astro.props;
     flex-direction: column;
     gap: 1em;
   }
-  
+
   #nav-pages a:hover span,
   #nav-pages a:focus span {
     color: var(--color-feature-2);
@@ -251,16 +246,8 @@ const { activeNav } = Astro.props;
   @media (max-width: 759px) {
     #nav-pages {
       font-variation-settings: "wght" 220;
-      font-feature-settings:
-        "calt" 01,
-        "dlig" 00,
-        "case" 01,
-        "ss01" 01,
-        "ss02" 01,
-        "ss07" 01,
-        "ss08" 01,
-        "cv10" 01,
-        "cv13" 00;
+      font-feature-settings: "calt" 01, "dlig" 00, "case" 01, "ss01" 01,
+        "ss02" 01, "ss07" 01, "ss08" 01, "cv10" 01, "cv13" 00;
       font-size: 12vw;
       line-height: 1.05;
       letter-spacing: -0.01em;

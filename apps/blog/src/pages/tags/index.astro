@@ -1,7 +1,5 @@
 ---
 import { getCollection } from "astro:content";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
 import Tag from "@components/Tag.astro";
@@ -14,7 +12,10 @@ let tags = getUniqueTags(posts);
 ---
 
 <Layout title={`Tags | ${SITE.title}`}>
-  <Main pageTitle="PartyKit blog tags" pageDesc="Because everything is better with metadata.">
+  <Main
+    pageTitle="PartyKit blog tags"
+    pageDesc="Everything is better with metadata."
+  >
     <ul class="font-XL">
       {tags.map(tag => <Tag name={tag} size="lg" />)}
     </ul>
@@ -22,7 +23,6 @@ let tags = getUniqueTags(posts);
 </Layout>
 
 <style>
-  
   ul {
     margin-top: var(--whitespace);
     display: flex;
@@ -31,18 +31,17 @@ let tags = getUniqueTags(posts);
     gap: 1rem var(--character-width);
     padding: 0 3rem;
   }
-  
+
   @media (min-width: 760px) {
     ul {
       padding: 0 2rem;
     }
   }
-  
+
   @media (min-width: 1100px) {
     ul {
       padding: 0;
       flex-direction: row;
     }
   }
-  
 </style>

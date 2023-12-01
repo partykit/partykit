@@ -2,8 +2,6 @@
 import { SITE } from "@config";
 import Layout from "@layouts/Layout.astro";
 import Main from "@layouts/Main.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import Card from "@components/Card";
 import LinkButton from "@components/LinkButton.astro";
 import slugify from "@utils/slugify";
@@ -30,35 +28,33 @@ const next = pageNum < totalPages ? "" : "disabled";
         ))
       }
     </ul>
-    
-  {
-    totalPages > 1 && (
-      <nav class="pagination-wrapper" aria-label="Pagination">
-        <LinkButton
-          disabled={prev === "disabled"}
-          href={`/posts${pageNum - 1 !== 1 ? "/" + (pageNum - 1) : ""}`}
-          className={``}
-          ariaLabel="Previous"
-        >
-          Prev
-        </LinkButton>
-        <LinkButton
-          disabled={next === "disabled"}
-          href={`/posts/${pageNum + 1}`}
-          className={``}
-          ariaLabel="Next"
-        >
-          Next
-        </LinkButton>
-      </nav>
-    )
-  }
-  </Main>
 
+    {
+      totalPages > 1 && (
+        <nav class="pagination-wrapper" aria-label="Pagination">
+          <LinkButton
+            disabled={prev === "disabled"}
+            href={`/posts${pageNum - 1 !== 1 ? "/" + (pageNum - 1) : ""}`}
+            className={``}
+            ariaLabel="Previous"
+          >
+            Prev
+          </LinkButton>
+          <LinkButton
+            disabled={next === "disabled"}
+            href={`/posts/${pageNum + 1}`}
+            className={``}
+            ariaLabel="Next"
+          >
+            Next
+          </LinkButton>
+        </nav>
+      )
+    }
+  </Main>
 </Layout>
 
 <style>
-
   .pagination-wrapper {
     display: flex;
     width: calc(100% - 6rem);
@@ -68,14 +64,14 @@ const next = pageNum < totalPages ? "" : "disabled";
     margin: 4rem 3rem 0;
     gap: 1rem;
   }
-  
+
   @media (min-width: 760px) {
     .pagination-wrapper {
       width: 100%;
       margin: 4rem 0 0;
     }
   }
-  
+
   .pagination-wrapper a:first-child:before {
     position: relative;
     content: "←";
@@ -92,18 +88,16 @@ const next = pageNum < totalPages ? "" : "disabled";
   .pagination-wrapper a:first-child:after {
     content: none;
   }
-  
+
   .pagination-wrapper a[aria-disabled] {
     opacity: 0.25;
     cursor: default;
   }
-  
+
   .pagination-wrapper a[aria-disabled]:hover:before,
   .pagination-wrapper a[aria-disabled]:hover:after,
   .pagination-wrapper a[aria-disabled]:focus:before,
   .pagination-wrapper a[aria-disabled]:focus:after {
     left: 0;
   }
-
-  
 </style>

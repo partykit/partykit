@@ -1,7 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Header from "@components/Header.astro";
-import Footer from "@components/Footer.astro";
 import Tag from "@components/Tag.astro";
 import Datetime from "@components/Datetime";
 import type { CollectionEntry } from "astro:content";
@@ -86,7 +84,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     padding-right: var(--character-width);
     transition: 0.3s ease 0.3s;
   }
-  
+
   .breadcrumb span:hover::before {
     left: -0.25em;
   }
@@ -105,20 +103,20 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     content: ",";
     padding-right: var(--character-width);
   }
-  
+
   @media (max-width: 759px) {
     .metadata {
       font-size: 16px;
     }
   }
-  
+
   @media (min-width: 760px) {
     .metadata {
       padding-left: 0;
       padding-right: 0;
     }
   }
-  
+
   article {
     display: flex;
     flex-direction: column;
@@ -126,14 +124,14 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     padding: 0 3rem;
     padding-bottom: calc(var(--whitespace) * 0.5);
   }
-  
+
   @media (min-width: 760px) {
     article {
       padding-left: 0;
       padding-right: 0;
     }
   }
-  
+
   .tags-container {
     display: flex;
     flex-direction: row;
@@ -145,12 +143,11 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     padding: 1rem 2rem;
     border-top: 1px solid var(--color-feature-1);
   }
-  
+
   @media (min-width: 1100px) {
     .tags-container {
       width: calc(80% - 3rem);
       margin: 0 auto;
     }
   }
-  
 </style>
