@@ -26,9 +26,17 @@ let tags = getUniqueTags(posts);
   ul {
     margin-top: var(--whitespace);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     gap: 1rem var(--character-width);
+    padding: 0 3rem;
+  }
+  
+  @media (min-width: 760px) {
+    ul {
+      padding: 0;
+      flex-direction: row;
+    }
   }
   
 </style>

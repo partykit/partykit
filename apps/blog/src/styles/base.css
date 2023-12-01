@@ -362,16 +362,19 @@
   }
   
   .card {
-    width: 100%;
+    width: calc(100% - 6rem);
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     padding: 4rem 0;
+    margin: 0 3rem;
   }
 
   @media (min-width: 760px) {
     .card {
       grid-template-columns: repeat(10, 1fr);
+      width: 100%;
+      margin: 0;
     }
   }
 
@@ -446,9 +449,19 @@
   article img,
   article video {
     display: block;
-    width: 100%;
+    width: calc(100% + 3rem);
+    max-width: calc(100% + 3rem);
     height: auto;
-    margin: 2rem 0;
+    margin: 2rem -1.5rem;
+  }
+  
+  @media (min-width: 760px) {
+    article img,
+    article video {
+      margin: 2rem 0;
+      width: 100%;
+      max-width: 100%;
+   }
   }
   
   article .flex img,
@@ -497,8 +510,16 @@
   
   article pre {
     padding: 1rem 1.5rem;
-    margin: 2rem 0;
-    font-size: 90%;
+    margin: 2rem -1.5rem;
+    font-size: 80%;
+    line-height: 1.5;
+  }
+  
+  @media (min-width: 760px) {
+    article pre {
+      margin: 2rem 0;
+      font-size: 90%;
+   }
   }
   
   article hr {

@@ -15,6 +15,12 @@ const { name, size = "sm" } = Astro.props;
 
 <style>
 
+  a {
+    display: flex;
+    flex-direction: row;
+    gap: 0 calc(var(--character-width) * 0.5);
+  }
+
   a:hover,
   a:focus {
     color: var(--color-feature-2);

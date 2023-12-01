@@ -61,12 +61,19 @@ const next = pageNum < totalPages ? "" : "disabled";
 
   .pagination-wrapper {
     display: flex;
-    width: 100%;
+    width: calc(100% - 6rem);
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 4rem;
+    margin: 4rem 3rem 0;
     gap: 1rem;
+  }
+  
+  @media (min-width: 760px) {
+    .pagination-wrapper {
+      width: 100%;
+      margin: 4rem 0 0;
+    }
   }
   
   .pagination-wrapper a:first-child:before {

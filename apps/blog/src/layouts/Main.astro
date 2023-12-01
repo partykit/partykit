@@ -19,7 +19,7 @@ const { pageTitle, pageDesc } = Astro.props;
 <style>
   
   #main-content {
-    margin: calc(var(--whitespace) + 50px) 0 calc(var(--whitespace) * 0.5);
+    margin: calc(var(--whitespace) - 50px) 0 calc(var(--whitespace) * 0.5);
   }
   @media (min-width: 1100px) {
     #main-content {
@@ -27,6 +27,15 @@ const { pageTitle, pageDesc } = Astro.props;
       margin-left: auto;
       margin-right: auto;
     }
+  }
+  
+  #main-content > h1 {
+    display: none;
+  }
+  
+  #main-content > h1 + p {
+    text-align: center;
+    padding: 0 3rem;
   }
 
 </style>

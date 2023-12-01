@@ -19,8 +19,8 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 <Layout>
   <Main id="main-content">
     <header>
-      <h1 class="font-XL-bold">PartyKit blog</h1>
-      <p class="font-L">Because everything's better with friends.</p>
+      <h1 class="font-hero-bold md:font-XL-bold">PartyKit blog</h1>
+      <p class="font-L">Because everything’s better with friends.</p>
     </header>
 
     {
@@ -60,8 +60,8 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
         }
       </ul>
       <div class="all-posts-btn-wrapper">
-        <LinkButton href="/posts">
-          All Posts
+        <LinkButton href="/posts/2">
+          More posts
         </LinkButton>
       </div>
     </section>
@@ -72,11 +72,21 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 <style>
 
   header {
-    margin-bottom: var(--whitespace);
+    margin-bottom: calc(var(--whitespace) * 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 3rem;
+    padding: 0 1rem;
+    text-align: center;
+  }
+  
+    
+  @media (min-width: 760px) {
+    header {
+      margin-bottom: var(--whitespace);
+      padding: 0;
+    }
   }
   
   h2 {
@@ -90,7 +100,13 @@ const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin-top: 4rem;
+    margin: 0 3rem;
+  }
+  
+  @media (min-width: 760px) {
+    .all-posts-btn-wrapper {
+      margin: 4rem 0;
+    }
   }
   
 </style>

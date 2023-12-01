@@ -33,7 +33,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     <span onclick="history.back()">Go back</span>
   </div>
   <main id="main-content">
-    <h1 class="mx-auto max-w-4xl font-hero" style="margin: calc(var(--whitespace) - 50px) auto calc(var(--whitespace) * 0.5)">{title}</h1>
+    <h1 class="font-hero">{title}</h1>
     <div class="metadata mx-auto max-w-2xl">
       <span>{author ?? "PartyKit Team"}</span>
       <Datetime datetime={pubDatetime} />
@@ -49,9 +49,15 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
 </Layout>
 
 <style>
+  h1 {
+    max-width: 15em;
+    padding: 0 2rem;
+    margin: calc(var(--whitespace) - 50px) auto calc(var(--whitespace) * 0.5);
+  }
+
   .breadcrumb {
     box-sizing: border-box;
-    padding-top: 50px;
+    padding: 50px 1rem 0;
     height: 100px;
     border-bottom: 1px solid var(--color-feature-1);
     display: flex;
@@ -79,6 +85,7 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     left: -0.25em;
   }
   .metadata {
+    padding: 0 3rem;
     display: flex;
     flex-direction: row;
     gap: 0;
@@ -92,11 +99,26 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     padding-right: var(--character-width);
   }
   
+  @media (min-width: 760px) {
+    .metadata {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+  
   article {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    padding: 0 3rem;
     padding-bottom: calc(var(--whitespace) * 0.5);
+  }
+  
+  @media (min-width: 760px) {
+    article {
+      padding-left: 0;
+      padding-right: 0;
+    }
   }
   
   .tags-container {
@@ -104,8 +126,10 @@ const ogUrl = new URL(ogImage ? ogImage : `${title}.png`, Astro.url.origin)
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem 2rem;
     min-height: 50px;
+    padding: 1rem 2rem;
     border-top: 1px solid var(--color-feature-1);
   }
   

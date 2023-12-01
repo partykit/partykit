@@ -232,8 +232,8 @@ const { noMarginTop = false } = Astro.props;
     align-items: stretch;
     justify-content: center;
     gap: 1rem;
-    margin: 2rem 0;
-    max-width: 100%;
+    margin: 2rem -0.5rem;
+    max-width: calc(100% + 1rem);
   }
   @media (min-width: 760px) {
     .get-started {
