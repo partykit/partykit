@@ -11,7 +11,7 @@ const valueIsNotNil = <T>(
 export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   id?: string; // the id of the client
   host: string; // base url for the party
-  room: string; // the room to connect to
+  room?: string; // the room to connect to
   party?: string; // the party to connect to (defaults to main)
   protocol?: "ws" | "wss";
   protocols?: string[];
@@ -125,36 +125,57 @@ function getPartyInfo(
 
 // TODO: incorporate the above notes
 export default class PartySocket extends ReconnectingWebSocket {
-  _pk: string;
-  _pkurl: string;
-  name: string;
-  room: string;
-  host: string;
-  path: string;
+  _pk!: string;
+  _pkurl!: string;
+  name!: string;
+  room?: string;
+  host!: string;
+  path!: string;
 
   constructor(readonly partySocketOptions: PartySocketOptions) {
-    const {
-      id,
-      host: _host,
-      path: _path,
-      party: _party,
-      room: _room,
-      protocol: _protocol,
-      query: _query,
-      protocols,
-      ...socketOptions
-    } = partySocketOptions;
+    const wsOptions = getWSOptions(partySocketOptions);
 
-    const _pk = id || generateUUID();
-    const party = getPartyInfo(partySocketOptions, "ws", { _pk });
+    super(wsOptions.urlProvider, wsOptions.protocols, wsOptions.socketOptions);
 
-    super(party.urlProvider, protocols, socketOptions);
+    this.setWSProperties(wsOptions);
+  }
+
+  public changeProperties(partySocketOptions: Partial<PartySocketOptions>) {
+    const wsOptions = getWSOptions({
+      ...partySocketOptions,
+      host: partySocketOptions.host ?? this.host,
+      room: partySocketOptions.room ?? this.room,
+      path: partySocketOptions.path ?? this.path,
+    });
+
+    this._url = wsOptions.urlProvider;
+    this._protocols = wsOptions.protocols;
+    this._options = wsOptions.socketOptions;
+
+    this.setWSProperties(wsOptions);
+  }
+
+  private setWSProperties(wsOptions: ReturnType<typeof getWSOptions>) {
+    const { _pk, _pkurl, name, room, host, path } = wsOptions;
+
     this._pk = _pk;
-    this._pkurl = party.partyUrl;
-    this.name = party.name;
-    this.room = party.room;
-    this.host = party.host;
-    this.path = party.path;
+    this._pkurl = _pkurl;
+    this.name = name;
+    this.room = room;
+    this.host = host;
+    this.path = path;
+  }
+
+  public reconnect(
+    code?: number | undefined,
+    reason?: string | undefined
+  ): void {
+    if (!this.room || !this.host) {
+      throw new Error(
+        "The room and host must be set before connecting, use `changeProperties` method to set them or pass them to the constructor."
+      );
+    }
+    super.reconnect(code, reason);
   }
 
   get id() {
@@ -185,3 +206,32 @@ export default class PartySocket extends ReconnectingWebSocket {
 }
 
 export { ReconnectingWebSocket as WebSocket };
+
+function getWSOptions(partySocketOptions: PartySocketOptions) {
+  const {
+    id,
+    host: _host,
+    path: _path,
+    party: _party,
+    room: _room,
+    protocol: _protocol,
+    query: _query,
+    protocols,
+    ...socketOptions
+  } = partySocketOptions;
+
+  const _pk = id || generateUUID();
+  const party = getPartyInfo(partySocketOptions, "ws", { _pk });
+
+  return {
+    _pk: _pk,
+    _pkurl: party.partyUrl,
+    name: party.name,
+    room: party.room,
+    host: party.host,
+    path: party.path,
+    protocols: protocols,
+    socketOptions: socketOptions,
+    urlProvider: party.urlProvider,
+  };
+}
