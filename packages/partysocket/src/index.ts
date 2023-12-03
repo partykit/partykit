@@ -140,7 +140,7 @@ export default class PartySocket extends ReconnectingWebSocket {
     this.setWSProperties(wsOptions);
   }
 
-  public changeProperties(partySocketOptions: Partial<PartySocketOptions>) {
+  public updateProperties(partySocketOptions: Partial<PartySocketOptions>) {
     const wsOptions = getWSOptions({
       ...partySocketOptions,
       host: partySocketOptions.host ?? this.host,
