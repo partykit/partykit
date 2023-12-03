@@ -172,7 +172,7 @@ export default class PartySocket extends ReconnectingWebSocket {
   ): void {
     if (!this.room || !this.host) {
       throw new Error(
-        "The room and host must be set before connecting, use `changeProperties` method to set them or pass them to the constructor."
+        "The room and host must be set before connecting, use `updateProperties` method to set them or pass them to the constructor."
       );
     }
     super.reconnect(code, reason);
