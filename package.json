@@ -16,8 +16,7 @@
     "test": "vitest",
     "repocheck": "manypkg check",
     "typecheck": "npm exec tsc --workspaces",
-    "coverage": "vitest run --coverage",
-    "postinstall": "patch-package"
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "PartyKit, Inc. <team@partykit.io>",
@@ -36,7 +35,6 @@
     "eslint-plugin-deprecation": "^2.0.0",
     "ink-testing-library": "^3.0.0",
     "jsdom": "^22.1.0",
-    "patch-package": "^8.0.0",
     "shx": "^0.3.4",
     "tsup": "^8.0.1",
     "typescript": "^5.3.2",
