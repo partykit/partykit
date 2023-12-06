@@ -53,6 +53,15 @@ const ws = new PartySocket({
   // if not provided, a random id will be generated
   id: "some-connection-id",
 });
+
+// optionally, update the properties of the connection
+// (e.g. to change the host or room)
+ws.updateProperties({
+  host: "another-project.username.partykit.dev",
+  room: "my-new-room",
+});
+
+ws.reconnect(); // make sure to call reconnect() after updating the properties
 ```
 
 ### Update URL
