@@ -1,5 +1,25 @@
 [
   {
+    "title": "Partycore (everything’s better at 140bpm)",
+    "link": "https://blog.partykit.io/posts/partycore-140bpm-with-tonejs/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/partycore-140bpm-with-tonejs/"
+    },
+    "description": "We’ve built a multiplayer drum machine demo with Tone.js and Yjs. It’s a ton of fun. Here’s how it works.",
+    "pubDate": "Tue, 05 Dec 2023 12:02:00 GMT"
+  },
+  {
+    "title": "Party.IO — a new Socket.IO backend for PartyKit",
+    "link": "https://blog.partykit.io/posts/party-io-a-socket-io-backend-for-partykit/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/party-io-a-socket-io-backend-for-partykit/"
+    },
+    "description": "We are super excited to announce the release of Party.IO, a Socket.IO backend for PartyKit!",
+    "pubDate": "Thu, 30 Nov 2023 10:12:00 GMT"
+  },
+  {
     "title": "PartyKit orchestrates Stately's machines in the Sky",
     "link": "https://blog.partykit.io/posts/partykit-orchestrates-stately/",
     "guid": {
@@ -78,25 +98,5 @@
     },
     "description": "Building a live poll Web Component with Stencil and PartyKit, plus a meditation on the art of maintenance.",
     "pubDate": "Fri, 29 Sep 2023 10:12:00 GMT"
-  },
-  {
-    "title": "PartyKit raises a pre-seed round of $2.5M from Sequoia, Remote First, and more",
-    "link": "https://blog.partykit.io/posts/partykit-raises-a-pre-seed-round-2-5-m-from-sequoia-remote-first-and-more/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/partykit-raises-a-pre-seed-round-2-5-m-from-sequoia-remote-first-and-more/"
-    },
-    "description": "We're building the developer-friendly, real-time platform for human-to-human and human-to-AI collaboration. Today we're announcing our pre-seed round, as well as general availability of our platform!",
-    "pubDate": "Tue, 26 Sep 2023 13:00:00 GMT"
-  },
-  {
-    "title": "Dancing cursors and Voronoi diagrams",
-    "link": "https://blog.partykit.io/posts/dancing-cursors-and-voronoi-diagrams/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/dancing-cursors-and-voronoi-diagrams/"
-    },
-    "description": "Real-time multiplayer cursors on the PartyKit homepage drive an interactive Voronoi diagram. Here’s how it works.",
-    "pubDate": "Mon, 25 Sep 2023 13:26:00 GMT"
   }
 ]
