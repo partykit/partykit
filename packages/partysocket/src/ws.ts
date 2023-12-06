@@ -154,9 +154,9 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
   private _closeCalled = false;
   private _messageQueue: Message[] = [];
 
-  private readonly _url: UrlProvider;
-  private readonly _protocols?: ProtocolsProvider;
-  private readonly _options: Options;
+  protected _url: UrlProvider;
+  protected _protocols?: ProtocolsProvider;
+  protected _options: Options;
 
   constructor(
     url: UrlProvider,
