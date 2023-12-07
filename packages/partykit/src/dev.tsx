@@ -653,6 +653,7 @@ Workers["${name}"] = ${name};
 
                   void server.onBundleUpdate(
                     {
+                      host: "0.0.0.0",
                       log: new Log(5, { prefix: "pk" }),
                       verbose: options.verbose,
                       inspectorPort: portForRuntimeInspector,
