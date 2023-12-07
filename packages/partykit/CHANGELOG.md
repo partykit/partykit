@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.40
+
+### Patch Changes
+
+- [#594](https://github.com/partykit/partykit/pull/594) [`44bc94a`](https://github.com/partykit/partykit/commit/44bc94a227ec283d546155fb2dbb662aa075e6f2) Thanks [@threepointone](https://github.com/threepointone)! - feat: config.build.alias / config.serve.build.alias
+
+  This lets you specify aliases for modules, just like esbuild's aliases.
+
 ## 0.0.39
 
 ### Patch Changes
