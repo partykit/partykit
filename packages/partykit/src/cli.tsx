@@ -465,6 +465,7 @@ export async function deploy(options: {
     format: assetsBuild?.format ?? "esm",
     sourcemap: assetsBuild?.sourcemap ?? true,
     external: assetsBuild?.external,
+    alias: assetsBuild?.alias,
     define: {
       PARTYKIT_HOST: `"${config.name}.${
         config.team || user.login
@@ -614,6 +615,7 @@ export const ${name} = ${name}Party;
         ...esbuildOptions.define,
         ...config.define,
       },
+      alias: config.build?.alias,
       plugins: [
         nodejsCompatPlugin,
         {

@@ -353,6 +353,7 @@ function useAssetServer(
         ...assetsBuild?.define,
       },
       loader: assetsBuild?.loader,
+      alias: assetsBuild?.alias,
     }),
     [assetsBuild, assetsPath, defines]
   );
@@ -582,6 +583,7 @@ Workers["${name}"] = ${name};
           ...esbuildOptions.define,
           ...config.define,
         },
+        alias: config.build?.alias,
         plugins: [
           nodejsCompatPlugin,
           {
