@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.42
+
+### Patch Changes
+
+- [#598](https://github.com/partykit/partykit/pull/598) [`29ec788`](https://github.com/partykit/partykit/commit/29ec78882bcc957ff8ecf63cb2eedae92e1f7f51) Thanks [@threepointone](https://github.com/threepointone)! - warn when running in replit without a token
+
 ## 0.0.41
 
 ### Patch Changes
