@@ -54,9 +54,18 @@ const ws = new PartySocket({
 
   // optionally, pass an object of query string parameters to add to the request
   query: async () => ({
-    token: await getAuthToken()
-  })
+    token: await getAuthToken(),
+  }),
 });
+
+// optionally, update the properties of the connection
+// (e.g. to change the host or room)
+ws.updateProperties({
+  host: "another-project.username.partykit.dev",
+  room: "my-new-room",
+});
+
+ws.reconnect(); // make sure to call reconnect() after updating the properties
 ```
 
 ### Usage with React
