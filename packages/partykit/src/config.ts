@@ -61,8 +61,7 @@ export async function getUser(
       chalk.yellow(
         `
 Warning: You are running PartyKit in a replit environment. 
-To deploy your project, you will need to set the following environment variables in your replit environment:
-
+To deploy your project, you will need to set GITHUB_LOGIN and GITHUB_TOKEN in your replit environment.
 
 You can get a GitHub token by going to https://github.com/settings/tokens 
 > Click "Generate new token" > "Generate new token (classic)

@@ -25,11 +25,11 @@
   },
   "devDependencies": {
     "@types/random-words": "^1.1.4",
-    "@types/react": "^18.2.38",
+    "@types/react": "^18.2.42",
     "@types/which-pm-runs": "^1.0.2",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
-    "esbuild": "0.19.7",
+    "esbuild": "0.19.8",
     "execa": "^8.0.1",
     "find-up": "^7.0.0",
     "gradient-string": "^2.0.2",
@@ -38,8 +38,8 @@
     "ink-text-input": "^5.0.1",
     "random-words": "^2.0.0",
     "react": "^18.2.0",
-    "typescript": "^5.3.2",
-    "undici": "^5.27.2",
+    "typescript": "^5.3.3",
+    "undici": "^6.0.1",
     "which-pm-runs": "^1.1.0"
   }
 }

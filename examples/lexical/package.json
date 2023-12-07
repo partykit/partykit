@@ -13,8 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@lexical/react": "^0.9.0",
-    "@types/react": "^18.2.38",
-    "@types/react-dom": "^18.2.16",
+    "@types/react": "^18.2.42",
+    "@types/react-dom": "^18.2.17",
     "lexical": "^0.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
