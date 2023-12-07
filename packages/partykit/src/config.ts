@@ -40,13 +40,42 @@ export type UserSession = UserConfig & {
   getSessionToken(): Promise<string>;
 };
 
+const isReplit = !!process.env.REPL_ID && !!process.env.REPL_OWNER;
+
+let warnedAboutReplitEnv = false;
+
 export type LoginMethod = UserConfig["type"];
 
 const USER_CONFIG_PATH = path.join(os.homedir(), ".partykit", "config.json");
+
 export async function getUser(
   loginMethod?: LoginMethod,
   exact: boolean = false
 ): Promise<UserSession> {
+  if (
+    isReplit &&
+    !warnedAboutReplitEnv &&
+    !(process.env.PARTYKIT_TOKEN || process.env.GITHUB_TOKEN)
+  ) {
+    console.warn(
+      chalk.yellow(
+        `
+Warning: You are running PartyKit in a replit environment. 
+To deploy your project, you will need to set the following environment variables in your replit environment:
+
+
+You can get a GitHub token by going to https://github.com/settings/tokens 
+> Click "Generate new token" > "Generate new token (classic)
+
+Then, in your replit environment, open the Secrets panel and add the following secrets:
+
+GITHUB_LOGIN=<your github username>
+GITHUB_TOKEN=<your github token>
+`
+      )
+    );
+    warnedAboutReplitEnv = true;
+  }
   const flags = getFlags();
   const method = loginMethod ?? flags.defaultLoginMethod;
 
