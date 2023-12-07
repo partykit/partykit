@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.17
+
+### Patch Changes
+
+- [#588](https://github.com/partykit/partykit/pull/588) [`1487c3c`](https://github.com/partykit/partykit/commit/1487c3c3d87d27da83a0a9eab6c20f2b02ae0286) Thanks [@ayoubqrt](https://github.com/ayoubqrt)! - Change properties of PartySocket after instantiation
+
 ## 0.0.16
 
 ### Patch Changes
