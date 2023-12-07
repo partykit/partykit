@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.21
+
+### Patch Changes
+
+- [#596](https://github.com/partykit/partykit/pull/596) [`cfaab8e`](https://github.com/partykit/partykit/commit/cfaab8e2397c4bd692c5019d43c691fce2c8ab20) Thanks [@threepointone](https://github.com/threepointone)! - fix: use 0.0.0.0 as host, so replit can serve dev
+
 ## 0.0.20
 
 ### Patch Changes
