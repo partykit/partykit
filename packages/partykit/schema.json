@@ -71,6 +71,12 @@
                     "minify": {
                       "type": "boolean"
                     },
+                    "alias": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
                     "format": {
                       "type": "string",
                       "enum": [
@@ -175,6 +181,12 @@
         },
         "watch": {
           "type": "string"
+        },
+        "alias": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

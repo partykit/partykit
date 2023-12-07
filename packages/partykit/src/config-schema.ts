@@ -45,6 +45,7 @@ export const schema = z
                 external: z.array(z.string()).optional(),
                 outdir: z.string().optional(),
                 minify: z.boolean().optional(),
+                alias: z.record(z.string()).optional(),
                 format: z.enum(["esm", "cjs", "iife"]).optional(),
                 sourcemap: z.boolean().optional(),
                 define: z.record(z.string()).optional(),
@@ -69,6 +70,7 @@ export const schema = z
         command: z.string().optional(),
         cwd: z.string().optional(),
         watch: z.string().optional(),
+        alias: z.record(z.string()).optional(),
       })
       .strict()
       .optional(),
