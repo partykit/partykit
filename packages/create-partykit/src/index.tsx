@@ -513,10 +513,10 @@ export async function init(options: {
     `‣ To publish your project, run: ${chalk.bold("npm run deploy")}`
   );
 
-  console.log(`That's it! If you need any help, reach out to us on:`);
+  console.log(`\nThat's it! If you need any help, reach out to us on:`);
   console.log(`- Discord: https://discord.gg/g5uqHQJc3z`);
   console.log(`- Github: https://github.com/partykit/partykit`);
-  console.log(`- Twitter: https://twitter.com/partykit_io`);
+  console.log(`- Twitter: https://twitter.com/partykit_io\n`);
 }
 
 // for when we call this via the main CLI
