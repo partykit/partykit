@@ -733,6 +733,9 @@ export const ${name} = ${name}Party;
   if (config.parties) {
     form.set("parties", JSON.stringify([...Object.keys(config.parties)]));
   }
+  if (config.ai) {
+    form.set("ai", JSON.stringify(config.ai));
+  }
 
   if (assetsPath) {
     form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));

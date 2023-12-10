@@ -1,12 +1,16 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
-    "source.organizeImports": false
+    "source.organizeImports": "never"
   },
   "json.schemas": [
     {
       "url": "https://cdn.jsdelivr.net/npm/tsup/schema.json",
       "fileMatch": ["package.json"]
+    },
+    {
+      "url": "https://cdn.jsdelivr.net/npm/tsup/schema.json",
+      "fileMatch": ["package.json", "tsup.config.json"]
     }
   ]
 }

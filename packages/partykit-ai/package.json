@@ -1,0 +1,39 @@
+{
+  "name": "partykit-ai",
+  "version": "0.0.0",
+  "description": "partykit + ai",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "esm",
+      "cjs"
+    ]
+  },
+  "scripts": {
+    "clean": "shx rm -rf dist *.d.ts *.d.mts",
+    "post-build": "shx mv dist/*.d.ts* dist/*.d.mts* .",
+    "build": "npm run clean && tsup --dts-resolve && npm run post-build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/ai": "^1.0.39"
+  }
+}

@@ -668,6 +668,18 @@ Workers["${name}"] = ${name};
                         ...(config.vars
                           ? { PARTYKIT_VARS: config.vars as Json }
                           : {}),
+                        ...(config.ai
+                          ? {
+                              PARTYKIT_AI:
+                                config.ai === true
+                                  ? {
+                                      apiGateway:
+                                        "https://ai-dev.labs.partykit.dev",
+                                      apiToken: "DEVTOKEN",
+                                    }
+                                  : (config.ai as Json),
+                            }
+                          : {}),
                       },
                       durableObjects: {
                         PARTYKIT_DURABLE: "PartyKitDurable",
