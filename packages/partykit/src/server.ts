@@ -64,8 +64,11 @@ export type Context = {
   >;
 };
 
+export type AI = Record<string, never>;
+
 export type FetchLobby = {
   env: Record<string, unknown>;
+  ai: AI;
   parties: Context["parties"];
 };
 
@@ -167,6 +170,11 @@ export type Party = {
    * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
   getConnections<TState = unknown>(tag?: string): Iterable<Connection<TState>>;
+
+  /**
+   * A binding to the Cloudflare AI service.
+   */
+  ai: AI;
 };
 
 /* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party
@@ -327,6 +335,7 @@ export type PartyKitServer = {
     party: {
       id: string;
       env: Record<string, unknown>;
+      ai: AI;
       parties: Context["parties"];
     },
     ctx: ExecutionContext
@@ -344,6 +353,7 @@ export type PartyKitServer = {
     party: {
       id: string;
       env: Record<string, unknown>;
+      ai: AI;
       parties: Context["parties"];
     },
     ctx: ExecutionContext

@@ -71,6 +71,7 @@ type DurableObjectNamespaceEnv = {
 };
 
 type Env = DurableObjectNamespaceEnv & {
+  PARTYKIT_AI: Party.Party["ai"];
   PARTYKIT_VARS: Record<string, unknown>;
   PARTYKIT_DURABLE: DurableObjectNamespace;
 };
@@ -255,7 +256,8 @@ function createDurable(
     constructor(controller: DurableObjectState, env: Env) {
       super();
 
-      const { PARTYKIT_VARS, PARTYKIT_DURABLE, ...namespaces } = env;
+      const { PARTYKIT_VARS, PARTYKIT_AI, PARTYKIT_DURABLE, ...namespaces } =
+        env;
 
       this.controller = controller;
       this.namespaces = namespaces;
@@ -287,6 +289,7 @@ function createDurable(
         internalID: this.controller.id.toString(),
         name: options.name,
         env: PARTYKIT_VARS,
+        ai: PARTYKIT_AI,
         storage: this.controller.storage,
         broadcast: this.broadcast,
         context: {
@@ -621,7 +624,8 @@ export default {
 
       // TODO: throw if room is longer than x characters
 
-      const { PARTYKIT_VARS, PARTYKIT_DURABLE, ...namespaces } = env;
+      const { PARTYKIT_VARS, PARTYKIT_AI, PARTYKIT_DURABLE, ...namespaces } =
+        env;
 
       Object.assign(namespaces, {
         main: PARTYKIT_DURABLE,
@@ -680,6 +684,7 @@ export default {
                   {
                     id: roomId,
                     env: PARTYKIT_VARS,
+                    ai: PARTYKIT_AI,
                     parties,
                   },
                   ctx
@@ -722,6 +727,7 @@ export default {
                   {
                     id: roomId,
                     env: PARTYKIT_VARS,
+                    ai: PARTYKIT_AI,
                     parties,
                   },
                   ctx
@@ -769,6 +775,7 @@ export default {
             request,
             {
               env: PARTYKIT_VARS,
+              ai: PARTYKIT_AI,
               parties,
             },
             ctx

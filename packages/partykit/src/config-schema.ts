@@ -77,6 +77,16 @@ export const schema = z
     compatibilityDate: z.string().optional(),
     compatibilityFlags: z.array(z.string()).optional(),
     minify: z.boolean().optional(),
+    ai: z
+      .union([
+        z.boolean(),
+        z.object({
+          apiGateway: z.string().optional(),
+          apiToken: z.string().optional(),
+          apiAccount: z.string().optional(),
+        }),
+      ])
+      .optional(),
   })
   .strict();
 

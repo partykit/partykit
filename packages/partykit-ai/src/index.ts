@@ -4,11 +4,15 @@ import { Ai as CFAi } from "@cloudflare/ai";
 type AiOptions = ConstructorParameters<typeof CFAi>[1] & { binding?: any };
 
 export class Ai extends CFAi {
-  constructor(options: AiOptions = {}) {
-    super(options.binding, {
+  constructor(options: AiOptions) {
+    if (!options) {
+      throw new Error("You should pass this.party.ai as the first argument");
+    }
+    const { binding, ...rest } = options;
+    super(binding, {
       apiGateway: true,
       apiToken: "DEVTOKEN",
-      ...options,
+      ...rest,
     });
   }
 }

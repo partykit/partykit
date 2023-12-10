@@ -311,6 +311,8 @@ let loggedAboutReadingDotEnv = false;
 let loggedAboutReadingDotEnvLocal = false;
 let loggedAboutReadingPackageJson = false;
 
+let warnedAboutExperimentalAi = false;
+
 export function getConfig(
   configPath: string | undefined | null,
   overrides: ConfigOverrides = {},
@@ -403,6 +405,15 @@ export function getConfig(
       }
     }
 
+    if (config.ai && !warnedAboutExperimentalAi) {
+      logger.warn(
+        chalk.yellow(
+          `The AI feature is experimental and may change in the future.`
+        )
+      );
+      warnedAboutExperimentalAi = true;
+    }
+
     return config;
   }
   logger.debug(
@@ -483,6 +494,15 @@ export function getConfig(
 
   if (config.parties?.main) {
     throw new ConfigurationError(`Cannot have a party named "main"`);
+  }
+
+  if (config.ai && !warnedAboutExperimentalAi) {
+    logger.warn(
+      chalk.yellow(
+        `The AI feature is experimental and may change in the future.`
+      )
+    );
+    warnedAboutExperimentalAi = true;
   }
 
   return config;

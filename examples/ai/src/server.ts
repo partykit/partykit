@@ -3,11 +3,12 @@ import type * as Party from "partykit/server";
 import { Ai } from "partykit-ai";
 
 export default class Server implements Party.Server {
-  ai = new Ai();
-  constructor(readonly party: Party.Party) {}
+  ai: Ai;
+  constructor(public party: Party.Party) {
+    this.ai = new Ai(this.party.ai);
+  }
 
   async onRequest(_request: Party.Request): Promise<Response> {
-    // console.log(request);
     const messages = [
       { role: "system", content: "You are a friendly assistant" },
       {

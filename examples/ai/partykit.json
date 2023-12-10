@@ -6,5 +6,6 @@
     "path": "public",
     "singlePageApp": true,
     "build": "src/client.ts"
-  }
+  },
+  "ai": true
 }
