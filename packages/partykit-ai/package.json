@@ -1,5 +1,5 @@
 {
-  "name": "party-ai",
+  "name": "partykit-ai",
   "version": "0.0.0",
   "description": "partykit + ai",
   "main": "./dist/index.js",

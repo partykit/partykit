@@ -64,4 +64,4 @@ jobs:
       - run: npm publish --tag beta
         env:
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-        working-directory: packages/party-ai
+        working-directory: packages/partykit-ai

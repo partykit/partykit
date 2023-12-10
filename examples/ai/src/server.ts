@@ -1,6 +1,6 @@
 import type * as Party from "partykit/server";
 
-import { Ai } from "party-ai";
+import { Ai } from "partykit-ai";
 
 export default class Server implements Party.Server {
   ai = new Ai();
@@ -15,14 +15,13 @@ export default class Server implements Party.Server {
         content: "What is the origin of the phrase Hello, World",
       },
     ];
-    console.log("request");
     const stream = await this.ai.run("@cf/meta/llama-2-7b-chat-int8", {
       messages,
-      // stream: true,
+      stream: true,
     });
-    console.log(stream);
-    return Response.json(stream, {
-      // headers: { "content-type": "text/event-stream" },
+
+    return new Response(stream, {
+      headers: { "content-type": "text/event-stream" },
     });
   }
 }
