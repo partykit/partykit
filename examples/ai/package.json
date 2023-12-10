@@ -1,0 +1,14 @@
+{
+  "name": "@partykit/examples-ai",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "partykit dev",
+    "deploy": "partykit deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

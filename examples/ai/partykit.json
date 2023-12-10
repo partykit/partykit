@@ -1,0 +1,10 @@
+{
+  "name": "ai",
+  "main": "src/server.ts",
+  "compatibilityDate": "2023-11-12",
+  "serve": {
+    "path": "public",
+    "singlePageApp": true,
+    "build": "src/client.ts"
+  }
+}

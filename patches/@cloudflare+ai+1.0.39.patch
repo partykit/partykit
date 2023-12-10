@@ -1,0 +1,13 @@
+diff --git a/node_modules/@cloudflare/ai/dist/ai.js b/node_modules/@cloudflare/ai/dist/ai.js
+index 18d9eb7..7d8498b 100644
+--- a/node_modules/@cloudflare/ai/dist/ai.js
++++ b/node_modules/@cloudflare/ai/dist/ai.js
+@@ -27,7 +27,7 @@ export class Ai {
+                             "content-type": "application/json",
+                         },
+                     };
+-                    const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${this.options.apiAccount}/ai/run/${model}`, fetchOptions);
++                    const res = await fetch(`https://ai-dev.labs.partykit.dev/${model}`, fetchOptions);
+                     if (!res.ok) {
+                         throw new Error(await res.text());
+                     }

@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "npm start -w partykit",
-    "build": "npm run build -w partykit && concurrently \"npm run build -w y-partykit\" \"npm run build -w partysocket\" \"npm run build -w create-partykit\" \"npm run build -w partymix\" \"npm run build -w party.io\" --kill-others-on-fail",
+    "build": "npm run build -w partykit && concurrently \"npm run build -w y-partykit\" \"npm run build -w partysocket\" \"npm run build -w create-partykit\" \"npm run build -w partymix\" \"npm run build -w party.io\" \"npm run build -w party-ai\" --kill-others-on-fail",
     "check": "concurrently \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
@@ -26,6 +26,7 @@
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@manypkg/cli": "^0.21.1",
+    "@microsoft/api-extractor": "^7.38.5",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "@vitest/coverage-c8": "^0.33.0",
