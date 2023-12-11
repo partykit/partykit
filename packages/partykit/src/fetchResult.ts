@@ -24,6 +24,8 @@ export async function fetchResult<T>(
       Accept: "application/json",
       "User-Agent": `partykit/${packageVersion}`,
       "X-PartyKit-Version": packageVersion,
+      "X-CLOUDFLARE-ACCOUNT-ID": process.env.CLOUDFLARE_ACCOUNT_ID || "",
+      "X-CLOUDFLARE-API-TOKEN": process.env.CLOUDFLARE_API_TOKEN || "",
       ...(typeof fetchOptions.body === "string"
         ? { "Content-Type": "application/json" }
         : {}),

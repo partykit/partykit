@@ -87,6 +87,7 @@ export const schema = z
         }),
       ])
       .optional(),
+    domain: z.string().optional(),
   })
   .strict();
 

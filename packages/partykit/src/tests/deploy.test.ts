@@ -87,6 +87,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
+      domain: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -139,6 +140,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
+      domain: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -191,6 +193,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
+      domain: undefined,
     });
     expect(checkedResponse).toBe(true);
   });
@@ -217,6 +220,7 @@ describe("deploy", () => {
         compatibilityFlags: undefined,
         minify: undefined,
         withEnv: undefined,
+        domain: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
   });
@@ -307,6 +311,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
+      domain: undefined,
     });
 
     expect(checkedResponse).toBe(true);
