@@ -10,8 +10,6 @@ export class Ai extends CFAi {
     }
     const { binding, ...rest } = options;
     super(binding, {
-      apiGateway: true,
-      apiToken: "DEVTOKEN",
       ...rest,
     });
   }
