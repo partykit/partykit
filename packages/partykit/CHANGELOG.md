@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.44
+
+### Patch Changes
+
+- [#602](https://github.com/partykit/partykit/pull/602) [`f83a20b`](https://github.com/partykit/partykit/commit/f83a20bdc71c7687e8bce2f162cd2354c604d9b8) Thanks [@threepointone](https://github.com/threepointone)! - Experimental AI bindings
+
 ## 0.0.43
 
 ### Patch Changes
