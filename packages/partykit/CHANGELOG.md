@@ -1,5 +1,15 @@
 # partykit
 
+## 0.0.45
+
+### Patch Changes
+
+- [#606](https://github.com/partykit/partykit/pull/606) [`ef18e36`](https://github.com/partykit/partykit/commit/ef18e36dbb0cc189c6b9ae1246092bca0046ba10) Thanks [@threepointone](https://github.com/threepointone)! - deploy to own cloudflare account
+
+  You can now deploy to your own CF account! To do so, you must set the following environment variables: CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN, and add `domain: your.domain.com` to your `partykit.json` file.
+
+- [#608](https://github.com/partykit/partykit/pull/608) [`597e4dd`](https://github.com/partykit/partykit/commit/597e4dd0bb532797e7afcc92faeb38b093fa347f) Thanks [@threepointone](https://github.com/threepointone)! - deploy directly to custom domains (don't add the project name)
+
 ## 0.0.44
 
 ### Patch Changes
