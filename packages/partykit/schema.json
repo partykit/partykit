@@ -224,6 +224,9 @@
           "additionalProperties": false
         }
       ]
+    },
+    "domain": {
+      "type": "string"
     }
   },
   "additionalProperties": false,

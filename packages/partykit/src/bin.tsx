@@ -166,6 +166,7 @@ program
   .option("--with-env", "Define all variables in the deployment")
   .option("-n, --name <name>", "Name of the project")
   .option("--preview [name]", "Deploy to preview environment")
+  .option("--domain [domain]", "Custom domain for the project")
   .action(async (scriptPath, options) => {
     await printBanner();
     await cli.deploy({
@@ -181,6 +182,7 @@ program
       compatibilityFlags: options.compatibilityFlags,
       minify: options.minify,
       withEnv: options.withEnv,
+      domain: options.domain,
     });
   });
 

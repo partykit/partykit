@@ -382,6 +382,7 @@ export async function deploy(options: {
   compatibilityDate: string | undefined;
   compatibilityFlags: string[] | undefined;
   minify: boolean | undefined;
+  domain: string | undefined;
 }): Promise<void> {
   const config = getConfig(
     options.config,
@@ -428,6 +429,16 @@ export async function deploy(options: {
   // get user details
   const user = await getUser();
 
+  if (
+    config.domain &&
+    !(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN)
+  ) {
+    throw new Error(
+      "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the domain option"
+    );
+  }
+  const domain = config.domain || `${config.team || user.login}.partykit.dev`;
+
   const assetsConfig =
     config.serve === undefined
       ? {}
@@ -467,9 +478,7 @@ export async function deploy(options: {
     external: assetsBuild?.external,
     alias: assetsBuild?.alias,
     define: {
-      PARTYKIT_HOST: `"${config.name}.${
-        config.team || user.login
-      }.partykit.dev"`,
+      PARTYKIT_HOST: `"${config.name}.${domain}"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -609,9 +618,7 @@ export const ${name} = ${name}Party;
       ...esbuildOptions,
       minify: options.minify,
       define: {
-        PARTYKIT_HOST: `"${config.name}.${
-          config.team || user.login
-        }.partykit.dev"`,
+        PARTYKIT_HOST: `"${config.name}.${domain}"`,
         ...esbuildOptions.define,
         ...config.define,
       },
@@ -737,6 +744,10 @@ export const ${name} = ${name}Party;
     form.set("ai", JSON.stringify(config.ai));
   }
 
+  if (config.domain) {
+    form.set("domain", config.domain);
+  }
+
   if (assetsPath) {
     form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));
   }
@@ -792,11 +803,11 @@ or by passing it in via the CLI
   logger.log(
     `Deployed ${config.main} to https://${`${
       options.preview ? `${options.preview}.` : ""
-    }${config.name}.${config.team || user.login.toLowerCase()}.partykit.dev`}`
+    }${config.name}.${domain}`}`
   );
   if (deployRes.result.is_initial_deploy) {
     logger.log(
-      `We're provisioning your partykit.dev domain. This can take up to ${chalk.bold(
+      `We're provisioning the ${domain} domain. This can take up to ${chalk.bold(
         "2 minutes"
       )}. Hold tight!`
     );
@@ -816,6 +827,16 @@ export async function _delete(rawOptions: {
   }
   // get user details
   const user = await getUser();
+
+  if (
+    config.domain &&
+    !(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN)
+  ) {
+    throw new Error(
+      "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the domain option"
+    );
+  }
+  const domain = config.domain || `${config.team || user.login}.partykit.dev`;
 
   const urlSearchParams = new URLSearchParams();
   if (options.preview) {
@@ -839,10 +860,8 @@ export async function _delete(rawOptions: {
                 Are you sure you want to delete{" "}
                 {chalk.bold(
                   options.preview
-                    ? `${options.preview}.${config.name}.${
-                        config.team || user.login
-                      }.partykit.dev`
-                    : `${config.name}.${config.team || user.login}.partykit.dev`
+                    ? `${options.preview}.${config.name}.${domain}`
+                    : `${config.name}.${domain}`
                 )}
                 ?
               </Text>
@@ -886,10 +905,8 @@ export async function _delete(rawOptions: {
   );
 
   const displayName = options.preview
-    ? `${options.preview}.${config.name}.${
-        config.team || user.login
-      }.partykit.dev`
-    : `${config.name}.${config.team || user.login}.partykit.dev`;
+    ? `${options.preview}.${config.name}.${domain}`
+    : `${config.name}.${domain}`;
 
   logger.log(`Deleted ${chalk.bold(displayName)}`);
 }
