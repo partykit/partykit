@@ -394,6 +394,7 @@ export async function deploy(options: {
       define: options.define,
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
+      domain: options.domain,
     },
     { withEnv: options.withEnv }
   );
@@ -437,7 +438,8 @@ export async function deploy(options: {
       "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the domain option"
     );
   }
-  const domain = config.domain || `${config.team || user.login}.partykit.dev`;
+  const domain =
+    config.domain || `${config.name}.${config.team || user.login}.partykit.dev`;
 
   const assetsConfig =
     config.serve === undefined
@@ -478,7 +480,7 @@ export async function deploy(options: {
     external: assetsBuild?.external,
     alias: assetsBuild?.alias,
     define: {
-      PARTYKIT_HOST: `"${config.name}.${domain}"`,
+      PARTYKIT_HOST: `"${domain}"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -618,7 +620,7 @@ export const ${name} = ${name}Party;
       ...esbuildOptions,
       minify: options.minify,
       define: {
-        PARTYKIT_HOST: `"${config.name}.${domain}"`,
+        PARTYKIT_HOST: `"${domain}"`,
         ...esbuildOptions.define,
         ...config.define,
       },
@@ -803,7 +805,7 @@ or by passing it in via the CLI
   logger.log(
     `Deployed ${config.main} to https://${`${
       options.preview ? `${options.preview}.` : ""
-    }${config.name}.${domain}`}`
+    }${domain}`}`
   );
   if (deployRes.result.is_initial_deploy) {
     logger.log(
@@ -836,7 +838,8 @@ export async function _delete(rawOptions: {
       "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the domain option"
     );
   }
-  const domain = config.domain || `${config.team || user.login}.partykit.dev`;
+  const domain =
+    config.domain || `${config.name}.${config.team || user.login}.partykit.dev`;
 
   const urlSearchParams = new URLSearchParams();
   if (options.preview) {
@@ -859,9 +862,7 @@ export async function _delete(rawOptions: {
               <Text>
                 Are you sure you want to delete{" "}
                 {chalk.bold(
-                  options.preview
-                    ? `${options.preview}.${config.name}.${domain}`
-                    : `${config.name}.${domain}`
+                  options.preview ? `${options.preview}.${domain}` : `${domain}`
                 )}
                 ?
               </Text>
@@ -905,8 +906,8 @@ export async function _delete(rawOptions: {
   );
 
   const displayName = options.preview
-    ? `${options.preview}.${config.name}.${domain}`
-    : `${config.name}.${domain}`;
+    ? `${options.preview}.${domain}`
+    : `${domain}`;
 
   logger.log(`Deleted ${chalk.bold(displayName)}`);
 }
