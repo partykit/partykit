@@ -7,8 +7,8 @@ import type {
 
 export type StaticAssetsManifestType = {
   devServer: string;
-  browserTTL: number | undefined;
-  edgeTTL: number | undefined;
+  browserTTL: number | null | undefined;
+  edgeTTL: number | null | undefined;
   singlePageApp: boolean | undefined;
   assets: Record<string, string>;
   assetInfo?: Record<
