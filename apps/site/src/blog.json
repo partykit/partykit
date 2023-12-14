@@ -1,5 +1,15 @@
 [
   {
+    "title": "Cursor party! Get multiplayer cursors on your own website",
+    "link": "https://blog.partykit.io/posts/cursor-party/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/cursor-party/"
+    },
+    "description": "Cursor Party is a new PartyKit project for you to add presence to your website (even static sites) with a single script tag. Oh and it has cursor chat too.",
+    "pubDate": "Thu, 14 Dec 2023 16:26:00 GMT"
+  },
+  {
     "title": "Partycore (everything’s better at 140bpm)",
     "link": "https://blog.partykit.io/posts/partycore-140bpm-with-tonejs/",
     "guid": {
@@ -88,15 +98,5 @@
     },
     "description": "How might we interact with AI? I'm exploring this with tldraw, a multiplayer whiteboard app.",
     "pubDate": "Wed, 04 Oct 2023 14:12:00 GMT"
-  },
-  {
-    "title": "Using Stencil to make a live poll Web Component",
-    "link": "https://blog.partykit.io/posts/live-polls-with-stencil/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/live-polls-with-stencil/"
-    },
-    "description": "Building a live poll Web Component with Stencil and PartyKit, plus a meditation on the art of maintenance.",
-    "pubDate": "Fri, 29 Sep 2023 10:12:00 GMT"
   }
 ]
