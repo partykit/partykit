@@ -29,6 +29,6 @@
   "license": "ISC",
   "devDependencies": {
     "@cloudflare/workers-types": "4.20231121.0",
-    "esbuild": "0.19.8"
+    "esbuild": "0.19.9"
   }
 }

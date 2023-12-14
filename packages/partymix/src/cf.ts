@@ -33,6 +33,7 @@ export type {
   CookieParseOptions,
   CookieSerializeOptions,
   CookieSignatureOptions,
+  // eslint-disable-next-line deprecation/deprecation
   DataFunctionArgs,
   EntryContext,
   ErrorResponse,
