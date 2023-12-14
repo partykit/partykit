@@ -30,7 +30,7 @@ What if I said you could have them on your own website with just one line of cod
 
 This is **Cursor Party.** We're releasing it today. You can get it on your own site right away.
 
-_Ok there's a little more to it. I'll go into the process below._
+_Full instructions below!_
 
 ### 🎈 Easter egg: Cursor chat
 
@@ -44,7 +44,7 @@ You can also chat with other people on a site with Cursor Party. Just type `/` a
 
 **Try it now!** Right now, on this page, hit `/` and say hello. If there's no-one else here, open another browser window to this same page and say hi to yourself. (That's not weird I promise.)
 
-Is it useful? Um. Let me get back to you. Is it fun to surprise someone by messaging _BOO_ on my website as they're reading a post and then have a serendipitious back-and-forth? Yes. Yes it is.
+Is it useful? Um. Let me get back to you. Is it fun to surprise someone by messaging _HELLOOOO_ on my website as they're reading a post and then have a serendipitious back-and-forth? Yes. Yes it is.
 
 ### Why? Because VIBES
 
@@ -75,11 +75,11 @@ The benchmark here is Spencer Chang's project [playhtml](https://github.com/spen
 
 Such a great project.
 
-### How to get multiplayer cursors on your site
+### Step by step: how to get multiplayer cursors on your site
 
 Here's everything you need: **[cursor-party on GitHub](https://github.com/partykit/cursor-party).**
 
-There are step-by-step instructions over there. As a summary...
+There are full instructions over there. As a summary...
 
 - you'll need a GitHub account, and either a development machine with Node.js installed or a Replit account
 - you clone the repo
@@ -98,15 +98,20 @@ Then you add that script tag to your website, and you're done. Cursor chat and a
 
 _**A note about Replit...** The [Replit](https://replit.com/) option is a brand new way to deploy PartyKit without having to install anything on your local machine. It's experimental! So if you use it then we'd love to hear how it goes, whether it was a smooth process for you or not._
 
-### Making Cursor Party your own
+### Making it your own
 
 Instead of cloning the repo, you can fork it. Then you can customise the code yourself.
 
 Some ideas of what you could do:
 
 - change the appearance of the cursors, or of the chat bubbles. (On my own site, the cursors are blurred unless they have a chat message attached.)
+- add a denylist to ban certain words from chat -- you'll need that for family-friendly sites.
 - there's a full presence library there too, made for re-use _(sssssh but Cursor Party is an excuse to test [that lib](https://github.com/partykit/cursor-party/tree/main/src/presence))._ So you could add a [facepile](https://interconnected.org/more/2023/partykit/facepiles.html) component to the navigation bar, or allow people to change their cursor colours, or move chat into a sidebar.
 
-It's a starting point!
+It's a first step!
+
+### GitHub
+
+**Start by grabbing the code 👉 [cursor-party](https://github.com/partykit/cursor-party).** The readme has full instructions.
 
 Any questions/ideas/fixes please do [join us on the Discord](https://discord.gg/GJwKKTcQ7W) and say hi.
