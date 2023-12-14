@@ -135,10 +135,16 @@
               }
             },
             "browserTTL": {
-              "type": "number"
+              "type": [
+                "null",
+                "number"
+              ]
             },
             "edgeTTL": {
-              "type": "number"
+              "type": [
+                "null",
+                "number"
+              ]
             },
             "singlePageApp": {
               "type": "boolean"
