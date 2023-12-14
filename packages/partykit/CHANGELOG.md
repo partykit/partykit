@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.47
+
+### Patch Changes
+
+- [#614](https://github.com/partykit/partykit/pull/614) [`ebb0afa`](https://github.com/partykit/partykit/commit/ebb0afa789c4aa76b22c05ed2cc6c3e6990ecec6) Thanks [@threepointone](https://github.com/threepointone)! - `partykit.json#serve.browserTTL/.cacheTTL` can be null
+
 ## 0.0.46
 
 ### Patch Changes
