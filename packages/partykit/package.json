@@ -46,8 +46,8 @@
   "dependencies": {
     "@cloudflare/workers-types": "4.20231121.0",
     "clipboardy": "4.0.0",
-    "esbuild": "0.19.8",
-    "miniflare": "3.20231030.3",
+    "esbuild": "0.19.9",
+    "miniflare": "3.20231030.4",
     "p-limit": "^5.0.0",
     "p-retry": "^6.1.0",
     "yoga-wasm-web": "0.3.3"
@@ -69,7 +69,7 @@
     "chokidar": "^3.5.3",
     "commander": "^11.1.0",
     "detect-indent": "^7.0.1",
-    "devtools-protocol": "^0.0.1233758",
+    "devtools-protocol": "^0.0.1236148",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -92,9 +92,9 @@
     "undici": "^6.0.1",
     "update-notifier": "^7.0.0",
     "which-pm-runs": "^1.1.0",
-    "ws": "^8.14.2",
+    "ws": "^8.15.1",
     "zod": "^3.22.4",
-    "zod-to-json-schema": "^3.22.1"
+    "zod-to-json-schema": "^3.22.3"
   },
   "files": [
     "dist",
