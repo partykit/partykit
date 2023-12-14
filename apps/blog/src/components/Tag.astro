@@ -4,7 +4,7 @@ export interface Props {
   size?: "sm" | "lg";
 }
 
-const { name, size = "sm" } = Astro.props;
+const { name } = Astro.props;
 ---
 
 <li>
@@ -14,7 +14,6 @@ const { name, size = "sm" } = Astro.props;
 </li>
 
 <style>
-
   a {
     display: flex;
     flex-direction: row;
@@ -25,15 +24,14 @@ const { name, size = "sm" } = Astro.props;
   a:focus {
     color: var(--color-feature-2);
   }
-  
+
   a span {
     text-decoration: underline;
   }
-  
+
   a:before {
     content: "🎈";
     position: relative;
     top: 0.1em;
   }
-  
 </style>
