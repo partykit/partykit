@@ -1,7 +1,7 @@
 ---
 author: Matt Webb
-pubDatetime: 2023-12-145T16:26:00Z
-title: Dancing cursors and Voronoi diagrams
+pubDatetime: 2023-12-14T16:26:00Z
+title: Cursor party! Get multiplayer cursors on your own website
 postSlug: cursor-party
 featured: false
 draft: false
@@ -9,7 +9,7 @@ tags:
   - libraries
   - cursors
   - pret-a-installer
-ogImage: "/content-images/cursor-party/@TODO"
+ogImage: "/content-images/cursor-party/social.png"
 description: TK
 ---
 
@@ -17,32 +17,36 @@ Yeah yeah you already know I'm obsessed with multiplayer cursors.
 
 What if I said you could have them on your own website with just one line of code?
 
-(video TK)
+<video autoplay muted loop src="/content-images/cursor-party/cursors-in-use-sm.mp4"></video>
 
-Here's the code.
+👀 Here's the code.
 
 ```html
-  ...
-  <script src="https://cursor-party.YOUR-PARTYKIT-USERNAME.partykit.dev/cursors.js"></script>
+...
+<script src="https://cursor-party.YOUR-PARTYKIT-USERNAME.partykit.dev/cursors.js"></script>
 </body>
 </html>
 ```
 
-This is **Cursor Party** and we're releasing it today.
+This is **Cursor Party.** We're releasing it today. You can get it on your own site right away.
 
-_Ok there's a little more to it. I'll go into that below._
+_Ok there's a little more to it. I'll go into the process below._
 
-### Easter egg: Cursor chat
+### 🎈 Easter egg: Cursor chat
 
 But wait! There's more!
 
-(video TK)
+<video autoplay muted loop src="/content-images/cursor-party/cursor-chat-sm.mp4"></video>
 
-You can also chat with other people on the site. Just type `/` and then your message.
+We're used to [cursor chat on Figma](https://help.figma.com/hc/en-us/articles/1500004414842-Send-messages-with-cursor-chat) but why not regular websites? And so...
+
+You can also chat with other people on a site with Cursor Party. Just type `/` and then your message.
 
 **Try it now!** Right now, on this page, hit `/` and say hello. If there's no-one else here, open another browser window to this same page and say hi to yourself. (That's not weird I promise.)
 
-### Why? VIBES
+Is it useful? Um. Let me get back to you. Is it fun to surprise someone by messaging _BOO_ on my website as they're reading a post and then have a serendipitious back-and-forth? Yes. Yes it is.
+
+### Why? Because VIBES
 
 I have this same set-up on my [personal blog](https://interconnected.org/home/). I love it. It's a tiny way to make the web feel more alive.
 
@@ -58,7 +62,7 @@ Somebody dropped me a note earlier today:
 >
 > but it felt very "water cooler"
 
-And I hear this kind of story a lot. It makes me feel so warm, you know? And once you realise that, just behind the glass, there are _other people_ and we can be _together_ — well, that's a vibe. Other websites feel a little impoverished in comparison, you know what I mean?
+And I hear this kind of story a lot. It makes me feel so warm, you know? And once you realise that, just behind the glass, there are _other people_ and we can be _together_ — well, that's a vibe. Other websites feel a little impoverished in comparison maybe?
 
 So I wanted to make it easy for any website creator to add multiplayer cursors to their own site. Being both:
 
@@ -71,34 +75,38 @@ The benchmark here is Spencer Chang's project [playhtml](https://github.com/spen
 
 Such a great project.
 
-### How to get Cursor Party on your site
+### How to get multiplayer cursors on your site
 
-Here's everything you need: **[cursor-party on GitHub](https://github.com/partykit/cursor-party)**
+Here's everything you need: **[cursor-party on GitHub](https://github.com/partykit/cursor-party).**
 
-There are instructions over there, but just to summarise:
+There are step-by-step instructions over there. As a summary...
 
 - you'll need a GitHub account, and either a development machine with Node.js installed or a Replit account
 - you clone the repo
 - then edit the config file to add your website URL
 - then deploy: you'll be walked through creating a PartyKit account.
 
-What you get is a PartyKit server that looks like this:
+What you get is a PartyKit server that looks like this when you visit it:
 
-TK
+![Cursor Party splashscreen showing a list of websites this installation is configured for](/content-images/cursor-party/cursor-party-backend.png)
 
-That PartyKit server is the brains for your multiplayer cursors. It will only work for the websites you list in the config.
+That PartyKit server is the brains for your multiplayer cursors. It will only work for the websites you list in the config. You can test your installation by visiting this site.
 
-Then you add that script tag to your website, and you're done. Cursor chat and all.
+Then you add that script tag to your website, and you're done. Cursor chat and all 🎉
 
-### Customising Cursor Party
+(If you don't want cursor chat, cool cool, the readme has instructions for that too.)
 
-Instead of cloning the repo, you can also fork it. Then you can customise the code yourself.
+_**A note about Replit...** The [Replit](https://replit.com/) option is a brand new way to deploy PartyKit without having to install anything on your local machine. It's experimental! So if you use it then we'd love to hear how it goes, whether it was a smooth process for you or not._
 
-Some ideas of what you can do:
+### Making Cursor Party your own
 
-- change the appearance of the cursors, or of the cursor chat bubbles (on my own site, the cursors are blurred out unless they're chatting)
-- there's a full presence library in there. _(Sssssh but Cursor Party is an excuse to test that lib.)_ So you could add a facepile component to the top of the screen, or allow people to change their cursor colours, or move chat into a sidebar.
+Instead of cloning the repo, you can fork it. Then you can customise the code yourself.
+
+Some ideas of what you could do:
+
+- change the appearance of the cursors, or of the chat bubbles. (On my own site, the cursors are blurred unless they have a chat message attached.)
+- there's a full presence library in there _(sssssh but Cursor Party is an excuse to test that lib)._ So you could add a [facepile](https://interconnected.org/more/2023/partykit/facepiles.html) component to the navigation bar, or allow people to change their cursor colours, or move chat into a sidebar.
 
 It's a starting point!
 
-Any questions/ideas/fixes [head over to the Discord](https://discord.gg/GJwKKTcQ7W).
+Any questions/ideas/fixes please do [join us on the Discord](https://discord.gg/GJwKKTcQ7W) and say hi.

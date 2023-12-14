@@ -341,6 +341,10 @@
     transition: inherit;
   }
 
+  em {
+    font-style: italic;
+  }
+
   .icon {
     display: inline-flex;
     flex-direction: column;
@@ -515,6 +519,7 @@
   
   article li:before {
     content: "●";
+    font-size: 0.5rem;
     display: inline-block;
     width: 1.5rem;
     margin-left: -1.5rem;
