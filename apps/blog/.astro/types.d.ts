@@ -209,6 +209,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"cursor-party.md": {
+	id: "cursor-party.md";
+  slug: "cursor-party";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "customizing-astropaper-theme-color-schemes.md": {
 	id: "customizing-astropaper-theme-color-schemes.md";
   slug: "customizing-astropaper-theme-color-schemes";
@@ -289,6 +296,13 @@ declare module 'astro:content' {
 "party-io-a-socket-io-backend-for-partykit.md": {
 	id: "party-io-a-socket-io-backend-for-partykit.md";
   slug: "party-io-a-socket-io-backend-for-partykit";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"partycore-140bpm-with-tonejs.md": {
+	id: "partycore-140bpm-with-tonejs.md";
+  slug: "partycore-140bpm-with-tonejs";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
