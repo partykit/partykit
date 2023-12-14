@@ -10,7 +10,7 @@ tags:
   - cursors
   - pret-a-installer
 ogImage: "/content-images/cursor-party/social.png"
-description: TK
+description: Cursor Party is a new PartyKit project for you to add presence to your website (even static sites) with a single script tag. Oh and it has cursor chat too.
 ---
 
 Yeah yeah you already know I'm obsessed with multiplayer cursors.
@@ -105,7 +105,7 @@ Instead of cloning the repo, you can fork it. Then you can customise the code yo
 Some ideas of what you could do:
 
 - change the appearance of the cursors, or of the chat bubbles. (On my own site, the cursors are blurred unless they have a chat message attached.)
-- there's a full presence library in there _(sssssh but Cursor Party is an excuse to test that lib)._ So you could add a [facepile](https://interconnected.org/more/2023/partykit/facepiles.html) component to the navigation bar, or allow people to change their cursor colours, or move chat into a sidebar.
+- there's a full presence library there too, made for re-use _(sssssh but Cursor Party is an excuse to test [that lib](https://github.com/partykit/cursor-party/tree/main/src/presence))._ So you could add a [facepile](https://interconnected.org/more/2023/partykit/facepiles.html) component to the navigation bar, or allow people to change their cursor colours, or move chat into a sidebar.
 
 It's a starting point!
 
