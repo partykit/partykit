@@ -1,5 +1,15 @@
 import PartySocket from "partysocket";
 
+import styles from "./something.module.css";
+
+declare module "./*.module.css" {
+  interface ClassNames {
+    something: string;
+  }
+}
+
+console.log(styles);
+
 declare const PARTYKIT_HOST: string;
 
 document.getElementById("app")!.innerText = location.href;

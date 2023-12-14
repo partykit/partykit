@@ -22,6 +22,11 @@
   "serve": {
     "path": "public",
     "singlePageApp": true,
-    "build": "src/client.ts"
+    "build": {
+      "entry": "src/client.ts",
+      "loaders": {
+        ".module.css": "local-css"
+      }
+    }
   }
 }
