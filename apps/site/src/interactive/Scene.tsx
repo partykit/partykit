@@ -1,7 +1,7 @@
 // The basic demo is needs adjusting (light intensity) to work
 // https://github.com/pmndrs/react-three-fiber/issues/2963
 
-import type * as THREE from "three";
+// import type * as THREE from "three";
 import { useRef, useState, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 //import { Canvas, useFrame, useThree } from "@react-three/fiber";
@@ -40,13 +40,13 @@ function CameraComponent(props) {
 */
 
 function Light(props: { x: number; y: number; z: number; color: string }) {
-  const rLight = useRef<THREE.SpotLight>(null!);
+  // const rLight = useRef<THREE.SpotLight>(null!);
   //useHelper(rLight, THREE.SpotLightHelper, "red");
 
   return (
     <>
       <spotLight
-        ref={rLight}
+        // ref={rLight}
         position={[props.x, props.y, 5]}
         angle={0.9}
         penumbra={1}
@@ -125,7 +125,7 @@ export default function Scene() {
       Array.from(state.otherUsers.entries()).map(([id, user]) => [
         id,
         user.presence,
-      ]),
+      ])
     ),
   }));
   const { synced, updatePresence } = usePresence((state) => ({
