@@ -8,13 +8,15 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "postinstall": "patch-package"
   },
   "dependencies": {
-    "@astrojs/starlight": "^0.8.0",
+    "@astrojs/starlight": "0.8.0",
     "@astrojs/tailwind": "^4.0.0",
     "@astrojs/vercel": "^3.8.2",
     "astro": "^2.8.0",
+    "patch-package": "^8.0.0",
     "sharp": "^0.32.6",
     "tailwindcss": "^3.3.5"
   },

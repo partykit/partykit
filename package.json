@@ -37,6 +37,7 @@
     "eslint-plugin-deprecation": "^2.0.0",
     "ink-testing-library": "^3.0.0",
     "jsdom": "^23.0.1",
+    "pagefind": "1.0.0-alpha.5",
     "patch-package": "^8.0.0",
     "shx": "^0.3.4",
     "tsup": "^8.0.1",
