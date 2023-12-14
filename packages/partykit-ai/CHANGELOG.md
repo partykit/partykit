@@ -1,5 +1,11 @@
 # partykit-ai
 
+## 0.0.3
+
+### Patch Changes
+
+- [#613](https://github.com/partykit/partykit/pull/613) [`1738741`](https://github.com/partykit/partykit/commit/1738741977d20ee150f6c22a4b3b6353bbca8637) Thanks [@threepointone](https://github.com/threepointone)! - Pick up the patch for the new version
+
 ## 0.0.2
 
 ### Patch Changes
