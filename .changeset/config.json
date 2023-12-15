@@ -10,5 +10,10 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@partykit/examples-*"]
+  "ignore": [
+    "@partykit/examples-*",
+    "@partykit/site",
+    "@partykit/docs",
+    "@partykit/blog"
+  ]
 }
