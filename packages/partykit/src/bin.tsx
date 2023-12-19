@@ -1,5 +1,8 @@
 // A shebang will be inserted by the build script
 import * as cli from "./cli";
+import { File, FormData } from "undici";
+import { createReadStream } from "node:fs";
+import { type Interface as RLInterface, createInterface } from "node:readline";
 import { Option, program /*, Option*/ } from "commander";
 import React, { Suspense } from "react";
 import updateNotifier from "update-notifier";
@@ -7,8 +10,12 @@ import updateNotifier from "update-notifier";
 import Login from "./commands/login";
 import Logout from "./commands/logout";
 
-import { render } from "ink";
+import { Box, Text, render } from "ink";
 import { Dev } from "./dev";
+import * as vectorize from "./vectorize/client";
+import type { VectorizeDistanceMetric } from "@cloudflare/workers-types";
+// @ts-expect-error hmm odd
+import type { VectorizePreset } from "@cloudflare/workers-types";
 
 import gradient from "gradient-string";
 
@@ -318,6 +325,290 @@ envCommand
   .action(async (key, options) => {
     await printBanner();
     await cli.env.remove(key, options);
+  });
+
+/**
+ * Vectorize commands
+ */
+
+const vectorizeCommand = program
+  .command("vectorize")
+  .description("Manage vectorize indexes")
+  .action(async () => {
+    await printBanner();
+    vectorizeCommand.outputHelp();
+  });
+
+vectorizeCommand
+  .command("create")
+  .description("Create a vectorize index")
+  .argument(
+    "<name>",
+    "The name of the Vectorize index to create (must be unique)."
+  )
+  .option(
+    "--dimensions <dimensions>",
+    "The dimension size to configure this index for, based on the output dimensions of your ML model",
+    parseFloat
+  )
+  .addOption(
+    new Option(
+      "--metric <format>",
+      "The distance metric to use for searching within the index."
+    ).choices(["euclidean", "cosine", "dot-product"])
+  )
+  .addOption(
+    new Option(
+      "--preset <preset>",
+      "The name of an preset representing an embeddings model: Vectorize will configure the dimensions and distance metric for you when provided."
+    ).choices([
+      "@cf/baai/bge-small-en-v1.5",
+      "@cf/baai/bge-base-en-v1.5",
+      "@cf/baai/bge-large-en-v1.5",
+      "openai/text-embedding-ada-002",
+      "cohere/embed-multilingual-v2.0",
+    ])
+  )
+  .option(
+    "--description <description>",
+    "An optional description for this index."
+  )
+  .option("--json", "Return output as clean JSON", false)
+  .option("-c, --config <path>", "Path to config file")
+  .action(async (name, args) => {
+    // TODO: validate index name
+    await printBanner();
+
+    let indexConfig;
+
+    if (args.preset && (args.dimensions || args.metric)) {
+      logger.error(
+        "You must provide either a preset or both dimensions and a metric, but not both."
+      );
+      return;
+    }
+
+    if (args.preset) {
+      indexConfig = { preset: args.preset as VectorizePreset };
+      logger.log(
+        `Configuring index based for the embedding model ${args.preset}.`
+      );
+    } else if (args.dimensions && args.metric) {
+      // We let the server validate the supported (maximum) dimensions so that we
+      // don't have to keep partykit in sync with server-side changes
+      indexConfig = {
+        metric: args.metric as VectorizeDistanceMetric,
+        dimensions: args.dimensions as number,
+      };
+    } else {
+      logger.error(
+        "You must provide both dimensions and a metric, or a known model preset when creating an index."
+      );
+      return;
+    }
+
+    const index = {
+      name: name,
+      description: args.description,
+      config: indexConfig,
+    };
+
+    logger.log(`🚧 Creating index: '${name}'`);
+
+    await vectorize.createIndex({
+      config: args.config,
+      body: index,
+    });
+
+    if (args.json) {
+      logger.log(JSON.stringify(index, null, 2));
+      return;
+    }
+
+    render(
+      <Box flexDirection="column">
+        <Text>
+          ✅ Successfully created a new Vectorize index: &apos;
+          {name}&apos;
+        </Text>
+        <Text>
+          📋 To start querying from your project, add the following
+          configuration into &apos;partykit.json&apos;:
+        </Text>
+        <Text>&nbsp;</Text>
+        <Text>vectorize: ["{name}"]</Text>
+      </Box>
+    );
+  });
+
+vectorizeCommand
+  .command("delete")
+  .description("Delete a vectorize index")
+  .argument("<name>", "The name of the Vectorize index to delete.")
+  .option("--force", "Force delete without confirmation")
+  .option("-c, --config <path>", "Path to config file")
+  .action(async (name, args) => {
+    logger.log(`Deleting Vectorize index ${name}`);
+    if (!args.force) {
+      // const confirmedDeletion = await confirm(
+      //   `OK to delete the index '${name}'?`
+      // );
+      // if (!confirmedDeletion) {
+      //   logger.log("Deletion cancelled.");
+      //   return;
+      // }
+    }
+
+    await vectorize.deleteIndex({ config: args.config, indexName: name });
+    logger.log(`✅ Deleted index ${name}`);
+  });
+
+vectorizeCommand
+  .command("get")
+  .description("Get a vectorize index by name")
+  .argument("<name>", "The name of the Vectorize index to get.")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--json", "Return output as clean JSON", false)
+  .action(async (name, args) => {
+    const indexResult = await vectorize.getIndex({
+      config: args.config,
+      indexName: name,
+    });
+
+    // if (args.json) {
+    logger.log(JSON.stringify(indexResult, null, 2));
+    return;
+    // }
+
+    // logger.table([
+    // 	{
+    // 		name: index.name,
+    // 		dimensions: index.config?.dimensions.toString(),
+    // 		metric: index.config?.metric,
+    // 		description: index.description || "",
+    // 		created: index.created_on,
+    // 		modified: index.modified_on,
+    // 	},
+    // ]);
+  });
+
+vectorizeCommand
+  .command("list")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--json", "Return output as clean JSON", false)
+  .action(async (args) => {
+    logger.log(`📋 Listing Vectorize indexes...`);
+    const indexes = await vectorize.listIndexes({ config: args.config });
+
+    if (indexes.length === 0) {
+      logger.warn(`
+You haven't created any indexes on this account.
+
+Use 'npx partykit vectorize create <name>' to create one, or visit
+https://docs.partykit.io/vectorize/ to get started.
+		`);
+      return;
+    }
+
+    // if (args.json) {
+    logger.log(JSON.stringify(indexes, null, 2));
+    return;
+    // }
+
+    // logger.table(
+    // 	indexes.map((index) => ({
+    // 		name: index.name,
+    // 		dimensions: index.config?.dimensions.toString(),
+    // 		metric: index.config?.metric,
+    // 		description: index.description ?? "",
+    // 		created: index.created_on,
+    // 		modified: index.modified_on,
+    // 	}))
+    // );
+  });
+
+const VECTORIZE_MAX_BATCH_SIZE = 1_000;
+const VECTORIZE_UPSERT_BATCH_SIZE = VECTORIZE_MAX_BATCH_SIZE;
+const VECTORIZE_MAX_UPSERT_VECTOR_RECORDS = 100_000;
+
+// helper method that reads an ndjson file line by line in batches. not this doesn't
+// actually do any parsing - that will be handled on the backend
+// https://nodejs.org/docs/latest-v16.x/api/readline.html#rlsymbolasynciterator
+async function* getBatchFromFile(
+  rl: RLInterface,
+  batchSize = VECTORIZE_UPSERT_BATCH_SIZE
+) {
+  let batch: string[] = [];
+  for await (const line of rl) {
+    if (batch.push(line) >= batchSize) {
+      yield batch;
+      batch = [];
+    }
+  }
+
+  yield batch;
+}
+
+vectorizeCommand
+  .command("insert")
+  .description("Insert vectors into a Vectorize index")
+  .argument("[name]", "The name of the Vectorize index to insert into.")
+  .option(
+    "--file <file>",
+    "A file containing line separated json (ndjson) vector objects."
+  )
+  .addOption(
+    new Option(
+      "--batch-size <number>",
+      "The number of vectors to insert per batch."
+    ).default(VECTORIZE_UPSERT_BATCH_SIZE)
+  )
+  .option("--json", "Return output as clean JSON", false)
+  .option("-c, --config <path>", "Path to config file")
+  .action(async (name, args) => {
+    const rl = createInterface({ input: createReadStream(args.file) });
+
+    if (Number(args.batchSize) > VECTORIZE_MAX_BATCH_SIZE) {
+      logger.error(
+        `🚨 Vectorize currently limits upload batches to ${VECTORIZE_MAX_BATCH_SIZE} records at a time.`
+      );
+    }
+
+    let vectorInsertCount = 0;
+    for await (const batch of getBatchFromFile(rl, args.batchSize)) {
+      const formData = new FormData();
+      formData.append(
+        "vectors",
+        new File([batch.join(`\n`)], "vectors.ndjson", {
+          type: "application/x-ndjson",
+        })
+      );
+      logger.log(`✨ Uploading vector batch (${batch.length} vectors)`);
+      const idxPart = await vectorize.insertIntoIndex({
+        config: args.config,
+        indexName: name,
+        body: formData,
+      });
+      vectorInsertCount += idxPart.count;
+
+      if (vectorInsertCount > VECTORIZE_MAX_UPSERT_VECTOR_RECORDS) {
+        logger.warn(
+          `🚧 While Vectorize is in beta, we've limited uploads to 100k vectors per run. You may run this again with another batch to upload further`
+        );
+        break;
+      }
+    }
+
+    if (args.json) {
+      logger.log(
+        JSON.stringify({ index: name, count: vectorInsertCount }, null, 2)
+      );
+      return;
+    }
+
+    logger.log(
+      `✅ Successfully inserted ${vectorInsertCount} vectors into index '${name}'`
+    );
   });
 
 program

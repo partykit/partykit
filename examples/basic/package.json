@@ -5,7 +5,9 @@
   "main": "index.js",
   "private": true,
   "scripts": {
-    "start": "partykit dev --with-env --var A=456 B=789 --define SOME_GLOBAL=88888"
+    "start": "partykit dev --with-env --var A=456 B=789 --define SOME_GLOBAL=88888",
+    "deploy": "partykit deploy --with-env --var A=456 B=789 --define SOME_GLOBAL=88888",
+    "delete": "partykit delete -f"
   },
   "keywords": [],
   "author": "",
