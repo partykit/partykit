@@ -633,7 +633,7 @@ Workers["${name}"] = ${name};
         metafile: true,
         define: {
           PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
-          PARTYKIT_API_BASE: API_BASE,
+          PARTYKIT_API_BASE: `"${API_BASE}"`,
           ...esbuildOptions.define,
           ...config.define,
         },
