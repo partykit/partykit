@@ -48,6 +48,25 @@ async function fetchResult<T>(api: string, options: FetchInit): Promise<T> {
   }
 }
 
+const VECTORIZE_MAX_BATCH_SIZE = 1_000;
+const VECTORIZE_UPSERT_BATCH_SIZE = VECTORIZE_MAX_BATCH_SIZE;
+const VECTORIZE_MAX_UPSERT_VECTOR_RECORDS = 100_000;
+
+async function* getBatchFromArray(
+  array: VectorizeVector[],
+  batchSize = VECTORIZE_UPSERT_BATCH_SIZE
+) {
+  let batch: string[] = [];
+  for await (const line of array) {
+    if (batch.push(JSON.stringify(line)) >= batchSize) {
+      yield batch;
+      batch = [];
+    }
+  }
+
+  yield batch;
+}
+
 export type VectorizeClientOptions = {
   index_name: string;
   headers: VectorizeLocalDevHeaders;
@@ -87,12 +106,49 @@ export class VectorizeClient implements VectorizeIndex {
     );
   }
 
-  async insert(_vectors: VectorizeVector[]): Promise<VectorizeVectorMutation> {
-    throw new Error("Method not implemented.");
+  async insert(
+    vectors: VectorizeVector[],
+    upsert = false
+  ): Promise<VectorizeVectorMutation> {
+    let vectorInsertCount = 0;
+    const insertedIds: string[] = [];
+    for await (const batch of getBatchFromArray(vectors)) {
+      const formData = new FormData();
+      formData.append(
+        "vectors",
+        new File([batch.join(`\n`)], "vectors.ndjson", {
+          type: "application/x-ndjson",
+        })
+      );
+
+      const idxPart = await this.fetch<VectorizeVectorMutation>(
+        `/vectorize/${this.namespace}/indexes/${this.index_name}/${
+          upsert ? "upsert" : "insert"
+        }`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      vectorInsertCount += idxPart.count;
+      insertedIds.push(...idxPart.ids);
+
+      if (vectorInsertCount > VECTORIZE_MAX_UPSERT_VECTOR_RECORDS) {
+        console.warn(
+          `🚧 While Vectorize is in beta, we've limited uploads to 100k vectors per run. You may run this again with another batch to upload further`
+        );
+        break;
+      }
+    }
+
+    return {
+      count: vectorInsertCount,
+      ids: insertedIds,
+    };
   }
 
-  async upsert(_vectors: VectorizeVector[]): Promise<VectorizeVectorMutation> {
-    throw new Error("Method not implemented.");
+  async upsert(vectors: VectorizeVector[]): Promise<VectorizeVectorMutation> {
+    return this.insert(vectors, true);
   }
 
   async deleteByIds(_ids: string[]): Promise<VectorizeVectorMutation> {
