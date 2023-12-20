@@ -27,6 +27,7 @@ import nodejsCompatPlugin from "./nodejs-compat";
 
 import type { VectorizeClientOptions } from "../facade/vectorize";
 import assert from "node:assert";
+import { API_BASE } from "./fetchResult";
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -632,6 +633,7 @@ Workers["${name}"] = ${name};
         metafile: true,
         define: {
           PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
+          PARTYKIT_API_BASE: API_BASE,
           ...esbuildOptions.define,
           ...config.define,
         },
