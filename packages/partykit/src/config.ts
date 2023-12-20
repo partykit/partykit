@@ -405,7 +405,7 @@ export function getConfig(
       }
     }
 
-    if (config.ai && !warnedAboutExperimentalAi) {
+    if ((config.ai || config.vectorize) && !warnedAboutExperimentalAi) {
       logger.warn(
         chalk.yellow(
           `The AI feature is experimental and may change in the future.`
@@ -496,7 +496,7 @@ export function getConfig(
     throw new ConfigurationError(`Cannot have a party named "main"`);
   }
 
-  if (config.ai && !warnedAboutExperimentalAi) {
+  if ((config.ai || config.vectorize) && !warnedAboutExperimentalAi) {
     logger.warn(
       chalk.yellow(
         `The AI feature is experimental and may change in the future.`
