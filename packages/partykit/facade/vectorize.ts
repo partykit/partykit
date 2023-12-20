@@ -8,8 +8,7 @@ import type {
   VectorizeVectorMutation,
 } from "@cloudflare/workers-types";
 
-// const API_BASE = process.env.PARTYKIT_API_BASE || PARTYKIT_API_BASE;
-const API_BASE = "http://127.0.0.1:8787";
+declare const PARTYKIT_API_BASE: string;
 
 export type VectorizeLocalDevHeaders = {
   "User-Agent": string;
@@ -26,7 +25,7 @@ type FetchInit = RequestInit & {
 
 async function fetchResult<T>(api: string, options: FetchInit): Promise<T> {
   const { extraHeaders, ...fetchOptions } = options;
-  const res = await fetch(`${API_BASE}${api}`, {
+  const res = await fetch(`${PARTYKIT_API_BASE}${api}`, {
     ...fetchOptions,
     headers: {
       "Content-Type": "application/json",

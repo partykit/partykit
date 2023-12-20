@@ -7,7 +7,7 @@ import type { UserSession } from "./config";
 declare const PARTYKIT_API_BASE: string | undefined;
 assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
 
-const API_BASE = process.env.PARTYKIT_API_BASE || PARTYKIT_API_BASE;
+export const API_BASE = process.env.PARTYKIT_API_BASE || PARTYKIT_API_BASE;
 
 export type FetchInit = RequestInit & { user?: UserSession };
 
