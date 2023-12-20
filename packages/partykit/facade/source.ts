@@ -21,6 +21,7 @@ import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
 // @ts-expect-error We'll be replacing __WORKER__
 // with the path to the input worker
 import Worker from "__WORKER__";
+import { VectorizeClient, type VectorizeClientOptions } from "./vectorize";
 
 declare const Worker: Party.PartyKitServer;
 
@@ -74,6 +75,7 @@ type Env = DurableObjectNamespaceEnv & {
   PARTYKIT_AI: Party.Party["ai"];
   PARTYKIT_VARS: Record<string, unknown>;
   PARTYKIT_DURABLE: DurableObjectNamespace;
+  PARTYKIT_VECTORIZE: Record<string, VectorizeClientOptions>;
 };
 
 let parties: Party.Party["context"]["parties"];
@@ -251,13 +253,19 @@ function createDurable(
     id?: string;
     worker?: PartyServerAPI;
     parties?: Party.Party["context"]["parties"];
+    vectorize: Record<string, VectorizeClient>;
     connectionManager?: ConnectionManager;
 
     constructor(controller: DurableObjectState, env: Env) {
       super();
 
-      const { PARTYKIT_VARS, PARTYKIT_AI, PARTYKIT_DURABLE, ...namespaces } =
-        env;
+      const {
+        PARTYKIT_VARS,
+        PARTYKIT_AI,
+        PARTYKIT_DURABLE,
+        PARTYKIT_VECTORIZE,
+        ...namespaces
+      } = env;
 
       this.controller = controller;
       this.namespaces = namespaces;
@@ -265,6 +273,13 @@ function createDurable(
       Object.assign(this.namespaces, {
         main: PARTYKIT_DURABLE,
       });
+
+      this.vectorize = Object.fromEntries(
+        Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
+          key,
+          new VectorizeClient(value),
+        ])
+      );
 
       // Party.connections getter needs access to durable object in closure
       // eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -307,6 +322,7 @@ function createDurable(
               "Parties are not yet initialized. This is probably a bug in PartyKit."
             );
           },
+          vectorize: this.vectorize,
         },
         getConnection(id: string) {
           if (self.connectionManager) {
@@ -624,8 +640,13 @@ export default {
 
       // TODO: throw if room is longer than x characters
 
-      const { PARTYKIT_VARS, PARTYKIT_AI, PARTYKIT_DURABLE, ...namespaces } =
-        env;
+      const {
+        PARTYKIT_VARS,
+        PARTYKIT_AI,
+        PARTYKIT_DURABLE,
+        PARTYKIT_VECTORIZE,
+        ...namespaces
+      } = env;
 
       Object.assign(namespaces, {
         main: PARTYKIT_DURABLE,
@@ -639,6 +660,13 @@ export default {
         {
           host: url.host,
         }
+      );
+
+      const vectorizeBindings = Object.fromEntries(
+        Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
+          key,
+          new VectorizeClient(value),
+        ])
       );
 
       if (roomId) {
@@ -686,6 +714,7 @@ export default {
                     env: PARTYKIT_VARS,
                     ai: PARTYKIT_AI,
                     parties,
+                    vectorize: vectorizeBindings,
                   },
                   ctx
                 );
@@ -729,6 +758,7 @@ export default {
                     env: PARTYKIT_VARS,
                     ai: PARTYKIT_AI,
                     parties,
+                    vectorize: vectorizeBindings,
                   },
                   ctx
                 );
@@ -777,6 +807,7 @@ export default {
               env: PARTYKIT_VARS,
               ai: PARTYKIT_AI,
               parties,
+              vectorize: vectorizeBindings,
             },
             ctx
           );

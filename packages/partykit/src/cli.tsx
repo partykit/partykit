@@ -445,8 +445,8 @@ export async function deploy(options: {
     config.serve === undefined
       ? {}
       : typeof config.serve === "string"
-      ? { path: config.serve }
-      : config.serve;
+        ? { path: config.serve }
+        : config.serve;
 
   const newAssetsMap: StaticAssetsManifestType = {
     devServer: "", // this is a no-op when deploying
@@ -748,6 +748,10 @@ export const ${name} = ${name}Party;
 
   if (config.domain) {
     form.set("domain", config.domain);
+  }
+
+  if (config.vectorize) {
+    form.set("vectorize", JSON.stringify(config.vectorize));
   }
 
   if (assetsPath) {
