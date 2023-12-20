@@ -88,6 +88,17 @@ export const schema = z
       ])
       .optional(),
     domain: z.string().optional(),
+    vectorize: z
+      .record(
+        z.union([
+          z.string(),
+          z.object({
+            index_name: z.string(),
+            // TODO: add more fields, probably for provisioning
+          }),
+        ]),
+      )
+      .optional(),
   })
   .strict();
 

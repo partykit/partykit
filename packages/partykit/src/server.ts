@@ -3,6 +3,7 @@ import type {
   ExecutionContext as CFExecutionContext,
   WebSocket,
   Request as CFRequest,
+  VectorizeIndex,
 } from "@cloudflare/workers-types";
 
 export type StaticAssetsManifestType = {
@@ -62,6 +63,7 @@ export type Context = {
       get(id: string): Stub;
     }
   >;
+  vectorize: Record<string, VectorizeIndex>;
 };
 
 export type AI = Record<string, never>;
@@ -70,12 +72,14 @@ export type FetchLobby = {
   env: Record<string, unknown>;
   ai: AI;
   parties: Context["parties"];
+  vectorize: Context["vectorize"];
 };
 
 export type Lobby = {
   id: string;
   env: Record<string, unknown>;
   parties: Context["parties"];
+  vectorize: Context["vectorize"];
 };
 
 export type ExecutionContext = CFExecutionContext;
@@ -85,12 +89,12 @@ type ImmutablePrimitive = undefined | null | boolean | string | number;
 type Immutable<T> = T extends ImmutablePrimitive
   ? T
   : T extends Array<infer U>
-  ? ImmutableArray<U>
-  : T extends Map<infer K, infer V>
-  ? ImmutableMap<K, V>
-  : T extends Set<infer M>
-  ? ImmutableSet<M>
-  : ImmutableObject<T>;
+    ? ImmutableArray<U>
+    : T extends Map<infer K, infer V>
+      ? ImmutableMap<K, V>
+      : T extends Set<infer M>
+        ? ImmutableSet<M>
+        : ImmutableObject<T>;
 type ImmutableArray<T> = ReadonlyArray<Immutable<T>>;
 type ImmutableMap<K, V> = ReadonlyMap<Immutable<K>, Immutable<V>>;
 type ImmutableSet<T> = ReadonlySet<Immutable<T>>;
@@ -337,6 +341,7 @@ export type PartyKitServer = {
       env: Record<string, unknown>;
       ai: AI;
       parties: Context["parties"];
+      vectorize: Context["vectorize"];
     },
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
@@ -355,6 +360,7 @@ export type PartyKitServer = {
       env: Record<string, unknown>;
       ai: AI;
       parties: Context["parties"];
+      vectorize: Context["vectorize"];
     },
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;

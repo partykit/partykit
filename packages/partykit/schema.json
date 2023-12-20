@@ -233,6 +233,28 @@
     },
     "domain": {
       "type": "string"
+    },
+    "vectorize": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "index_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "index_name"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
     }
   },
   "additionalProperties": false,

@@ -3,7 +3,7 @@ import { Log, Miniflare, TypedEventTarget } from "miniflare";
 import { fileURLToPath } from "url";
 import { onExit } from "signal-exit";
 import type { Config } from "./config";
-import { getConfig } from "./config";
+import { getConfig, getUser } from "./config";
 import fs from "fs";
 import path from "path";
 import { execaCommand } from "execa";
@@ -25,6 +25,9 @@ import open from "open";
 import type { StaticAssetsManifestType } from "./server";
 import nodejsCompatPlugin from "./nodejs-compat";
 
+import type { VectorizeClientOptions } from "../facade/vectorize";
+import assert from "node:assert";
+
 const esbuildOptions: BuildOptions = {
   format: "esm",
   bundle: true,
@@ -43,6 +46,27 @@ function getPortForServer(name: string, preferred?: number) {
   return portCache(name, () => getPort({ port: preferred })) as Awaited<
     ReturnType<typeof getPort>
   >;
+}
+
+const getUserCache = asyncCache();
+
+type UserDetails = {
+  namespace: string;
+  token: string;
+  type: "string";
+};
+
+function getUserDetails(config: Config): UserDetails {
+  return getUserCache("user", async () => {
+    const user = await getUser();
+    const sessionToken = await user?.getSessionToken();
+    return {
+      // eslint-disable-next-line deprecation/deprecation
+      namespace: config.team || user.login,
+      token: sessionToken,
+      type: user.type,
+    };
+  }) as UserDetails;
 }
 
 class ReloadedEvent extends Event implements ReloadedEventOptions {
@@ -322,8 +346,8 @@ function useAssetServer(
   const assetsPath = !options
     ? undefined
     : typeof options === "string"
-    ? options
-    : options.path;
+      ? options
+      : options.path;
 
   const assetsBuild = useMemo(
     () =>
@@ -477,6 +501,11 @@ function useDev(options: DevProps): {
 
   const portForServer = config.port ?? getPortForServer("dev", 1999);
 
+  const userDetails = useMemo(
+    () => (config.vectorize ? null : getUserDetails(config)),
+    [config]
+  );
+
   const portForRuntimeInspector = getPortForServer("runtime-inspector");
   // ^ no preferred port for the runtime inspector, in fact it's better if
   // it's a different port every time so that it doesn't clash with multiple devs
@@ -506,6 +535,29 @@ function useDev(options: DevProps): {
   useEffect(() => {
     const currentUTCDate = new Date().toISOString().split("T", 1)[0];
 
+    const vectorizeBindings: Record<string, VectorizeClientOptions> = {};
+    if (config.vectorize) {
+      assert(
+        userDetails,
+        "You need to be logged in to use vectorize in local development"
+      );
+
+      for (const [name, _opts] of Object.entries(config.vectorize || {})) {
+        const opts = typeof _opts === "string" ? { index_name: _opts } : _opts;
+        vectorizeBindings[name] = {
+          index_name: opts.index_name,
+          namespace: userDetails.namespace,
+          headers: {
+            "User-Agent": "partykit-dev",
+            "X-PartyKit-Version": "0.0.0",
+            "X-CLOUDFLARE-ACCOUNT-ID": process.env.CLOUDFLARE_ACCOUNT_ID || "",
+            "X-CLOUDFLARE-API-TOKEN": process.env.CLOUDFLARE_API_TOKEN || "",
+            Authorization: `Bearer ${userDetails.token}`,
+            "X-PartyKit-User-Type": userDetails.type,
+          },
+        };
+      }
+    }
     if (!config.compatibilityDate) {
       logger.warn(
         `No compatibilityDate specified in configuration, defaulting to ${currentUTCDate}
@@ -637,12 +689,12 @@ Workers["${name}"] = ${name};
                     config.persist === "true"
                       ? undefined
                       : config.persist === true
-                      ? undefined
-                      : config.persist === "false"
-                      ? false
-                      : config.persist === false
-                      ? false
-                      : config.persist;
+                        ? undefined
+                        : config.persist === "false"
+                          ? false
+                          : config.persist === false
+                            ? false
+                            : config.persist;
                   const persistencePath =
                     localPersistencePath !== false
                       ? getLocalPersistencePath(
@@ -679,6 +731,9 @@ Workers["${name}"] = ${name};
                                     }
                                   : (config.ai as Json),
                             }
+                          : {}),
+                        ...(config.vectorize
+                          ? { PARTYKIT_VECTORIZE: vectorizeBindings }
                           : {}),
                       },
                       durableObjects: {
@@ -832,6 +887,7 @@ Workers["${name}"] = ${name};
     options.config,
     options.verbose,
     options.unstable_outdir,
+    userDetails,
   ]);
 
   const { onReady } = options;
@@ -848,9 +904,8 @@ Workers["${name}"] = ${name};
         const jsonUrl = `http://127.0.0.1:${portForRuntimeInspector}/json`;
         const res = await fetch(jsonUrl);
         const body = (await res.json()) as InspectorWebSocketTarget[];
-        const debuggerUrl = body?.find(({ id }) =>
-          id.startsWith("core:user")
-        )?.webSocketDebuggerUrl;
+        const debuggerUrl = body?.find(({ id }) => id.startsWith("core:user"))
+          ?.webSocketDebuggerUrl;
         if (debuggerUrl === undefined) {
           setInspectorUrl(undefined);
         } else {
