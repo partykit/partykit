@@ -71,11 +71,14 @@ process.on("unhandledRejection", function (reason, _promise) {
 });
 
 function getArrayKVOption(val: string[] = []) {
-  return val.reduce((acc, curr) => {
-    const [key, ...value] = curr.split("=");
-    acc[key] = value.join("=");
-    return acc;
-  }, {} as Record<string, string>);
+  return val.reduce(
+    (acc, curr) => {
+      const [key, ...value] = curr.split("=");
+      acc[key] = value.join("=");
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 }
 
 program
@@ -436,7 +439,7 @@ vectorizeCommand
           configuration into &apos;partykit.json&apos;:
         </Text>
         <Text>&nbsp;</Text>
-        <Text>vectorize: ["{name}"]</Text>
+        <Text>{`"vectorize": { "index_name": "${name}" }`}</Text>
       </Box>
     );
   });
