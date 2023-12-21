@@ -28,6 +28,109 @@ import nodejsCompatPlugin from "./nodejs-compat";
 import type { VectorizeClientOptions } from "../facade/vectorize";
 import assert from "node:assert";
 import { API_BASE } from "./fetchResult";
+import type { Readable } from "node:stream";
+
+function handleRuntimeStdio(stdout: Readable, stderr: Readable) {
+  // ASSUMPTION: each chunk is a whole message from workerd
+  // This may not hold across OSes/architectures, but it seems to work on macOS M-line
+  // I'm going with this simple approach to avoid complicating this too early
+  // We can iterate on this heuristic in the future if it causes issues
+  const classifiers = {
+    // Is this chunk a big chonky barf from workerd that we want to hijack to cleanup/ignore?
+    isBarf(chunk: string) {
+      const containsLlvmSymbolizerWarning = chunk.includes(
+        "Not symbolizing stack traces because $LLVM_SYMBOLIZER is not set"
+      );
+      const containsRecursiveIsolateLockWarning = chunk.includes(
+        "took recursive isolate lock"
+      );
+      // Matches stack traces from workerd
+      //  - on unix: groups of 9 hex digits separated by spaces
+      //  - on windows: groups of 12 hex digits, or a single digit 0, separated by spaces
+      const containsHexStack = /stack:( (0|[a-f\d]{4,})){3,}/.test(chunk);
+
+      return (
+        containsLlvmSymbolizerWarning ||
+        containsRecursiveIsolateLockWarning ||
+        containsHexStack
+      );
+    },
+    // Is this chunk an Address In Use error?
+    isAddressInUse(chunk: string) {
+      return chunk.includes("Address already in use; toString() = ");
+    },
+    isWarning(chunk: string) {
+      return /\.c\+\+:\d+: warning:/.test(chunk);
+    },
+  };
+
+  stdout.on("data", (chunk: Buffer | string) => {
+    chunk = chunk.toString().trim();
+
+    if (classifiers.isBarf(chunk)) {
+      // this is a big chonky barf from workerd that we want to hijack to cleanup/ignore
+
+      // CLEANABLE:
+      // there are no known cases to cleanup yet
+      // but, as they are identified, we will do that here
+
+      // IGNORABLE:
+      // anything else not handled above is considered ignorable
+      // so send it to the debug logs which are discarded unless
+      // the user explicitly sets a logLevel indicating they care
+      logger.debug(chunk);
+    }
+
+    // known case: warnings are not info, log them as such
+    else if (classifiers.isWarning(chunk)) {
+      logger.warn(chunk);
+    }
+
+    // anything not exlicitly handled above should be logged as info (via stdout)
+    else {
+      logger.info(chunk);
+    }
+  });
+
+  stderr.on("data", (chunk: Buffer | string) => {
+    chunk = chunk.toString().trim();
+
+    if (classifiers.isBarf(chunk)) {
+      // this is a big chonky barf from workerd that we want to hijack to cleanup/ignore
+
+      // CLEANABLE:
+      // known case to cleanup: Address in use errors
+      if (classifiers.isAddressInUse(chunk)) {
+        const address = chunk.match(
+          /Address already in use; toString\(\) = (.+)\n/
+        )?.[1];
+
+        logger.error(
+          `Address already in use (${address}). Please check that you are not already running a server on this address or specify a different port with --port.`
+        );
+
+        // even though we've intercepted the chunk and logged a better error to stderr
+        // fallthrough to log the original chunk to the debug log file for observability
+      }
+
+      // IGNORABLE:
+      // anything else not handled above is considered ignorable
+      // so send it to the debug logs which are discarded unless
+      // the user explicitly sets a logLevel indicating they care
+      logger.debug(chunk);
+    }
+
+    // known case: warnings are not errors, log them as such
+    else if (classifiers.isWarning(chunk)) {
+      logger.warn(chunk);
+    }
+
+    // anything not exlicitly handled above should be logged as an error (via stderr)
+    else {
+      logger.error(chunk);
+    }
+  });
+}
 
 const esbuildOptions: BuildOptions = {
   format: "esm",
@@ -711,7 +814,7 @@ Workers["${name}"] = ${name};
                       log: new Log(5, { prefix: "pk" }),
                       verbose: options.verbose,
                       inspectorPort: portForRuntimeInspector,
-
+                      handleRuntimeStdio,
                       compatibilityDate,
                       compatibilityFlags: [
                         "nodejs_compat",
