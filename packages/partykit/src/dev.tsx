@@ -606,7 +606,7 @@ function useDev(options: DevProps): {
   const portForServer = config.port ?? getPortForServer("dev", 1999);
 
   const userDetails = useMemo(
-    () => (config.vectorize ? null : getUserDetails(config)),
+    () => (config.vectorize || config.ai ? getUserDetails(config) : null),
     [config]
   );
 
@@ -640,7 +640,8 @@ function useDev(options: DevProps): {
     const currentUTCDate = new Date().toISOString().split("T", 1)[0];
 
     const vectorizeBindings: Record<string, VectorizeClientOptions> = {};
-    if (config.vectorize) {
+
+    if (config.vectorize || config.ai) {
       assert(
         userDetails,
         "You need to be logged in to use vectorize in local development"
@@ -830,9 +831,26 @@ Workers["${name}"] = ${name};
                               PARTYKIT_AI:
                                 config.ai === true
                                   ? {
-                                      apiGateway:
-                                        "https://ai-dev.labs.partykit.dev",
-                                      apiToken: "DEVTOKEN",
+                                      apiGateway: `${API_BASE}/ai/${userDetails?.namespace}/dev`,
+                                      apiToken: userDetails!.token,
+                                      apiEndpoint: `${API_BASE}/ai/${userDetails?.namespace}/dev`,
+                                      sessionOptions: {
+                                        extraHeaders: {
+                                          "User-Agent": "partykit-dev",
+                                          "X-PartyKit-Version": "0.0.0",
+                                          "X-CLOUDFLARE-ACCOUNT-ID":
+                                            process.env.CLOUDFLARE_ACCOUNT_ID ||
+                                            "",
+                                          "X-CLOUDFLARE-API-TOKEN":
+                                            process.env.CLOUDFLARE_API_TOKEN ||
+                                            "",
+                                          Authorization: `Bearer ${
+                                            userDetails!.token
+                                          }`,
+                                          "X-PartyKit-User-Type":
+                                            userDetails!.type,
+                                        },
+                                      },
                                     }
                                   : (config.ai as Json),
                             }
