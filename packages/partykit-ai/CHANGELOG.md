@@ -1,5 +1,11 @@
 # partykit-ai
 
+## 0.0.5
+
+### Patch Changes
+
+- [#623](https://github.com/partykit/partykit/pull/623) [`c9b992c`](https://github.com/partykit/partykit/commit/c9b992c193d400e16780e0dcbfe93e45c3139cd3) Thanks [@threepointone](https://github.com/threepointone)! - experimental: add vectorize commands
+
 ## 0.0.3
 
 ### Patch Changes

@@ -1,5 +1,27 @@
 # partykit
 
+## 0.0.48
+
+### Patch Changes
+
+- [#631](https://github.com/partykit/partykit/pull/631) [`22b620f`](https://github.com/partykit/partykit/commit/22b620fb7c52dbcb66b45511f5c492c0741f1ef6) Thanks [@threepointone](https://github.com/threepointone)! - Use the api for ai dev
+
+- [#623](https://github.com/partykit/partykit/pull/623) [`c9b992c`](https://github.com/partykit/partykit/commit/c9b992c193d400e16780e0dcbfe93e45c3139cd3) Thanks [@threepointone](https://github.com/threepointone)! - experimental: add vectorize commands
+
+- [#629](https://github.com/partykit/partykit/pull/629) [`955455e`](https://github.com/partykit/partykit/commit/955455e4508a4549900a061df24ded78238ef815) Thanks [@threepointone](https://github.com/threepointone)! - add AI warning when vectorize is used
+
+- [#627](https://github.com/partykit/partykit/pull/627) [`94f3891`](https://github.com/partykit/partykit/commit/94f38917e83d8e99bb45700c0743789115a44aa3) Thanks [@threepointone](https://github.com/threepointone)! - wrap API_BASE with quotes
+
+- [#630](https://github.com/partykit/partykit/pull/630) [`5b4bed3`](https://github.com/partykit/partykit/commit/5b4bed38f15381c661b6e51be4d6716b1b48d2fd) Thanks [@threepointone](https://github.com/threepointone)! - Silence extraneous logs
+
+- [#628](https://github.com/partykit/partykit/pull/628) [`31b4359`](https://github.com/partykit/partykit/commit/31b43596369147cd5dc2796d38b75b0ad0027fa7) Thanks [@threepointone](https://github.com/threepointone)! - vectorize: insert/upsert inside local dev
+
+- [#625](https://github.com/partykit/partykit/pull/625) [`17dcf4c`](https://github.com/partykit/partykit/commit/17dcf4cec124502184f3b90cc9a5f73dfa98f3f3) Thanks [@threepointone](https://github.com/threepointone)! - vectorize: local dev + deploy
+
+  This adds local dev for vectorize, and the parts needed to deploy it to production.
+
+- [#626](https://github.com/partykit/partykit/pull/626) [`35eac21`](https://github.com/partykit/partykit/commit/35eac214a3a5c410fe851aeb1c722455ed5cb4ec) Thanks [@threepointone](https://github.com/threepointone)! - expose API_BASE to be used by vectorize polyfill
+
 ## 0.0.47
 
 ### Patch Changes
@@ -607,7 +629,7 @@
     // You can now tag connections, and retrieve tagged connections using Party.getConnections()
     getConnectionTags(
       connection: PartyConnection,
-      ctx: PartyConnectionContext
+      ctx: PartyConnectionContext,
     ) {
       return [ctx.request.cf?.country as string];
     }
@@ -627,7 +649,7 @@
         compatriot.send(
           JSON.stringify({
             message: `${connection.id} is also from ${country}!`,
-          })
+          }),
         );
       }
     }
