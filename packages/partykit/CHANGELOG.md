@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.49
+
+### Patch Changes
+
+- [#632](https://github.com/partykit/partykit/pull/632) [`431492a`](https://github.com/partykit/partykit/commit/431492ae8e53a1f8ae5552112c822b35d55c832e) Thanks [@threepointone](https://github.com/threepointone)! - fix: vectorize index create message
+
 ## 0.0.48
 
 ### Patch Changes
