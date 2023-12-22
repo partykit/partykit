@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.18
+
+### Patch Changes
+
+- [#636](https://github.com/partykit/partykit/pull/636) [`b190d1d`](https://github.com/partykit/partykit/commit/b190d1d52d9e6265231d904380ca0e08bba2842a) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: make a proper event/target polyfill for react native
+
 ## 0.0.17
 
 ### Patch Changes
