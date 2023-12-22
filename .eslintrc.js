@@ -23,6 +23,7 @@ module.exports = {
     "*.d.ts",
     "packages/partykit/init/index.js",
     "packages/party.io/**/*.test.ts",
+    "packages/partysocket/event-target-polyfill.*",
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
