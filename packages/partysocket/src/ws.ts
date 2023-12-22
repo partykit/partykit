@@ -13,20 +13,10 @@ import type { TypedEventTarget } from "./type-helper";
 if (!globalThis.EventTarget || !globalThis.Event) {
   console.error(`
   PartySocket requires a global 'EventTarget' class to be available!
-  You can use the 'event-target-shim' package to polyfill this. See https://www.npmjs.com/package/event-target-shim. 
-  First, run:
+  You can polyfill this global by adding this to your code before any partysocket imports: 
+  
   \`\`\`
-  npm install event-target-shim
-  \`\`\`
-  Then, add this in your code:
-  \`\`\`
-  import {Event, EventTarget} from 'event-target-shim';
-  if(!globalThis.Event) {
-    globalThis.Event = Event;
-  }
-  if(!globalThis.EventTarget) {
-    globalThis.EventTarget = EventTarget;
-  }
+  import 'partysocket/event-target-polyfill';
   \`\`\`
   Please file an issue at https://github.com/partykit/partykit if you're still having trouble.
 `);

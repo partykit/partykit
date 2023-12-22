@@ -20,8 +20,8 @@
   },
   "scripts": {
     "check": "tsc",
-    "clean": "shx rm -rf dist *.d.ts",
-    "post-build": "shx mv dist/*.d.ts* .",
+    "clean": "shx rm -rf dist *.d.ts *.d.mts",
+    "post-build": "shx mv dist/*.d.ts* dist/*.d.mts* .",
     "build": "npm run clean && tsup && npm run post-build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
