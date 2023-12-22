@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.50
+
+### Patch Changes
+
+- [#634](https://github.com/partykit/partykit/pull/634) [`7b7bc9b`](https://github.com/partykit/partykit/commit/7b7bc9b5d9c7e8ec40bfe36c6025d6acbdb1d495) Thanks [@threepointone](https://github.com/threepointone)! - alias Party.Party as Party.Room
+
 ## 0.0.49
 
 ### Patch Changes
