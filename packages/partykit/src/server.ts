@@ -134,8 +134,8 @@ export type Connection<TState = unknown> = WebSocket & {
   deserializeAttachment<T = unknown>(): T | null;
 };
 
-/** Party represents a single, self-contained, long-lived session. */
-export type Party = {
+/** Room represents a single, self-contained, long-lived session. */
+export type Room = {
   /** Party ID defined in the Party URL, e.g. /parties/:name/:id */
   id: string;
 
@@ -180,6 +180,8 @@ export type Party = {
    */
   ai: AI;
 };
+
+export type Party = Room;
 
 /* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party
  *
@@ -258,7 +260,7 @@ export type Server = {
 };
 
 type ServerConstructor = {
-  new (party: Party): Server;
+  new (party: Room): Server;
 };
 
 /**
@@ -346,11 +348,11 @@ export type PartyKitServer = {
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
-  onRequest?: (req: Request, party: Party) => Response | Promise<Response>;
+  onRequest?: (req: Request, party: Room) => Response | Promise<Response>;
   onAlarm?: (party: Omit<Party, "id" | "parties">) => void | Promise<void>;
   onConnect?: (
     connection: Connection,
-    party: Party,
+    party: Room,
     ctx: ConnectionContext
   ) => void | Promise<void>;
   onBeforeConnect?: (
@@ -372,13 +374,13 @@ export type PartyKitServer = {
   onMessage?: (
     message: string | ArrayBuffer | ArrayBufferView,
     connection: Connection,
-    party: Party
+    party: Room
   ) => void | Promise<void>;
-  onClose?: (connection: Connection, party: Party) => void | Promise<void>;
+  onClose?: (connection: Connection, party: Room) => void | Promise<void>;
   onError?: (
     connection: Connection,
     err: Error,
-    party: Party
+    party: Room
   ) => void | Promise<void>;
 };
 
