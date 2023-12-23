@@ -4,6 +4,7 @@ import type {
   WebSocket,
   Request as CFRequest,
   VectorizeIndex,
+  DurableObjectState,
 } from "@cloudflare/workers-types";
 
 export type StaticAssetsManifestType = {
@@ -150,6 +151,9 @@ export type Room = {
 
   /** A per-party key-value storage */
   storage: Storage;
+
+  /** `blockConcurrencyWhile()` ensures no requests are delivered until */
+  blockConcurrencyWhile: DurableObjectState["blockConcurrencyWhile"];
 
   /** Additional information about other resources in the current project */
   context: Context;

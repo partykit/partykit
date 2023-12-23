@@ -306,6 +306,9 @@ function createDurable(
         env: PARTYKIT_VARS,
         ai: PARTYKIT_AI,
         storage: this.controller.storage,
+        blockConcurrencyWhile: this.controller.blockConcurrencyWhile.bind(
+          this.controller
+        ),
         broadcast: this.broadcast,
         context: {
           get parties() {

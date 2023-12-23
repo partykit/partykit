@@ -1,0 +1,5 @@
+---
+"partykit": patch
+---
+
+expose blockConcurrencyWhile
