@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.51
+
+### Patch Changes
+
+- [#638](https://github.com/partykit/partykit/pull/638) [`6523e92`](https://github.com/partykit/partykit/commit/6523e92c631a746beee70dec53049fa3ba4717e4) Thanks [@threepointone](https://github.com/threepointone)! - expose blockConcurrencyWhile
+
 ## 0.0.50
 
 ### Patch Changes
