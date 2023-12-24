@@ -13,5 +13,6 @@
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"]
     }
-  }
+  },
+  "exclude": ["dist"]
 }
