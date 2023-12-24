@@ -47,7 +47,7 @@ describe("deploy", () => {
   it("should error without a valid script", async () => {
     // @ts-expect-error we're purposely not passing a script path
     await expect(deploy({})).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing entry point, please specify \\"main\\" in your config, or pass it in via the CLI"'
+      `[Error: Missing entry point, please specify "main" in your config, or pass it in via the CLI]`
     );
   });
 
@@ -56,7 +56,7 @@ describe("deploy", () => {
       // @ts-expect-error we're purposely not passing a name
       deploy({ main: fixture })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"'
+      `[Error: Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>]`
     );
   });
 
@@ -116,7 +116,7 @@ describe("deploy", () => {
 
         const form = options?.body as FormData;
         expect(form.get("vars")).toMatchInlineSnapshot(
-          '"{\\"a\\":\\"b\\",\\"c\\":\\"d\\"}"'
+          `"{"a":"b","c":"d"}"`
         );
         checkedResponse = true;
         return {
@@ -169,7 +169,7 @@ describe("deploy", () => {
 
         const form = options?.body as FormData;
         expect(form.get("vars")).toMatchInlineSnapshot(
-          '"{\\"a\\":\\"b\\",\\"b\\":\\"b2\\",\\"c\\":\\"d\\",\\"d\\":\\"d4\\"}"'
+          `"{"a":"b","b":"b2","c":"d","d":"d4"}"`
         );
         checkedResponse = true;
         return {
@@ -222,7 +222,7 @@ describe("deploy", () => {
         withEnv: undefined,
         domain: undefined,
       })
-    ).rejects.toThrowErrorMatchingInlineSnapshot('"Not OK"');
+    ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Not OK]`);
   });
 
   it('should warn if using "serve" in the config', async () => {

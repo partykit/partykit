@@ -1,16 +1,16 @@
 import * as util from "node:util";
 import { beforeEach, afterEach, vi } from "vitest";
-import type { SpyInstance } from "vitest";
+import type { MockInstance } from "vitest";
 /**
  * We use this module to mock console methods, and optionally
  * assert on the values they're called with in our tests.
  */
 
-let debugSpy: SpyInstance,
-  logSpy: SpyInstance,
-  infoSpy: SpyInstance,
-  errorSpy: SpyInstance,
-  warnSpy: SpyInstance;
+let debugSpy: MockInstance,
+  logSpy: MockInstance,
+  infoSpy: MockInstance,
+  errorSpy: MockInstance,
+  warnSpy: MockInstance;
 
 const std = {
   get debug() {
@@ -30,7 +30,7 @@ const std = {
   },
 };
 
-function normalizeOutput(spy: SpyInstance): string {
+function normalizeOutput(spy: MockInstance): string {
   return normalizeErrorMarkers(
     replaceByte(
       stripTrailingWhitespace(
@@ -40,7 +40,7 @@ function normalizeOutput(spy: SpyInstance): string {
   );
 }
 
-function captureCalls(spy: SpyInstance): string {
+function captureCalls(spy: MockInstance): string {
   return spy.mock.calls
     .map((args: unknown[]) => util.format("%s", ...args))
     .join("\n");

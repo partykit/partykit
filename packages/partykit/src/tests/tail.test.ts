@@ -48,7 +48,7 @@ describe("tail", () => {
         search: undefined,
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing project name, please specify \\"name\\" in your config, or pass it in via the CLI with --name <name>"'
+      `[Error: Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>]`
     );
   });
 

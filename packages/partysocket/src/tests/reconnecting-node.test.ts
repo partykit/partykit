@@ -16,7 +16,7 @@ import NodeWebSocket, { WebSocketServer } from "ws";
 // import type { ErrorEvent } from "../ws";
 import ReconnectingWebSocket from "../ws";
 
-const PORT = 50123;
+const PORT = 50122;
 const URL = `ws://localhost:${PORT}/`;
 // const ERROR_URL = "ws://255.255.255.255";
 

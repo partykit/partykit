@@ -6,7 +6,7 @@
 
 import type { AppLoadContext, EntryContext } from "partymix";
 import { RemixServer } from "@remix-run/react";
-import isbot from "isbot";
+import { isbot } from "isbot";
 import { renderToReadableStream } from "react-dom/server";
 
 export default async function handleRequest(
@@ -28,7 +28,8 @@ export default async function handleRequest(
     }
   );
 
-  if (isbot(request.headers.get("user-agent"))) {
+  const userAgent = request.headers.get("user-agent");
+  if (userAgent && isbot(userAgent)) {
     await body.allReady;
   }
 
