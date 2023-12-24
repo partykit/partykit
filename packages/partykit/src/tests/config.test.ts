@@ -206,7 +206,7 @@ describe("config", () => {
     expect(() =>
       getConfig(undefined, undefined)
     ).toThrowErrorMatchingInlineSnapshot(
-      "\"JSON5: invalid character 'e' at 1:2\""
+      `[SyntaxError: JSON5: invalid character 'e' at 1:2]`
     );
   });
 
@@ -215,7 +215,7 @@ describe("config", () => {
     expect(() =>
       getConfig(undefined, undefined)
     ).toThrowErrorMatchingInlineSnapshot(
-      "\"JSON5: invalid character 'e' at 1:2\""
+      `[SyntaxError: JSON5: invalid character 'e' at 1:2]`
     );
   });
 
@@ -224,7 +224,7 @@ describe("config", () => {
     expect(() =>
       getConfig(undefined, undefined)
     ).toThrowErrorMatchingInlineSnapshot(
-      "\"JSON5: invalid character 'e' at 1:2\""
+      `[SyntaxError: JSON5: invalid character 'e' at 1:2]`
     );
   });
 
@@ -260,18 +260,18 @@ describe("config", () => {
         getConfig(undefined, undefined)
       ).toThrowErrorMatchingInlineSnapshot(
         `
-          "[
-            {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"string\\",
-              \\"received\\": \\"number\\",
-              \\"path\\": [
-                \\"team\\"
-              ],
-              \\"message\\": \\"Expected string, received number\\"
-            }
-          ]"
-        `
+        [ZodError: [
+          {
+            "code": "invalid_type",
+            "expected": "string",
+            "received": "number",
+            "path": [
+              "team"
+            ],
+            "message": "Expected string, received number"
+          }
+        ]]
+      `
       );
     });
   });
@@ -307,18 +307,18 @@ describe("config", () => {
       );
       expect(() => getConfig(undefined, undefined))
         .toThrowErrorMatchingInlineSnapshot(`
-            "[
-              {
-                \\"code\\": \\"invalid_type\\",
-                \\"expected\\": \\"string\\",
-                \\"received\\": \\"number\\",
-                \\"path\\": [
-                  \\"name\\"
-                ],
-                \\"message\\": \\"Expected string, received number\\"
-              }
-            ]"
-          `);
+          [ZodError: [
+            {
+              "code": "invalid_type",
+              "expected": "string",
+              "received": "number",
+              "path": [
+                "name"
+              ],
+              "message": "Expected string, received number"
+            }
+          ]]
+        `);
     });
   });
 
@@ -371,18 +371,18 @@ describe("config", () => {
       );
       expect(() => getConfig(undefined, undefined))
         .toThrowErrorMatchingInlineSnapshot(`
-            "[
-              {
-                \\"code\\": \\"invalid_type\\",
-                \\"expected\\": \\"string\\",
-                \\"received\\": \\"number\\",
-                \\"path\\": [
-                  \\"main\\"
-                ],
-                \\"message\\": \\"Expected string, received number\\"
-              }
-            ]"
-          `);
+          [ZodError: [
+            {
+              "code": "invalid_type",
+              "expected": "string",
+              "received": "number",
+              "path": [
+                "main"
+              ],
+              "message": "Expected string, received number"
+            }
+          ]]
+        `);
     });
 
     it("should error on a path that doesn't exist", () => {
@@ -394,7 +394,7 @@ describe("config", () => {
       );
       expect(() =>
         getConfig(undefined, undefined)
-      ).toThrowErrorMatchingInlineSnapshot('"Could not find main: test"');
+      ).toThrowErrorMatchingInlineSnapshot(`[Error: Could not find main: test]`);
     });
 
     it("should resolve config.main path relative to the config file", () => {
@@ -448,17 +448,17 @@ describe("config", () => {
       );
       expect(() => getConfig(undefined, undefined))
         .toThrowErrorMatchingInlineSnapshot(`
-          "[
+          [ZodError: [
             {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"number\\",
-              \\"received\\": \\"string\\",
-              \\"path\\": [
-                \\"port\\"
+              "code": "invalid_type",
+              "expected": "number",
+              "received": "string",
+              "path": [
+                "port"
               ],
-              \\"message\\": \\"Expected number, received string\\"
+              "message": "Expected number, received string"
             }
-          ]"
+          ]]
         `);
     });
   });
@@ -497,17 +497,17 @@ describe("config", () => {
       );
       expect(() => getConfig(undefined, undefined))
         .toThrowErrorMatchingInlineSnapshot(`
-          "[
+          [ZodError: [
             {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"object\\",
-              \\"received\\": \\"string\\",
-              \\"path\\": [
-                \\"vars\\"
+              "code": "invalid_type",
+              "expected": "object",
+              "received": "string",
+              "path": [
+                "vars"
               ],
-              \\"message\\": \\"Expected object, received string\\"
+              "message": "Expected object, received string"
             }
-          ]"
+          ]]
         `);
     });
 
@@ -525,18 +525,18 @@ describe("config", () => {
           vars: "test",
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-          "[
-            {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"object\\",
-              \\"received\\": \\"string\\",
-              \\"path\\": [
-                \\"vars\\"
-              ],
-              \\"message\\": \\"Expected object, received string\\"
-            }
-          ]"
-        `);
+        [ZodError: [
+          {
+            "code": "invalid_type",
+            "expected": "object",
+            "received": "string",
+            "path": [
+              "vars"
+            ],
+            "message": "Expected object, received string"
+          }
+        ]]
+      `);
     });
   });
 
@@ -574,17 +574,17 @@ describe("config", () => {
       );
       expect(() => getConfig(undefined, undefined))
         .toThrowErrorMatchingInlineSnapshot(`
-          "[
+          [ZodError: [
             {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"object\\",
-              \\"received\\": \\"string\\",
-              \\"path\\": [
-                \\"define\\"
+              "code": "invalid_type",
+              "expected": "object",
+              "received": "string",
+              "path": [
+                "define"
               ],
-              \\"message\\": \\"Expected object, received string\\"
+              "message": "Expected object, received string"
             }
-          ]"
+          ]]
         `);
     });
 
@@ -602,18 +602,18 @@ describe("config", () => {
           define: "test",
         })
       ).toThrowErrorMatchingInlineSnapshot(`
-          "[
-            {
-              \\"code\\": \\"invalid_type\\",
-              \\"expected\\": \\"object\\",
-              \\"received\\": \\"string\\",
-              \\"path\\": [
-                \\"define\\"
-              ],
-              \\"message\\": \\"Expected object, received string\\"
-            }
-          ]"
-        `);
+        [ZodError: [
+          {
+            "code": "invalid_type",
+            "expected": "object",
+            "received": "string",
+            "path": [
+              "define"
+            ],
+            "message": "Expected object, received string"
+          }
+        ]]
+      `);
     });
   });
 

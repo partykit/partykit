@@ -98,12 +98,12 @@ describe("env", () => {
     expect(fs.existsSync("partykit.json")).toBe(true);
     expect(fs.readFileSync("partykit.json", "utf-8")).toMatchInlineSnapshot(`
       "{
-        \\"name\\": \\"my-project\\",
-        \\"vars\\": {
-          \\"a\\": \\"a1\\",
-          \\"b\\": \\"b2\\",
-          \\"c\\": \\"c3\\",
-          \\"d\\": \\"d4\\"
+        "name": "my-project",
+        "vars": {
+          "a": "a1",
+          "b": "b2",
+          "c": "c3",
+          "d": "d4"
         }
       }
       "

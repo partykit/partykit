@@ -50,7 +50,7 @@ afterEach(async () => {
 describe("dev", () => {
   it("should error if no script path is provided", async () => {
     await expect(runDev({})).rejects.toThrowErrorMatchingInlineSnapshot(
-      '"Missing entry point, please specify \\"main\\" in your config"'
+      `[Error: Missing entry point, please specify "main" in your config]`
     );
   });
 

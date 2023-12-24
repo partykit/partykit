@@ -5,7 +5,7 @@
 import { test, expect } from "vitest";
 import PartySocket from "../index";
 
-const PORT = 50123;
+const PORT = 50121;
 const URL = `localhost:${PORT}/`;
 
 test("throws if host or room is not set", () => {
