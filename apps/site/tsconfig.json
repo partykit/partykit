@@ -8,5 +8,6 @@
         "name": "@astrojs/ts-plugin"
       }
     ]
-  }
+  },
+  "ignore": ["node_modules", "dist"]
 }
