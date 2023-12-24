@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.52
+
+### Patch Changes
+
+- [#641](https://github.com/partykit/partykit/pull/641) [`c03660b`](https://github.com/partykit/partykit/commit/c03660bbb82c279b52b777a7ab863035f32bc87e) Thanks [@threepointone](https://github.com/threepointone)! - Inject every var as it's own var instead of a big PARTYKIT_VARS object
+
+  env vars have a 5kb limit, and people are hitting it. This should ease that off, without changing how we persist it ourselves.
+
 ## 0.0.51
 
 ### Patch Changes
