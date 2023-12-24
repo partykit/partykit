@@ -1,5 +1,11 @@
 # partymix
 
+## 0.0.11
+
+### Patch Changes
+
+- [#643](https://github.com/partykit/partykit/pull/643) [`c8e26e7`](https://github.com/partykit/partykit/commit/c8e26e7c09479e51df7bbad90de5f5882b6737d4) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
 ## 0.0.10
 
 ### Patch Changes
