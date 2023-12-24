@@ -663,6 +663,15 @@ function useDev(options: DevProps): {
         };
       }
     }
+
+    // prefix all vars with pkvar-
+    const vars = Object.entries(config.vars || {}).reduce<
+      Record<string, unknown>
+    >((obj, [key, value]) => {
+      obj[`pkvar-${key}`] = value;
+      return obj;
+    }, {});
+
     if (!config.compatibilityDate) {
       logger.warn(
         `No compatibilityDate specified in configuration, defaulting to ${currentUTCDate}
@@ -823,9 +832,7 @@ Workers["${name}"] = ${name};
                       ],
                       port: portForServer,
                       bindings: {
-                        ...(config.vars
-                          ? { PARTYKIT_VARS: config.vars as Json }
-                          : {}),
+                        ...vars,
                         ...(config.ai
                           ? {
                               PARTYKIT_AI:

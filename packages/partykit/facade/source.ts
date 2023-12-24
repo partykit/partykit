@@ -73,12 +73,21 @@ type DurableObjectNamespaceEnv = {
 
 type Env = DurableObjectNamespaceEnv & {
   PARTYKIT_AI: Party.Party["ai"];
-  PARTYKIT_VARS: Record<string, unknown>;
   PARTYKIT_DURABLE: DurableObjectNamespace;
   PARTYKIT_VECTORIZE: Record<string, VectorizeClientOptions>;
 };
 
 let parties: Party.Party["context"]["parties"];
+
+function extractVars(obj: Record<string, unknown>): Record<string, unknown> {
+  const vars: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (key.startsWith("pkvar-")) {
+      vars[key.slice(`pkvar-`.length)] = value;
+    }
+  }
+  return vars;
+}
 
 // create a "multi-party" object that can be used to connect to other parties
 function createMultiParties(
@@ -260,7 +269,6 @@ function createDurable(
       super();
 
       const {
-        PARTYKIT_VARS,
         PARTYKIT_AI,
         PARTYKIT_DURABLE,
         PARTYKIT_VECTORIZE,
@@ -303,7 +311,7 @@ function createDurable(
         },
         internalID: this.controller.id.toString(),
         name: options.name,
-        env: PARTYKIT_VARS,
+        env: extractVars(env),
         ai: PARTYKIT_AI,
         storage: this.controller.storage,
         blockConcurrencyWhile: this.controller.blockConcurrencyWhile.bind(
@@ -644,7 +652,6 @@ export default {
       // TODO: throw if room is longer than x characters
 
       const {
-        PARTYKIT_VARS,
         PARTYKIT_AI,
         PARTYKIT_DURABLE,
         PARTYKIT_VECTORIZE,
@@ -714,7 +721,7 @@ export default {
                   mutableRequest,
                   {
                     id: roomId,
-                    env: PARTYKIT_VARS,
+                    env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
                     vectorize: vectorizeBindings,
@@ -758,7 +765,7 @@ export default {
                   mutableRequest,
                   {
                     id: roomId,
-                    env: PARTYKIT_VARS,
+                    env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
                     vectorize: vectorizeBindings,
@@ -807,7 +814,7 @@ export default {
           return await onFetch(
             request,
             {
-              env: PARTYKIT_VARS,
+              env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
               vectorize: vectorizeBindings,
