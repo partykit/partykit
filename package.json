@@ -11,7 +11,7 @@
   "scripts": {
     "start": "npm start -w partykit",
     "build": "npm run build -w partykit && concurrently \"npm run build -w y-partykit\" \"npm run build -w partysocket\" \"npm run build -w create-partykit\" \"npm run build -w partymix\" \"npm run build -w party.io\" \"npm run build -w partykit-ai\" --kill-others-on-fail",
-    "check": "concurrently \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
+    "check": "concurrently \"npm run repocheck\" \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
     "repocheck": "manypkg check",
