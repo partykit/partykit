@@ -1,4 +1,5 @@
 {
+  "$schema": "https://www.partykit.io/schema.json",
   "name": "$PROJECT_NAME",
   "main": "src/server.js",
   "compatibilityDate": "$COMPATIBILITY_DATE",

@@ -243,6 +243,7 @@ export async function init(options: {
           path.join(process.cwd(), "partykit.json"),
           JSON.stringify(
             {
+              $schema: "https://www.partykit.io/schema.json",
               name: options.name || `${packageJson.name || "my"}-party`,
               main: isTypeScriptProject ? "party/index.ts" : "party/index.js",
               compatibilityDate: defaultCompatibilityDate,
@@ -1185,6 +1186,7 @@ export const env = {
       targetFileName,
       JSON.stringify(
         {
+          $schema: "https://www.partykit.io/schema.json",
           ...JSON.parse(fs.readFileSync(targetFileName, "utf8")),
           name: config.name,
           vars: res,

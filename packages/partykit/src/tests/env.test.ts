@@ -98,6 +98,7 @@ describe("env", () => {
     expect(fs.existsSync("partykit.json")).toBe(true);
     expect(fs.readFileSync("partykit.json", "utf-8")).toMatchInlineSnapshot(`
       "{
+        "$schema": "https://www.partykit.io/schema.json",
         "name": "my-project",
         "vars": {
           "a": "a1",
