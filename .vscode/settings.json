@@ -3,6 +3,9 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never"
   },
+  "files.associations": {
+    "partykit.json": "jsonc"
+  },
   "json.schemas": [
     {
       "url": "https://cdn.jsdelivr.net/npm/tsup/schema.json",
