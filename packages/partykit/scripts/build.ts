@@ -80,3 +80,7 @@ esbuild.buildSync({
 const jsonSchema = zodToJsonSchema(ConfigSchema.schema);
 // write to file
 fs.writeFileSync("schema.json", JSON.stringify(jsonSchema, null, 2) + "\n");
+
+// copy to the site's public folder
+
+fs.copyFileSync("schema.json", "../../apps/site/public/schema.json");
