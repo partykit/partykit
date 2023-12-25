@@ -1,0 +1,262 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "team": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "main": {
+      "type": "string"
+    },
+    "port": {
+      "type": "number"
+    },
+    "preview": {
+      "type": "string"
+    },
+    "serve": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "build": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "entry": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      ]
+                    },
+                    "bundle": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "splitting": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "external": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "outdir": {
+                      "type": "string"
+                    },
+                    "minify": {
+                      "type": "boolean"
+                    },
+                    "alias": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": [
+                        "esm",
+                        "cjs",
+                        "iife"
+                      ]
+                    },
+                    "sourcemap": {
+                      "type": "boolean"
+                    },
+                    "define": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    },
+                    "loader": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string",
+                        "enum": [
+                          "base64",
+                          "binary",
+                          "copy",
+                          "css",
+                          "dataurl",
+                          "default",
+                          "empty",
+                          "file",
+                          "js",
+                          "json",
+                          "jsx",
+                          "local-css",
+                          "text",
+                          "ts",
+                          "tsx"
+                        ]
+                      }
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "include": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exclude": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "browserTTL": {
+              "type": [
+                "null",
+                "number"
+              ]
+            },
+            "edgeTTL": {
+              "type": [
+                "null",
+                "number"
+              ]
+            },
+            "singlePageApp": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "persist": {
+      "type": [
+        "boolean",
+        "string"
+      ]
+    },
+    "vars": {
+      "type": "object",
+      "additionalProperties": {}
+    },
+    "define": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "parties": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "build": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "cwd": {
+          "type": "string"
+        },
+        "watch": {
+          "type": "string"
+        },
+        "alias": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibilityDate": {
+      "type": "string"
+    },
+    "compatibilityFlags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "minify": {
+      "type": "boolean"
+    },
+    "ai": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "apiGateway": {
+              "type": "string"
+            },
+            "apiToken": {
+              "type": "string"
+            },
+            "apiAccount": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "domain": {
+      "type": "string"
+    },
+    "vectorize": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "index_name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "index_name"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
