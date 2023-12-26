@@ -157,6 +157,7 @@ export async function init(options: {
     const packageJsonFile = fs.readFileSync(packageJsonPath, "utf8");
     const packageJsonIndent = detectIndent(packageJsonFile).indent || 2;
     const packageJson = JSON.parse(packageJsonFile);
+
     // if there's an existing package.json, we're in a project
     // ask the user whether they want to add to it, or create a new one
     const shouldAddToExisting =
@@ -204,7 +205,10 @@ export async function init(options: {
         // so let's add the partykit dependency
         // and make a partykit.json file
 
-        if (!packageJson.devDependencies?.partykit) {
+        if (
+          !packageJson.devDependencies?.partykit &&
+          !packageJson.dependencies?.partykit
+        ) {
           packageJson.devDependencies = packageJson.devDependencies || {};
           packageJson.devDependencies.partykit = latestPartyKitVersion;
           shouldRunInstaller = true;
