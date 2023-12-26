@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.55
+
+### Patch Changes
+
+- [#653](https://github.com/partykit/partykit/pull/653) [`d4d5ea7`](https://github.com/partykit/partykit/commit/d4d5ea7abfd9a7824209d15e928279c93acdde14) Thanks [@threepointone](https://github.com/threepointone)! - Don't check for existence of config.main until after (optional) custom build
+
+- [#651](https://github.com/partykit/partykit/pull/651) [`879a9de`](https://github.com/partykit/partykit/commit/879a9de09110a14416242c07b340b51e8e770325) Thanks [@threepointone](https://github.com/threepointone)! - Don't install partykit during init if it's already in dependencies
+
 ## 0.0.54
 
 ### Patch Changes
