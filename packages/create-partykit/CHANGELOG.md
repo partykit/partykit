@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.25
+
+### Patch Changes
+
+- [#649](https://github.com/partykit/partykit/pull/649) [`5bd0a23`](https://github.com/partykit/partykit/commit/5bd0a23f656bda859b709292a70788d0a8ab3fde) Thanks [@threepointone](https://github.com/threepointone)! - Add schema ref to generated json partykit.json files
+
 ## 0.0.24
 
 ### Patch Changes
