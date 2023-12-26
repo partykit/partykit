@@ -427,6 +427,10 @@ export async function deploy(options: {
     });
   }
 
+  if (!fs.existsSync(config.main)) {
+    throw new Error(`Could not find main: ${config.main}`);
+  }
+
   const absoluteScriptPath = path.join(process.cwd(), config.main).replace(
     /\\/g, // windows
     "/"

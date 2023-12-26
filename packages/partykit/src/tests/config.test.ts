@@ -385,18 +385,6 @@ describe("config", () => {
         `);
     });
 
-    it("should error on a path that doesn't exist", () => {
-      fs.writeFileSync(
-        "partykit.json",
-        JSON.stringify({
-          main: "test",
-        })
-      );
-      expect(() =>
-        getConfig(undefined, undefined)
-      ).toThrowErrorMatchingInlineSnapshot(`[Error: Could not find main: test]`);
-    });
-
     it("should resolve config.main path relative to the config file", () => {
       fs.mkdirSync("some/path/src", { recursive: true });
       fs.writeFileSync(
