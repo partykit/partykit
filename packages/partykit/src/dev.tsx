@@ -990,6 +990,10 @@ Workers["${name}"] = ${name};
           });
       }
 
+      if (!fs.existsSync(config.main!)) {
+        throw new Error(`Could not find main: ${config.main}`);
+      }
+
       // should we call watcher.close() on exit?
 
       await ctx.watch(); // turn on watch mode

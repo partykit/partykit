@@ -396,13 +396,9 @@ export function getConfig(
         ? config.main
         : path.join(process.cwd(), config.main);
 
-      if (!fs.existsSync(absoluteMainPath)) {
-        throw new ConfigurationError(`Could not find main: ${config.main}`);
-      } else {
-        config.main =
-          "./" +
-          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
-      }
+      config.main =
+        "./" +
+        replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
     }
 
     if ((config.ai || config.vectorize) && !warnedAboutExperimentalAi) {
@@ -452,26 +448,16 @@ export function getConfig(
       const absoluteMainPath = path.isAbsolute(overrides.main)
         ? overrides.main
         : path.join(process.cwd(), overrides.main);
-      if (!fs.existsSync(absoluteMainPath)) {
-        throw new ConfigurationError(`Could not find main: ${overrides.main}`);
-      } else {
-        config.main =
-          "./" +
-          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
-      }
+      config.main =
+        "./" +
+        replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
     } else if (parsedConfig.main) {
       const absoluteMainPath = path.isAbsolute(parsedConfig.main)
         ? parsedConfig.main
         : path.join(path.dirname(configPath), parsedConfig.main);
-      if (!fs.existsSync(absoluteMainPath)) {
-        throw new ConfigurationError(
-          `Could not find main: ${parsedConfig.main}`
-        );
-      } else {
-        config.main =
-          "./" +
-          replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
-      }
+      config.main =
+        "./" +
+        replacePathSlashes(path.relative(process.cwd(), absoluteMainPath));
     }
   }
   if (config.parties) {
