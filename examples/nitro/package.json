@@ -1,0 +1,12 @@
+{
+  "name": "@partykit/examples-nitro",
+  "private": true,
+  "scripts": {
+    "prepare": "nitropack prepare",
+    "dev": "npm run build && partykit dev",
+    "build": "nitropack build"
+  },
+  "devDependencies": {
+    "nitropack": "^2.8.1"
+  }
+}

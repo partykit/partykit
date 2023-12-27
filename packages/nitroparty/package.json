@@ -1,0 +1,14 @@
+{
+  "name": "nitroparty",
+  "version": "0.0.0",
+  "description": "partykit + nitro",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nitropack": "^2.8.1"
+  },
+  "peerDependencies": {
+    "nitropack": "^2.8.1"
+  }
+}
