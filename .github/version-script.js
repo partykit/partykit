@@ -15,6 +15,7 @@ try {
       "./packages/partymix/package.json",
       "./packages/party.io/package.json",
       "./packages/partykit-ai/package.json",
+      "./packages/nitroparty/package.json",
     ]) {
       const package = JSON.parse(fs.readFileSync(path));
       package.version = "0.0.0-" + stdout.trim();

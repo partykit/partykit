@@ -1,0 +1,18 @@
+{
+  "$schema": "https://www.partykit.io/schema.json",
+  "name": "my-party",
+  "main": "./.output/server/index.mjs",
+  "compatibilityDate": "2023-12-26",
+  "define": {
+    "process.env.NITRO_ENV_PREFIX": "'_'",
+    "process.env": "{}"
+  },
+  "build": {
+    "command": "npm run build",
+    "watch": "routes"
+  },
+  "serve": {
+    "path": ".output/public",
+    "build": "./client/index.ts"
+  }
+}
