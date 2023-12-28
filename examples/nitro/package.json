@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "prepare": "nitropack prepare",
-    "dev": "npm run build && partykit dev",
+    "dev": "partykit dev",
     "build": "nitropack build"
   },
   "devDependencies": {

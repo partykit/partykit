@@ -12,7 +12,8 @@
     "watch": "routes"
   },
   "serve": {
-    "path": ".output/public",
-    "build": "./client/index.ts"
+    "build": "./client/index.ts",
+    // TODO: make "public" the default when using serve
+    "path": "public"
   }
 }
