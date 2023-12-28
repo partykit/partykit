@@ -2,6 +2,12 @@
 
 ⚡️ nitro ⤫ partykit 🎈
 
+### install
+
+```bash
+npm install partykit nitropack nitroparty --save-dev
+```
+
 ### setup
 
 ```ts
@@ -11,7 +17,7 @@ export default defineNitroConfig({
 });
 ```
 
-```json
+```jsonc
 // partykit.json
 {
   "$schema": "https://www.partykit.io/schema.json",
@@ -33,7 +39,7 @@ export default defineNitroConfig({
 }
 ```
 
-```json
+```jsonc
 // package.json
 {
   // ...
@@ -41,9 +47,6 @@ export default defineNitroConfig({
     "prepare": "nitropack prepare",
     "dev": "partykit dev",
     "deploy": "partykit deploy"
-  },
-  "devDependencies": {
-    "nitropack": "^2.8.1"
   }
 }
 ```
