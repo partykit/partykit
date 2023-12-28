@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.partykit.io/schema.json",
-  "name": "my-party",
+  "name": "nitroparty",
   "main": "./.output/server/index.mjs",
   "compatibilityDate": "2023-12-26",
   "define": {
@@ -8,7 +8,7 @@
     "process.env": "{}"
   },
   "build": {
-    "command": "npm run build",
+    "command": "npx nitropack build",
     "watch": "routes"
   },
   "serve": {
