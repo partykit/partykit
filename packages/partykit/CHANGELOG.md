@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.56
+
+### Patch Changes
+
+- [#657](https://github.com/partykit/partykit/pull/657) [`21d6703`](https://github.com/partykit/partykit/commit/21d67036e4a276c853b39191c6c1ff3164cf6489) Thanks [@threepointone](https://github.com/threepointone)! - use execaCommandSync in dev to prevent race conditions
+
 ## 0.0.55
 
 ### Patch Changes
