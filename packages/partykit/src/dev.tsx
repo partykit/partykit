@@ -6,7 +6,7 @@ import type { Config } from "./config";
 import { getConfig, getUser } from "./config";
 import fs from "fs";
 import path from "path";
-import { execaCommand } from "execa";
+import { execaCommandSync } from "execa";
 import esbuild from "esbuild";
 import type { BuildContext, BuildOptions } from "esbuild";
 import chalk from "chalk";
@@ -956,20 +956,25 @@ Workers["${name}"] = ${name};
       });
 
       if (config.build?.command) {
-        const buildCommand = config.build.command;
-        const buildCwd = config.build.cwd;
         // run a build
         // start a watcher
         // on change, run a build
 
-        await execaCommand(buildCommand, {
-          shell: true,
-          // we keep these two as "inherit" so that
-          // logs are still visible.
-          stdout: "inherit",
-          stderr: "inherit",
-          ...(buildCwd && { cwd: buildCwd }),
-        });
+        const buildCommand = config.build.command;
+        const buildCwd = config.build.cwd;
+
+        try {
+          execaCommandSync(buildCommand, {
+            shell: true,
+            // we keep these two as "inherit" so that
+            // logs are still visible.
+            stdout: "inherit",
+            stderr: "inherit",
+            ...(buildCwd && { cwd: buildCwd }),
+          });
+        } catch (err) {
+          console.error(chalk.red("Custom build failed"), err);
+        }
 
         customBuildFolderWatcher = chokidar
           .watch(config.build.watch || path.join(process.cwd(), "./src"), {
@@ -977,16 +982,18 @@ Workers["${name}"] = ${name};
             ignoreInitial: true,
           })
           .on("all", async (_event, _path) => {
-            execaCommand(buildCommand, {
-              shell: true,
-              // we keep these two as "inherit" so that
-              // logs are still visible.
-              stdout: "inherit",
-              stderr: "inherit",
-              ...(buildCwd && { cwd: buildCwd }),
-            }).catch((err) => {
+            try {
+              execaCommandSync(buildCommand, {
+                shell: true,
+                // we keep these two as "inherit" so that
+                // logs are still visible.
+                stdout: "inherit",
+                stderr: "inherit",
+                ...(buildCwd && { cwd: buildCwd }),
+              });
+            } catch (err) {
               console.error(chalk.red("Custom build failed"), err);
-            });
+            }
           });
       }
 
