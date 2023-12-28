@@ -1,5 +1,11 @@
 # nitroparty
 
+## 0.0.2
+
+### Patch Changes
+
+- [#661](https://github.com/partykit/partykit/pull/661) [`0f81796`](https://github.com/partykit/partykit/commit/0f817961331d73a9784ddac6c26d910f12cdd513) Thanks [@threepointone](https://github.com/threepointone)! - nitroparty: pass context and body to request handler
+
 ## 0.0.1
 
 ### Patch Changes
