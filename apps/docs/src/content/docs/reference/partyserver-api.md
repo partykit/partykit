@@ -23,12 +23,12 @@ export default class Server implements Party.Server {}
 
 ### new Party.Server (constructor)
 
-The `Party.Server` constructor receives an instance of [`Party.Party`](#party), which gives you access to the room state and resources such as storage, connections, id, and more.
+The `Party.Server` constructor receives an instance of [`Party.Room`](#partyroom), which gives you access to the room state and resources such as storage, connections, id, and more.
 
 ```ts
 import type * as Party from "partykit/server";
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {
+  constructor(readonly room: Party.Room) {
     // ...
   }
 }
@@ -122,7 +122,7 @@ export default class Server implements Party.Server {
 
 ### Party.Server.onRequest
 
-Called when a HTTP request is made to the party URL.
+Called when a HTTP request is made to the room URL.
 
 Receives an instance of [`Party.Request`](#partyrequest), and is expected to return a standard Fetch API [`Response`](https://developer.mozilla.org/en-US/docs/Web/API/Response).
 
@@ -141,7 +141,7 @@ export default class Server implements Party.Server {
 
 Called when an alarm is triggered.
 
-Alarms have access to most [`Party`](#party) resources such as storage, but not [`Party.id`](#partyid) and [`Party.context.parties`](#partycontextparties) properties. Attempting to access them will result in a runtime error.
+Alarms have access to most [`Room`](#partyroom) resources such as storage, but not [`Room.id`](#roomid) and [`Room.context.parties`](#roomcontextparties) properties. Attempting to access them will result in a runtime error.
 
 ```ts
 import type * as Party from "partykit/server";
@@ -167,7 +167,7 @@ export default class Server implements Party.Server {
     return [country];
   }
   async onMessage(message: string) {
-    for (const british of this.party.getConnections("GB")) {
+    for (const british of this.room.getConnections("GB")) {
       british.send(`Pip-pip!`);
     }
   }
@@ -325,36 +325,36 @@ Server satisfies Party.Worker;
 When developing locally, you can test your cron jobs by visiting `http://localhost:1999/__scheduled__?cron=cron-name` in your browser.
 :::
 
-## Party
+## Party.Room
 
-Each `Party.Server` instance receives an instance of `Party.Party` as a constructor parameter, and can use it to access the room state and resources such as storage, connections, id, and more.
+Each `Party.Server` instance receives an instance of [`Party.Room`](#partyroom) as a constructor parameter, and can use it to access the room state and resources such as storage, connections, id, and more.
 
 ```ts
 import type * as Party from "partykit/server";
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {
+  constructor(readonly room: Party.Room) {
     // ...
   }
 }
 ```
 
-### Party.id
+### Room.id
 
-Party ID defined in the Party URL, e.g. `/parties/:name/:id`.
+Room ID defined in the Party URL, e.g. `/parties/:name/:id`.
 
-### Party.internalID
+### Room.internalID
 
-Internal ID assigned by the platform. Use `Party.id` instead.
+Internal ID assigned by the platform. Use `Room.id` instead.
 
-### Party.env
+### Room.env
 
 Environment variables defined for this party.
 
 Related reading: [Managing environment variables with PartyKit](/guides/managing-environment-variables).
 
-### Party.storage
+### Room.storage
 
-A per-party, asynchronous key-value storage.
+A per-room, asynchronous key-value storage.
 
 - The key must be a string with a max size of 2,048 bytes.
 - The value can be any type supported by the [structured clone algorithm](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm), limited to 128 KiB (131,072 bytes) per value
@@ -362,23 +362,23 @@ A per-party, asynchronous key-value storage.
 ```ts
 // write arbitrary data
 const input = { username: "jani" };
-await this.party.storage.put("user", { user });
+await this.room.storage.put("user", { user });
 // read data
-const user = await this.party.storage.get<{ username: string }>("user");
+const user = await this.room.storage.get<{ username: string }>("user");
 ```
 
 Related reading: [Persisting state into storage](/guides/persisting-state-into-storage).
 
-### Party.context
+### Room.context
 
 Additional information about other resources in the current project.
 
-##### Party.context.parties
+##### Room.context.parties
 
 Access other parties in this project.
 
 ```ts
-const otherParty = this.party.context.parties.other;
+const otherParty = this.room.context.parties.other;
 const otherPartyInstance = otherParty.other.get("room-id");
 const req = await otherRoom.fetch({ method: "GET" });
 const res = await req.json();
@@ -386,32 +386,32 @@ const res = await req.json();
 
 Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
 
-### Party.broadcast
+### Room.broadcast
 
 Send a message to all connected clients, except connection ids listed in the second array parameter.
 
 ```ts
-this.party.broadcast(message, [sender.id]);
+this.room.broadcast(message, [sender.id]);
 ```
 
 **Related guide:** [Building a Real-time WebSocket server](/guides/building-a-real-time-websocket-server)
 
-### Party.getConnection
+### Room.getConnection
 
 Get a connection by connection id. Returns a [`PartyConnection`](#partyconnection) `undefined` if connection by id doesn't exist.
 
-### Party.getConnections
+### Room.getConnections
 
 Get all currently connected WebSocket connections. Returns an iterable list of [`PartyConnection`](#partyconnection)s.
 
 Optionally, you can provide a tag to filter returned connections.
 
 ```ts
-const playerCount = [...this.party.getConnections()].length;
-for (const everyone of this.party.getConnections()) {
+const playerCount = [...this.room.getConnections()].length;
+for (const everyone of this.room.getConnections()) {
   everyone.send(`Let's play!`);
 }
-for (const tagged of this.party.getConnections("some-tag")) {
+for (const tagged of this.room.getConnections("some-tag")) {
   tagged.send(`You're it!`);
 }
 ```
@@ -439,7 +439,7 @@ The original URI of the connection request.
 
 `setState` allows you to store small pieces of data on each connection.
 
-Unlike [`Party.storage`](#partystorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
+Unlike [`Room.storage`](#roomstorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
 
 ```ts
 connection.setState({ username: "jani" });
@@ -448,7 +448,7 @@ connection.setState({ username: "jani" });
 :::danger[State size]
 The maximum size of the state you can store on a connection is 2KB. If you try to store values larger than 2KB, `setState` will throw an error.
 
-For larger state, use [`Party.storage`](#partystorage) instead.
+For larger state, use [`Room.storage`](#roomstorage) instead.
 :::
 
 ##### Party.Connection.state
@@ -477,23 +477,15 @@ Provides access to a limited subset of room resources for `onBeforeConnect` and 
 
 ### Party.Lobby.id
 
-See: [`Party.id`](#partyid)
+See: [`Room.id`](#roomid)
 
 ### Party.Lobby.env
 
-See: [`Party.env`](#partyenv)
+See: [`Room.env`](#roomenv)
 
 ### Party.Lobby.parties
 
-See: [`Party.context.parties`](#partycontextparties)
-
-### Party.Lobby.env
-
-See: [`Party.env`](#partyenv)
-
-### Party.Lobby.parties
-
-See: [`Party.context.parties`](#partycontextparties)
+See: [`Room.context.parties`](#roomcontextparties)
 
 ## Party.FetchLobby
 

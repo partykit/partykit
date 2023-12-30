@@ -4,8 +4,8 @@ import { Ai } from "partykit-ai";
 
 export default class Server implements Party.Server {
   ai: Ai;
-  constructor(public party: Party.Party) {
-    this.ai = new Ai(this.party.ai);
+  constructor(public room: Party.Room) {
+    this.ai = new Ai(this.room.ai);
   }
 
   async onRequest(_request: Party.Request): Promise<Response> {

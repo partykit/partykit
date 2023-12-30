@@ -59,7 +59,7 @@ Let's say you've created a `"user"` party to store user and session state on a p
 You can communicate with any room:
 
 ```ts
-const userParty = this.party.context.parties.user;
+const userParty = this.room.context.parties.user;
 const userRoom = userParty.get(userId);
 
 // make an HTTP request to the room
@@ -86,7 +86,7 @@ export default class Rooms implements Party.Server {
   async onRequest(request: Party.Request) {
     // read from storage
     this.connections =
-      this.connections ?? (await this.party.storage.get("connections")) ?? {};
+      this.connections ?? (await this.room.storage.get("connections")) ?? {};
     // update connection count
     if (request.method === "POST") {
       const update = await request.json();
@@ -100,7 +100,7 @@ export default class Rooms implements Party.Server {
       this.broadcast(JSON.stringify(this.connections));
 
       // save to storage
-      await this.party.storage.put("connections", this.connections);
+      await this.room.storage.put("connections", this.connections);
     }
 
     // send connection counts to requester
@@ -114,7 +114,7 @@ Any other party can notify the `connections` party of connection/disconnection e
 ```ts
 // src/main.ts
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
 
   async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
     this.updateConnections("connect", connection);
@@ -127,7 +127,7 @@ export default class Server implements Party.Server {
     connection: Party.Connection
   ) {
     // get handle to a shared room instance of the "connections" party
-    const connectionsParty = this.party.context.parties.connections;
+    const connectionsParty = this.room.context.parties.connections;
     const connectionsRoomId = "active-connections";
     const connectionsRoom = connectionsParty.get(connectionsRoomId);
 
@@ -137,7 +137,7 @@ export default class Server implements Party.Server {
       body: JSON.stringify({
         type,
         connectionId: connection.id,
-        roomId: this.party.id,
+        roomId: this.room.id,
       }),
     });
   }

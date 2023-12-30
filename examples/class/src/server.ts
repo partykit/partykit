@@ -31,17 +31,17 @@ export default class Main implements Party.Server {
   // Servers can now keep state in class instance variables
   messages: string[] = [];
 
-  // PartyServer receives the Party (previous PartyKitRoom) as a constructor argument
+  // PartyServer receives the Room (previous PartyKitRoom) as a constructor argument
   // instead of receiving the `room` argument in each method.
 
-  constructor(public party: Party.Party) {}
+  constructor(public room: Party.Room) {}
 
   // There's now a new lifecycle method `onStart` which fires before first connection
   // or request to the room. You can use this to load data from storage and perform other
-  // asynchronous initialization. The Party will wait until `onStart` completes before
+  // asynchronous initialization. The Room will wait until `onStart` completes before
   // processing any connections or requests.
   async onStart() {
-    this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
+    this.messages = (await this.room.storage.get<string[]>("messages")) ?? [];
   }
 
   // You can now tag connections, and retrieve tagged connections using Party.getConnections()
@@ -57,19 +57,19 @@ export default class Main implements Party.Server {
   // onConnect, onRequest, onAlarm no longer receive the room argument.
   async onRequest(_req: Party.Request) {
     return new Response(
-      `Party ${this.party.id} has received ${this.messages.length} messages`
+      `Party ${this.room.id} has received ${this.messages.length} messages`
     );
   }
   async onConnect(connection: Connection, ctx: Party.ConnectionContext) {
-    // You can now read the room state from `this.party` instead.
-    this.party.broadcast(
+    // You can now read the room state from `this.room` instead.
+    this.room.broadcast(
       "A new connection has joined the party! Say hello to " + connection.id
     );
 
     // room.connections is now called room.getConnections(tag?)
     // that receives an optional tag argument to filter connections
     const country = ctx.request.cf?.country as string;
-    for (const compatriot of this.party.getConnections(country)) {
+    for (const compatriot of this.room.getConnections(country)) {
       compatriot.send(`${connection.id} is also from ${country}!`);
     }
   }
@@ -79,7 +79,7 @@ export default class Main implements Party.Server {
   // manage event handlers in onConnect!
   async onMessage(message: string, connection: Connection) {
     connection.send(`Pong from ${connection.state?.country}!`);
-    this.party.broadcast(message, [connection.id]);
+    this.room.broadcast(message, [connection.id]);
   }
   async onError(connection: Party.Connection, err: Error) {
     console.log("Error from " + connection.id, err.message);

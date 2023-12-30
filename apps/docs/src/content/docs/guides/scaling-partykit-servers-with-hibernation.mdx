@@ -5,7 +5,7 @@ description: Hibernation API is a pathway for scaling your app to tens of thousa
 
 import { Tabs, TabItem } from "@astrojs/starlight/components";
 
-PartyKit simplifies building realtime multiplayer applications. However, as your app grows, maintaining WebSocket connections requires a lot of memory. Hibernation API is a pathway for scaling your app to tens of thousands of connections. It is done by offloading the memory burden from the party instance process to the PartyKit platform.
+PartyKit simplifies building realtime multiplayer applications. However, as your app grows, maintaining WebSocket connections requires a lot of memory. Hibernation API is a pathway for scaling your app to tens of thousands of connections. It is done by offloading the memory burden from the room process to the PartyKit platform.
 
 This page provides an overview of the Hibernation API — what it is, how it works, when it’s useful, and how to implement it.
 
@@ -21,10 +21,10 @@ export default class Server implements Party.Server {
 
 ## Benefits
 
-Hibernation allows a single party instance to handle vastly more active connections than it otherwise would:
+Hibernation allows a single room to handle vastly more active connections than it otherwise would:
 
-- Without Hibernation: up to **100 connections** per party instance
-- With Hibernation: up to **32,000 connections** per party instance
+- Without Hibernation: up to **100 connections** per room
+- With Hibernation: up to **32,000 connections** per room
 
 Note that even with Hibernation, the practical maximum amount of connections may vary depending on the performance characteristics of the code you run on PartyKit (for example, memory use or CPU time). In PartyKit apps, memory use depends on:
 
@@ -34,14 +34,14 @@ Note that even with Hibernation, the practical maximum amount of connections may
 - dynamic allocations — memory used by JavaScript for local variables, execution stack, and others.
 
 :::caution[Scale limit]
-The limit to scale per party instance is typically 128MB memory. With Hibernation, the active WebSocket connections no longer count towards your party's 128MB memory limit, but the total memory footprint of your code, state, and dynamic allocations may still exceed that limit.
+The limit to scale per room is typically 128MB memory. With Hibernation, the active WebSocket connections no longer count towards your party's 128MB memory limit, but the total memory footprint of your code, state, and dynamic allocations may still exceed that limit.
 :::
 
 ## How Hibernation works
 
 By default, PartyKit keeps the `Party.Server` instance in memory as long as there are connected WebSockets.
 
-With Hibernation, the party hibernates (goes to sleep) when it's not actively handling messages. This means that the `Party.Server` instance is unallocated by the platform. However, the open connections to clients are still maintained and the clients don't notice anything. As soon as a client sends a message, a new party instance is instantiated and the constructor and `onStart` callback are executed again.
+With Hibernation, the party hibernates (goes to sleep) when it's not actively handling messages. This means that the `Party.Server` instance is unallocated by the platform. However, the open connections to clients are still maintained and the clients don't notice anything. As soon as a client sends a message, a new Server is instantiated and the constructor and `onStart` callback are executed again.
 
 This process can happen quite frequently. With no messages from any client, alarms, or other background processes keeping the room alive, hibernation may be triggered even after a few seconds.
 
@@ -78,7 +78,7 @@ Hibernation will work better with certain programming patterns.
 
 Instead of loading the full state from storage in the `onStart` lifecycle method, only read from storage the data you need, and only when you need it. Additionally, store state under multiple keys instead of one.
 
-If your party instance requires state, you will need to persist it to party storage, an external database, or an API, and reload it when the party is woken up from hibernation.
+If your Server instance requires state, you will need to persist it to storage, an external database, or an API, and reload it when the party is woken up from hibernation.
 
 :::tip[PartyKit storage]
 The PartyKit `storage` API has its own built-in cache. Because of that, reading frequently the same key is very performant as the result is cached in memory instead of having to read it from disk every time.
@@ -95,28 +95,28 @@ type AllItems = Record<string, any>;
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: true };
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   // GOOD: no data loading on startup
   // onStart() {}
 
   async onMessage(websocketMessage: string) {
     const event = JSON.parse(websocketMessage);
     if (event.type === "create") {
-      this.party.broadcast(event.data);
+      this.room.broadcast(event.data);
       // store each item under a separate key
-      this.party.storage.put(`item:${event.id}`, event.data);
+      this.room.storage.put(`item:${event.id}`, event.data);
     };
 
     if (event.type === "update") {
       // GOOD: read stored state on-demand when needed
-      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
+      const item = (await this.room.storage.get(`item:${event.id}`)) ?? {};
       const updatedItem = {
         ...item,
         ...event.data,
       };
 
       // GOOD: now we need to write only to a single key
-      this.party.storage.put(`item:${event.id}`, updatedItem);
+      this.room.storage.put(`item:${event.id}`, updatedItem);
     };
   };
 };
@@ -128,18 +128,18 @@ type AllItems = Record<string, any>;
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: true };
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   async onStart() {
     // BAD
     // we load full state from storage on start (may be big)
-    this.items = await this.party.storage.get<AllItems>("state");
+    this.items = await this.room.storage.get<AllItems>("state");
   };
 
   async onMessage(websocketMessage: string) {
     const event = JSON.parse(websocketMessage);
     if (event.type === "create") {
       this.items[event.id] = event.data;
-      this.party.broadcast(event.data);
+      this.room.broadcast(event.data);
     };
 
     if (event.type === "update") {
@@ -152,7 +152,7 @@ export default class Server implements Party.Server {
 
     // BAD
     // we need to persist the whole state again (expensive)
-    await this.party.storage.put("items", this.items);
+    await this.room.storage.put("items", this.items);
   };
 };
 ```

@@ -16,7 +16,7 @@ export class ModuleWorker implements PartyServerAPI {
 
   constructor(
     private worker: Party.PartyKitServer,
-    readonly party: Party.Party
+    readonly room: Party.Room
   ) {
     this.supportsHibernation =
       "onMessage" in worker || !(`onConnect` in worker);
@@ -28,27 +28,27 @@ export class ModuleWorker implements PartyServerAPI {
 
   onConnect(ws: Party.Connection, ctx: Party.ConnectionContext) {
     if (this.worker.onConnect) {
-      return this.worker.onConnect(ws, this.party, ctx);
+      return this.worker.onConnect(ws, this.room, ctx);
     }
   }
   onMessage(message: string | ArrayBuffer, ws: Party.Connection) {
     if (this.worker.onMessage) {
-      return this.worker.onMessage(message, ws, this.party);
+      return this.worker.onMessage(message, ws, this.room);
     }
   }
   onClose(ws: Party.Connection) {
     if (this.worker.onClose) {
-      return this.worker.onClose(ws, this.party);
+      return this.worker.onClose(ws, this.room);
     }
   }
   onError(ws: Party.Connection, err: Error) {
     if (this.worker.onError) {
-      return this.worker.onError(ws, err, this.party);
+      return this.worker.onError(ws, err, this.room);
     }
   }
   onRequest(req: Party.Request) {
     if (this.worker.onRequest) {
-      return this.worker.onRequest(req, this.party);
+      return this.worker.onRequest(req, this.room);
     }
     return new Response("Invalid onRequest handler", {
       status: 500,
@@ -56,7 +56,7 @@ export class ModuleWorker implements PartyServerAPI {
   }
   onAlarm() {
     if (this.worker.onAlarm) {
-      return this.worker.onAlarm(this.party);
+      return this.worker.onAlarm(this.room);
     }
   }
   getConnectionTags(): string[] | Promise<string[]> {
@@ -74,9 +74,9 @@ export class ClassWorker implements PartyServerAPI {
 
   constructor(
     private Worker: Party.Worker,
-    readonly party: Party.Party
+    readonly room: Party.Room
   ) {
-    this.worker = new Worker(party);
+    this.worker = new Worker(room);
     this.options = this.worker.options ?? {};
     this.supportsHibernation = this.options.hibernate === true;
   }

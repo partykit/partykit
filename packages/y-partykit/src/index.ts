@@ -73,7 +73,7 @@ class WSSharedDoc extends YDoc {
   persistMaxUpdates = MAX_UPDATES;
   gc: boolean;
 
-  constructor(room: Party.Party, options: YPartyKitOptions) {
+  constructor(room: Party.Room, options: YPartyKitOptions) {
     super({ gc: options.gc ?? !options.persist });
     this.gc = options.gc ?? !options.persist;
     this.name = room.id;
@@ -223,7 +223,7 @@ function getContent(objName: string, objType: string, doc: WSSharedDoc) {
  */
 async function getYDoc(
   // docname: string, // the name of the Y.Doc to find or create
-  room: Party.Party,
+  room: Party.Room,
   options: YPartyKitOptions
 ): Promise<WSSharedDoc> {
   let doc = docs.get(room.id);
@@ -519,7 +519,7 @@ export const unstable_getYDoc = getYDoc;
 
 export async function onConnect(
   conn: Party.Connection,
-  room: Party.Party,
+  room: Party.Room,
   opts: YPartyKitOptions = {}
 ) {
   // conn.binaryType = "arraybuffer"; // from y-websocket, breaks in our runtime

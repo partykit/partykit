@@ -112,7 +112,7 @@ type ImmutableObject<T> = { readonly [K in keyof T]: Immutable<T[K]> };
 export type ConnectionState<T> = ImmutableObject<T> | null;
 export type ConnectionSetStateFn<T> = (prevState: ConnectionState<T>) => T;
 
-/** A WebSocket connected to the Party */
+/** A WebSocket connected to the Room */
 export type Connection<TState = unknown> = WebSocket & {
   /** Connection identifier */
   id: string;
@@ -145,7 +145,7 @@ export type Connection<TState = unknown> = WebSocket & {
 
 /** Room represents a single, self-contained, long-lived session. */
 export type Room = {
-  /** Party ID defined in the Party URL, e.g. /parties/:name/:id */
+  /** Room ID defined in the Party URL, e.g. /parties/:name/:id */
   id: string;
 
   /** Internal ID assigned by the platform. Use Party.id instead. */
@@ -157,7 +157,7 @@ export type Room = {
   /** Environment variables (--var, partykit.json#vars, or .env) */
   env: Record<string, unknown>;
 
-  /** A per-party key-value storage */
+  /** A per-room key-value storage */
   storage: Storage;
 
   /** `blockConcurrencyWhile()` ensures no requests are delivered until */
@@ -166,10 +166,10 @@ export type Room = {
   /** Additional information about other resources in the current project */
   context: Context;
 
-  /** @deprecated Use `party.getConnections` instead */
+  /** @deprecated Use `room.getConnections` instead */
   connections: Map<string, Connection>;
 
-  /** @deprecated Use `party.context.parties` instead */
+  /** @deprecated Use `room.context.parties` instead */
   parties: Context["parties"];
 
   /** Send a message to all connected clients, except connection ids listed `without` */
@@ -199,9 +199,9 @@ export type Party = Room;
  *
  * @example
  * export default class Room implements Party.Server {
- *   constructor(readonly party: Party) {}
+ *   constructor(readonly room: Party) {}
  *   onConnect(connection: Party.Connection) {
- *     this.party.broadcast("Someone connected with id " + connection.id);
+ *     this.room.broadcast("Someone connected with id " + connection.id);
  *   }
  * }
  */
@@ -257,7 +257,7 @@ export type Server = {
   onError?(connection: Connection, error: Error): void | Promise<void>;
 
   /**
-   * Called when a HTTP request is made to the party URL.
+   * Called when a HTTP request is made to the room URL.
    */
   onRequest?(req: Request): Response | Promise<Response>;
 
@@ -280,7 +280,7 @@ export type Cron = ScheduledController & {
 };
 
 type ServerConstructor = {
-  new (party: Room): Server;
+  new (room: Room): Server;
 };
 
 /**
@@ -293,7 +293,7 @@ type ServerConstructor = {
  *   static onBeforeConnect(req: Party.Request) {
  *     return new Response("Access denied", { status: 403 })
  *   }
- *   constructor(readonly party: Party) {}
+ *   constructor(readonly room: Room) {}
  * }
  *
  * Room satisfies Party.Worker;
@@ -385,7 +385,7 @@ export type PartyKitServer = {
   ): void | Promise<void>;
   onBeforeRequest?: (
     req: Request,
-    party: {
+    lobby: {
       id: string;
       env: Record<string, unknown>;
       ai: AI;
@@ -401,16 +401,16 @@ export type PartyKitServer = {
     ctx: ExecutionContext
   ) => void | Promise<void>;
 
-  onRequest?: (req: Request, party: Room) => Response | Promise<Response>;
-  onAlarm?: (party: Omit<Party, "id" | "parties">) => void | Promise<void>;
+  onRequest?: (req: Request, room: Room) => Response | Promise<Response>;
+  onAlarm?: (room: Omit<Room, "id" | "parties">) => void | Promise<void>;
   onConnect?: (
     connection: Connection,
-    party: Room,
+    room: Room,
     ctx: ConnectionContext
   ) => void | Promise<void>;
   onBeforeConnect?: (
     req: Request,
-    party: {
+    lobby: {
       id: string;
       env: Record<string, unknown>;
       ai: AI;
@@ -427,13 +427,13 @@ export type PartyKitServer = {
   onMessage?: (
     message: string | ArrayBuffer | ArrayBufferView,
     connection: Connection,
-    party: Room
+    room: Room
   ) => void | Promise<void>;
-  onClose?: (connection: Connection, party: Room) => void | Promise<void>;
+  onClose?: (connection: Connection, room: Room) => void | Promise<void>;
   onError?: (
     connection: Connection,
     err: Error,
-    party: Room
+    room: Room
   ) => void | Promise<void>;
 };
 
@@ -493,8 +493,8 @@ export type PartyServer = Server;
 /** @deprecated use Party.Worker instead */
 export type PartyWorker = Worker;
 
-/** @deprecated Use `Party` instead */
-export type PartyKitRoom = Party;
+/** @deprecated Use `Room` instead */
+export type PartyKitRoom = Room;
 
 /** @deprecated Use `Party.Connection` instead */
 export type PartyKitConnection = Connection;

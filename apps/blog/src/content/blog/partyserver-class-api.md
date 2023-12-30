@@ -32,7 +32,7 @@ export default class Chat implements Party.Server {
     // when a client sends a WebSocket message, keep track of message history
     this.messages.push(message);
     // and broadcast it to all clients (as easy as a for-loop)
-    for (const conn of this.party.getConnections()) {
+    for (const conn of this.room.getConnections()) {
       conn.send(message);
     }
   }
@@ -87,10 +87,10 @@ By expressing each server as a class instance, we're able to convey the stateful
 
 ```ts
 export default class Main implements Party.Server {
-  party: Party;
+  room: Party.Room;
   messages: string[];
-  constructor(party: Party) {
-    this.party = party;
+  constructor(room: Party.Room) {
+    this.room = room;
     this.messages = [];
   }
 }
@@ -103,7 +103,7 @@ The `Party` object gives you access to the server state, such as storage, connec
 For example:
 
 ```ts
-const messages = (await this.party.storage.get<string[]>("messages")) ?? [];
+const messages = (await this.room.storage.get<string[]>("messages")) ?? [];
 const message = `There are ${messages.length} messages in ${party.id}`;
 
 for (const conn in party.getConnections()) {
@@ -121,7 +121,7 @@ party.broadcast(message, [sender.id]);
 
 ### `onStart`
 
-PartyKit servers are convenient, because they're stateful, but you still need to make sure to persist the state for when the party restarts due to inactivity.
+PartyKit servers are convenient, because they're stateful, but you still need to make sure to persist the state for when the room restarts due to inactivity.
 
 In the last example we read `messages` from storage when we needed them, but it would be much more convenient (and performant) to read the messages from storage just once when the server starts.
 
@@ -130,7 +130,7 @@ There's now a new lifecycle method `onStart` which fires before first connection
 ```ts
   messages: string[] = [];
   async onStart() {
-    this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
+    this.messages = (await this.room.storage.get<string[]>("messages")) ?? [];
   }
 ```
 
@@ -140,13 +140,13 @@ Each WebSocket connection's lifecycle is now exposed on `Party.Server`:
 
 ```ts
 async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {
-  this.party.broadcast(`${connection.id} joined`);
+  this.room.broadcast(`${connection.id} joined`);
 }
 async onClose(connection: Party.Connection) {
-  this.party.broadcast(`${connection.id} left`);
+  this.room.broadcast(`${connection.id} left`);
 }
 async onError(connection: Party.Connection, err: Error) {
-  this.party.broadcast(`${connection.id} is having connection difficulties`);
+  this.room.broadcast(`${connection.id} is having connection difficulties`);
 }
 ```
 
@@ -156,7 +156,7 @@ Every WebSocket message received from any connected client is routed to `onMessa
 
 ```ts
 async onMessage(message: string, sender: Party.Connection) {
-  this.party.broadcast(message, [sender.id]);
+  this.room.broadcast(message, [sender.id]);
 }
 ```
 
@@ -187,7 +187,7 @@ As simple as this looks, being able to access the same party state with both Web
 
 ### `static onBeforeRequest`, `static onBeforeConnect`
 
-The static `onBefore*` methods allow you to modify incoming request before they're sent to the party, or prevent the request from reaching the party altogether by returning a `Response` instead.
+The static `onBefore*` methods allow you to modify incoming request before they're sent to the room, or prevent the request from reaching the room altogether by returning a `Response` instead.
 
 This can be very useful for scenarios such as authentication and authorisation:
 
@@ -261,9 +261,9 @@ Now, instead, you can access connections on `Party` as follows:
 
 ```ts
 // get connection by id (previously room.connections.get(id))
-const connection = this.party.getConnection(id);
+const connection = this.room.getConnection(id);
 // iterate over all connection (previously room.connections.values())
-for (const c of this.party.getConnections()) {
+for (const c of this.room.getConnections()) {
 }
 ```
 
@@ -281,7 +281,7 @@ You can set additional metadata on connections by returning them from a `getConn
 You can then filter connections by tag, removing the need to wake up hibernated sockets unnecessarily:
 
 ```ts
-for (const italians of this.party.getConnections("IT")) {
+for (const italians of this.room.getConnections("IT")) {
   italians.send(`Buongiorno!`);
 }
 ```

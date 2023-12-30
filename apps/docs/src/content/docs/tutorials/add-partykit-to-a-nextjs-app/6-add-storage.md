@@ -13,7 +13,7 @@ Navigate to the server file (`party/index.ts`) and add a new method called `onSt
 
 ```ts
   async onStart() {
-    this.poll = await this.party.storage.get<Poll>("poll");
+    this.poll = await this.room.storage.get<Poll>("poll");
   }
 ```
 
@@ -24,7 +24,7 @@ Next, give your app possibility to also add data to storage. Create a helper met
 ```ts
   async savePoll() {
     if (this.poll) {
-      await this.party.storage.put<Poll>("poll", this.poll);
+      await this.room.storage.put<Poll>("poll", this.poll);
     }
   }
 ```
@@ -60,7 +60,7 @@ and invoke it again in `onMessage` to save the poll when user votes:
     const event = JSON.parse(message);
     if (event.type === "vote") {
       this.poll.votes![event.option] += 1;
-      this.party.broadcast(JSON.stringify(this.poll));
+      this.room.broadcast(JSON.stringify(this.poll));
       // ADD THIS LINE:
       this.savePoll();
     }

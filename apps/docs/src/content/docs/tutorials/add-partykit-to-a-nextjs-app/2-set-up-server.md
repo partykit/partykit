@@ -42,7 +42,7 @@ import type * as Party from "partykit/server";
 import type { Poll } from "@/app/types";
 
 export default class Server implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
 
   poll: Poll | undefined;
 

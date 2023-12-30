@@ -28,7 +28,7 @@ const CORS = {
 
 // server.ts
 export default class PresenceServer implements Party.Server {
-  constructor(public party: Party.Party) {}
+  constructor(public room: Party.Room) {}
   options: Party.ServerOptions = {
     hibernate: true,
   };
@@ -62,7 +62,7 @@ export default class PresenceServer implements Party.Server {
 
     this.join(connection);
 
-    //console.log("onConnect", this.party.id, connection.id, request.cf?.country);
+    //console.log("onConnect", this.room.id, connection.id, request.cf?.country);
   }
 
   enqueueAdd(id: string, user: User) {
@@ -88,7 +88,7 @@ export default class PresenceServer implements Party.Server {
   makeSyncMessage() {
     // Build users list
     const users = <Record<string, User>>{};
-    for (const connection of this.party.getConnections()) {
+    for (const connection of this.room.getConnections()) {
       const user = this.getUser(connection);
       users[connection.id] = user;
     }
@@ -130,7 +130,7 @@ export default class PresenceServer implements Party.Server {
     const message = result.data;
     /*console.log(
       "onMessage",
-      this.party.id,
+      this.room.id,
       connection.id,
       JSON.stringify(message, null, 2)
     );*/
@@ -188,7 +188,7 @@ export default class PresenceServer implements Party.Server {
 
     // Avoid the situation where there's only one connection and we're
     // rebroadcasting its own deltas to it
-    const connections = [...this.party.getConnections()];
+    const connections = [...this.room.getConnections()];
     const presenceUniqueIds = new Set(Object.keys(this.presence));
     if (
       connections.length === 1 &&
@@ -207,8 +207,8 @@ export default class PresenceServer implements Party.Server {
       presence: this.presence,
       remove: this.remove,
     } satisfies PartyMessage;
-    //this.party.broadcast(JSON.stringify(update));
-    this.party.broadcast(encodePartyMessage(update));
+    //this.room.broadcast(JSON.stringify(update));
+    this.room.broadcast(encodePartyMessage(update));
     this.add = {};
     this.presence = {};
     this.remove = [];
@@ -217,7 +217,7 @@ export default class PresenceServer implements Party.Server {
   async onRequest(req: Party.Request) {
     if (req.method === "GET") {
       // For SSR, return the current presence of all connections
-      const users = [...this.party.getConnections()].reduce(
+      const users = [...this.room.getConnections()].reduce(
         (acc, user) => ({ ...acc, [user.id]: this.getUser(user) }),
         {},
       );

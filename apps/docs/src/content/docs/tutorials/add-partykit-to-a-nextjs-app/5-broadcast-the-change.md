@@ -20,7 +20,7 @@ Your PartyKit server currently receives WebSocket messages from the client, but 
     const event = JSON.parse(message);
     if (event.type === "vote") {
       this.poll.votes![event.option] += 1;
-      this.party.broadcast(JSON.stringify(this.poll));
+      this.room.broadcast(JSON.stringify(this.poll));
     }
   }
 ```

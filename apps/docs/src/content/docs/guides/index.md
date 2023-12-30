@@ -39,7 +39,7 @@ partySocket.addEventListener("message", (e) => {
 
 This will automatically open a WebSocket connection to the PartyKit server at `ws://localhost:1999/party/my-room`, and send a greeting message.
 
-The `room` id, in this case `"my-room"`, uniquely identifies the party that you're connecting to. Each time you use a new room id, a new PartyServer instance is created.
+The `room` id, in this case `"my-room"`, uniquely identifies the room that you're connecting to. Each time you use a new room id, a new PartyServer instance is created.
 
 This means that two clients connecting with the same `room` id will always be connected to the same server and can communicate to each other. In other words, creating new server instances is as easy as using a new id.
 
@@ -49,10 +49,10 @@ However, the server doesn't do anything yet! Let's fix that by adding an `onMess
 
 ```ts
 export default class WebSocketServer implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   onMessage(message: string, sender: Party.Connection) {
     // send the message to all connected clients
-    for (const conn of this.party.getConnections()) {
+    for (const conn of this.room.getConnections()) {
       if (conn.id !== sender.id) {
         conn.send(`${sender.id} says: ${message}`);
       }
@@ -67,21 +67,21 @@ Now, every connected client will instantly see the same message in their browser
 
 <!-- TODO: API reference link -->
 
-This works, because the `Party` maintains references to all connected clients. You can access them using the `Party.getConnections()` method.
+This works, because the `Room` maintains references to all connected clients. You can access them using the `Room.getConnections()` method.
 
 This pattern is called "broadcasting" -- a message from one client is received and sent to everyone. In fact, this use case is so common that PartyKit includes a `broadcast` utility method that does the same thing as the `for...of` loop through connections.
 
 ```ts
-this.party.broadcast(message);
+this.room.broadcast(message);
 ```
 
 The above can be simplified to:
 
 ```ts
 export default class WebSocketServer implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   onMessage(message: string, sender: Party.Connection) {
-    this.party.broadcast(message, [sender.id]);
+    this.room.broadcast(message, [sender.id]);
   }
 }
 ```
@@ -94,24 +94,24 @@ Let's make our server a little friendlier and notify other members when new user
 
 ```ts
 export default class WebSocketServer implements Party.Server {
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
   // when a client sends a message
   onMessage(message: string, sender: Party.Connection) {
     // send it to everyone else
-    this.party.broadcast(message, [sender.id]);
+    this.room.broadcast(message, [sender.id]);
   }
   // when a new client connects
   onConnect(connection: Party.Connection) {
     // welcome the new joiner
     connection.send(`Welcome, ${connection.id}`);
     // let everyone else know that a new connection joined
-    this.party.broadcast(`Heads up! ${connection.id} joined the party!`, [
+    this.room.broadcast(`Heads up! ${connection.id} joined the party!`, [
       connection.id,
     ]);
   }
   // when a client disconnects
   onClose(connection: Party.Connection) {
-    this.party.broadcast(`So sad! ${connection.id} left the party!`);
+    this.room.broadcast(`So sad! ${connection.id} left the party!`);
   }
 }
 ```

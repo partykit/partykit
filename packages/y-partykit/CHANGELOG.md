@@ -132,15 +132,15 @@
 
   export default class YjsServer implements Party.Server {
     yjsOptions: YPartyKitOptions = { persist: true };
-    constructor(public party: Party.Party) {}
+    constructor(public room: Party.Room) {}
 
     async onRequest() {
-      const doc = await unstable_getYDoc(this.party, opts);
+      const doc = await unstable_getYDoc(this.room, opts);
       return new Response(doc.getText("message")?.toJSON());
     }
 
     onConnect(conn: Party.Connection) {
-      return onConnect(conn, this.party, opts);
+      return onConnect(conn, this.room, opts);
     }
   }
   ```

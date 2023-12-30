@@ -1,9 +1,9 @@
 ---
 title: Persisting state into storage
-description: Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance
+description: Each PartyKit room comes with a transactional key-value Storage API
 ---
 
-Each PartyKit room comes with a transactional key-value Storage API to persist data alongside your party instance. This page provides an overview on what Storage API is, its data format, and programming.
+Each PartyKit room comes with a transactional key-value Storage API to persist data. This page provides an overview on what Storage API is, its data format, and programming.
 
 ## Keeping data between server restarts
 
@@ -11,14 +11,14 @@ Persisting data to disk is optional as PartyKit servers also allow you to keep i
 
 Server restarts happen when:
 
-- You re-deploy the party using `partykit deploy`.
+- You re-deploy the project using `partykit deploy`.
 - Having opted into [Hibernation](/guides/scaling-partykit-servers-with-hibernation/), the server is currently not processing messages.
 - There's an unexpected error in the PartyKit runtime (for example, a hardware fault).
 - The server reaches its maximum lifetime.
 
 If you want to guarantee that your party state is not lost between server restarts, you'll need to save the state somewhere and reload it when your party starts up again.
 
-You can store your state in a third-party edge-compatible database such as PlanetScale or Supabase, or send it to an arbitrary API endpoint of your choice. The most convenient storage option is to use [`Party.storage`](/reference/partyserver-api/#partystorage/).
+You can store your state in a third-party edge-compatible database such as PlanetScale or Supabase, or send it to an arbitrary API endpoint of your choice. The most convenient storage option is to use [`Room.storage`](/reference/partyserver-api/#roomstorage/).
 
 ## Data format
 
@@ -34,19 +34,19 @@ Please note that:
 ### Reading data
 
 ```ts
-const data = await this.party.storage.get<OptionalTypeDefinition>("key");
+const data = await this.room.storage.get<OptionalTypeDefinition>("key");
 ```
 
 ### Writing data
 
 ```ts
-await this.party.storage.put("key", value);
+await this.room.storage.put("key", value);
 ```
 
 ### Deleting data
 
 ```ts
-await this.party.storage.delete("key");
+await this.room.storage.delete("key");
 ```
 
 ### Listing items
@@ -54,7 +54,7 @@ await this.party.storage.delete("key");
 `list()` returns a map of all items in storage.
 
 ```ts
-const items = await this.party.storage.list();
+const items = await this.room.storage.list();
 for (const [key, value] of items) {
   console.log(key, value);
 }
@@ -67,7 +67,7 @@ You should only use this operation when you **need to iterate through all of the
 If you only need access to the keys, you can do this:
 
 ```ts
-const keys = [...(await this.party.storage.list()).keys()];
+const keys = [...(await this.room.storage.list()).keys()];
 ```
 
 ## Storing large amounts of data
@@ -79,24 +79,24 @@ type AllItems = Record<string, any>;
 
 export default class Server implements Party.Server {
   options: Party.ServerOptions = { hibernate: true };
-  constructor(readonly party: Party.Party) {}
+  constructor(readonly room: Party.Room) {}
 
   async onMessage(websocketMessage: string) {
     const event = JSON.parse(websocketMessage);
     if (event.type === "create") {
-      this.party.broadcast(event.data);
+      this.room.broadcast(event.data);
       // store each item under a separate key
-      this.party.storage.put(`item:${event.id}`, event.data);
+      this.room.storage.put(`item:${event.id}`, event.data);
     }
 
     if (event.type === "update") {
-      const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
+      const item = (await this.room.storage.get(`item:${event.id}`)) ?? {};
       const updatedItem = {
         ...item,
         ...event.data,
       };
 
-      this.party.storage.put(`item:${event.id}`, updatedItem);
+      this.room.storage.put(`item:${event.id}`, updatedItem);
     }
   }
 }
@@ -105,7 +105,7 @@ export default class Server implements Party.Server {
 In the above example we were able to shard the data across multiple keys. However, if an individual value were to exceed 128KiB limit, you would need to implement an additional sharding strategy to split the value across multiple keys -- see [an example in the `y-partykit` storage adapter](https://github.com/partykit/partykit/blob/7f307216f33dbef8fb61963cac7ce88ce8e8f769/packages/y-partykit/src/storage.ts#L79C1-L97C2).
 
 :::caution[Thoughtful read-patterns]
-Given that each Party has a total of 128MiB RAM, we recommend thoughtful data read-patterns, which includes not reading vast amounts of data to memory when loading from `storage`.
+Given that each room has a total of 128MiB RAM, we recommend thoughtful data read-patterns, which includes not reading vast amounts of data to memory when loading from `storage`.
 :::
 
 ## Data access patterns
@@ -116,20 +116,20 @@ Storage API will work better with certain programming patterns.
 
 A common pattern is to read the data from storage into memory when the server starts. This way, the data is accessible in a convenient format.
 
-This pattern is especially helpful when your app features **frequent reads and infrequent writes** or when you need to **join multiple data sets to create derived data** (for example, load data from a third-party API or database in addition to the party `storage`).
+This pattern is especially helpful when your app features **frequent reads and infrequent writes** or when you need to **join multiple data sets to create derived data** (for example, load data from a third-party API or database in addition to the room `storage`).
 
-You'll also need to keep in mind that for large data sets, you may reach either the 128KB per key storage limit, or the 128MB total RAM limit of the Party. For simplicity, below examples assume all your "messages" data fits in a single 128KB value.
+You'll also need to keep in mind that for large data sets, you may reach either the 128KB per key storage limit, or the 128MB total RAM limit of the Room. For simplicity, below examples assume all your "messages" data fits in a single 128KB value.
 
 ```ts
 export default class Main implements Party.Server {
-  constructor(public party: Party.Party) {}
+  constructor(public room: Party.Room) {}
   messages: string[] = [];
 
   // You can use this to load data from storage and perform other
-  // asynchronous initialization. The Party will wait until `onStart` completes before
+  // asynchronous initialization. The Room will wait until `onStart` completes before
   // processing any connections or requests.
   async onStart() {
-    this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
+    this.messages = (await this.room.storage.get<string[]>("messages")) ?? [];
   }
 
   async onConnect(connection: Party.Connection) {
@@ -138,7 +138,7 @@ export default class Main implements Party.Server {
 
   async onMessage(message: string) {
     this.messages.push(message);
-    this.party.storage.put("messages", this.messages);
+    this.room.storage.put("messages", this.messages);
     connection.send(message);
   }
 }
@@ -159,10 +159,10 @@ The trade-off is that the programming model is less ergonomic, because you need 
 ```ts
 export default class Main implements Party.Server {
 
-  constructor(public party: Party.Party) {};
+  constructor(public room: Party.Room) {};
 
   async readMessages() {
-    return this.party.storage.get<string[]>("messages")) ?? [];
+    return this.room.storage.get<string[]>("messages")) ?? [];
   };
 
   async onConnect(connection: Party.Connection) {
@@ -174,7 +174,7 @@ export default class Main implements Party.Server {
 
     const messages = await this.readMessages();
     messages.push(message);
-    this.party.storage.put("messages", message);
+    this.room.storage.put("messages", message);
   };
 };
 ```

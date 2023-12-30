@@ -15,7 +15,7 @@ Similarly, you'll often see the server responding with stringified JSON:
 
 ```ts
 onConnect(connection: Party.Connection) {
-  this.party.broadcast(JSON.stringify({ type: "join", id: connection.id }));
+  this.room.broadcast(JSON.stringify({ type: "join", id: connection.id }));
 }
 ```
 
@@ -24,7 +24,7 @@ These examples are simplified, because in reality, both incoming and outgoing me
 ```ts
 onMessage(message: string | ArrayBufferLike) {
   if (typeof message !== string) {
-    this.party.broadcast(message);
+    this.room.broadcast(message);
   }
 }
 ```
@@ -57,11 +57,12 @@ At its simplest, MessagePack is a drop-in replacement for JSON:
 import { unpack, pack } from "msgpackr";
 
 class Server implements Party.Server {
+  constructor(readonly room: Party.Room) {}
   onConnect(connection: Party.Connection) {
     const data = { type: "join", id: connection.id };
     //  const message = JSON.stringify(data);
     const message = pack(data);
-    this.party.broadcast(message);
+    this.room.broadcast(message);
   }
 
   onMessage(message: string | ArrayBufferLike) {

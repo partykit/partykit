@@ -74,13 +74,13 @@ type DurableObjectNamespaceEnv = {
 };
 
 type Env = DurableObjectNamespaceEnv & {
-  PARTYKIT_AI: Party.Party["ai"];
+  PARTYKIT_AI: Party.Room["ai"];
   PARTYKIT_DURABLE: DurableObjectNamespace;
   PARTYKIT_VECTORIZE: Record<string, VectorizeClientOptions>;
   PARTYKIT_CRONS: Record<string, string>;
 };
 
-let parties: Party.Party["context"]["parties"];
+let parties: Party.Room["context"]["parties"];
 
 function extractVars(obj: Record<string, unknown>): Record<string, unknown> {
   const vars: Record<string, unknown> = {};
@@ -98,7 +98,7 @@ function createMultiParties(
   options: {
     host: string;
   }
-): Party.Party["context"]["parties"] {
+): Party.Room["context"]["parties"] {
   if (!parties) {
     parties = {};
     for (const [key, value] of Object.entries(namespaces)) {
@@ -257,14 +257,14 @@ function createDurable(
 
   return class extends PartyDurable implements DurableObject {
     controller: DurableObjectState;
-    room: Party.Party;
+    room: Party.Room;
     namespaces: Record<string, DurableObjectNamespace>;
     inAlarm = false; // used to prevent access to certain properties in onAlarm
 
     // assigned when first connection is received
     id?: string;
     worker?: PartyServerAPI;
-    parties?: Party.Party["context"]["parties"];
+    parties?: Party.Room["context"]["parties"];
     vectorize: Record<string, VectorizeClient>;
     connectionManager?: ConnectionManager;
 
@@ -302,7 +302,7 @@ function createDurable(
             throw new Error(
               "You can not access `Party.id` in the `onAlarm` handler.\n" +
                 "This is a known limitation, and may be fixed in a future version of PartyKit.\n" +
-                "If you access to the id, you can save it into the Party storage when setting the alarm.\n"
+                "If you access to the id, you can save it into the Room storage when setting the alarm.\n"
             );
           }
           if (self.id) {
@@ -669,7 +669,7 @@ export default {
       const { room: roomId, party: targetParty } =
         getRoomAndPartyFromPathname(url.pathname) || {};
 
-      const parties: Party.Party["context"]["parties"] = createMultiParties(
+      const parties: Party.Room["context"]["parties"] = createMultiParties(
         namespaces,
         {
           host: url.host,

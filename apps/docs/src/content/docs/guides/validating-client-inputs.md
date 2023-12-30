@@ -108,7 +108,7 @@ If you want to ensure that the server can never accidentally send a response tha
 ```ts
 onConnect(connection: Party.Connection) {
   const message = ReplyMessage.parse({ type: "join", id: connection.id });
-  this.party.broadcast(JSON.stringify(message));
+  this.room.broadcast(JSON.stringify(message));
 }
 ```
 
