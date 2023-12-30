@@ -25,6 +25,8 @@ import { VectorizeClient, type VectorizeClientOptions } from "./vectorize";
 
 declare const Worker: Party.PartyKitServer;
 
+declare const PARTYKIT_HOST: string;
+
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
     throw new Error(msg);
@@ -808,6 +810,27 @@ export default {
           // eslint-disable-next-line deprecation/deprecation
           Worker.unstable_onFetch;
 
+        const onCron = Worker.onCron;
+        if (url.pathname === "/__scheduled__" && typeof onCron === "function") {
+          await onCron(
+            {
+              scheduledTime: Date.now(),
+              cron: url.searchParams.get("cron") || "* * * * *",
+              noRetry() {
+                throw new Error("Not implemented");
+              },
+            },
+            {
+              env: extractVars(env),
+              ai: PARTYKIT_AI,
+              parties,
+              vectorize: vectorizeBindings,
+            },
+            ctx
+          );
+          return new Response("ran onCron", { status: 200 });
+        }
+
         if (staticAssetsResponse) {
           return staticAssetsResponse;
         } else if (typeof onFetch === "function") {
@@ -834,4 +857,45 @@ export default {
       });
     }
   },
-};
+
+  async scheduled(
+    controller: ScheduledController,
+    env: Env,
+    ctx: ExecutionContext
+  ) {
+    const { PARTYKIT_AI, PARTYKIT_DURABLE, PARTYKIT_VECTORIZE, ...namespaces } =
+      env;
+
+    Object.assign(namespaces, {
+      main: PARTYKIT_DURABLE,
+    });
+
+    const onCron = Worker.onCron;
+    if (typeof onCron === "function") {
+      const vectorizeBindings = Object.fromEntries(
+        Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
+          key,
+          new VectorizeClient(value),
+        ])
+      );
+
+      const parties: Party.Party["context"]["parties"] = createMultiParties(
+        namespaces,
+        {
+          host: PARTYKIT_HOST,
+        }
+      );
+
+      return onCron(
+        controller,
+        {
+          env: extractVars(env),
+          ai: PARTYKIT_AI,
+          parties,
+          vectorize: vectorizeBindings,
+        },
+        ctx
+      );
+    }
+  },
+} satisfies ExportedHandler<Env>;

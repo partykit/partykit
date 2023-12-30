@@ -763,6 +763,10 @@ export const ${name} = ${name}Party;
     form.set("vectorize", JSON.stringify(config.vectorize));
   }
 
+  if (config.crons) {
+    form.set("crons", JSON.stringify(config.crons));
+  }
+
   if (assetsPath) {
     form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));
   }

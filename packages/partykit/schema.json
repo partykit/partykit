@@ -19,6 +19,12 @@
     "preview": {
       "type": "string"
     },
+    "crons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "serve": {
       "anyOf": [
         {
