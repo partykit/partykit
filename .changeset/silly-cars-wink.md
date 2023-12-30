@@ -2,4 +2,4 @@
 "partykit": patch
 ---
 
-onScheduled + scheduled config
+onCron + crons config
