@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.57
+
+### Patch Changes
+
+- [#664](https://github.com/partykit/partykit/pull/664) [`2911efe`](https://github.com/partykit/partykit/commit/2911efe847d501d4522989718dddcc9e6cb1785c) Thanks [@threepointone](https://github.com/threepointone)! - onCron + crons config
+
 ## 0.0.56
 
 ### Patch Changes
