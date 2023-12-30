@@ -30,6 +30,7 @@ export const schema = z
     main: z.string().optional(),
     port: z.number().optional(),
     preview: z.string().optional(),
+    crons: z.array(z.string()).optional(), // todo: valiadate cron
     serve: z
       .union([
         z.string(),
@@ -96,7 +97,7 @@ export const schema = z
             index_name: z.string(),
             // TODO: add more fields, probably for provisioning
           }),
-        ]),
+        ])
       )
       .optional(),
   })

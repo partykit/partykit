@@ -5,6 +5,7 @@ import type {
   Request as CFRequest,
   VectorizeIndex,
   DurableObjectState,
+  ScheduledController,
 } from "@cloudflare/workers-types";
 
 export type StaticAssetsManifestType = {
@@ -70,6 +71,13 @@ export type Context = {
 export type AI = Record<string, never>;
 
 export type FetchLobby = {
+  env: Record<string, unknown>;
+  ai: AI;
+  parties: Context["parties"];
+  vectorize: Context["vectorize"];
+};
+
+export type ScheduledLobby = {
   env: Record<string, unknown>;
   ai: AI;
   parties: Context["parties"];
@@ -313,6 +321,16 @@ export type Worker = ServerConstructor & {
     lobby: Lobby,
     ctx: ExecutionContext
   ): Request | Response | Promise<Request | Response>;
+
+  /**
+   * Runs on a schedule. You can use this to perform periodic tasks, such as
+   * sending a heartbeat to a third-party service.
+   */
+  onCron?(
+    controller: ScheduledController,
+    lobby: ScheduledLobby,
+    ctx: ExecutionContext
+  ): Response | Promise<Response>;
 };
 
 /**
@@ -351,6 +369,12 @@ export type PartyKitServer = {
     },
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
+
+  onCron?: (
+    controller: ScheduledController,
+    lobby: ScheduledLobby,
+    ctx: ExecutionContext
+  ) => void | Promise<void>;
 
   onRequest?: (req: Request, party: Room) => Response | Promise<Response>;
   onAlarm?: (party: Omit<Party, "id" | "parties">) => void | Promise<void>;
