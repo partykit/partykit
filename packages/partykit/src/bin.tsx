@@ -225,6 +225,17 @@ program
   });
 
 program
+  .command("info")
+  .description("Get information about a deployed project")
+  .option("-n, --name <name>", "Name of the project")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "Get info about preview")
+  .action(async (options) => {
+    await printBanner();
+    await cli.info(options);
+  });
+
+program
   .command("tail")
   .description("Stream live logs from a deployed project")
   .option("-n, --name <name>", "Name of the project")

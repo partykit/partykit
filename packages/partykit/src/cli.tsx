@@ -833,6 +833,36 @@ or by passing it in via the CLI
   }
 }
 
+export async function info(options: {
+  name: string | undefined;
+  config: string | undefined;
+  preview: string | undefined;
+}) {
+  const config = getConfig(options.config, {
+    name: options.name,
+  });
+  if (!config.name) {
+    throw new ConfigurationError(MissingProjectNameError);
+  }
+
+  // get user details
+  const user = await getUser();
+
+  const urlSearchParams = new URLSearchParams();
+  if (options.preview) {
+    urlSearchParams.set("preview", options.preview);
+  }
+
+  const res = await fetchResult(
+    `/parties/${config.team || user.login}/${config.name}${
+      options.preview ? `?${urlSearchParams.toString()}` : ""
+    }`,
+    { user }
+  );
+
+  console.log(res);
+}
+
 export async function _delete(rawOptions: {
   name: string | undefined;
   force: boolean | undefined;
