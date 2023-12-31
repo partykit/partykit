@@ -19,7 +19,7 @@ You know that magic moment when everything clicks? When you finally figure out t
 
 We've all used the word 'Flow' at some point, expressing the seamless interchange of ideas and thoughts. Flow is woven into our daily interactions, fostering collective wisdom, like individual streams merging to form an expansive, dynamic ocean.
 
-<img src="/content-images/flow-and-partykit-collaboration/screenshot.png"/>
+<img src="/content-images/flow-and-partykit-collaboration/screenshot.png" alt=""/>
 
 ## Flow and PartyKit: Sculpting Collaboration
 
