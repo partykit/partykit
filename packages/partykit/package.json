@@ -48,8 +48,6 @@
     "clipboardy": "4.0.0",
     "esbuild": "0.19.10",
     "miniflare": "3.20231030.4",
-    "p-limit": "^5.0.0",
-    "p-retry": "^6.2.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
@@ -84,6 +82,8 @@
     "mime": "^4.0.1",
     "object-hash": "^3.0.0",
     "open": "^10.0.1",
+    "p-limit": "^5.0.0",
+    "p-retry": "^6.2.0",
     "prompts": "^2.4.2",
     "react": "^18.2.0",
     "react-error-boundary": "^4.0.12",
