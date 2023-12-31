@@ -1,6 +1,6 @@
 {
   "name": "party.io",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Socket.IO server for PartyKit",
   "main": "./dist/index.js",
   "types": "./types/index.d.ts",
