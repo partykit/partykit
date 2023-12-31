@@ -10,19 +10,17 @@ export default defineConfig({
       {
         title: "PartyKit Docs",
         description: "Collaborative applications are the future of software",
-        customCss: [
-          "./src/fonts/font-face.css",
-          "./src/styles/custom.css"
-        ],
+        customCss: ["./src/fonts/font-face.css", "./src/styles/custom.css"],
         head: [
           {
-            tag: 'script',
-            content: 'window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };'
+            tag: "script",
+            content:
+              "window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };",
           },
           {
-            tag: 'script',
+            tag: "script",
             attrs: {
-              src: '/_vercel/insights/script.js',
+              src: "/_vercel/insights/script.js",
               defer: true,
             },
           },
@@ -69,7 +67,7 @@ export default defineConfig({
                   directory: "tutorials/add-partykit-to-a-nextjs-app",
                 },
               },
-            ]
+            ],
           },
           {
             label: "Guides",
@@ -80,24 +78,25 @@ export default defineConfig({
           {
             label: "Examples",
             collapsed: true,
-            items: [ {
-              label: "All PartyKit Examples",
-              link: "/examples/",
-            },
-            {
-              label: "App examples",
-              autogenerate: {
-                directory: "examples/app-examples",
+            items: [
+              {
+                label: "All PartyKit Examples",
+                link: "/examples/",
               },
-            },
-            {
-              label: "Starter kits",
-              collapsed: true,
-              autogenerate: {
-                directory: "examples/starter-kits",
+              {
+                label: "App examples",
+                autogenerate: {
+                  directory: "examples/app-examples",
+                },
               },
-            },
-          ]
+              {
+                label: "Starter kits",
+                collapsed: true,
+                autogenerate: {
+                  directory: "examples/starter-kits",
+                },
+              },
+            ],
           },
           {
             label: "API Reference",

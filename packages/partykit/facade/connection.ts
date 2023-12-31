@@ -146,7 +146,10 @@ class HibernatingConnectionIterator<T>
 {
   private index: number = 0;
   private sockets: WebSocket[] | undefined;
-  constructor(private state: DurableObjectState, private tag?: string) {}
+  constructor(
+    private state: DurableObjectState,
+    private tag?: string
+  ) {}
 
   [Symbol.iterator](): IterableIterator<Party.Connection<T>> {
     return this;

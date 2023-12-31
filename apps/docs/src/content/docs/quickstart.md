@@ -20,7 +20,7 @@ npm create partykit@latest
 ```
 
 :::tip[Create projects faster]
-To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to  install dependencies.
+To create a PartyKit project faster, you can pass arguments to the `create` command, such as `--yes` to skip all prompt by accepting defaults, `--typescript` to default to TypeScript, `--git` to initialize git repository, or `--install` to install dependencies.
 :::
 
 That's it! Navigate to your project's directory, and explore your first PartyKit app 🥳

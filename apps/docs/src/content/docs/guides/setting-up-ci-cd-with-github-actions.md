@@ -26,7 +26,6 @@ PARTYKIT_TOKEN=eyJhb...YR7Bw
 
 Provide the `PARTYKIT_LOGIN` and `PARTYKIT_TOKEN` values you generated in the previous step to GitHub actions securely following the official [Using Secrets in GitHub guide](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
 
-
 :::caution[Storing secrets]
 The `PARTYKIT_TOKEN` will allow anyone to deploy to PartyKit your behalf, so do not share it publicly or commit it to source control.
 :::

@@ -1,7 +1,7 @@
 ---
 title: Broadcast the change
 sidebar:
-    label: 5. Broadcast the change
+  label: 5. Broadcast the change
 description: In this step you will broadcast the changes immediately to all connected clients
 ---
 

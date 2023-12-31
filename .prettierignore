@@ -1,0 +1,7 @@
+*.mdx
+.astro
+*.gltf
+
+packages/partykit/server.d.ts
+packages/partykit/schema.json
+apps/site/public/schema.json

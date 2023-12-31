@@ -29,8 +29,8 @@ const partySocket = new PartySocket({
   // attach the token to PartyKit in the query string
   query: async () => ({
     // get an auth token using your authentication client library
-    token: await getToken()
-  })
+    token: await getToken(),
+  }),
 });
 ```
 
@@ -49,7 +49,7 @@ export default class Server implements Party.Server {
   static async onBeforeConnect(request: Party.Request, lobby: Party.Lobby) {
     try {
       // get authentication server url from environment variables (optional)
-      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT
+      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT;
       // get token from request query string
       const token = new URL(request.url).searchParams.get("token") ?? "";
       // verify the JWT (in this case using clerk)
@@ -65,7 +65,10 @@ export default class Server implements Party.Server {
     }
   }
 
-  onConnect(connection: Party.Connection, { request }: Party.ConnectionContext) {
+  onConnect(
+    connection: Party.Connection,
+    { request }: Party.ConnectionContext
+  ) {
     const userId = request.headers.get("X-User-ID");
     return new Response(`Hello ${userId} from party!`);
   }
@@ -103,7 +106,7 @@ export default class Server implements Party.Server {
   static async onBeforeRequest(request: Party.Request) {
     try {
       // get authentication server url from environment variables (optional)
-      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT
+      const issuer = lobby.env.CLERK_ENDPOINT || DEFAULT_CLERK_ENDPOINT;
       // get token from request headers
       const token = request.headers.get("Authorization") ?? "";
       // verify the JWT (in this case using clerk)

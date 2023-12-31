@@ -372,12 +372,11 @@ Uniquely identifies the connection. Usually an automatically generated GUID, but
 
 The original URI of the connection request.
 
-
 ##### Party.Connection.setState
 
 `setState` allows you to store small pieces of data on each connection.
 
-Unlike  [`Party.storage`](#partystorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
+Unlike [`Party.storage`](#partystorage), connection state is not persisted, and will only exist for the lifetime of the WebSocket connection.
 
 ```ts
 connection.setState({ username: "jani" });
@@ -386,7 +385,7 @@ connection.setState({ username: "jani" });
 :::danger[State size]
 The maximum size of the state you can store on a connection is 2KB. If you try to store values larger than 2KB, `setState` will throw an error.
 
-For larger state, use  [`Party.storage`](#partystorage) instead.
+For larger state, use [`Party.storage`](#partystorage) instead.
 :::
 
 ##### Party.Connection.state
@@ -400,6 +399,7 @@ const user = connection.state?.username;
 ##### Party.Connection.serializeAttachment
 
 **Deprecated**. Use [`Party.Connection.setState`](#partyconnectionsetstate) instead.
+
 ##### Party.Connection.deserializeAttachment
 
 **Deprecated**. Use [`Party.Connection.state`](#partyconnectionstate) instead.

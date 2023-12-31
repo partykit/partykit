@@ -2,7 +2,7 @@
 title: Overview
 description: PartyKit enables you to create real-time collaborative applications.
 sidebar:
-    order: 1
+  order: 1
 ---
 
 - [`Party.Server` (Server) API](/reference/partyserver-api/)

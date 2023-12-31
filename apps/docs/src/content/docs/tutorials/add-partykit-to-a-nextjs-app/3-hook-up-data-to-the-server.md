@@ -1,7 +1,7 @@
 ---
 title: Hook up data to the server
 sidebar:
-    label: 3. Hook up data to the server
+  label: 3. Hook up data to the server
 description: In this step you will connect UI and the PartyKit server
 ---
 
@@ -14,32 +14,32 @@ Navigate to `page.tsx`, in the `app` directory, which generates the poll (see on
 Take a look at the file. You'll notice that we've already included the code to get the data from the form in the server action:
 
 ```ts
-    const title = formData.get("title")?.toString() ?? "Anonymous poll";
-    const options: string[] = [];
+const title = formData.get("title")?.toString() ?? "Anonymous poll";
+const options: string[] = [];
 
-    for (const [key, value] of formData.entries()) {
-      if (key.startsWith("option-") && value.length > 0) {
-        options.push(value.toString());
-      }
-    }
+for (const [key, value] of formData.entries()) {
+  if (key.startsWith("option-") && value.length > 0) {
+    options.push(value.toString());
+  }
+}
 
-    const id = randomId();
-    const poll: Poll = {
-      title,
-      options,
-    };
+const id = randomId();
+const poll: Poll = {
+  title,
+  options,
+};
 ```
 
 Now you need to send it to PartyKit with an HTTP request to the server:
 
 ```ts
-    await fetch(`${PARTYKIT_URL}/party/${id}`, {
-      method: "POST",
-      body: JSON.stringify(poll),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+await fetch(`${PARTYKIT_URL}/party/${id}`, {
+  method: "POST",
+  body: JSON.stringify(poll),
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 ```
 
 In the example project, we've already defined the `PARTYKIT_URL` variable and set it to the default PartyKit development server address. In the final step of this tutorial, you'll deploy your project to PartyKit and set this variable's value to your project's address.
@@ -57,20 +57,20 @@ Navigate to the file which renders the poll page: `page.tsx` in the `app/[poll_i
 In the previous step of this tutorial, your `onRequest` method returned the poll data. You can now use it to render the poll on the server:
 
 ```ts
-  const req = await fetch(`${PARTYKIT_URL}/party/${pollId}`, {
-    method: "GET",
-    next: {
-      revalidate: 0,
-    },
-  });
+const req = await fetch(`${PARTYKIT_URL}/party/${pollId}`, {
+  method: "GET",
+  next: {
+    revalidate: 0,
+  },
+});
 
-  if (!req.ok) {
-    if (req.status === 404) {
-      notFound();
-    } else {
-      throw new Error("Something went wrong.");
-    }
+if (!req.ok) {
+  if (req.status === 404) {
+    notFound();
+  } else {
+    throw new Error("Something went wrong.");
   }
+}
 ```
 
 :::tip[Caching]
@@ -80,7 +80,7 @@ Notice the `revalidate: 0`. Next.js will cache server fetches by default. The vo
 Finally, read the response from the server and replace the mock data:
 
 ```ts
-  const poll = (await req.json()) as Poll;
+const poll = (await req.json()) as Poll;
 ```
 
 Time to validate that your poll page works. Go to the page and see if the data you entered in the form renders now on the new poll page.

@@ -22,7 +22,7 @@ export type EventNames<Map extends EventsMap> = keyof Map & (string | symbol);
 /** The tuple type representing the parameters of an event listener */
 export type EventParams<
   Map extends EventsMap,
-  Ev extends EventNames<Map>
+  Ev extends EventNames<Map>,
 > = Parameters<Map[Ev]>;
 
 /**
@@ -30,7 +30,7 @@ export type EventParams<
  */
 export type ReservedOrUserEventNames<
   ReservedEventsMap extends EventsMap,
-  UserEvents extends EventsMap
+  UserEvents extends EventsMap,
 > = EventNames<ReservedEventsMap> | EventNames<UserEvents>;
 
 /**
@@ -40,13 +40,13 @@ export type ReservedOrUserEventNames<
 export type ReservedOrUserListener<
   ReservedEvents extends EventsMap,
   UserEvents extends EventsMap,
-  Ev extends ReservedOrUserEventNames<ReservedEvents, UserEvents>
+  Ev extends ReservedOrUserEventNames<ReservedEvents, UserEvents>,
 > = FallbackToUntypedListener<
   Ev extends EventNames<ReservedEvents>
     ? ReservedEvents[Ev]
     : Ev extends EventNames<UserEvents>
-    ? UserEvents[Ev]
-    : never
+      ? UserEvents[Ev]
+      : never
 >;
 
 /**
@@ -70,7 +70,7 @@ type FallbackToUntypedListener<T> = [T] extends [never]
 abstract class BaseEventEmitter<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
-  ReservedEvents extends EventsMap = never
+  ReservedEvents extends EventsMap = never,
 > {
   private _listeners: Map<
     ReservedOrUserEventNames<ReservedEvents, ListenEvents>,
@@ -103,7 +103,7 @@ abstract class BaseEventEmitter<
    * @param listener - Callback function
    */
   public once<
-    Ev extends ReservedOrUserEventNames<ReservedEvents, ListenEvents>
+    Ev extends ReservedOrUserEventNames<ReservedEvents, ListenEvents>,
   >(
     event: Ev,
     listener: ReservedOrUserListener<ReservedEvents, ListenEvents, Ev>
@@ -198,7 +198,7 @@ abstract class BaseEventEmitter<
    * @returns Array of listeners subscribed to `event`
    */
   public listeners<
-    Ev extends ReservedOrUserEventNames<ReservedEvents, ListenEvents>
+    Ev extends ReservedOrUserEventNames<ReservedEvents, ListenEvents>,
   >(event: Ev): ReservedOrUserListener<ReservedEvents, ListenEvents, Ev>[] {
     return this._listeners.get(event) || [];
   }
@@ -211,7 +211,7 @@ abstract class BaseEventEmitter<
 export class EventEmitter<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
-  ReservedEvents extends EventsMap = never
+  ReservedEvents extends EventsMap = never,
 > extends BaseEventEmitter<ListenEvents, EmitEvents, ReservedEvents> {
   /**
    * Emits a reserved event.

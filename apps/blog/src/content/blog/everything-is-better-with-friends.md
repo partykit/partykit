@@ -14,20 +14,19 @@ description: Announcing the PartyKit founding team!
 
 ![Sunil Pai on stage at React Miami](/content-images/team-sunil-stage.jpg)
 
-
-> Everything’s better with friends. 
+> Everything’s better with friends.
 
 That was the title of Sunil Pai’s talk at React Miami this April, where he released PartyKit to open beta. The title was a reference to PartyKit’s mission to make building collaborative, real-time interactive applications accessible to everyone.
 
-I watched his presentation live stream from my couch, and I couldn’t help but notice the irony that Sunil stood on that stage alone, unveiling a company for whom he was the sole founder and team member. 
+I watched his presentation live stream from my couch, and I couldn’t help but notice the irony that Sunil stood on that stage alone, unveiling a company for whom he was the sole founder and team member.
 
 Where were those friends? So sad.
 
 ---
 
-**Today, we’re happy to tell you that Sunil is no longer alone.** 
+**Today, we’re happy to tell you that Sunil is no longer alone.**
 
-Throughout the summer, we’ve been building the foundations for PartyKit’s **product**, **company** and the **team**. We have big announcements coming later this month about the product and the company *(ooh, foreshadowing…),* but today we’re announcing the third foundational pillar of PartyKit: **the team**.
+Throughout the summer, we’ve been building the foundations for PartyKit’s **product**, **company** and the **team**. We have big announcements coming later this month about the product and the company _(ooh, foreshadowing…),_ but today we’re announcing the third foundational pillar of PartyKit: **the team**.
 
 If you’ve been keeping an eye on PartyKit’s [GitHub](https://github.com/partykit/partykit) or [Discord](https://discord.gg/vwDWs68C), you may have already seen spoilers, but today we’re making it official.
 
@@ -37,9 +36,7 @@ Look, we got professional headshots and everything!
 
 ![Team portrait](/content-images/team-portrait.jpg)
 
-
 ### Sunil Pai (CEO)
-
 
 <div class="flex flex-col lg:flex-row lg:space-x-8">
 <div class="lg:w-1/4">
@@ -70,7 +67,6 @@ Look, we got professional headshots and everything!
 </div>
 </div>
 
-
 ### Jani Eväkallio (CTO)
 
 <div class="flex flex-col lg:flex-row lg:space-x-8">
@@ -86,8 +82,6 @@ Look, we got professional headshots and everything!
 </div>
 </div>
 
-
-
 ## But wait, there’s more…
 
 ### Matt Webb, Inventor-in-Residence
@@ -102,7 +96,7 @@ Explorations help us stretch PartyKit, which makes it more useful for everyone. 
 
 ### PartyKit x tldraw
 
-Speaking of [tldraw](https://www.tldraw.com/) ******(nice segue, huh?),****** we’ve recently moved into our brand-new office in London. And because everything’s better with friends (*have we said that enough yet?*), we’re sharing the office the lovely bunch of arrowsmiths at tldraw!
+Speaking of [tldraw](https://www.tldraw.com/) **\*\***(nice segue, huh?),**\*\*** we’ve recently moved into our brand-new office in London. And because everything’s better with friends (_have we said that enough yet?_), we’re sharing the office the lovely bunch of arrowsmiths at tldraw!
 
 If you’re ever in North London and want to talk multiplayer, real-time, building AI agents, or any that sort of thing, do drop in!
 

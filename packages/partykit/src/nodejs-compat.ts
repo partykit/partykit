@@ -12,7 +12,7 @@ const supportedNodeBuiltins = [
   "stream",
   "string_decoder",
   "util",
-  "crypto"
+  "crypto",
 ];
 
 const plugin: Plugin = {

@@ -15,15 +15,16 @@ If you're interested in the isolated use case of implementing the cursors, fork 
 In this part of the tutorial, we will:
 
 1. Implement a PartyPresence helper class, to manage state and events for the party.
-2. 
+2.
 
 ## 1. Set up a WebSocket connection
 
 <!-- explanation of why we need websockets here -->
+
 To do so, let's install `partysocket`, a library which makes managing WebSocket connection easier and is compatible with PartyKit:
 
 ```bash
 npm install partysocket@beta
 ```
 
-In the `client.ts` file, import PartySocket from "partysocket" and 
+In the `client.ts` file, import PartySocket from "partysocket" and

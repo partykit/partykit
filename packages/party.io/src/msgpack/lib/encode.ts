@@ -12,21 +12,22 @@ function utf8Write(view: DataView, offset: number, str: string) {
       view.setUint8(offset++, 0x80 | (c & 0x3f));
     } else if (c < 0xd800 || c >= 0xe000) {
       view.setUint8(offset++, 0xe0 | (c >> 12));
-      view.setUint8(offset++, 0x80 | (c >> 6) & 0x3f);
+      view.setUint8(offset++, 0x80 | ((c >> 6) & 0x3f));
       view.setUint8(offset++, 0x80 | (c & 0x3f));
     } else {
       i++;
       c = 0x10000 + (((c & 0x3ff) << 10) | (str.charCodeAt(i) & 0x3ff));
       view.setUint8(offset++, 0xf0 | (c >> 18));
-      view.setUint8(offset++, 0x80 | (c >> 12) & 0x3f);
-      view.setUint8(offset++, 0x80 | (c >> 6) & 0x3f);
+      view.setUint8(offset++, 0x80 | ((c >> 12) & 0x3f));
+      view.setUint8(offset++, 0x80 | ((c >> 6) & 0x3f));
       view.setUint8(offset++, 0x80 | (c & 0x3f));
     }
   }
 }
 
 function utf8Length(str: string) {
-  let c = 0, length = 0;
+  let c = 0,
+    length = 0;
   for (let i = 0; i < str.length; i++) {
     c = str.charCodeAt(i);
     if (c < 0x80) {
@@ -54,7 +55,7 @@ type DeferredElement = {
 function _encodeObject(
   bytes: number[],
   defers: DeferredElement[],
-  value: Record<string, unknown>,
+  value: Record<string, unknown>
 ): number {
   if (value.toJSON === "function") {
     return _encode(bytes, defers, (value.toJSON as unknown as () => unknown)());
@@ -100,10 +101,14 @@ function _encodeObject(
 function _encode(
   bytes: number[],
   defers: DeferredElement[],
-  value: unknown,
+  value: unknown
 ): number {
   const type = typeof value;
-  let i = 0, hi = 0, lo = 0, length = 0, size = 0;
+  let i = 0,
+    hi = 0,
+    lo = 0,
+    length = 0,
+    size = 0;
 
   if (type === "string") {
     length = utf8Length(value as string);
@@ -181,7 +186,7 @@ function _encode(
         lo >> 24,
         lo >> 16,
         lo >> 8,
-        lo,
+        lo
       );
       return 9;
     } else {
@@ -217,7 +222,7 @@ function _encode(
         lo >> 24,
         lo >> 16,
         lo >> 8,
-        lo,
+        lo
       );
       return 9;
     }
@@ -277,7 +282,7 @@ function _encode(
             lo >> 24,
             lo >> 16,
             lo >> 8,
-            lo,
+            lo
           );
           return 10;
         }
@@ -300,7 +305,7 @@ function _encode(
           lo >> 24,
           lo >> 16,
           lo >> 8,
-          lo,
+          lo
         );
         return 15;
       }
@@ -366,7 +371,9 @@ export function encode(value: unknown) {
     nextOffset = defers[0]._offset;
   }
 
-  let defer, deferLength = 0, offset = 0;
+  let defer,
+    deferLength = 0,
+    offset = 0;
   for (let i = 0; i < bytes.length; i++) {
     view.setUint8(deferWritten + i, bytes[i]);
     if (i + 1 !== nextOffset) continue;

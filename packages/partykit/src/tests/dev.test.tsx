@@ -110,7 +110,7 @@ describe("dev", () => {
     const res = await fetch(`http://${host}:${port}`);
     expect(res.status).toBe(200);
     expect(await res.text()).toMatchInlineSnapshot(`
-      "<!DOCTYPE html>
+      "<!doctype html>
       <html>
         <head>
           <title>Partykit Public Fixture</title>

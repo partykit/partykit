@@ -48,27 +48,27 @@ const { name, url, role, variant, img } = Astro.props;
         padding-top: var(--whitespace);
       }
       &:nth-child(3n) {
-        padding-top: calc(var(--whitespace) *0.5);
+        padding-top: calc(var(--whitespace) * 0.5);
       }
-       &:nth-child(7n-3) {
+      &:nth-child(7n-3) {
         align-self: flex-end;
       }
       &.quote-S-test {
-        padding-top: 0!important;
+        padding-top: 0 !important;
         overflow: hidden;
         blockquote {
           width: 12em;
         }
       }
       &.quote-M-test {
-        padding-top: 0!important;
+        padding-top: 0 !important;
         overflow: hidden;
         blockquote {
           width: 20em;
         }
       }
       &.quote-L-test {
-        padding-top: 0!important;
+        padding-top: 0 !important;
         overflow: hidden;
         blockquote {
           width: 28em;
@@ -138,7 +138,7 @@ const { name, url, role, variant, img } = Astro.props;
       object-fit: cover;
     }
   }
-  
+
   .author {
     display: flex;
     flex-direction: column;

@@ -59,8 +59,8 @@ const provider = new YPartyKitProvider(
     connect: false, // do not connect immediately, use provider.connect() when required
     awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
     // adds to the query string of the websocket connection, useful for e.g. auth tokens
-    params: async () => ({ 
-      token: await getAuthToken() 
+    params: async () => ({
+      token: await getAuthToken()
     });
   }
 );
@@ -82,7 +82,6 @@ function App() {
   });
 }
 ```
-
 
 ## Server Configuration
 
@@ -135,14 +134,14 @@ To persists the Yjs document state between sessions, you can use the built-in Pa
 
 #### Persisting snapshots (recommended)
 
-In `snapshot` mode, PartyKit stores the latest document state between sessions. 
+In `snapshot` mode, PartyKit stores the latest document state between sessions.
 
 ```ts
 onConnect(connection, party, {
-  persist: { 
-    mode: "snapshot" 
-  }
-})
+  persist: {
+    mode: "snapshot",
+  },
+});
 ```
 
 During a session, PartyKit accumulates individual updates and stores them as separate records. When an editing session ends due to last connection disconnecting, PartyKit merges all updates to a single snapshot.
@@ -157,10 +156,10 @@ This is useful when multiple clients are expected to be able to change the docum
 
 ```ts
 onConnect(connection, party, {
-  persist: { 
+  persist: {
     mode: "history",
-  }
-})
+  },
+});
 ```
 
 For long-lived documents, the edit history would grow indefinitely, eventually reaching the practical limits of a single PartyKit server instance.
@@ -169,17 +168,17 @@ To prevent unbounded growth, PartyKit applies a 10MB maximum limit to the edit h
 
 ```ts
 onConnect(connection, party, {
-  persist: { 
+  persist: {
     mode: "history",
-    // Maximum size in bytes. 
+    // Maximum size in bytes.
     // You can set this value to any number below 10MB (10_000_000 bytes).
     maxBytes: 10_000_000,
 
-    // Maximum number of updates. 
+    // Maximum number of updates.
     // By default, there is no maximum, and history grows until maximum amount of bytes is reached.
     maxUpdates: 10_000,
-  }
-})
+  },
+});
 ```
 
 Once either limit is reached, the document is snapshotted, and history tracking is started again.
@@ -189,7 +188,7 @@ Once either limit is reached, the document is snapshotted, and history tracking 
 In previous versions, PartyKit only had one persistence mode:
 
 ```ts
-onConnect(connection, party, { persist: true })
+onConnect(connection, party, { persist: true });
 ```
 
 This is functionally equivalent to setting the value to `{ mode: "history" }`.
@@ -213,8 +212,8 @@ return onConnect(conn, this.party, {
     // only save after every 2 seconds (default)
     debounceWait: 2000,
     // if updates keep coming, save at least once every 10 seconds (default)
-    debounceMaxWait: 10000
-  }
+    debounceMaxWait: 10000,
+  },
 });
 ```
 

@@ -40,13 +40,13 @@ const data = await this.party.storage.get<OptionalTypeDefinition>("key");
 ### Writing data
 
 ```ts
-await this.party.storage.put("key", value)
+await this.party.storage.put("key", value);
 ```
 
 ### Deleting data
 
 ```ts
-await this.party.storage.delete("key")
+await this.party.storage.delete("key");
 ```
 
 ### Listing items
@@ -56,7 +56,7 @@ await this.party.storage.delete("key")
 ```ts
 const items = await this.party.storage.list();
 for (const [key, value] of items) {
-    console.log(key, value);
+  console.log(key, value);
 }
 ```
 
@@ -87,7 +87,7 @@ export default class Server implements Party.Server {
       this.party.broadcast(event.data);
       // store each item under a separate key
       this.party.storage.put(`item:${event.id}`, event.data);
-    };
+    }
 
     if (event.type === "update") {
       const item = (await this.party.storage.get(`item:${event.id}`)) ?? {};
@@ -97,9 +97,9 @@ export default class Server implements Party.Server {
       };
 
       this.party.storage.put(`item:${event.id}`, updatedItem);
-    };
-  };
-};
+    }
+  }
+}
 ```
 
 In the above example we were able to shard the data across multiple keys. However, if an individual value were to exceed 128KiB limit, you would need to implement an additional sharding strategy to split the value across multiple keys -- see [an example in the `y-partykit` storage adapter](https://github.com/partykit/partykit/blob/7f307216f33dbef8fb61963cac7ce88ce8e8f769/packages/y-partykit/src/storage.ts#L79C1-L97C2).
@@ -122,8 +122,7 @@ You'll also need to keep in mind that for large data sets, you may reach either 
 
 ```ts
 export default class Main implements Party.Server {
-
-  constructor(public party: Party.Party) {};
+  constructor(public party: Party.Party) {}
   messages: string[] = [];
 
   // You can use this to load data from storage and perform other
@@ -131,18 +130,18 @@ export default class Main implements Party.Server {
   // processing any connections or requests.
   async onStart() {
     this.messages = (await this.party.storage.get<string[]>("messages")) ?? [];
-  };
-  
+  }
+
   async onConnect(connection: Party.Connection) {
     connection.send(JSON.stringify(this.messages));
-  };
+  }
 
   async onMessage(message: string) {
     this.messages.push(message);
     this.party.storage.put("messages", this.messages);
     connection.send(message);
-  };
-};
+  }
+}
 ```
 
 :::danger[Loading data with Hibernation]

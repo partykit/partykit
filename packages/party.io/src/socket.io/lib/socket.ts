@@ -150,7 +150,7 @@ export class Socket<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = DefaultEventsMap,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 > extends EventEmitter<ListenEvents, EmitEvents, SocketReservedEvents> {
   /**
    * An unique identifier for the session.

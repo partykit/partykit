@@ -90,7 +90,7 @@ type IOSetup<
   L extends EventsMap,
   E extends EventsMap,
   Se extends EventsMap,
-  So
+  So,
 > = (
   server: SocketIOServer<L, E, Se, So>,
   req: Party.Request,
@@ -102,7 +102,7 @@ export function createServer<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = ListenEvents,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 >(
   opts:
     | Partial<ServerOptions>

@@ -11,14 +11,13 @@ tags:
   - education
 ogImage: "/content-images/partykit-powers-realtime-avatars-in-epic-web/social.png"
 description: Kent C. Dodds used PartyKit for users' presence on his course platform.
-
 ---
 
-Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [*Epic Web*](https://www.epicweb.dev/). The course is massive in scale - it consists of 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been celebrated enthusiastically by the web dev community.
+Last week Kent C. Dodds launched his magnum opus, a fullstack web development course called [_Epic Web_](https://www.epicweb.dev/). The course is massive in scale - it consists of 452 videos divided into 56 sections, with additional snacks like 25 interviews with experts. It was an instant success and has been celebrated enthusiastically by the web dev community.
 
 <a href="https://twitter.com/kentcdodds/status/1714021891462369341" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/partykit-powers-realtime-avatars-in-epic-web/kent-cool-feature.png" alt="Kent's tweet: 'The Workshop App now uses PartyKit for a cool feature. This is only the beginning :)'"></a>
 
-We couldn't be prouder to be a part of this amazing feat. Right before the launch we worked with Kent and added *presence* to the course platform (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like in Figma), the place in text they are (like in Google Docs), or by featuring your users' avatars, which is what Kent went with.
+We couldn't be prouder to be a part of this amazing feat. Right before the launch we worked with Kent and added _presence_ to the course platform (see [first PR](https://github.com/epicweb-dev/kcdshop/pull/152) and [second PR](https://github.com/epicweb-dev/kcdshop/pull/153)). Presence is a way to create a sense of shared online experience among your users for example by showing their cursors (like in Figma), the place in text they are (like in Google Docs), or by featuring your users' avatars, which is what Kent went with.
 
 <a href="https://twitter.com/kentcdodds/status/1715569320141713749" target="_blank" rel="noopener noreferrer"><img style="width:500px; height: auto;" src="/content-images/partykit-powers-realtime-avatars-in-epic-web/kent-loves-presence.png" alt="Kent's tweet: 'I just love this presence feature. It makes you feel like you're not learning alone. Learning is better together. Thanks for making this feature so easy to add PartyKit!'"></a>
 
@@ -39,62 +38,62 @@ Since the launch, the platform has been sending over 100,000 events a day to Par
 All PartyKit server code that was needed to implement the real-time avatars feature to Kent's course was the following:
 
 ```ts
-import type * as Party from 'partykit/server'
+import type * as Party from "partykit/server";
 
 type UserPayload = {
-	id: string
-	avatarUrl: string
-	name?: string | null | undefined
-}
+  id: string;
+  avatarUrl: string;
+  name?: string | null | undefined;
+};
 
 type Message =
-	| { type: 'remove-user'; payload: Pick<UserPayload, 'id'> }
-	| { type: 'add-user'; payload: UserPayload }
-	| { type: 'presence'; payload: { users: Array<UserPayload> } }
+  | { type: "remove-user"; payload: Pick<UserPayload, "id"> }
+  | { type: "add-user"; payload: UserPayload }
+  | { type: "presence"; payload: { users: Array<UserPayload> } };
 
 export default class Server implements Party.Server {
-	options: Party.ServerOptions = { hibernate: true }
-	constructor(party: Party.Party) {
-		this.party = party
-	}
+  options: Party.ServerOptions = { hibernate: true };
+  constructor(party: Party.Party) {
+    this.party = party;
+  }
 
-	updateUsers() {
-		const presenceMessage = JSON.stringify(this.getPresenceMessage())
-		for (const connection of this.party.getConnections<UserPayload>()) {
-			connection.send(presenceMessage)
-		}
-	}
+  updateUsers() {
+    const presenceMessage = JSON.stringify(this.getPresenceMessage());
+    for (const connection of this.party.getConnections<UserPayload>()) {
+      connection.send(presenceMessage);
+    }
+  }
 
-	getPresenceMessage(): Message {
-		const users = new Map<string, UserPayload>()
-		for (const connection of this.party.getConnections<UserPayload>()) {
-			const user = connection.state
-			if (user) users.set(user.id, user)
-		}
-		return {
-			type: 'presence',
-			payload: { users: Array.from(users.values()) },
-		} satisfies Message
-	}
+  getPresenceMessage(): Message {
+    const users = new Map<string, UserPayload>();
+    for (const connection of this.party.getConnections<UserPayload>()) {
+      const user = connection.state;
+      if (user) users.set(user.id, user);
+    }
+    return {
+      type: "presence",
+      payload: { users: Array.from(users.values()) },
+    } satisfies Message;
+  }
 
-	onMessage(message: string, sender: Party.Connection<UserPayload>) {
-		const user = JSON.parse(message) as Message
-		if (user.type === 'add-user') {
-			sender.setState(user.payload)
-			this.updateUsers()
-		} else if (user.type === 'remove-user') {
-			sender.setState(null)
-			this.updateUsers()
-		}
-	}
+  onMessage(message: string, sender: Party.Connection<UserPayload>) {
+    const user = JSON.parse(message) as Message;
+    if (user.type === "add-user") {
+      sender.setState(user.payload);
+      this.updateUsers();
+    } else if (user.type === "remove-user") {
+      sender.setState(null);
+      this.updateUsers();
+    }
+  }
 
-	onClose() {
-		this.updateUsers()
-	}
-	
-	onError() {
-		this.updateUsers()
-	}
+  onClose() {
+    this.updateUsers();
+  }
+
+  onError() {
+    this.updateUsers();
+  }
 }
 ```
 

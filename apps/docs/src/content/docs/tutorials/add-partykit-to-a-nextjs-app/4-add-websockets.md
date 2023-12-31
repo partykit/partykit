@@ -1,7 +1,7 @@
 ---
 title: Add WebSockets
 sidebar:
-    label: 4. Add WebSockets
+  label: 4. Add WebSockets
 description: In this step you'll add WebSockets connection into the mix
 ---
 
@@ -22,16 +22,16 @@ Since `PollUI` is not a server component, the connection will be established dir
 Add this hook between the state setters and the `sendVote` method:
 
 ```ts
-  const socket = usePartySocket({
-    host: PARTYKIT_HOST,
-    room: id,
-    onMessage(event) {
-      const message = JSON.parse(event.data) as Poll;
-      if (message.votes) {
-        setVotes(message.votes);
-      }
-    },
-  });
+const socket = usePartySocket({
+  host: PARTYKIT_HOST,
+  room: id,
+  onMessage(event) {
+    const message = JSON.parse(event.data) as Poll;
+    if (message.votes) {
+      setVotes(message.votes);
+    }
+  },
+});
 ```
 
 Let's go over the code above. PartyKit comes with <a href="https://docs.partykit.io/reference/partysocket-api/#usage-with-react" target="_blank" rel="noopener noreferrer"><code>usePartySocket</code></a>, a React hook for WebSockets. Notice that the `id` is a prop containing the the same poll `id` created a moment ago. In this way, the WebSocket will connect to the right poll.
@@ -43,12 +43,12 @@ The `onMessage` callback is called when you receive a WebSocket message from the
 Now that you have started a WebSocket connection, modify the existing `sendVote` function. Add the following code which enables the button to send the selected vote data:
 
 ```ts
-  const sendVote = (option: number) => {
-    if (vote === null) {
-      socket.send(JSON.stringify({ type: "vote", option }));
-      setVote(option);
-    }
-  };
+const sendVote = (option: number) => {
+  if (vote === null) {
+    socket.send(JSON.stringify({ type: "vote", option }));
+    setVote(option);
+  }
+};
 ```
 
 ## Next steps

@@ -2,7 +2,7 @@
 title: Integrating PartyKit with deployment platforms
 description: ...
 sidebar:
-    hidden: true
+  hidden: true
 ---
 
 Coming soon!

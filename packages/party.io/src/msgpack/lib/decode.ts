@@ -1,5 +1,7 @@
 function utf8Read(view: DataView, offset: number, length: number) {
-  let string = "", chr: number, byte: number;
+  let string = "",
+    chr: number,
+    byte: number;
   for (let i = offset, end = offset + length; i < end; i++) {
     byte = view.getUint8(i);
     if ((byte & 0x80) === 0x00) {
@@ -8,8 +10,7 @@ function utf8Read(view: DataView, offset: number, length: number) {
     }
     if ((byte & 0xe0) === 0xc0) {
       string += String.fromCharCode(
-        ((byte & 0x1f) << 6) |
-          (view.getUint8(++i) & 0x3f),
+        ((byte & 0x1f) << 6) | (view.getUint8(++i) & 0x3f)
       );
       continue;
     }
@@ -17,20 +18,22 @@ function utf8Read(view: DataView, offset: number, length: number) {
       string += String.fromCharCode(
         ((byte & 0x0f) << 12) |
           ((view.getUint8(++i) & 0x3f) << 6) |
-          ((view.getUint8(++i) & 0x3f) << 0),
+          ((view.getUint8(++i) & 0x3f) << 0)
       );
       continue;
     }
     if ((byte & 0xf8) === 0xf0) {
-      chr = ((byte & 0x07) << 18) |
+      chr =
+        ((byte & 0x07) << 18) |
         ((view.getUint8(++i) & 0x3f) << 12) |
         ((view.getUint8(++i) & 0x3f) << 6) |
         ((view.getUint8(++i) & 0x3f) << 0);
-      if (chr >= 0x010000) { // surrogate pair
+      if (chr >= 0x010000) {
+        // surrogate pair
         chr -= 0x010000;
         string += String.fromCharCode(
-          (chr >>> 10) + 0xD800,
-          (chr & 0x3FF) + 0xDC00,
+          (chr >>> 10) + 0xd800,
+          (chr & 0x3ff) + 0xdc00
         );
       } else {
         string += String.fromCharCode(chr);
@@ -56,7 +59,7 @@ class Decoder {
       this._view = new DataView(
         this._buffer,
         buffer.byteOffset,
-        buffer.byteLength,
+        buffer.byteLength
       );
     } else {
       throw new Error("Invalid argument");
@@ -94,7 +97,11 @@ class Decoder {
 
   public parse() {
     const prefix = this._view.getUint8(this._offset++);
-    let value, length = 0, type = 0, hi = 0, lo = 0;
+    let value,
+      length = 0,
+      type = 0,
+      hi = 0,
+      lo = 0;
 
     if (prefix < 0xc0) {
       // positive fixint
@@ -316,7 +323,7 @@ export function decode(buffer: ArrayBuffer | ArrayBufferView) {
   const decoder = new Decoder(buffer);
   const value = decoder.parse();
   if (decoder._offset !== buffer.byteLength) {
-    throw new Error((buffer.byteLength - decoder._offset) + " trailing bytes");
+    throw new Error(buffer.byteLength - decoder._offset + " trailing bytes");
   }
   return value;
 }

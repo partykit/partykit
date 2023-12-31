@@ -115,9 +115,7 @@ describe("deploy", () => {
         expect(options?.user?.access_token).toBe("test-token");
 
         const form = options?.body as FormData;
-        expect(form.get("vars")).toMatchInlineSnapshot(
-          `"{"a":"b","c":"d"}"`
-        );
+        expect(form.get("vars")).toMatchInlineSnapshot(`"{"a":"b","c":"d"}"`);
         checkedResponse = true;
         return {
           result: { is_first_deploy: false },

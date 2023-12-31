@@ -48,7 +48,7 @@ export interface ServerReservedEvents<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData
+  SocketData,
 > extends NamespaceReservedEvents<
     ListenEvents,
     EmitEvents,
@@ -98,7 +98,7 @@ export class Server<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = ListenEvents,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 > extends EventEmitter<
   ListenEvents,
   EmitEvents,

@@ -1,7 +1,7 @@
 ---
 title: Add storage
 sidebar:
-    label: 6. Add storage
+  label: 6. Add storage
 description: In this step, you will enable your server to store the votes
 ---
 

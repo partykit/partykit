@@ -11,7 +11,7 @@ export class ParentNamespace<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = DefaultEventsMap,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 > extends Namespace<ListenEvents, EmitEvents, ServerSideEvents, SocketData> {
   private static count = 0;
 

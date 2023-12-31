@@ -14,28 +14,30 @@ Let's send a request to the room's public URL:
 ```ts
 fetch(`https://${PARTYKIT_HOST}/parties/main/${roomId}`, {
   method: "POST",
-  body: JSON.stringify({ message: "Hello!" })
+  body: JSON.stringify({ message: "Hello!" }),
 });
 ```
 
 The PartyKit hosting environment uses the `https` protocol by default, but in local development you are most likely using `http`, so in practice, your code might look something like this:
+
 ```ts
-const protocol = PARTYKIT_HOST.startsWith("localhost")
-  ? "http" 
-  : "https";
+const protocol = PARTYKIT_HOST.startsWith("localhost") ? "http" : "https";
 fetch(`${protocol}://${PARTYKIT_HOST}/parties/main/${roomId}`, {
   method: "POST",
-  body: JSON.stringify({ message: "Hello!" })
+  body: JSON.stringify({ message: "Hello!" }),
 });
 ```
 
 To make this easier, the [`partysocket`](/reference/partysocket-api) package exports a `PartySocket.fetch` utility that constructs the correct URL for you:
 
 ```ts
-PartySocket.fetch({ host: PARTYKIT_HOST, room: roomId }, {
-  method: "POST",
-  body: JSON.stringify({ message: "Hello!" })
-});
+PartySocket.fetch(
+  { host: PARTYKIT_HOST, room: roomId },
+  {
+    method: "POST",
+    body: JSON.stringify({ message: "Hello!" }),
+  }
+);
 ```
 
 ### Handle incoming requests

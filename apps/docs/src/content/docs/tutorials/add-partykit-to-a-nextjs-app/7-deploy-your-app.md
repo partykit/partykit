@@ -1,7 +1,7 @@
 ---
 title: Deploy your poll app
 sidebar:
-    label: 7. Deploy your poll app
+  label: 7. Deploy your poll app
 description: PartyKit hosts the real-time server but you can host your website at any deployment platform of your choosing
 ---
 

@@ -72,7 +72,10 @@ export class ClassWorker implements PartyServerAPI {
   options: Party.ServerOptions;
   supportsHibernation: boolean;
 
-  constructor(private Worker: Party.Worker, readonly party: Party.Party) {
+  constructor(
+    private Worker: Party.Worker,
+    readonly party: Party.Party
+  ) {
     this.worker = new Worker(party);
     this.options = this.worker.options ?? {};
     this.supportsHibernation = this.options.hibernate === true;

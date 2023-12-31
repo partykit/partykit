@@ -1,12 +1,11 @@
-  
-  .TextLoop {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-items: center;
-  }
-  
-  .TextLoop div {
-    width: 100%!important;
-  }
+.TextLoop {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-items: center;
+}
+
+.TextLoop div {
+  width: 100% !important;
+}

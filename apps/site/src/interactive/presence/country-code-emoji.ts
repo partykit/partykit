@@ -17,7 +17,7 @@ export default function countryCodeEmoji(cc: string): string {
   }
 
   const codePoints = [...cc.toUpperCase()].map(
-    (c) => (c.codePointAt(0) ?? 0) + OFFSET
+    (c) => (c.codePointAt(0) ?? 0) + OFFSET,
   );
   return String.fromCodePoint(...codePoints);
 }

@@ -3,7 +3,13 @@ import "../../styles/variables.scss";
 
 interface Props {
   url: string;
-  variant?: null | "outline" | "inverted" | "github" | "terminal-github" | "pricingCTA";
+  variant?:
+    | null
+    | "outline"
+    | "inverted"
+    | "github"
+    | "terminal-github"
+    | "pricingCTA";
 }
 
 const { url, variant = null } = Astro.props;
@@ -36,9 +42,9 @@ const { url, variant = null } = Astro.props;
       max-width: var(--atom-width);
     }
   }
-  
+
   a:focus {
-    outline: none;  
+    outline: none;
   }
 
   a:after {
@@ -58,7 +64,7 @@ const { url, variant = null } = Astro.props;
   a:focus:after {
     left: 0.25em;
   }
-  
+
   a.inverted {
     background: var(--color-page);
     color: var(--color-feature-2);
@@ -72,7 +78,7 @@ const { url, variant = null } = Astro.props;
     color: var(--color-feature-2);
     outline-style: none;
   }
-  
+
   a.outline:after {
     content: none;
   }
@@ -98,10 +104,9 @@ const { url, variant = null } = Astro.props;
     flex-grow: 0;
     @include font-S();
   }
-  
+
   a.pricingCTA {
     flex-grow: 0;
     margin-top: 2rem;
   }
-  
 </style>

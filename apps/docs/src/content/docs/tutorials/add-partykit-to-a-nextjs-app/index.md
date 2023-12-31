@@ -1,7 +1,7 @@
 ---
 title: What you will build
 sidebar:
-    label: 1. What you will build
+  label: 1. What you will build
 description: In this tutorial, you'll add a real-time feature to a Next.js app
 ---
 
@@ -11,7 +11,7 @@ Here's the poll app with two pages. The first page lets you create a poll.
 
 ![A screenshot of the form for generating the poll](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-1.png)
 
-And the second page that features the new poll which you can now share with your  friends.
+And the second page that features the new poll which you can now share with your friends.
 
 ![A screenshot of the page featuring the poll with the question: "Are pierogi an empanada?"](../../../../assets/tutorials/add-partykit-to-a-nextjs-app/page1-2.png)
 

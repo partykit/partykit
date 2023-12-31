@@ -1,7 +1,7 @@
 ---
 title: Set up PartyKit server
 sidebar:
-    label: 2. Set up PartyKit server
+  label: 2. Set up PartyKit server
 description: The first step is to set up your PartyKit server to handle HTTP requests
 ---
 
@@ -71,7 +71,7 @@ Let's go over this code.
 Since each poll will be its own room, you can keep our poll data in-memory. You can also use the TypeScript types from our Next.js app:
 
 ```ts
-  poll: Poll | undefined;
+poll: Poll | undefined;
 ```
 
 Next is the `onRequest` method, which receives a regular HTTP request:
@@ -95,7 +95,7 @@ We will create the poll in a Next.js server action, and we cannot make a WebSock
 Finally, if the poll exists, the method will return its data; otherwise, it will error out:
 
 ```ts
- return new Response("Not found", { status: 404 });
+return new Response("Not found", { status: 404 });
 ```
 
 ## Next steps

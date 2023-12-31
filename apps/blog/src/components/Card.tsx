@@ -11,18 +11,11 @@ export default function Card({ href, frontmatter, secHeading = true }: Props) {
   const { title, pubDatetime, description } = frontmatter;
   return (
     <li className="card">
-      <a
-        href={href}
-        className="font-L"
-      >
+      <a href={href} className="font-L">
         {secHeading ? (
-          <h2 className="">
-            {title}
-          </h2>
+          <h2 className="">{title}</h2>
         ) : (
-          <h3 className="">
-            {title}
-          </h3>
+          <h3 className="">{title}</h3>
         )}
       </a>
       <Datetime datetime={pubDatetime} />

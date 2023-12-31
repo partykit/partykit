@@ -695,7 +695,7 @@
     // You can now tag connections, and retrieve tagged connections using Party.getConnections()
     getConnectionTags(
       connection: PartyConnection,
-      ctx: PartyConnectionContext,
+      ctx: PartyConnectionContext
     ) {
       return [ctx.request.cf?.country as string];
     }
@@ -715,7 +715,7 @@
         compatriot.send(
           JSON.stringify({
             message: `${connection.id} is also from ${country}!`,
-          }),
+          })
         );
       }
     }

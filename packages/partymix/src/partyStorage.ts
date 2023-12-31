@@ -41,7 +41,7 @@ interface PartySessionStorageOptions {
  */
 export function createPartySessionStorage<
   Data = SessionData,
-  FlashData = Data
+  FlashData = Data,
 >({
   cookie,
   party,

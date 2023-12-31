@@ -20,7 +20,7 @@ export class Client<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 > {
   public readonly conn: RawSocket;
 

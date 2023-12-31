@@ -27,7 +27,7 @@ export function createAdapter<
   ListenEvents,
   EmitEvents,
   ServerSideEvents,
-  SocketData
+  SocketData,
 >(
   lobby: Party.FetchLobby,
   ctx: Party.ExecutionContext,

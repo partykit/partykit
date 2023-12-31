@@ -3,5 +3,5 @@ import OtherCursors from "./presence/other-cursors";
 
 export default function Room() {
   useCursorTracking("document");
-  return (<OtherCursors />);
+  return <OtherCursors />;
 }

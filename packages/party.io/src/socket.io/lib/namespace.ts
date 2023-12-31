@@ -16,7 +16,7 @@ export interface NamespaceReservedEvents<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData
+  SocketData,
 > {
   connection: (
     socket: Socket<ListenEvents, EmitEvents, ServerSideEvents, SocketData>
@@ -84,7 +84,7 @@ export class Namespace<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = DefaultEventsMap,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown
+  SocketData = unknown,
 > extends EventEmitter<
   ServerSideEvents,
   EmitEvents,

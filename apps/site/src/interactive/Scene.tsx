@@ -125,7 +125,7 @@ export default function Scene() {
       Array.from(state.otherUsers.entries()).map(([id, user]) => [
         id,
         user.presence,
-      ])
+      ]),
     ),
   }));
   const { synced, updatePresence } = usePresence((state) => ({

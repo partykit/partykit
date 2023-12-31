@@ -4,7 +4,6 @@ interface Props {
 }
 
 const { variant = null } = Astro.props;
-
 ---
 
 <div class={variant}><slot /></div>
@@ -17,7 +16,7 @@ const { variant = null } = Astro.props;
     gap: 1rem;
     padding: var(--padding);
   }
-  
+
   div.nested {
     padding: 0;
   }
@@ -33,6 +32,4 @@ const { variant = null } = Astro.props;
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  
-  
 </style>

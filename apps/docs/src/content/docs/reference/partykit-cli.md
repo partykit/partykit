@@ -2,7 +2,7 @@
 title: PartyKit CLI
 description: PartyKit Command Line Interface reference
 sidebar:
-    order: 2
+  order: 2
 ---
 
 The `partykit` Command Line Interface allows you to develop, deploy and manage your PartyKit projects from your terminal, and automate deployment workflows in your Continuous Integration environments.
@@ -17,7 +17,7 @@ npm install partykit@latest
 
 ## Commands
 
-This is a reference for the commands you can run in your terminal. 
+This is a reference for the commands you can run in your terminal.
 
 :::tip[Using npx]
 You'll notice the below examples use the `npx` command, which is a utility that comes packaged with Node.js. `npx` allows you run commands from packages you have installed locally.
@@ -27,13 +27,13 @@ You'll notice the below examples use the `npx` command, which is a utility that 
 
 #### init
 
-`npx partykit init` will add PartyKit to your existing `npm` project. This will install the latest version of PartyKit into your project, create a `partykit.json` configuration file, and example `client.ts` and `server.ts`  you can use as starting points for your app.
+`npx partykit init` will add PartyKit to your existing `npm` project. This will install the latest version of PartyKit into your project, create a `partykit.json` configuration file, and example `client.ts` and `server.ts` you can use as starting points for your app.
 
 It will use the name specified in your `package.json` as the name of your project.
 
 #### dev
 
-`npx partykit dev` will start a local development server. This will watch your code for changes, and automatically restart the server when you make changes. 
+`npx partykit dev` will start a local development server. This will watch your code for changes, and automatically restart the server when you make changes.
 
 It will use the file specified in the `main` field in your `partykit.json` file as the entry point for your project. Alternately, you can pass the entry point as an argument to the command, like this: `npx partykit dev src/server.ts`
 
@@ -82,6 +82,7 @@ The value will continue to be available to previously deployed projects until yo
 #### env pull
 
 <!-- TODO: We are going to remove the .vars field in partykit.json, so this behaviour will also change -->
+
 `npx partykit env pull [filename]` will write all environment variable keys and values you've configured in your project into a JSON file.
 
 If `filename` is not provided, `env pull` will update your `partykit.json` configuration file.
@@ -89,6 +90,7 @@ If `filename` is not provided, `env pull` will update your `partykit.json` confi
 #### env push
 
 <!-- TODO: We are going to remove the .vars field in partykit.json, so this behaviour will also change -->
+
 `npx partykit env push` will read all environment variable keys and values you've configured in your `partykit.json` and deploy them to the PartyKit platform.
 
 You need to run `npx partykit deploy` again for the newly pushed variables to take effect.

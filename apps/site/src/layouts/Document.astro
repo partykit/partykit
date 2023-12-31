@@ -29,11 +29,11 @@ const { title } = Astro.props;
   main h2 {
     grid-column: 1 / -1;
   }
-  
+
   main h3,
   main h4,
-  main h5, 
-  main h6, 
+  main h5,
+  main h6,
   main p,
   main ul,
   main ol {
@@ -45,27 +45,26 @@ const { title } = Astro.props;
       grid-column: 4 / 10;
     }
   }
-  
+
   main h1 {
     @include font-hero();
     margin: calc(var(--whitespace) + 50px) 0 var(--whitespace);
   }
-  
+
   main h3 {
-    margin-top: calc(var(--whitespace) *0.5);
+    margin-top: calc(var(--whitespace) * 0.5);
   }
-  
+
   main h4 {
     @include font-core-bold();
     margin-top: 4rem;
   }
-  
+
   main h5,
   main h6 {
     margin-top: 4rem;
   }
-  
-  
+
   @media (max-width: 759px) {
     main h4,
     main h5,
@@ -84,14 +83,14 @@ const { title } = Astro.props;
       font-size: inherit;
     }
   }
-  
+
   main strong,
   main b {
     @include font-core-bold();
     font-weight: inherit;
     font-size: inherit;
   }
-  
+
   main a {
     text-decoration: underline;
     &:hover,
@@ -99,7 +98,7 @@ const { title } = Astro.props;
       color: var(--color-feature-2);
     }
   }
-  
+
   main ul {
     li {
       position: relative;
@@ -117,10 +116,9 @@ const { title } = Astro.props;
       li li:before {
         content: "→";
       }
-
     }
   }
-  
+
   main .overflow-x-auto {
     width: 100%;
     grid-column: 1 / -1;
@@ -129,7 +127,7 @@ const { title } = Astro.props;
       grid-column: 2 / 10;
     }
   }
-  
+
   main table {
     width: 100%;
     @include font-S();
@@ -137,9 +135,11 @@ const { title } = Astro.props;
       @include font-core();
     }
     &.equal-columns {
-      table-layout : fixed;
+      table-layout: fixed;
     }
-    th, strong, b {
+    th,
+    strong,
+    b {
       @include font-S-bold();
       @media (min-width: 1100px) {
         @include font-core-bold();
@@ -172,13 +172,12 @@ const { title } = Astro.props;
       }
     }
   }
-  
+
   td.reset * {
     @include reset();
     white-space: normal;
   }
 
-  
   main table div {
     white-space: nowrap;
     overflow: hidden;
@@ -188,28 +187,28 @@ const { title } = Astro.props;
     &#brand-element-font-hero {
       @include font-hero();
       text-align: left;
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-hero-bold {
       @include font-hero-bold();
       text-align: left;
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-xl {
       @include font-XL();
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-xl-bold {
       @include font-XL-bold();
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-l {
       @include font-L();
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-l-bold {
       @include font-L-bold();
-      line-height: 1.2!important;
+      line-height: 1.2 !important;
     }
     &#brand-element-font-core {
       @include font-core();
@@ -267,5 +266,4 @@ const { title } = Astro.props;
       color: var(--color-page);
     }
   }
-
 </style>

@@ -369,12 +369,15 @@ function intersperse<T, I>(
   elements: T[]
 ): (T | I)[] {
   // Intersparse by reducing from left.
-  const interspersed: (T | I)[] = elements.reduce((acc, element, index) => {
-    // Only add element if it's the first one.
-    if (acc.length === 0) return [element];
-    // Add the intersparser as well otherwise.
-    return [...acc, intersperser(index), element];
-  }, [] as (T | I)[]);
+  const interspersed: (T | I)[] = elements.reduce(
+    (acc, element, index) => {
+      // Only add element if it's the first one.
+      if (acc.length === 0) return [element];
+      // Add the intersparser as well otherwise.
+      return [...acc, intersperser(index), element];
+    },
+    [] as (T | I)[]
+  );
 
   return interspersed;
 }

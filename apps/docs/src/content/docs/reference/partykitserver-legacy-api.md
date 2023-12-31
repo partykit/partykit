@@ -2,7 +2,7 @@
 title: PartyKitServer (Legacy Server API)
 description: PartyKitServer Legacy API reference
 sidebar:
-    hidden: true
+  hidden: true
 ---
 
 You may encounter PartyKit code that exports a plain object conforming to the `PartyKitServer` type, instead of exporting a class that implements the [PartyServer interface](/reference/partyserver-api).
@@ -10,8 +10,8 @@ You may encounter PartyKit code that exports a plain object conforming to the `P
 ```ts
 import { PartyKitServer, PartyKitRoom } from "partykit/server";
 export default {
-  async onConnect(connection, room: PartyKitRoom) { },
-  async onRequest(request: Request, room: PartyKitRoom) { },
+  async onConnect(connection, room: PartyKitRoom) {},
+  async onRequest(request: Request, room: PartyKitRoom) {},
 } satisfies PartyKitServer;
 ```
 
@@ -52,7 +52,6 @@ The function `onRequest` will be called whenever a client makes an HTTP request 
 #### **_request_**: _Request_
 
 A [Request](https://developer.mozilla.org/en-US/docs/Web/API/Request) object that contains information about the HTTP request that initiated the WebSocket connection. This is useful if you want to get information about the client that's connecting to your project. For example, you can get the IP address of the client like this: `ctx.request.headers.get('cf-connecting-ip')`
-
 
 #### **_room_:** _PartyKitRoom_
 

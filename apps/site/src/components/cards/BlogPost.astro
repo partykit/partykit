@@ -18,7 +18,7 @@ const { title, url, date } = Astro.props;
   <div class="extract"><slot /></div>
 </Grid>
 
-<hr>
+<hr />
 
 <style lang="scss">
   @import "../../styles/shared.scss";
@@ -71,7 +71,7 @@ const { title, url, date } = Astro.props;
       grid-column: 2 / 4;
     }
   }
-  
+
   .extract {
     grid-column: 1 / -1;
     @include atom();
@@ -82,14 +82,14 @@ const { title, url, date } = Astro.props;
       max-width: 100%;
       grid-column: 2 / 4;
     }
-  }  
+  }
 
   @media (min-width: 1100px) {
     .extract {
       grid-column: 4 / 8;
     }
-  }  
-  
+  }
+
   hr {
     @include atom();
     margin-top: 4rem;
@@ -104,9 +104,8 @@ const { title, url, date } = Astro.props;
       max-width: 80%;
     }
   }
-  
+
   hr:last-child {
     display: none;
   }
-
 </style>

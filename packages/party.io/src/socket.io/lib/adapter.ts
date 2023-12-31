@@ -478,17 +478,20 @@ export abstract class Adapter extends InMemoryAdapter {
     const requestId = generateId();
 
     return new Promise((resolve, reject) => {
-      const timerId = setTimeout(() => {
-        const storedRequest = this.#pendingRequests.get(requestId);
-        if (storedRequest) {
-          reject(
-            new Error(
-              `timeout reached: only ${storedRequest.currentCount} responses received out of ${storedRequest.expectedCount}`
-            )
-          );
-          this.#pendingRequests.delete(requestId);
-        }
-      }, opts.flags?.timeout || DEFAULT_TIMEOUT_MS);
+      const timerId = setTimeout(
+        () => {
+          const storedRequest = this.#pendingRequests.get(requestId);
+          if (storedRequest) {
+            reject(
+              new Error(
+                `timeout reached: only ${storedRequest.currentCount} responses received out of ${storedRequest.expectedCount}`
+              )
+            );
+            this.#pendingRequests.delete(requestId);
+          }
+        },
+        opts.flags?.timeout || DEFAULT_TIMEOUT_MS
+      );
 
       const storedRequest = {
         type: RequestType.FETCH_SOCKETS,
