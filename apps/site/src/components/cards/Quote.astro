@@ -51,7 +51,7 @@ const { name, url, role, variant, img } = Astro.props;
         padding-top: calc(var(--whitespace) *0.5);
       }
        &:nth-child(7n-3) {
-        align-self: end;
+        align-self: flex-end;
       }
       &.quote-S-test {
         padding-top: 0!important;
@@ -105,8 +105,8 @@ const { name, url, role, variant, img } = Astro.props;
     @include font-S();
     display: flex;
     flex-direction: row;
-    justify-content: start;
-    align-items: start;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 1rem 1rem 0 0;
     gap: 0 1rem;
     @media (min-width: 760px) {
@@ -143,7 +143,7 @@ const { name, url, role, variant, img } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: start;
+    align-items: flex-start;
     flex-wrap: wrap;
     gap: 0 var(--character-width);
     a {
