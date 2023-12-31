@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.59
+
+### Patch Changes
+
+- [#670](https://github.com/partykit/partykit/pull/670) [`f92dcb9`](https://github.com/partykit/partykit/commit/f92dcb968c7770f8bf9fbb525fd117dd00c2e2ad) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
 ## 0.0.58
 
 ### Patch Changes
@@ -695,7 +701,7 @@
     // You can now tag connections, and retrieve tagged connections using Party.getConnections()
     getConnectionTags(
       connection: PartyConnection,
-      ctx: PartyConnectionContext
+      ctx: PartyConnectionContext,
     ) {
       return [ctx.request.cf?.country as string];
     }
@@ -715,7 +721,7 @@
         compatriot.send(
           JSON.stringify({
             message: `${connection.id} is also from ${country}!`,
-          })
+          }),
         );
       }
     }
