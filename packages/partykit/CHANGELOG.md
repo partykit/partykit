@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.58
+
+### Patch Changes
+
+- [#666](https://github.com/partykit/partykit/pull/666) [`4be8509`](https://github.com/partykit/partykit/commit/4be8509cf411dc12b39005de57a050e64565b70b) Thanks [@threepointone](https://github.com/threepointone)! - move p-limit and p-retry to devDependencies
+
+- [#668](https://github.com/partykit/partykit/pull/668) [`afda7dd`](https://github.com/partykit/partykit/commit/afda7dd43b5011bf2c277793781821d1f59ba730) Thanks [@threepointone](https://github.com/threepointone)! - get info about a project
+
 ## 0.0.57
 
 ### Patch Changes
