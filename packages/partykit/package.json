@@ -47,7 +47,7 @@
     "@cloudflare/workers-types": "4.20231218.0",
     "clipboardy": "4.0.0",
     "esbuild": "0.19.11",
-    "miniflare": "3.20231030.4",
+    "miniflare": "3.20231218.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
