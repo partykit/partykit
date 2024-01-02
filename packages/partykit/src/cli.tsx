@@ -489,7 +489,9 @@ export async function deploy(options: {
     external: assetsBuild?.external,
     alias: assetsBuild?.alias,
     define: {
-      PARTYKIT_HOST: `"${domain}"`,
+      PARTYKIT_HOST: `"${
+        options.preview ? `${options.preview}.` : ""
+      }${domain}"`,
       ...config.define,
       ...assetsBuild?.define,
     },
@@ -629,7 +631,9 @@ export const ${name} = ${name}Party;
       ...esbuildOptions,
       minify: options.minify,
       define: {
-        PARTYKIT_HOST: `"${domain}"`,
+        PARTYKIT_HOST: `"${
+          options.preview ? `${options.preview}.` : ""
+        }${domain}"`,
         ...esbuildOptions.define,
         ...config.define,
       },
@@ -826,7 +830,9 @@ or by passing it in via the CLI
   );
   if (deployRes.result.is_initial_deploy) {
     logger.log(
-      `We're provisioning the ${domain} domain. This can take up to ${chalk.bold(
+      `We're provisioning the ${
+        options.preview ? `${options.preview}.` : ""
+      }${domain} domain. This can take up to ${chalk.bold(
         "2 minutes"
       )}. Hold tight!`
     );

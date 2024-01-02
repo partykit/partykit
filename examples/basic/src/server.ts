@@ -4,6 +4,7 @@ declare global {
   const SOME_GLOBAL: string;
   const TEST_DEFINE_NUMBER: number;
   const TEST_DEFINE_STRING: string;
+  const PARTYKIT_HOST: string;
 }
 
 console.log(TEST_DEFINE_NUMBER, typeof TEST_DEFINE_NUMBER);
@@ -66,7 +67,9 @@ export default {
         " " +
         room.id +
         " " +
-        TEST_DEFINE_NUMBER
+        TEST_DEFINE_NUMBER +
+        " " +
+        PARTYKIT_HOST
     );
   },
 } satisfies PartyKitServer;
