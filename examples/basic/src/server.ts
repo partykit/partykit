@@ -1,4 +1,9 @@
-import type { PartyKitServer } from "partykit/server";
+import type {
+  ExecutionContext,
+  FetchLobby,
+  FetchSocket,
+  PartyKitServer,
+} from "partykit/server";
 
 declare global {
   const SOME_GLOBAL: string;
@@ -10,7 +15,28 @@ declare global {
 console.log(TEST_DEFINE_NUMBER, typeof TEST_DEFINE_NUMBER);
 console.log(TEST_DEFINE_STRING, typeof TEST_DEFINE_STRING);
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 export default {
+  async onSocket(
+    socket: FetchSocket,
+    _env: FetchLobby,
+    _ctx: ExecutionContext
+  ) {
+    socket.addEventListener("message", (evt) => {
+      console.log("got a message from client", evt.data);
+    });
+
+    (async () => {
+      for (let i = 0; i < 10; i++) {
+        await sleep(1000);
+        socket.send("hello " + i);
+      }
+      socket.close(1001, "bye");
+    })().catch(console.error);
+  },
   onConnect(ws, room) {
     console.log(room.env);
 
