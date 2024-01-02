@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.62
+
+### Patch Changes
+
+- [#676](https://github.com/partykit/partykit/pull/676) [`2de0a9c`](https://github.com/partykit/partykit/commit/2de0a9c379876431fad0e96ad8b7b143f1af19f2) Thanks [@threepointone](https://github.com/threepointone)! - Use the new cron config format, add docs for onCron
+
 ## 0.0.61
 
 ### Patch Changes
