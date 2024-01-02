@@ -1,4 +1,5 @@
 import type {
+  Cron,
   ExecutionContext,
   FetchLobby,
   FetchSocket,
@@ -96,6 +97,12 @@ export default {
         TEST_DEFINE_NUMBER +
         " " +
         PARTYKIT_HOST
+    );
+  },
+
+  onCron(cron: Cron, _lobby, _ctx) {
+    console.log(
+      `Running cron ${cron.name}: ${cron.cron} at ${cron.scheduledTime}`
     );
   },
 } satisfies PartyKitServer;

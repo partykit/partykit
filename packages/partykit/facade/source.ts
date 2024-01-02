@@ -77,6 +77,7 @@ type Env = DurableObjectNamespaceEnv & {
   PARTYKIT_AI: Party.Party["ai"];
   PARTYKIT_DURABLE: DurableObjectNamespace;
   PARTYKIT_VECTORIZE: Record<string, VectorizeClientOptions>;
+  PARTYKIT_CRONS: Record<string, string>;
 };
 
 let parties: Party.Party["context"]["parties"];
@@ -657,6 +658,7 @@ export default {
         PARTYKIT_AI,
         PARTYKIT_DURABLE,
         PARTYKIT_VECTORIZE,
+        PARTYKIT_CRONS,
         ...namespaces
       } = env;
 
@@ -837,10 +839,17 @@ export default {
 
         const onCron = Worker.onCron;
         if (url.pathname === "/__scheduled__" && typeof onCron === "function") {
+          const cronName = url.searchParams.get("cron") || "unknown";
+          const cron =
+            Object.entries(PARTYKIT_CRONS).find(
+              ([name, _val]) => name === cronName
+            )?.[1] || "* * * * *";
+
           await onCron(
             {
               scheduledTime: Date.now(),
-              cron: url.searchParams.get("cron") || "* * * * *",
+              cron,
+              name: cronName,
               noRetry() {
                 throw new Error("Not implemented");
               },
@@ -853,7 +862,7 @@ export default {
             },
             ctx
           );
-          return new Response("ran onCron", { status: 200 });
+          return new Response(`ran cron ${cronName}: ${cron}`, { status: 200 });
         }
 
         if (staticAssetsResponse) {
@@ -888,8 +897,13 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ) {
-    const { PARTYKIT_AI, PARTYKIT_DURABLE, PARTYKIT_VECTORIZE, ...namespaces } =
-      env;
+    const {
+      PARTYKIT_AI,
+      PARTYKIT_DURABLE,
+      PARTYKIT_VECTORIZE,
+      PARTYKIT_CRONS,
+      ...namespaces
+    } = env;
 
     Object.assign(namespaces, {
       main: PARTYKIT_DURABLE,
@@ -911,8 +925,16 @@ export default {
         }
       );
 
+      const cron = controller.cron;
+      const cronName =
+        Object.entries(PARTYKIT_CRONS).find(
+          ([_name, val]) => val === cron
+        )?.[0] || "unknown";
+
       return onCron(
-        controller,
+        Object.assign(controller, {
+          name: cronName,
+        }),
         {
           env: extractVars(env),
           ai: PARTYKIT_AI,

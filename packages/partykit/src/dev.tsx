@@ -865,6 +865,7 @@ Workers["${name}"] = ${name};
                         ...(config.vectorize
                           ? { PARTYKIT_VECTORIZE: vectorizeBindings }
                           : {}),
+                        ...{ PARTYKIT_CRONS: config.crons || {} },
                       },
                       durableObjects: {
                         PARTYKIT_DURABLE: "PartyKitDurable",
