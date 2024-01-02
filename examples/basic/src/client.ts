@@ -1,4 +1,4 @@
-import PartySocket from "partysocket";
+import PartySocket, { WebSocket } from "partysocket";
 
 declare const PARTYKIT_HOST: string;
 
@@ -44,3 +44,11 @@ Object.assign(latencyMonitor.style, {
 });
 
 document.body.appendChild(latencyMonitor);
+
+const fetchSocket = new WebSocket(`ws://${PARTYKIT_HOST}/test-on-socket`, [], {
+  maxRetries: 0,
+});
+fetchSocket.send("hello");
+fetchSocket.addEventListener("message", (evt) => {
+  console.log("got a message from server", evt.data);
+});

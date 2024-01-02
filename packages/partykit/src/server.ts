@@ -271,6 +271,10 @@ export type Server = {
   onAlarm?(): void | Promise<void>;
 };
 
+export type FetchSocket = WebSocket & {
+  request: Request;
+};
+
 type ServerConstructor = {
   new (party: Room): Server;
 };
@@ -290,6 +294,7 @@ type ServerConstructor = {
  *
  * Room satisfies Party.Worker;
  */
+
 export type Worker = ServerConstructor & {
   /**
    * Runs on any HTTP request that does not match a Party URL or a static asset.
@@ -301,6 +306,17 @@ export type Worker = ServerConstructor & {
     lobby: FetchLobby,
     ctx: ExecutionContext
   ): Response | Promise<Response>;
+
+  /**
+   * Runs on any WebSocket connection that does not match a Party URL or a static asset.
+   * Useful for running lightweight WebSocket endpoints that don't need access to the Party
+   * state.
+   */
+  onSocket?(
+    socket: FetchSocket,
+    lobby: FetchLobby,
+    ctx: ExecutionContext
+  ): void | Promise<void>;
 
   /**
    * Runs before any HTTP request is made to the party. You can modify the request
@@ -358,6 +374,11 @@ export type PartyKitServer = {
     lobby: FetchLobby,
     ctx: ExecutionContext
   ) => Response | Promise<Response>;
+  onSocket?(
+    socket: FetchSocket,
+    lobby: FetchLobby,
+    ctx: ExecutionContext
+  ): void | Promise<void>;
   onBeforeRequest?: (
     req: Request,
     party: {

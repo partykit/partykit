@@ -803,6 +803,31 @@ export default {
           return await targetDurable.get(id).fetch(onBeforeRequestResponse);
         }
       } else {
+        if (
+          request.headers.get("upgrade")?.toLowerCase() === "websocket" &&
+          Worker.onSocket
+        ) {
+          const { 0: clientWebSocket, 1: serverWebSocket } =
+            new WebSocketPair();
+          const connection = serverWebSocket as Party.FetchSocket;
+          connection.request = request;
+          connection.accept();
+          await Worker.onSocket(
+            connection,
+            {
+              env: extractVars(env),
+              ai: PARTYKIT_AI,
+              parties,
+              vectorize: vectorizeBindings,
+            },
+            ctx
+          );
+          return new Response(null, {
+            status: 101,
+            webSocket: clientWebSocket,
+          });
+        }
+
         const staticAssetsResponse = await fetchStaticAsset(request, env, ctx);
 
         const onFetch =
