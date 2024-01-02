@@ -247,6 +247,29 @@ Each project can only define one `onFetch` handler in its `main` party. Other pa
 
 Related reading: [Creating custom endpoints with onFetch](/guides/creating-custom-endpoints-with-onfetch)
 
+### `static` onSocket
+
+Runs on any WebSocket connection that does not match a Party URL. Useful for running lightweight WebSocket endpoints that don't need access to the `Party` state.
+
+Receives an instance of [`Party.FetchSocket`](#partyfetchsocket).
+
+```ts
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  static async onSocket(
+    socket: Party.FetchSocket,
+    lobby: Party.FetchLobby,
+    ctx: Party.ExecutionContext
+  ) {
+    socket.send("Hello!");
+  }
+}
+```
+
+:::danger[Multiple parties and onSocket]
+Each project can only define one `onSocket` handler in its `main` party. Other parties' `onSocket` handlers are quietly ignored. Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
+:::
+
 ### `static` onCron
 
 Runs on a schedule defined in the `crons` field of the `partykit.json` file. Useful for running code periodically, such as sending reminders or cleaning up old data.
@@ -461,6 +484,10 @@ See: [`Party.context.parties`](#partycontextparties)
 ## Party.FetchLobby
 
 Provides access to a limited subset of project resources for the `onFetch` method:
+
+## Party.FetchSocket
+
+Wraps a standard [`WebSocket`](https://developer.mozilla.org/en-US/docs/Web/API/WebSocket), with an additional `request` property that contains the original HTTP request.
 
 ## Party.Cron
 
