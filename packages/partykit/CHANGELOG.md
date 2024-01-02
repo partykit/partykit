@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.61
+
+### Patch Changes
+
+- [#674](https://github.com/partykit/partykit/pull/674) [`b2891f2`](https://github.com/partykit/partykit/commit/b2891f25071e7c3e7bd28c7f0bbf902928398a64) Thanks [@threepointone](https://github.com/threepointone)! - static onSocket for general websockets
+
 ## 0.0.60
 
 ### Patch Changes
