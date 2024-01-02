@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.60
+
+### Patch Changes
+
+- [#672](https://github.com/partykit/partykit/pull/672) [`b1ff9bd`](https://github.com/partykit/partykit/commit/b1ff9bd549311de38c106aa0ee6aa1543b8d6141) Thanks [@threepointone](https://github.com/threepointone)! - fix: PARTYKIT_HOST should include preview subdomain
+
 ## 0.0.59
 
 ### Patch Changes
