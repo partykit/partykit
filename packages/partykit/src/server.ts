@@ -77,7 +77,7 @@ export type FetchLobby = {
   vectorize: Context["vectorize"];
 };
 
-export type ScheduledLobby = {
+export type CronLobby = {
   env: Record<string, unknown>;
   ai: AI;
   parties: Context["parties"];
@@ -275,6 +275,10 @@ export type FetchSocket = WebSocket & {
   request: Request;
 };
 
+export type Cron = ScheduledController & {
+  name: string;
+};
+
 type ServerConstructor = {
   new (party: Room): Server;
 };
@@ -343,8 +347,8 @@ export type Worker = ServerConstructor & {
    * sending a heartbeat to a third-party service.
    */
   onCron?(
-    controller: ScheduledController,
-    lobby: ScheduledLobby,
+    controller: Cron,
+    lobby: CronLobby,
     ctx: ExecutionContext
   ): Response | Promise<Response>;
 };
@@ -392,8 +396,8 @@ export type PartyKitServer = {
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
   onCron?: (
-    controller: ScheduledController,
-    lobby: ScheduledLobby,
+    controller: Cron,
+    lobby: CronLobby,
     ctx: ExecutionContext
   ) => void | Promise<void>;
 

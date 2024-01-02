@@ -247,6 +247,40 @@ Each project can only define one `onFetch` handler in its `main` party. Other pa
 
 Related reading: [Creating custom endpoints with onFetch](/guides/creating-custom-endpoints-with-onfetch)
 
+### `static` onCron
+
+Runs on a schedule defined in the `crons` field of the `partykit.json` file. Useful for running code periodically, such as sending reminders or cleaning up old data.
+
+Receives an instance of [`Party.Cron`](#partycron).
+
+```jsonc
+{
+  // ...
+  "crons": {
+    "every-minute": "*/1 * * * *",
+    "every-hour": "0 * * * *",
+    "every-day": "0 0 * * *"
+  }
+}
+```
+
+```ts
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  static async onCron(
+    cron: Party.Cron,
+    lobby: Party.CronLobby,
+    ctx: Party.ExecutionContext
+  ) {
+    console.log(`Running cron ${cron.name} at ${cron.scheduledTime}`);
+  }
+}
+```
+
+:::tip[Local development]
+When developing locally, you can test your cron jobs by visiting `http://localhost:1999/__scheduled__?cron=cron-name` in your browser.
+:::
+
 ## Party.Worker
 
 The `Party.Worker` interface describes the `static` methods available on the `Party.Server` class. You can use it to add additional type safety to your TypeScript code:
@@ -427,6 +461,14 @@ See: [`Party.context.parties`](#partycontextparties)
 ## Party.FetchLobby
 
 Provides access to a limited subset of project resources for the `onFetch` method:
+
+## Party.Cron
+
+Describes a cron job that is about to be executed. You can use it to access the cron's name, definition and scheduledTime.
+
+## Party.CronLobby
+
+Provides access to a limited subset of project resources for the `onCron` method:
 
 ### Party.Lobby.env
 

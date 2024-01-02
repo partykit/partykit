@@ -21,7 +21,9 @@
   },
   "serve": {
     "path": "public",
-    "singlePageApp": true,
     "build": "src/client.ts"
+  },
+  "crons": {
+    "every-minute": "*/1 * * * *"
   }
 }
