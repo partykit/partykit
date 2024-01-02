@@ -66,7 +66,7 @@ const userRoom = userParty.get(userId);
 const res = await userRoom.fetch({ method: "GET" });
 
 // or open a WebSocket connection to the room to listen to messages
-const socket = userRoom.connect();
+const socket = await userRoom.socket();
 ```
 
 #### Example: Tracking connections across rooms
