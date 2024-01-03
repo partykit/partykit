@@ -220,6 +220,21 @@ Because the static `onBeforeConnect` method runs in an edge worker near the user
 
 Related reading: [How PartyKit works](/how-partykit-works)
 
+## Party.Worker
+
+The `Party.Worker` interface describes the `static` methods available on the `Party.Server` class. You can use it to add additional type safety to your TypeScript code:
+
+```ts
+import type * as Party from "partykit/server";
+export default class Server implements Party.Server {
+  static async onFetch(req: Party.Request) {
+    return new Response(req.url);
+  }
+}
+
+Server satisfies Party.Worker;
+```
+
 ### `static` onFetch
 
 Runs on any HTTP request that does not match a Party URL or a static asset. Useful for running lightweight HTTP endpoints that don't need access to the `Party` state.
@@ -237,6 +252,8 @@ export default class Server implements Party.Server {
     return new Response(req.url, { status: 403 });
   }
 }
+
+Server satisfies Party.Worker;
 ```
 
 Because the static `onFetch` method runs in an edge worker near the user instead of in the room, it doesn't have access to `Party` room resources such as storage. Instead, you can access a subset of its properties via a [`Party.FetchLobby`](#partyfetchlobby).
@@ -264,6 +281,8 @@ export default class Server implements Party.Server {
     socket.send("Hello!");
   }
 }
+
+Server satisfies Party.Worker;
 ```
 
 :::danger[Multiple parties and onSocket]
@@ -298,26 +317,13 @@ export default class Server implements Party.Server {
     console.log(`Running cron ${cron.name} at ${cron.scheduledTime}`);
   }
 }
+
+Server satisfies Party.Worker;
 ```
 
 :::tip[Local development]
 When developing locally, you can test your cron jobs by visiting `http://localhost:1999/__scheduled__?cron=cron-name` in your browser.
 :::
-
-## Party.Worker
-
-The `Party.Worker` interface describes the `static` methods available on the `Party.Server` class. You can use it to add additional type safety to your TypeScript code:
-
-```ts
-import type * as Party from "partykit/server";
-export default class Server implements Party.Server {
-  static async onFetch(req: Party.Request) {
-    return new Response(req.url);
-  }
-}
-
-Server satisfies Party.Worker;
-```
 
 ## Party
 
