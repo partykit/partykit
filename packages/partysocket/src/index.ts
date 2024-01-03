@@ -91,7 +91,8 @@ function getPartyInfo(
     host.startsWith("10.") ||
     (host.startsWith("172.") &&
       host.split(".")[1] >= "16" &&
-      host.split(".")[1] <= "31")
+      host.split(".")[1] <= "31") ||
+    host.startsWith("[::ffff:7f00:1]:")
       ? // http / ws
         defaultProtocol
       : // https / wss

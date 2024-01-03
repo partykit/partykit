@@ -1,13 +1,23 @@
 import PartySocket, { WebSocket } from "partysocket";
 
-declare const PARTYKIT_HOST: string;
-
 document.getElementById("app")!.innerText = location.href;
 
 const partySocket = new PartySocket({
-  host: PARTYKIT_HOST,
+  host: window.location.host,
   room: "some-room",
 });
+
+function generateUUID() {
+  let d = new Date().getTime();
+  if (window.performance && typeof window.performance.now === "function") {
+    d += performance.now(); //use high-precision timer if available
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
 
 const latencyPingStarts = new Map();
 
@@ -25,7 +35,7 @@ partySocket.onmessage = (evt) => {
 };
 
 setInterval(() => {
-  const id = crypto.randomUUID();
+  const id = generateUUID();
   latencyPingStarts.set(id, Date.now());
   partySocket.send(`latency:${id}`);
 }, 1000);
@@ -45,9 +55,13 @@ Object.assign(latencyMonitor.style, {
 
 document.body.appendChild(latencyMonitor);
 
-const fetchSocket = new WebSocket(`ws://${PARTYKIT_HOST}/test-on-socket`, [], {
-  maxRetries: 0,
-});
+const fetchSocket = new WebSocket(
+  `ws://${window.location.host}/test-on-socket`,
+  [],
+  {
+    maxRetries: 0,
+  }
+);
 fetchSocket.send("hello");
 fetchSocket.addEventListener("message", (evt) => {
   console.log("got a message from server", evt.data);
