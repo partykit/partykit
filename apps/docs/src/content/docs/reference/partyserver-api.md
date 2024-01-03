@@ -481,6 +481,14 @@ See: [`Party.env`](#partyenv)
 
 See: [`Party.context.parties`](#partycontextparties)
 
+### Party.Lobby.env
+
+See: [`Party.env`](#partyenv)
+
+### Party.Lobby.parties
+
+See: [`Party.context.parties`](#partycontextparties)
+
 ## Party.FetchLobby
 
 Provides access to a limited subset of project resources for the `onFetch` method:
@@ -496,11 +504,3 @@ Describes a cron job that is about to be executed. You can use it to access the 
 ## Party.CronLobby
 
 Provides access to a limited subset of project resources for the `onCron` method:
-
-### Party.Lobby.env
-
-See: [`Party.env`](#partyenv)
-
-### Party.Lobby.parties
-
-See: [`Party.context.parties`](#partycontextparties)
