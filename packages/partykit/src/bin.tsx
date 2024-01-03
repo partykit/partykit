@@ -24,6 +24,8 @@ import {
   name as packageName,
 } from "../package.json";
 import { ConfigurationError, logger } from "./logger";
+import { listModels } from "./ai";
+import InkTable from "./ink-table";
 
 async function printBanner() {
   const notifier = updateNotifier({
@@ -342,6 +344,41 @@ envCommand
   });
 
 /**
+ * AI commands
+ */
+
+const aiCommand = program
+  .command("ai")
+  .description("Manage AI models")
+  .action(async () => {
+    await printBanner();
+    aiCommand.outputHelp();
+  });
+
+aiCommand
+  .command("models")
+  .option("-c, --config <path>", "Path to config file")
+  .option("--json", "Return output as clean JSON", false)
+  .action(async (args) => {
+    logger.log(`📋 Listing available AI models...`);
+    const models = await listModels({ config: args.config });
+
+    if (args.json) {
+      logger.log(JSON.stringify(models, null, 2));
+      return;
+    }
+
+    render(
+      <InkTable
+        data={models.map((row) => ({
+          name: row.name,
+          description: row.description,
+        }))}
+      />
+    );
+  });
+
+/**
  * Vectorize commands
  */
 
@@ -508,6 +545,7 @@ vectorizeCommand
 
 vectorizeCommand
   .command("list")
+  .description("List all vectorize indexes")
   .option("-c, --config <path>", "Path to config file")
   .option("--json", "Return output as clean JSON", false)
   .action(async (args) => {
