@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.19
+
+### Patch Changes
+
+- [#683](https://github.com/partykit/partykit/pull/683) [`9927c51`](https://github.com/partykit/partykit/commit/9927c51a5c081059421a5cbf1060f6d7f81503df) Thanks [@threepointone](https://github.com/threepointone)! - partysocket/y-partykit: Use ws:/http:/ by default for all local networks
+
 ## 0.0.18
 
 ### Patch Changes

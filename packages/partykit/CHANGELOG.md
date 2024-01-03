@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.63
+
+### Patch Changes
+
+- [#678](https://github.com/partykit/partykit/pull/678) [`290c794`](https://github.com/partykit/partykit/commit/290c794a4ee99e26a4afc87b8853cfa1de5fc63a) Thanks [@threepointone](https://github.com/threepointone)! - update miniflare
+
+- [#681](https://github.com/partykit/partykit/pull/681) [`2a8026d`](https://github.com/partykit/partykit/commit/2a8026d250f795ef07f1925962780d802a86d3ed) Thanks [@threepointone](https://github.com/threepointone)! - npx partykit ai models: list available models
+
 ## 0.0.62
 
 ### Patch Changes
