@@ -590,7 +590,13 @@ export default class YPartyKitProvider extends WebsocketProvider {
     }
 
     const serverUrl = `${
-      host.startsWith("localhost:") || host.startsWith("127.0.0.1:")
+      host.startsWith("localhost:") ||
+      host.startsWith("127.0.0.1:") ||
+      host.startsWith("192.168.") ||
+      host.startsWith("10.") ||
+      (host.startsWith("172.") &&
+        host.split(".")[1] >= "16" &&
+        host.split(".")[1] <= "31")
         ? "ws"
         : "wss"
     }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
