@@ -486,6 +486,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"reference/partykit-ai.md": {
+	id: "reference/partykit-ai.md";
+  slug: "reference/partykit-ai";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "reference/partykit-cli.md": {
 	id: "reference/partykit-cli.md";
   slug: "reference/partykit-cli";
