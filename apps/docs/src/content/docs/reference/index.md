@@ -10,3 +10,4 @@ sidebar:
 - [`partykit` Command-Line Interface (CLI)](/reference/partykit-cli/)
 - [`partykit.json` Configuration file](/reference/partykit-configuration/)
 - [`y-partykit` (Y.js) API](/reference/y-partykit-api/)
+- [PartyKit AI](/reference/partykit-ai/)
