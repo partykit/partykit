@@ -918,7 +918,7 @@ export default {
         ])
       );
 
-      const parties: Party.Party["context"]["parties"] = createMultiParties(
+      const parties: Party.Room["context"]["parties"] = createMultiParties(
         namespaces,
         {
           host: PARTYKIT_HOST,
