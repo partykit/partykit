@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.20
+
+### Patch Changes
+
+- [#684](https://github.com/partykit/partykit/pull/684) [`bc7cdcd`](https://github.com/partykit/partykit/commit/bc7cdcdd794bfecc0ed3ba63cbbb5e9465bce539) Thanks [@threepointone](https://github.com/threepointone)! - Use ws/http by default for ipv6 localhost
+
 ## 0.0.19
 
 ### Patch Changes
