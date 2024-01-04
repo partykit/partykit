@@ -76,7 +76,7 @@ $ partykit dev server.ts
 
 ## But wait, there's more
 
-By default, Party.IO will use a single party instance to coordinate messages between rooms and clients. This should scale to thousands of concurrent users. However, depending on where this backend instantiates, you might find that users far away from it might face longer latencies than users who are closer.
+By default, Party.IO will use a single room to coordinate messages between rooms and clients. This should scale to thousands of concurrent users. However, depending on where this backend instantiates, you might find that users far away from it might face longer latencies than users who are closer.
 
 We can solve this easily. When instantiating a client, pass a `partyID` that associates with the document of interest in your application in the `query` parameter. Party.IO will then instantiate a new syncing backend close to that user. For instance, you may use this when you want a distinct backend for every game session, chat room, collaborative drawing document, etc. It looks like this:
 

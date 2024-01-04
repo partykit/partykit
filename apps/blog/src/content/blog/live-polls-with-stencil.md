@@ -103,7 +103,7 @@ Now, PartyKit…
 
 [Have a look at poll-party.tsx](https://github.com/partykit/sketch-polls/blob/main/src/components/poll-party/poll-party.tsx), which is the component source. You can see in there how the websocket (as using `PartySocket`) is created, and how votes are submitted and results listened for.
 
-And [here’s polls.ts, the PartyKit server](https://github.com/partykit/sketch-polls/blob/main/partykit/polls.ts). It’s incredibly simple. Each poll is a separate party, and the party persists the vote tally using the [Storage API](https://docs.partykit.io/guides/persisting-state-into-storage/) _(link there to the PartyKit docs)_. The current state is broadcast when a client connects, and whenever any connected client submits a new vote.
+And [here’s polls.ts, the PartyKit server](https://github.com/partykit/sketch-polls/blob/main/partykit/polls.ts). It’s incredibly simple. Each poll is a separate party, and the room persists the vote tally using the [Storage API](https://docs.partykit.io/guides/persisting-state-into-storage/) _(link there to the PartyKit docs)_. The current state is broadcast when a client connects, and whenever any connected client submits a new vote.
 
 ## Lightweight and composable
 

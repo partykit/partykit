@@ -54,7 +54,8 @@ PartyKit also provides optional client SDKs, such as the [PartySocket](/referenc
 PartyKit servers are fully programmable in TypeScript, JavaScript, and using any language that can be compiled into WebAssembly modules, such as Rust, Swift or C.
 
 ```ts
-export default class Server implements PartyServer {
+export default class Server implements Party.Server {
+  constructor(readonly room: Party.Room) {}
   onRequest(req: PartyRequest) {
     return new Response("Hello via HTTP");
   },
@@ -62,7 +63,7 @@ export default class Server implements PartyServer {
     connection.send("Hello via WebSockets");
   },
   onMessage(message: string) {
-    this.party.broadcast(`Received ${message} via WebSockets`);
+    this.room.broadcast(`Received ${message} via WebSockets`);
   }
 ```
 
@@ -72,10 +73,10 @@ PartyKit allows you to write your own business logic, or use industry-standard o
 
 PartyKit can create instances **on-demand**, unlike standard web servers, which you need to provision, scale and maintain yourself.
 
-In above examples, we saw that each party instance has a unique `id`:
+In above examples, we saw that each Server has a unique `id`:
 
 ```ts
-fetch(`https://${project}.${user}.partykit.dev/parties/main/${id}`
+fetch(`https://${project}.${user}.partykit.dev/parties/main/${id}`);
 ```
 
 The `id` can be any arbitrary string, but it will often correspond to an id of the document, project, room, user, or other entity to which you are adding multiplayer or real-time characteristics.
@@ -99,7 +100,7 @@ export default class Server implements PartyServer {
     // keep track of messages in-memory
     this.messages.push(message);
     // send them to all connected clients
-    this.party.broadcast(JSON.stringify({ messages: [message]} ));
+    this.room.broadcast(JSON.stringify({ messages: [message]} ));
   }
   onConnect(connection: PartyConnection) {
     // when a new client connects, send them the full message history

@@ -88,8 +88,8 @@ export default class extends Server {
   async onRequest(req: Party.Request): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname.endsWith(`/user-count`) && req.method === "GET") {
-      console.log("user-count", [...this.party.getConnections()].length);
-      return new Response([...this.party.getConnections()].length.toString());
+      console.log("user-count", [...this.room.getConnections()].length);
+      return new Response([...this.room.getConnections()].length.toString());
     }
     return super.onRequest(req);
   }

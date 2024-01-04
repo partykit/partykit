@@ -15,7 +15,7 @@ You can schedule an alarm by calling `Party.storage.setAlarm`.
 For example, the following methods sets an alarm 5 minutes from now:
 
 ```ts
-this.party.storage.setAlarm(Date.now() + 5 * 60 * 1000);
+this.room.storage.setAlarm(Date.now() + 5 * 60 * 1000);
 ```
 
 ## Reacting to alarms
@@ -28,7 +28,7 @@ onAlarm() {
   this.refreshDataFromExternalDatabase();
 
   // (optional) schedule next alarm in 5 minutes
-  this.party.storage.setAlarm(Date.now() + 5 * 60 * 1000);
+  this.room.storage.setAlarm(Date.now() + 5 * 60 * 1000);
 }
 ```
 
@@ -48,9 +48,9 @@ You can use `Party.storage.getAlarm` to check if an alarm is already set. In thi
 
 ```ts
 const nextAlarm = Date.now() + 1000 * 60 * 5;
-const previousAlarm = await this.party.storage.getAlarm();
+const previousAlarm = await this.room.storage.getAlarm();
 if (previousAlarm === null || nextAlarm < previousAlarm) {
-  await this.party.storage.setAlarm(nextAlarm);
+  await this.room.storage.setAlarm(nextAlarm);
 }
 ```
 
@@ -62,7 +62,7 @@ Because we cannot expect the room to be currently holding connections when the a
 
 ```ts
 onAlarm() {
-  console.log(this.party.id);
+  console.log(this.room.id);
 }
 ```
 
@@ -70,15 +70,15 @@ You can work around this limitation by storing the room `id` in [room storage](.
 
 ```ts
 onStart() {
-  if (this.party.id) {
+  if (this.room.id) {
     // save id when room starts from a connection or request
-    await this.party.storage.put<string>("id", this.id);
+    await this.room.storage.put<string>("id", this.id);
   }
 }
 
 onAlarm() {
   // read id from storage
-  const id = await this.party.storage.get<string>("id");
+  const id = await this.room.storage.get<string>("id");
   console.log(id);
 }
 ```
@@ -91,7 +91,7 @@ Normally, you can communicate between different parties and rooms inside the Par
 
 ```ts
 onConnect() {
-  const otherParty = this.party.context.parties.otherPartyName.get(otherRoomId);
+  const otherParty = this.room.context.parties.otherPartyName.get(otherRoomId);
   const req = await otherParty.fetch("/path", { method: "POST" });
 }
 ```
@@ -126,13 +126,13 @@ export default class UserSession implements Party.Server {
   onMessage(message: string) {
     const data = JSON.parse(message);
     // do something, and save to storage
-    await this.party.storage.put(data.id, data);
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
+    await this.room.storage.put(data.id, data);
+    await this.room.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
   }
 
   onAlarm() {
     // clear all storage in this room
-    await this.party.storage.deleteAll();
+    await this.room.storage.deleteAll();
   }
 }
 ```
@@ -142,7 +142,7 @@ The above example deletes the data after it has not been changed for 30 days. If
 ```ts
   onConnect(connection: Party.Connection) {
     // do something, and save to storage
-    connection.send(await this.party.storage.get(data.id));
-    await this.party.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
+    connection.send(await this.room.storage.get(data.id));
+    await this.room.storage.setAlarm(Date.now() + EXPIRY_PERIOD_MILLISECONDS);
   }
 ```

@@ -136,12 +136,12 @@ export function createServer<
       return io.handler()(req, lobby, ctx);
     }
 
-    constructor(public party: Party.Party) {}
+    constructor(public room: Party.Room) {}
 
     onMessage(
       message: string | ArrayBuffer | ArrayBufferView
     ): void | Promise<void> {
-      this.party.broadcast(message);
+      this.room.broadcast(message);
     }
 
     onRequest(req: Party.Request): Response | Promise<Response> {
@@ -150,7 +150,7 @@ export function createServer<
 
         if (url.pathname.endsWith("/count")) {
           let count = 0;
-          for (const _ of this.party.getConnections()) {
+          for (const _ of this.room.getConnections()) {
             count++;
           }
           return new Response(count.toString(), { status: 200 });

@@ -2,7 +2,7 @@
 
 // @ts-check
 // Optional JS type checking, powered by TypeScript.
-/** @typedef {import("partykit/server").Party} Party */
+/** @typedef {import("partykit/server").Room} Room */
 /** @typedef {import("partykit/server").Server} Server */
 /** @typedef {import("partykit/server").Connection} Connection */
 /** @typedef {import("partykit/server").ConnectionContext} ConnectionContext */
@@ -11,9 +11,9 @@
  * @implements {Server}
  */
 class PartyServer {
-  constructor(party) {
-    /** @type {Party} */
-    this.party = party;
+  constructor(room) {
+    /** @type {Room} */
+    this.room = room;
   }
 
   /**
@@ -25,7 +25,7 @@ class PartyServer {
     console.log(
       `Connected:
   id: ${conn.id}
-  room: ${this.party.id}
+  room: ${this.room.id}
   url: ${new URL(ctx.request.url).pathname}`
     );
 
@@ -40,7 +40,7 @@ class PartyServer {
   onMessage(message, sender) {
     console.log(`connection ${sender.id} sent message: ${message}`);
     // Broadcast the received message to all other connections in the room except the sender
-    this.party.broadcast(`${sender.id}: ${message}`, [sender.id]);
+    this.room.broadcast(`${sender.id}: ${message}`, [sender.id]);
   }
 }
 
