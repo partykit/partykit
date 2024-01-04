@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.64
+
+### Patch Changes
+
+- [#663](https://github.com/partykit/partykit/pull/663) [`4ee25aa`](https://github.com/partykit/partykit/commit/4ee25aac71dd573f49ce9a1bdc07e67789a03066) Thanks [@threepointone](https://github.com/threepointone)! - rename Party.Party -> Party.Room
+
 ## 0.0.63
 
 ### Patch Changes
