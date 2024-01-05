@@ -59,7 +59,7 @@ PartyKit AI includes a vector database (powered by [Cloudflare Vectorize](https:
 
 ## Commands
 
-You can list all available commands by running `npx partykit ai vectorize` in your terminal.
+You can list all available commands by running `npx partykit vectorize` in your terminal.
 
 ```
 🎈 PartyKit
@@ -84,11 +84,11 @@ Commands:
 Create a vectorize index
 
 ```bash
-npx partykit ai vectorize create my-index --dimensions <dimensions> --metric <type>
+npx partykit vectorize create my-index --dimensions <dimensions> --metric <type>
 
 # or
 
-npx partykit ai vectorize create my-index --preset <preset>
+npx partykit vectorize create my-index --preset <preset>
 # where <preset> is one of:
 # - @cf/baai/bge-small-en-v1.5
 # - @cf/baai/bge-base-en-v1.5
@@ -101,7 +101,7 @@ npx partykit ai vectorize create my-index --preset <preset>
 Delete a vectorize index
 
 ```bash
-npx partykit ai vectorize delete my-index
+npx partykit vectorize delete my-index
 ```
 
 ### get <index>
@@ -109,7 +109,7 @@ npx partykit ai vectorize delete my-index
 Get a vectorize index' details by name
 
 ```bash
-npx partykit ai vectorize get my-index
+npx partykit vectorize get my-index
 ```
 
 ### list
@@ -117,7 +117,7 @@ npx partykit ai vectorize get my-index
 List all vectorize indexes
 
 ```bash
-npx partykit ai vectorize list
+npx partykit vectorize list
 ```
 
 ### insert <index>
@@ -125,7 +125,7 @@ npx partykit ai vectorize list
 Insert vectors into a Vectorize index
 
 ```bash
-npx partykit ai vectorize insert my-index --file <filename>
+npx partykit vectorize insert my-index --file <filename>
 ```
 
 ## API
