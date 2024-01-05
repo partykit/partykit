@@ -193,6 +193,7 @@ export type Room = {
   ai: AI;
 };
 
+/** @deprecated Use `Party.Room` instead */
 export type Party = Room;
 
 /* Party.Server defines what happens when someone connects to and sends messages or HTTP requests to your party
@@ -367,7 +368,7 @@ export type Worker = ServerConstructor & {
  * }
  */
 export type PartyKitServer = {
-  /** @deprecated. Use `onFetch` instead */
+  /** @deprecated Use `onFetch` instead */
   unstable_onFetch?: (
     req: Request,
     lobby: FetchLobby,
@@ -453,44 +454,44 @@ export type ServerOptions = {
 // ---
 //
 
-/** @deprecated use Party.Request instead */
+/** @deprecated Use Party.Request instead */
 export type PartyRequest = Request;
 
-/** @deprecated use Party.Storage instead */
+/** @deprecated Use Party.Storage instead */
 export type PartyStorage = Storage;
 
-/** @deprecated use Party.Storage instead */
+/** @deprecated Use Party.Storage instead */
 export type PartyKitStorage = Storage;
 
-/** @deprecated use Party.ConnectionContext instead */
+/** @deprecated Use Party.ConnectionContext instead */
 export type PartyConnectionContext = ConnectionContext;
 
-/** @deprecated use Party.ConnectionContext instead */
+/** @deprecated Use Party.ConnectionContext instead */
 export type PartyKitContext = ConnectionContext;
 
-/** @deprecated use Party.Stub instead */
+/** @deprecated Use Party.Stub instead */
 export type PartyStub = Stub;
 
 /** Additional information about other resources in the current project */
-/** @deprecated use Party.Context instead */
+/** @deprecated Use Party.Context instead */
 export type PartyContext = Context;
 
-/** @deprecated use Party.FetchLobby instead */
+/** @deprecated Use Party.FetchLobby instead */
 export type PartyFetchLobby = FetchLobby;
 
-/** @deprecated use Party.Lobby instead */
+/** @deprecated Use Party.Lobby instead */
 export type PartyLobby = Lobby;
 
-/** @deprecated use Party.ExecutionContext instead */
+/** @deprecated Use Party.ExecutionContext instead */
 export type PartyExecutionContext = ExecutionContext;
 
-/** @deprecated use Party.Connection instead */
+/** @deprecated Use Party.Connection instead */
 export type PartyConnection = Connection;
 
-/** @deprecated use Party.Server instead */
+/** @deprecated Use Party.Server instead */
 export type PartyServer = Server;
 
-/** @deprecated use Party.Worker instead */
+/** @deprecated Use Party.Worker instead */
 export type PartyWorker = Worker;
 
 /** @deprecated Use `Room` instead */
