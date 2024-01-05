@@ -87,7 +87,12 @@ export class VectorizeClient implements VectorizeIndex {
   }
 
   describe(): Promise<VectorizeIndexDetails> {
-    throw new Error("Method not implemented.");
+    return this.fetch(
+      `/vectorize/${this.namespace}/indexes/${this.index_name}`,
+      {
+        method: "GET",
+      }
+    );
   }
   async query(
     vector: VectorFloatArray | number[],
@@ -154,10 +159,14 @@ export class VectorizeClient implements VectorizeIndex {
   }
 
   async deleteByIds(_ids: string[]): Promise<VectorizeVectorMutation> {
-    throw new Error("Method not implemented.");
+    throw new Error(
+      "This method is not implemented in local dev, but will work when deployed"
+    );
   }
 
   async getByIds(_ids: string[]): Promise<VectorizeVector[]> {
-    throw new Error("Method not implemented.");
+    throw new Error(
+      "This method is not implemented in local dev, but will work when deployed."
+    );
   }
 }
