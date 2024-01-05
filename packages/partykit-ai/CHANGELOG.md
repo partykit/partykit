@@ -1,5 +1,11 @@
 # partykit-ai
 
+## 0.0.8
+
+### Patch Changes
+
+- [#696](https://github.com/partykit/partykit/pull/696) [`ecbe61b`](https://github.com/partykit/partykit/commit/ecbe61b5e59775ce41087619dc9d438685c2391d) Thanks [@threepointone](https://github.com/threepointone)! - move `.ai` into `room.context`
+
 ## 0.0.7
 
 ### Patch Changes

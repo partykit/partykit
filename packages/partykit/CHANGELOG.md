@@ -1,5 +1,15 @@
 # partykit
 
+## 0.0.66
+
+### Patch Changes
+
+- [#695](https://github.com/partykit/partykit/pull/695) [`4657bc3`](https://github.com/partykit/partykit/commit/4657bc323d9bf5b00aea3f6f57e1c5c33f32fe89) Thanks [@threepointone](https://github.com/threepointone)! - vectorizeIndex.describe() in local dev
+
+- [#696](https://github.com/partykit/partykit/pull/696) [`ecbe61b`](https://github.com/partykit/partykit/commit/ecbe61b5e59775ce41087619dc9d438685c2391d) Thanks [@threepointone](https://github.com/threepointone)! - move `.ai` into `room.context`
+
+- [#693](https://github.com/partykit/partykit/pull/693) [`60b4090`](https://github.com/partykit/partykit/commit/60b40904db04a4a9402ad3e5f8f2601af338132a) Thanks [@threepointone](https://github.com/threepointone)! - init tweaks
+
 ## 0.0.65
 
 ### Patch Changes
