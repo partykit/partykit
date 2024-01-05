@@ -6,7 +6,7 @@ type AiOptions = ConstructorParameters<typeof CFAi>[1] & { binding?: any };
 export class Ai extends CFAi {
   constructor(options: AiOptions) {
     if (!options) {
-      throw new Error("You should pass this.room.ai as the first argument");
+      throw new Error("You should pass room.context.ai as the first argument");
     }
     const { binding, ...rest } = options;
     super(binding, {

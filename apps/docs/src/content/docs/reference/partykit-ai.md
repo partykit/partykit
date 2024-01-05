@@ -28,7 +28,7 @@ import { Ai } from "partykit-ai";
 export default class Server implements Party.Server {
   ai: Ai;
   constructor(public room: Party.Room) {
-    this.ai = new Ai(room.ai);
+    this.ai = new Ai(room.context.ai);
   }
   onConnect(connection: Party.Connection) {
     // ...
@@ -40,8 +40,8 @@ You can also use the package for non-party, regular api endpoints with [onFetch]
 
 ```ts
 export default class {
-  static onFetch(request, env, ctx) {
-    const ai = new Ai(env.ai);
+  static onFetch(request, lobby, ctx) {
+    const ai = new Ai(lobby.ai);
     // ... call models
   }
 }
@@ -52,6 +52,33 @@ The `partykit-ai` package is a wrapper on top of `@cloudflare/ai`, so you can us
 :::tip[Available models]
 You can list all available models and their usecases by running `npx partykit ai models` in your terminal.
 :::
+
+As an example, here's a fetch handler that uses the text-generation model to get a description for a word:
+
+```ts
+import type * as Party from "partykit/server";
+import { Ai } from "partykit-ai";
+
+export default class {
+  static async onFetch(request: Party.Request, lobby: Party.FetchLobby) {
+    const ai = new Ai(lobby.ai);
+    const result = await ai.run("@cf/meta/llama-2-7b-chat-int8", {
+      messages: [
+        { role: "system", content: "You are a friendly assistant" },
+        {
+          role: "user",
+          content: "What is the origin of the phrase Hello, World",
+        },
+      ],
+      stream: true,
+    });
+
+    return new Response(result, {
+      headers: { "content-type": "text/event-stream" },
+    });
+  }
+}
+```
 
 ## Vectorize: Build your own search engine
 
