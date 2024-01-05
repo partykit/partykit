@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.65
+
+### Patch Changes
+
+- [#688](https://github.com/partykit/partykit/pull/688) [`b5cd7e6`](https://github.com/partykit/partykit/commit/b5cd7e6b3492af74f20b1b3116bc93ccceee07d5) Thanks [@threepointone](https://github.com/threepointone)! - Add a deprecation for Party.Party
+
+- [#692](https://github.com/partykit/partykit/pull/692) [`87541fb`](https://github.com/partykit/partykit/commit/87541fb78c2e82544e7504e250c055aa917e2d5f) Thanks [@threepointone](https://github.com/threepointone)! - fix: vectorize upsert()/insert() in local dev
+
 ## 0.0.64
 
 ### Patch Changes
