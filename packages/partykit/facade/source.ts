@@ -74,7 +74,7 @@ type DurableObjectNamespaceEnv = {
 };
 
 type Env = DurableObjectNamespaceEnv & {
-  PARTYKIT_AI: Party.Room["ai"];
+  PARTYKIT_AI: Party.Room["context"]["ai"];
   PARTYKIT_DURABLE: DurableObjectNamespace;
   PARTYKIT_VECTORIZE: Record<string, VectorizeClientOptions>;
   PARTYKIT_CRONS: Record<string, string>;
@@ -315,7 +315,6 @@ function createDurable(
         internalID: this.controller.id.toString(),
         name: options.name,
         env: extractVars(env),
-        ai: PARTYKIT_AI,
         storage: this.controller.storage,
         blockConcurrencyWhile: this.controller.blockConcurrencyWhile.bind(
           this.controller
@@ -337,6 +336,7 @@ function createDurable(
             );
           },
           vectorize: this.vectorize,
+          ai: PARTYKIT_AI,
         },
         getConnection(id: string) {
           if (self.connectionManager) {

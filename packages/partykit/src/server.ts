@@ -65,6 +65,13 @@ export type Context = {
       get(id: string): Stub;
     }
   >;
+  /**
+   * A binding to the Cloudflare AI service.
+   */
+  ai: AI;
+  /**
+   * A binding to the Cloudflare Vectorize service.
+   */
   vectorize: Record<string, VectorizeIndex>;
 };
 
@@ -186,11 +193,6 @@ export type Room = {
    * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
   getConnections<TState = unknown>(tag?: string): Iterable<Connection<TState>>;
-
-  /**
-   * A binding to the Cloudflare AI service.
-   */
-  ai: AI;
 };
 
 /** @deprecated Use `Party.Room` instead */
