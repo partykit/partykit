@@ -28,7 +28,6 @@ async function fetchResult<T>(api: string, options: FetchInit): Promise<T> {
   const res = await fetch(`${PARTYKIT_API_BASE}${api}`, {
     ...fetchOptions,
     headers: {
-      "Content-Type": "application/json",
       ...extraHeaders,
       ...fetchOptions.headers,
     },
@@ -102,6 +101,9 @@ export class VectorizeClient implements VectorizeIndex {
           vector,
           ...options,
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
   }
