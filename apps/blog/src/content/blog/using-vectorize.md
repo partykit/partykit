@@ -139,8 +139,8 @@ import { Ai } from "partykit-ai";
 export default class SearchServer implements Party.Server {
   ai: Ai;
 
-  constructor(public party: Party.Room) {
-    this.ai = new Ai(party.ai);
+  constructor(public room: Party.Room) {
+    this.ai = new Ai(room.context.ai);
   }
 }
 ```
