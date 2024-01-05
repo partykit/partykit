@@ -158,11 +158,57 @@ export async function init(options: {
     const packageJsonIndent = detectIndent(packageJsonFile).indent || 2;
     const packageJson = JSON.parse(packageJsonFile);
 
+    const shouldUseTypeScript =
+      options.yes ??
+      (await new Promise((resolve) => {
+        if (isTypeScriptProject) {
+          resolve(true);
+          return;
+        }
+        function Component(props: {
+          onSelect: (shouldUseTypeScript: boolean) => void;
+        }) {
+          return (
+            <>
+              <Box>
+                <Text>Would you like to use TypeScript?</Text>
+              </Box>
+              <SelectInput
+                items={[
+                  { label: "Yes", value: true },
+                  { label: "No", value: false },
+                ]}
+                onSelect={(item) => {
+                  props.onSelect(item.value);
+                }}
+              />
+            </>
+          );
+        }
+        const { clear, unmount } = render(
+          <Component
+            onSelect={(shouldUseTypeScript: boolean) => {
+              resolve(shouldUseTypeScript);
+              clear();
+              unmount();
+            }}
+          />
+        );
+      }));
+
+    const alreadyInstalled =
+      packageJson.devDependencies?.partykit ||
+      packageJson.dependencies?.partykit;
+
     // if there's an existing package.json, we're in a project
     // ask the user whether they want to add to it, or create a new one
     const shouldAddToExisting =
       options.yes ??
       (await new Promise<boolean>((resolve, _reject) => {
+        if (alreadyInstalled) {
+          resolve(false);
+          return;
+        }
         function Component(props: { onSelect: (shouldAdd: boolean) => void }) {
           return (
             <>
@@ -249,7 +295,7 @@ export async function init(options: {
             {
               $schema: "https://www.partykit.io/schema.json",
               name: options.name || `${packageJson.name || "my"}-party`,
-              main: isTypeScriptProject ? "party/index.ts" : "party/index.js",
+              main: shouldUseTypeScript ? "party/index.ts" : "party/index.js",
               compatibilityDate: defaultCompatibilityDate,
             },
             null,
@@ -269,7 +315,7 @@ export async function init(options: {
 
       // write an entrypoint file
       if (!options.dryRun) {
-        if (isTypeScriptProject) {
+        if (shouldUseTypeScript) {
           fs.writeFileSync(
             path.join(process.cwd(), "party/index.ts"),
             fs.readFileSync(
@@ -299,7 +345,7 @@ export async function init(options: {
       } else {
         console.log(
           `⤬ Dry run: Skipped creating ${chalk.bold(
-            isTypeScriptProject ? "party/index.ts" : "party/index.js"
+            shouldUseTypeScript ? "party/index.ts" : "party/index.js"
           )}`
         );
       }
@@ -333,7 +379,7 @@ export async function init(options: {
       const command = `${
         pkgManager?.name || "npm"
       } create partykit@latest ${partyKitProjectName} -- ${
-        isTypeScriptProject ? "--typescript" : ""
+        shouldUseTypeScript ? "--typescript" : ""
       } ${isGitRepo ? "" : "--git"} --install -y ${
         options.dryRun ? "--dry-run" : ""
       }`;
