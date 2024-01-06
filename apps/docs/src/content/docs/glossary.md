@@ -25,10 +25,10 @@ xyz -->
 ## CRDTs
 
 xyz -->
-<!--
 ## Durable Object
 
-xyz -->
+A piece of code running at the edge (worker) with persistant state that is infinitely scaleable (from Cloudflare). It is best suited for real time collaborative applications. [Learn more](https://www.cloudflare.com/developer-platform/durable-objects/)
+
 <!--
 ## Multiparty
 
