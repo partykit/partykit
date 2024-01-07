@@ -1,5 +1,13 @@
 # y-partykit
 
+## 0.0.14
+
+### Patch Changes
+
+- [#699](https://github.com/partykit/partykit/pull/699) [`ccf7ebe`](https://github.com/partykit/partykit/commit/ccf7ebec0d27d11fdbb88bc92e249c2cbb30c701) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit remove ChunkedWebSocket class
+
+  The class definition was eagerly looking for a WebSocket class, breaking in non-standards based environments (like node.js), leading to issues like https://github.com/partykit/partykit/issues/698. This removes the class definition, and uses the chunking function directly when required. I think this should fix the problem.
+
 ## 0.0.13
 
 ### Patch Changes
