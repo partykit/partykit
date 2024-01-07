@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.15
+
+### Patch Changes
+
+- [#701](https://github.com/partykit/partykit/pull/701) [`9b1e29c`](https://github.com/partykit/partykit/commit/9b1e29c47f6ef1fa906022a764c43ac314836a79) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: use sendChunked from the client/provider
+
 ## 0.0.14
 
 ### Patch Changes
