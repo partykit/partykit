@@ -7,7 +7,7 @@ import * as decoding from "lib0/decoding";
 import debounce from "lodash.debounce";
 import type * as Party from "partykit/server";
 import { YPartyKitStorage } from "./storage";
-import { handleChunked } from "./chunking";
+import { handleChunked, sendChunked } from "./chunking";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -431,12 +431,11 @@ function send(doc: WSSharedDoc, conn: Party.Connection, m: Uint8Array) {
     closeConn(doc, conn);
   }
   try {
-    conn.send(
-      m
-      // /** @param {any} err */ (err) => {
-      //   err != null && closeConn(doc, conn);
-      // }
-    );
+    if (typeof m !== "string") {
+      sendChunked(m, conn as unknown as WebSocket);
+    } else {
+      conn.send(m);
+    }
   } catch (e) {
     closeConn(doc, conn);
   }
