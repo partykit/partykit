@@ -9,7 +9,6 @@ import * as awarenessProtocol from "y-protocols/awareness";
 import { Observable } from "lib0/observable";
 import * as math from "lib0/math";
 import * as url from "lib0/url";
-import { sendChunked } from "./chunking";
 
 export const messageSync = 0;
 export const messageQueryAwareness = 3;
@@ -560,14 +559,6 @@ type YPartyKitProviderOptions = Omit<
   params?: ParamsProvider;
 };
 
-class ChunkedWebSocket extends WebSocket {
-  send(data: string | ArrayBufferLike) {
-    if (typeof data !== "string") {
-      sendChunked(data, (chunk) => super.send(chunk));
-    }
-  }
-}
-
 export default class YPartyKitProvider extends WebsocketProvider {
   id: string;
   #params?: ParamsProvider;
@@ -611,7 +602,6 @@ export default class YPartyKitProvider extends WebsocketProvider {
     const baseOptions = {
       ...rest,
       connect: false,
-      WebSocketPolyfill: ChunkedWebSocket,
     };
 
     super(serverUrl, room, doc ?? new YDoc(), baseOptions);

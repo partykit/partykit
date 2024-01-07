@@ -27,12 +27,9 @@ type Batch = {
  * 3. The sender sends each chunk as a individual packet
  * 4. The sender sends a chunk end marker
  */
-export const sendChunked = (
-  data: ArrayBufferLike,
-  send: (data: ArrayBufferLike | string) => void
-) => {
+export const sendChunked = (data: ArrayBufferLike, ws: WebSocket) => {
   if (data.byteLength <= CHUNK_MAX_SIZE) {
-    send(data);
+    ws.send(data);
     return;
   }
 
@@ -48,7 +45,7 @@ export const sendChunked = (
   const id = (Date.now() + Math.random()).toString(36).substring(10);
   const chunks = Math.ceil(data.byteLength / CHUNK_MAX_SIZE);
 
-  send(
+  ws.send(
     serializeBatchMarker({
       id,
       type: "start",
@@ -61,12 +58,12 @@ export const sendChunked = (
   let sentChunks = 0;
   for (let i = 0; i < chunks; i++) {
     const chunk = data.slice(CHUNK_MAX_SIZE * i, CHUNK_MAX_SIZE * (i + 1));
-    send(chunk);
+    ws.send(chunk);
     sentChunks += 1;
     sentSize += chunk.byteLength;
   }
 
-  send(
+  ws.send(
     serializeBatchMarker({
       id,
       type: "end",
