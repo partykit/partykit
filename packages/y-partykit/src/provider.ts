@@ -9,6 +9,7 @@ import * as awarenessProtocol from "y-protocols/awareness";
 import { Observable } from "lib0/observable";
 import * as math from "lib0/math";
 import * as url from "lib0/url";
+import { sendChunked } from "./chunking";
 
 export const messageSync = 0;
 export const messageQueryAwareness = 3;
@@ -141,7 +142,7 @@ function setupWS(provider: WebsocketProvider) {
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(provider, new Uint8Array(event.data), true);
       if (encoding.length(encoder) > 1) {
-        websocket.send(encoding.toUint8Array(encoder));
+        sendChunked(encoding.toUint8Array(encoder), websocket);
       }
     };
     websocket.onerror = (event) => {
@@ -195,7 +196,7 @@ function setupWS(provider: WebsocketProvider) {
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
       syncProtocol.writeSyncStep1(encoder, provider.doc);
-      websocket.send(encoding.toUint8Array(encoder));
+      sendChunked(encoding.toUint8Array(encoder), websocket);
       // broadcast local awareness state
       if (provider.awareness.getLocalState() !== null) {
         const encoderAwarenessState = encoding.createEncoder();
@@ -206,7 +207,7 @@ function setupWS(provider: WebsocketProvider) {
             provider.doc.clientID,
           ])
         );
-        websocket.send(encoding.toUint8Array(encoderAwarenessState));
+        sendChunked(encoding.toUint8Array(encoderAwarenessState), websocket);
       }
     };
     provider.emit("status", [
@@ -220,7 +221,7 @@ function setupWS(provider: WebsocketProvider) {
 function broadcastMessage(provider: WebsocketProvider, buf: ArrayBuffer) {
   const ws = provider.ws;
   if (provider.wsconnected && ws && ws.readyState === ws.OPEN) {
-    ws.send(buf);
+    sendChunked(buf, ws);
   }
   if (provider.bcconnected) {
     bc.publish(provider.bcChannel, buf, provider);
@@ -333,7 +334,7 @@ export class WebsocketProvider extends Observable<string> {
           const encoder = encoding.createEncoder();
           encoding.writeVarUint(encoder, messageSync);
           syncProtocol.writeSyncStep1(encoder, doc);
-          this.ws.send(encoding.toUint8Array(encoder));
+          sendChunked(encoding.toUint8Array(encoder), this.ws);
         }
       }, resyncInterval);
     }
