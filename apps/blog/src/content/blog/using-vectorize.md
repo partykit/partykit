@@ -200,7 +200,7 @@ What’s happening here?
 
 - `this.ai.run(...)` is how we use Cloudflare Workers AI. `@cf/baai/bge-base-en-v1.5` is the embedding model that converts text to vectors. It’s all the same syntax as using Cloudflare directly, so read the [Workers AI text embeddings docs](https://developers.cloudflare.com/workers-ai/models/text-embeddings/) for more.
 - Vectorize expects records in a particular shape with an ID, the vector itself in `values`, and arbitrary metadata. The metadata is returned when we query, later, so we can use that to store the title and permalink for each episode.
-- Finally we access our vector database at `this.room.context.vectorize.searchIndex` (using the name set in `partykit.json` above) and use upsert to insert (or replace) vectors. [Here are the Vectorize API docs](https://developers.cloudflare.com/vectorize/platform/client-api/) over at Cloudflare.
+- Finally we access our vector database (using the name set in `partykit.json` above) and use upsert to insert (or replace) vectors. [Here are the Vectorize API docs](https://developers.cloudflare.com/vectorize/platform/client-api/) over at Cloudflare.
 
 In all of this we’re batching the calls for efficiency.
 
