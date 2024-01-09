@@ -13,7 +13,7 @@ tags:
   - ML
 
 draft: false
-ogImage: "#"
+ogImage: "/content-images/using-vectorize/og.png"
 description: "A selection of LLMs and a vector database directly in the PartyKit environment, available today."
 ---
 
