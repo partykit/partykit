@@ -1,0 +1,21 @@
+{
+  "name": "@partykit/examples-ai-autocomplete",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "partykit dev",
+    "deploy": "partykit deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@copilotkit/react-core": "^0.16.0",
+    "@copilotkit/react-textarea": "^0.26.1",
+    "openai": "^4.24.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

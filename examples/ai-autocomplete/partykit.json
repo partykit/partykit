@@ -1,0 +1,16 @@
+{
+  "name": "ai",
+  "main": "src/server.ts",
+  "compatibilityDate": "2023-11-12",
+  "serve": {
+    "path": "public",
+    "build": {
+      "entry": "src/client.tsx",
+      "loader": {
+        ".woff2": "file",
+        ".woff": "file"
+      }
+    }
+  },
+  "ai": true
+}
