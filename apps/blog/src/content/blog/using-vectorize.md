@@ -263,7 +263,7 @@ async search(query: string) {
 Breaking it down:
 
 - The query is converted to a vector embedding, as before.
-- We find the nearest vectors in the database with `this.room.context.vectorize.searchIndex.query(...)` — this also gives us the metadata stored during indexing.
+- We find the nearest vectors in the database with `searchIndex.query(...)` — this also gives us the metadata stored during indexing.
 - Finally we convert the result to a useful shape and return.
 
 Let’s add an API so we can see it in action.
