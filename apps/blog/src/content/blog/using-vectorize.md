@@ -4,7 +4,7 @@ pubDatetime: 2024-01-09T17:00:00Z
 title: Using Vectorize to build an unreasonably good search engine in 160 lines of code
 postSlug: using-vectorize-to-build-search
 featured: false
-draft: false
+draft: true
 tags:
   - demos
   - ai
