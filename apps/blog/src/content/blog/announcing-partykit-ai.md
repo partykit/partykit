@@ -1,6 +1,6 @@
 ---
 author: Sunil Pai
-pubDatetime: 2024-01-14T14:12:00Z
+pubDatetime: 2024-01-09T14:12:00Z
 title: "🎈 ⤫ 🤖 Introducing PartyKit AI: Unleashing the Future of Collaborative AI"
 postSlug: announcing-partykit-ai
 featured: false
