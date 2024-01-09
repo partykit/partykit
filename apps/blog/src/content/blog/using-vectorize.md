@@ -111,13 +111,13 @@ Here we’re creating the vector database and calling it `braggoscope-index`. Th
 
 Now add these lines to your `partykit.json` config file (or check that they’re present if you already have the code):
 
-```json
+```jsonc
 {
-	...,
-	"parties": {
+  // ...
+  "parties": {
     "search": "party/search.ts"
   },
-	"vectorize": {
+  "vectorize": {
     "searchIndex": "braggoscope-index"
   },
   "ai": true
@@ -151,7 +151,7 @@ We need to get all our documents into the vector database.
 
 Braggoscope is a static site — but it is built from a database, so I can output all kinds of files in the build step. So it now generates a single file that lists all the pages and the content we want to index. Here’s an extract:
 
-```json
+```jsonc
 [
   {
     "id": "p0038x9h",
@@ -260,7 +260,7 @@ async search(query: string) {
 }
 ```
 
-Breaking it down…
+Breaking it down:
 
 - The query is converted to a vector embedding, as before.
 - We find the nearest vectors in the database with `this.room.context.vectorize.searchIndex.query(...)` — this also gives us the metadata stored during indexing.
@@ -338,5 +338,7 @@ Check the PartyKit docs for...
 
 - [PartyKit AI](https://docs.partykit.io/reference/partykit-ai/) — _to use Vectorize and several AI models._
 - [PartyKit x Remix Starter Kit](https://docs.partykit.io/reference/partykit-ai/) — _for a full-stack web app with a PartyKit server._
+
+Any questions or feedback, do join us on our [Discord](https://discord.gg/GJwKKTcQ7W) or say hi on [Twitter](https://twitter.com/partykit_io).
 
 Enjoy!
