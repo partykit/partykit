@@ -60,7 +60,7 @@ To jumpstart your journey, we've prepared [comprehensive documentation](https://
 
 ## Building a Search Engine with PartyKit AI
 
-The power of PartyKit AI lies in the integration of its various components. By combining embeddings with Vectorize, you can create a fully-hosted, AI-driven search engine within the PartyKit framework. For a step-by-step guide and an introduction to Vectorize, [read our new blog post](/posts/using-vectorize).
+The power of PartyKit AI lies in the integration of its various components. By combining embeddings with Vectorize, you can create a fully-hosted, AI-driven search engine within the PartyKit framework. For a step-by-step guide and an introduction to Vectorize, [read our new blog post](/posts/using-vectorize-to-build-search).
 
 ## What Will You Create?
 
