@@ -1,6 +1,6 @@
 ---
 author: Matt Webb
-pubDatetime: 2024-01-09T15:16:00Z
+pubDatetime: 2024-01-09T17:00:00Z
 title: Using Vectorize to build an unreasonably good search engine in 160 lines of code
 postSlug: using-vectorize-to-build-search
 featured: false
@@ -9,8 +9,8 @@ tags:
   - demos
   - ai
   - search
-ogImage: ""
-description: PartyKit now provides a vector database and access to machine line models, both from Cloudflare. Here’s a guide on how to use them to build a search engine.
+ogImage: "/content-images/using-vectorize/social.png"
+description: PartyKit now includes a vector database and access to an embedding model. Here’s a guide on how to use them to build a search engine.
 ---
 
 The tl;dr is that search got really good suddenly and really easy to build because of AI.
@@ -322,13 +322,13 @@ Lines of code, including boilerplate and other niceties: 162. Not bad.
 
 ## Vector databases are useful beyond search
 
-Really good search is great, sure, but what else are vector databases good for?
+Really good search is nice to have, sure, but how else are vector databases used?
 
-It turns out that they also underpin RAG, or _Retrieval-Augmented Generation_, which is the primary technique for constructing AI prompts with dynamically-chosen, relevant docs.
+It turns out that they also underpin RAG, or _Retrieval-Augmented Generation._ RAG is the primary technique for making AI chatbots that don’t hallucinate, and copilot-like experiences where the AI provides relevant help.
 
-Invented by [Meta in September 2020](https://ai.meta.com/blog/retrieval-augmented-generation-streamlining-the-creation-of-intelligent-natural-language-processing-models/), RAG is now a fundamental pattern, and allows for chatbots that don’t hallucinate and copilot-like experiences where the AI provides contextual help. [Nvidia explains more.](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/)
+Invented by [Meta in September 2020](https://ai.meta.com/blog/retrieval-augmented-generation-streamlining-the-creation-of-intelligent-natural-language-processing-models/), RAG is now a fundamental pattern, using search to dynamically construct prompts based on user context. [Nvidia explains more.](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/)
 
-And when you combine that with PartyKit’s easy-to-spin-up realtime, multiplayer capabilities...
+And when you combine that with PartyKit’s easy-to-spin-up real-time, multiplayer capabilities...
 
 ...well this feels like a great new building block to have.
 
@@ -336,7 +336,7 @@ And when you combine that with PartyKit’s easy-to-spin-up realtime, multiplaye
 
 Check the PartyKit docs for...
 
-- [PartyKit AI](https://docs.partykit.io/reference/partykit-ai/) — _to use Vectorize and several AI models_
-- [PartyKit x Remix Starter Kit](https://docs.partykit.io/reference/partykit-ai/) — _for a full-stack web app with a PartyKit server_
+- [PartyKit AI](https://docs.partykit.io/reference/partykit-ai/) — _to use Vectorize and several AI models._
+- [PartyKit x Remix Starter Kit](https://docs.partykit.io/reference/partykit-ai/) — _for a full-stack web app with a PartyKit server._
 
 Enjoy!
