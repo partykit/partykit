@@ -47,13 +47,16 @@ While we provide first-class support for the above features, PartyKit AI is also
 
 ## Getting Started with PartyKit AI
 
-To jumpstart your journey with PartyKit AI, we've prepared comprehensive documentation and a variety of examples, including:
+To jumpstart your journey with PartyKit AI, we've prepared [comprehensive documentation](https://docs.partykit.io/reference/partykit-ai/) and two basic examples:
 
-[TODO]
+![Showing text-to-image and text generation in action.](/content-images/announcing-partykit-ai/demos.png)
+
+- **Using text-to-image** to generate fictional _New Yorker_ cartoons. [Code on GitHub](https://github.com/partykit/sketch-noo-yorker/blob/main/README.md) _(left)._
+- **Chatting with Llama2** in a version of our multiplayer chatroom demo. [Code on GitHub](https://github.com/partykit/sketch-ai-chat-demo/tree/feat/using-partykit-ai) _(right)._
 
 ## Building a Search Engine with PartyKit AI
 
-The true power of PartyKit AI lies in the integration of its various components. By combining embeddings with Vectorize, you can create a fully-hosted, AI-driven search engine within the PartyKit framework. For detailed guidance, refer to our dedicated blog post. [TODO]
+The true power of PartyKit AI lies in the integration of its various components. By combining embeddings with Vectorize, you can create a fully-hosted, AI-driven search engine within the PartyKit framework. For a step-by-step guide and an introduction to Vectorize, [read to our new blog post](/posts/using-vectorize).
 
 ## What Will You Create?
 
