@@ -30,7 +30,7 @@
   --sl-sidebar-width: 20vw;
   --sl-sidebar-pad-x: 1.5rem;
   /* --sl-content-width: 60vw; */
-  --sl-content-pad-x: 4rem;
+  /* --sl-content-pad-x: 4rem; */
   --sl-menu-button-size: 30px;
   --sl-nav-gap: 4rem;
   /* Offset required to show outline inside an element instead of round the outside */
@@ -82,3 +82,5 @@
 .site-title {
   color: var(--sl-color-white);
 }
+
+@media ()
