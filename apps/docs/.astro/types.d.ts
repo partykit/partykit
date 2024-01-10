@@ -353,6 +353,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/deploy-to-cloudflare.md": {
+	id: "guides/deploy-to-cloudflare.md";
+  slug: "guides/deploy-to-cloudflare";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/deploying-your-partykit-server.md": {
 	id: "guides/deploying-your-partykit-server.md";
   slug: "guides/deploying-your-partykit-server";
