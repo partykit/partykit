@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.67
+
+### Patch Changes
+
+- [#707](https://github.com/partykit/partykit/pull/707) [`b354b19`](https://github.com/partykit/partykit/commit/b354b19968501483ee091794b9dfa924f0e2d4c1) Thanks [@threepointone](https://github.com/threepointone)! - Use blockConcurrencyWhile when running onStart()
+
 ## 0.0.66
 
 ### Patch Changes
