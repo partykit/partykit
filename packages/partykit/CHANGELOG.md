@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.68
+
+### Patch Changes
+
+- [#709](https://github.com/partykit/partykit/pull/709) [`34d5233`](https://github.com/partykit/partykit/commit/34d523370e2c6a6d2ee8bacc520baa7d9718e99a) Thanks [@threepointone](https://github.com/threepointone)! - in hibernation mode, run onStart() before onClose()/onError()
+
 ## 0.0.67
 
 ### Patch Changes
