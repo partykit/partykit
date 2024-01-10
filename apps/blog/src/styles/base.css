@@ -341,6 +341,10 @@
     font-style: italic;
   }
 
+  code {
+    overflow-wrap: break-word;
+  }
+
   .icon {
     display: inline-flex;
     flex-direction: column;
