@@ -594,12 +594,26 @@ function createDurable(
 
     /** Runtime calls webSocketClose when hibernated connection closes  */
     async webSocketClose(ws: WebSocket) {
-      return this.invokeOnClose(createLazyConnection(ws));
+      const connection = createLazyConnection(ws);
+      if (!this.worker) {
+        // This means the room "woke up" after hibernation
+        // so we need to hydrate this.room again
+        assert(connection.uri, "No uri found in connection");
+        await this.initialize(connection.uri);
+      }
+      return this.invokeOnClose(connection);
     }
 
     /** Runtime calls webSocketError when hibernated connection errors  */
     async webSocketError(ws: WebSocket, err: Error) {
-      return this.invokeOnError(createLazyConnection(ws), err);
+      const connection = createLazyConnection(ws);
+      if (!this.worker) {
+        // This means the room "woke up" after hibernation
+        // so we need to hydrate this.room again
+        assert(connection.uri, "No uri found in connection");
+        await this.initialize(connection.uri);
+      }
+      return this.invokeOnError(connection, err);
     }
 
     async invokeOnClose(connection: Party.Connection) {
