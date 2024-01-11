@@ -3,11 +3,11 @@ title: Deploy to your own Cloudflare account (beta)
 description: Deploy to your own Cloudflare account
 ---
 
-The PartyKit platform is powered by Cloudflare Workers, a worldwide network of thousands of servers that run projects with low latency and high performance.
+The PartyKit platform is powered by Cloudflare Workers, a worldwide network of servers that run projects with low latency and high performance.
 
 By default we manage the platform for your projects.
 
-## Managed vs cloud-prem
+## Managed vs Cloud-Prem
 
 As a managed platform, PartyKit abstracts away the complexity of deploying to the cloud and allows you to focus on building. We handle ops and provisioning resources like static assets, Durable Objects, configuring routes and more. Our platform also scales with you.
 
