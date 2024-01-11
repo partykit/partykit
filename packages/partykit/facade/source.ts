@@ -540,10 +540,7 @@ function createDurable(
         ? new HibernatingConnectionManager(this.controller)
         : new InMemoryConnectionManager();
 
-      await this.controller.blockConcurrencyWhile(async () => {
-        await this.worker!.onStart();
-      });
-      return;
+      return this.worker.onStart();
     }
 
     async attachSocketEventHandlers(connection: Party.Connection) {
