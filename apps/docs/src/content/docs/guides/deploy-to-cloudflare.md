@@ -1,13 +1,13 @@
 ---
-title: Deploy to your own Cloudflare account
+title: Deploy to your own Cloudflare account (beta)
 description: Deploy to your own Cloudflare account
 ---
 
-The PartyKit platform is powered by Cloudflare Workers, a worldwide network of thousands of servers that run projects with low latency and high performance.
+The PartyKit platform is powered by Cloudflare Workers, a worldwide network of servers that run projects with low latency and high performance.
 
 By default we manage the platform for your projects.
 
-## Managed vs cloud-prem
+## Managed vs Cloud-Prem
 
 As a managed platform, PartyKit abstracts away the complexity of deploying to the cloud and allows you to focus on building. We handle ops and provisioning resources like static assets, Durable Objects, configuring routes and more. Our platform also scales with you.
 
@@ -31,7 +31,9 @@ CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> np
 
 Running this command will deploy your project to your own Cloudflare account.
 
-**Costs.** You won't pay usage fees to PartyKit. You will be billed for usage of Cloudflare Workers and other services by Cloudflare itself.
+#### Pricing
+
+The PartyKit platform fee is waived while the cloud-prem feature is in beta. If you’re using this for commercial purposes, please reach out to us on [Discord](https://discord.gg/GJwKKTcQ7W) to discuss pricing.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
