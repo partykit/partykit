@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.69
+
+### Patch Changes
+
+- [#711](https://github.com/partykit/partykit/pull/711) [`23931b1`](https://github.com/partykit/partykit/commit/23931b100153d364c5b1e56efe945dd3a4808ff6) Thanks [@threepointone](https://github.com/threepointone)! - do not use bcW for onStart
+
 ## 0.0.68
 
 ### Patch Changes
