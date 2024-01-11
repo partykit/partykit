@@ -16,8 +16,8 @@
   --sl-text-lg: 16px;
   --sl-text-xl: 16px;
   --sl-text-2xl: 16px;
-  --sl-text-3xl: 32px;
-  --sl-text-4xl: 32px;
+  --sl-text-3xl: 24px;
+  --sl-text-4xl: 24px;
   --sl-text-5xl: 32px;
   --sl-text-6xl: 32px;
 
@@ -82,5 +82,3 @@
 .site-title {
   color: var(--sl-color-white);
 }
-
-@media ()

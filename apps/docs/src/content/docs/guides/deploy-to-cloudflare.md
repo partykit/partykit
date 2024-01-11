@@ -3,15 +3,25 @@ title: Deploy to your own Cloudflare account
 description: Deploy to your own Cloudflare account
 ---
 
-The PartyKit platform is powered by Cloudflare Workers, a worldwide network of thousands of servers that run projects with incredibly low latency and high performance. It abstracts away the complexity of deploying to the cloud, and allows you to focus on building your project. As a fully managed platform, PartyKit handles all the ops for you, and you can manage all your projects from a single point. PartyKit handles provisioning resources like static assets Durable Objects, configuring routes, and more. It also scales with you, so you don't have to worry about your project going viral.
+The PartyKit platform is powered by Cloudflare Workers, a worldwide network of thousands of servers that run projects with low latency and high performance.
 
-However, you may want to deploy your projects to your own Cloudflare account for a number of reasons:
+By default we manage the platform for your projects.
+
+## Managed vs cloud-prem
+
+As a managed platform, PartyKit abstracts away the complexity of deploying to the cloud and allows you to focus on building. We handle ops and provisioning resources like static assets, Durable Objects, configuring routes and more. Our platform also scales with you.
+
+In some advanced scenarios, you may want to move away from the managed platform and deploy your projects to your own Cloudflare account instead:
 
 - You have regulatory requirements that require you to use your own Cloudflare account
 - You want to use a domain already configured under Cloudflare
 - You'd like to use your existing Cloudflare Workers and services in tandem with PartyKit
 
-In the advanced scenario, PartyKit makes it extremely easy to deploy to your own Cloudflare account. You can always start with the default, managed platform and switch to cloud-prem at any point.
+PartyKit supports this configuration, called **cloud-prem.**
+
+You can start with the default, managed platform and switch to cloud-prem at any point.
+
+## How to deploy
 
 tl;dr:
 
@@ -19,7 +29,9 @@ tl;dr:
 CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> npx partykit deploy --domain partykit.domain.com
 ```
 
-Running this command will deploy your project to your own Cloudflare account. You won't have to pay for usage of the PartyKit platform, but you will be billed for usage of Cloudflare Workers and other services by Cloudflare itself.
+Running this command will deploy your project to your own Cloudflare account.
+
+**Costs.** You won't pay usage fees to PartyKit. You will be billed for usage of Cloudflare Workers and other services by Cloudflare itself.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
@@ -33,7 +45,9 @@ You can make an API token https://dash.cloudflare.com/profile/api-tokens with th
 You can also set the `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` environment variables in your shell.
 :::
 
-This is our initial implementation, but we'd like to add more features in the future, like:
+## Future development
+
+This is our initial implementation and we're planning features based on demand. For example future versions of cloud-prem could:
 
 - Add bindings to Cloudflare services that PartyKit doesn't support yet (like KV, R2, D1, logpush)
 - Integrate PartyKit's login with Cloudflare Access/Logins
