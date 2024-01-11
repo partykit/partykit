@@ -1,5 +1,5 @@
 ---
-title: Deploy to your own Cloudflare account
+title: Deploy to your own Cloudflare account (beta)
 description: Deploy to your own Cloudflare account
 ---
 
@@ -31,7 +31,9 @@ CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> np
 
 Running this command will deploy your project to your own Cloudflare account.
 
-**Pricing.** The PartyKit platform fee is waived while the cloud-prem feature is in beta. If you’re using this for commercial purposes, please reach out to us on [Discord](https://discord.gg/GJwKKTcQ7W) to discuss pricing.
+#### Pricing
+
+The PartyKit platform fee is waived while the cloud-prem feature is in beta. If you’re using this for commercial purposes, please reach out to us on [Discord](https://discord.gg/GJwKKTcQ7W) to discuss pricing.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
