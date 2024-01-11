@@ -31,7 +31,7 @@ CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> np
 
 Running this command will deploy your project to your own Cloudflare account.
 
-**Costs.** You won't pay usage fees to PartyKit. You will be billed for usage of Cloudflare Workers and other services by Cloudflare itself.
+**Pricing.** The PartyKit platform fee is waived while the cloud-prem feature is in beta. If you’re using this for commercial purposes, please reach out to us on [Discord](https://discord.gg/GJwKKTcQ7W) to discuss pricing.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
