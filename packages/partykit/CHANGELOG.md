@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.70
+
+### Patch Changes
+
+- [#713](https://github.com/partykit/partykit/pull/713) [`70d50fd`](https://github.com/partykit/partykit/commit/70d50fd6846e2ea8d707cecd18e2cd19ca6275c6) Thanks [@threepointone](https://github.com/threepointone)! - Warning about cloud-prem
+
 ## 0.0.69
 
 ### Patch Changes
