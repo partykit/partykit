@@ -28,17 +28,3 @@ index ec2431f..487bf9c 100644
  ];
  
  if (description)
-diff --git a/node_modules/@astrojs/starlight/utils/createTranslationSystem.ts b/node_modules/@astrojs/starlight/utils/createTranslationSystem.ts
-index 9f2a5bf..97153b9 100644
---- a/node_modules/@astrojs/starlight/utils/createTranslationSystem.ts
-+++ b/node_modules/@astrojs/starlight/utils/createTranslationSystem.ts
-@@ -76,7 +76,9 @@ function buildDictionary(
- 	// Iterate over alternate dictionaries to avoid overwriting preceding values with `undefined`.
- 	for (const dict of dictionaries) {
- 		for (const key in dict) {
-+			// @ts-expect-error: `key` is a string, but TS doesn't know that.
- 			const value = dict[key as keyof typeof dict];
-+			// @ts-expect-error: `key` is a string, but TS doesn't know that.
- 			if (value) dictionary[key as keyof typeof dict] = value;
- 		}
- 	}

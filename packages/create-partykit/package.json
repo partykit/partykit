@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@types/random-words": "^1.1.4",
-    "@types/react": "^18.2.46",
+    "@types/react": "^18.2.47",
     "@types/which-pm-runs": "^1.0.2",
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
@@ -39,7 +39,7 @@
     "random-words": "^2.0.0",
     "react": "^18.2.0",
     "typescript": "^5.3.3",
-    "undici": "^6.2.1",
+    "undici": "^6.3.0",
     "which-pm-runs": "^1.1.0"
   }
 }
