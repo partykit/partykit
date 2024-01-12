@@ -409,6 +409,13 @@ declare module 'astro:content' {
   collection: "docs";
   data: InferEntrySchema<"docs">
 } & { render(): Render[".md"] };
+"guides/preview-environments.md": {
+	id: "guides/preview-environments.md";
+  slug: "guides/preview-environments";
+  body: string;
+  collection: "docs";
+  data: InferEntrySchema<"docs">
+} & { render(): Render[".md"] };
 "guides/rate-limiting-messages.md": {
 	id: "guides/rate-limiting-messages.md";
   slug: "guides/rate-limiting-messages";
