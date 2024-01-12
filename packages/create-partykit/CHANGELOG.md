@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.28
+
+### Patch Changes
+
+- [#715](https://github.com/partykit/partykit/pull/715) [`8ac1f0b`](https://github.com/partykit/partykit/commit/8ac1f0b4fca6338f9dd61853373211d725d00750) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
 ## 0.0.27
 
 ### Patch Changes
