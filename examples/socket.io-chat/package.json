@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "jquery": "^3.7.1",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.3"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.23"
+    "@types/jquery": "^3.5.29"
   }
 }
