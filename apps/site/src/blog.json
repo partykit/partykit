@@ -1,5 +1,25 @@
 [
   {
+    "title": "Using Vectorize to build an unreasonably good search engine in 160 lines of code",
+    "link": "https://blog.partykit.io/posts/using-vectorize-to-build-search/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/using-vectorize-to-build-search/"
+    },
+    "description": "PartyKit now includes a vector database and access to an embedding model. Here’s a guide on how to use them to build a search engine.",
+    "pubDate": "Tue, 09 Jan 2024 17:00:00 GMT"
+  },
+  {
+    "title": "🎈 ⤫ 🤖 Introducing PartyKit AI: Unleashing the Future of Collaborative AI",
+    "link": "https://blog.partykit.io/posts/announcing-partykit-ai/",
+    "guid": {
+      "isPermaLink": "true",
+      "$t": "https://blog.partykit.io/posts/announcing-partykit-ai/"
+    },
+    "description": "A selection of LLMs and a vector database directly in the PartyKit environment, available today.",
+    "pubDate": "Tue, 09 Jan 2024 14:12:00 GMT"
+  },
+  {
     "title": "Cursor party! Get multiplayer cursors on your own website",
     "link": "https://blog.partykit.io/posts/cursor-party/",
     "guid": {
@@ -78,25 +98,5 @@
     },
     "description": "I work with a window open to a YouTube live stream of a waterhole in Namibia, animals and all. Now it’s multiplayer and hosted on PartyKit using the Remix starter kit.",
     "pubDate": "Fri, 13 Oct 2023 11:12:00 GMT"
-  },
-  {
-    "title": "PartyKit at ViteConf 2023",
-    "link": "https://blog.partykit.io/posts/partykit-at-viteconf/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/partykit-at-viteconf/"
-    },
-    "description": "ViteConf attendees sent over 23,000 live reactions using PartyKit.",
-    "pubDate": "Thu, 12 Oct 2023 14:12:00 GMT"
-  },
-  {
-    "title": "Exploring AI interaction design and multiplayer with tldraw",
-    "link": "https://blog.partykit.io/posts/ai-interactions-with-tldraw/",
-    "guid": {
-      "isPermaLink": "true",
-      "$t": "https://blog.partykit.io/posts/ai-interactions-with-tldraw/"
-    },
-    "description": "How might we interact with AI? I'm exploring this with tldraw, a multiplayer whiteboard app.",
-    "pubDate": "Wed, 04 Oct 2023 14:12:00 GMT"
   }
 ]
