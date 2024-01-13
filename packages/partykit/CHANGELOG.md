@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.72
+
+### Patch Changes
+
+- [#718](https://github.com/partykit/partykit/pull/718) [`d2e49d2`](https://github.com/partykit/partykit/commit/d2e49d2760cc9ba5f3dae14393c22c96b0fcd14f) Thanks [@threepointone](https://github.com/threepointone)! - Validate party names
+
 ## 0.0.71
 
 ### Patch Changes
