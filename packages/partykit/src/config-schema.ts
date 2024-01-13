@@ -22,11 +22,22 @@ const loaders = [
   "tsx",
 ] as const;
 
+function isValidWorkerName(name: string) {
+  const isValid = /^[a-z0-9_-]+$/.test(name);
+  if (!isValid) console.warn(`Invalid party name: ${name}`);
+  return isValid;
+}
+
 export const schema = z
   .object({
     $schema: z.string().optional(),
     team: z.string().optional(),
-    name: z.string().optional(),
+    name: z
+      .string()
+      .refine(isValidWorkerName, {
+        message: "must satisfy /^[a-z0-9_-]+$/",
+      })
+      .optional(),
     main: z.string().optional(),
     port: z.number().optional(),
     preview: z.string().optional(),
@@ -65,7 +76,12 @@ export const schema = z
     persist: z.union([z.boolean(), z.string()]).optional(),
     vars: z.record(z.unknown()).optional(),
     define: z.record(z.string()).optional(),
-    parties: z.record(z.string()).optional(),
+    parties: z
+      .record(z.string())
+      .refine((object) => Object.keys(object).every(isValidWorkerName), {
+        message: "must satisfy /^[a-z0-9_-]+$/",
+      })
+      .optional(),
     build: z
       .object({
         command: z.string().optional(),
