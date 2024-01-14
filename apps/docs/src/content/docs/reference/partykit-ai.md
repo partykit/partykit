@@ -247,5 +247,5 @@ const result = await myIndex.describe();
 ```
 
 :::tip[Learn more]
-Learn more about building a search engine for your content with [Matt Webb's Braggoscope](#todo)
+Learn more about building a search engine for your content with [Matt Webb's Braggoscope](https://blog.partykit.io/posts/using-vectorize-to-build-search)
 :::
