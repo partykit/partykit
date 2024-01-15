@@ -181,6 +181,15 @@ export default class implements Party.Server {
     // ... call functions on myIndex
   }
 }
+
+// OR for non-party, regular api endpoints with onFetch / onSocket / onCron
+
+export default class {
+  static onFetch(request, lobby, ctx) {
+    const myIndex = lobby.vectorize.myIndex;
+    // ... call functions on myIndex
+  }
+}
 ```
 
 ### insert
