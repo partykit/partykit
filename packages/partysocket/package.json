@@ -1,7 +1,9 @@
 {
   "name": "partysocket",
   "version": "0.0.20",
-  "description": "party hotline",
+  "description": "A better WebSocket that Just Works™",
+  "homepage": "https://docs.partykit.io/reference/partysocket-api",
+  "bugs": "https://github.com/partykit/partykit/issues",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "exports": {
@@ -56,7 +58,22 @@
     "*.d.ts",
     "event-target-polyfill.*"
   ],
-  "keywords": [],
+  "keywords": [
+    "websocket",
+    "client",
+    "reconnecting",
+    "reconnection",
+    "reconnect",
+    "forever",
+    "persistent",
+    "forever",
+    "automatic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/partykit/partykit.git",
+    "directory": "packages/partykit"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
