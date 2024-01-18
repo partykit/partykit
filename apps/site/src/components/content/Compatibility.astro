@@ -24,7 +24,12 @@ import Counter from "../../interactive/Counter.tsx";
 
   <div id="demo">
     <h3>Try it now</h3>
-    <p>Open another browser tab. The counter is synced.</p>
+    <p>
+      Open another browser tab. The counter is synced. <a
+        href="https://github.com/partykit/sketch-counter-demo"
+        >View on GitHub.</a
+      >
+    </p>
     <Counter client:load initialCount={0} />
   </div>
 </div>
@@ -59,5 +64,9 @@ import Counter from "../../interactive/Counter.tsx";
 
   #demo {
     @include atom();
+
+    a {
+      text-decoration: underline;
+    }
   }
 </style>

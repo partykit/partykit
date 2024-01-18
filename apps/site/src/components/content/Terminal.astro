@@ -16,23 +16,31 @@ import "../../styles/variables.scss";
 npm install partykit
 
 // 2. Write your code
-export default class Server {
-  onMessage(message, websocket) {
-    websocket.send("pong");
-  }
-  onRequest(request) {
-    return new Response(\`This is room \${party.id}\`);
+import type * as Party from "partykit/server";
+
+export default class Server implements Party.Server {
+  count = 0;
+
+  constructor(public room: Party.Room) {}
+
+  onMessage(message: string, ws: Party.Connection) {
+    // On any message, increment and broadcast
+    this.room.broadcast((++this.count).toString(), []);
   }
 }
 
-// 3. Develop on localhost
-npx partykit dev server.js
+// 3. Run locally
+npx partykit dev server.ts
 
-// 4. Deploy to the edge
-npx partykit deploy server.js --name first-party
+// 4. Listen + hit enter to increment. Try multiple terminals.
+// Using https://github.com/vi/websocat
+websocat 'ws://127.0.0.1:1999/party/default-room'
 
-// 5. Try it out
-curl 'https://first-party.{yourname}.partykit.dev/party/my-room'
+// 5. Deploy to the edge network
+npx partykit deploy server.ts --name my-first-counter
+
+// 6. Try it out
+websocat 'wss://my-first-counter.{yourname}.partykit.dev/party/default-room'
 `}
       lang="js"
       theme="dark-plus"
