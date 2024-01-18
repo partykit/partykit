@@ -379,7 +379,7 @@ export async function init(options: {
       const command = `${
         pkgManager?.name || "npm"
       } create partykit@latest ${partyKitProjectName} -- ${
-        shouldUseTypeScript ? "--typescript" : ""
+        shouldUseTypeScript ? "--template typescript" : ""
       } ${isGitRepo ? "" : "--git"} --install -y ${
         options.dryRun ? "--dry-run" : ""
       }`;
