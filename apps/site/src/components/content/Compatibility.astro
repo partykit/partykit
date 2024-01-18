@@ -1,32 +1,31 @@
 ---
 import "../../styles/variables.scss";
+import Counter from "../../interactive/Counter.tsx";
 ---
 
 <div id="compatibility">
   <div id="compatibility-frameworks">
-    <h3>Add PartyKit to&nbsp;everything</h3>
+    <h3>For any project</h3>
     <p>
-      It works well with with popular collaboration frameworks and libraries.
-      Y.js, Automerge, Replicache, XState, tldraw, TinyBase, they all Just
-      Work™.
+      Develop in vanilla JS or use our React bindings. Integrate with popular
+      collaboration frameworks: Y.js, Automerge, Replicache, XState, tldraw,
+      TinyBase, they all Just Work™.
     </p>
   </div>
 
   <div id="compatibility-platforms">
-    <h3>It’s platform agnostic</h3>
+    <h3>Standards and interop</h3>
     <p>
-      PartyKit integrates with your current setup. Plays nicely with Vercel,
-      Netlify, AWS, Cloudflare, fly.io, or wherever you host your app. No big
-      rewrite needed.
+      WebSockets, Fetch, Request-Response, Wasm. PartyKit uses web standards to
+      guarantee interoperability with your projects on Vercel, Netlify, AWS,
+      Cloudflare, fly.io, or wherever you host your app.
     </p>
   </div>
 
-  <div id="compatibility-standards">
-    <h3>And standards based</h3>
-    <p>
-      WebSockets, Fetch, Request-Response, Wasm. PartyKit uses web standards to
-      guarantee interoperability with all your tools, now and in the future.
-    </p>
+  <div id="demo">
+    <h3>Try it now</h3>
+    <p>Open another browser tab. The counter is synced.</p>
+    <Counter client:load initialCount={0} />
   </div>
 </div>
 
@@ -47,7 +46,7 @@ import "../../styles/variables.scss";
     #compatibility {
       padding-top: 0;
       grid-column: 7 / 11;
-      grid-row: 2 / 3;
+      grid-row: 4 / 5;
       gap: 4rem;
     }
   }
@@ -55,6 +54,10 @@ import "../../styles/variables.scss";
   #compatibility-frameworks,
   #compatibility-platforms,
   #compatibility-standards {
+    @include atom();
+  }
+
+  #demo {
     @include atom();
   }
 </style>

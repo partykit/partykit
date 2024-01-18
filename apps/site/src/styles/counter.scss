@@ -1,0 +1,24 @@
+.counter {
+  display: inline-block;
+padding: var(--box-padding);
+//width: 100%;
+border: none;
+border-radius: 2em;
+text-align: center;
+text-decoration: none;
+background: var(--color-feature-2);
+color: var(--color-page);
+font-variation-settings: "wght" 350;
+cursor: pointer;
+flex-grow: 2;
+margin-top: 1rem;
+margin-bottom: 1rem;
+@media (max-width: 759px) {
+  font-size: 95%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 760px) {
+  max-width: var(--atom-width);
+}
+}

@@ -1,56 +1,69 @@
 ---
+import { Code } from "astro:components";
 import "../../styles/variables.scss";
 ---
 
-<>
-  <h2 id="product-header">Why PartyKit?</h2>
-
-  <div id="product-features">
-    <div class="feature">
-      <h3>More flexible</h3>
-      <p>
-        You bring the code, we do the hosting. Use any package from npm, or
-        write your own servers from scratch.
-      </p>
+<div id="product-features">
+  <div class="feature">
+    <div class="mini-terminal">
+      <Code
+        code={`npm partykit create
+# Or:
+# npm install partykit
+# npx partykit init`}
+        lang="typescript"
+        theme="dark-plus"
+      />
     </div>
-
-    <div class="feature">
-      <h3>More functional</h3>
-      <p>
-        Analytics, staging environments, secrets management, logging. All the
-        tools your team needs to build production apps.
-      </p>
-    </div>
-
-    <div class="feature">
-      <h3>More fast</h3>
-      <p>
-        A worldwide edge network with low latency, anywhere on Earth. We enable
-        your ambition, from your first user to millions.
-      </p>
-    </div>
+    <h3>Just add realtime</h3>
+    <p>
+      Add realtime to Next.js, Remix, Svelte and other app frameworks, or go
+      full stack with PartyKit itself. <a href="#get-started"
+        >Get started &darr;</a
+      >
+    </p>
   </div>
-</>
+
+  <div class="feature">
+    <div class="mini-terminal">
+      <Code
+        code={`npx partykit add --list
+# - ai
+# - yjs
+# - multiplayer...`}
+        lang="typescript"
+        theme="dark-plus"
+      />
+    </div>
+    <h3>Just add anything</h3>
+    <p>
+      Get multiplayer rooms and state immediately. Develop your own services.
+      Add bundles for collaborative text editing, AI, and more.
+    </p>
+  </div>
+
+  <div class="feature">
+    <div class="mini-terminal">
+      <Code
+        code={`npx partykit deploy
+npx partykit dashboard
+
+
+`}
+        lang="typescript"
+        theme="dark-plus"
+      />
+    </div>
+    <h3>Dev to prod, fast</h3>
+    <p>
+      Deploy to our fully managed global edge network and run with low latency
+      and high performance. We scale with you. Cloud-prem also available.
+    </p>
+  </div>
+</div>
 
 <style lang="scss">
   @import "../../styles/shared.scss";
-
-  #product-header {
-    grid-column: 1 / -1;
-    @include atom();
-  }
-
-  @media (min-width: 760px) {
-    #product-header {
-      max-width: 100%;
-    }
-  }
-
-  @media (min-width: 1100px) {
-    #product-header {
-      grid-column: 2 / 10;
-    }
-  }
 
   #product-features {
     grid-column: 1 / -1;
@@ -83,5 +96,24 @@ import "../../styles/variables.scss";
     .feature {
       margin: 0;
     }
+  }
+
+  .mini-terminal {
+    font-family: monospace;
+    line-height: 1.5;
+    font-size: 80%;
+    border-radius: calc(var(--box-radius) / 2);
+    background: #1e1e1e; /* to match Code theme background */
+    color: white;
+    font-variation-settings: "wght" 300;
+    padding: 20px;
+    margin-bottom: 1.5rem;
+  }
+
+  a {
+    color: var(--color-feature-2);
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
   }
 </style>
