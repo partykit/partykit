@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.21
+
+### Patch Changes
+
+- [#720](https://github.com/partykit/partykit/pull/720) [`11d3035`](https://github.com/partykit/partykit/commit/11d3035e5080d55da37b61902c7e2ae2c17cc3d1) Thanks [@MortalKastor](https://github.com/MortalKastor)! - chore: add metadata to `partysocket` package.json for discoverability
+
 ## 0.0.20
 
 ### Patch Changes
