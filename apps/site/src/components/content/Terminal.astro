@@ -1,13 +1,18 @@
 ---
 import { Code } from "astro:components";
+import Button from "../atoms/Button.astro";
 import "../../styles/variables.scss";
 ---
 
 <div id="terminal">
   <div id="terminal-tabs">
-    <span>Add PartyKit to a new project</span>
-    <!-- <span>Add to existing project</span> -->
-    <!-- <Button variant="terminal-github" url="#">Fork on GitHub</Button> -->
+    <span>PartyKit in 60 seconds</span>
+    <Button
+      variant="terminal-github"
+      url="https://github.com/partykit/sketch-counter-demo"
+    >
+      Fork on GitHub
+    </Button>
   </div>
 
   <div id="terminal-console">
