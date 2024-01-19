@@ -1,5 +1,13 @@
 # create-partykit
 
+## 0.0.29
+
+### Patch Changes
+
+- [#725](https://github.com/partykit/partykit/pull/725) [`6883221`](https://github.com/partykit/partykit/commit/68832211fd30b840dd787042285fe27f6b381c1d) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+- [#723](https://github.com/partykit/partykit/pull/723) [`6a38b57`](https://github.com/partykit/partykit/commit/6a38b5738f1eaec0f83e67cd71b97458ed721e70) Thanks [@threepointone](https://github.com/threepointone)! - create: use templates from partykit/templates
+
 ## 0.0.28
 
 ### Patch Changes
