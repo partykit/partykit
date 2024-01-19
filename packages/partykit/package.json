@@ -44,10 +44,10 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20231218.0",
+    "@cloudflare/workers-types": "4.20240117.0",
     "clipboardy": "4.0.0",
     "esbuild": "0.19.11",
-    "miniflare": "3.20231218.1",
+    "miniflare": "3.20231218.2",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
@@ -57,7 +57,7 @@
     "@clerk/clerk-js": "4.59.1",
     "@types/gradient-string": "^1.1.5",
     "@types/mime": "^3.0.4",
-    "@types/node": "^20.11.0",
+    "@types/node": "^20.11.5",
     "@types/object-hash": "^3.0.6",
     "@types/polka": "^0.5.7",
     "@types/prompts": "^2.4.9",
@@ -67,7 +67,7 @@
     "chokidar": "^3.5.3",
     "commander": "^11.1.0",
     "detect-indent": "^7.0.1",
-    "devtools-protocol": "^0.0.1245094",
+    "devtools-protocol": "^0.0.1248698",
     "dotenv": "^16.3.1",
     "dotenv-cli": "^7.3.0",
     "eslint-plugin-react-hooks": "^4.6.0",

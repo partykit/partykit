@@ -28,7 +28,7 @@
   "author": "PartyKit, Inc. <contact@partykit.io>",
   "license": "ISC",
   "devDependencies": {
-    "@cloudflare/workers-types": "4.20231218.0",
+    "@cloudflare/workers-types": "4.20240117.0",
     "esbuild": "0.19.11"
   }
 }
