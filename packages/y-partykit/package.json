@@ -53,13 +53,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/lodash.debounce": "^4.0.7"
+    "@types/lodash.debounce": "^4.0.9"
   },
   "dependencies": {
-    "lib0": "^0.2.86",
+    "lib0": "^0.2.88",
     "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "y-protocols": "^1.0.6",
-    "yjs": "^13.6.8"
+    "yjs": "^13.6.10"
   }
 }
