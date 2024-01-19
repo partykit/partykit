@@ -2,7 +2,8 @@ import { Text, render } from "ink";
 import * as React from "react";
 import TextInput from "ink-text-input";
 import SelectInput from "ink-select-input";
-import { fetch } from "undici";
+
+import { downloadTemplate } from "giget";
 
 import * as RandomWords from "random-words";
 
@@ -11,15 +12,10 @@ import detectPackageManager from "which-pm-runs";
 import path from "path";
 import fs from "fs";
 import { findUpSync } from "find-up";
-import {
-  version as packageVersion,
-  devDependencies as packageDevDependencies,
-} from "../package.json";
+import { version as packageVersion } from "../package.json";
 
 import chalk from "chalk";
 import { program, Option } from "commander";
-
-import { fileURLToPath } from "url";
 
 import { execaCommand } from "execa";
 import gradient from "gradient-string";
@@ -28,35 +24,6 @@ function printBanner() {
   const string = `🎈 PartyKit`;
   console.log(gradient.fruit(string));
   console.log(gradient.passion(`-`.repeat(string.length + 1)));
-}
-
-// duplicate dev.tsx
-function* findAllFiles(
-  root: string,
-  { ignore: _ignore }: { ignore?: string[] } = {}
-) {
-  const dirs = [root];
-  while (dirs.length > 0) {
-    const dir = dirs.pop()!;
-    const files = fs.readdirSync(dir);
-    // TODO: handle ignore arg
-    for (const file of files) {
-      if (file.startsWith(".")) {
-        continue;
-      }
-
-      const filePath = path.join(dir, file);
-      const stat = fs.statSync(filePath);
-      if (stat.isDirectory()) {
-        if (file === "node_modules") {
-          continue;
-        }
-        dirs.push(filePath);
-      } else {
-        yield path.relative(root, filePath);
-      }
-    }
-  }
 }
 
 async function install({
@@ -142,48 +109,30 @@ async function initGit({ cwd }: { cwd: string }) {
   }
 }
 
+const templateChoices = {
+  typescript: "TypeScript starter",
+  javascript: "JavaScript starter",
+  // game: "A simple multiplayer game",
+  // "text-editor": "A shared text editor",
+  // "video-chat": "A video chat app",
+  // whiteboard: "A collaborative whiteboard",
+  // "chat-room": "A chat room",
+  // pubsub: "A simple pubsub server",
+};
+
 export async function init(options: {
   name: string | undefined;
   install: boolean | undefined;
   git: boolean | undefined;
-  typescript: boolean | undefined;
   yes: boolean | undefined;
   dryRun: boolean | undefined;
   hideBanner: boolean | undefined;
+  template: keyof typeof templateChoices | undefined;
 }) {
   if (!options.hideBanner) {
     printBanner();
   }
   const originalCwd = process.cwd();
-
-  let latestPartyKitVersion = "*";
-  let latestPartySocketVersion = "*";
-  if (packageVersion.startsWith("0.0.0-")) {
-    // this means it's a beta, so let's use this version everywhere
-    latestPartyKitVersion = packageVersion;
-    latestPartySocketVersion = packageVersion;
-  } else {
-    try {
-      latestPartyKitVersion = await fetch(
-        `https://registry.npmjs.org/partykit/latest`
-      )
-        .then((res) => res.json() as Promise<{ version: string }>)
-        .then((res) => res.version);
-
-      latestPartySocketVersion = await fetch(
-        `https://registry.npmjs.org/partysocket/latest`
-      )
-        .then((res) => res.json() as Promise<{ version: string }>)
-        .then((res) => res.version);
-    } catch (e) {
-      console.error(
-        "Could not fetch latest versions of partykit and partysocket, defaulting to *"
-      );
-      console.debug(e);
-      latestPartyKitVersion = "*";
-      latestPartySocketVersion = "*";
-    }
-  }
 
   const inputPathToProject = await new Promise<string>((resolve, reject) => {
     const randomName =
@@ -276,58 +225,24 @@ export async function init(options: {
     }
   }
 
-  // init a new package.json
-  const packageJson = {
-    name: projectName,
-    version: "0.0.0",
-    private: true,
-    scripts: {
-      dev: "partykit dev",
-      deploy: "partykit deploy",
-    },
-    dependencies: {
-      partysocket: latestPartySocketVersion,
-    },
-    devDependencies: {
-      partykit: latestPartyKitVersion,
-      typescript: packageDevDependencies.typescript,
-    },
-  };
-  if (!options.dryRun) {
-    fs.writeFileSync(
-      path.join(pathToProject, "package.json"),
-      JSON.stringify(packageJson, null, 2)
-    );
-    console.log(
-      `‣ Created package.json at ${chalk.bold(
-        path.relative(originalCwd, path.join(pathToProject, "package.json"))
-      )}`
-    );
-  } else {
-    console.log(
-      `⤬ Dry run: skipping creating package.json at ${chalk.bold(
-        path.relative(originalCwd, path.join(pathToProject, "package.json"))
-      )}`
-    );
-  }
-
-  const shouldUseTypeScript = await new Promise<boolean>((resolve, _reject) => {
-    if (options.yes || options.typescript) {
-      resolve(true);
+  const templateChoice = (await new Promise<string>((resolve, _reject) => {
+    if (options.yes) {
+      resolve("typescript");
       return;
     }
-    if (options.typescript === false) {
-      resolve(false);
+
+    if (options.template) {
+      resolve(options.template);
       return;
     }
     const { unmount, clear } = render(
       <>
-        <Text>Do you plan to write typescript?</Text>
+        <Text>Which template would you like to use?</Text>
         <SelectInput
-          items={[
-            { label: "Yes", value: true },
-            { label: "No", value: false },
-          ]}
+          items={Object.entries(templateChoices).map(([value, label]) => ({
+            value,
+            label,
+          }))}
           onSelect={(item) => {
             resolve(item.value);
             clear();
@@ -336,26 +251,15 @@ export async function init(options: {
         />
       </>
     );
-  });
-
-  // ok now let's copy over the files from `template` to the new project
-  const templatePath = path.join(
-    path.dirname(fileURLToPath(import.meta.url)),
-    "..",
-    shouldUseTypeScript ? "ts-template" : "js-template"
-  );
+  })) as keyof typeof templateChoices;
 
   if (!options.dryRun) {
-    for (const file of findAllFiles(templatePath)) {
-      const source = path.join(templatePath, file);
-      const dest = path.join(pathToProject, file);
-      fs.mkdirSync(path.dirname(dest), { recursive: true });
-      fs.copyFileSync(source, dest);
-    }
-    // rename gitignore to .gitignore
-    fs.renameSync(
-      path.join(pathToProject, "gitignore"),
-      path.join(pathToProject, ".gitignore")
+    // copy template files to pathToProject
+    await downloadTemplate(
+      `github:partykit/templates/templates/${templateChoice}`,
+      {
+        dir: pathToProject,
+      }
     );
 
     const today = new Date();
@@ -384,61 +288,31 @@ export async function init(options: {
     );
 
     console.log(
-      `‣ Created a ${
-        shouldUseTypeScript ? "TypeScript" : "JavaScript"
-      } project at ${chalk.bold(path.relative(originalCwd, pathToProject))}`
+      `‣ Created a new "${
+        templateChoices[templateChoice]
+      }" project at ${chalk.bold(path.relative(originalCwd, pathToProject))}`
     );
   } else {
     console.log(
-      `⤬ Dry run: skipping copying ${
-        shouldUseTypeScript ? "TypeScript" : "JavaScript"
-      } template files to ${chalk.bold(
+      `⤬ Dry run: skipping copying "${
+        templateChoices[templateChoice]
+      }" template files to ${chalk.bold(
         path.relative(originalCwd, pathToProject)
       )}`
     );
   }
 
-  const shouldInstallDependencies = await new Promise<boolean>(
-    (resolve, _reject) => {
-      if (options.yes || options.install) {
-        resolve(true);
-        return;
-      }
-      if (options.install === false) {
-        resolve(false);
-        return;
-      }
-      const { unmount, clear } = render(
-        <>
-          <Text>Would you like to install dependencies?</Text>
-          <SelectInput
-            items={[
-              { label: "Yes", value: true },
-              { label: "No", value: false },
-            ]}
-            onSelect={(item) => {
-              resolve(item.value);
-              clear();
-              unmount();
-            }}
-          />
-        </>
-      );
-    }
-  );
-
-  if (shouldInstallDependencies === true) {
-    if (!options.dryRun) {
-      console.log(`‣ Installing dependencies...`);
-      // run npm install from packageJsonPath
-      await install({
-        pkgManager: detectPackageManager()?.name || "npm",
-        cwd: packageInstallPath,
-      });
-      console.log(`‣ Installed dependencies`);
-    } else {
-      console.log(`⤬ Dry run: skipping installing dependencies`);
-    }
+  // always install dependencies
+  if (!options.dryRun) {
+    console.log(`‣ Installing dependencies...`);
+    // run npm install from packageJsonPath
+    await install({
+      pkgManager: detectPackageManager()?.name || "npm",
+      cwd: packageInstallPath,
+    });
+    console.log(`‣ Installed dependencies`);
+  } else {
+    console.log(`⤬ Dry run: skipping installing dependencies`);
   }
 
   // detect if we're inside a git repo, even if several directories up
@@ -530,7 +404,11 @@ program
   .argument("[name]", "Name of the project")
   .option("--install", "Install dependencies")
   .option("--git", "Initialize a new git repository")
-  .option("--typescript", "Initialize a new typescript project")
+  .addOption(
+    new Option("-t, --template <template>").choices(
+      Object.keys(templateChoices)
+    )
+  )
   .option("-y, --yes", "Skip prompts")
   .option("--dry-run", "Skip writing files and installing dependencies")
   .addOption(hideBanner)
@@ -542,7 +420,7 @@ program
       install: options.install,
       git: options.git,
       hideBanner: options.hideBanner,
-      typescript: options.typescript,
+      template: options.template,
     });
   });
 

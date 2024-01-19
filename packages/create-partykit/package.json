@@ -10,8 +10,6 @@
   },
   "files": [
     "dist",
-    "js-template",
-    "ts-template",
     "rdt-mock.js"
   ],
   "keywords": [],
@@ -32,6 +30,7 @@
     "esbuild": "0.19.11",
     "execa": "^8.0.1",
     "find-up": "^7.0.0",
+    "giget": "^1.2.1",
     "gradient-string": "^2.0.2",
     "ink": "4.4.1",
     "ink-select-input": "^5.0.0",
