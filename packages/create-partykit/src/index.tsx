@@ -287,6 +287,17 @@ export async function init(options: {
         .replace(/\$PROJECT_NAME/g, projectName)
     );
 
+    // replace name in package.json with projectName
+    const packageJsonPath = path.join(pathToProject, "package.json");
+    const packageJsonContents = JSON.parse(
+      fs.readFileSync(packageJsonPath, { encoding: "utf-8" })
+    );
+    packageJsonContents.name = projectName;
+    fs.writeFileSync(
+      packageJsonPath,
+      JSON.stringify(packageJsonContents, null, 2) + "\n"
+    );
+
     console.log(
       `‣ Created a new "${
         templateChoices[templateChoice]

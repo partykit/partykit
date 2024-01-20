@@ -294,13 +294,27 @@ export async function init(options: {
           JSON.stringify(
             {
               $schema: "https://www.partykit.io/schema.json",
-              name: options.name || `${packageJson.name || "my"}-party`,
+              name:
+                options.name ||
+                `${
+                  packageJson.name
+                    .replace(
+                      // replace non alphanumeric or -_ with -
+                      /[^a-zA-Z0-9-_]/g,
+                      "-"
+                    )
+                    .replace(
+                      // remove leading -
+                      /^-/,
+                      ""
+                    ) || "my"
+                }-party`,
               main: shouldUseTypeScript ? "party/index.ts" : "party/index.js",
               compatibilityDate: defaultCompatibilityDate,
             },
             null,
             2
-          )
+          ) + "\n"
         );
         console.log(`‣ Created ${chalk.bold("partykit.json")}`);
       } else {
@@ -374,7 +388,20 @@ export async function init(options: {
       // so let's call the `npm create partykit` on the shell
 
       const partyKitProjectName =
-        options.name || `${packageJson.name || "my"}-party`;
+        options.name ||
+        `${
+          packageJson.name
+            .replace(
+              // replace non alphanumeric or -_ with -
+              /[^a-zA-Z0-9-_]/g,
+              "-"
+            )
+            .replace(
+              // remove leading -
+              /^-/,
+              ""
+            ) || "my"
+        }-party`;
 
       const command = `${
         pkgManager?.name || "npm"
