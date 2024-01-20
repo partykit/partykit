@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.74
+
+### Patch Changes
+
+- [#728](https://github.com/partykit/partykit/pull/728) [`fca54cb`](https://github.com/partykit/partykit/commit/fca54cbfbff28a3ea2a252df040afc1bb2357a3c) Thanks [@threepointone](https://github.com/threepointone)! - init: when using package.json#name for party name, replace non alphanumeric chars with -
+
 ## 0.0.73
 
 ### Patch Changes
