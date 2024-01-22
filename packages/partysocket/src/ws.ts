@@ -66,28 +66,28 @@ function cloneEventBrowser(e: Event) {
 }
 
 function cloneEventNode(e: Event) {
-  const evt = new Event(e.type, e);
-
   if ("data" in e) {
-    // @ts-expect-error we need to fix event/listener types
-    evt.data = e.data;
+    const evt = new MessageEvent(e.type, e);
+    return evt;
   }
 
-  if ("code" in e) {
-    // @ts-expect-error we need to fix event/listener types
-    evt.code = e.code;
-  }
-
-  if ("reason" in e) {
-    // @ts-expect-error we need to fix event/listener types
-    evt.reason = e.reason;
+  if ("code" in e || "reason" in e) {
+    const evt = new CloseEvent(
+      // @ts-expect-error we need to fix event/listener types
+      (e.code || 1999) as number,
+      // @ts-expect-error we need to fix event/listener types
+      (e.reason || "unknown reason") as string,
+      e
+    );
+    return evt;
   }
 
   if ("error" in e) {
-    // @ts-expect-error we need to fix event/listener types
-    evt.error = e.error;
+    const evt = new ErrorEvent(e.error as Error, e);
+    return evt;
   }
 
+  const evt = new Event(e.type, e);
   return evt;
 }
 
@@ -122,6 +122,8 @@ const DEFAULT = {
   startClosed: false,
   debug: false
 };
+
+let didWarnAboutMissingWebSocket = false;
 
 export type UrlProvider = string | (() => string) | (() => Promise<string>);
 export type ProtocolsProvider =
@@ -458,6 +460,27 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
         if (this._closeCalled) {
           this._connectLock = false;
           return;
+        }
+        if (
+          !this._options.WebSocket &&
+          typeof WebSocket === "undefined" &&
+          !didWarnAboutMissingWebSocket
+        ) {
+          console.error(`‼️ No WebSocket implementation available. You should define options.WebSocket. 
+
+For example, if you're using node.js, run \`npm install ws\`, and then in your code:
+
+import PartySocket from 'partysocket';
+import WS from 'ws';
+
+const partysocket = new PartySocket({
+  host: "127.0.0.1:1999",
+  room: "test-room",
+  WebSocket: WS
+});
+
+`);
+          didWarnAboutMissingWebSocket = true;
         }
         const WS: typeof WebSocket = this._options.WebSocket || WebSocket;
         this._debug("connect", { url, protocols });
