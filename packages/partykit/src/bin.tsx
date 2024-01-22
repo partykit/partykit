@@ -11,7 +11,10 @@ import Login from "./commands/login";
 import Logout from "./commands/logout";
 
 import { Box, Text, render } from "ink";
+import { ErrorBoundary } from "react-error-boundary";
 import { Dev } from "./dev";
+import { ZodError } from "zod";
+import { fromZodError } from "zod-validation-error";
 import * as vectorize from "./vectorize/client";
 import type { VectorizeDistanceMetric } from "@cloudflare/workers-types";
 // @ts-expect-error hmm odd
@@ -58,16 +61,22 @@ process.on("exit", (_code) => {
   // console.log(`About to exit with code: ${_code}`);
 });
 
-process.on("uncaughtExceptionMonitor", function (err) {
+function uncaughtExceptionHandler(err: Error) {
   if (err instanceof ConfigurationError) {
     logger.error(err.message);
+    process.exit(1);
+  } else if (err instanceof ZodError) {
+    logger.error(fromZodError(err).toString());
     process.exit(1);
   } else {
     throw err;
   }
-});
+}
+
+process.on("uncaughtExceptionMonitor", uncaughtExceptionHandler);
 
 process.on("unhandledRejection", function (reason, _promise) {
+  uncaughtExceptionHandler(reason as Error);
   // console.error("Unhandled Rejection at:", _promise, "reason:", reason);
   throw reason;
 });
@@ -138,21 +147,26 @@ program
   .action(async (scriptPath, options) => {
     await printBanner();
     render(
-      <Dev
-        main={scriptPath}
-        unstable_outdir={options.unstable_outdir}
-        port={options.port ? parseInt(options.port) : undefined}
-        persist={options.persist}
-        config={options.config}
-        vars={getArrayKVOption(options.var)}
-        define={getArrayKVOption(options.define)}
-        withEnv={options.withEnv}
-        compatibilityDate={options.compatibilityDate}
-        compatibilityFlags={options.compatibilityFlags}
-        minify={options.minify}
-        verbose={options.verbose}
-        serve={options.serve}
-      />
+      <ErrorBoundary
+        fallbackRender={() => null}
+        onError={uncaughtExceptionHandler}
+      >
+        <Dev
+          main={scriptPath}
+          unstable_outdir={options.unstable_outdir}
+          port={options.port ? parseInt(options.port) : undefined}
+          persist={options.persist}
+          config={options.config}
+          vars={getArrayKVOption(options.var)}
+          define={getArrayKVOption(options.define)}
+          withEnv={options.withEnv}
+          compatibilityDate={options.compatibilityDate}
+          compatibilityFlags={options.compatibilityFlags}
+          minify={options.minify}
+          verbose={options.verbose}
+          serve={options.serve}
+        />
+      </ErrorBoundary>
     );
   });
 
