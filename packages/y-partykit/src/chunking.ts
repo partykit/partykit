@@ -50,7 +50,7 @@ export const sendChunked = (data: ArrayBufferLike, ws: WebSocket) => {
       id,
       type: "start",
       size: data.byteLength,
-      count: chunks,
+      count: chunks
     })
   );
 
@@ -68,7 +68,7 @@ export const sendChunked = (data: ArrayBufferLike, ws: WebSocket) => {
       id,
       type: "end",
       size: sentSize,
-      count: sentChunks,
+      count: sentChunks
     })
   );
 };

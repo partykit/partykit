@@ -8,10 +8,11 @@ sidebar:
 You may encounter PartyKit code that exports a plain object conforming to the `PartyKitServer` type, instead of exporting a class that implements the [PartyServer interface](/reference/partyserver-api).
 
 ```ts
-import { PartyKitServer, PartyKitRoom } from "partykit/server";
+import { PartyKitRoom, PartyKitServer } from "partykit/server";
+
 export default {
   async onConnect(connection, room: PartyKitRoom) {},
-  async onRequest(request: Request, room: PartyKitRoom) {},
+  async onRequest(request: Request, room: PartyKitRoom) {}
 } satisfies PartyKitServer;
 ```
 
@@ -24,7 +25,7 @@ We recommend migrating to the new `export default class implements PartyServer` 
 :::
 
 ```ts
-import { PartyKitServer, PartyKitRoom, PartyKitContext } from "partykit/server";
+import { PartyKitContext, PartyKitRoom, PartyKitServer } from "partykit/server";
 
 export default {
   async onConnect(connection, room: PartyKitRoom, ctx: PartyKitContext) {
@@ -37,7 +38,7 @@ export default {
   },
   async onRequest(request: Request, room: PartyKitRoom) {
     // ...
-  },
+  }
 } satisfies PartyKitServer;
 ```
 

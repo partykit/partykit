@@ -15,11 +15,11 @@ try {
       "./packages/partymix/package.json",
       "./packages/party.io/package.json",
       "./packages/partykit-ai/package.json",
-      "./packages/nitroparty/package.json",
+      "./packages/nitroparty/package.json"
     ]) {
-      const package = JSON.parse(fs.readFileSync(path));
-      package.version = "0.0.0-" + stdout.trim();
-      fs.writeFileSync(path, JSON.stringify(package, null, "\t") + "\n");
+      const packageJson = JSON.parse(fs.readFileSync(path));
+      packageJson.version = "0.0.0-" + stdout.trim();
+      fs.writeFileSync(path, JSON.stringify(packageJson, null, "\t") + "\n");
     }
   });
 } catch (error) {

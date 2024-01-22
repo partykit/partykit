@@ -11,5 +11,5 @@ export default {
   onConnect(ws, _room) {
     console.log("xyz connected");
     ws.send("ping from xyz");
-  },
+  }
 } satisfies PartyKitServer;

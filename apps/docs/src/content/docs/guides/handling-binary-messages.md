@@ -54,7 +54,7 @@ In this example, we'll use the [MessagePack](https://msgpack.org/) format and th
 At its simplest, MessagePack is a drop-in replacement for JSON:
 
 ```ts
-import { unpack, pack } from "msgpackr";
+import { pack, unpack } from "msgpackr";
 
 class Server implements Party.Server {
   constructor(readonly room: Party.Room) {}

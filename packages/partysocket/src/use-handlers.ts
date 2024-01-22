@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+
 import type WebSocket from "./ws";
 
 export type EventHandlerOptions = {

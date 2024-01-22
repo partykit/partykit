@@ -3,7 +3,6 @@
 import "./styles.css";
 
 import $ from "jquery";
-
 import { io } from "socket.io-client";
 
 const FADE_TIME = 150; // ms
@@ -20,7 +19,7 @@ const COLORS = [
   "#3b88eb",
   "#3824aa",
   "#a700ff",
-  "#d300e7",
+  "#d300e7"
 ];
 
 // Initialize variables
@@ -33,7 +32,7 @@ const $loginPage = $(".login.page"); // The login page
 const $chatPage = $(".chat.page"); // The chatroom page
 
 const socket = io({
-  transports: ["websocket"],
+  transports: ["websocket"]
 });
 
 // Prompt for setting a username
@@ -257,7 +256,7 @@ socket.on("login", (data) => {
   // Display the welcome message
   const message = "Welcome to Socket.IO Chat – ";
   log(message, {
-    prepend: true,
+    prepend: true
   });
   addParticipantsMessage(data);
 });

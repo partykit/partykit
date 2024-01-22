@@ -2,7 +2,7 @@ import {
   createCookieFactory,
   createCookieSessionStorageFactory,
   createMemorySessionStorageFactory,
-  createSessionStorageFactory,
+  createSessionStorageFactory
 } from "@remix-run/server-runtime";
 
 import { sign, unsign } from "./crypto";

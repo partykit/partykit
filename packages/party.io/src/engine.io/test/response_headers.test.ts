@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID } from "misc/util.test";
 import { assertEquals, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID } from "misc/util.test";
 
 await enableLogs();
 
@@ -13,14 +14,14 @@ describe("response headers", () => {
       },
       editResponseHeaders: (responseHeaders) => {
         responseHeaders.set("def", "456");
-      },
+      }
     });
 
     return setup(engine, 1, async (port, done) => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -33,7 +34,7 @@ describe("response headers", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "4hello",
+          body: "4hello"
         }
       );
 
@@ -54,7 +55,7 @@ describe("response headers", () => {
       },
       editResponseHeaders: (responseHeaders) => {
         responseHeaders.set("def", "456");
-      },
+      }
     });
 
     return setup(engine, 1, (port, done) => {

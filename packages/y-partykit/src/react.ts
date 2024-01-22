@@ -1,6 +1,7 @@
+import { useEffect, useState } from "react";
 import type * as Y from "yjs";
+
 import YPartyKitProvider from "./provider";
-import { useState, useEffect } from "react";
 
 type UseYPartyKitProviderOptions = {
   host: string;
@@ -19,7 +20,7 @@ export default function useYProvider(
       new YPartyKitProvider(host, room, doc, {
         connect: false,
         party,
-        ...options,
+        ...options
       })
   );
 

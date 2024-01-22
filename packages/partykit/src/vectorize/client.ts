@@ -1,15 +1,15 @@
-import { fetchResult } from "../fetchResult";
 import { getConfig, getUser } from "../config";
+import { fetchResult } from "../fetchResult";
 
 import type {
   VectorizeDistanceMetric,
   VectorizeIndex,
   VectorizeIndexDetails,
-  VectorizeQueryOptions,
-  VectorizeVector,
-  VectorizeVectorMutation,
   // @ts-expect-error hmm odd
   VectorizePreset,
+  VectorizeQueryOptions,
+  VectorizeVector,
+  VectorizeVectorMutation
 } from "@cloudflare/workers-types";
 import type { FormData } from "undici";
 
@@ -49,7 +49,7 @@ export async function createIndex(options: {
     {
       user,
       method: "POST",
-      body: JSON.stringify(options.body),
+      body: JSON.stringify(options.body)
     }
   );
 }
@@ -68,7 +68,7 @@ export async function deleteIndex(options: {
     }/indexes/${options.indexName}`,
     {
       user,
-      method: "DELETE",
+      method: "DELETE"
     }
   );
 }
@@ -87,7 +87,7 @@ export async function getIndex(options: {
     }/indexes/${options.indexName}`,
     {
       user,
-      method: "GET",
+      method: "GET"
     }
   );
 }
@@ -102,7 +102,7 @@ export async function listIndexes(options: {
     `/vectorize/${config.team || user.login}/indexes`,
     {
       user,
-      method: "GET",
+      method: "GET"
     }
   );
 }
@@ -123,7 +123,7 @@ export async function updateIndex(options: {
     {
       user,
       method: "PUT",
-      body: JSON.stringify(options.body),
+      body: JSON.stringify(options.body)
     }
   );
 }
@@ -145,7 +145,7 @@ export async function insertIntoIndex(options: {
     {
       user,
       method: "POST",
-      body: options.body,
+      body: options.body
     }
   );
 }
@@ -167,7 +167,7 @@ export async function upsertIntoIndex(options: {
     {
       user,
       method: "POST",
-      body: options.body,
+      body: options.body
     }
   );
 }
@@ -183,7 +183,7 @@ export async function queryIndex(options: {
 
   const payload = {
     query: options.query,
-    options: options,
+    options: options
   };
 
   return fetchResult(
@@ -195,7 +195,7 @@ export async function queryIndex(options: {
     {
       user,
       method: "POST",
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     }
   );
 }
@@ -217,7 +217,7 @@ export async function getByIds(options: {
     {
       user,
       method: "POST",
-      body: JSON.stringify(options.ids),
+      body: JSON.stringify(options.ids)
     }
   );
 }
@@ -239,7 +239,7 @@ export async function deleteByIds(options: {
     {
       user,
       method: "POST",
-      body: JSON.stringify(options.ids),
+      body: JSON.stringify(options.ids)
     }
   );
 }

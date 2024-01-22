@@ -1,5 +1,6 @@
-import type * as RWS from "./ws";
 import ReconnectingWebSocket from "./ws";
+
+import type * as RWS from "./ws";
 
 type Maybe<T> = T | null | undefined;
 type Params = Record<string, Maybe<string>>;
@@ -67,7 +68,7 @@ function getPartyInfo(
     protocol: rawProtocol,
     room,
     party,
-    query,
+    query
   } = partySocketOptions;
 
   // strip the protocol from the beginning of `host` if any
@@ -105,7 +106,7 @@ function getPartyInfo(
   const makeUrl = (query: Params = {}) =>
     `${baseUrl}?${new URLSearchParams([
       ...Object.entries(defaultParams),
-      ...Object.entries(query).filter(valueIsNotNil),
+      ...Object.entries(query).filter(valueIsNotNil)
     ])}`;
 
   // allow urls to be defined as functions
@@ -121,7 +122,7 @@ function getPartyInfo(
     name,
     protocol,
     partyUrl: baseUrl,
-    urlProvider,
+    urlProvider
   };
 }
 
@@ -152,7 +153,7 @@ export default class PartySocket extends ReconnectingWebSocket {
       ...partySocketOptions,
       host: partySocketOptions.host ?? this.host,
       room: partySocketOptions.room ?? this.room,
-      path: partySocketOptions.path ?? this.path,
+      path: partySocketOptions.path ?? this.path
     });
 
     this._url = wsOptions.urlProvider;
@@ -239,6 +240,6 @@ function getWSOptions(partySocketOptions: PartySocketOptions) {
     path: party.path,
     protocols: protocols,
     socketOptions: socketOptions,
-    urlProvider: party.urlProvider,
+    urlProvider: party.urlProvider
   };
 }

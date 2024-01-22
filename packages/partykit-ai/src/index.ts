@@ -10,7 +10,7 @@ export class Ai extends CFAi {
     }
     const { binding, ...rest } = options;
     super(binding, {
-      ...rest,
+      ...rest
     });
   }
 }

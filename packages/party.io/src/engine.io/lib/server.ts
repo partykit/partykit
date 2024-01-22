@@ -1,14 +1,16 @@
-import { getLogger } from "../../logger";
-import type { Handler } from "../../util";
+import type * as Party from "partykit/server";
+
 import { EventEmitter } from "../../event-emitter";
+import { getLogger } from "../../logger";
+import { addCorsHeaders } from "./cors";
 import { Socket } from "./socket";
+import { Transport } from "./transport";
 import { Polling } from "./transports/polling";
 import { WS } from "./transports/websocket";
-import { addCorsHeaders, type CorsOptions } from "./cors";
-import { Transport } from "./transport";
 import { generateId } from "./util";
 
-import type * as Party from "partykit/server";
+import type { Handler } from "../../util";
+import type { CorsOptions } from "./cors";
 
 const TRANSPORTS = ["polling", "websocket"];
 
@@ -94,7 +96,7 @@ const enum ERROR_CODES {
   BAD_HANDSHAKE_METHOD,
   BAD_REQUEST,
   FORBIDDEN,
-  UNSUPPORTED_PROTOCOL_VERSION,
+  UNSUPPORTED_PROTOCOL_VERSION
 }
 
 const ERROR_MESSAGES = new Map<ERROR_CODES, string>([
@@ -103,7 +105,7 @@ const ERROR_MESSAGES = new Map<ERROR_CODES, string>([
   [ERROR_CODES.BAD_HANDSHAKE_METHOD, "Bad handshake method"],
   [ERROR_CODES.BAD_REQUEST, "Bad request"],
   [ERROR_CODES.FORBIDDEN, "Forbidden"],
-  [ERROR_CODES.UNSUPPORTED_PROTOCOL_VERSION, "Unsupported protocol version"],
+  [ERROR_CODES.UNSUPPORTED_PROTOCOL_VERSION, "Unsupported protocol version"]
 ]);
 
 export class Server extends EventEmitter<
@@ -124,7 +126,7 @@ export class Server extends EventEmitter<
         pingTimeout: 20000,
         pingInterval: 25000,
         upgradeTimeout: 10000,
-        maxHttpBufferSize: 1e6,
+        maxHttpBufferSize: 1e6
       },
       opts
     );
@@ -187,16 +189,16 @@ export class Server extends EventEmitter<
         req,
         code,
         message,
-        context,
+        context
       });
       const body = JSON.stringify({
         code,
-        message,
+        message
       });
       responseHeaders.set("Content-Type", "application/json");
       return new Response(body, {
         status: 400,
-        headers: responseHeaders,
+        headers: responseHeaders
       });
     }
 
@@ -209,17 +211,17 @@ export class Server extends EventEmitter<
           code: ERROR_CODES.FORBIDDEN,
           message: ERROR_MESSAGES.get(ERROR_CODES.FORBIDDEN)!,
           context: {
-            message: reason,
-          },
+            message: reason
+          }
         });
         const body = JSON.stringify({
           code: ERROR_CODES.FORBIDDEN,
-          message: reason,
+          message: reason
         });
         responseHeaders.set("Content-Type", "application/json");
         return new Response(body, {
           status: 403,
-          headers: responseHeaders,
+          headers: responseHeaders
         });
       }
     }
@@ -261,8 +263,8 @@ export class Server extends EventEmitter<
       return Promise.reject({
         code: ERROR_CODES.UNKNOWN_TRANSPORT,
         context: {
-          transport,
-        },
+          transport
+        }
       });
     }
 
@@ -274,8 +276,8 @@ export class Server extends EventEmitter<
         return Promise.reject({
           code: ERROR_CODES.UNKNOWN_SID,
           context: {
-            sid,
-          },
+            sid
+          }
         });
       }
       const previousTransport = client.transport.name;
@@ -288,8 +290,8 @@ export class Server extends EventEmitter<
           context: {
             name: "TRANSPORT_MISMATCH",
             transport,
-            previousTransport,
-          },
+            previousTransport
+          }
         });
       }
     } else {
@@ -298,8 +300,8 @@ export class Server extends EventEmitter<
         return Promise.reject({
           code: ERROR_CODES.BAD_HANDSHAKE_METHOD,
           context: {
-            method: req.method,
-          },
+            method: req.method
+          }
         });
       }
 
@@ -308,8 +310,8 @@ export class Server extends EventEmitter<
         return Promise.reject({
           code: ERROR_CODES.UNSUPPORTED_PROTOCOL_VERSION,
           context: {
-            protocol,
-          },
+            protocol
+          }
         });
       }
     }

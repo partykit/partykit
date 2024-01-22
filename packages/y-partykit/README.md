@@ -19,7 +19,7 @@ import { onConnect } from "y-partykit";
 export default {
   async onConnect(conn, room, context) {
     return onConnect(conn, room);
-  },
+  }
 };
 ```
 
@@ -49,10 +49,10 @@ export default {
         // control how often handler is called with these options
         debounceWait: 10000, // default: 2000 ms
         debounceMaxWait: 20000, // default: 10000 ms
-        timeout: 5000, // default: 5000 ms
-      },
+        timeout: 5000 // default: 5000 ms
+      }
     });
-  },
+  }
 };
 ```
 
@@ -83,7 +83,7 @@ const provider = new YPartyKitProvider(
     readOnly: false, // Only allow read access to the document (default: false)
     connect: false, // don't connect immediately, use provider.connect() when required
     params: { token: "my-secret-token" }, // adds to the query string of the websocket connection
-    awareness: new awarenessProtocol.Awareness(yDoc), // use your own Yjs awareness instance
+    awareness: new awarenessProtocol.Awareness(yDoc) // use your own Yjs awareness instance
   }
 );
 ```
@@ -92,12 +92,13 @@ If you're using react, then you can the hook version of the provider: `useYParty
 
 ```tsx
 import useYProvider from "y-partykit/react";
+
 function App() {
   const provider = useYProvider({
     host: "localhost:1999",
     room: "my-document-name",
     doc: yDoc, // optional!
-    options,
+    options
   });
 }
 ```

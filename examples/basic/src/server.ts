@@ -3,7 +3,7 @@ import type {
   ExecutionContext,
   FetchLobby,
   FetchSocket,
-  PartyKitServer,
+  PartyKitServer
 } from "partykit/server";
 
 declare global {
@@ -70,8 +70,8 @@ export default {
   async onBeforeRequest(req) {
     return new Request(req.url, {
       headers: {
-        "x-foo": "bar",
-      },
+        "x-foo": "bar"
+      }
     });
   },
 
@@ -104,5 +104,5 @@ export default {
     console.log(
       `Running cron ${cron.name}: ${cron.cron} at ${cron.scheduledTime}`
     );
-  },
+  }
 } satisfies PartyKitServer;

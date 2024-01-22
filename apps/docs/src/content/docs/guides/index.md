@@ -25,7 +25,7 @@ import PartySocket from "partysocket";
 // connect to our server
 const partySocket = new PartySocket({
   host: "localhost:1999",
-  room: "my-room",
+  room: "my-room"
 });
 
 // send a message to the server
@@ -106,7 +106,7 @@ export default class WebSocketServer implements Party.Server {
     connection.send(`Welcome, ${connection.id}`);
     // let everyone else know that a new connection joined
     this.room.broadcast(`Heads up! ${connection.id} joined the party!`, [
-      connection.id,
+      connection.id
     ]);
   }
   // when a client disconnects

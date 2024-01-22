@@ -6,7 +6,7 @@ document.getElementById("app")!.innerText = location.href;
 
 const partySocket = new PartySocket({
   host: PARTYKIT_HOST,
-  room: "some-room",
+  room: "some-room"
 });
 
 const latencyPingStarts = new Map();
@@ -40,7 +40,7 @@ Object.assign(latencyMonitor.style, {
   "text-align": "center",
   background: "white",
   padding: "10px",
-  zIndex: "9999",
+  zIndex: "9999"
 });
 
 document.body.appendChild(latencyMonitor);

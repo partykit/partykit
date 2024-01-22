@@ -29,8 +29,8 @@ const partySocket = new PartySocket({
   // attach the token to PartyKit in the query string
   query: async () => ({
     // get an auth token using your authentication client library
-    token: await getToken(),
-  }),
+    token: await getToken()
+  })
 });
 ```
 
@@ -89,8 +89,8 @@ The recommended way is to pass it as an `Authorization` header:
 fetch(`https://${PARTYKIT_HOST}/party/${roomId}`, {
   headers: {
     // get an auth token using your authentication client library
-    Authorization: getToken(),
-  },
+    Authorization: getToken()
+  }
 });
 ```
 

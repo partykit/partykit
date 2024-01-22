@@ -1,6 +1,8 @@
-import type { AppLoadContext, ServerBuild } from "./cf";
-import { createRequestHandler as createRemixRequestHandler } from "./cf";
 import type * as Party from "partykit/server";
+
+import { createRequestHandler as createRemixRequestHandler } from "./cf";
+
+import type { AppLoadContext, ServerBuild } from "./cf";
 
 /**
  * A function that returns the value to use as `context` in route `loader` and
@@ -28,7 +30,7 @@ export type RequestHandler = (
 export function createRequestHandler({
   build,
   getLoadContext,
-  mode,
+  mode
 }: {
   build: ServerBuild;
   getLoadContext?: GetLoadContextFunction;

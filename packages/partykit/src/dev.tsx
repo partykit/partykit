@@ -1,33 +1,34 @@
-import type { Json, MiniflareOptions } from "miniflare";
-import { Log, Miniflare, TypedEventTarget } from "miniflare";
-import { fileURLToPath } from "url";
-import { onExit } from "signal-exit";
-import type { Config } from "./config";
-import { getConfig, getUser } from "./config";
+import crypto from "crypto";
 import fs from "fs";
+import assert from "node:assert";
 import path from "path";
-import { execaCommandSync } from "execa";
-import esbuild from "esbuild";
-import type { BuildContext, BuildOptions } from "esbuild";
+import { fileURLToPath } from "url";
+
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import crypto from "crypto";
-import type { Abortable } from "node:events";
-import { Suspense, useEffect, useMemo, useState } from "react";
-import React from "react";
-import { Text, Box, render, useApp, useInput, useStdin } from "ink";
-import useInspector from "./inspect";
-import { fetch } from "undici";
-import { logger } from "./logger";
+import esbuild from "esbuild";
+import { execaCommandSync } from "execa";
 import getPort from "get-port";
-import asyncCache from "./async-cache";
+import { Box, render, Text, useApp, useInput, useStdin } from "ink";
+import { Log, Miniflare, TypedEventTarget } from "miniflare";
 import open from "open";
-import type { StaticAssetsManifestType } from "./server";
+import { onExit } from "signal-exit";
+import { fetch } from "undici";
+
+import asyncCache from "./async-cache";
+import { getConfig, getUser } from "./config";
+import { API_BASE } from "./fetchResult";
+import useInspector from "./inspect";
+import { logger } from "./logger";
 import nodejsCompatPlugin from "./nodejs-compat";
 
 import type { VectorizeClientOptions } from "../facade/vectorize";
-import assert from "node:assert";
-import { API_BASE } from "./fetchResult";
+import type { Config } from "./config";
+import type { StaticAssetsManifestType } from "./server";
+import type { BuildContext, BuildOptions } from "esbuild";
+import type { Json, MiniflareOptions } from "miniflare";
+import type { Abortable } from "node:events";
 import type { Readable } from "node:stream";
 
 function handleRuntimeStdio(stdout: Readable, stderr: Readable) {
@@ -61,7 +62,7 @@ function handleRuntimeStdio(stdout: Readable, stderr: Readable) {
     },
     isWarning(chunk: string) {
       return /\.c\+\+:\d+: warning:/.test(chunk);
-    },
+    }
   };
 
   stdout.on("data", (chunk: Buffer | string) => {
@@ -136,7 +137,7 @@ const esbuildOptions: BuildOptions = {
   format: "esm",
   bundle: true,
   write: false,
-  target: "esnext",
+  target: "esnext"
 } as const;
 
 interface ReloadedEventOptions {
@@ -168,7 +169,7 @@ function getUserDetails(config: Config): UserDetails {
       // eslint-disable-next-line deprecation/deprecation
       namespace: config.team || user.login,
       token: sessionToken,
-      type: user.type,
+      type: user.type
     };
   }) as UserDetails;
 }
@@ -236,7 +237,7 @@ export class MiniflareServer extends TypedEventTarget<MiniflareServerEventMap> {
       const url = await this.#mf.ready;
       if (opts?.signal?.aborted) return;
       const event = new ReloadedEvent("reloaded", {
-        url,
+        url
         // internalDurableObjects: internalObjects,
       });
       this.dispatchEvent(event);
@@ -262,7 +263,7 @@ export async function devTest(props: DevProps) {
           resolve({
             close: () => {
               unmount();
-            },
+            }
           });
         }}
       />
@@ -296,7 +297,7 @@ function useHotkeys(props: {
 }) {
   const {
     // inspectorPort, inspect,
-    localProtocol,
+    localProtocol
   } = props;
   // UGH, we should put port in context instead
   // const [toggles, setToggles] = useState({});
@@ -389,7 +390,7 @@ function Inspector(props: { inspectorUrl: string | undefined }) {
     inspectorUrl: props.inspectorUrl,
     logToTerminal: true,
     sourceMapPath: undefined,
-    sourceMapMetadata: undefined,
+    sourceMapMetadata: undefined
   });
   return null;
 }
@@ -478,10 +479,10 @@ function useAssetServer(
       external: assetsBuild?.external,
       define: {
         ...defines,
-        ...assetsBuild?.define,
+        ...assetsBuild?.define
       },
       loader: assetsBuild?.loader,
-      alias: assetsBuild?.alias,
+      alias: assetsBuild?.alias
     }),
     [assetsBuild, assetsPath, defines]
   );
@@ -501,7 +502,7 @@ function useAssetServer(
       browserTTL: theOptions.browserTTL,
       edgeTTL: theOptions.edgeTTL,
       singlePageApp: theOptions.singlePageApp,
-      assets: {},
+      assets: {}
     };
     if (!assetsPath) return assetsMap;
 
@@ -522,7 +523,7 @@ function useAssetServer(
     if (!assetsPath) return;
     const watcher = chokidar.watch(assetsPath, {
       ignoreInitial: true,
-      ignored: ["**/node_modules/**", "**/.git/**"],
+      ignored: ["**/node_modules/**", "**/.git/**"]
     });
 
     watcher.on("all", () => {
@@ -561,7 +562,7 @@ function useAssetServer(
 
       await ctx.serve({
         port: portForAssetsServer,
-        servedir: assetsPath,
+        servedir: assetsPath
       });
     }
 
@@ -578,7 +579,7 @@ function useAssetServer(
 
   return {
     assetsMap,
-    portForAssetsServer,
+    portForAssetsServer
   };
 }
 
@@ -597,7 +598,7 @@ function useDev(options: DevProps): {
         port: options.port,
         persist: options.persist,
         compatibilityDate: options.compatibilityDate,
-        compatibilityFlags: options.compatibilityFlags,
+        compatibilityFlags: options.compatibilityFlags
       },
       { readEnvLocal: true, withEnv: options.withEnv }
     )
@@ -623,7 +624,7 @@ function useDev(options: DevProps): {
   const assetDefines = useMemo(
     () => ({
       PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
-      ...config.define,
+      ...config.define
     }),
     [config.define, portForServer]
   );
@@ -658,8 +659,8 @@ function useDev(options: DevProps): {
             "X-CLOUDFLARE-ACCOUNT-ID": process.env.CLOUDFLARE_ACCOUNT_ID || "",
             "X-CLOUDFLARE-API-TOKEN": process.env.CLOUDFLARE_API_TOKEN || "",
             Authorization: `Bearer ${userDetails.token}`,
-            "X-PartyKit-User-Type": userDetails.type,
-          },
+            "X-PartyKit-User-Type": userDetails.type
+          }
         };
       }
     }
@@ -734,7 +735,7 @@ Workers["${name}"] = ${name};
                 )
                 .join("\n")
             ),
-          resolveDir: process.cwd(),
+          resolveDir: process.cwd()
           // TODO: setting a sourcefile name crashes the whole thing???
           // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
         },
@@ -748,7 +749,7 @@ Workers["${name}"] = ${name};
           PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
           PARTYKIT_API_BASE: `"${API_BASE}"`,
           ...esbuildOptions.define,
-          ...config.define,
+          ...config.define
         },
         alias: config.build?.alias,
         plugins: [
@@ -797,7 +798,7 @@ Workers["${name}"] = ${name};
 
                 return new Promise<void>((resolve) => {
                   server.addEventListener("reloaded", () => resolve(), {
-                    once: true,
+                    once: true
                   });
 
                   const localPersistencePath =
@@ -828,7 +829,7 @@ Workers["${name}"] = ${name};
                       compatibilityDate,
                       compatibilityFlags: [
                         "nodejs_compat",
-                        ...(config.compatibilityFlags || []),
+                        ...(config.compatibilityFlags || [])
                       ],
                       port: portForServer,
                       bindings: {
@@ -855,17 +856,17 @@ Workers["${name}"] = ${name};
                                             userDetails!.token
                                           }`,
                                           "X-PartyKit-User-Type":
-                                            userDetails!.type,
-                                        },
-                                      },
+                                            userDetails!.type
+                                        }
+                                      }
                                     }
-                                  : (config.ai as Json),
+                                  : (config.ai as Json)
                             }
                           : {}),
                         ...(config.vectorize
                           ? { PARTYKIT_VECTORIZE: vectorizeBindings }
                           : {}),
-                        ...{ PARTYKIT_CRONS: config.crons || {} },
+                        ...{ PARTYKIT_CRONS: config.crons || {} }
                       },
                       durableObjects: {
                         PARTYKIT_DURABLE: "PartyKitDurable",
@@ -874,7 +875,7 @@ Workers["${name}"] = ${name};
                         >((obj, [name, _]) => {
                           obj[name] = `${name}DO`;
                           return obj;
-                        }, {}),
+                        }, {})
                       },
                       ...(persistencePath && {
                         cachePersist: path.join(persistencePath, "cache"),
@@ -884,14 +885,14 @@ Workers["${name}"] = ${name};
                         ),
                         kvPersist: path.join(persistencePath, "kv"),
                         r2Persist: path.join(persistencePath, "r2"),
-                        d1Persist: path.join(persistencePath, "d1"),
+                        d1Persist: path.join(persistencePath, "d1")
                       }),
                       // @ts-expect-error miniflare's types are wrong
                       modules: [
                         {
                           type: "ESModule",
                           path: absoluteScriptPath,
-                          contents: code,
+                          contents: code
                         },
                         {
                           type: "ESModule",
@@ -901,7 +902,7 @@ Workers["${name}"] = ${name};
                           ),
                           contents: `export default ${JSON.stringify(
                             assetsMap
-                          )};`,
+                          )};`
                         },
                         ...Object.entries(wasmModules).map(([name, p]) => ({
                           type: "CompiledWasm",
@@ -909,17 +910,17 @@ Workers["${name}"] = ${name};
                             path.dirname(absoluteScriptPath),
                             name
                           ),
-                          contents: fs.readFileSync(p),
-                        })),
+                          contents: fs.readFileSync(p)
+                        }))
                       ],
                       modulesRoot: process.cwd(),
-                      script: code,
+                      script: code
                     },
                     { signal: abortController.signal }
                   );
                 });
               });
-            },
+            }
           },
           {
             name: "partykit-wasm-dev",
@@ -948,12 +949,12 @@ Workers["${name}"] = ${name};
                   path: fileName, // change the reference to the changed module
                   external: true, // not an external in dev, we swap it with an identifier
                   namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
-                  watchFiles: [filePath], // we also add the file to esbuild's watch list
+                  watchFiles: [filePath] // we also add the file to esbuild's watch list
                 };
               });
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
 
       if (config.build?.command) {
@@ -971,7 +972,7 @@ Workers["${name}"] = ${name};
             // logs are still visible.
             stdout: "inherit",
             stderr: "inherit",
-            ...(buildCwd && { cwd: buildCwd }),
+            ...(buildCwd && { cwd: buildCwd })
           });
         } catch (err) {
           console.error(chalk.red("Custom build failed"), err);
@@ -980,7 +981,7 @@ Workers["${name}"] = ${name};
         customBuildFolderWatcher = chokidar
           .watch(config.build.watch || path.join(process.cwd(), "./src"), {
             persistent: true,
-            ignoreInitial: true,
+            ignoreInitial: true
           })
           .on("all", async (_event, _path) => {
             try {
@@ -990,7 +991,7 @@ Workers["${name}"] = ${name};
                 // logs are still visible.
                 stdout: "inherit",
                 stderr: "inherit",
-                ...(buildCwd && { cwd: buildCwd }),
+                ...(buildCwd && { cwd: buildCwd })
               });
             } catch (err) {
               console.error(chalk.red("Custom build failed"), err);
@@ -1029,7 +1030,7 @@ Workers["${name}"] = ${name};
     options.config,
     options.verbose,
     options.unstable_outdir,
-    userDetails,
+    userDetails
   ]);
 
   const { onReady } = options;
@@ -1121,12 +1122,12 @@ Workers["${name}"] = ${name};
 
   return {
     inspectorUrl,
-    portForServer,
+    portForServer
   };
 }
 
 function HotKeys({
-  portForServer,
+  portForServer
 }: {
   portForServer: number;
   // inspectorPort: number;
@@ -1138,7 +1139,7 @@ function HotKeys({
     localProtocol: "http",
     // worker: undefined,
     host: `localhost`,
-    port: portForServer,
+    port: portForServer
   });
 
   return (

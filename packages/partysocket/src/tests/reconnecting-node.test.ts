@@ -4,15 +4,16 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
 import {
-  beforeEach,
-  afterEach,
-  test,
-  expect,
-  vitest,
-  beforeAll,
   afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  expect,
+  test,
+  vitest
 } from "vitest";
 import NodeWebSocket, { WebSocketServer } from "ws";
+
 // import type { ErrorEvent } from "../ws";
 import ReconnectingWebSocket from "../ws";
 
@@ -91,7 +92,7 @@ testDone("pass WebSocket via options", (done) => {
   delete (global as any).WebSocket;
   const ws = new ReconnectingWebSocket(URL, undefined, {
     WebSocket: NodeWebSocket,
-    maxRetries: 0,
+    maxRetries: 0
   });
   ws.reconnect();
   ws.addEventListener("open", () => {

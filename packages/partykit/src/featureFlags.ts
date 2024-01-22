@@ -1,20 +1,22 @@
-import path from "path";
-import os from "os";
 import fs from "fs";
-import z from "zod";
+import os from "os";
+import path from "path";
+
 import JSON5 from "json5";
+import z from "zod";
+
 import { fetchResult } from "./fetchResult";
 
 const USER_FLAGS_PATH = path.join(os.homedir(), ".partykit", "settings.json");
 
 const flagsSchema = z.object({
   defaultLoginMethod: z.enum(["clerk", "github"]),
-  supportedLoginMethods: z.array(z.enum(["clerk", "github"])),
+  supportedLoginMethods: z.array(z.enum(["clerk", "github"]))
 });
 
 const defaultFlags: Flags = {
   defaultLoginMethod: "clerk",
-  supportedLoginMethods: ["clerk", "github"],
+  supportedLoginMethods: ["clerk", "github"]
 };
 
 let cachedFlags: Flags | undefined;
@@ -47,7 +49,7 @@ export function getFlags(): Flags {
 
   return {
     ...defaultFlags,
-    ...(cachedFlags || {}),
+    ...(cachedFlags || {})
   };
 }
 

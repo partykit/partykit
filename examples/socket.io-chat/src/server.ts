@@ -1,4 +1,5 @@
-import { createServer, type Socket } from "party.io";
+import { createServer } from "party.io";
+import type { Socket } from "party.io";
 import type * as Party from "partykit/server";
 
 const Server = createServer((io, req, lobby, _ctx) => {
@@ -17,7 +18,7 @@ const Server = createServer((io, req, lobby, _ctx) => {
       // we tell the client to execute 'new message'
       socket.broadcast.emit("new message", {
         username,
-        message: data,
+        message: data
       });
     });
 
@@ -38,26 +39,26 @@ const Server = createServer((io, req, lobby, _ctx) => {
       // ++numUsers;
       addedUser = true;
       socket.emit("login", {
-        numUsers: numUsers + 1,
+        numUsers: numUsers + 1
       });
       // echo globally (all clients) that a person has connected
       socket.broadcast.emit("user joined", {
         username,
-        numUsers: numUsers + 1,
+        numUsers: numUsers + 1
       });
     });
 
     // when the client emits 'typing', we broadcast it to others
     socket.on("typing", () => {
       socket.broadcast.emit("typing", {
-        username,
+        username
       });
     });
 
     // when the client emits 'stop typing', we broadcast it to others
     socket.on("stop typing", () => {
       socket.broadcast.emit("stop typing", {
-        username,
+        username
       });
     });
 
@@ -74,7 +75,7 @@ const Server = createServer((io, req, lobby, _ctx) => {
         // echo globally that this client has left
         socket.broadcast.emit("user left", {
           username,
-          numUsers: numUsers - 1,
+          numUsers: numUsers - 1
         });
       }
     });

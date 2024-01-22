@@ -1,5 +1,6 @@
-import { EventEmitter } from ".";
 import { assertEquals, describe, it } from "vitest";
+
+import { EventEmitter } from ".";
 
 describe("EventEmitter", () => {
   describe(".on(event, fn)", () => {

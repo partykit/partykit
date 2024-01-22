@@ -1,12 +1,10 @@
-import {
-  Adapter,
-  type BroadcastFlags,
-  type Room,
-  type SocketId,
-} from "./adapter";
-import type { EventNames, EventParams, EventsMap } from "../../event-emitter";
-import { type Handshake, RESERVED_EVENTS, Socket } from "./socket";
 import { PacketType } from "../../socket.io-parser";
+import { Adapter } from "./adapter";
+import { RESERVED_EVENTS, Socket } from "./socket";
+
+import type { EventNames, EventParams, EventsMap } from "../../event-emitter";
+import type { BroadcastFlags, Room, SocketId } from "./adapter";
+import type { Handshake } from "./socket";
 
 /**
  * Interface for classes that aren't `EventEmitter`s, but still expose a
@@ -204,7 +202,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       // @ts-ignore FIXME
       nsp: this.adapter.nsp.name,
       type: PacketType.EVENT,
-      data,
+      data
     };
 
     const withAck = typeof data[data.length - 1] === "function";
@@ -213,7 +211,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       this.adapter.broadcast(packet, {
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       });
 
       return true;
@@ -248,7 +246,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       {
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       },
       (clientCount: number) => {
         // each Socket.IO server in the cluster sends the number of clients that were notified
@@ -300,7 +298,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       .fetchSockets({
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       })
       .then((sockets: Socket[]) => {
         return sockets.map((socket) => {
@@ -337,7 +335,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       {
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       },
       Array.isArray(room) ? room : [room]
     );
@@ -362,7 +360,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       {
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       },
       Array.isArray(room) ? room : [room]
     );
@@ -387,7 +385,7 @@ export class BroadcastOperator<EmitEvents extends EventsMap, SocketData>
       {
         rooms: this.rooms,
         except: this.exceptRooms,
-        flags: this.flags,
+        flags: this.flags
       },
       close
     );

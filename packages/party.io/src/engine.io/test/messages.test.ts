@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID } from "misc/util.test";
 import { assertEquals, assertInstanceOf, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID } from "misc/util.test";
 
 await enableLogs();
 
@@ -17,7 +18,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -26,7 +27,7 @@ describe("messages", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -51,7 +52,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -60,7 +61,7 @@ describe("messages", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -86,7 +87,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -95,7 +96,7 @@ describe("messages", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -175,7 +176,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -185,7 +186,7 @@ describe("messages", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "4hello €亜Б",
+          body: "4hello €亜Б"
         }
       );
 
@@ -212,7 +213,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -222,7 +223,7 @@ describe("messages", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "bAQIDBA==",
+          body: "bAQIDBA=="
         }
       );
 
@@ -254,7 +255,7 @@ describe("messages", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -264,7 +265,7 @@ describe("messages", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "bAQIDBA==\x1e4hello €亜Б",
+          body: "bAQIDBA==\x1e4hello €亜Б"
         }
       );
 

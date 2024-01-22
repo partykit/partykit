@@ -93,7 +93,7 @@ export default class Server implements Party.Server {
       const item = (await this.room.storage.get(`item:${event.id}`)) ?? {};
       const updatedItem = {
         ...item,
-        ...event.data,
+        ...event.data
       };
 
       this.room.storage.put(`item:${event.id}`, updatedItem);

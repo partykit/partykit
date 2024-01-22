@@ -1,14 +1,12 @@
-import type { PartySocketOptions } from ".";
 import PartySocket from ".";
-
+import { useAttachWebSocketEventHandlers } from "./use-handlers";
 import {
   getOptionsThatShouldCauseRestartWhenChanged,
-  useStableSocket,
+  useStableSocket
 } from "./use-socket";
-import {
-  useAttachWebSocketEventHandlers,
-  type EventHandlerOptions,
-} from "./use-handlers";
+
+import type { PartySocketOptions } from ".";
+import type { EventHandlerOptions } from "./use-handlers";
 
 type UsePartySocketOptions = PartySocketOptions & EventHandlerOptions;
 
@@ -29,8 +27,8 @@ export default function usePartySocket(options: UsePartySocketOptions) {
         options.path,
         options.protocol,
         options.protocols,
-        ...getOptionsThatShouldCauseRestartWhenChanged(options),
-      ]),
+        ...getOptionsThatShouldCauseRestartWhenChanged(options)
+      ])
   });
 
   useAttachWebSocketEventHandlers(socket, options);

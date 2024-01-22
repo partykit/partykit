@@ -1,11 +1,13 @@
 import chalk from "chalk";
-import { fetch } from "undici";
 import open from "open";
-import { version as packageVersion } from "../../package.json";
+import { fetch } from "undici";
 
+import { version as packageVersion } from "../../package.json";
+import { userConfigSchema } from "../config";
 import * as ConfigSchema from "../config-schema";
-import { userConfigSchema, type UserConfig } from "../config";
 import countdown from "../countdown";
+
+import type { UserConfig } from "../config";
 
 export const configSchema = ConfigSchema.schema;
 export type Config = ConfigSchema.Config;
@@ -21,11 +23,11 @@ export async function signInWithGitHub(): Promise<UserConfig> {
       Accept: "application/json",
       "Content-Type": "application/json",
       "User-Agent": `partykit/${packageVersion}`,
-      "X-PartyKit-Version": packageVersion,
+      "X-PartyKit-Version": packageVersion
     },
     body: JSON.stringify({
-      client_id: GITHUB_APP_ID,
-    }),
+      client_id: GITHUB_APP_ID
+    })
   });
 
   if (!res.ok) {
@@ -71,13 +73,13 @@ export async function signInWithGitHub(): Promise<UserConfig> {
         Accept: "application/json",
         "Content-Type": "application/json",
         "User-Agent": `partykit/${packageVersion}`,
-        "X-PartyKit-Version": packageVersion,
+        "X-PartyKit-Version": packageVersion
       },
       body: JSON.stringify({
         client_id: GITHUB_APP_ID,
         device_code,
-        grant_type: "urn:ietf:params:oauth:grant-type:device_code",
-      }),
+        grant_type: "urn:ietf:params:oauth:grant-type:device_code"
+      })
     });
 
     if (!res.ok) {
@@ -95,8 +97,8 @@ export async function signInWithGitHub(): Promise<UserConfig> {
         headers: {
           Authorization: `Bearer ${access_token}`,
           "User-Agent": `partykit/${packageVersion}`,
-          "X-PartyKit-Version": packageVersion,
-        },
+          "X-PartyKit-Version": packageVersion
+        }
       })
     ).json()) as { login: string };
 
@@ -104,7 +106,7 @@ export async function signInWithGitHub(): Promise<UserConfig> {
       return userConfigSchema.parse({
         access_token,
         login: githubUserDetails.login,
-        type: "github",
+        type: "github"
       });
     }
 

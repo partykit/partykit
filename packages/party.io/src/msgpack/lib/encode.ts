@@ -135,7 +135,7 @@ function _encode(
     defers.push({
       _str: value as string,
       _length: length,
-      _offset: bytes.length,
+      _offset: bytes.length
     });
     return size + length;
   }
@@ -148,7 +148,7 @@ function _encode(
       defers.push({
         _float: value as number,
         _length: 8,
-        _offset: bytes.length,
+        _offset: bytes.length
       });
       return 9;
     }
@@ -332,7 +332,7 @@ function _encode(
       defers.push({
         _bin: value instanceof ArrayBuffer ? value : value.buffer,
         _length: length,
-        _offset: bytes.length,
+        _offset: bytes.length
       });
       return size + length;
     }

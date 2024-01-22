@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
-import WS from "ws";
 import PartySocket from "partysocket";
+import WS from "ws";
 
 const ps = new PartySocket({
   host: "127.0.0.1:1999",
   room: "test",
-  WebSocket: WS,
+  WebSocket: WS
 });
 
 ps.addEventListener("open", () => {

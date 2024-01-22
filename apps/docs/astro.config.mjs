@@ -1,6 +1,6 @@
-import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
 import tailwind from "@astrojs/tailwind";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,23 +15,23 @@ export default defineConfig({
           {
             tag: "script",
             content:
-              "window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };",
+              "window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };"
           },
           {
             tag: "script",
             attrs: {
               src: "/_vercel/insights/script.js",
-              defer: true,
-            },
-          },
+              defer: true
+            }
+          }
         ],
         social: {
           github: "https://github.com/partykit/partykit",
           discord: "https://discord.gg/KDZb7J4uxJ",
-          twitter: "https://twitter.com/partykit_io",
+          twitter: "https://twitter.com/partykit_io"
         },
         editLink: {
-          baseUrl: "https://github.com/partykit/partykit/tree/main/apps/docs",
+          baseUrl: "https://github.com/partykit/partykit/tree/main/apps/docs"
         },
         lastUpdated: true,
         sidebar: [
@@ -40,33 +40,33 @@ export default defineConfig({
             items: [
               {
                 label: "Quickstart",
-                link: "/quickstart/",
+                link: "/quickstart/"
               },
               {
                 label: "Add to existing project",
-                link: "/add-to-existing-project/",
+                link: "/add-to-existing-project/"
               },
               {
                 label: "What is PartyKit",
-                link: "/",
+                link: "/"
               },
               {
                 label: "How PartyKit works",
-                link: "/how-partykit-works/",
-              },
-            ],
+                link: "/how-partykit-works/"
+              }
+            ]
           },
           {
             label: "API Reference",
             autogenerate: {
-              directory: "reference",
-            },
+              directory: "reference"
+            }
           },
           {
             label: "Guides",
             autogenerate: {
-              directory: "guides",
-            },
+              directory: "guides"
+            }
           },
           {
             label: "Examples",
@@ -74,22 +74,22 @@ export default defineConfig({
             items: [
               {
                 label: "All PartyKit Examples",
-                link: "/examples/",
+                link: "/examples/"
               },
               {
                 label: "App examples",
                 autogenerate: {
-                  directory: "examples/app-examples",
-                },
+                  directory: "examples/app-examples"
+                }
               },
               {
                 label: "Starter kits",
                 collapsed: true,
                 autogenerate: {
-                  directory: "examples/starter-kits",
-                },
-              },
-            ],
+                  directory: "examples/starter-kits"
+                }
+              }
+            ]
           },
           {
             label: "Tutorials",
@@ -99,30 +99,30 @@ export default defineConfig({
                 label: "Add PartyKit to a Next.js app",
                 collapsed: true,
                 autogenerate: {
-                  directory: "tutorials/add-partykit-to-a-nextjs-app",
-                },
-              },
-            ],
+                  directory: "tutorials/add-partykit-to-a-nextjs-app"
+                }
+              }
+            ]
           },
           {
             label: "Glossary",
-            link: "/glossary",
+            link: "/glossary"
           },
           {
             label: "Enterprise",
-            link: "/enterprise",
-          },
-        ],
+            link: "/enterprise"
+          }
+        ]
       },
       tailwind({
-        applyBaseStyles: false,
+        applyBaseStyles: false
       })
-    ),
+    )
   ],
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
   image: {
     service: {
-      entrypoint: "astro/assets/services/sharp",
-    },
-  },
+      entrypoint: "astro/assets/services/sharp"
+    }
+  }
 });

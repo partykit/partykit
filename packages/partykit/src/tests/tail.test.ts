@@ -1,12 +1,14 @@
 import fs from "fs";
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { clearMocks } from "./fetchResult-mock";
+
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { tail } from "../cli";
+import { clearMocks } from "./fetchResult-mock";
 
 vi.mock("../fetchResult", async () => {
   const { fetchResult } = await import("./fetchResult-mock");
   return {
-    fetchResult,
+    fetchResult
   };
 });
 
@@ -45,7 +47,7 @@ describe("tail", () => {
         samplingRate: undefined,
         method: [],
         ip: [],
-        search: undefined,
+        search: undefined
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot(
       `[Error: Missing project name, please specify "name" in your config, or pass it in via the CLI with --name <name>]`

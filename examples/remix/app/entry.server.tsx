@@ -4,10 +4,10 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
+import { renderToReadableStream } from "react-dom/server";
 import type { AppLoadContext, EntryContext } from "partymix";
 import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
-import { renderToReadableStream } from "react-dom/server";
 
 export default async function handleRequest(
   request: Request,
@@ -24,7 +24,7 @@ export default async function handleRequest(
         // Log streaming rendering errors from inside the shell
         console.error(error);
         responseStatusCode = 500;
-      },
+      }
     }
   );
 
@@ -36,6 +36,6 @@ export default async function handleRequest(
   responseHeaders.set("Content-Type", "text/html");
   return new Response(body, {
     headers: responseHeaders,
-    status: responseStatusCode,
+    status: responseStatusCode
   });
 }

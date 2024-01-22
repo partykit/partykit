@@ -26,8 +26,8 @@ npm install partykit-ai
 Then, import the `partykit-ai` package in your server code:
 
 ```ts
-import type * as Party from "partykit/server";
 import { Ai } from "partykit-ai";
+import type * as Party from "partykit/server";
 
 export default class Server implements Party.Server {
   ai: Ai;
@@ -60,8 +60,8 @@ You can list all available models and their usecases by running `npx partykit ai
 As an example, here's a fetch handler that uses the text-generation model to get a description for a word:
 
 ```ts
-import type * as Party from "partykit/server";
 import { Ai } from "partykit-ai";
+import type * as Party from "partykit/server";
 
 export default class {
   static async onFetch(request: Party.Request, lobby: Party.FetchLobby) {
@@ -71,14 +71,14 @@ export default class {
         { role: "system", content: "You are a friendly assistant" },
         {
           role: "user",
-          content: "What is the origin of the phrase Hello, World",
-        },
+          content: "What is the origin of the phrase Hello, World"
+        }
       ],
-      stream: true,
+      stream: true
     });
 
     return new Response(result, {
-      headers: { "content-type": "text/event-stream" },
+      headers: { "content-type": "text/event-stream" }
     });
   }
 }
@@ -168,9 +168,9 @@ You can also interact with the vectorize index from your server code. After conf
   // ...
   "vectorize": {
     "myIndex": {
-      "index_name": "my-index",
-    },
-  },
+      "index_name": "my-index"
+    }
+  }
 }
 ```
 
@@ -178,6 +178,7 @@ You can access it from your server code like so:
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class implements Party.Server {
   constructor(public room: Party.Room) {}
   async onConnect(connection: Party.Connection) {
@@ -212,8 +213,8 @@ let vectorExample = {
   metadata: {
     key: "value",
     hello: "world",
-    url: "r2://bucket/some/object.json",
-  },
+    url: "r2://bucket/some/object.json"
+  }
 };
 ```
 
@@ -224,7 +225,7 @@ Insert vectors into a Vectorize index
 ```ts
 await myIndex.insert([
   { id: "1", values: [1, 2, 3] },
-  { id: "2", values: [4, 5, 6] },
+  { id: "2", values: [4, 5, 6] }
 ]);
 ```
 
@@ -235,7 +236,7 @@ Upsert vectors into a Vectorize index
 ```ts
 await myIndex.upsert([
   { id: "1", values: [1, 2, 3] },
-  { id: "2", values: [4, 5, 6] },
+  { id: "2", values: [4, 5, 6] }
 ]);
 ```
 
@@ -261,7 +262,7 @@ const result = await myIndex.query(
     topK: 15,
     returnValues: false,
     returnMetadata: true,
-    namespace: "my-namespace",
+    namespace: "my-namespace"
   }
 );
 ```
@@ -364,28 +365,28 @@ const newMetadataVectors = [
   {
     id: "1",
     values: [32.4, 74.1, 3.2],
-    metadata: { url: "/products/sku/13913913", streaming_platform: "netflix" },
+    metadata: { url: "/products/sku/13913913", streaming_platform: "netflix" }
   },
   {
     id: "2",
     values: [15.1, 19.2, 15.8],
-    metadata: { url: "/products/sku/10148191", streaming_platform: "hbo" },
+    metadata: { url: "/products/sku/10148191", streaming_platform: "hbo" }
   },
   {
     id: "3",
     values: [0.16, 1.2, 3.8],
-    metadata: { url: "/products/sku/97913813", streaming_platform: "amazon" },
+    metadata: { url: "/products/sku/97913813", streaming_platform: "amazon" }
   },
   {
     id: "4",
     values: [75.1, 67.1, 29.9],
-    metadata: { url: "/products/sku/418313", streaming_platform: "netflix" },
+    metadata: { url: "/products/sku/418313", streaming_platform: "netflix" }
   },
   {
     id: "5",
     values: [58.8, 6.7, 3.4],
-    metadata: { url: "/products/sku/55519183", streaming_platform: "hbo" },
-  },
+    metadata: { url: "/products/sku/55519183", streaming_platform: "hbo" }
+  }
 ];
 
 // Upsert vectors with added metadata, returning a count of the vectors upserted and their vector IDs
@@ -402,7 +403,7 @@ let queryVector = [54.8, 5.5, 3.1];
 let originalMatches = await YOUR_INDEX.query(queryVector, {
   topK: 3,
   returnValues: true,
-  returnMetadata: true,
+  returnMetadata: true
 });
 ```
 
@@ -451,7 +452,7 @@ let metadataMatches = await YOUR_INDEX.query(queryVector, {
   topK: 3,
   filter: { streaming_platform: "netflix" },
   returnValues: true,
-  returnMetadata: true,
+  returnMetadata: true
 });
 ```
 

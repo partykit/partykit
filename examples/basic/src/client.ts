@@ -4,7 +4,7 @@ document.getElementById("app")!.innerText = location.href;
 
 const partySocket = new PartySocket({
   host: window.location.host,
-  room: "some-room",
+  room: "some-room"
 });
 
 function generateUUID() {
@@ -50,7 +50,7 @@ Object.assign(latencyMonitor.style, {
   "text-align": "center",
   background: "white",
   padding: "10px",
-  zIndex: "9999",
+  zIndex: "9999"
 });
 
 document.body.appendChild(latencyMonitor);
@@ -59,7 +59,7 @@ const fetchSocket = new WebSocket(
   `ws://${window.location.host}/test-on-socket`,
   [],
   {
-    maxRetries: 0,
+    maxRetries: 0
   }
 );
 fetchSocket.send("hello");

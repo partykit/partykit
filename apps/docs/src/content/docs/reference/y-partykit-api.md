@@ -78,7 +78,7 @@ function App() {
     host: "localhost:1999",
     room: "my-document-name",
     doc: yDoc, // optional!
-    options,
+    options
   });
 }
 ```
@@ -117,8 +117,8 @@ export default class YjsServer implements Party.Server {
         // control how often handler is called with these options
         debounceWait: 10000, // default: 2000 ms
         debounceMaxWait: 20000, // default: 10000 ms
-        timeout: 5000, // default: 5000 ms
-      },
+        timeout: 5000 // default: 5000 ms
+      }
     });
   }
 }
@@ -139,8 +139,8 @@ In `snapshot` mode, PartyKit stores the latest document state between sessions.
 ```ts
 onConnect(connection, party, {
   persist: {
-    mode: "snapshot",
-  },
+    mode: "snapshot"
+  }
 });
 ```
 
@@ -157,8 +157,8 @@ This is useful when multiple clients are expected to be able to change the docum
 ```ts
 onConnect(connection, party, {
   persist: {
-    mode: "history",
-  },
+    mode: "history"
+  }
 });
 ```
 
@@ -176,8 +176,8 @@ onConnect(connection, party, {
 
     // Maximum number of updates.
     // By default, there is no maximum, and history grows until maximum amount of bytes is reached.
-    maxUpdates: 10_000,
-  },
+    maxUpdates: 10_000
+  }
 });
 ```
 

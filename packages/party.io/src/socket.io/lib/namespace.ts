@@ -1,22 +1,26 @@
-import {
-  type DefaultEventsMap,
-  EventEmitter,
-  type EventNames,
-  type EventParams,
-  type EventsMap,
-} from "../../event-emitter";
-import { type Handshake, Socket } from "./socket";
-import { Server, type ServerReservedEvents } from "./server";
-import { Adapter, type Room, type SocketId } from "./adapter";
+import { EventEmitter } from "../../event-emitter";
 import { getLogger } from "../../logger";
-import { Client } from "./client";
+import { Adapter } from "./adapter";
 import { BroadcastOperator, RemoteSocket } from "./broadcast-operator";
+import { Client } from "./client";
+import { Server } from "./server";
+import { Socket } from "./socket";
+
+import type {
+  DefaultEventsMap,
+  EventNames,
+  EventParams,
+  EventsMap
+} from "../../event-emitter";
+import type { Room, SocketId } from "./adapter";
+import type { ServerReservedEvents } from "./server";
+import type { Handshake } from "./socket";
 
 export interface NamespaceReservedEvents<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData,
+  SocketData
 > {
   connection: (
     socket: Socket<ListenEvents, EmitEvents, ServerSideEvents, SocketData>
@@ -84,7 +88,7 @@ export class Namespace<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = DefaultEventsMap,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown,
+  SocketData = unknown
 > extends EventEmitter<
   ServerSideEvents,
   EmitEvents,
@@ -265,7 +269,7 @@ export class Namespace<
       socket._cleanup();
       return socket._error({
         message: err.message || err,
-        data: err.data,
+        data: err.data
       });
     }
 

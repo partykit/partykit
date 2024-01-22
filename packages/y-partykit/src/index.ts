@@ -1,13 +1,13 @@
-import { Doc as YDoc, applyUpdate, encodeStateAsUpdate } from "yjs";
-import * as syncProtocol from "y-protocols/sync";
-import * as awarenessProtocol from "y-protocols/awareness";
-import * as encoding from "lib0/encoding";
-import * as decoding from "lib0/decoding";
-
-import debounce from "lodash.debounce";
 import type * as Party from "partykit/server";
-import { YPartyKitStorage } from "./storage";
+import * as decoding from "lib0/decoding";
+import * as encoding from "lib0/encoding";
+import debounce from "lodash.debounce";
+import * as awarenessProtocol from "y-protocols/awareness";
+import * as syncProtocol from "y-protocols/sync";
+import { applyUpdate, encodeStateAsUpdate, Doc as YDoc } from "yjs";
+
 import { handleChunked } from "./chunking";
+import { YPartyKitStorage } from "./storage";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -86,7 +86,7 @@ class WSSharedDoc extends YDoc {
         this.persist = {
           mode: "history",
           maxBytes: MAX_BYTES,
-          maxUpdates: MAX_UPDATES,
+          maxUpdates: MAX_UPDATES
         };
       } else if (options.persist?.mode === "history") {
         if ((options.persist.maxBytes ?? 0) > MAX_BYTES) {
@@ -99,7 +99,7 @@ class WSSharedDoc extends YDoc {
         this.persist = {
           mode: "history",
           maxBytes: Math.min(MAX_BYTES, maxBytes || MAX_BYTES),
-          maxUpdates: Math.min(MAX_UPDATES, maxUpdates || MAX_UPDATES),
+          maxUpdates: Math.min(MAX_UPDATES, maxUpdates || MAX_UPDATES)
         };
       } else {
         this.persist = options.persist;
@@ -121,7 +121,7 @@ class WSSharedDoc extends YDoc {
       {
         added,
         updated,
-        removed,
+        removed
       }: {
         added: Array<number>;
         updated: Array<number>;
@@ -196,7 +196,7 @@ const CALLBACK_DEFAULTS = {
   debounceWait: 2000,
   debounceMaxWait: 10000,
   timeout: 5000,
-  objects: {},
+  objects: {}
 };
 
 function getContent(objName: string, objType: string, doc: WSSharedDoc) {
@@ -270,7 +270,7 @@ async function getYDoc(
         (update: Uint8Array, origin: Party.Connection, doc: WSSharedDoc) => {
           const dataToSend = {
             room: doc.name,
-            data: {},
+            data: {}
           };
 
           const callbackObjects: Record<string, string> =
@@ -286,7 +286,7 @@ async function getYDoc(
                 sharedObjectName,
                 sharedObjectType,
                 doc
-              ).toJSON(),
+              ).toJSON()
             };
           });
 
@@ -296,12 +296,12 @@ async function getYDoc(
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
-                ...(callback.headers && Object.fromEntries(callback.headers)),
+                ...(callback.headers && Object.fromEntries(callback.headers))
               },
               body: JSON.stringify(dataToSend),
               signal: AbortSignal.timeout(
                 callback.timeout || CALLBACK_DEFAULTS.timeout
-              ),
+              )
             }).catch((err) => {
               console.error("failed to persist", err);
             });
@@ -313,8 +313,7 @@ async function getYDoc(
         },
         callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
         {
-          maxWait:
-            callback.debounceMaxWait || CALLBACK_DEFAULTS.debounceMaxWait,
+          maxWait: callback.debounceMaxWait || CALLBACK_DEFAULTS.debounceMaxWait
         }
       )
     );

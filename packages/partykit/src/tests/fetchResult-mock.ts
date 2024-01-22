@@ -4,7 +4,7 @@ type Method = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 const mocks: [
   Method,
   string,
-  (url: string, options: FetchInit | undefined) => unknown,
+  (url: string, options: FetchInit | undefined) => unknown
 ][] = [];
 
 export function mockFetchResult<T>(

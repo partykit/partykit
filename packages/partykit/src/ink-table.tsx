@@ -59,7 +59,7 @@ export default class Table<T extends ScalarDict> extends React.Component<
       padding: this.props.padding || 1,
       header: this.props.header || Header,
       cell: this.props.cell || Cell,
-      skeleton: this.props.skeleton || Skeleton,
+      skeleton: this.props.skeleton || Skeleton
     };
   }
 
@@ -104,7 +104,7 @@ export default class Table<T extends ScalarDict> extends React.Component<
       return {
         column: key,
         width: width,
-        key: String(key),
+        key: String(key)
       };
     });
 
@@ -137,8 +137,8 @@ export default class Table<T extends ScalarDict> extends React.Component<
       line: "─",
       left: "┌",
       right: "┐",
-      cross: "┬",
-    },
+      cross: "┬"
+    }
   });
 
   // The line with column names.
@@ -151,8 +151,8 @@ export default class Table<T extends ScalarDict> extends React.Component<
       line: " ",
       left: "│",
       right: "│",
-      cross: "│",
-    },
+      cross: "│"
+    }
   });
 
   // The line that separates rows.
@@ -165,8 +165,8 @@ export default class Table<T extends ScalarDict> extends React.Component<
       line: "─",
       left: "├",
       right: "┤",
-      cross: "┼",
-    },
+      cross: "┼"
+    }
   });
 
   // The row with the data.
@@ -179,8 +179,8 @@ export default class Table<T extends ScalarDict> extends React.Component<
       line: " ",
       left: "│",
       right: "│",
-      cross: "│",
-    },
+      cross: "│"
+    }
   });
 
   // The bottom most line of the table.
@@ -193,8 +193,8 @@ export default class Table<T extends ScalarDict> extends React.Component<
       line: "─",
       left: "└",
       right: "┘",
-      cross: "┴",
-    },
+      cross: "┴"
+    }
   });
 
   /* Render */

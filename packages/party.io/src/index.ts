@@ -1,4 +1,50 @@
 /**
+ * The Redis adapter, to broadcast packets between several Socket.IO servers
+ *
+ * Documentation: https://socket.io/docs/v4/redis-adapter/
+ *
+ * @example
+ * import { serve } from "https://deno.land/std/http/server";
+ * import { Server, createRedisAdapter, createRedisClient } from "https://deno.land/x/socket_io/mod";
+ *
+ * const [pubClient, subClient] = await Promise.all([
+ *   createRedisClient({
+ *     hostname: "localhost",
+ *   }),
+ *   createRedisClient({
+ *     hostname: "localhost",
+ *   })
+ * ]);
+ *
+ * const io = new Server({
+ *     adapter: createRedisAdapter(pubClient, subClient)
+ * });
+ *
+ * await serve(io.handler(), {
+ *     port: 3000
+ * });
+ */
+// export {
+//   createAdapter,
+//   type PartyAdapterOptions,
+// } from "./socket.io/lib/party-adapter";
+
+import type * as Party from "partykit/server";
+
+import { type ServerOptions as EngineOptions } from "./engine.io";
+import {
+  type DefaultEventsMap,
+  // EventEmitter,
+  // type EventNames,
+  // type EventParams,
+  type EventsMap
+} from "./event-emitter";
+import { Server as SocketIOServer } from "./socket.io";
+import { createAdapter } from "./socket.io/lib/party-adapter";
+
+import type { ServerOptions as SocketServerOptions } from "./socket.io";
+
+/**
  * @example
  * import { serve } from "https://deno.land/std@a.b.c/http/server";
  * import { Server } from "https://deno.land/x/socket_io@x.y.z/mod";
@@ -31,66 +77,19 @@ export {
   // type Namespace,
   // Server,
   // type ServerOptions,
-  type Socket,
+  type Socket
 } from "./socket.io";
-
-/**
- * The Redis adapter, to broadcast packets between several Socket.IO servers
- *
- * Documentation: https://socket.io/docs/v4/redis-adapter/
- *
- * @example
- * import { serve } from "https://deno.land/std/http/server";
- * import { Server, createRedisAdapter, createRedisClient } from "https://deno.land/x/socket_io/mod";
- *
- * const [pubClient, subClient] = await Promise.all([
- *   createRedisClient({
- *     hostname: "localhost",
- *   }),
- *   createRedisClient({
- *     hostname: "localhost",
- *   })
- * ]);
- *
- * const io = new Server({
- *     adapter: createRedisAdapter(pubClient, subClient)
- * });
- *
- * await serve(io.handler(), {
- *     port: 3000
- * });
- */
-// export {
-//   createAdapter,
-//   type PartyAdapterOptions,
-// } from "./socket.io/lib/party-adapter";
-
-import {
-  type ServerOptions as SocketServerOptions,
-  Server as SocketIOServer,
-} from "./socket.io";
-import { type ServerOptions as EngineOptions } from "./engine.io";
-import { createAdapter } from "./socket.io/lib/party-adapter";
-
-import {
-  type DefaultEventsMap,
-  // EventEmitter,
-  // type EventNames,
-  // type EventParams,
-  type EventsMap,
-} from "./event-emitter";
 
 export type ServerOptions = Omit<
   SocketServerOptions & EngineOptions,
   "adapter"
 >;
-import type * as Party from "partykit/server";
 
 type IOSetup<
   L extends EventsMap,
   E extends EventsMap,
   Se extends EventsMap,
-  So,
+  So
 > = (
   server: SocketIOServer<L, E, Se, So>,
   req: Party.Request,
@@ -102,7 +101,7 @@ export function createServer<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = ListenEvents,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown,
+  SocketData = unknown
 >(
   opts:
     | Partial<ServerOptions>
@@ -129,8 +128,8 @@ export function createServer<
       >({
         ...opts,
         adapter: createAdapter(lobby, ctx, {
-          partyId: query.get("partyId") || undefined,
-        }),
+          partyId: query.get("partyId") || undefined
+        })
       });
       await ioSetup!(io, req, lobby, ctx);
       return io.handler()(req, lobby, ctx);

@@ -1,6 +1,7 @@
-import { assertEquals, assertIsError, describe, it } from "vitest";
-import { Server } from "../lib/server";
 import { eioPoll, eioPush, enableLogs, runHandshake } from "misc/util.test";
+import { assertEquals, assertIsError, describe, it } from "vitest";
+
+import { Server } from "../lib/server";
 import { setup } from "./setup.test";
 
 await enableLogs();

@@ -1,8 +1,10 @@
+import type * as Party from "partykit/server";
+
+import { Parser } from "../../../engine.io-parser";
 import { getLogger } from "../../../logger";
 import { Transport } from "../transport";
-import { type Packet, Parser } from "../../../engine.io-parser";
 
-import type * as Party from "partykit/server";
+import type { Packet } from "../../../engine.io-parser";
 
 export class Polling extends Transport {
   private pollingPromise?: {
@@ -104,7 +106,7 @@ export class Polling extends Transport {
     return Promise.resolve(
       new Response("ok", {
         status: 200,
-        headers: responseHeaders,
+        headers: responseHeaders
       })
     );
   }
@@ -135,7 +137,7 @@ export class Polling extends Transport {
     this.pollingPromise.resolve(
       new Response(data, {
         status: 200,
-        headers,
+        headers
       })
     );
 

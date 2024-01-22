@@ -1,6 +1,7 @@
-import type { Server } from "../lib/server";
-import { serve } from "vitest";
 import { createPartialDone } from "misc/util.test";
+import { serve } from "vitest";
+
+import type { Server } from "../lib/server";
 
 export function setup(
   server: Server,
@@ -28,7 +29,7 @@ export function setup(
 
         return callback(port, partialDone);
       },
-      signal: abortController.signal,
+      signal: abortController.signal
     });
   });
 }

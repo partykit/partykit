@@ -1,6 +1,7 @@
+import type { PartyKitServer } from "partykit/server";
+
 // @ts-expect-error we should fix this but I don't know how
 import fibonacci from "./fib.wasm";
-import type { PartyKitServer } from "partykit/server";
 
 // declare module "./fib.wasm" {
 //   const fibonacci: WebAssembly.Module;
@@ -17,5 +18,5 @@ export default {
   },
   async onRequest(_req) {
     return new Response(fib(20) + "");
-  },
+  }
 } satisfies PartyKitServer;

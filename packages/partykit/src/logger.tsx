@@ -3,16 +3,17 @@ import { format } from "node:util";
 
 import { formatMessagesSync } from "esbuild";
 
+import type { BuildFailure } from "esbuild";
+
 export class ConfigurationError extends Error {}
 
-import type { BuildFailure } from "esbuild";
 export const LOGGER_LEVELS = {
   none: -1,
   error: 0,
   warn: 1,
   info: 2,
   log: 3,
-  debug: 4,
+  debug: 4
 } as const;
 
 export type LoggerLevel = keyof typeof LOGGER_LEVELS;
@@ -23,7 +24,7 @@ const LOGGER_LEVEL_FORMAT_TYPE_MAP = {
   warn: "warning",
   info: undefined,
   log: undefined,
-  debug: undefined,
+  debug: undefined
 } as const;
 
 function getLogLevelFromEnv(): string | undefined {
@@ -96,7 +97,7 @@ export class Logger {
       return formatMessagesSync([{ text: firstLine, notes }], {
         color: true,
         kind,
-        terminalWidth: this.columns,
+        terminalWidth: this.columns
       })[0];
     } else {
       return message;

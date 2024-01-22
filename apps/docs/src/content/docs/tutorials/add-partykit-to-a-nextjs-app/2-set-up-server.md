@@ -39,6 +39,7 @@ Navigate to the `index.ts` file in the `party` directory. This is the server tem
 
 ```ts
 import type * as Party from "partykit/server";
+
 import type { Poll } from "@/app/types";
 
 export default class Server implements Party.Server {
@@ -55,7 +56,7 @@ export default class Server implements Party.Server {
     if (this.poll) {
       return new Response(JSON.stringify(this.poll), {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     }
 

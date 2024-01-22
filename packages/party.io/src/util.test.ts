@@ -1,22 +1,23 @@
 import * as log from "../test_deps";
-import type { EventEmitter } from "./event-emitter";
 import { type EventsMap } from "./event-emitter";
+
+import type { EventEmitter } from "./event-emitter";
 
 export function enableLogs() {
   return log.setup({
     handlers: {
-      console: new log.handlers.ConsoleHandler("DEBUG"),
+      console: new log.handlers.ConsoleHandler("DEBUG")
     },
     loggers: {
       "engine.io": {
         level: "ERROR", // set to "DEBUG" to display the Engine.IO logs
-        handlers: ["console"],
+        handlers: ["console"]
       },
       "socket.io": {
         level: "ERROR", // set to "DEBUG" to display the Socket.IO logs
-        handlers: ["console"],
-      },
-    },
+        handlers: ["console"]
+      }
+    }
   });
 }
 
@@ -43,7 +44,7 @@ export async function runHandshake(
   const response = await fetch(
     `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
     {
-      method: "get",
+      method: "get"
     }
   );
 
@@ -80,7 +81,7 @@ export async function eioPoll(port: number, sid: string) {
   const response = await fetch(
     `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
     {
-      method: "get",
+      method: "get"
     }
   );
 
@@ -92,7 +93,7 @@ export async function eioPush(port: number, sid: string, body: BodyInit) {
     `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
     {
       method: "post",
-      body,
+      body
     }
   );
 

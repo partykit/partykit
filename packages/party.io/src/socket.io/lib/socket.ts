@@ -1,22 +1,20 @@
-import { type Packet, PacketType } from "../../socket.io-parser";
-import { getLogger } from "../../logger";
-import {
-  type DefaultEventsMap,
-  EventEmitter,
-  type EventNames,
-  type EventParams,
-  type EventsMap,
-} from "../../event-emitter";
-import {
-  Adapter,
-  type BroadcastFlags,
-  type Room,
-  type SocketId,
-} from "./adapter";
 import { generateId } from "../../engine.io";
-import { Namespace } from "./namespace";
-import { Client } from "./client";
+import { EventEmitter } from "../../event-emitter";
+import { getLogger } from "../../logger";
+import { PacketType } from "../../socket.io-parser";
+import { Adapter } from "./adapter";
 import { BroadcastOperator } from "./broadcast-operator";
+import { Client } from "./client";
+import { Namespace } from "./namespace";
+
+import type {
+  DefaultEventsMap,
+  EventNames,
+  EventParams,
+  EventsMap
+} from "../../event-emitter";
+import type { Packet } from "../../socket.io-parser";
+import type { BroadcastFlags, Room, SocketId } from "./adapter";
 
 type ClientReservedEvents = "connect" | "connect_error";
 
@@ -58,7 +56,7 @@ export const RESERVED_EVENTS: ReadonlySet<string | symbol> = new Set<
   "disconnect",
   "disconnecting",
   "newListener",
-  "removeListener",
+  "removeListener"
 ] as const);
 
 /**
@@ -150,7 +148,7 @@ export class Socket<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = DefaultEventsMap,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown,
+  SocketData = unknown
 > extends EventEmitter<ListenEvents, EmitEvents, SocketReservedEvents> {
   /**
    * An unique identifier for the session.
@@ -244,7 +242,7 @@ export class Socket<
     const packet: Packet = {
       nsp: this.nsp.name,
       type: PacketType.EVENT,
-      data: data,
+      data: data
     };
 
     // access last argument to see if it's an ACK callback
@@ -427,7 +425,7 @@ export class Socket<
       this.packet({
         id: id,
         type: PacketType.ACK,
-        data: args,
+        data: args
       });
 
       sent = true;

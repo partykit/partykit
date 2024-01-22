@@ -73,8 +73,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "snapshot",
-    },
+      mode: "snapshot"
+    }
   });
   ```
 
@@ -91,8 +91,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "history",
-    },
+      mode: "history"
+    }
   });
   ```
 
@@ -110,8 +110,8 @@
 
       // Maximum number of updates.
       // By default, there is no maximum, and history grows until maximum amount of bytes is reached.
-      maxUpdates: 10_000,
-    },
+      maxUpdates: 10_000
+    }
   });
   ```
 
@@ -153,11 +153,8 @@
 
   ```ts
   import type * as Party from "partykit/server";
-  import {
-    onConnect,
-    unstable_getYDoc,
-    type YPartyKitOptions,
-  } from "y-partykit";
+  import type { YPartyKitOptions } from "y-partykit";
+  import { onConnect, unstable_getYDoc } from "y-partykit";
 
   // options must match when calling unstable_getYDoc and onConnect
   const opts: YPartyKitOptions = { persist: true };

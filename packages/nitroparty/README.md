@@ -13,7 +13,7 @@ npm install partykit nitropack nitroparty --save-dev
 ```ts
 // nitro.config.ts
 export default defineNitroConfig({
-  extends: "nitroparty",
+  extends: "nitroparty"
 });
 ```
 

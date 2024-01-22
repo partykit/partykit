@@ -1,8 +1,11 @@
 import fs from "fs";
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { deploy } from "../cli";
-import { mockFetchResult, clearMocks } from "./fetchResult-mock";
+import { clearMocks, mockFetchResult } from "./fetchResult-mock";
 import { mockConsoleMethods } from "./mock-console";
+
 import type { StaticAssetsManifestType } from "../server";
 
 const std = mockConsoleMethods();
@@ -10,7 +13,7 @@ const std = mockConsoleMethods();
 vi.mock("../fetchResult", async () => {
   const { fetchResult } = await import("./fetchResult-mock");
   return {
-    fetchResult,
+    fetchResult
   };
 });
 
@@ -70,7 +73,7 @@ describe("deploy", () => {
         expect(options?.user?.access_token).toBe("test-token");
         checkedResponse = true;
         return {
-          result: { is_first_deploy: false },
+          result: { is_first_deploy: false }
         };
       }
     );
@@ -87,7 +90,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
-      domain: undefined,
+      domain: undefined
     });
     expect(checkedResponse).toBe(true);
   });
@@ -101,8 +104,8 @@ describe("deploy", () => {
           a: "a1",
           b: "b2",
           c: "c3",
-          d: "d4",
-        },
+          d: "d4"
+        }
       })
     );
 
@@ -118,7 +121,7 @@ describe("deploy", () => {
         expect(form.get("vars")).toMatchInlineSnapshot(`"{"a":"b","c":"d"}"`);
         checkedResponse = true;
         return {
-          result: { is_first_deploy: false },
+          result: { is_first_deploy: false }
         };
       }
     );
@@ -128,7 +131,7 @@ describe("deploy", () => {
       config: undefined,
       vars: {
         a: "b",
-        c: "d",
+        c: "d"
       },
       define: undefined,
       preview: undefined,
@@ -138,7 +141,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
-      domain: undefined,
+      domain: undefined
     });
     expect(checkedResponse).toBe(true);
   });
@@ -152,8 +155,8 @@ describe("deploy", () => {
           a: "a1",
           b: "b2",
           c: "c3",
-          d: "d4",
-        },
+          d: "d4"
+        }
       })
     );
 
@@ -171,7 +174,7 @@ describe("deploy", () => {
         );
         checkedResponse = true;
         return {
-          result: { is_first_deploy: false },
+          result: { is_first_deploy: false }
         };
       }
     );
@@ -181,7 +184,7 @@ describe("deploy", () => {
       config: undefined,
       vars: {
         a: "b",
-        c: "d",
+        c: "d"
       },
       define: undefined,
       preview: undefined,
@@ -191,7 +194,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
-      domain: undefined,
+      domain: undefined
     });
     expect(checkedResponse).toBe(true);
   });
@@ -218,7 +221,7 @@ describe("deploy", () => {
         compatibilityFlags: undefined,
         minify: undefined,
         withEnv: undefined,
-        domain: undefined,
+        domain: undefined
       })
     ).rejects.toThrowErrorMatchingInlineSnapshot(`[Error: Not OK]`);
   });
@@ -234,7 +237,7 @@ describe("deploy", () => {
 
         checkedResponse = true;
         return {
-          result: { is_first_deploy: false },
+          result: { is_first_deploy: false }
         };
       }
     );
@@ -259,7 +262,7 @@ describe("deploy", () => {
           edgeTTL: undefined,
           singlePageApp: false,
           assets: {},
-          assetInfo: {},
+          assetInfo: {}
         };
       }
     );
@@ -290,7 +293,7 @@ describe("deploy", () => {
       JSON.stringify({
         name: "test-script",
         serve: "./public",
-        compatibilityDate: "2023-09-28",
+        compatibilityDate: "2023-09-28"
       })
     );
 
@@ -309,7 +312,7 @@ describe("deploy", () => {
       compatibilityFlags: undefined,
       minify: undefined,
       withEnv: undefined,
-      domain: undefined,
+      domain: undefined
     });
 
     expect(checkedResponse).toBe(true);

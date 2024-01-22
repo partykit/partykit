@@ -1,6 +1,9 @@
 import * as util from "node:util";
-import { beforeEach, afterEach, vi } from "vitest";
+
+import { afterEach, beforeEach, vi } from "vitest";
+
 import type { MockInstance } from "vitest";
+
 /**
  * We use this module to mock console methods, and optionally
  * assert on the values they're called with in our tests.
@@ -27,7 +30,7 @@ const std = {
   },
   get warn() {
     return normalizeOutput(warnSpy);
-  },
+  }
 };
 
 function normalizeOutput(spy: MockInstance): string {

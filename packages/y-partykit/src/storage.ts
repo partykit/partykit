@@ -1,22 +1,21 @@
-import {
-  Doc as YDoc,
-  applyUpdate,
-  encodeStateAsUpdate,
-  encodeStateVector,
-} from "yjs";
-import {
-  createEncoder as encodingCreateEncoder,
-  writeVarUint as encodingWriteVarUint,
-  writeVarUint8Array as encodingWriteVarUint8Array,
-  toUint8Array as encodingToUint8Array,
-} from "lib0/encoding";
+import type * as Party from "partykit/server";
 import {
   createDecoder as decodingCreateDecoder,
   readVarUint as decodingReadVarUint,
-  readVarUint8Array as decodingReadVarUint8Array,
+  readVarUint8Array as decodingReadVarUint8Array
 } from "lib0/decoding";
-
-import type * as Party from "partykit/server";
+import {
+  createEncoder as encodingCreateEncoder,
+  toUint8Array as encodingToUint8Array,
+  writeVarUint as encodingWriteVarUint,
+  writeVarUint8Array as encodingWriteVarUint8Array
+} from "lib0/encoding";
+import {
+  applyUpdate,
+  encodeStateAsUpdate,
+  encodeStateVector,
+  Doc as YDoc
+} from "yjs";
 
 const BINARY_BITS_32 = 0xffffffff;
 const TRACE_ENABLED = false;
@@ -45,7 +44,7 @@ const keyEncoding = {
       .map((el) =>
         el.startsWith('"') ? (JSON.parse(el) as StorageKey) : parseInt(el, 10)
       ) as StorageKey;
-  },
+  }
 };
 
 /**
@@ -67,7 +66,7 @@ export async function levelGet(
 
   const res = await db.list<Uint8Array>({
     start: prefix,
-    end: `${prefix}#zzzzz`,
+    end: `${prefix}#zzzzz`
   });
 
   if (res.size === 0) {
@@ -148,7 +147,7 @@ export async function getLevelBulkData(
     start: keyEncoding.encode(opts.gte),
     end: keyEncoding.encode(opts.lt),
     reverse: opts.reverse,
-    limit: opts.limit,
+    limit: opts.limit
   });
 
   const grouped = groupBy(Array.from(res.entries()), ([key]) =>
@@ -171,7 +170,7 @@ export async function getLevelBulkData(
 
     result.push({
       key: keyEncoding.decode(key),
-      value: finalArray,
+      value: finalArray
     });
   }
 
@@ -194,7 +193,7 @@ export async function getLevelKeyRangeAsEncoded(
     start: keyEncoding.encode(opts.gte),
     end: keyEncoding.encode(opts.lt),
     reverse: opts.reverse,
-    limit: opts.limit,
+    limit: opts.limit
   });
 
   return [...res.keys()];
@@ -213,13 +212,13 @@ async function getLevelUpdates(
     limit?: number;
   } = {
     values: true,
-    keys: false,
+    keys: false
   }
 ): Promise<Array<Datum>> {
   return getLevelBulkData(db, {
     gte: createDocumentUpdateKey(docName, 0),
     lt: createDocumentUpdateKey(docName, BINARY_BITS_32),
-    ...opts,
+    ...opts
   });
 }
 
@@ -234,7 +233,7 @@ async function getCurrentUpdateClock(
     keys: true,
     values: false,
     reverse: true,
-    limit: 1,
+    limit: 1
   }).then((datums) => {
     if (datums.length === 0) {
       return -1;
@@ -255,7 +254,7 @@ export async function clearRange(
 ): Promise<void> {
   const keys = await getLevelKeyRangeAsEncoded(db, {
     gte,
-    lt,
+    lt
   });
 
   await db.transaction(() =>

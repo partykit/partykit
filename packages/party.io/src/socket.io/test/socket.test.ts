@@ -1,6 +1,7 @@
-import { assertEquals, describe, it } from "vitest";
-import { Server } from "../lib/server";
 import { enableLogs, runHandshake } from "misc/util.test";
+import { assertEquals, describe, it } from "vitest";
+
+import { Server } from "../lib/server";
 import { setup } from "./setup.test";
 
 await enableLogs();

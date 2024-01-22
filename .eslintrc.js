@@ -4,7 +4,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     project: [true, "tsconfig.base.json"],
-    sourceType: "module",
+    sourceType: "module"
   },
   plugins: ["@typescript-eslint"],
   extends: [
@@ -12,7 +12,7 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:react-hooks/recommended",
-    "plugin:deprecation/recommended",
+    "plugin:deprecation/recommended"
   ],
   ignorePatterns: [
     "node_modules",
@@ -26,7 +26,7 @@ module.exports = {
     "apps/blog/dist",
     "packages/partykit/init/index.js",
     "packages/party.io/**/*.test.ts",
-    "packages/partysocket/event-target-polyfill.*",
+    "packages/partysocket/event-target-polyfill.*"
   ],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
@@ -37,8 +37,8 @@ module.exports = {
         // vars: "all",
         varsIgnorePattern: "^_",
         // args: "after-used",
-        argsIgnorePattern: "^_",
-      },
+        argsIgnorePattern: "^_"
+      }
     ],
 
     // Todo: consider investigating, for each of these, whether they should be enabled
@@ -49,7 +49,7 @@ module.exports = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/require-await": "off",
     "@typescript-eslint/restrict-plus-operands": "off",
-    "@typescript-eslint/restrict-template-expressions": "off",
+    "@typescript-eslint/restrict-template-expressions": "off"
   },
-  root: true,
+  root: true
 };

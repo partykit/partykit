@@ -1,11 +1,11 @@
 import type {
-  DurableObjectStorage,
   ExecutionContext as CFExecutionContext,
-  WebSocket,
   Request as CFRequest,
-  VectorizeIndex,
   DurableObjectState,
+  DurableObjectStorage,
   ScheduledController,
+  VectorizeIndex,
+  WebSocket
 } from "@cloudflare/workers-types";
 
 export type StaticAssetsManifestType = {

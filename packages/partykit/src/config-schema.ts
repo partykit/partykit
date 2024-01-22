@@ -19,7 +19,7 @@ const loaders = [
   "local-css",
   "text",
   "ts",
-  "tsx",
+  "tsx"
 ] as const;
 
 function isValidWorkerName(name: string) {
@@ -35,7 +35,7 @@ export const schema = z
     name: z
       .string()
       .refine(isValidWorkerName, {
-        message: "must satisfy /^[a-z0-9_-]+$/",
+        message: "must satisfy /^[a-z0-9_-]+$/"
       })
       .optional(),
     main: z.string().optional(),
@@ -61,16 +61,16 @@ export const schema = z
                 format: z.enum(["esm", "cjs", "iife"]).optional(),
                 sourcemap: z.boolean().optional(),
                 define: z.record(z.string()).optional(),
-                loader: z.record(z.enum(loaders)).optional(),
-              }),
+                loader: z.record(z.enum(loaders)).optional()
+              })
             ])
             .optional(),
           include: z.array(z.string()).optional(),
           exclude: z.array(z.string()).optional(),
           browserTTL: z.union([z.null(), z.number()]).optional(),
           edgeTTL: z.union([z.null(), z.number()]).optional(),
-          singlePageApp: z.boolean().optional(),
-        }),
+          singlePageApp: z.boolean().optional()
+        })
       ])
       .optional(),
     persist: z.union([z.boolean(), z.string()]).optional(),
@@ -79,7 +79,7 @@ export const schema = z
     parties: z
       .record(z.string())
       .refine((object) => Object.keys(object).every(isValidWorkerName), {
-        message: "must satisfy /^[a-z0-9_-]+$/",
+        message: "must satisfy /^[a-z0-9_-]+$/"
       })
       .optional(),
     build: z
@@ -87,7 +87,7 @@ export const schema = z
         command: z.string().optional(),
         cwd: z.string().optional(),
         watch: z.string().optional(),
-        alias: z.record(z.string()).optional(),
+        alias: z.record(z.string()).optional()
       })
       .strict()
       .optional(),
@@ -100,8 +100,8 @@ export const schema = z
         z.object({
           apiGateway: z.string().optional(),
           apiToken: z.string().optional(),
-          apiAccount: z.string().optional(),
-        }),
+          apiAccount: z.string().optional()
+        })
       ])
       .optional(),
     domain: z.string().optional(),
@@ -110,12 +110,12 @@ export const schema = z
         z.union([
           z.string(),
           z.object({
-            index_name: z.string(),
+            index_name: z.string()
             // TODO: add more fields, probably for provisioning
-          }),
+          })
         ])
       )
-      .optional(),
+      .optional()
   })
   .strict();
 

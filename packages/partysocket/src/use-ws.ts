@@ -1,13 +1,12 @@
-import WebSocket from "./ws";
-import type { Options, ProtocolsProvider, UrlProvider } from "./ws";
+import { useAttachWebSocketEventHandlers } from "./use-handlers";
 import {
-  useAttachWebSocketEventHandlers,
-  type EventHandlerOptions,
-} from "./use-handlers";
-import {
-  useStableSocket,
   getOptionsThatShouldCauseRestartWhenChanged,
+  useStableSocket
 } from "./use-socket";
+import WebSocket from "./ws";
+
+import type { EventHandlerOptions } from "./use-handlers";
+import type { Options, ProtocolsProvider, UrlProvider } from "./ws";
 
 type UseWebSocketOptions = Options & EventHandlerOptions;
 
@@ -26,8 +25,8 @@ export default function useWebSocket(
         // if they are functions, the WebSocket will handle reconnection
         url,
         protocols,
-        ...getOptionsThatShouldCauseRestartWhenChanged(options),
-      ]),
+        ...getOptionsThatShouldCauseRestartWhenChanged(options)
+      ])
   });
 
   useAttachWebSocketEventHandlers(socket, options);

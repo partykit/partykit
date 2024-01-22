@@ -1,12 +1,13 @@
-import { assertEquals, describe, it } from "vitest";
-import { Server } from "../lib/server";
 import {
   eioPoll,
   eioPush,
   enableLogs,
   parseSessionID,
-  runHandshake,
+  runHandshake
 } from "misc/util.test";
+import { assertEquals, describe, it } from "vitest";
+
+import { Server } from "../lib/server";
 import { setup } from "./setup.test";
 
 await enableLogs();
@@ -82,7 +83,7 @@ describe("event", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -104,7 +105,7 @@ describe("event", () => {
       io.use((_) => {
         throw {
           message: "Authentication error",
-          data: { a: "b", c: 3 },
+          data: { a: "b", c: 3 }
         };
       });
 
@@ -115,7 +116,7 @@ describe("event", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 

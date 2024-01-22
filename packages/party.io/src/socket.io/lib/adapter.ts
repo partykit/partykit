@@ -1,9 +1,9 @@
-import { EventEmitter } from "../../event-emitter";
-import { type Socket } from "./socket";
-import { type Namespace } from "./namespace";
-import { type Packet } from "../../socket.io-parser";
 import { generateId } from "../../engine.io";
+import { EventEmitter } from "../../event-emitter";
 import { getLogger } from "../../logger";
+import { type Packet } from "../../socket.io-parser";
+import { type Namespace } from "./namespace";
+import { type Socket } from "./socket";
 
 const DEFAULT_TIMEOUT_MS = 5000;
 
@@ -148,7 +148,7 @@ export class InMemoryAdapter extends EventEmitter<
     this.apply(opts, (socket) => {
       socket._notifyOutgoingListeners(args);
       socket.client._writeToEngine(encodedPackets, {
-        volatile: opts.flags && opts.flags.volatile,
+        volatile: opts.flags && opts.flags.volatile
       });
     });
   }
@@ -175,7 +175,7 @@ export class InMemoryAdapter extends EventEmitter<
     const flags = opts.flags || {};
     const packetOpts = {
       preEncoded: true,
-      volatile: flags.volatile,
+      volatile: flags.volatile
     };
 
     packet.nsp = this.nsp.name;
@@ -324,7 +324,7 @@ export enum RequestType {
   SERVER_SIDE_EMIT,
   SERVER_SIDE_EMIT_RESPONSE,
   BROADCAST_CLIENT_COUNT,
-  BROADCAST_ACK,
+  BROADCAST_ACK
 }
 
 export interface ClusterRequest {
@@ -370,10 +370,10 @@ function serializeSocket(socket: Socket) {
       issued: socket.handshake.issued,
       url: socket.handshake.url,
       query: socket.handshake.query,
-      auth: socket.handshake.auth,
+      auth: socket.handshake.auth
     },
     rooms: [...socket.rooms],
-    data: socket.data,
+    data: socket.data
   };
 }
 
@@ -415,10 +415,10 @@ export abstract class Adapter extends InMemoryAdapter {
       data: {
         opts: {
           rooms: [...opts.rooms],
-          except: [...opts.except],
+          except: [...opts.except]
         },
-        rooms: [...rooms],
-      },
+        rooms: [...rooms]
+      }
     });
   }
 
@@ -435,10 +435,10 @@ export abstract class Adapter extends InMemoryAdapter {
       data: {
         opts: {
           rooms: [...opts.rooms],
-          except: [...opts.except],
+          except: [...opts.except]
         },
-        rooms: [...rooms],
-      },
+        rooms: [...rooms]
+      }
     });
   }
 
@@ -455,10 +455,10 @@ export abstract class Adapter extends InMemoryAdapter {
       data: {
         opts: {
           rooms: [...opts.rooms],
-          except: [...opts.except],
+          except: [...opts.except]
         },
-        close,
-      },
+        close
+      }
     });
   }
 
@@ -478,20 +478,17 @@ export abstract class Adapter extends InMemoryAdapter {
     const requestId = generateId();
 
     return new Promise((resolve, reject) => {
-      const timerId = setTimeout(
-        () => {
-          const storedRequest = this.#pendingRequests.get(requestId);
-          if (storedRequest) {
-            reject(
-              new Error(
-                `timeout reached: only ${storedRequest.currentCount} responses received out of ${storedRequest.expectedCount}`
-              )
-            );
-            this.#pendingRequests.delete(requestId);
-          }
-        },
-        opts.flags?.timeout || DEFAULT_TIMEOUT_MS
-      );
+      const timerId = setTimeout(() => {
+        const storedRequest = this.#pendingRequests.get(requestId);
+        if (storedRequest) {
+          reject(
+            new Error(
+              `timeout reached: only ${storedRequest.currentCount} responses received out of ${storedRequest.expectedCount}`
+            )
+          );
+          this.#pendingRequests.delete(requestId);
+        }
+      }, opts.flags?.timeout || DEFAULT_TIMEOUT_MS);
 
       const storedRequest = {
         type: RequestType.FETCH_SOCKETS,
@@ -501,7 +498,7 @@ export abstract class Adapter extends InMemoryAdapter {
         timerId,
         currentCount: 0,
         expectedCount: expectedResponseCount,
-        responses: localSockets,
+        responses: localSockets
       };
       this.#pendingRequests.set(requestId, storedRequest);
 
@@ -511,10 +508,10 @@ export abstract class Adapter extends InMemoryAdapter {
         data: {
           opts: {
             rooms: [...opts.rooms],
-            except: [...opts.except],
+            except: [...opts.except]
           },
-          requestId,
-        },
+          requestId
+        }
       });
     });
   }
@@ -533,8 +530,8 @@ export abstract class Adapter extends InMemoryAdapter {
       uid: this.uid,
       type: RequestType.SERVER_SIDE_EMIT,
       data: {
-        packet,
-      },
+        packet
+      }
     });
   }
 
@@ -572,7 +569,7 @@ export abstract class Adapter extends InMemoryAdapter {
       timerId,
       currentCount: 0,
       expectedCount: expectedResponseCount,
-      responses: [],
+      responses: []
     };
 
     this.#pendingRequests.set(requestId, storedRequest);
@@ -582,8 +579,8 @@ export abstract class Adapter extends InMemoryAdapter {
       type: RequestType.SERVER_SIDE_EMIT,
       data: {
         requestId, // the presence of this attribute defines whether an acknowledgement is needed
-        packet,
-      },
+        packet
+      }
     });
   }
 
@@ -599,9 +596,9 @@ export abstract class Adapter extends InMemoryAdapter {
           opts: {
             rooms: [...opts.rooms],
             except: [...opts.except],
-            flags: opts.flags,
-          },
-        },
+            flags: opts.flags
+          }
+        }
       });
     }
 
@@ -630,14 +627,14 @@ export abstract class Adapter extends InMemoryAdapter {
           opts: {
             rooms: [...opts.rooms],
             except: [...opts.except],
-            flags: opts.flags,
-          },
-        },
+            flags: opts.flags
+          }
+        }
       });
 
       this.#ackRequests.set(requestId, {
         clientCountCallback,
-        ack,
+        ack
       });
 
       // we have no way to know at this level whether the server has received an acknowledgement from each client, so we
@@ -673,7 +670,7 @@ export abstract class Adapter extends InMemoryAdapter {
             packet,
             {
               rooms: new Set(opts.rooms),
-              except: new Set(opts.except),
+              except: new Set(opts.except)
             },
             (clientCount) => {
               getLogger("socket.io").debug(
@@ -683,8 +680,8 @@ export abstract class Adapter extends InMemoryAdapter {
                 type: RequestType.BROADCAST_CLIENT_COUNT,
                 data: {
                   requestId: request.data.requestId as string,
-                  clientCount,
-                },
+                  clientCount
+                }
               });
             },
             (arg) => {
@@ -695,15 +692,15 @@ export abstract class Adapter extends InMemoryAdapter {
                 type: RequestType.BROADCAST_ACK,
                 data: {
                   requestId: request.data.requestId as string,
-                  packet: arg,
-                },
+                  packet: arg
+                }
               });
             }
           );
         } else {
           return super.broadcast(packet, {
             rooms: new Set(opts.rooms),
-            except: new Set(opts.except),
+            except: new Set(opts.except)
           });
         }
       }
@@ -719,7 +716,7 @@ export abstract class Adapter extends InMemoryAdapter {
         return super.addSockets(
           {
             rooms: new Set(opts.rooms),
-            except: new Set(opts.except),
+            except: new Set(opts.except)
           },
           rooms
         );
@@ -736,7 +733,7 @@ export abstract class Adapter extends InMemoryAdapter {
         return super.delSockets(
           {
             rooms: new Set(opts.rooms),
-            except: new Set(opts.except),
+            except: new Set(opts.except)
           },
           rooms
         );
@@ -753,7 +750,7 @@ export abstract class Adapter extends InMemoryAdapter {
         return super.disconnectSockets(
           {
             rooms: new Set(opts.rooms),
-            except: new Set(opts.except),
+            except: new Set(opts.except)
           },
           close
         );
@@ -770,7 +767,7 @@ export abstract class Adapter extends InMemoryAdapter {
 
         const localSockets = await super.fetchSockets({
           rooms: new Set(opts.rooms),
-          except: new Set(opts.except),
+          except: new Set(opts.except)
         });
 
         getLogger("socket.io").debug(
@@ -781,8 +778,8 @@ export abstract class Adapter extends InMemoryAdapter {
           type: RequestType.FETCH_SOCKETS_RESPONSE,
           data: {
             requestId: request.data.requestId as string,
-            sockets: localSockets.map(serializeSocket),
-          },
+            sockets: localSockets.map(serializeSocket)
+          }
         });
         break;
       }
@@ -808,8 +805,8 @@ export abstract class Adapter extends InMemoryAdapter {
             type: RequestType.SERVER_SIDE_EMIT_RESPONSE,
             data: {
               requestId: request.data.requestId as string,
-              packet: arg,
-            },
+              packet: arg
+            }
           });
         };
 

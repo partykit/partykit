@@ -26,7 +26,7 @@ for (const [key, value] of formData.entries()) {
 const id = randomId();
 const poll: Poll = {
   title,
-  options,
+  options
 };
 ```
 
@@ -37,8 +37,8 @@ await fetch(`${PARTYKIT_URL}/party/${id}`, {
   method: "POST",
   body: JSON.stringify(poll),
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Content-Type": "application/json"
+  }
 });
 ```
 
@@ -60,8 +60,8 @@ In the previous step of this tutorial, your `onRequest` method returned the poll
 const req = await fetch(`${PARTYKIT_URL}/party/${pollId}`, {
   method: "GET",
   next: {
-    revalidate: 0,
-  },
+    revalidate: 0
+  }
 });
 
 if (!req.ok) {

@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID, sleep } from "misc/util.test";
 import { assertEquals, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID, sleep } from "misc/util.test";
 
 await enableLogs();
 
@@ -9,7 +10,7 @@ describe("close", () => {
   it("should trigger upon ping timeout (polling)", () => {
     const engine = new Server({
       pingInterval: 5,
-      pingTimeout: 5,
+      pingTimeout: 5
     });
 
     return setup(engine, 2, async (port, partialDone) => {
@@ -24,7 +25,7 @@ describe("close", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -35,7 +36,7 @@ describe("close", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -51,7 +52,7 @@ describe("close", () => {
   it("should trigger upon ping timeout (ws)", () => {
     const engine = new Server({
       pingInterval: 5,
-      pingTimeout: 5,
+      pingTimeout: 5
     });
 
     return setup(engine, 2, (port, partialDone) => {
@@ -88,7 +89,7 @@ describe("close", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -97,7 +98,7 @@ describe("close", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -150,7 +151,7 @@ describe("close", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -164,9 +165,9 @@ describe("close", () => {
           `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
           {
             method: "post",
-            body: "1",
+            body: "1"
           }
-        ),
+        )
       ]);
 
       assertEquals(pollResponse.status, 200);
@@ -246,7 +247,7 @@ describe("close", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -256,7 +257,7 @@ describe("close", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "abc",
+          body: "abc"
         }
       );
 
@@ -272,7 +273,7 @@ describe("close", () => {
 
   it("should trigger when the client sends a payload bigger than maxHttpBufferSize (polling)", () => {
     const engine = new Server({
-      maxHttpBufferSize: 100,
+      maxHttpBufferSize: 100
     });
 
     return setup(engine, 2, async (port, partialDone) => {
@@ -287,7 +288,7 @@ describe("close", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -297,7 +298,7 @@ describe("close", () => {
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "a".repeat(101),
+          body: "a".repeat(101)
         }
       );
 
@@ -312,7 +313,7 @@ describe("close", () => {
 
   it("should trigger when the client sends a payload bigger than maxHttpBufferSize (ws)", () => {
     const engine = new Server({
-      maxHttpBufferSize: 100,
+      maxHttpBufferSize: 100
     });
 
     return setup(engine, 1, (port, done) => {

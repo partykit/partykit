@@ -3,7 +3,7 @@ import type { MetaFunction } from "partymix";
 export const meta: MetaFunction = () => {
   return [
     { title: "New Partymix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { name: "description", content: "Welcome to Remix!" }
   ];
 };
 

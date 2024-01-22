@@ -1,14 +1,15 @@
-import { Doc as YDoc } from "yjs";
 import * as bc from "lib0/broadcastchannel";
-import * as time from "lib0/time";
-import * as encoding from "lib0/encoding";
 import * as decoding from "lib0/decoding";
-import * as syncProtocol from "y-protocols/sync";
+import * as encoding from "lib0/encoding";
+import * as math from "lib0/math";
+import { Observable } from "lib0/observable";
+import * as time from "lib0/time";
+import * as url from "lib0/url";
 import * as authProtocol from "y-protocols/auth";
 import * as awarenessProtocol from "y-protocols/awareness";
-import { Observable } from "lib0/observable";
-import * as math from "lib0/math";
-import * as url from "lib0/url";
+import * as syncProtocol from "y-protocols/sync";
+import { Doc as YDoc } from "yjs";
+
 import { sendChunked } from "./chunking";
 
 export const messageSync = 0;
@@ -170,8 +171,8 @@ function setupWS(provider: WebsocketProvider) {
         );
         provider.emit("status", [
           {
-            status: "disconnected",
-          },
+            status: "disconnected"
+          }
         ]);
       } else {
         provider.wsUnsuccessfulReconnects++;
@@ -194,8 +195,8 @@ function setupWS(provider: WebsocketProvider) {
       provider.wsUnsuccessfulReconnects = 0;
       provider.emit("status", [
         {
-          status: "connected",
-        },
+          status: "connected"
+        }
       ]);
       // always send sync step 1 when connected
       const encoder = encoding.createEncoder();
@@ -209,7 +210,7 @@ function setupWS(provider: WebsocketProvider) {
         encoding.writeVarUint8Array(
           encoderAwarenessState,
           awarenessProtocol.encodeAwarenessUpdate(provider.awareness, [
-            provider.doc.clientID,
+            provider.doc.clientID
           ])
         );
         sendChunked(encoding.toUint8Array(encoderAwarenessState), websocket);
@@ -217,8 +218,8 @@ function setupWS(provider: WebsocketProvider) {
     };
     provider.emit("status", [
       {
-        status: "connecting",
-      },
+        status: "connecting"
+      }
     ]);
   }
 }
@@ -291,7 +292,7 @@ export class WebsocketProvider extends Observable<string> {
       WebSocketPolyfill = DefaultWebSocket as typeof WebSocket, // Optionally provide a WebSocket polyfill
       resyncInterval = -1, // Request server state every `resyncInterval` milliseconds
       maxBackoffTime = 2500, // Maximum amount of time to wait before trying to reconnect (we try to reconnect using exponential backoff)
-      disableBc = DEFAULT_DISABLE_BC, // Disable cross-tab BroadcastChannel communication
+      disableBc = DEFAULT_DISABLE_BC // Disable cross-tab BroadcastChannel communication
     }: {
       connect?: boolean;
       awareness?: awarenessProtocol.Awareness;
@@ -474,7 +475,7 @@ export class WebsocketProvider extends Observable<string> {
     encoding.writeVarUint8Array(
       encoderAwarenessState,
       awarenessProtocol.encodeAwarenessUpdate(this.awareness, [
-        this.doc.clientID,
+        this.doc.clientID
       ])
     );
     bc.publish(
@@ -609,7 +610,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
     // don't connect until we've updated the url parameters
     const baseOptions = {
       ...rest,
-      connect: false,
+      connect: false
     };
 
     super(serverUrl, room, doc ?? new YDoc(), baseOptions);

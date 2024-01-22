@@ -31,7 +31,7 @@ const PACKET_TYPES_REVERSE = new Map<string, PacketType>();
     "pong",
     "message",
     "upgrade",
-    "noop",
+    "noop"
   ] as PacketType[]
 ).forEach((type, index) => {
   PACKET_TYPES.set(type, "" + index);
@@ -74,7 +74,7 @@ export const Parser = {
     if (typeof encodedPacket !== "string") {
       return {
         type: "message",
-        data: mapBinary(encodedPacket, binaryType),
+        data: mapBinary(encodedPacket, binaryType)
       };
     }
     const typeChar = encodedPacket.charAt(0);
@@ -82,7 +82,7 @@ export const Parser = {
       const buffer = decodeFromBase64(encodedPacket.substring(1));
       return {
         type: "message",
-        data: mapBinary(buffer, binaryType),
+        data: mapBinary(buffer, binaryType)
       };
     }
     if (!PACKET_TYPES_REVERSE.has(typeChar)) {
@@ -92,10 +92,10 @@ export const Parser = {
     return encodedPacket.length > 1
       ? {
           type,
-          data: encodedPacket.substring(1),
+          data: encodedPacket.substring(1)
         }
       : {
-          type,
+          type
         };
   },
 
@@ -127,7 +127,7 @@ export const Parser = {
       }
     }
     return packets;
-  },
+  }
 };
 
 function encodeBlobAsBase64(

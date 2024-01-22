@@ -30,7 +30,7 @@ const socket = usePartySocket({
     if (message.votes) {
       setVotes(message.votes);
     }
-  },
+  }
 });
 ```
 

@@ -1,8 +1,11 @@
 import assert from "assert";
-import type { RequestInit } from "undici";
+
 import { fetch } from "undici";
+
 import { version as packageVersion } from "../package.json";
+
 import type { UserSession } from "./config";
+import type { RequestInit } from "undici";
 
 declare const PARTYKIT_API_BASE: string | undefined;
 assert(PARTYKIT_API_BASE, "PARTYKIT_API_BASE is not defined");
@@ -32,11 +35,11 @@ export async function fetchResult<T>(
       ...(user && sessionToken
         ? {
             Authorization: `Bearer ${sessionToken}`,
-            "X-PartyKit-User-Type": user.type,
+            "X-PartyKit-User-Type": user.type
           }
         : {}),
-      ...(fetchOptions.headers ?? {}),
-    },
+      ...(fetchOptions.headers ?? {})
+    }
   });
   if (res.ok) {
     const resJson = (await res.json()) as T;

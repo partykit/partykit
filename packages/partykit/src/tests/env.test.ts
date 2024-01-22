@@ -1,13 +1,15 @@
 import fs from "fs";
+
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+
 import { env } from "../cli";
-import { vi, beforeEach, expect, describe, test, afterEach } from "vitest";
+import { clearMocks, mockFetchResult } from "./fetchResult-mock";
 import { mockConsoleMethods } from "./mock-console";
-import { mockFetchResult, clearMocks } from "./fetchResult-mock";
 
 vi.mock("../fetchResult", async () => {
   const { fetchResult } = await import("./fetchResult-mock");
   return {
-    fetchResult,
+    fetchResult
   };
 });
 
@@ -49,7 +51,7 @@ describe("env", () => {
     await env.list({
       name: "my-project",
       config: undefined,
-      preview: undefined,
+      preview: undefined
     });
     expect(checkedResponse).toBe(true);
     expect(std).toMatchInlineSnapshot(`
@@ -74,7 +76,7 @@ describe("env", () => {
           a: "a1",
           b: "b2",
           c: "c3",
-          d: "d4",
+          d: "d4"
         };
       }
     );
@@ -82,7 +84,7 @@ describe("env", () => {
     await env.pull(undefined, {
       name: "my-project",
       config: undefined,
-      preview: undefined,
+      preview: undefined
     });
 
     expect(checkedResponse).toBe(true);
@@ -116,7 +118,7 @@ describe("env", () => {
       await env.push({
         name: "my-project",
         config: undefined,
-        preview: undefined,
+        preview: undefined
       });
 
       expect(std).toMatchInlineSnapshot(`
@@ -141,8 +143,8 @@ describe("env", () => {
             a: "a1",
             b: "b2",
             c: "c3",
-            d: "d4",
-          },
+            d: "d4"
+          }
         })
       );
 
@@ -161,7 +163,7 @@ describe("env", () => {
           `);
           checkedResponse = true;
           return {
-            success: true,
+            success: true
           };
         }
       );
@@ -169,7 +171,7 @@ describe("env", () => {
       await env.push({
         name: "my-project",
         config: undefined,
-        preview: undefined,
+        preview: undefined
       });
 
       expect(checkedResponse).toBe(true);
@@ -194,7 +196,7 @@ describe("env", () => {
       (_url, _options) => {
         checkedResponse = true;
         return {
-          success: true,
+          success: true
         };
       }
     );
@@ -202,7 +204,7 @@ describe("env", () => {
     await env.add("key", {
       name: "my-project",
       config: undefined,
-      preview: undefined,
+      preview: undefined
     });
 
     expect(checkedResponse).toBe(true);
@@ -217,7 +219,7 @@ describe("env", () => {
       (_url, _options) => {
         checkedResponse = true;
         return {
-          success: true,
+          success: true
         };
       }
     );
@@ -225,7 +227,7 @@ describe("env", () => {
     await env.remove("some-key", {
       name: "my-project",
       config: undefined,
-      preview: undefined,
+      preview: undefined
     });
 
     expect(checkedResponse).toBe(true);
