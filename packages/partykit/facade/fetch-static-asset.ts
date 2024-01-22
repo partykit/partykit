@@ -18,13 +18,13 @@ function getRoomAndPartyFromPathname(pathname: string): {
     const [_, __, roomId] = pathname.split("/");
     return {
       room: roomId,
-      party: "main",
+      party: "main"
     };
   } else if (pathname.startsWith("/parties/")) {
     const [_, __, partyName, roomId] = pathname.split("/");
     return {
       room: roomId,
-      party: partyName,
+      party: partyName
     };
   }
   return null;

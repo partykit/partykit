@@ -1,27 +1,30 @@
 // This is the facade for the worker that will be used in partykit.
 // It will be compiled and imported by the CLI.
 
+// @ts-expect-error We'll be replacing __WORKER__
+// with the path to the input worker
+import Worker from "__WORKER__";
+
+import {
+  createLazyConnection,
+  HibernatingConnectionManager,
+  InMemoryConnectionManager
+} from "./connection";
+import fetchStaticAsset from "./fetch-static-asset";
+import { VectorizeClient } from "./vectorize";
+import { ClassWorker, ModuleWorker } from "./worker";
+
 import type * as Party from "../src/server";
+import type { ConnectionManager } from "./connection";
+import type { VectorizeClientOptions } from "./vectorize";
+import type { PartyServerAPI } from "./worker";
 import type {
   DurableObjectNamespace,
   DurableObjectState,
   ExecutionContext,
   RequestInfo,
-  RequestInit,
+  RequestInit
 } from "@cloudflare/workers-types";
-import fetchStaticAsset from "./fetch-static-asset";
-import {
-  type ConnectionManager,
-  HibernatingConnectionManager,
-  InMemoryConnectionManager,
-  createLazyConnection,
-} from "./connection";
-import { type PartyServerAPI, ClassWorker, ModuleWorker } from "./worker";
-
-// @ts-expect-error We'll be replacing __WORKER__
-// with the path to the input worker
-import Worker from "__WORKER__";
-import { VectorizeClient, type VectorizeClientOptions } from "./vectorize";
 
 declare const Worker: Party.PartyKitServer;
 
@@ -44,13 +47,13 @@ function getRoomAndPartyFromPathname(pathname: string): {
     const [_, __, roomId] = pathname.split("/");
     return {
       room: roomId,
-      party: "main",
+      party: "main"
     };
   } else if (pathname.startsWith("/parties/")) {
     const [_, __, partyName, roomId] = pathname.split("/");
     return {
       room: roomId,
-      party: partyName,
+      party: partyName
     };
   }
   return null;
@@ -166,8 +169,8 @@ function createMultiParties(
                         ...init,
                         headers: {
                           upgrade: "websocket",
-                          ...init?.headers,
-                        },
+                          ...init?.headers
+                        }
                       }
                     );
                   } else {
@@ -178,8 +181,8 @@ function createMultiParties(
                         ...init,
                         headers: {
                           upgrade: "websocket",
-                          ...init?.headers,
-                        },
+                          ...init?.headers
+                        }
                       }
                     );
                   }
@@ -188,8 +191,8 @@ function createMultiParties(
                     `http://${options.host}/parties/${key}/${name}`,
                     {
                       headers: {
-                        upgrade: "websocket",
-                      },
+                        upgrade: "websocket"
+                      }
                     }
                   );
                 }
@@ -199,9 +202,9 @@ function createMultiParties(
                 }
                 ws.accept();
                 return ws as WebSocket;
-              },
+              }
             };
-          },
+          }
         };
       }
     }
@@ -229,7 +232,7 @@ function createDurable(
     "onMessage",
     "onClose",
     "onError",
-    "onAlarm",
+    "onAlarm"
   ] satisfies (keyof Party.PartyKitServer)[]) {
     if (handler in Worker && typeof Worker[handler] !== "function") {
       throw new Error(`.${handler} should be a function`);
@@ -240,7 +243,7 @@ function createDurable(
     "unstable_onFetch",
     "onFetch",
     "onBeforeConnect",
-    "onBeforeRequest",
+    "onBeforeRequest"
   ] satisfies (keyof Party.PartyKitServer)[]) {
     if (handler in WorkerInstanceMethods) {
       if (isClassAPI) {
@@ -282,13 +285,13 @@ function createDurable(
       this.namespaces = namespaces;
 
       Object.assign(this.namespaces, {
-        main: PARTYKIT_DURABLE,
+        main: PARTYKIT_DURABLE
       });
 
       this.vectorize = Object.fromEntries(
         Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
           key,
-          new VectorizeClient(value),
+          new VectorizeClient(value)
         ])
       );
 
@@ -336,7 +339,7 @@ function createDurable(
             );
           },
           vectorize: this.vectorize,
-          ai: PARTYKIT_AI,
+          ai: PARTYKIT_AI
         },
         getConnection(id: string) {
           if (self.connectionManager) {
@@ -381,7 +384,7 @@ function createDurable(
             "Party.parties is deprecated and will be removed in a future version of PartyKit. Use Party.context.parties instead."
           );
           return this.context.parties;
-        },
+        }
       };
     }
 
@@ -427,7 +430,7 @@ function createDurable(
         return new Response(
           errMessage || "Uncaught exception when making a request",
           {
-            status: errCode,
+            status: errCode
           }
         );
       }
@@ -475,7 +478,7 @@ function createDurable(
             // TODO: deepFreeze object?
             this.state = state as Party.ConnectionState<T>;
             return this.state;
-          },
+          }
         });
 
         const ctx = { request };
@@ -527,7 +530,7 @@ function createDurable(
 
       this.id = roomId;
       this.parties = createMultiParties(this.namespaces, {
-        host: url.host,
+        host: url.host
       });
     }
 
@@ -650,7 +653,7 @@ function createDurable(
 }
 
 const Workers: Record<string, Party.PartyKitServer> = {
-  main: Worker,
+  main: Worker
 };
 
 export const PartyKitDurable = createDurable(Worker, { name: "main" });
@@ -677,7 +680,7 @@ export default {
       } = env;
 
       Object.assign(namespaces, {
-        main: PARTYKIT_DURABLE,
+        main: PARTYKIT_DURABLE
       });
 
       const { room: roomId, party: targetParty } =
@@ -686,14 +689,14 @@ export default {
       const parties: Party.Room["context"]["parties"] = createMultiParties(
         namespaces,
         {
-          host: url.host,
+          host: url.host
         }
       );
 
       const vectorizeBindings = Object.fromEntries(
         Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
           key,
-          new VectorizeClient(value),
+          new VectorizeClient(value)
         ])
       );
 
@@ -703,7 +706,7 @@ export default {
         const targetDurable = namespaces[targetParty];
         if (!targetWorker) {
           return new Response(`Party ${targetParty} not found`, {
-            status: 404,
+            status: 404
           });
         }
 
@@ -742,7 +745,7 @@ export default {
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
-                    vectorize: vectorizeBindings,
+                    vectorize: vectorizeBindings
                   },
                   ctx
                 );
@@ -751,7 +754,7 @@ export default {
                 return new Response(
                   e instanceof Error ? e.message : `${e}` || "Unauthorised",
                   {
-                    status: 401,
+                    status: 401
                   }
                 );
               }
@@ -786,7 +789,7 @@ export default {
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
-                    vectorize: vectorizeBindings,
+                    vectorize: vectorizeBindings
                   },
                   ctx
                 );
@@ -795,7 +798,7 @@ export default {
                 return new Response(
                   e instanceof Error ? e.message : `${e}` || "Unauthorised",
                   {
-                    status: 401,
+                    status: 401
                   }
                 );
               }
@@ -834,13 +837,13 @@ export default {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings,
+              vectorize: vectorizeBindings
             },
             ctx
           );
           return new Response(null, {
             status: 101,
-            webSocket: clientWebSocket,
+            webSocket: clientWebSocket
           });
         }
 
@@ -866,13 +869,13 @@ export default {
               name: cronName,
               noRetry() {
                 throw new Error("Not implemented");
-              },
+              }
             },
             {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings,
+              vectorize: vectorizeBindings
             },
             ctx
           );
@@ -888,20 +891,20 @@ export default {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings,
+              vectorize: vectorizeBindings
             },
             ctx
           );
         }
 
         return new Response("Not found", {
-          status: 404,
+          status: 404
         });
       }
     } catch (e) {
       console.error("fetch error", e);
       return new Response(e instanceof Error ? e.message : `${e}`, {
-        status: 500,
+        status: 500
       });
     }
   },
@@ -920,7 +923,7 @@ export default {
     } = env;
 
     Object.assign(namespaces, {
-      main: PARTYKIT_DURABLE,
+      main: PARTYKIT_DURABLE
     });
 
     const onCron = Worker.onCron;
@@ -928,14 +931,14 @@ export default {
       const vectorizeBindings = Object.fromEntries(
         Object.entries(PARTYKIT_VECTORIZE || {}).map(([key, value]) => [
           key,
-          new VectorizeClient(value),
+          new VectorizeClient(value)
         ])
       );
 
       const parties: Party.Room["context"]["parties"] = createMultiParties(
         namespaces,
         {
-          host: PARTYKIT_HOST,
+          host: PARTYKIT_HOST
         }
       );
 
@@ -947,16 +950,16 @@ export default {
 
       return onCron(
         Object.assign(controller, {
-          name: cronName,
+          name: cronName
         }),
         {
           env: extractVars(env),
           ai: PARTYKIT_AI,
           parties,
-          vectorize: vectorizeBindings,
+          vectorize: vectorizeBindings
         },
         ctx
       );
     }
-  },
+  }
 } satisfies ExportedHandler<Env>;
