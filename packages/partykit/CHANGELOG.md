@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.75
+
+### Patch Changes
+
+- [#734](https://github.com/partykit/partykit/pull/734) [`5a9a489`](https://github.com/partykit/partykit/commit/5a9a489558cc63ca508d0640d5dd1836bb7e9add) Thanks [@threepointone](https://github.com/threepointone)! - format config errors
+
+- [#732](https://github.com/partykit/partykit/pull/732) [`9d407bf`](https://github.com/partykit/partykit/commit/9d407bf1a1737307a127880d7e32abe53e138d3d) Thanks [@threepointone](https://github.com/threepointone)! - init: package.json#name might not exist
+
 ## 0.0.74
 
 ### Patch Changes
@@ -697,7 +705,7 @@
   import type {
     PartyKitConnection,
     PartyKitRoom,
-    PartyKitServer
+    PartyKitServer,
   } from "partykit/server";
 
   export default {
@@ -707,7 +715,7 @@
     },
     onConnect(connection: PartyKitConnection, room: PartyKitRoom) {
       room.broadcast(`Someone joined room ${room.id}!`);
-    }
+    },
   } satisfies PartyKitServer;
   ```
 
@@ -719,7 +727,7 @@
     PartyConnection,
     PartyRequest,
     PartyServer,
-    PartyWorker
+    PartyWorker,
   } from "partykit/server";
 
   export default class MyParty implements PartyServer {
@@ -761,7 +769,7 @@
     PartyRequest,
     PartyServer,
     PartyServerOptions,
-    PartyWorker
+    PartyWorker,
   } from "partykit/server";
 
   // PartyKit servers now implement PartyServer interface
@@ -776,7 +784,7 @@
 
     // Opting into hibernation is now an explicit option
     readonly options: PartyServerOptions = {
-      hibernate: true
+      hibernate: true,
     };
 
     // Servers can now keep state in class instance variables
@@ -801,7 +809,7 @@
     // You can now tag connections, and retrieve tagged connections using Party.getConnections()
     getConnectionTags(
       connection: PartyConnection,
-      ctx: PartyConnectionContext
+      ctx: PartyConnectionContext,
     ) {
       return [ctx.request.cf?.country as string];
     }
@@ -820,8 +828,8 @@
       for (const compatriot of this.party.getConnections(country)) {
         compatriot.send(
           JSON.stringify({
-            message: `${connection.id} is also from ${country}!`
-          })
+            message: `${connection.id} is also from ${country}!`,
+          }),
         );
       }
     }
@@ -1368,7 +1376,7 @@
     onMessage(message, connection, room) {
       const { ip } = connection.deserializeAttachment();
       // do something with the ip
-    }
+    },
   };
   ```
 

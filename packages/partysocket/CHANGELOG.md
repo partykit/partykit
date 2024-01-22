@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.22
+
+### Patch Changes
+
+- [#737](https://github.com/partykit/partykit/pull/737) [`62c8471`](https://github.com/partykit/partykit/commit/62c8471272913fd0fba5da91466b459d0b45a64b) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: fix message types in node, give a useful error when WebSocket implementation hasn't been passed
+
 ## 0.0.21
 
 ### Patch Changes
