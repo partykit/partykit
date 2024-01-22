@@ -114,6 +114,9 @@ const templateChoices = {
   // whiteboard: "A collaborative whiteboard",
   // "chat-room": "A chat room",
   // pubsub: "A simple pubsub server",
+  // remix: "A simple remix starter"
+  // remix-spa: "A simple remix + vite starter"
+  // nuxt: "A simple nuxt js starter"
 };
 
 export async function init(options: {
