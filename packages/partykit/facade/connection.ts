@@ -8,7 +8,7 @@ if (!("OPEN" in WebSocket)) {
     CONNECTING: WebSocket.READY_STATE_CONNECTING,
     OPEN: WebSocket.READY_STATE_OPEN,
     CLOSING: WebSocket.READY_STATE_CLOSING,
-    CLOSED: WebSocket.READY_STATE_CLOSED,
+    CLOSED: WebSocket.READY_STATE_CLOSED
   };
 
   Object.assign(WebSocket, WebSocketStatus);
@@ -83,22 +83,22 @@ export const createLazyConnection = (
     id: {
       get() {
         return attachments.get(ws).__pk.id;
-      },
+      }
     },
     uri: {
       get() {
         return attachments.get(ws).__pk.uri;
-      },
+      }
     },
     socket: {
       get() {
         return ws;
-      },
+      }
     },
     state: {
       get() {
         return this.deserializeAttachment() as Party.ConnectionState<unknown>;
-      },
+      }
     },
     setState: {
       value: function setState<T>(setState: T | Party.ConnectionSetStateFn<T>) {
@@ -111,26 +111,26 @@ export const createLazyConnection = (
 
         this.serializeAttachment(state);
         return state as Party.ConnectionState<T>;
-      },
+      }
     },
 
     deserializeAttachment: {
       value: function deserializeAttachment<T = unknown>() {
         const attachment = attachments.get(ws);
         return (attachment.__user ?? null) as T;
-      },
+      }
     },
 
     serializeAttachment: {
       value: function serializeAttachment<T = unknown>(attachment: T) {
         const setting = {
           ...attachments.get(ws),
-          __user: attachment ?? null,
+          __user: attachment ?? null
         };
 
         attachments.set(ws, setting);
-      },
-    },
+      }
+    }
   }) as Party.Connection;
 
   if (initialState) {
@@ -228,7 +228,7 @@ export class InMemoryConnectionManager<TState> implements ConnectionManager {
     this.tags.set(connection, [
       // make sure we have id tag
       connection.id,
-      ...tags.filter((t) => t !== connection.id),
+      ...tags.filter((t) => t !== connection.id)
     ]);
 
     const removeConnection = () => {
@@ -281,7 +281,7 @@ export class HibernatingConnectionManager<TState> implements ConnectionManager {
     // dedupe tags in case user already provided id tag
     const tags = [
       connection.id,
-      ...userTags.filter((t) => t !== connection.id),
+      ...userTags.filter((t) => t !== connection.id)
     ];
 
     // validate tags against documented restrictions
@@ -308,9 +308,9 @@ export class HibernatingConnectionManager<TState> implements ConnectionManager {
     connection.serializeAttachment({
       __pk: {
         id: connection.id,
-        uri: connection.uri,
+        uri: connection.uri
       },
-      __user: null,
+      __user: null
     });
 
     return createLazyConnection(connection);

@@ -1,5 +1,6 @@
-import type { Nitro, NitroPreset } from "nitropack";
 import { fileURLToPath } from "node:url";
+
+import type { Nitro, NitroPreset } from "nitropack";
 
 export default <NitroPreset>{
   // extends: null,
@@ -9,6 +10,6 @@ export default <NitroPreset>{
   hooks: {
     async compiled(_nitro: Nitro) {
       // no op
-    },
-  },
+    }
+  }
 };

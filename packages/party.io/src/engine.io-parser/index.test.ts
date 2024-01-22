@@ -3,9 +3,12 @@ import {
   assertInstanceOf,
   assertStrictEquals,
   describe,
-  it,
+  it
 } from "vitest";
-import { type Packet, Parser } from ".";
+
+import { Parser } from ".";
+
+import type { Packet } from ".";
 
 describe("engine.io-parser", () => {
   describe("single packet", () => {
@@ -23,11 +26,11 @@ describe("engine.io-parser", () => {
     it("should fail to decode a malformed packet", () => {
       assertEquals(Parser.decodePacket(""), {
         type: "error",
-        data: "parser error",
+        data: "parser error"
       });
       assertEquals(Parser.decodePacket("a123"), {
         type: "error",
-        data: "parser error",
+        data: "parser error"
       });
     });
 
@@ -35,7 +38,7 @@ describe("engine.io-parser", () => {
       return new Promise((done) => {
         const packet: Packet = {
           type: "message",
-          data: Uint8Array.from([1, 2, 3, 4]).buffer,
+          data: Uint8Array.from([1, 2, 3, 4]).buffer
         };
         Parser.encodePacket(packet, true, (encodedPacket) => {
           assertEquals(
@@ -63,7 +66,7 @@ describe("engine.io-parser", () => {
       return new Promise((done) => {
         const packet: Packet = {
           type: "message",
-          data: Uint8Array.from([1, 2, 3, 4]).buffer,
+          data: Uint8Array.from([1, 2, 3, 4]).buffer
         };
         Parser.encodePacket(packet, false, (encodedPacket) => {
           assertEquals(encodedPacket, "bAQIDBA==");
@@ -104,7 +107,7 @@ describe("engine.io-parser", () => {
       return new Promise((done) => {
         const packet: Packet = {
           type: "message",
-          data: new Blob(["1234", Uint8Array.from([1, 2, 3, 4])]),
+          data: new Blob(["1234", Uint8Array.from([1, 2, 3, 4])])
         };
         Parser.encodePacket(packet, true, (encodedPacket) => {
           assertInstanceOf(encodedPacket, Blob);
@@ -122,7 +125,7 @@ describe("engine.io-parser", () => {
       return new Promise((done) => {
         const packet: Packet = {
           type: "message",
-          data: new Blob(["1234", Uint8Array.from([1, 2, 3, 4])]),
+          data: new Blob(["1234", Uint8Array.from([1, 2, 3, 4])])
         };
         Parser.encodePacket(packet, false, (encodedPacket) => {
           assertEquals(encodedPacket, "bMTIzNAECAwQ=");
@@ -145,7 +148,7 @@ describe("engine.io-parser", () => {
           { type: "close" },
           { type: "ping", data: "probe" },
           { type: "pong", data: "probe" },
-          { type: "message", data: "test" },
+          { type: "message", data: "test" }
         ];
 
         Parser.encodePayload(packets, (payload) => {
@@ -158,13 +161,13 @@ describe("engine.io-parser", () => {
 
     it("should fail to decode a malformed payload", () => {
       assertEquals(Parser.decodePayload("{"), [
-        { type: "error", data: "parser error" },
+        { type: "error", data: "parser error" }
       ]);
       assertEquals(Parser.decodePayload("{}"), [
-        { type: "error", data: "parser error" },
+        { type: "error", data: "parser error" }
       ]);
       assertEquals(Parser.decodePayload('["a123", "a456"]'), [
-        { type: "error", data: "parser error" },
+        { type: "error", data: "parser error" }
       ]);
     });
 
@@ -172,7 +175,7 @@ describe("engine.io-parser", () => {
       return new Promise((done) => {
         const packets: Packet[] = [
           { type: "message", data: "test" },
-          { type: "message", data: Uint8Array.from([1, 2, 3, 4]).buffer },
+          { type: "message", data: Uint8Array.from([1, 2, 3, 4]).buffer }
         ];
         Parser.encodePayload(packets, (payload) => {
           assertEquals(payload, "4test\x1ebAQIDBA==");

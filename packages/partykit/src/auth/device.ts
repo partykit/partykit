@@ -1,6 +1,8 @@
-import open from "open";
 import http from "http";
+
 import getPort from "get-port";
+import open from "open";
+
 import type { Socket } from "net";
 
 declare const PARTYKIT_DASHBOARD_BASE: string | undefined;
@@ -76,7 +78,7 @@ export async function signInWithBrowser(mode: "cli" | "token"): Promise<
                   }
                   res
                     .writeHead(302, {
-                      Location: `${DASHBOARD_BASE}${successRedirectUrl}`,
+                      Location: `${DASHBOARD_BASE}${successRedirectUrl}`
                     })
                     .end();
                 }

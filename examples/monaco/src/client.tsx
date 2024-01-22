@@ -1,11 +1,10 @@
 /* eslint-env browser */
 
-import * as Y from "yjs";
-import YPartyKitProvider from "y-partykit/provider";
-import { MonacoBinding } from "y-monaco";
-import * as monaco from "monaco-editor";
-
 import BetterWebSocket from "partysocket/ws";
+import YPartyKitProvider from "y-partykit/provider";
+import * as monaco from "monaco-editor";
+import { MonacoBinding } from "y-monaco";
+import * as Y from "yjs";
 
 declare const PARTYKIT_HOST: string;
 
@@ -29,14 +28,14 @@ window.MonacoEnvironment = {
     }
     return "/dist/monaco-editor/esm/vs/editor/editor.worker.js";
     // return "/dist/editor.worker.bundle.js";
-  },
+  }
 };
 
 window.addEventListener("load", () => {
   const ydoc = new Y.Doc();
   const provider = new YPartyKitProvider(PARTYKIT_HOST, "monaco-demo", ydoc, {
     // @ts-expect-error TODO: fix this
-    WebSocketPolyfill: BetterWebSocket,
+    WebSocketPolyfill: BetterWebSocket
   });
 
   provider.ws?.send("do-the-thing");
@@ -48,7 +47,7 @@ window.addEventListener("load", () => {
     {
       value: "",
       language: "javascript",
-      theme: "vs-dark",
+      theme: "vs-dark"
     }
   );
   new MonacoBinding(

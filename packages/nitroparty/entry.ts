@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable react-hooks/rules-of-hooks */
 import "#internal/nitro/virtual/polyfill";
+
 import type * as Party from "partykit/server";
 
 // @ts-expect-error polyfilled by nitro
@@ -28,14 +29,14 @@ export default class PartyServer implements Party.Server {
       context: {
         request,
         lobby,
-        ctx,
+        ctx
       },
       host: url.hostname,
       protocol: url.protocol,
       method: request.method,
       // we need to cast the headers to a web standard Headers
       headers: request.headers as unknown as Headers,
-      body,
+      body
     });
   }
 }

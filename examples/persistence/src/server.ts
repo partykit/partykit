@@ -23,5 +23,5 @@ export default {
         ws.send(evt.data);
       }
     });
-  },
+  }
 } satisfies PartyKitServer;

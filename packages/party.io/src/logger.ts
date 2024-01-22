@@ -11,6 +11,6 @@ export function getLogger(name: string) {
       if (SHOW_DEBUG) {
         console.log(name, ...args);
       }
-    },
+    }
   };
 }

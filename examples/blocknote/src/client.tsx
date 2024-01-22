@@ -1,9 +1,11 @@
 import * as React from "react";
-import YPartyKitProvider from "y-partykit/provider";
-import * as Y from "yjs";
 import { createRoot } from "react-dom/client";
+import YPartyKitProvider from "y-partykit/provider";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import * as Y from "yjs";
+
 import "@blocknote/core/style.css";
+
 import { getRandomUser } from "./randomUser";
 
 declare const PARTYKIT_HOST: string;
@@ -19,8 +21,8 @@ function Editor() {
       // Where to store BlockNote data in the Y.Doc:
       fragment: doc.getXmlFragment("document-store"),
       // Information (name and color) for this user:
-      user: getRandomUser(),
-    },
+      user: getRandomUser()
+    }
   });
   return <BlockNoteView editor={editor} />;
 }

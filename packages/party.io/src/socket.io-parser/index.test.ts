@@ -1,6 +1,9 @@
-import { assertEquals, describe, it } from "vitest";
-import { Decoder, Encoder, type Packet, PacketType } from ".";
 import { type RawData } from "@/engine.io-parser";
+import { assertEquals, describe, it } from "vitest";
+
+import { Decoder, Encoder, PacketType } from ".";
+
+import type { Packet } from ".";
 
 const encoder = new Encoder();
 
@@ -9,7 +12,7 @@ describe("socket.io-parser", () => {
     it("should encode/decode a CONNECT packet (main namespace)", () => {
       const packet = {
         type: PacketType.CONNECT,
-        nsp: "/",
+        nsp: "/"
       };
       return testEncodeDecode(packet, "0");
     });
@@ -19,8 +22,8 @@ describe("socket.io-parser", () => {
         type: PacketType.CONNECT,
         nsp: "/woot",
         data: {
-          token: "123",
-        },
+          token: "123"
+        }
       };
       return testEncodeDecode(packet, '0/woot,{"token":"123"}');
     });
@@ -28,7 +31,7 @@ describe("socket.io-parser", () => {
     it("should encode/decode a DISCONNECT packet", () => {
       const packet = {
         type: PacketType.DISCONNECT,
-        nsp: "/",
+        nsp: "/"
       };
       return testEncodeDecode(packet, "1");
     });
@@ -37,7 +40,7 @@ describe("socket.io-parser", () => {
       const packet = {
         type: PacketType.EVENT,
         nsp: "/",
-        data: ["a", 1, {}],
+        data: ["a", 1, {}]
       };
       return testEncodeDecode(packet, '2["a",1,{}]');
     });
@@ -47,7 +50,7 @@ describe("socket.io-parser", () => {
         type: PacketType.EVENT,
         nsp: "/",
         id: 1,
-        data: ["a", 1, {}],
+        data: ["a", 1, {}]
       };
       return testEncodeDecode(packet, '21["a",1,{}]');
     });
@@ -57,7 +60,7 @@ describe("socket.io-parser", () => {
         type: PacketType.ACK,
         nsp: "/",
         id: 123,
-        data: ["a", 1, {}],
+        data: ["a", 1, {}]
       };
       return testEncodeDecode(packet, '3123["a",1,{}]');
     });
@@ -67,8 +70,8 @@ describe("socket.io-parser", () => {
         type: PacketType.CONNECT_ERROR,
         nsp: "/",
         data: {
-          message: "Unauthorized",
-        },
+          message: "Unauthorized"
+        }
       };
       return testEncodeDecode(packet, '4{"message":"Unauthorized"}');
     });
@@ -94,8 +97,8 @@ describe("socket.io-parser", () => {
           data: [
             "a",
             { b: Uint8Array.from([1, 2, 3]) },
-            ["c", Int32Array.from([4, 5, 6])],
-          ],
+            ["c", Int32Array.from([4, 5, 6])]
+          ]
         };
 
         const encodedPackets = encoder.encode(packet);
@@ -118,9 +121,9 @@ describe("socket.io-parser", () => {
             data: [
               "a",
               { b: Uint8Array.from([1, 2, 3]) },
-              ["c", Int32Array.from([4, 5, 6])],
+              ["c", Int32Array.from([4, 5, 6])]
             ],
-            attachments: 2,
+            attachments: 2
           });
 
           done();

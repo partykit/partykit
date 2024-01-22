@@ -1,18 +1,18 @@
 import { readFileSync } from "fs";
 import { readFile } from "fs/promises";
 import assert from "node:assert";
-import { createServer } from "node:http";
+import { createServer as createHttpServer, createServer } from "node:http";
 import os from "node:os";
 import { URL } from "node:url";
 import path from "path";
-import open from "open";
-import { apps as openApps } from "open";
+
 import { useEffect, useRef, useState } from "react";
+import { createHttpTerminator } from "http-terminator";
+import open, { apps as openApps } from "open";
 import { SourceMapConsumer } from "source-map";
 import WebSocket, { WebSocketServer } from "ws";
+
 import { version } from "../package.json";
-import { createServer as createHttpServer } from "node:http";
-import { createHttpTerminator } from "http-terminator";
 
 import type Protocol from "devtools-protocol";
 import type { IncomingMessage, Server, ServerResponse } from "node:http";
@@ -65,7 +65,7 @@ export async function waitForPortToBeAvailable(
       const server = createHttpServer();
       const terminator = createHttpTerminator({
         server,
-        gracefulTerminationTimeout: 0, // default 1000
+        gracefulTerminationTimeout: 0 // default 1000
       });
 
       server.on("error", (err) => {
@@ -170,7 +170,7 @@ export default function useInspector(props: InspectorProps) {
                 Browser: `partykit/v${version}`,
                 // TODO: (someday): The DevTools protocol should match that of Edge Worker.
                 // This could be exposed by the preview API.
-                "Protocol-Version": "1.3",
+                "Protocol-Version": "1.3"
               })
             );
             return;
@@ -197,8 +197,8 @@ export default function useInspector(props: InspectorProps) {
                       "https://" +
                       (remoteWebSocket
                         ? new URL(remoteWebSocket.url).host
-                        : "workers.dev"),
-                  },
+                        : "workers.dev")
+                  }
                 ])
               );
             }
@@ -218,7 +218,7 @@ export default function useInspector(props: InspectorProps) {
   if (wsServerRef.current === undefined) {
     wsServerRef.current = new WebSocketServer({
       server,
-      clientTracking: true,
+      clientTracking: true
     });
   }
   const wsServer = wsServerRef.current;
@@ -241,7 +241,7 @@ export default function useInspector(props: InspectorProps) {
             // This number is arbitrary, and is chosen to be high so as not to conflict with messages that DevTools might actually send.
             // For completeness, these options don't work: 0, -1, or Number.MAX_SAFE_INTEGER
             id: 100_000_000,
-            method: "Debugger.disable",
+            method: "Debugger.disable"
           })
         );
         // As promised, save the created websocket in a state hook
@@ -269,7 +269,7 @@ export default function useInspector(props: InspectorProps) {
       await waitForPortToBeAvailable(props.port, {
         retryPeriod: 200,
         timeout: 2000,
-        abortSignal: abortController.signal,
+        abortSignal: abortController.signal
       });
       server.listen(props.port);
     }
@@ -299,7 +299,7 @@ export default function useInspector(props: InspectorProps) {
    */
   const [
     retryRemoteWebSocketConnectionSigil,
-    setRetryRemoteWebSocketConnectionSigil,
+    setRetryRemoteWebSocketConnectionSigil
   ] = useState<number>(0);
   function retryRemoteWebSocketConnection() {
     setRetryRemoteWebSocketConnectionSigil((x) => x + 1);
@@ -378,7 +378,7 @@ export default function useInspector(props: InspectorProps) {
 
             // Create the lines for the exception details log
             const exceptionLines = [
-              params.exceptionDetails.exception?.description?.split("\n")[0],
+              params.exceptionDetails.exception?.description?.split("\n")[0]
             ];
 
             await SourceMapConsumer.with(mapContent, null, async (consumer) => {
@@ -393,7 +393,7 @@ export default function useInspector(props: InspectorProps) {
                       // whereas the sourcemap consumer indexes from one.
                       const pos = consumer.originalPositionFor({
                         line: lineNumber + 1,
-                        column: columnNumber + 1,
+                        column: columnNumber + 1
                       });
 
                       // Print out line which caused error:
@@ -460,7 +460,7 @@ export default function useInspector(props: InspectorProps) {
       keepAliveInterval = setInterval(() => {
         send({
           method: "Runtime.getIsolateId",
-          id: messageCounterRef.current++,
+          id: messageCounterRef.current++
         });
       }, 10_000);
     }
@@ -507,7 +507,7 @@ export default function useInspector(props: InspectorProps) {
             // we're referencing a ref that stays alive
             // eslint-disable-next-line react-hooks/exhaustive-deps
             id: messageCounterRef.current++,
-            params: {},
+            params: {}
           })
         );
       });
@@ -533,7 +533,7 @@ export default function useInspector(props: InspectorProps) {
     // so react-hooks/exhaustive-deps doesn't complain if it's not
     // included in the dependency array. But its presence is critical,
     // so do NOT remove it from the dependency list.
-    retryRemoteWebSocketConnectionSigil,
+    retryRemoteWebSocketConnectionSigil
   ]);
 
   /**
@@ -618,10 +618,10 @@ export default function useInspector(props: InspectorProps) {
               result: {
                 resource: {
                   success: true,
-                  text: JSON.stringify(sourceMap),
-                },
-              },
-            }),
+                  text: JSON.stringify(sourceMap)
+                }
+              }
+            })
           });
           return;
         }
@@ -713,7 +713,7 @@ export default function useInspector(props: InspectorProps) {
     remoteWebSocket,
     props.name,
     props.sourceMapMetadata,
-    props.sourceMapPath,
+    props.sourceMapPath
   ]);
 }
 
@@ -755,18 +755,18 @@ export const openInspector = async (
   const childProcess = await open(url, {
     app: [
       {
-        name: openApps.chrome,
+        name: openApps.chrome
       },
       {
-        name: braveBrowser,
+        name: braveBrowser
       },
       {
-        name: openApps.edge,
+        name: openApps.edge
       },
       {
-        name: openApps.firefox,
-      },
-    ],
+        name: openApps.firefox
+      }
+    ]
   });
   childProcess.on("error", () => {
     logger.warn(errorMessage);

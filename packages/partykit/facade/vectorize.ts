@@ -5,7 +5,7 @@ import type {
   VectorizeMatches,
   VectorizeQueryOptions,
   VectorizeVector,
-  VectorizeVectorMutation,
+  VectorizeVectorMutation
 } from "@cloudflare/workers-types";
 
 declare const PARTYKIT_API_BASE: string;
@@ -29,8 +29,8 @@ async function fetchResult<T>(api: string, options: FetchInit): Promise<T> {
     ...fetchOptions,
     headers: {
       ...extraHeaders,
-      ...fetchOptions.headers,
-    },
+      ...fetchOptions.headers
+    }
   });
 
   if (res.ok) {
@@ -90,7 +90,7 @@ export class VectorizeClient implements VectorizeIndex {
     return this.fetch(
       `/vectorize/${this.namespace}/indexes/${this.index_name}`,
       {
-        method: "GET",
+        method: "GET"
       }
     );
   }
@@ -104,11 +104,11 @@ export class VectorizeClient implements VectorizeIndex {
         method: "POST",
         body: JSON.stringify({
           vector,
-          ...options,
+          ...options
         }),
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
   }
@@ -124,7 +124,7 @@ export class VectorizeClient implements VectorizeIndex {
       formData.append(
         "vectors",
         new File([batch.join(`\n`)], "vectors.ndjson", {
-          type: "application/x-ndjson",
+          type: "application/x-ndjson"
         })
       );
 
@@ -134,7 +134,7 @@ export class VectorizeClient implements VectorizeIndex {
         }`,
         {
           method: "POST",
-          body: formData,
+          body: formData
         }
       );
       vectorInsertCount += idxPart.count;
@@ -150,7 +150,7 @@ export class VectorizeClient implements VectorizeIndex {
 
     return {
       count: vectorInsertCount,
-      ids: insertedIds,
+      ids: insertedIds
     };
   }
 

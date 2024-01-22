@@ -1,4 +1,5 @@
 import { describe, it } from "vitest";
+
 import { decode, encode } from ".";
 
 function assertEquals(actual: unknown, expected: unknown) {
@@ -319,7 +320,7 @@ describe("msgpack", () => {
         c: 12,
         d: 13,
         e: 14,
-        f: 15,
+        f: 15
       },
       "de" +
         "0010" +
@@ -343,7 +344,7 @@ describe("msgpack", () => {
       a: "b",
       toJSON: function () {
         return "c";
-      },
+      }
     };
     assertEquals(encode(obj), encode("c"));
   });
@@ -365,11 +366,11 @@ describe("msgpack", () => {
     const value = {
       a: undefined,
       b: null,
-      c: [undefined, null],
+      c: [undefined, null]
     };
     const expected = {
       b: null,
-      c: [null, null],
+      c: [null, null]
     };
     assertEquals(decode(encode(value)), expected);
   });

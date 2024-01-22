@@ -1,5 +1,6 @@
-import * as esbuild from "esbuild";
 import fs from "fs";
+
+import * as esbuild from "esbuild";
 
 process.chdir(`${__dirname}/../`);
 
@@ -22,16 +23,16 @@ esbuild.buildSync({
   external: ["react-devtools-core", "yoga-wasm-web"],
   minify,
   alias: {
-    "react-devtools-core": "create-partykit/rdt-mock.js",
+    "react-devtools-core": "create-partykit/rdt-mock.js"
   },
   sourcemap: true,
   banner: isProd
     ? { js: "#!/usr/bin/env node" + createRequireSnippet }
     : { js: "#!/usr/bin/env node --enable-source-maps" + createRequireSnippet },
   define: {
-    "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
+    "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`
   },
-  outfile: "dist/index.mjs",
+  outfile: "dist/index.mjs"
 });
 
 fs.chmodSync("dist/index.mjs", 0o755);

@@ -1,24 +1,20 @@
-import { Text, render } from "ink";
+import fs from "fs";
+import path from "path";
+
 import * as React from "react";
-import TextInput from "ink-text-input";
-import SelectInput from "ink-select-input";
-
+import chalk from "chalk";
+import { Option, program } from "commander";
+import { execaCommand } from "execa";
+import { findUpSync } from "find-up";
 import { downloadTemplate } from "giget";
-
+import gradient from "gradient-string";
+import { render, Text } from "ink";
+import SelectInput from "ink-select-input";
+import TextInput from "ink-text-input";
 import * as RandomWords from "random-words";
-
 import detectPackageManager from "which-pm-runs";
 
-import path from "path";
-import fs from "fs";
-import { findUpSync } from "find-up";
 import { version as packageVersion } from "../package.json";
-
-import chalk from "chalk";
-import { program, Option } from "commander";
-
-import { execaCommand } from "execa";
-import gradient from "gradient-string";
 
 function printBanner() {
   const string = `🎈 PartyKit`;
@@ -28,7 +24,7 @@ function printBanner() {
 
 async function install({
   pkgManager,
-  cwd,
+  cwd
 }: {
   pkgManager: string;
   cwd: string;
@@ -39,7 +35,7 @@ async function install({
     {
       cwd,
       timeout: 90_000,
-      stdio: "inherit",
+      stdio: "inherit"
     }
   );
 }
@@ -48,7 +44,7 @@ function ensureYarnLock({ cwd }: { cwd: string }) {
   const yarnLock = findUpSync("yarn.lock", { cwd });
   if (yarnLock) return;
   return fs.writeFileSync(path.join(cwd, "yarn.lock"), "", {
-    encoding: "utf-8",
+    encoding: "utf-8"
   });
 }
 
@@ -66,7 +62,7 @@ export async function initializeGitRepo(cwd: string) {
       {
         cwd,
         stdout: "ignore",
-        stderr: "inherit",
+        stderr: "inherit"
       }
     );
 
@@ -76,7 +72,7 @@ export async function initializeGitRepo(cwd: string) {
       {
         cwd,
         stdout: "ignore",
-        stderr: "inherit",
+        stderr: "inherit"
       }
     );
   } catch {
@@ -84,7 +80,7 @@ export async function initializeGitRepo(cwd: string) {
     await execaCommand("git init", {
       cwd,
       stdout: "ignore",
-      stderr: "inherit",
+      stderr: "inherit"
     });
   }
 }
@@ -96,13 +92,13 @@ async function initGit({ cwd }: { cwd: string }) {
     await execaCommand("git add -A", {
       cwd,
       stdout: "ignore",
-      stderr: "inherit",
+      stderr: "inherit"
     });
     await execaCommand('git commit -m "Initial commit from PartyKit"', {
       cwd,
       stdout: "ignore",
       stderr: "inherit",
-      shell: true,
+      shell: true
     });
   } catch (e) {
     console.log("Failed to initialize git", e);
@@ -111,7 +107,7 @@ async function initGit({ cwd }: { cwd: string }) {
 
 const templateChoices = {
   typescript: "TypeScript starter",
-  javascript: "JavaScript starter",
+  javascript: "JavaScript starter"
   // game: "A simple multiplayer game",
   // "text-editor": "A shared text editor",
   // "video-chat": "A video chat app",
@@ -140,7 +136,7 @@ export async function init(options: {
       RandomWords.generate({
         exactly: 2,
         join: "-",
-        minLength: 4,
+        minLength: 4
       });
 
     if (options.yes) {
@@ -241,7 +237,7 @@ export async function init(options: {
         <SelectInput
           items={Object.entries(templateChoices).map(([value, label]) => ({
             value,
-            label,
+            label
           }))}
           onSelect={(item) => {
             resolve(item.value);
@@ -258,7 +254,7 @@ export async function init(options: {
     await downloadTemplate(
       `github:partykit/templates/templates/${templateChoice}`,
       {
-        dir: pathToProject,
+        dir: pathToProject
       }
     );
 
@@ -319,7 +315,7 @@ export async function init(options: {
     // run npm install from packageJsonPath
     await install({
       pkgManager: detectPackageManager()?.name || "npm",
-      cwd: packageInstallPath,
+      cwd: packageInstallPath
     });
     console.log(`‣ Installed dependencies`);
   } else {
@@ -354,7 +350,7 @@ export async function init(options: {
         <SelectInput
           items={[
             { label: "Yes", value: true },
-            { label: "No", value: false },
+            { label: "No", value: false }
           ]}
           onSelect={(item) => {
             resolve(item.value);
@@ -431,7 +427,7 @@ program
       install: options.install,
       git: options.git,
       hideBanner: options.hideBanner,
-      template: options.template,
+      template: options.template
     });
   });
 

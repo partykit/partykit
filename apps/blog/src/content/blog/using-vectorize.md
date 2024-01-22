@@ -115,12 +115,12 @@ Now add these lines to your `partykit.json` config file (or check that they’re
 {
   // ...
   "parties": {
-    "search": "party/search.ts"
+    "search": "party/search.ts",
   },
   "vectorize": {
-    "searchIndex": "braggoscope-index"
+    "searchIndex": "braggoscope-index",
   },
-  "ai": true
+  "ai": true,
 }
 ```
 
@@ -158,8 +158,8 @@ Braggoscope is a static site — but it is built from a database, so I can outpu
     "title": "The Speed of Light",
     "published": "2006-11-30",
     "permalink": "/2006/11/30/the-speed-of-light.html",
-    "description": "Melvyn Bragg and guests discuss the speed of light. ..."
-  }
+    "description": "Melvyn Bragg and guests discuss the speed of light. ...",
+  },
   // ...and so on for another 1,000+ episodes
 ]
 ```

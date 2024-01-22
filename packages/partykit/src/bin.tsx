@@ -1,43 +1,45 @@
 // A shebang will be inserted by the build script
-import * as cli from "./cli";
-import { File, FormData } from "undici";
 import { createReadStream } from "node:fs";
-import { type Interface as RLInterface, createInterface } from "node:readline";
-import { Option, program /*, Option*/ } from "commander";
+import { createInterface } from "node:readline";
+
 import React, { Suspense } from "react";
-import updateNotifier from "update-notifier";
-
-import Login from "./commands/login";
-import Logout from "./commands/logout";
-
-import { Box, Text, render } from "ink";
 import { ErrorBoundary } from "react-error-boundary";
-import { Dev } from "./dev";
+import { Option, program /*, Option*/ } from "commander";
+import gradient from "gradient-string";
+import { Box, render, Text } from "ink";
+import { File, FormData } from "undici";
+import updateNotifier from "update-notifier";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
-import * as vectorize from "./vectorize/client";
-import type { VectorizeDistanceMetric } from "@cloudflare/workers-types";
-// @ts-expect-error hmm odd
-import type { VectorizePreset } from "@cloudflare/workers-types";
-
-import gradient from "gradient-string";
 
 import {
-  version as packageVersion,
   name as packageName,
+  version as packageVersion
 } from "../package.json";
-import { ConfigurationError, logger } from "./logger";
 import { listModels } from "./ai";
+import * as cli from "./cli";
+import Login from "./commands/login";
+import Logout from "./commands/logout";
+import { Dev } from "./dev";
 import InkTable from "./ink-table";
+import { ConfigurationError, logger } from "./logger";
+import * as vectorize from "./vectorize/client";
+
+import type {
+  VectorizeDistanceMetric,
+  // @ts-expect-error hmm odd
+  VectorizePreset
+} from "@cloudflare/workers-types";
+import type { Interface as RLInterface } from "node:readline";
 
 async function printBanner() {
   const notifier = updateNotifier({
     pkg: {
       name: packageName,
-      version: packageVersion,
+      version: packageVersion
     },
     updateCheckInterval:
-      process.env.NODE_ENV !== "production" ? 0 : 1000 * 60 * 60 * 24,
+      process.env.NODE_ENV !== "production" ? 0 : 1000 * 60 * 60 * 24
   });
 
   const string =
@@ -112,7 +114,7 @@ program
     await cli.init({
       dryRun: options.dryRun,
       name,
-      yes: options.yes,
+      yes: options.yes
     });
   });
 program
@@ -208,7 +210,7 @@ program
       compatibilityFlags: options.compatibilityFlags,
       minify: options.minify,
       withEnv: options.withEnv,
-      domain: options.domain,
+      domain: options.domain
     });
   });
 
@@ -267,7 +269,7 @@ program
     new Option("--status <status>", "Filter by invocation status").choices([
       "ok",
       "error",
-      "canceled",
+      "canceled"
     ])
   )
   .option("--header", "Filter by HTTP header")
@@ -386,7 +388,7 @@ aiCommand
       <InkTable
         data={models.map((row) => ({
           name: row.name,
-          description: row.description,
+          description: row.description
         }))}
       />
     );
@@ -431,7 +433,7 @@ vectorizeCommand
       "@cf/baai/bge-base-en-v1.5",
       "@cf/baai/bge-large-en-v1.5",
       "openai/text-embedding-ada-002",
-      "cohere/embed-multilingual-v2.0",
+      "cohere/embed-multilingual-v2.0"
     ])
   )
   .option(
@@ -463,7 +465,7 @@ vectorizeCommand
       // don't have to keep partykit in sync with server-side changes
       indexConfig = {
         metric: args.metric as VectorizeDistanceMetric,
-        dimensions: args.dimensions as number,
+        dimensions: args.dimensions as number
       };
     } else {
       logger.error(
@@ -475,14 +477,14 @@ vectorizeCommand
     const index = {
       name: name,
       description: args.description,
-      config: indexConfig,
+      config: indexConfig
     };
 
     logger.log(`🚧 Creating index: '${name}'`);
 
     await vectorize.createIndex({
       config: args.config,
-      body: index,
+      body: index
     });
 
     if (args.json) {
@@ -537,7 +539,7 @@ vectorizeCommand
   .action(async (name, args) => {
     const indexResult = await vectorize.getIndex({
       config: args.config,
-      indexName: name,
+      indexName: name
     });
 
     // if (args.json) {
@@ -646,14 +648,14 @@ vectorizeCommand
       formData.append(
         "vectors",
         new File([batch.join(`\n`)], "vectors.ndjson", {
-          type: "application/x-ndjson",
+          type: "application/x-ndjson"
         })
       );
       logger.log(`✨ Uploading vector batch (${batch.length} vectors)`);
       const idxPart = await vectorize.insertIntoIndex({
         config: args.config,
         indexName: name,
-        body: formData,
+        body: formData
       });
       vectorInsertCount += idxPart.count;
 

@@ -1,27 +1,28 @@
 import fs from "fs";
 import os from "os";
 import path from "path";
-import * as dotenv from "dotenv";
-import { z } from "zod";
-import JSON5 from "json5";
-import { findUpSync } from "find-up";
-import { ConfigurationError, logger } from "./logger";
+import process from "process";
+
 import chalk from "chalk";
-import { getFlags } from "./featureFlags";
-
-import * as ConfigSchema from "./config-schema";
-
-export const configSchema = ConfigSchema.schema;
-
-export type Config = ConfigSchema.Config;
+import * as dotenv from "dotenv";
+import { findUpSync } from "find-up";
+import JSON5 from "json5";
+import { z } from "zod";
 
 import {
   createClerkClient,
   expireClerkClientToken,
-  fetchClerkClientToken,
+  fetchClerkClientToken
 } from "./auth/clerk";
 import { signInWithBrowser } from "./auth/device";
 import { signInWithGitHub } from "./auth/github";
+import * as ConfigSchema from "./config-schema";
+import { getFlags } from "./featureFlags";
+import { ConfigurationError, logger } from "./logger";
+
+export const configSchema = ConfigSchema.schema;
+
+export type Config = ConfigSchema.Config;
 
 export const userConfigSchema = z.object({
   /** @deprecated use team and username instead */
@@ -32,7 +33,7 @@ export const userConfigSchema = z.object({
 
   // TODO: make fields non-nullable when GitHub logins are deprecated
   username: z.string().optional(),
-  team: z.string().optional(),
+  team: z.string().optional()
 });
 
 export type UserConfig = z.infer<typeof userConfigSchema>;
@@ -112,8 +113,8 @@ GITHUB_TOKEN=<your github token>
   if (userConfig.type === "clerk") {
     const clerk = await createClerkClient({
       tokenStore: {
-        token: userConfig.access_token,
-      },
+        token: userConfig.access_token
+      }
     });
 
     return {
@@ -124,7 +125,7 @@ GITHUB_TOKEN=<your github token>
         // that long-running API calls have time to make the subrequests they need
         // so we will refresh the token every 30 seconds.
         const sessionToken = await clerk.session?.getToken({
-          leewayInSeconds: 30,
+          leewayInSeconds: 30
         });
 
         if (!sessionToken) {
@@ -132,7 +133,7 @@ GITHUB_TOKEN=<your github token>
         }
 
         return sessionToken;
-      },
+      }
     };
   } else {
     return {
@@ -140,7 +141,7 @@ GITHUB_TOKEN=<your github token>
       async getSessionToken() {
         // for GitHub logins, we use the access token as auth token directly
         return userConfig.access_token;
-      },
+      }
     };
   }
 }
@@ -161,7 +162,7 @@ export function getUserConfig(): UserConfig {
       access_token: process.env.PARTYKIT_TOKEN,
       type: "clerk",
       username: process.env.PARTYKIT_LOGIN,
-      team: process.env.PARTYKIT_TEAM, // optional
+      team: process.env.PARTYKIT_TEAM // optional
     };
   }
 
@@ -169,7 +170,7 @@ export function getUserConfig(): UserConfig {
     return {
       login: process.env.GITHUB_LOGIN,
       access_token: process.env.GITHUB_TOKEN,
-      type: "github",
+      type: "github"
     };
   }
 
@@ -211,10 +212,8 @@ function wrapValuesWithQuotes(obj: Record<string, unknown>) {
   );
 }
 
-import process from "process";
-
 export async function createClerkSession({
-  mode,
+  mode
 }: {
   mode: "cli" | "token";
 }): Promise<UserConfig> {
@@ -232,7 +231,7 @@ export async function createClerkSession({
   // Clerk dashboard only shows first word, so don't use spaces
   const label = mode === "cli" ? "partykit-cli" : "partykit-token";
   const user = await fetchClerkClientToken(signInResult.token, {
-    "User-Agent": label,
+    "User-Agent": label
   });
 
   if (user) {
@@ -244,7 +243,7 @@ export async function createClerkSession({
 
       // `login` is used for backwards compatibility with old github config.
       // going forward, we should use team and username explicitly
-      login: signInResult.teamId,
+      login: signInResult.teamId
     });
   }
 
@@ -345,7 +344,7 @@ export function getConfig(
     }
     envVars = {
       ...envVars,
-      ...dotenv.parse(fs.readFileSync(envLocalPath, "utf8")),
+      ...dotenv.parse(fs.readFileSync(envLocalPath, "utf8"))
     };
   }
 
@@ -381,13 +380,13 @@ export function getConfig(
       vars: {
         ...removeUndefinedKeys(packageJsonConfig.vars),
         ...removeUndefinedKeys(envVars),
-        ...removeUndefinedKeys(overrides.vars),
+        ...removeUndefinedKeys(overrides.vars)
       },
       define: {
         ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
         ...removeUndefinedKeys(packageJsonConfig.define),
-        ...removeUndefinedKeys(overrides.define),
-      },
+        ...removeUndefinedKeys(overrides.define)
+      }
     });
 
     if (config.main) {
@@ -427,13 +426,13 @@ export function getConfig(
     vars: {
       ...removeUndefinedKeys(parsedConfig.vars),
       ...removeUndefinedKeys(envVars),
-      ...removeUndefinedKeys(overrides.vars),
+      ...removeUndefinedKeys(overrides.vars)
     },
     define: {
       ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
       ...removeUndefinedKeys(parsedConfig.define),
-      ...removeUndefinedKeys(overrides.define),
-    },
+      ...removeUndefinedKeys(overrides.define)
+    }
   });
 
   if (config.name) {

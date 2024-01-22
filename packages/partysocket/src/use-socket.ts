@@ -1,6 +1,7 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+
 import type WebSocket from "./ws";
 import type { Options } from "./ws";
-import { useRef, useMemo, useState, useEffect } from "react";
 
 /** When any of the option values are changed, we should reinitialize the socket */
 export const getOptionsThatShouldCauseRestartWhenChanged = (
@@ -14,7 +15,7 @@ export const getOptionsThatShouldCauseRestartWhenChanged = (
   options.maxReconnectionDelay,
   options.minReconnectionDelay,
   options.reconnectionDelayGrowFactor,
-  options.debug,
+  options.debug
 ];
 
 /**
@@ -24,7 +25,7 @@ export const getOptionsThatShouldCauseRestartWhenChanged = (
 export function useStableSocket<T extends WebSocket, TOpts extends Options>({
   options,
   createSocket,
-  createSocketMemoKey: createOptionsMemoKey,
+  createSocketMemoKey: createOptionsMemoKey
 }: {
   options: TOpts;
   createSocket: (options: TOpts) => T;
@@ -59,7 +60,7 @@ export function useStableSocket<T extends WebSocket, TOpts extends Options>({
         ...socketOptions,
         // when reconnecting because of options change, we always reconnect
         // (startClosed only applies to initial mount)
-        startClosed: false,
+        startClosed: false
       });
 
       // update socket reference (this will cause the effect to run again)

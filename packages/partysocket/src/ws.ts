@@ -52,7 +52,7 @@ export interface WebSocketEventMap {
 const Events = {
   Event,
   ErrorEvent,
-  CloseEvent,
+  CloseEvent
 };
 
 function assert(condition: unknown, msg?: string): asserts condition {
@@ -120,7 +120,7 @@ const DEFAULT = {
   maxRetries: Infinity,
   maxEnqueuedMessages: Infinity,
   startClosed: false,
-  debug: false,
+  debug: false
 };
 
 export type UrlProvider = string | (() => string) | (() => Promise<string>);
@@ -355,7 +355,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     const {
       reconnectionDelayGrowFactor = DEFAULT.reconnectionDelayGrowFactor,
       minReconnectionDelay = DEFAULT.minReconnectionDelay,
-      maxReconnectionDelay = DEFAULT.maxReconnectionDelay,
+      maxReconnectionDelay = DEFAULT.maxReconnectionDelay
     } = this._options;
     let delay = 0;
     if (this._retryCount > 0) {
@@ -433,7 +433,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
 
     const {
       maxRetries = DEFAULT.maxRetries,
-      connectionTimeout = DEFAULT.connectionTimeout,
+      connectionTimeout = DEFAULT.connectionTimeout
     } = this._options;
 
     if (this._retryCount >= maxRetries) {
@@ -450,7 +450,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
       .then(() =>
         Promise.all([
           this._getNextUrl(this._url),
-          this._getNextProtocols(this._protocols || null),
+          this._getNextProtocols(this._protocols || null)
         ])
       )
       .then(([url, protocols]) => {

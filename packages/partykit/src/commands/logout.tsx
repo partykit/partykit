@@ -1,7 +1,8 @@
 import React from "react";
-import { logout } from "../config";
-import asyncCache from "../async-cache";
 import { Text } from "ink";
+
+import asyncCache from "../async-cache";
+import { logout } from "../config";
 
 const read = asyncCache();
 

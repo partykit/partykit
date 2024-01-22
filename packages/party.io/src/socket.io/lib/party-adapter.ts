@@ -1,18 +1,16 @@
-import { getLogger } from "../../logger";
-import {
-  Adapter,
-  type BroadcastOptions,
-  type Namespace,
-} from "../../socket.io";
-import { type Packet } from "../../socket.io-parser";
-import { decode, encode } from "../../msgpack";
-import {
-  type ClusterRequest,
-  type ClusterResponse,
-  RequestType,
-} from "../../socket.io/lib/adapter";
-
 import type * as Party from "partykit/server";
+
+import { getLogger } from "../../logger";
+import { decode, encode } from "../../msgpack";
+import { Adapter } from "../../socket.io";
+import { type Packet } from "../../socket.io-parser";
+import { RequestType } from "../../socket.io/lib/adapter";
+
+import type { BroadcastOptions, Namespace } from "../../socket.io";
+import type {
+  ClusterRequest,
+  ClusterResponse
+} from "../../socket.io/lib/adapter";
 
 export interface PartyAdapterOptions {
   /**
@@ -27,7 +25,7 @@ export function createAdapter<
   ListenEvents,
   EmitEvents,
   ServerSideEvents,
-  SocketData,
+  SocketData
 >(
   lobby: Party.FetchLobby,
   ctx: Party.ExecutionContext,
@@ -35,7 +33,7 @@ export function createAdapter<
 ) {
   const options = Object.assign(
     {
-      key: "socket.io",
+      key: "socket.io"
     },
     opts
   );
@@ -176,7 +174,7 @@ class PartyAdapter extends Adapter {
               type: 7,
               requestId: request.data.requestId,
               packet: request.data.packet,
-              opts: request.data.opts,
+              opts: request.data.opts
             })
           );
 
@@ -201,7 +199,7 @@ class PartyAdapter extends Adapter {
           uid: request.uid,
           type: 2,
           opts: request.data.opts,
-          rooms: request.data.rooms,
+          rooms: request.data.rooms
         });
 
         return [this.requestChannel, payload];
@@ -213,7 +211,7 @@ class PartyAdapter extends Adapter {
           uid: request.uid,
           type: 3,
           opts: request.data.opts,
-          rooms: request.data.rooms,
+          rooms: request.data.rooms
         });
 
         return [this.requestChannel, payload];
@@ -225,7 +223,7 @@ class PartyAdapter extends Adapter {
           uid: request.uid,
           type: 4,
           opts: request.data.opts,
-          close: request.data.close,
+          close: request.data.close
         });
 
         return [this.requestChannel, payload];
@@ -237,7 +235,7 @@ class PartyAdapter extends Adapter {
           uid: request.uid,
           requestId: request.data.requestId,
           type: 5,
-          opts: request.data.opts,
+          opts: request.data.opts
         });
 
         return [this.requestChannel, payload];
@@ -249,7 +247,7 @@ class PartyAdapter extends Adapter {
           uid: request.uid,
           type: 6,
           data: request.data.packet,
-          requestId: request.data.requestId,
+          requestId: request.data.requestId
         });
 
         return [this.requestChannel, payload];
@@ -275,7 +273,7 @@ class PartyAdapter extends Adapter {
         return JSON.stringify({
           channel,
           requestId: response.data.requestId,
-          sockets: response.data.sockets,
+          sockets: response.data.sockets
         });
       }
 
@@ -284,7 +282,7 @@ class PartyAdapter extends Adapter {
           channel,
           type: 6,
           requestId: response.data.requestId,
-          data: response.data.packet,
+          data: response.data.packet
         });
       }
 
@@ -293,7 +291,7 @@ class PartyAdapter extends Adapter {
           channel,
           type: 8,
           requestId: response.data.requestId,
-          clientCount: response.data.clientCount,
+          clientCount: response.data.clientCount
         });
       }
 
@@ -303,7 +301,7 @@ class PartyAdapter extends Adapter {
             channel,
             type: 9,
             requestId: response.data.requestId,
-            packet: response.data.packet,
+            packet: response.data.packet
           })
         );
       }
@@ -336,8 +334,8 @@ class PartyAdapter extends Adapter {
       type: RequestType.BROADCAST,
       data: {
         packet,
-        opts,
-      },
+        opts
+      }
     });
   }
 
@@ -382,8 +380,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.SOCKETS_JOIN,
           data: {
             opts: rawRequest.opts,
-            rooms: rawRequest.rooms,
-          },
+            rooms: rawRequest.rooms
+          }
         };
 
       case 3:
@@ -392,8 +390,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.SOCKETS_LEAVE,
           data: {
             opts: rawRequest.opts,
-            rooms: rawRequest.rooms,
-          },
+            rooms: rawRequest.rooms
+          }
         };
 
       case 4:
@@ -402,8 +400,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.DISCONNECT_SOCKETS,
           data: {
             opts: rawRequest.opts,
-            close: rawRequest.close,
-          },
+            close: rawRequest.close
+          }
         };
 
       case 5:
@@ -412,8 +410,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.FETCH_SOCKETS,
           data: {
             requestId: rawRequest.requestId,
-            opts: rawRequest.opts,
-          },
+            opts: rawRequest.opts
+          }
         };
 
       case 6:
@@ -422,8 +420,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.SERVER_SIDE_EMIT,
           data: {
             requestId: rawRequest.requestId,
-            packet: rawRequest.data,
-          },
+            packet: rawRequest.data
+          }
         };
 
       case 7:
@@ -433,8 +431,8 @@ class PartyAdapter extends Adapter {
           data: {
             opts: rawRequest.opts,
             requestId: rawRequest.requestId,
-            packet: rawRequest.packet,
-          },
+            packet: rawRequest.packet
+          }
         };
 
       default:
@@ -468,8 +466,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.FETCH_SOCKETS_RESPONSE,
           data: {
             requestId: rawResponse.requestId as string,
-            sockets: rawResponse.sockets,
-          },
+            sockets: rawResponse.sockets
+          }
         };
 
       case RequestType.SERVER_SIDE_EMIT:
@@ -477,8 +475,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.SERVER_SIDE_EMIT_RESPONSE,
           data: {
             requestId: rawResponse.requestId as string,
-            packet: rawResponse.data,
-          },
+            packet: rawResponse.data
+          }
         };
 
       case 8:
@@ -486,8 +484,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.BROADCAST_CLIENT_COUNT,
           data: {
             requestId: rawResponse.requestId as string,
-            clientCount: rawResponse.clientCount,
-          },
+            clientCount: rawResponse.clientCount
+          }
         };
 
       case 9:
@@ -495,8 +493,8 @@ class PartyAdapter extends Adapter {
           type: RequestType.BROADCAST_ACK,
           data: {
             requestId: rawResponse.requestId as string,
-            packet: rawResponse.packet,
-          },
+            packet: rawResponse.packet
+          }
         };
 
       default:
@@ -541,7 +539,7 @@ class PartyAdapter extends Adapter {
     const countRes = await this.partyLobby.parties.main
       .get(this.partyName)
       .fetch("/count", {
-        method: "POST",
+        method: "POST"
       });
     const count = await countRes.json<number>();
 

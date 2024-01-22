@@ -55,7 +55,7 @@ In your browser, you can connect to the server with:
 import { io } from "socket.io-client";
 
 const socket = io({
-  transports: ["websocket"],
+  transports: ["websocket"]
 });
 
 socket.on("hello", (data) => {
@@ -124,7 +124,7 @@ Example:
 ```ts
 export default createServer(
   {
-    path: "/my-custom-path/",
+    path: "/my-custom-path/"
   },
   (io) => {
     // ...
@@ -187,7 +187,7 @@ export default createServer(
   {
     allowRequest: (req, lobby, ctx) => {
       return Promise.reject("thou shall not pass");
-    },
+    }
   },
   (io) => {
     // ...
@@ -211,8 +211,8 @@ export default createServer(
     cors: {
       origin: ["https://example.com"],
       allowedHeaders: ["my-header"],
-      credentials: true,
-    },
+      credentials: true
+    }
   },
   (io) => {
     // ...
@@ -233,7 +233,7 @@ export default createServer(
   {
     editHandshakeHeaders: (responseHeaders, req, lobby, ctx) => {
       responseHeaders.set("set-cookie", "sid=1234");
-    },
+    }
   },
   (io) => {
     // ...
@@ -254,7 +254,7 @@ export default createServer(
   {
     editResponseHeaders: (responseHeaders, req, lobby, ctx) => {
       responseHeaders.set("my-header", "abcd");
-    },
+    }
   },
   (io) => {
     // ...

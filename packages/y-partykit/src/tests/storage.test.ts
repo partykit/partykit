@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { levelGet, levelPut, getLevelBulkData } from "../storage";
+
+import { getLevelBulkData, levelGet, levelPut } from "../storage";
+
 // import { RoomStorage } from "partykit/src/cli";
 
 describe.skip("storage layer", () => {
@@ -29,17 +31,17 @@ describe.skip("storage layer", () => {
       gte: ["v1_sv", ""],
       lt: ["v1_sv", "zzz"],
       keys: true,
-      values: true,
+      values: true
     });
     expect(foo).toEqual([
       {
         key: ["v1_sv", "bar"],
-        value: new Uint8Array([1, 2, 3]),
+        value: new Uint8Array([1, 2, 3])
       },
       {
         key: ["v1_sv", "baz"],
-        value: new Uint8Array([4, 5, 6]),
-      },
+        value: new Uint8Array([4, 5, 6])
+      }
     ]);
   });
 
@@ -53,17 +55,17 @@ describe.skip("storage layer", () => {
       gte: ["v1_sv", ""],
       lt: ["v1_sv", "zzz"],
       keys: true,
-      values: true,
+      values: true
     });
     expect(foo).toEqual([
       {
         key: ["v1_sv", "bar"],
-        value,
+        value
       },
       {
         key: ["v1_sv", "baz"],
-        value,
-      },
+        value
+      }
     ]);
   });
 });

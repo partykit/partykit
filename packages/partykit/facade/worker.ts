@@ -51,7 +51,7 @@ export class ModuleWorker implements PartyServerAPI {
       return this.worker.onRequest(req, this.room);
     }
     return new Response("Invalid onRequest handler", {
-      status: 500,
+      status: 500
     });
   }
   onAlarm() {
@@ -110,7 +110,7 @@ export class ClassWorker implements PartyServerAPI {
       return this.worker.onRequest(req);
     }
     return new Response("Invalid onRequest handler", {
-      status: 500,
+      status: 500
     });
   }
   onAlarm() {

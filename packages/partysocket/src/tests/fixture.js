@@ -7,5 +7,5 @@ export default {
         ws.send("unknown");
       }
     };
-  },
+  }
 };

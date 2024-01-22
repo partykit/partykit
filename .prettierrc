@@ -1,4 +1,18 @@
 {
   "singleQuote": false,
-  "trailingComma": "es5"
+  "trailingComma": "none",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "<BUILTIN_MODULES>",
+    "",
+    "^react",
+    "^party",
+    "<TYPES>^[party]",
+    "^y-partykit",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^[.]",
+    "",
+    "<TYPES>"
+  ]
 }

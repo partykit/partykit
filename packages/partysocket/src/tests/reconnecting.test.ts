@@ -4,17 +4,20 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
 import {
-  beforeEach,
-  afterEach,
-  test,
-  expect,
-  vitest,
-  beforeAll,
   afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  expect,
+  test,
+  vitest
 } from "vitest";
 import NodeWebSocket from "ws";
-import type { ErrorEvent } from "../ws";
+
 import ReconnectingWebSocket from "../ws";
+
+import type { ErrorEvent } from "../ws";
+
 const WebSocketServer = NodeWebSocket.Server;
 
 const PORT = 50123;
@@ -107,7 +110,7 @@ testDone("global WebSocket is used if available", (done) => {
 
 testDone("getters when not ready", (done) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
-    maxRetries: 0,
+    maxRetries: 0
   });
   expect(ws.bufferedAmount).toBe(0);
   expect(ws.protocol).toBe("");
@@ -125,7 +128,7 @@ testDone("debug on", (done) => {
 
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
     maxRetries: 0,
-    debug: true,
+    debug: true
   });
 
   ws.onerror = () => {
@@ -276,7 +279,7 @@ test("connection status constants", () => {
 const maxRetriesTest = (count: number, done: () => void) => {
   const ws = new ReconnectingWebSocket("ws://foo", undefined, {
     maxRetries: count,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
 
   ws.addEventListener("error", () => {
@@ -298,7 +301,7 @@ testDone("level0 event listeners are kept after reconnect", (done) => {
     maxRetries: 4,
     reconnectionDelayGrowFactor: 1.2,
     maxReconnectionDelay: 20,
-    minReconnectionDelay: 10,
+    minReconnectionDelay: 10
   });
 
   const handleOpen = () => undefined;
@@ -358,13 +361,13 @@ testDone("level2 event listeners using object with handleEvent", (done) => {
       expect(ws.bufferedAmount).toBe(0);
       ws.close();
       done();
-    },
+    }
   });
 
   const fail = {
     handleEvent: () => {
       throw Error("fail");
-    },
+    }
   };
   // @ts-ignore
   ws.addEventListener("unknown1", fail);
@@ -412,7 +415,7 @@ testDone("level2 event listeners using object with handleEvent", (done) => {
 testDone("getters", (done) => {
   const anyProtocol = "foobar";
   const ws = new ReconnectingWebSocket(URL, anyProtocol, {
-    maxReconnectionDelay: 100,
+    maxReconnectionDelay: 100
   });
 
   ws.addEventListener("open", () => {
@@ -427,7 +430,7 @@ testDone("getters", (done) => {
 
 testDone("binaryType", (done) => {
   const ws = new ReconnectingWebSocket(URL, undefined, {
-    minReconnectionDelay: 0,
+    minReconnectionDelay: 0
   });
 
   expect(ws.binaryType).toBe("blob");
@@ -495,7 +498,7 @@ testDone("start closed", (done, fail) => {
   const ws = new ReconnectingWebSocket(URL, anyProtocol, {
     minReconnectionDelay: 100,
     maxReconnectionDelay: 200,
-    startClosed: true,
+    startClosed: true
   });
 
   expect(ws.readyState).toBe(ws.CLOSED);
@@ -545,7 +548,7 @@ testDone("connect, send, receive, close", (done, fail) => {
 
   const ws = new ReconnectingWebSocket(URL, anyProtocol, {
     minReconnectionDelay: 100,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
   expect(ws.readyState).toBe(ws.CONNECTING);
 
@@ -592,7 +595,7 @@ testDone("connect, send, receive, reconnect", (done) => {
 
   const ws = new ReconnectingWebSocket(URL, anyProtocol, {
     minReconnectionDelay: 100,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
 
   ws.onopen = () => {
@@ -630,7 +633,7 @@ testDone("immediately-failed connection should not timeout", (done, fail) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
     maxRetries: 2,
     connectionTimeout: 500,
-    maxReconnectionDelay: 600,
+    maxReconnectionDelay: 600
   });
 
   ws.addEventListener("error", (err: ErrorEvent) => {
@@ -653,7 +656,7 @@ testDone(
       maxRetries: 0,
       connectionTimeout: 1000,
       minReconnectionDelay: 100,
-      maxReconnectionDelay: 200,
+      maxReconnectionDelay: 200
     });
 
     let i = 0;
@@ -675,7 +678,7 @@ testDone(
 testDone("connect and close before establishing connection", (done, fail) => {
   const ws = new ReconnectingWebSocket(URL, undefined, {
     minReconnectionDelay: 100,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
 
   ws.close(); // closing before establishing connection
@@ -700,7 +703,7 @@ testDone("connect and close before establishing connection", (done, fail) => {
 
 testDone("enqueue messages", (done) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
-    maxRetries: 0,
+    maxRetries: 0
   });
   const count = 10;
   const message = "message";
@@ -716,7 +719,7 @@ testDone("respect maximum enqueued messages", (done) => {
   const queueSize = 2;
   const ws = new ReconnectingWebSocket(ERROR_URL, undefined, {
     maxRetries: 0,
-    maxEnqueuedMessages: queueSize,
+    maxEnqueuedMessages: queueSize
   });
   const count = 10;
   const message = "message";
@@ -769,7 +772,7 @@ testDone(
 testDone("closing from the other side should reconnect", (done, fail) => {
   const ws = new ReconnectingWebSocket(URL, undefined, {
     minReconnectionDelay: 100,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
 
   const max = 3;
@@ -811,7 +814,7 @@ testDone(
   (done, fail) => {
     const ws = new ReconnectingWebSocket(URL, undefined, {
       minReconnectionDelay: 100,
-      maxReconnectionDelay: 200,
+      maxReconnectionDelay: 200
     });
 
     const codes = [4000, 4001];
@@ -846,7 +849,7 @@ testDone("reconnection delay grow factor", (done) => {
   const ws = new ReconnectingWebSocket(ERROR_URL, [], {
     minReconnectionDelay: 50,
     maxReconnectionDelay: 500,
-    reconnectionDelayGrowFactor: 2,
+    reconnectionDelayGrowFactor: 2
   });
   // @ts-ignore - accessing private field
   expect(ws._getNextDelay()).toBe(0);
@@ -870,7 +873,7 @@ testDone("minUptime", (done) => {
     minReconnectionDelay: 50,
     maxReconnectionDelay: 1000,
     reconnectionDelayGrowFactor: 2,
-    minUptime: 250,
+    minUptime: 250
   });
   const expectedDelays = [50, 100, 100, 200, 50, 50];
   const expectedRetryCount = [1, 2, 3, 4, 1, 1];
@@ -910,7 +913,7 @@ testDone("minUptime", (done) => {
 testDone("reconnect after closing", (done, fail) => {
   const ws = new ReconnectingWebSocket(URL, undefined, {
     minReconnectionDelay: 100,
-    maxReconnectionDelay: 200,
+    maxReconnectionDelay: 200
   });
 
   let i = 0;

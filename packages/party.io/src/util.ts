@@ -24,7 +24,7 @@ export function upgradeWebSocket(req: Request): {
     });
     return {
       response: new Response(null, { status: 101, webSocket: clientWebSocket }),
-      socket: serverWebSocket,
+      socket: serverWebSocket
     };
   } else {
     throw new Error("Not a websocket request");

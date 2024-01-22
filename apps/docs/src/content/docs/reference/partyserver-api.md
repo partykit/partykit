@@ -16,6 +16,7 @@ Each PartyKit server is a TypeScript module that implements the `Party.Server` i
 ```ts
 // server.ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {}
 ```
 
@@ -27,6 +28,7 @@ The `Party.Server` constructor receives an instance of [`Party.Room`](#partyroom
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   constructor(readonly room: Party.Room) {
     // ...
@@ -40,9 +42,10 @@ You can define an `options` field to customise the PartyServer behaviour.
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   readonly options = {
-    hibernate: false,
+    hibernate: false
   };
 }
 ```
@@ -61,6 +64,7 @@ You can use this to load data from storage and perform other asynchronous initia
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onStart() {}
 }
@@ -74,6 +78,7 @@ Receives a reference to the connecting [`Party.Connection`](#partyconnection), a
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onConnect(connection: Party.Connection, ctx: Party.ConnectionContext) {}
 }
@@ -89,6 +94,7 @@ Receives the incoming message, which can either be a string or a raw binary [Arr
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onMessage(message: string | ArrayBuffer, sender: Party.Connection) {}
 }
@@ -102,6 +108,7 @@ Receives a reference to the closed [`Party.Connection`](#partyconnection). By th
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onClose(connection: Party.Connection) {}
 }
@@ -115,6 +122,7 @@ Receives a reference to the closed [`Party.Connection`](#partyconnection), and a
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onError(connection: Party.Connection, error: Error) {}
 }
@@ -128,6 +136,7 @@ Receives an instance of [`Party.Request`](#partyrequest), and is expected to ret
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onRequest(req: Party.Request) {
     return new Response(req.cf.country, { status: 200 });
@@ -145,6 +154,7 @@ Alarms have access to most [`Room`](#partyroom) resources such as storage, but n
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   async onAlarm() {}
 }
@@ -158,6 +168,7 @@ You can set additional metadata on connections by returning them from a `getConn
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   getConnectionTags(
     connection: Party.Connection,
@@ -182,6 +193,7 @@ Receives an instance of [`Party.Request`](#partyrequest), and is expected to eit
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onBeforeRequest(
     req: Party.Request,
@@ -205,6 +217,7 @@ Receives an instance of [`Party.Request`](#partyrequest), and is expected to eit
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onBeforeConnect(
     req: Party.Request,
@@ -226,6 +239,7 @@ The `Party.Worker` interface describes the `static` methods available on the `Pa
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onFetch(req: Party.Request) {
     return new Response(req.url);
@@ -243,6 +257,7 @@ Receives an instance of [`Party.Request`](#partyrequest), and is expected to eit
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onFetch(
     req: Party.Request,
@@ -272,6 +287,7 @@ Receives an instance of [`Party.FetchSocket`](#partyfetchsocket).
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onSocket(
     socket: Party.FetchSocket,
@@ -308,6 +324,7 @@ Receives an instance of [`Party.Cron`](#partycron).
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   static async onCron(
     cron: Party.Cron,
@@ -331,6 +348,7 @@ Each `Party.Server` instance receives an instance of [`Party.Room`](#partyroom) 
 
 ```ts
 import type * as Party from "partykit/server";
+
 export default class Server implements Party.Server {
   constructor(readonly room: Party.Room) {
     // ...

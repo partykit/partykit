@@ -1,7 +1,8 @@
+import { enableLogs } from "misc/util.test";
 import { assertEquals, assertExists, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs } from "misc/util.test";
 
 await enableLogs();
 
@@ -13,7 +14,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -37,14 +38,14 @@ describe("handshake", () => {
     const engine = new Server({
       pingInterval: 100,
       pingTimeout: 200,
-      maxHttpBufferSize: 300,
+      maxHttpBufferSize: 300
     });
 
     return setup(engine, 1, async (port, done) => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -101,7 +102,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 

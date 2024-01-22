@@ -1,13 +1,12 @@
 import * as React from "react";
+import { createRoot } from "react-dom/client";
+import YPartyKitProvider from "y-partykit/provider";
+import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
+import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import * as Y from "yjs";
-import YPartyKitProvider from "y-partykit/provider";
-
-import { createRoot } from "react-dom/client";
 
 declare const PARTYKIT_HOST: string;
 
@@ -18,7 +17,7 @@ function Editor() {
     nodes: [],
     onError(error: Error) {
       throw error;
-    },
+    }
   };
 
   return (

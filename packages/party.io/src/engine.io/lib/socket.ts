@@ -1,8 +1,9 @@
 import { EventEmitter } from "../../event-emitter";
 import { getLogger } from "../../logger";
-import type { Packet, PacketType, RawData } from "../../engine.io-parser";
-import { Transport, TransportError } from "./transport";
 import { type ServerOptions } from "./server";
+import { Transport, TransportError } from "./transport";
+
+import type { Packet, PacketType, RawData } from "../../engine.io-parser";
 
 type ReadyState = "opening" | "open" | "closing" | "closed";
 
@@ -71,7 +72,7 @@ export class Socket extends EventEmitter<
         upgrades: this.transport.upgradesTo,
         pingInterval: this.opts.pingInterval,
         pingTimeout: this.opts.pingTimeout,
-        maxPayload: this.opts.maxHttpBufferSize,
+        maxPayload: this.opts.maxHttpBufferSize
       })
     );
 
@@ -304,7 +305,7 @@ export class Socket extends EventEmitter<
 
     const packet: Packet = {
       type,
-      data,
+      data
     };
 
     this.emitReserved("packetCreate", packet);

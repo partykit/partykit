@@ -2,13 +2,13 @@
 
 // const asyncLocalStorage = new AsyncLocalStorage();
 
-import type {
-  SessionStorage,
-  SessionIdStorageStrategy,
-  SessionData,
-} from "@remix-run/server-runtime";
-
 import { createSessionStorage } from "./implementations";
+
+import type {
+  SessionData,
+  SessionIdStorageStrategy,
+  SessionStorage
+} from "@remix-run/server-runtime";
 
 interface PartyStorage {
   get(id: string): Promise<string | null>;
@@ -41,10 +41,10 @@ interface PartySessionStorageOptions {
  */
 export function createPartySessionStorage<
   Data = SessionData,
-  FlashData = Data,
+  FlashData = Data
 >({
   cookie,
-  party,
+  party
 }: PartySessionStorageOptions): SessionStorage<Data, FlashData> {
   return createSessionStorage({
     cookie,
@@ -66,9 +66,7 @@ export function createPartySessionStorage<
         }
 
         await party.put(id, JSON.stringify(data), {
-          expiration: expires
-            ? Math.round(expires.getTime() / 1000)
-            : undefined,
+          expiration: expires ? Math.round(expires.getTime() / 1000) : undefined
         });
 
         return id;
@@ -86,11 +84,11 @@ export function createPartySessionStorage<
     },
     async updateData(id, data, expires) {
       await party.put(id, JSON.stringify(data), {
-        expiration: expires ? Math.round(expires.getTime() / 1000) : undefined,
+        expiration: expires ? Math.round(expires.getTime() / 1000) : undefined
       });
     },
     async deleteData(id) {
       await party.delete(id);
-    },
+    }
   });
 }

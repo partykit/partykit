@@ -35,7 +35,7 @@ You can communicate with a Party with standard HTTP requests:
 
 ```ts
 fetch(`https://${project}.${user}.partykit.dev/parties/main/${id}`, {
-  method: "GET",
+  method: "GET"
 });
 ```
 

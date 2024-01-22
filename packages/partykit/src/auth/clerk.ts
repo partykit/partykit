@@ -1,7 +1,9 @@
-import type Clerk from "@clerk/clerk-js";
 import ClerkImplementation from "@clerk/clerk-js/headless";
 import chalk from "chalk";
+
 import { logger } from "../logger";
+
+import type Clerk from "@clerk/clerk-js";
 
 declare const CLERK_PUBLISHABLE_KEY: string | undefined;
 const PUBLISHABLE_KEY =
@@ -24,7 +26,7 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
    */
   return async ({
     tokenStore,
-    headers = {},
+    headers = {}
   }: {
     tokenStore: TokenStore;
     headers?: Record<string, string>;
@@ -71,7 +73,7 @@ const clerkFactory = ({ publishableKey }: { publishableKey: string }) => {
 };
 
 export const createClerkClient = clerkFactory({
-  publishableKey: PUBLISHABLE_KEY,
+  publishableKey: PUBLISHABLE_KEY
 });
 
 export const fetchClerkClientToken = async (
@@ -80,13 +82,13 @@ export const fetchClerkClientToken = async (
 ) => {
   // the login process will populate the token in this object
   const tokenStore = {
-    token: undefined,
+    token: undefined
   };
 
   const clerk = await createClerkClient({ tokenStore, headers });
   const res = await clerk.client?.signIn.create({
     strategy: "ticket",
-    ticket: signInToken,
+    ticket: signInToken
   });
 
   if (res && res.status !== "complete") {
@@ -105,7 +107,7 @@ export const fetchClerkClientToken = async (
 
   return {
     access_token: tokenStore.token,
-    username: session.user.username,
+    username: session.user.username
   };
 };
 
@@ -114,7 +116,7 @@ export const expireClerkClientToken = async (
   headers?: Record<string, string>
 ) => {
   const tokenStore = {
-    token: clientToken,
+    token: clientToken
   };
 
   const clerk = await createClerkClient({ tokenStore, headers });

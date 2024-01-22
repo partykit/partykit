@@ -1,24 +1,26 @@
-import {
-  Server as Engine,
-  type ServerOptions as EngineOptions,
-} from "../../engine.io";
-import {
-  type DefaultEventsMap,
-  EventEmitter,
-  type EventNames,
-  type EventParams,
-  type EventsMap,
-} from "../../event-emitter";
+import type * as Party from "partykit/server";
+
+import { Server as Engine } from "../../engine.io";
+import { EventEmitter } from "../../event-emitter";
 import { getLogger } from "../../logger";
-import { type Handler } from "../../util";
-import { Client } from "./client";
 import { Decoder, Encoder } from "../../socket.io-parser";
-import { Namespace, type NamespaceReservedEvents } from "./namespace";
+import { type Handler } from "../../util";
+import { Adapter, InMemoryAdapter } from "./adapter";
+import { BroadcastOperator, RemoteSocket } from "./broadcast-operator";
+import { Client } from "./client";
+import { Namespace } from "./namespace";
 import { ParentNamespace } from "./parent-namespace";
 import { Socket } from "./socket";
-import { Adapter, InMemoryAdapter, type Room } from "./adapter";
-import { BroadcastOperator, RemoteSocket } from "./broadcast-operator";
-import type * as Party from "partykit/server";
+
+import type { ServerOptions as EngineOptions } from "../../engine.io";
+import type {
+  DefaultEventsMap,
+  EventNames,
+  EventParams,
+  EventsMap
+} from "../../event-emitter";
+import type { Room } from "./adapter";
+import type { NamespaceReservedEvents } from "./namespace";
 
 export interface ServerOptions {
   /**
@@ -48,7 +50,7 @@ export interface ServerReservedEvents<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData,
+  SocketData
 > extends NamespaceReservedEvents<
     ListenEvents,
     EmitEvents,
@@ -98,7 +100,7 @@ export class Server<
   ListenEvents extends EventsMap = DefaultEventsMap,
   EmitEvents extends EventsMap = ListenEvents,
   ServerSideEvents extends EventsMap = DefaultEventsMap,
-  SocketData = unknown,
+  SocketData = unknown
 > extends EventEmitter<
   ListenEvents,
   EmitEvents,
@@ -138,9 +140,9 @@ export class Server<
           },
           createDecoder() {
             return new Decoder();
-          },
+          }
         },
-        adapter: (nsp: Namespace) => new InMemoryAdapter(nsp),
+        adapter: (nsp: Namespace) => new InMemoryAdapter(nsp)
       },
       opts
     );

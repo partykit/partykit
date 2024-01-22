@@ -5,7 +5,7 @@ const colors = [
   "#FAF594",
   "#70CFF8",
   "#94FADB",
-  "#B9F18D",
+  "#B9F18D"
 ];
 
 // some random gpt generated names
@@ -24,7 +24,7 @@ const names = [
   "Miss Spellcheck",
   "Bullet Liston",
   "Autonomy Backspace",
-  "Ctrl Zedson",
+  "Ctrl Zedson"
 ];
 
 const getRandomElement = <T>(list: T[]) =>
@@ -35,5 +35,5 @@ const getRandomName = () => getRandomElement(names);
 
 export const getRandomUser = () => ({
   name: getRandomName(),
-  color: getRandomColor(),
+  color: getRandomColor()
 });

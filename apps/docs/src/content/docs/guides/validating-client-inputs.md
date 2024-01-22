@@ -23,7 +23,7 @@ import z from "zod";
 const AddMessage = z.object({
   type: z.literal("add"),
   id: z.string(),
-  item: z.string(),
+  item: z.string()
 });
 const RemoveMessage = z.object({ type: z.literal("remove"), id: z.number() });
 const Message = z.union([AddMessage, RemoveMessage]);
@@ -87,6 +87,7 @@ Define a schema in a shared file, for example in `schema.ts`:
 
 ```ts
 import z from "zod";
+
 export const ReplyMessage = z.object({ type: "join", id: z.string() });
 ```
 

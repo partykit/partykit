@@ -54,15 +54,15 @@ const ws = new PartySocket({
 
   // optionally, pass an object of query string parameters to add to the request
   query: async () => ({
-    token: await getAuthToken(),
-  }),
+    token: await getAuthToken()
+  })
 });
 
 // optionally, update the properties of the connection
 // (e.g. to change the host or room)
 ws.updateProperties({
   host: "another-project.username.partykit.dev",
-  room: "my-new-room",
+  room: "my-new-room"
 });
 
 ws.reconnect(); // make sure to call reconnect() after updating the properties
@@ -94,7 +94,7 @@ const Component = () => {
     },
     onError(e) {
       console.log("error");
-    },
+    }
   });
 };
 ```
@@ -129,7 +129,7 @@ import { WebSocket } from "partysocket";
 const urls = [
   "wss://my.site.com",
   "wss://your.site.com",
-  "wss://their.site.com",
+  "wss://their.site.com"
 ];
 let urlIndex = 0;
 
@@ -163,6 +163,7 @@ The `protocols` parameter will be resolved before connecting, possible types:
 
 ```javascript
 import { WebSocket } from "partysocket";
+
 const ws = new WebSocket("wss://your.site.com", "your protocol");
 ```
 
@@ -189,7 +190,7 @@ import WS from "ws";
 const options = {
   WebSocket: WS, // custom WebSocket constructor
   connectionTimeout: 1000,
-  maxRetries: 10,
+  maxRetries: 10
 };
 const ws = new WebSocket("wss://my.site.com", [], options);
 ```

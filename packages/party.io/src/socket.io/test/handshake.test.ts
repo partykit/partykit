@@ -1,12 +1,13 @@
-import { assertEquals, assertExists, describe, it } from "vitest";
-import { Server } from "../lib/server";
 import {
   eioPoll,
   eioPush,
   enableLogs,
   parseSessionID,
-  runHandshake,
+  runHandshake
 } from "misc/util.test";
+import { assertEquals, assertExists, describe, it } from "vitest";
+
+import { Server } from "../lib/server";
 import { setup } from "./setup.test";
 
 await enableLogs();
@@ -32,7 +33,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -44,7 +45,7 @@ describe("handshake", () => {
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: "40",
+          body: "40"
         }
       );
 
@@ -56,7 +57,7 @@ describe("handshake", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -83,7 +84,7 @@ describe("handshake", () => {
         assertEquals(socket.handshake.query.get("foo"), "123");
         assertEquals(socket.handshake.headers.get("bar"), "456");
         assertEquals(socket.handshake.auth, {
-          foobar: "789",
+          foobar: "789"
         });
 
         partialDone();
@@ -94,8 +95,8 @@ describe("handshake", () => {
         {
           method: "get",
           headers: {
-            bar: "456",
-          },
+            bar: "456"
+          }
         }
       );
 
@@ -107,7 +108,7 @@ describe("handshake", () => {
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
         {
           method: "post",
-          body: '40{"foobar":"789"}',
+          body: '40{"foobar":"789"}'
         }
       );
 
@@ -119,7 +120,7 @@ describe("handshake", () => {
       const pollResponse = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -144,7 +145,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -173,7 +174,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -197,7 +198,7 @@ describe("handshake", () => {
       const response = await fetch(
         `http://localhost:${port}/socket.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 

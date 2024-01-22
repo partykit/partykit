@@ -695,9 +695,9 @@
 
   ```ts
   import type {
-    PartyKitServer,
-    PartyKitRoom,
     PartyKitConnection,
+    PartyKitRoom,
+    PartyKitServer
   } from "partykit/server";
 
   export default {
@@ -707,7 +707,7 @@
     },
     onConnect(connection: PartyKitConnection, room: PartyKitRoom) {
       room.broadcast(`Someone joined room ${room.id}!`);
-    },
+    }
   } satisfies PartyKitServer;
   ```
 
@@ -719,7 +719,7 @@
     PartyConnection,
     PartyRequest,
     PartyServer,
-    PartyWorker,
+    PartyWorker
   } from "partykit/server";
 
   export default class MyParty implements PartyServer {
@@ -757,11 +757,11 @@
   import type {
     Party,
     PartyConnection,
+    PartyConnectionContext,
     PartyRequest,
     PartyServer,
-    PartyWorker,
     PartyServerOptions,
-    PartyConnectionContext,
+    PartyWorker
   } from "partykit/server";
 
   // PartyKit servers now implement PartyServer interface
@@ -776,7 +776,7 @@
 
     // Opting into hibernation is now an explicit option
     readonly options: PartyServerOptions = {
-      hibernate: true,
+      hibernate: true
     };
 
     // Servers can now keep state in class instance variables
@@ -801,7 +801,7 @@
     // You can now tag connections, and retrieve tagged connections using Party.getConnections()
     getConnectionTags(
       connection: PartyConnection,
-      ctx: PartyConnectionContext,
+      ctx: PartyConnectionContext
     ) {
       return [ctx.request.cf?.country as string];
     }
@@ -820,8 +820,8 @@
       for (const compatriot of this.party.getConnections(country)) {
         compatriot.send(
           JSON.stringify({
-            message: `${connection.id} is also from ${country}!`,
-          }),
+            message: `${connection.id} is also from ${country}!`
+          })
         );
       }
     }
@@ -1368,7 +1368,7 @@
     onMessage(message, connection, room) {
       const { ip } = connection.deserializeAttachment();
       // do something with the ip
-    },
+    }
   };
   ```
 

@@ -161,7 +161,7 @@ export function translateCLICommandToFilterMessage(
   }
 
   return {
-    filters: apiFilters,
+    filters: apiFilters
   };
 }
 
@@ -217,7 +217,7 @@ function parseOutcome(
   }
 
   return {
-    outcome: Array.from(outcomes),
+    outcome: Array.from(outcomes)
   };
 }
 
@@ -246,8 +246,8 @@ function parseHeader(header: string): HeaderFilter {
   return {
     header: {
       key: headerKey.trim(),
-      query: headerQuery?.trim(),
-    },
+      query: headerQuery?.trim()
+    }
   };
 }
 

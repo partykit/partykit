@@ -1,49 +1,46 @@
-/* eslint-disable deprecation/deprecation */
-import path from "path";
-import * as fs from "fs";
-import { fetchResult } from "./fetchResult";
-import { fetch, File, FormData } from "undici";
-import type { BuildOptions } from "esbuild";
 import * as crypto from "crypto";
-import WebSocket from "ws";
-import type { RawData } from "ws";
-import { onExit } from "signal-exit";
+import * as fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import React from "react";
+import chalk from "chalk";
+import detectIndent from "detect-indent";
+import { execaCommand, execaCommandSync } from "execa";
+import { findUpSync } from "find-up";
+import { Box, render, Text } from "ink";
+import SelectInput from "ink-select-input";
 import limit from "p-limit";
 import retry from "p-retry";
+import { onExit } from "signal-exit";
+import { fetch, File, FormData } from "undici";
+import detectPackageManager from "which-pm-runs";
+import WebSocket from "ws";
 
-import InkTable from "./ink-table";
-import SelectInput from "ink-select-input";
-
-import { Dev } from "./dev";
-import type { DevProps } from "./dev";
-
-export { Dev };
-export type { DevProps };
-
-import { execaCommand, execaCommandSync } from "execa";
-import detectIndent from "detect-indent";
 import { version as packageVersion } from "../package.json";
-
 import {
   createClerkServiceTokenSession,
   getConfig,
   getConfigPath,
   getUser,
-  getUserConfig,
+  getUserConfig
 } from "./config";
-import detectPackageManager from "which-pm-runs";
-
-import type { TailFilterMessage } from "./tail/filters";
+import { Dev } from "./dev";
+import { fetchResult } from "./fetchResult";
+import InkTable from "./ink-table";
+import { ConfigurationError, logger } from "./logger";
+import nodejsCompatPlugin from "./nodejs-compat";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
-import { Box, Text, render } from "ink";
-import React from "react";
-import chalk from "chalk";
-import { ConfigurationError, logger } from "./logger";
+
+import type { DevProps } from "./dev";
 import type { StaticAssetsManifestType } from "./server";
-import { findUpSync } from "find-up";
-import { fileURLToPath } from "url";
-import nodejsCompatPlugin from "./nodejs-compat";
+import type { TailFilterMessage } from "./tail/filters";
+import type { BuildOptions } from "esbuild";
+import type { RawData } from "ws";
+
+export { Dev };
+export type { DevProps };
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -80,7 +77,7 @@ function* findAllFiles(
 
 async function installWithPackageManager({
   pkgManager,
-  cwd,
+  cwd
 }: {
   pkgManager: string;
   cwd: string;
@@ -91,7 +88,7 @@ async function installWithPackageManager({
     {
       cwd,
       timeout: 90_000,
-      stdio: "inherit",
+      stdio: "inherit"
     }
   );
 }
@@ -100,7 +97,7 @@ function ensureYarnLock({ cwd }: { cwd: string }) {
   const yarnLock = findUpSync("yarn.lock", { cwd });
   if (yarnLock) return;
   return fs.writeFileSync(path.join(cwd, "yarn.lock"), "", {
-    encoding: "utf-8",
+    encoding: "utf-8"
   });
 }
 
@@ -176,7 +173,7 @@ export async function init(options: {
               <SelectInput
                 items={[
                   { label: "Yes", value: true },
-                  { label: "No", value: false },
+                  { label: "No", value: false }
                 ]}
                 onSelect={(item) => {
                   props.onSelect(item.value);
@@ -221,7 +218,7 @@ export async function init(options: {
               <SelectInput
                 items={[
                   { label: "Add to package.json", value: true },
-                  { label: "Create new project", value: false },
+                  { label: "Create new project", value: false }
                 ]}
                 onSelect={(item) => {
                   props.onSelect(item.value);
@@ -308,7 +305,7 @@ export async function init(options: {
                     ""
                   )}-party`,
               main: shouldUseTypeScript ? "party/index.ts" : "party/index.js",
-              compatibilityDate: defaultCompatibilityDate,
+              compatibilityDate: defaultCompatibilityDate
             },
             null,
             2
@@ -367,7 +364,7 @@ export async function init(options: {
         if (!options.dryRun) {
           await installWithPackageManager({
             pkgManager: pkgManager?.name || "npm",
-            cwd: path.dirname(packageJsonPath),
+            cwd: path.dirname(packageJsonPath)
           });
           console.log(
             "‣ Installed dependencies with " +
@@ -412,7 +409,7 @@ export async function init(options: {
         // we keep these two as "inherit" so that
         // logs are still visible.
         stdout: "inherit",
-        stderr: "inherit",
+        stderr: "inherit"
       });
     }
   } else {
@@ -431,7 +428,7 @@ export async function init(options: {
       // we keep these two as "inherit" so that
       // logs are still visible.
       stdout: "inherit",
-      stderr: "inherit",
+      stderr: "inherit"
     });
   }
 }
@@ -440,7 +437,7 @@ const esbuildOptions: BuildOptions = {
   format: "esm",
   bundle: true,
   write: false,
-  target: "esnext",
+  target: "esnext"
 } as const;
 
 export async function deploy(options: {
@@ -468,7 +465,7 @@ export async function deploy(options: {
       define: options.define,
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
-      domain: options.domain,
+      domain: options.domain
     },
     { withEnv: options.withEnv }
   );
@@ -492,7 +489,7 @@ export async function deploy(options: {
       // logs are still visible.
       stdout: "inherit",
       stderr: "inherit",
-      ...(buildCwd && { cwd: buildCwd }),
+      ...(buildCwd && { cwd: buildCwd })
     });
   }
 
@@ -524,6 +521,7 @@ export async function deploy(options: {
     );
   }
   const domain =
+    // eslint-disable-next-line deprecation/deprecation
     config.domain || `${config.name}.${config.team || user.login}.partykit.dev`;
 
   const assetsConfig =
@@ -539,7 +537,7 @@ export async function deploy(options: {
     edgeTTL: assetsConfig.edgeTTL,
     singlePageApp: assetsConfig.singlePageApp,
     assets: {},
-    assetInfo: {},
+    assetInfo: {}
   };
 
   const assetsBuild =
@@ -569,9 +567,9 @@ export async function deploy(options: {
         options.preview ? `${options.preview}.` : ""
       }${domain}"`,
       ...config.define,
-      ...assetsBuild?.define,
+      ...assetsBuild?.define
     },
-    loader: assetsBuild?.loader,
+    loader: assetsBuild?.loader
   };
 
   const unsupportedKeys = (["include", "exclude"] as const).filter(
@@ -590,13 +588,15 @@ export async function deploy(options: {
         preview: options.preview,
         // notify that the client has attempted to call prepare_assets,
         // so that each upload process doesn't need to do it
-        prepare: "true",
+        prepare: "true"
       })}`
     : "";
 
+  // eslint-disable-next-line deprecation/deprecation
   const assetsApiPath = `/parties/${config.team || user.login}/${
     config.name
   }/assets${assetsApiParams}`;
+  // eslint-disable-next-line deprecation/deprecation
   const prepareAssetsApiPath = `/parties/${config.team || user.login}/${
     config.name
   }/prepare_assets${assetsApiParams}`;
@@ -619,8 +619,8 @@ export async function deploy(options: {
     }>(assetsApiPath, {
       user,
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
 
     for (const file of findAllFiles(assetsPath)) {
@@ -659,7 +659,7 @@ export async function deploy(options: {
       newAssetsMap.assetInfo![key] = {
         fileHash,
         fileSize,
-        fileName: sourceName,
+        fileName: sourceName
       };
 
       // if the file is already uploaded, skip it
@@ -674,7 +674,7 @@ export async function deploy(options: {
         filesToUpload.push({
           file,
           filePath,
-          fileName,
+          fileName
         });
       }
     }
@@ -700,7 +700,7 @@ export const ${name} = ${name}Party;
             .join("\n")}
         `,
 
-        resolveDir: process.cwd(),
+        resolveDir: process.cwd()
         // TODO: setting a sourcefile name crashes the whole thing???
         // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
       },
@@ -711,7 +711,7 @@ export const ${name} = ${name}Party;
           options.preview ? `${options.preview}.` : ""
         }${domain}"`,
         ...esbuildOptions.define,
-        ...config.define,
+        ...config.define
       },
       alias: config.build?.alias,
       plugins: [
@@ -738,12 +738,12 @@ export const ${name} = ${name}Party;
               return {
                 path: fileName, // change the reference to the changed module
                 external: true, // mark it as external in the bundle
-                namespace: "partykit-module-wasm-publish", // just a tag, this isn't strictly necessary
+                namespace: "partykit-module-wasm-publish" // just a tag, this isn't strictly necessary
               };
             });
-          },
-        },
-      ],
+          }
+        }
+      ]
     })
   ).outputFiles![0].text;
 
@@ -760,7 +760,7 @@ export const ${name} = ${name}Party;
     await fetchResult(prepareAssetsApiPath, {
       method: "POST",
       body: JSON.stringify(newAssetsMap),
-      user,
+      user
     });
 
     logger.log(
@@ -773,7 +773,7 @@ export const ${name} = ${name}Party;
     const withRetries = (fn: () => Promise<void>) =>
       retry(fn, {
         maxRetryTime: 10_000,
-        retries: 2,
+        retries: 2
       });
 
     await Promise.all(
@@ -786,9 +786,9 @@ export const ${name} = ${name}Party;
               body: fs.createReadStream(file.filePath),
               headers: {
                 ContentType: "application/octet-stream",
-                "X-PartyKit-Asset-Name": file.fileName,
+                "X-PartyKit-Asset-Name": file.fileName
               },
-              duplex: "half",
+              duplex: "half"
             }).then(() => {
               logger.log(
                 `Uploaded ${file.file.replace(
@@ -809,8 +809,8 @@ export const ${name} = ${name}Party;
       method: "POST",
       body: JSON.stringify(newAssetsMap),
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     });
   }
 
@@ -889,13 +889,14 @@ or by passing it in via the CLI
   const deployRes = await fetchResult<{
     result: { is_initial_deploy: boolean };
   }>(
+    // eslint-disable-next-line deprecation/deprecation
     `/parties/${config.team || user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
       user,
       method: "POST",
-      body: form,
+      body: form
     }
   );
 
@@ -921,7 +922,7 @@ export async function info(options: {
   preview: string | undefined;
 }) {
   const config = getConfig(options.config, {
-    name: options.name,
+    name: options.name
   });
   if (!config.name) {
     throw new ConfigurationError(MissingProjectNameError);
@@ -936,6 +937,7 @@ export async function info(options: {
   }
 
   const res = await fetchResult(
+    // eslint-disable-next-line deprecation/deprecation
     `/parties/${config.team || user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
@@ -968,6 +970,7 @@ export async function _delete(rawOptions: {
     );
   }
   const domain =
+    // eslint-disable-next-line deprecation/deprecation
     config.domain || `${config.name}.${config.team || user.login}.partykit.dev`;
 
   const urlSearchParams = new URLSearchParams();
@@ -999,7 +1002,7 @@ export async function _delete(rawOptions: {
             <SelectInput
               items={[
                 { label: "Yes", value: true },
-                { label: "No", value: false },
+                { label: "No", value: false }
               ]}
               onSelect={(item) => {
                 props.onSelect(item.value);
@@ -1025,12 +1028,13 @@ export async function _delete(rawOptions: {
   }
 
   await fetchResult(
+    // eslint-disable-next-line deprecation/deprecation
     `/parties/${config.team || user.login}/${config.name}${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
       user,
-      method: "DELETE",
+      method: "DELETE"
     }
   );
 
@@ -1068,7 +1072,7 @@ export async function tail(options: {
   const user = await getUser();
 
   const config = getConfig(options.config, {
-    name: options.name,
+    name: options.name
   });
   if (!config.name) {
     throw new ConfigurationError(MissingProjectNameError);
@@ -1085,7 +1089,7 @@ export async function tail(options: {
     method: options.method,
     search: options.search,
     samplingRate: options.samplingRate,
-    clientIp: options.ip,
+    clientIp: options.ip
   });
 
   const urlSearchParams = new URLSearchParams();
@@ -1093,15 +1097,16 @@ export async function tail(options: {
     urlSearchParams.set("preview", options.preview);
   }
   const {
-    result: { id: tailId, url: websocketUrl, expires_at: expiration },
+    result: { id: tailId, url: websocketUrl, expires_at: expiration }
   } = await fetchResult<TailCreationApiResponse>(
+    // eslint-disable-next-line deprecation/deprecation
     `/parties/${config.team || user.login}/${config.name}/tail${
       options.preview ? `?${urlSearchParams.toString()}` : ""
     }`,
     {
       user,
       method: "POST",
-      body: JSON.stringify(filters),
+      body: JSON.stringify(filters)
     }
   );
 
@@ -1113,12 +1118,13 @@ export async function tail(options: {
 
   async function deleteTail() {
     await fetchResult(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${config.name}/tail/${tailId}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         user,
-        method: "DELETE",
+        method: "DELETE"
       }
     );
   }
@@ -1128,8 +1134,8 @@ export async function tail(options: {
     headers: {
       "Sec-WebSocket-Protocol": TRACE_VERSION, // needs to be `trace-v1` to be accepted
       "User-Agent": `partykit/${packageVersion}`,
-      "X-PartyKit-Version": packageVersion,
-    },
+      "X-PartyKit-Version": packageVersion
+    }
   });
 
   // send filters when we open up
@@ -1194,6 +1200,7 @@ export async function list(options: {
   const config = getConfig(options.config);
 
   const res = await fetchResult<{ name: string; url: string }[]>(
+    // eslint-disable-next-line deprecation/deprecation
     `/parties/${config.team || user.login}`,
     { user }
   );
@@ -1216,6 +1223,7 @@ export async function generateToken() {
     "Set the following environment variables to allow a machine to deploy to PartyKit on your behalf:"
   );
   logger.log("");
+  // eslint-disable-next-line deprecation/deprecation
   logger.log(`PARTYKIT_LOGIN=${chalk.bold(session.login)}`);
   logger.log(`PARTYKIT_TOKEN=${chalk.bold(session.access_token)}`);
   logger.log("");
@@ -1226,6 +1234,7 @@ export async function whoami() {
   // get user details
   try {
     const user = getUserConfig();
+    // eslint-disable-next-line deprecation/deprecation
     console.log(`Logged in as ${chalk.bold(user.login)} (${user.type})`);
   } catch (e) {
     console.log(
@@ -1246,7 +1255,7 @@ export const env = {
     const user = await getUser();
 
     const config = getConfig(options.config, {
-      name: options.name,
+      name: options.name
     });
     if (!config.name) {
       throw new ConfigurationError(MissingProjectNameError);
@@ -1259,6 +1268,7 @@ export const env = {
     }
 
     const res = await fetchResult<string[]>(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${
         config.name
       }/env?${urlSearchParams.toString()}`,
@@ -1279,7 +1289,7 @@ export const env = {
     const user = await getUser();
 
     const config = getConfig(options.config, {
-      name: options.name,
+      name: options.name
     });
     if (!config.name) {
       throw new ConfigurationError(MissingProjectNameError);
@@ -1291,6 +1301,7 @@ export const env = {
     }
 
     const res = await fetchResult(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
@@ -1313,7 +1324,7 @@ export const env = {
           $schema: "https://www.partykit.io/schema.json",
           ...JSON.parse(fs.readFileSync(targetFileName, "utf8")),
           name: config.name,
-          vars: res,
+          vars: res
         },
         null,
         2
@@ -1329,7 +1340,7 @@ export const env = {
     const user = await getUser();
 
     const config = getConfig(options.config, {
-      name: options.name,
+      name: options.name
     });
     if (!config.name) {
       throw new ConfigurationError(MissingProjectNameError);
@@ -1346,6 +1357,7 @@ export const env = {
     }
 
     await fetchResult(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${config.name}/env${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
@@ -1354,8 +1366,8 @@ export const env = {
         method: "POST",
         body: JSON.stringify(config.vars || {}),
         headers: {
-          "Content-Type": "application/json",
-        },
+          "Content-Type": "application/json"
+        }
       }
     );
 
@@ -1376,7 +1388,7 @@ export const env = {
     const user = await getUser();
 
     const config = getConfig(options.config, {
-      name: options.name,
+      name: options.name
     });
     if (!config.name) {
       throw new ConfigurationError(MissingProjectNameError);
@@ -1407,7 +1419,7 @@ export const env = {
         await prompt({
           type: "password",
           name: "value",
-          message: `Enter the value for ${key}`,
+          message: `Enter the value for ${key}`
         });
 
     const urlSearchParams = new URLSearchParams();
@@ -1416,13 +1428,14 @@ export const env = {
     }
 
     await fetchResult(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         user,
         method: "POST",
-        body: value,
+        body: value
       }
     );
 
@@ -1440,7 +1453,7 @@ export const env = {
     const user = await getUser();
 
     const config = getConfig(options.config, {
-      name: options.name,
+      name: options.name
     });
     if (!config.name) {
       throw new ConfigurationError(MissingProjectNameError);
@@ -1458,7 +1471,7 @@ export const env = {
         type: "confirm",
         name: "value",
         message: `Are you sure you want to delete all environment variables?`,
-        initial: true,
+        initial: true
       });
 
       if (!value) {
@@ -1466,12 +1479,13 @@ export const env = {
         return;
       } else {
         await fetchResult(
+          // eslint-disable-next-line deprecation/deprecation
           `/parties/${config.team || user.login}/${config.name}/env${
             options.preview ? `?${urlSearchParams.toString()}` : ""
           }`,
           {
             user,
-            method: "DELETE",
+            method: "DELETE"
           }
         );
         logger.log(`Deleted all deployed environment variables`);
@@ -1480,15 +1494,16 @@ export const env = {
     }
 
     await fetchResult(
+      // eslint-disable-next-line deprecation/deprecation
       `/parties/${config.team || user.login}/${config.name}/env/${key}${
         options.preview ? `?${urlSearchParams.toString()}` : ""
       }`,
       {
         user,
-        method: "DELETE",
+        method: "DELETE"
       }
     );
 
     logger.log(`Deleted deployed environment variable: ${key}`);
-  },
+  }
 };

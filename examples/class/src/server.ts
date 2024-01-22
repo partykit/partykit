@@ -25,7 +25,7 @@ export default class Main implements Party.Server {
 
   // Opting into hibernation is now an explicit option
   readonly options: Party.ServerOptions = {
-    hibernate: true,
+    hibernate: true
   };
 
   // Servers can now keep state in class instance variables

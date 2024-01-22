@@ -3,7 +3,7 @@ import type {
   EmailEvent,
   RequestEvent,
   ScheduledEvent,
-  TailEventMessage,
+  TailEventMessage
 } from "./";
 import type { Outcome } from "./filters";
 import type WebSocket from "ws";

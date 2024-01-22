@@ -1,5 +1,5 @@
-import { serve } from "../../../../test_deps";
 import { Server } from "../..";
+import { serve } from "../../../../test_deps";
 
 const engine = new Server({
   pingInterval: 300,
@@ -7,8 +7,8 @@ const engine = new Server({
   maxHttpBufferSize: 1e6,
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PUT"],
-  },
+    methods: ["GET", "POST", "PUT"]
+  }
 });
 
 engine.on("connection", (socket) => {
@@ -18,5 +18,5 @@ engine.on("connection", (socket) => {
 });
 
 await serve(engine.handler(), {
-  port: 3000,
+  port: 3000
 });

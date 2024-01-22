@@ -15,19 +15,19 @@ export default function asyncCache(): (
       promises[name] = fn();
       states[name] = {
         status: "pending",
-        value: undefined,
+        value: undefined
       };
       promises[name]
         .then((value) => {
           states[name] = {
             status: "success",
-            value,
+            value
           };
         })
         .catch((error) => {
           states[name] = {
             status: "error",
-            value: error,
+            value: error
           };
         });
     }

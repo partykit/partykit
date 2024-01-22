@@ -1,14 +1,16 @@
-import { assertEquals, describe, fail, it } from "vitest";
-import { Server } from "../lib/server";
-import { setup } from "./setup.test";
-import type { Socket } from "../lib/socket";
 import {
   eioPoll,
   eioPush,
   enableLogs,
   runHandshake,
-  waitFor,
+  waitFor
 } from "misc/util.test";
+import { assertEquals, describe, fail, it } from "vitest";
+
+import { Server } from "../lib/server";
+import { setup } from "./setup.test";
+
+import type { Socket } from "../lib/socket";
 
 await enableLogs();
 
@@ -19,7 +21,7 @@ describe("catch-all listeners", () => {
     return setup(io, 1, async (port, done) => {
       const [[sid], socket] = await Promise.all([
         runHandshake(port),
-        waitFor<Socket>(io, "connection"),
+        waitFor<Socket>(io, "connection")
       ]);
 
       socket.onAnyIncoming((...args) => {
@@ -41,7 +43,7 @@ describe("catch-all listeners", () => {
     return setup(io, 1, async (port, done) => {
       const [[sid], socket] = await Promise.all([
         runHandshake(port),
-        waitFor<Socket>(io, "connection"),
+        waitFor<Socket>(io, "connection")
       ]);
 
       const listener = () => {
@@ -63,7 +65,7 @@ describe("catch-all listeners", () => {
     return setup(io, 1, async (port, done) => {
       const [[sid], socket] = await Promise.all([
         runHandshake(port),
-        waitFor<Socket>(io, "connection"),
+        waitFor<Socket>(io, "connection")
       ]);
 
       socket.onAnyOutgoing((...args) => {
@@ -87,7 +89,7 @@ describe("catch-all listeners", () => {
     return setup(io, 1, async (port, done) => {
       const [[sid], socket] = await Promise.all([
         runHandshake(port),
-        waitFor<Socket>(io, "connection"),
+        waitFor<Socket>(io, "connection")
       ]);
 
       socket.onAnyOutgoing((...args) => {
@@ -111,7 +113,7 @@ describe("catch-all listeners", () => {
     return setup(io, 1, async (port, done) => {
       const [[sid], socket] = await Promise.all([
         runHandshake(port),
-        waitFor<Socket>(io, "connection"),
+        waitFor<Socket>(io, "connection")
       ]);
 
       socket.onAnyOutgoing((...args) => {

@@ -2,7 +2,8 @@
  * @vitest-environment jsdom
  */
 
-import { test, expect } from "vitest";
+import { expect, test } from "vitest";
+
 import PartySocket from "../index";
 
 const PORT = 50121;

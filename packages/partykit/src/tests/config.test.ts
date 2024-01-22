@@ -1,6 +1,8 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { getConfig } from "../config";
 import fs from "fs";
+
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+
+import { getConfig } from "../config";
 
 const currDir = process.cwd();
 
@@ -34,8 +36,8 @@ describe("config", () => {
   it("should return a config with overrides", () => {
     const config = getConfig(undefined, {
       vars: {
-        test: "test",
-      },
+        test: "test"
+      }
     });
     expect(config).toMatchInlineSnapshot(`
       {
@@ -64,8 +66,8 @@ describe("config", () => {
     fs.writeFileSync(".env", "test=test");
     const config = getConfig(undefined, {
       vars: {
-        test: "test2",
-      },
+        test: "test2"
+      }
     });
     expect(config).toMatchInlineSnapshot(`
       {
@@ -84,8 +86,8 @@ describe("config", () => {
       undefined,
       {
         vars: {
-          test4: "test4",
-        },
+          test4: "test4"
+        }
       },
       { readEnvLocal: true }
     );
@@ -106,8 +108,8 @@ describe("config", () => {
       "partykit.json",
       JSON.stringify({
         vars: {
-          test: "test",
-        },
+          test: "test"
+        }
       })
     );
     const config = getConfig(undefined, undefined);
@@ -127,8 +129,8 @@ describe("config", () => {
       JSON.stringify({
         main: "script.js",
         vars: {
-          test: "test",
-        },
+          test: "test"
+        }
       })
     );
     fs.writeFileSync(".env", "test=test2");
@@ -151,9 +153,9 @@ describe("config", () => {
         partykit: {
           main: "script.js",
           vars: {
-            test: "test",
-          },
-        },
+            test: "test"
+          }
+        }
       })
     );
     const config = getConfig(undefined, undefined);
@@ -175,9 +177,9 @@ describe("config", () => {
         partykit: {
           main: "script.js",
           vars: {
-            test: "test",
-          },
-        },
+            test: "test"
+          }
+        }
       })
     );
     fs.writeFileSync(
@@ -185,8 +187,8 @@ describe("config", () => {
       JSON.stringify({
         main: "script.js",
         vars: {
-          anotherTest: "test",
-        },
+          anotherTest: "test"
+        }
       })
     );
     const config = getConfig(undefined, undefined);
@@ -235,7 +237,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          team: "test",
+          team: "test"
         })
       );
       const config = getConfig(undefined, undefined);
@@ -253,7 +255,7 @@ describe("config", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
-          team: 1,
+          team: 1
         })
       );
       expect(() =>
@@ -283,7 +285,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          name: "test",
+          name: "test"
         })
       );
       const config = getConfig(undefined, undefined);
@@ -302,7 +304,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          name: 1,
+          name: 1
         })
       );
       expect(() => getConfig(undefined, undefined))
@@ -328,7 +330,7 @@ describe("config", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
-          main: "test.js",
+          main: "test.js"
         })
       );
       fs.writeFileSync("test.js", "test");
@@ -351,7 +353,7 @@ describe("config", () => {
       );
       fs.writeFileSync("test.js", "test");
       const config = getConfig(undefined, {
-        main: "test.js",
+        main: "test.js"
       });
       expect(config).toMatchInlineSnapshot(`
           {
@@ -366,7 +368,7 @@ describe("config", () => {
       fs.writeFileSync(
         "partykit.json",
         JSON.stringify({
-          main: 1,
+          main: 1
         })
       );
       expect(() => getConfig(undefined, undefined))
@@ -390,7 +392,7 @@ describe("config", () => {
       fs.writeFileSync(
         "some/path/partykit.json",
         JSON.stringify({
-          main: "src/test.js",
+          main: "src/test.js"
         })
       );
       fs.writeFileSync("some/path/src/test.js", "test");
@@ -412,7 +414,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          port: 1,
+          port: 1
         })
       );
       const config = getConfig(undefined, undefined);
@@ -431,7 +433,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          port: "1",
+          port: "1"
         })
       );
       expect(() => getConfig(undefined, undefined))
@@ -459,8 +461,8 @@ describe("config", () => {
         JSON.stringify({
           main: "script.js",
           vars: {
-            test: "test",
-          },
+            test: "test"
+          }
         })
       );
       const config = getConfig(undefined, undefined);
@@ -480,7 +482,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          vars: "test",
+          vars: "test"
         })
       );
       expect(() => getConfig(undefined, undefined))
@@ -504,13 +506,13 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          vars: { x: 1 },
+          vars: { x: 1 }
         })
       );
       expect(() =>
         getConfig(undefined, {
           // @ts-expect-error purposely wrong
-          vars: "test",
+          vars: "test"
         })
       ).toThrowErrorMatchingInlineSnapshot(`
         [ZodError: [
@@ -536,8 +538,8 @@ describe("config", () => {
         JSON.stringify({
           main: "script.js",
           define: {
-            test: "test",
-          },
+            test: "test"
+          }
         })
       );
       const config = getConfig(undefined, undefined);
@@ -557,7 +559,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          define: "test",
+          define: "test"
         })
       );
       expect(() => getConfig(undefined, undefined))
@@ -581,13 +583,13 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          define: { x: 1 },
+          define: { x: 1 }
         })
       );
       expect(() =>
         getConfig(undefined, {
           // @ts-expect-error purposely wrong
-          define: "test",
+          define: "test"
         })
       ).toThrowErrorMatchingInlineSnapshot(`
         [ZodError: [
@@ -611,7 +613,7 @@ describe("config", () => {
         "partykit.json",
         JSON.stringify({
           main: "script.js",
-          serve: "public",
+          serve: "public"
         })
       );
       const config = getConfig(undefined, undefined);

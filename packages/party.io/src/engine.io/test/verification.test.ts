@@ -1,7 +1,8 @@
+import { enableLogs } from "misc/util.test";
 import { assertEquals, assertExists, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs } from "misc/util.test";
 
 await enableLogs();
 
@@ -11,7 +12,7 @@ describe("verification", () => {
 
     return setup(engine, 1, async (port, done) => {
       const response = await fetch(`http://localhost:${port}/test/`, {
-        method: "get",
+        method: "get"
       });
 
       assertEquals(response.status, 404);
@@ -38,7 +39,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?transport=tobi`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -67,7 +68,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?transport=constructor`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -96,7 +97,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?transport=polling&sid=test`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -114,7 +115,7 @@ describe("verification", () => {
     const engine = new Server({
       allowRequest: () => {
         return Promise.reject("Thou shall not pass");
-      },
+      }
     });
 
     return setup(engine, 2, async (port, partialDone) => {
@@ -130,7 +131,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -148,7 +149,7 @@ describe("verification", () => {
     const engine = new Server({
       allowRequest: () => {
         return Promise.reject("Thou shall not pass");
-      },
+      }
     });
 
     return setup(engine, 2, (port, partialDone) => {
@@ -185,7 +186,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?transport=polling`,
         {
-          method: "put",
+          method: "put"
         }
       );
 
@@ -215,7 +216,7 @@ describe("verification", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=3&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -254,7 +255,7 @@ describe("verification", () => {
         const response = await fetch(
           `http://localhost:${port}/engine.io/?EIO=3&transport=polling&sid=${handshake.sid}`,
           {
-            method: "get",
+            method: "get"
           }
         );
 

@@ -12,7 +12,7 @@ export enum PacketType {
   ACK,
   CONNECT_ERROR,
   BINARY_EVENT,
-  BINARY_ACK,
+  BINARY_ACK
 }
 
 export interface Packet {
@@ -142,7 +142,7 @@ export class Decoder extends EventEmitter<
       } else if (packet.attachments) {
         this.buffer = {
           packet,
-          attachments: [],
+          attachments: []
         };
       } else {
         this.emitReserved("packet", packet);

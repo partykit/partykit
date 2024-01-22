@@ -11,8 +11,8 @@
       "@layouts/*": ["layouts/*"],
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"]
-    }
+      "@utils/*": ["utils/*"],
+    },
   },
-  "exclude": ["dist"]
+  "exclude": ["dist"],
 }

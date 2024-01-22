@@ -1,6 +1,6 @@
 import * as React from "react";
-import { render, Text } from "ink";
 import chalk from "chalk";
+import { render, Text } from "ink";
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));

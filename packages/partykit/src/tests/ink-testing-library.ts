@@ -2,9 +2,11 @@
 // until https://github.com/vadimdemedes/ink-testing-library/pull/23 is merged
 
 import { EventEmitter } from "node:events";
-import { render as inkRender } from "ink";
-import type { Instance as InkInstance } from "ink";
+
 import type { ReactElement } from "react";
+import { render as inkRender } from "ink";
+
+import type { Instance as InkInstance } from "ink";
 
 class Stdout extends EventEmitter {
   get columns() {
@@ -93,7 +95,7 @@ export const render = (tree: ReactElement): Instance => {
     stdin: stdin as any,
     debug: true,
     exitOnCtrlC: false,
-    patchConsole: false,
+    patchConsole: false
   });
 
   instances.push(instance);
@@ -106,7 +108,7 @@ export const render = (tree: ReactElement): Instance => {
     stderr,
     stdin,
     frames: stdout.frames,
-    lastFrame: stdout.lastFrame,
+    lastFrame: stdout.lastFrame
   };
 };
 

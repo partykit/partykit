@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID } from "misc/util.test";
 import { assertEquals, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID } from "misc/util.test";
 
 await enableLogs();
 
@@ -21,7 +22,7 @@ describe("upgrade", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -30,7 +31,7 @@ describe("upgrade", () => {
       fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
         {
-          method: "get",
+          method: "get"
         }
       ).then(async (response) => {
         assertEquals(response.status, 200);
@@ -59,7 +60,7 @@ describe("upgrade", () => {
 
   it("should timeout if the upgrade takes too much time", () => {
     const engine = new Server({
-      upgradeTimeout: 5,
+      upgradeTimeout: 5
     });
 
     return setup(engine, 2, async (port, partialDone) => {
@@ -76,7 +77,7 @@ describe("upgrade", () => {
       const response = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 

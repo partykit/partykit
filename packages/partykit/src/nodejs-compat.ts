@@ -12,7 +12,7 @@ const supportedNodeBuiltins = [
   "stream",
   "string_decoder",
   "util",
-  "crypto",
+  "crypto"
 ];
 
 const plugin: Plugin = {
@@ -36,7 +36,7 @@ const plugin: Plugin = {
         return { path: `node:${args.path}`, external: true };
       }
     );
-  },
+  }
 };
 
 export default plugin;

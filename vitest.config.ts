@@ -8,7 +8,7 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.js"],
     exclude: ["./packages/party.io/**", "**/node_modules/**"],
     sequence: {
-      concurrent: false,
-    },
-  },
+      concurrent: false
+    }
+  }
 });

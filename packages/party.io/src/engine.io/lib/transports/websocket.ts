@@ -1,9 +1,11 @@
+import type * as Party from "partykit/server";
+
+import { Parser } from "../../../engine.io-parser";
 import { getLogger } from "../../../logger";
 import { upgradeWebSocket } from "../../../util";
 import { Transport } from "../transport";
-import { type Packet, Parser, type RawData } from "../../../engine.io-parser";
 
-import type * as Party from "partykit/server";
+import type { Packet, RawData } from "../../../engine.io-parser";
 
 export class WS extends Transport {
   private socket?: WebSocket;

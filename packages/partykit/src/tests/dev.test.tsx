@@ -1,12 +1,14 @@
-import { describe, it, expect, afterEach } from "vitest";
-import { render } from "./ink-testing-library";
-import type { DevProps } from "../dev";
-import { Dev } from "../dev";
-import { fetch } from "undici";
-import { WebSocket } from "ws";
-import { ErrorBoundary } from "react-error-boundary";
 import React from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import { Text } from "ink";
+import { fetch } from "undici";
+import { afterEach, describe, expect, it } from "vitest";
+import { WebSocket } from "ws";
+
+import { Dev } from "../dev";
+import { render } from "./ink-testing-library";
+
+import type { DevProps } from "../dev";
 
 const onConnectFixture = `${__dirname}/fixture.js`;
 const onRequestFixture = `${__dirname}/on-request-fixture.js`;
@@ -105,7 +107,7 @@ describe("dev", () => {
   it("should serve static assets in dev", async () => {
     const { host, port } = await runDev({
       main: onConnectFixture,
-      serve: publicFixture,
+      serve: publicFixture
     });
     const res = await fetch(`http://${host}:${port}`);
     expect(res.status).toBe(200);

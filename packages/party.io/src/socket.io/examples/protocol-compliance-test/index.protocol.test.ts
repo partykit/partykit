@@ -1,5 +1,5 @@
-import { serve } from "../../../../test_deps";
 import { Server } from "../..";
+import { serve } from "../../../../test_deps";
 
 const io = new Server({
   pingInterval: 300,
@@ -7,8 +7,8 @@ const io = new Server({
   maxHttpBufferSize: 1e6,
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PUT"],
-  },
+    methods: ["GET", "POST", "PUT"]
+  }
 });
 
 io.on("connection", (socket) => {
@@ -29,5 +29,5 @@ io.of("/custom").on("connection", (socket) => {
 });
 
 await serve(io.handler(), {
-  port: 3000,
+  port: 3000
 });

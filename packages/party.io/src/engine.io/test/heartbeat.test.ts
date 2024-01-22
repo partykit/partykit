@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID } from "misc/util.test";
 import { assertEquals, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID } from "misc/util.test";
 
 await enableLogs();
 
@@ -9,14 +10,14 @@ describe("heartbeat", () => {
   it("should keep the connection alive (polling)", () => {
     const engine = new Server({
       pingInterval: 10,
-      pingTimeout: 25,
+      pingTimeout: 25
     });
 
     return setup(engine, 1, async (port, done) => {
       const handshake = await fetch(
         `http://localhost:${port}/engine.io/?EIO=4&transport=polling`,
         {
-          method: "get",
+          method: "get"
         }
       );
 
@@ -27,7 +28,7 @@ describe("heartbeat", () => {
         const pollResponse = await fetch(
           `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
           {
-            method: "get",
+            method: "get"
           }
         );
 
@@ -38,7 +39,7 @@ describe("heartbeat", () => {
           `http://localhost:${port}/engine.io/?EIO=4&transport=polling&sid=${sid}`,
           {
             method: "post",
-            body: "3",
+            body: "3"
           }
         );
 
@@ -54,7 +55,7 @@ describe("heartbeat", () => {
   it("should keep the connection alive (ws)", () => {
     const engine = new Server({
       pingInterval: 10,
-      pingTimeout: 25,
+      pingTimeout: 25
     });
 
     return setup(engine, 1, (port, done) => {

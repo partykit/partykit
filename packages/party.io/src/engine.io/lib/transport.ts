@@ -1,7 +1,9 @@
+import { Parser } from "../../engine.io-parser";
 import { EventEmitter } from "../../event-emitter";
-import { type Packet, Parser, type RawData } from "../../engine.io-parser";
 import { getLogger } from "../../logger";
 import { type ServerOptions } from "./server";
+
+import type { Packet, RawData } from "../../engine.io-parser";
 
 interface TransportEvents {
   packet: (packet: Packet) => void;

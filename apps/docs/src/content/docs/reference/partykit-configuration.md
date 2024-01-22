@@ -132,7 +132,7 @@ export default {
   onConnect(connection, room) {
     console.log(room.env.MY_VAR); // "my value"
     console.log(room.env["some-nested-object"].a); // 123
-  },
+  }
 };
 ```
 

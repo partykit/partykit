@@ -22,7 +22,7 @@ const provider = new YProvider(PARTYKIT_HOST, room, doc, {
   // disable broadcast channel for this demo, so syncing only happens via the partykit server
   // https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API
   disableBc: true,
-  params: getToken,
+  params: getToken
 });
 const yMessage: Y.Text = doc.getText("message");
 const awareness = provider.awareness;

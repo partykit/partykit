@@ -42,7 +42,7 @@ To connect to a party using [`PartySocket`](/reference/partysocket-api/), specif
 const partySocket = new PartySocket({
   host: PARTYKIT_HOST,
   room: "room-id",
-  party: "connections",
+  party: "connections"
 });
 ```
 
@@ -137,8 +137,8 @@ export default class Server implements Party.Server {
       body: JSON.stringify({
         type,
         connectionId: connection.id,
-        roomId: this.room.id,
-      }),
+        roomId: this.room.id
+      })
     });
   }
 }

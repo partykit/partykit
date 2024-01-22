@@ -1,13 +1,16 @@
-import { type EventsMap } from "../../event-emitter";
-import { Decoder, type Packet, PacketType } from "../../socket.io-parser";
+import type * as Party from "partykit/server";
+
 import { type Socket as RawSocket } from "../../engine.io";
-import { getLogger } from "../../logger";
-import { type Handshake, Socket } from "./socket";
-import { Server } from "./server";
 import { type RawData } from "../../engine.io-parser";
 import { type CloseReason } from "../../engine.io/lib/socket";
+import { type EventsMap } from "../../event-emitter";
+import { getLogger } from "../../logger";
+import { Decoder, PacketType } from "../../socket.io-parser";
+import { Server } from "./server";
+import { Socket } from "./socket";
 
-import type * as Party from "partykit/server";
+import type { Packet } from "../../socket.io-parser";
+import type { Handshake } from "./socket";
 
 interface WriteOptions {
   volatile?: boolean;
@@ -20,7 +23,7 @@ export class Client<
   ListenEvents extends EventsMap,
   EmitEvents extends EventsMap,
   ServerSideEvents extends EventsMap,
-  SocketData = unknown,
+  SocketData = unknown
 > {
   public readonly conn: RawSocket;
 
@@ -61,7 +64,7 @@ export class Client<
       // address: (connInfo.remoteAddr as Deno.NetAddr).hostname,
       address: url.hostname,
       secure: false,
-      xdomain: req.headers.has("origin"),
+      xdomain: req.headers.has("origin")
     };
 
     conn.on("message", (data) => this.decoder.add(data));
@@ -115,8 +118,8 @@ export class Client<
         type: PacketType.CONNECT_ERROR,
         nsp: name,
         data: {
-          message: "Invalid namespace",
-        },
+          message: "Invalid namespace"
+        }
       });
       return;
     }
@@ -143,7 +146,7 @@ export class Client<
       {
         issued: now.getTime(),
         time: now.toISOString(),
-        auth,
+        auth
       },
       this.handshake
     );

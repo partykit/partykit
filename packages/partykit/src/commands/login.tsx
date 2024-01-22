@@ -1,8 +1,10 @@
 import React from "react";
-import { getUser, type LoginMethod } from "../config";
+import { Text } from "ink";
 
 import asyncCache from "../async-cache";
-import { Text } from "ink";
+import { getUser } from "../config";
+
+import type { LoginMethod } from "../config";
 
 const read = asyncCache();
 

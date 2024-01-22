@@ -1,7 +1,8 @@
+import { enableLogs, parseSessionID } from "misc/util.test";
 import { assertEquals, describe, it } from "vitest";
+
 import { Server } from "../lib/server";
 import { setup } from "./setup.test";
-import { enableLogs, parseSessionID } from "misc/util.test";
 
 await enableLogs();
 
@@ -14,8 +15,8 @@ describe("CORS", () => {
         credentials: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-header"],
-        maxAge: 42,
-      },
+        maxAge: 42
+      }
     });
 
     return setup(engine, 1, async (port, done) => {
@@ -24,8 +25,8 @@ describe("CORS", () => {
         {
           method: "OPTIONS",
           headers: {
-            origin: "https://example.com",
-          },
+            origin: "https://example.com"
+          }
         }
       );
 
@@ -67,8 +68,8 @@ describe("CORS", () => {
         credentials: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-header"],
-        maxAge: 42,
-      },
+        maxAge: 42
+      }
     });
 
     return setup(engine, 1, async (port, done) => {
@@ -77,8 +78,8 @@ describe("CORS", () => {
         {
           method: "GET",
           headers: {
-            origin: "https://example.com",
-          },
+            origin: "https://example.com"
+          }
         }
       );
 
@@ -107,8 +108,8 @@ describe("CORS", () => {
           method: "POST",
           body: "1",
           headers: {
-            origin: "https://example.com",
-          },
+            origin: "https://example.com"
+          }
         }
       );
 
@@ -150,8 +151,8 @@ describe("CORS", () => {
         credentials: true,
         methods: ["GET", "POST"],
         allowedHeaders: ["my-header"],
-        maxAge: 42,
-      },
+        maxAge: 42
+      }
     });
 
     return setup(engine, 1, async (port, done) => {
@@ -160,8 +161,8 @@ describe("CORS", () => {
         {
           method: "OPTIONS",
           headers: {
-            origin: "https://wrong-domain.com",
-          },
+            origin: "https://wrong-domain.com"
+          }
         }
       );
 
