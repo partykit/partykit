@@ -127,6 +127,11 @@ function readMessage(
 
 function setupWS(provider: WebsocketProvider) {
   if (provider.shouldConnect && provider.ws === null) {
+    if (!provider._WS) {
+      throw new Error(
+        "No WebSocket implementation available, did you forget to pass options.WebSocketPolyfill?"
+      );
+    }
     const websocket = new provider._WS(provider.url);
     websocket.binaryType = "arraybuffer";
     provider.ws = websocket;
@@ -234,6 +239,8 @@ type AwarenessUpdate = {
   removed: number[];
 };
 
+const DefaultWebSocket = typeof WebSocket === "undefined" ? null : WebSocket;
+
 /**
  * Websocket Provider for Yjs. Creates a websocket connection to sync the shared document.
  * The document name is attached to the provided url. I.e. the following example
@@ -281,7 +288,7 @@ export class WebsocketProvider extends Observable<string> {
       connect = true,
       awareness = new awarenessProtocol.Awareness(doc),
       params = {},
-      WebSocketPolyfill = WebSocket, // Optionally provide a WebSocket polyfill
+      WebSocketPolyfill = DefaultWebSocket as typeof WebSocket, // Optionally provide a WebSocket polyfill
       resyncInterval = -1, // Request server state every `resyncInterval` milliseconds
       maxBackoffTime = 2500, // Maximum amount of time to wait before trying to reconnect (we try to reconnect using exponential backoff)
       disableBc = DEFAULT_DISABLE_BC, // Disable cross-tab BroadcastChannel communication
