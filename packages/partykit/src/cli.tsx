@@ -296,19 +296,17 @@ export async function init(options: {
               $schema: "https://www.partykit.io/schema.json",
               name:
                 options.name ||
-                `${
-                  packageJson.name
-                    .replace(
-                      // replace non alphanumeric or -_ with -
-                      /[^a-zA-Z0-9-_]/g,
-                      "-"
-                    )
-                    .replace(
-                      // remove leading -
-                      /^-/,
-                      ""
-                    ) || "my"
-                }-party`,
+                `${(packageJson.name || "my")
+                  .replace(
+                    // replace non alphanumeric or -_ with -
+                    /[^a-zA-Z0-9-_]/g,
+                    "-"
+                  )
+                  .replace(
+                    // remove leading -
+                    /^-/,
+                    ""
+                  )}-party`,
               main: shouldUseTypeScript ? "party/index.ts" : "party/index.js",
               compatibilityDate: defaultCompatibilityDate,
             },
@@ -389,19 +387,17 @@ export async function init(options: {
 
       const partyKitProjectName =
         options.name ||
-        `${
-          packageJson.name
-            .replace(
-              // replace non alphanumeric or -_ with -
-              /[^a-zA-Z0-9-_]/g,
-              "-"
-            )
-            .replace(
-              // remove leading -
-              /^-/,
-              ""
-            ) || "my"
-        }-party`;
+        `${(packageJson.name || "my")
+          .replace(
+            // replace non alphanumeric or -_ with -
+            /[^a-zA-Z0-9-_]/g,
+            "-"
+          )
+          .replace(
+            // remove leading -
+            /^-/,
+            ""
+          )}-party`;
 
       const command = `${
         pkgManager?.name || "npm"
