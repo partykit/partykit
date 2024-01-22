@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.17
+
+### Patch Changes
+
+- [#730](https://github.com/partykit/partykit/pull/730) [`68789f0`](https://github.com/partykit/partykit/commit/68789f03006e0c6f7d27a25f990aa3887dfe987c) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit/react: don't crash in node if websocket polyfill not available
+
 ## 0.0.16
 
 ### Patch Changes
