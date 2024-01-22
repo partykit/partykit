@@ -45,8 +45,8 @@ ws.addEventListener("open", () => {
 
 ```javascript
 import PartySocket from "partysocket";
-// optional, only needed if creating a client inside Node
-import WS from 'ws';
+// optional: only needed if creating using inside node.js. Run `npm install ws`, and then add:
+// import WS from "ws";
 
 const ws = new PartySocket({
   host: "project.name.partykit.dev", // or localhost:1999 in dev
@@ -54,7 +54,7 @@ const ws = new PartySocket({
   // add an optional id to identify the client,
   // if not provided, a random id will be generated
   id: "some-connection-id"
-  // if used from Node, you need to pass a WebSocket polyfill imported from `ws`
+  // optional: if used from node.js, you need to pass the WebSocket polyfill imported from `ws`
   // WebSocket: WS
 });
 
