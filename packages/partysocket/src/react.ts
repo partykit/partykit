@@ -8,12 +8,24 @@ import {
 import type { PartySocketOptions } from ".";
 import type { EventHandlerOptions } from "./use-handlers";
 
-type UsePartySocketOptions = PartySocketOptions & EventHandlerOptions;
+type UsePartySocketOptions = Omit<PartySocketOptions, "host"> &
+  EventHandlerOptions & {
+    host?: string | undefined;
+  };
 
 // A React hook that wraps PartySocket
 export default function usePartySocket(options: UsePartySocketOptions) {
+  const { host, ...otherOptions } = options;
+
   const socket = useStableSocket({
-    options,
+    options: {
+      host:
+        host ||
+        (typeof window !== "undefined"
+          ? window.location.host
+          : "dummy-domain.com"),
+      ...otherOptions
+    },
     createSocket: (options) => new PartySocket(options),
     createSocketMemoKey: (options) =>
       JSON.stringify([

@@ -4,7 +4,7 @@ import type * as Y from "yjs";
 import YPartyKitProvider from "./provider";
 
 type UseYPartyKitProviderOptions = {
-  host: string;
+  host?: string | undefined;
   room: string;
   party?: string;
   doc?: Y.Doc;
@@ -17,11 +17,19 @@ export default function useYProvider(
   const { host, room, party, doc, options } = yProviderOptions;
   const [provider] = useState<YPartyKitProvider>(
     () =>
-      new YPartyKitProvider(host, room, doc, {
-        connect: false,
-        party,
-        ...options
-      })
+      new YPartyKitProvider(
+        host ||
+          (typeof window !== "undefined"
+            ? window.location.host
+            : "dummy-domain.com"),
+        room,
+        doc,
+        {
+          connect: false,
+          party,
+          ...options
+        }
+      )
   );
 
   useEffect(() => {

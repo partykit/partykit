@@ -95,7 +95,7 @@ import useYProvider from "y-partykit/react";
 
 function App() {
   const provider = useYProvider({
-    host: "localhost:1999",
+    host: "localhost:1999", // optional, defaults to window.location.host
     room: "my-document-name",
     doc: yDoc, // optional!
     options
