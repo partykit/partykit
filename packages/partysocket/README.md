@@ -45,6 +45,7 @@ ws.addEventListener("open", () => {
 
 ```javascript
 import PartySocket from "partysocket";
+
 // optional: only needed if creating using inside node.js. Run `npm install ws`, and then add:
 // import WS from "ws";
 
