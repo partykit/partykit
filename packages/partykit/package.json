@@ -94,7 +94,8 @@
     "which-pm-runs": "^1.1.0",
     "ws": "^8.16.0",
     "zod": "^3.22.4",
-    "zod-to-json-schema": "^3.22.3"
+    "zod-to-json-schema": "^3.22.3",
+    "zod-validation-error": "^3.0.0"
   },
   "files": [
     "dist",
