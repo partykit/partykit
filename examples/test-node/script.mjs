@@ -14,11 +14,11 @@ ps.addEventListener("open", () => {
 });
 
 ps.addEventListener("message", (e) => {
-  console.log("message", e, e.data);
+  console.log("message (aEL):", e.data);
 });
 
 ps.onmessage = (e) => {
-  console.log("message", e, e.data);
+  console.log("message (om):", e.data);
 };
 
 ps.addEventListener("close", () => {
@@ -26,9 +26,7 @@ ps.addEventListener("close", () => {
 });
 
 ps.addEventListener("error", (e) => {
-  console.log("error", e);
+  console.log("error:", e.message);
 });
-
-ps.reconnect();
 
 console.log("connecting...");
