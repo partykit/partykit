@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.24
+
+### Patch Changes
+
+- [#744](https://github.com/partykit/partykit/pull/744) [`cf944ab`](https://github.com/partykit/partykit/commit/cf944ab663476da5e9d6ea314d23fd4e966b0db8) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: debugLogger
+
 ## 0.0.23
 
 ### Patch Changes
