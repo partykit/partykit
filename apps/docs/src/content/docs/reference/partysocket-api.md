@@ -209,6 +209,7 @@ type Options = {
   maxEnqueuedMessages?: number; // maximum number of messages to buffer until reconnection
   startClosed?: boolean; // start websocket in CLOSED state, call `.reconnect()` to connect
   debug?: boolean; // enables debug output
+  debugLogger?: (...args: any[]) => void; // Use a custom logger (when `debug` is true)
 };
 ```
 

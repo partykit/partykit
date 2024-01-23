@@ -6,6 +6,10 @@ const ps = new PartySocket({
   host: "127.0.0.1:1999",
   room: "test",
   WebSocket: WS
+  // debug: true,
+  // debugLogger: (_arg, ...args) => {
+  //   console.log(...args);
+  // }
 });
 
 ps.addEventListener("open", () => {

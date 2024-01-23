@@ -109,6 +109,7 @@ export type Options = {
   maxEnqueuedMessages?: number;
   startClosed?: boolean;
   debug?: boolean;
+  debugLogger?: (...args: any[]) => void;
 };
 
 const DEFAULT = {
@@ -146,6 +147,8 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
   private _closeCalled = false;
   private _messageQueue: Message[] = [];
 
+  private _debugLogger = console.log.bind(console);
+
   protected _url: UrlProvider;
   protected _protocols?: ProtocolsProvider;
   protected _options: Options;
@@ -161,6 +164,9 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
     this._options = options;
     if (this._options.startClosed) {
       this._shouldReconnect = false;
+    }
+    if (this._options.debugLogger) {
+      this._debugLogger = this._options.debugLogger;
     }
     this._connect();
   }
@@ -347,9 +353,7 @@ export default class ReconnectingWebSocket extends (EventTarget as TypedEventTar
 
   private _debug(...args: unknown[]) {
     if (this._options.debug) {
-      // not using spread because compiled version uses Symbols
-      // tslint:disable-next-line
-      console.log.apply(console, ["RWS>", ...args]);
+      this._debugLogger("RWS>", ...args);
     }
   }
 
