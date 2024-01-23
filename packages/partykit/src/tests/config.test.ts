@@ -54,7 +54,9 @@ describe("config", () => {
     const config = getConfig(undefined, undefined);
     expect(config).toMatchInlineSnapshot(`
       {
-        "define": {},
+        "define": {
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test\\"}"",
+        },
         "vars": {
           "test": "test",
         },
@@ -71,7 +73,9 @@ describe("config", () => {
     });
     expect(config).toMatchInlineSnapshot(`
       {
-        "define": {},
+        "define": {
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test\\"}"",
+        },
         "vars": {
           "test": "test2",
         },
@@ -93,7 +97,9 @@ describe("config", () => {
     );
     expect(config).toMatchInlineSnapshot(`
       {
-        "define": {},
+        "define": {
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test3\\",\\"test2\\":\\"test2\\"}"",
+        },
         "vars": {
           "test": "test3",
           "test2": "test2",
@@ -137,7 +143,9 @@ describe("config", () => {
     const config = getConfig(undefined, undefined);
     expect(config).toMatchInlineSnapshot(`
       {
-        "define": {},
+        "define": {
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test2\\"}"",
+        },
         "main": "./script.js",
         "vars": {
           "test": "test2",
