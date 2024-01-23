@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.23
+
+### Patch Changes
+
+- [#739](https://github.com/partykit/partykit/pull/739) [`297cfb1`](https://github.com/partykit/partykit/commit/297cfb13e703d5e00329b0edefb98eaf05fe67e3) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit/partysocket: default `host` to `window.location.host`
+
 ## 0.0.22
 
 ### Patch Changes
