@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.77
+
+### Patch Changes
+
+- [#742](https://github.com/partykit/partykit/pull/742) [`850c77d`](https://github.com/partykit/partykit/commit/850c77d712054725cfd8dbeb49b9bbf577909899) Thanks [@threepointone](https://github.com/threepointone)! - populate `process.env` with `.env` contents
+
+  (as well as `.env.local` during `dev`)
+
 ## 0.0.76
 
 ### Patch Changes
