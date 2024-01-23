@@ -6,6 +6,8 @@ import type {
   PartyKitServer
 } from "partykit/server";
 
+console.log(process.env);
+
 declare global {
   const SOME_GLOBAL: string;
   const TEST_DEFINE_NUMBER: number;

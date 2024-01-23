@@ -348,6 +348,8 @@ export function getConfig(
     };
   }
 
+  const hasEnvVars = Object.keys(envVars).length > 0;
+
   configPath ||= getConfigPath();
 
   // do a quick check of the overrides
@@ -383,6 +385,9 @@ export function getConfig(
         ...removeUndefinedKeys(overrides.vars)
       },
       define: {
+        ...(hasEnvVars
+          ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(envVars)) }
+          : {}),
         ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
         ...removeUndefinedKeys(packageJsonConfig.define),
         ...removeUndefinedKeys(overrides.define)
@@ -429,6 +434,9 @@ export function getConfig(
       ...removeUndefinedKeys(overrides.vars)
     },
     define: {
+      ...(hasEnvVars
+        ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(envVars)) }
+        : {}),
       ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
       ...removeUndefinedKeys(parsedConfig.define),
       ...removeUndefinedKeys(overrides.define)
