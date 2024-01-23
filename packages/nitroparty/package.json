@@ -1,6 +1,6 @@
 {
   "name": "nitroparty",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "partykit + nitro",
   "main": "./nitro.config.ts",
   "keywords": [],

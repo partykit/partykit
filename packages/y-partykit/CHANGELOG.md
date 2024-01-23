@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.18
+
+### Patch Changes
+
+- [#739](https://github.com/partykit/partykit/pull/739) [`297cfb1`](https://github.com/partykit/partykit/commit/297cfb13e703d5e00329b0edefb98eaf05fe67e3) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit/partysocket: default `host` to `window.location.host`
+
 ## 0.0.17
 
 ### Patch Changes
@@ -73,8 +79,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "snapshot"
-    }
+      mode: "snapshot",
+    },
   });
   ```
 
@@ -91,8 +97,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "history"
-    }
+      mode: "history",
+    },
   });
   ```
 
@@ -110,8 +116,8 @@
 
       // Maximum number of updates.
       // By default, there is no maximum, and history grows until maximum amount of bytes is reached.
-      maxUpdates: 10_000
-    }
+      maxUpdates: 10_000,
+    },
   });
   ```
 

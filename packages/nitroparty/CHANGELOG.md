@@ -1,5 +1,11 @@
 # nitroparty
 
+## 0.0.3
+
+### Patch Changes
+
+- [#741](https://github.com/partykit/partykit/pull/741) [`b5ffa13`](https://github.com/partykit/partykit/commit/b5ffa130b42a94b0d6c94bb55c3f89d511c2cf62) Thanks [@threepointone](https://github.com/threepointone)! - inject `process` global
+
 ## 0.0.2
 
 ### Patch Changes
