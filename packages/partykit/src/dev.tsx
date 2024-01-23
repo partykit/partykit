@@ -745,6 +745,11 @@ Workers["${name}"] = ${name};
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
         metafile: true,
+        inject: [
+          fileURLToPath(
+            path.join(path.dirname(import.meta.url), "../inject-process.js")
+          )
+        ],
         define: {
           PARTYKIT_HOST: `"127.0.0.1:${portForServer}"`,
           PARTYKIT_API_BASE: `"${API_BASE}"`,

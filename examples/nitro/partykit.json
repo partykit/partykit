@@ -3,17 +3,15 @@
   "name": "nitroparty",
   "main": "./.output/server/index.mjs",
   "compatibilityDate": "2023-12-26",
-  "define": {
-    "process.env.NITRO_ENV_PREFIX": "'_'",
-    "process.env": "{}"
-  },
   "build": {
     "command": "npx nitropack build",
     "watch": "routes"
   },
   "serve": {
     "build": "./client/index.ts",
-    // TODO: make "public" the default when using serve
     "path": "public"
+  },
+  "parties": {
+    "test": "party/test.ts"
   }
 }

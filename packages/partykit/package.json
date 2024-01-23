@@ -103,7 +103,8 @@
     "*.d.ts.map",
     "schema.json",
     "init",
-    "rdt-mock.js"
+    "rdt-mock.js",
+    "inject-process.js"
   ],
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",

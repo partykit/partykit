@@ -713,6 +713,11 @@ export const ${name} = ${name}Party;
         ...esbuildOptions.define,
         ...config.define
       },
+      inject: [
+        fileURLToPath(
+          path.join(path.dirname(import.meta.url), "../inject-process.js")
+        )
+      ],
       alias: config.build?.alias,
       plugins: [
         nodejsCompatPlugin,

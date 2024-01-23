@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "build": "remix build",
-    "deploy": "partykit deploy",
-    "start": "remix dev --manual -c \"partykit dev\" --port 8002",
+    "deploy": "npm run build && partykit deploy",
+    "start": "remix dev --manual -c \"partykit dev\"",
     "check": "tsc"
   },
   "dependencies": {
