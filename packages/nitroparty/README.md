@@ -2,6 +2,8 @@
 
 ⚡️ nitro ⤫ partykit 🎈
 
+⚠️ _This is a work in progress, and should be considered experimental._
+
 ### install
 
 ```bash
@@ -24,10 +26,6 @@ export default defineNitroConfig({
   "name": "my-party",
   "main": "./.output/server/index.mjs",
   "compatibilityDate": "2023-12-26",
-  "define": {
-    "process.env.NITRO_ENV_PREFIX": "'_'",
-    "process.env": "{}"
-  },
   "build": {
     "command": "npx nitropack build",
     "watch": "routes"

@@ -7,7 +7,6 @@ export default {
   serverMinify: false,
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
-  // appDirectory: "app",
   assetsBuildDirectory: "public/dist",
   serverBuildPath: "dist/index.js",
   publicPath: "/dist/"
