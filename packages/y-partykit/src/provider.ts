@@ -390,7 +390,10 @@ export class WebsocketProvider extends Observable<string> {
     };
     if (typeof window !== "undefined") {
       window.addEventListener("unload", this._unloadHandler);
-    } else if (typeof process !== "undefined") {
+    } else if (
+      typeof process !== "undefined" &&
+      typeof process.on === "function"
+    ) {
       process.on("exit", this._unloadHandler);
     }
     awareness.on("update", this._awarenessUpdateHandler);
@@ -434,7 +437,10 @@ export class WebsocketProvider extends Observable<string> {
     this.disconnect();
     if (typeof window !== "undefined") {
       window.removeEventListener("unload", this._unloadHandler);
-    } else if (typeof process !== "undefined") {
+    } else if (
+      typeof process !== "undefined" &&
+      typeof process.off === "function"
+    ) {
       process.off("exit", this._unloadHandler);
     }
     this.awareness.off("update", this._awarenessUpdateHandler);
