@@ -1,5 +1,11 @@
 # partysocket
 
+## 0.0.25
+
+### Patch Changes
+
+- [#747](https://github.com/partykit/partykit/pull/747) [`24636b4`](https://github.com/partykit/partykit/commit/24636b4270e89ddda5b0afa91e010871cc3ecf50) Thanks [@threepointone](https://github.com/threepointone)! - partysocket: `.updateProperties()` shouldn't reset `party` to `main`
+
 ## 0.0.24
 
 ### Patch Changes
