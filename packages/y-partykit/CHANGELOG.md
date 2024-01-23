@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.19
+
+### Patch Changes
+
+- [#749](https://github.com/partykit/partykit/pull/749) [`aa408aa`](https://github.com/partykit/partykit/commit/aa408aa583616baa29dfbe11813c2d06369274b9) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: call process.on/.off only when available
+
 ## 0.0.18
 
 ### Patch Changes
