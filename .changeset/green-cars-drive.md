@@ -1,0 +1,5 @@
+---
+"partysocket": patch
+---
+
+partysocket: debugLogger
