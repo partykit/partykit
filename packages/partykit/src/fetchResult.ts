@@ -3,6 +3,7 @@ import assert from "assert";
 import { fetch } from "undici";
 
 import { version as packageVersion } from "../package.json";
+import { cfContext } from "./cf-context";
 
 import type { UserSession } from "./config";
 import type { RequestInit } from "undici";
@@ -21,14 +22,17 @@ export async function fetchResult<T>(
   const { user, ...fetchOptions } = options;
   const sessionToken = await user?.getSessionToken();
 
+  const cfDetails = cfContext.getStore();
+  console.log("cf", cfDetails);
+
   const res = await fetch(`${API_BASE}${api}`, {
     ...fetchOptions,
     headers: {
       Accept: "application/json",
       "User-Agent": `partykit/${packageVersion}`,
       "X-PartyKit-Version": packageVersion,
-      "X-CLOUDFLARE-ACCOUNT-ID": process.env.CLOUDFLARE_ACCOUNT_ID || "",
-      "X-CLOUDFLARE-API-TOKEN": process.env.CLOUDFLARE_API_TOKEN || "",
+      "X-CLOUDFLARE-ACCOUNT-ID": cfDetails?.account_id || "",
+      "X-CLOUDFLARE-API-TOKEN": cfDetails?.api_token || "",
       ...(typeof fetchOptions.body === "string"
         ? { "Content-Type": "application/json" }
         : {}),

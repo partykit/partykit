@@ -18,6 +18,7 @@ import {
 } from "../package.json";
 import { listModels } from "./ai";
 import * as CFAuth from "./cf-auth";
+import { wrapWithCFContext } from "./cf-context";
 import * as cli from "./cli";
 import Login from "./commands/login";
 import Logout from "./commands/logout";
@@ -118,6 +119,7 @@ program
       yes: options.yes
     });
   });
+
 program
   .command("dev")
   .description("Run a project in development mode")
@@ -198,21 +200,23 @@ program
   .option("--domain [domain]", "Custom domain for the project")
   .action(async (scriptPath, options) => {
     await printBanner();
-    await cli.deploy({
-      main: scriptPath,
-      name: options.name,
-      config: options.config,
-      vars: getArrayKVOption(options.var),
-      define: getArrayKVOption(options.define),
-      preview: options.preview,
-      withVars: options.withVars,
-      serve: options.serve,
-      compatibilityDate: options.compatibilityDate,
-      compatibilityFlags: options.compatibilityFlags,
-      minify: options.minify,
-      withEnv: options.withEnv,
-      domain: options.domain
-    });
+    await wrapWithCFContext(() =>
+      cli.deploy({
+        main: scriptPath,
+        name: options.name,
+        config: options.config,
+        vars: getArrayKVOption(options.var),
+        define: getArrayKVOption(options.define),
+        preview: options.preview,
+        withVars: options.withVars,
+        serve: options.serve,
+        compatibilityDate: options.compatibilityDate,
+        compatibilityFlags: options.compatibilityFlags,
+        minify: options.minify,
+        withEnv: options.withEnv,
+        domain: options.domain
+      })
+    );
   });
 
 program
