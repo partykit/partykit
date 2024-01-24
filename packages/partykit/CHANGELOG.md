@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.78
+
+### Patch Changes
+
+- [#754](https://github.com/partykit/partykit/pull/754) [`ccf6f14`](https://github.com/partykit/partykit/commit/ccf6f14afbab5d404cfceae69bb81dacb362358e) Thanks [@threepointone](https://github.com/threepointone)! - config.build.watch: watch multiple folders
+
+- [#751](https://github.com/partykit/partykit/pull/751) [`a22b4bc`](https://github.com/partykit/partykit/commit/a22b4bce0321e0ab9a1eca4345434a71e113928d) Thanks [@threepointone](https://github.com/threepointone)! - EXPERIMENTAL DO NOT USE Login/Logout with cloudflare
+
 ## 0.0.77
 
 ### Patch Changes

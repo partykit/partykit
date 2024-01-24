@@ -1,5 +1,11 @@
 # nitroparty
 
+## 0.0.4
+
+### Patch Changes
+
+- [#753](https://github.com/partykit/partykit/pull/753) [`197f5e9`](https://github.com/partykit/partykit/commit/197f5e95bcbff760c9387d1a60728bd0d4528c30) Thanks [@threepointone](https://github.com/threepointone)! - nitroparty: compile source
+
 ## 0.0.3
 
 ### Patch Changes
