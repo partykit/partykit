@@ -14,5 +14,11 @@
   },
   "scripts": {
     "build": "esbuild src/* --outdir=dist"
-  }
+  },
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "src",
+    "dist"
+  ]
 }
