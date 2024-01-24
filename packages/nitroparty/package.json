@@ -2,7 +2,7 @@
   "name": "nitroparty",
   "version": "0.0.3",
   "description": "partykit + nitro",
-  "main": "./nitro.config.ts",
+  "main": "./dist/nitro.config.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -11,5 +11,8 @@
   },
   "peerDependencies": {
     "nitropack": "^2.8.1"
+  },
+  "scripts": {
+    "build": "esbuild src/* --outdir=dist"
   }
 }
