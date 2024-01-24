@@ -55,7 +55,9 @@
   },
   "devDependencies": {
     "@clerk/clerk-js": "4.59.1",
+    "@iarna/toml": "^2.2.5",
     "@types/gradient-string": "^1.1.5",
+    "@types/is-ci": "^3.0.4",
     "@types/mime": "^3.0.4",
     "@types/node": "^20.11.5",
     "@types/object-hash": "^3.0.6",
@@ -78,6 +80,7 @@
     "http-terminator": "^3.2.0",
     "ink": "4.4.1",
     "ink-select-input": "^5.0.0",
+    "is-ci": "^3.0.1",
     "json5": "^2.2.3",
     "mime": "^4.0.1",
     "object-hash": "^3.0.0",
@@ -93,6 +96,7 @@
     "update-notifier": "^7.0.0",
     "which-pm-runs": "^1.1.0",
     "ws": "^8.16.0",
+    "xdg-app-paths": "^8.3.0",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.3",
     "zod-validation-error": "^3.0.0"
