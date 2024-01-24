@@ -17,6 +17,7 @@ import {
   version as packageVersion
 } from "../package.json";
 import { listModels } from "./ai";
+import * as CFAuth from "./cf-auth";
 import * as cli from "./cli";
 import Login from "./commands/login";
 import Logout from "./commands/logout";
@@ -287,6 +288,40 @@ program
     await cli.tail(options);
   });
 
+if (process.env.CF_LOGIN_TESTS) {
+  console.warn("☢️ You probably shouldn't be using this. Go back.");
+
+  const cloudflareCommand = program
+    .command("cloudflare")
+    .description("Manage Cloudflare Account")
+    .action(async () => {
+      await printBanner();
+      cloudflareCommand.outputHelp();
+    });
+
+  cloudflareCommand
+    .command("login")
+    .description("Login to Cloudflare")
+    .action(async () => {
+      const loggedIn = await CFAuth.login({ browser: true });
+      console.log({ loggedIn });
+    });
+
+  cloudflareCommand
+    .command("login")
+    .description("Logout from Cloudflare")
+    .action(async () => {
+      await CFAuth.logout();
+    });
+
+  cloudflareCommand
+    .command("whoami")
+    .description("Show Account information")
+    .action(async () => {
+      await CFAuth.whoami();
+    });
+}
+
 const envCommand = program
   .command("env")
   .description("Manage environment variables")
@@ -294,7 +329,6 @@ const envCommand = program
     await printBanner();
     envCommand.outputHelp();
   });
-
 envCommand
   .command("list")
   .description("List all environment variables")

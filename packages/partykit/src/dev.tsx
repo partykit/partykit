@@ -12,7 +12,6 @@ import { execaCommandSync } from "execa";
 import getPort from "get-port";
 import { Box, render, Text, useApp, useInput, useStdin } from "ink";
 import { Log, Miniflare, TypedEventTarget } from "miniflare";
-import open from "open";
 import { onExit } from "signal-exit";
 import { fetch } from "undici";
 
@@ -22,6 +21,7 @@ import { API_BASE } from "./fetchResult";
 import useInspector from "./inspect";
 import { logger } from "./logger";
 import nodejsCompatPlugin from "./nodejs-compat";
+import { openInBrowser } from "./open-in-browser";
 
 import type { VectorizeClientOptions } from "../facade/vectorize";
 import type { Config } from "./config";
@@ -268,22 +268,6 @@ export async function devTest(props: DevProps) {
         }}
       />
     );
-  });
-}
-
-/**
- * An extremely simple wrapper around the open command.
- * Specifically, it adds an 'error' event handler so that when this function
- * is called in environments where we can't open the browser (e.g. GitHub Codespaces,
- * StackBlitz, remote servers), it doesn't just crash the process.
- *
- * @param url the URL to point the browser at
- */
-export async function openInBrowser(url: string): Promise<void> {
-  // updateStatus("Opening browser");
-  const childProcess = await open(url);
-  childProcess.on("error", () => {
-    logger.warn("Failed to open browser");
   });
 }
 
