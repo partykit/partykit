@@ -613,13 +613,36 @@ function useDev(options: DevProps): {
     [config.define, portForServer]
   );
 
-  const { assetsMap } = useAssetServer(config.serve, assetDefines);
-
   if (!config.main) {
     throw new Error(
       'Missing entry point, please specify "main" in your config'
     );
   }
+
+  useEffect(() => {
+    if (config.build?.command) {
+      // we run a sync custom build before we start anything else
+
+      const buildCommand = config.build.command;
+      const buildCwd = config.build.cwd;
+
+      try {
+        execaCommandSync(buildCommand, {
+          shell: true,
+          // we keep these two as "inherit" so that
+          // logs are still visible.
+          stdout: "inherit",
+          stderr: "inherit",
+          ...(buildCwd && { cwd: buildCwd })
+        });
+      } catch (err) {
+        console.error(chalk.red("Custom build failed"), err);
+        throw err;
+      }
+    }
+  }, [config.build?.command, config.build?.cwd]);
+
+  const { assetsMap } = useAssetServer(config.serve, assetDefines);
 
   useEffect(() => {
     const currentUTCDate = new Date().toISOString().split("T", 1)[0];
@@ -947,25 +970,11 @@ Workers["${name}"] = ${name};
       });
 
       if (config.build?.command) {
-        // run a build
         // start a watcher
         // on change, run a build
 
         const buildCommand = config.build.command;
         const buildCwd = config.build.cwd;
-
-        try {
-          execaCommandSync(buildCommand, {
-            shell: true,
-            // we keep these two as "inherit" so that
-            // logs are still visible.
-            stdout: "inherit",
-            stderr: "inherit",
-            ...(buildCwd && { cwd: buildCwd })
-          });
-        } catch (err) {
-          console.error(chalk.red("Custom build failed"), err);
-        }
 
         customBuildFolderWatcher = chokidar
           .watch(config.build.watch || path.join(process.cwd(), "./src"), {
