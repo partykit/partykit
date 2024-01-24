@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.79
+
+### Patch Changes
+
+- [#755](https://github.com/partykit/partykit/pull/755) [`e8aa911`](https://github.com/partykit/partykit/commit/e8aa9113a5b2115bd3c17308be6cebffb3a0fa0e) Thanks [@threepointone](https://github.com/threepointone)! - dev: when we have a custom build, run it before starting any effects
+
+  In some conditions, the custom build may be generating static assets, which will trigger the file watcher and infinitely loop. Moving it to the top before any effects are run fixes this.
+
 ## 0.0.78
 
 ### Patch Changes
