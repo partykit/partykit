@@ -86,7 +86,7 @@ export const schema = z
       .object({
         command: z.string().optional(),
         cwd: z.string().optional(),
-        watch: z.string().optional(),
+        watch: z.union([z.string(), z.array(z.string())]).optional(),
         alias: z.record(z.string()).optional()
       })
       .strict()

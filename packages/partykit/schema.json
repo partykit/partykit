@@ -192,7 +192,17 @@
           "type": "string"
         },
         "watch": {
-          "type": "string"
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
         },
         "alias": {
           "type": "object",
