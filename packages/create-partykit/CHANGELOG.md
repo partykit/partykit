@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.30
+
+### Patch Changes
+
+- [#757](https://github.com/partykit/partykit/pull/757) [`5337ba7`](https://github.com/partykit/partykit/commit/5337ba77a1f4b4c46508e0ac912b1c102362db38) Thanks [@threepointone](https://github.com/threepointone)! - create: allow passing arbitrary strings to --template. expose react template.
+
 ## 0.0.29
 
 ### Patch Changes
