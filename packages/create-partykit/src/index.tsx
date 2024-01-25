@@ -107,7 +107,8 @@ async function initGit({ cwd }: { cwd: string }) {
 
 const templateChoices = {
   typescript: "TypeScript starter",
-  javascript: "JavaScript starter"
+  javascript: "JavaScript starter",
+  react: "React starter"
   // game: "A simple multiplayer game",
   // "text-editor": "A shared text editor",
   // "video-chat": "A video chat app",
@@ -225,15 +226,16 @@ export async function init(options: {
   }
 
   const templateChoice = (await new Promise<string>((resolve, _reject) => {
+    if (options.template) {
+      resolve(options.template);
+      return;
+    }
+
     if (options.yes) {
       resolve("typescript");
       return;
     }
 
-    if (options.template) {
-      resolve(options.template);
-      return;
-    }
     const { unmount, clear } = render(
       <>
         <Text>Which template would you like to use?</Text>
@@ -299,13 +301,13 @@ export async function init(options: {
 
     console.log(
       `‣ Created a new "${
-        templateChoices[templateChoice]
+        templateChoices[templateChoice] || `partykit/${templateChoice}`
       }" project at ${chalk.bold(path.relative(originalCwd, pathToProject))}`
     );
   } else {
     console.log(
       `⤬ Dry run: skipping copying "${
-        templateChoices[templateChoice]
+        templateChoices[templateChoice] || `partykit/${templateChoice}`
       }" template files to ${chalk.bold(
         path.relative(originalCwd, pathToProject)
       )}`
@@ -415,8 +417,9 @@ program
   .option("--install", "Install dependencies")
   .option("--git", "Initialize a new git repository")
   .addOption(
-    new Option("-t, --template <template>").choices(
-      Object.keys(templateChoices)
+    new Option(
+      "-t, --template [template]",
+      "Template to use (typescript, javascript, or react)"
     )
   )
   .option("-y, --yes", "Skip prompts")
