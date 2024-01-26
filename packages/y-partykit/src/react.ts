@@ -8,7 +8,7 @@ type UseYPartyKitProviderOptions = {
   room: string;
   party?: string;
   doc?: Y.Doc;
-  options: ConstructorParameters<typeof YPartyKitProvider>[3];
+  options?: ConstructorParameters<typeof YPartyKitProvider>[3];
 };
 
 export default function useYProvider(
