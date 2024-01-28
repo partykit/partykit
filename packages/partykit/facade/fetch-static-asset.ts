@@ -59,7 +59,11 @@ export default async function fetchStaticAsset<Env>(
     );
   }
 
-  if (StaticAssetManifest.singlePageApp === true && response === null) {
+  if (
+    StaticAssetManifest.singlePageApp === true &&
+    response === null &&
+    request.headers.get("Sec-Fetch-Mode") === "navigate"
+  ) {
     // if path starts with /party/:id or /parties/:name/:id, we should skip
     const { room: roomId } = getRoomAndPartyFromPathname(`/${filePath}`) || {};
 
