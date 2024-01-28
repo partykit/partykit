@@ -140,7 +140,7 @@ function setupWS(provider: WebsocketProvider) {
     provider.wsconnected = false;
     provider.synced = false;
 
-    websocket.onmessage = (event) => {
+    websocket.addEventListener("message", (event) => {
       if (typeof event.data === "string") {
         // ignore text messages
         return;
@@ -150,11 +150,11 @@ function setupWS(provider: WebsocketProvider) {
       if (encoding.length(encoder) > 1) {
         sendChunked(encoding.toUint8Array(encoder), websocket);
       }
-    };
-    websocket.onerror = (event) => {
+    });
+    websocket.addEventListener("error", (event) => {
       provider.emit("connection-error", [event, provider]);
-    };
-    websocket.onclose = (event) => {
+    });
+    websocket.addEventListener("close", (event) => {
       provider.emit("connection-close", [event, provider]);
       provider.ws = null;
       provider.wsconnecting = false;
@@ -187,8 +187,8 @@ function setupWS(provider: WebsocketProvider) {
         ),
         provider
       );
-    };
-    websocket.onopen = () => {
+    });
+    websocket.addEventListener("open", () => {
       provider.wsLastMessageReceived = time.getUnixTime();
       provider.wsconnecting = false;
       provider.wsconnected = true;
@@ -215,7 +215,7 @@ function setupWS(provider: WebsocketProvider) {
         );
         sendChunked(encoding.toUint8Array(encoderAwarenessState), websocket);
       }
-    };
+    });
     provider.emit("status", [
       {
         status: "connecting"
