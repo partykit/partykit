@@ -1,5 +1,13 @@
 # y-partykit
 
+## 0.0.20
+
+### Patch Changes
+
+- [#759](https://github.com/partykit/partykit/pull/759) [`aedaead`](https://github.com/partykit/partykit/commit/aedaeadecd3fc02fcd183d8dec0165616bc30066) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: options are optional
+
+- [#761](https://github.com/partykit/partykit/pull/761) [`00bc826`](https://github.com/partykit/partykit/commit/00bc8269437156586e352e6e4f211fe4ed07a6c5) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: ignore string messages
+
 ## 0.0.19
 
 ### Patch Changes
