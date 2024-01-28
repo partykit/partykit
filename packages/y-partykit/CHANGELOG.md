@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.21
+
+### Patch Changes
+
+- [#763](https://github.com/partykit/partykit/pull/763) [`7885ced`](https://github.com/partykit/partykit/commit/7885ced71e24e1282cc2fd31718ca81525c577df) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: in provider, replace ws.onX with ws.addEventListener(X
+
 ## 0.0.20
 
 ### Patch Changes
