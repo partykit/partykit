@@ -91,6 +91,9 @@ export const handleChunked = (
   let start: Batch | undefined;
 
   return (message) => {
+    if (typeof message === "string") {
+      return;
+    }
     if (isBatchSentinel(message.data)) {
       const marker = parseBatchMarker(message.data);
       if (marker.type === "start") {
