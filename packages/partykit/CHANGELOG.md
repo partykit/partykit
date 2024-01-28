@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.80
+
+### Patch Changes
+
+- [#764](https://github.com/partykit/partykit/pull/764) [`1d35748`](https://github.com/partykit/partykit/commit/1d35748756c9ebdcd1ba150e009c1b822faa00b0) Thanks [@threepointone](https://github.com/threepointone)! - when singlePageMode is true, for missing urls only return index.html if Sec-Fetch-Mode === 'navigate'
+
 ## 0.0.79
 
 ### Patch Changes
