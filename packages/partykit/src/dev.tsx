@@ -619,7 +619,11 @@ function useDev(options: DevProps): {
     );
   }
 
-  useEffect(() => {
+  const [_dummyCtr, _setDummyCtr] = useState(() => {
+    // If there's a sync custom build, we need it to run
+    // before we run the useAssetsServer hook. So we use
+    // this dummy state var. It's a bit hacky, but it works.
+
     if (config.build?.command) {
       // we run a sync custom build before we start anything else
 
@@ -640,7 +644,7 @@ function useDev(options: DevProps): {
         throw err;
       }
     }
-  }, [config.build?.command, config.build?.cwd]);
+  });
 
   const { assetsMap } = useAssetServer(config.serve, assetDefines);
 
