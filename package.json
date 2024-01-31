@@ -26,22 +26,22 @@
     "@changesets/cli": "^2.27.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "@manypkg/cli": "^0.21.2",
-    "@microsoft/api-extractor": "^7.39.1",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@microsoft/api-extractor": "^7.39.4",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "esbuild-register": "^3.5.0",
     "eslint": "^8.56.0",
     "eslint-plugin-deprecation": "^2.0.0",
     "ink-testing-library": "^3.0.0",
-    "jsdom": "^23.2.0",
+    "jsdom": "^24.0.0",
     "patch-package": "^8.0.0",
     "prettier": "^3.2.4",
     "shx": "^0.3.4",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.1"
+    "vitest": "^1.2.2"
   },
   "trustedDependencies": [
     "sharp"

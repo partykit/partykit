@@ -14,11 +14,12 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@astrojs/rss": "^4.0.2",
-    "@astrojs/vercel": "^7.0.0",
+    "@astrojs/check": "^0.4.1",
+    "@astrojs/rss": "^4.0.4",
+    "@astrojs/vercel": "^7.0.2",
     "@resvg/resvg-js": "^2.6.0",
     "@vercel/analytics": "^1.1.2",
-    "astro": "^4.2.1",
+    "astro": "^4.2.6",
     "clsx": "^2.1.0",
     "fuse.js": "^7.0.0",
     "github-slugger": "^2.0.0",

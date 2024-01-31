@@ -28,3 +28,15 @@ index ec2431f..487bf9c 100644
  ];
  
  if (description)
+diff --git a/node_modules/@astrojs/starlight/integrations/expressive-code/theming.ts b/node_modules/@astrojs/starlight/integrations/expressive-code/theming.ts
+index 39f96b1..a7491ec 100644
+--- a/node_modules/@astrojs/starlight/integrations/expressive-code/theming.ts
++++ b/node_modules/@astrojs/starlight/integrations/expressive-code/theming.ts
+@@ -1,5 +1,7 @@
+ import { ExpressiveCodeTheme, type ThemeObjectOrShikiThemeName } from 'astro-expressive-code';
++// @ts-expect-error - missing types
+ import nightOwlDark from './themes/night-owl-dark.jsonc?raw';
++// @ts-expect-error - missing types
+ import nightOwlLight from './themes/night-owl-light.jsonc?raw';
+ 
+ export type BundledThemeName = 'starlight-dark' | 'starlight-light';
