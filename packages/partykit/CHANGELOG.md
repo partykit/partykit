@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.81
+
+### Patch Changes
+
+- [#769](https://github.com/partykit/partykit/pull/769) [`dc91b54`](https://github.com/partykit/partykit/commit/dc91b54bfb32b671449a411b69f59326406f0117) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
+- [#772](https://github.com/partykit/partykit/pull/772) [`d9bf4b2`](https://github.com/partykit/partykit/commit/d9bf4b25c9a744b95df74282d150a564c71d5662) Thanks [@threepointone](https://github.com/threepointone)! - run first custom build synchronously in dev
+
 ## 0.0.80
 
 ### Patch Changes

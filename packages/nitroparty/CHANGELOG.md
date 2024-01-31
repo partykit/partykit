@@ -1,5 +1,11 @@
 # nitroparty
 
+## 0.0.5
+
+### Patch Changes
+
+- [#771](https://github.com/partykit/partykit/pull/771) [`dc8e960`](https://github.com/partykit/partykit/commit/dc8e960a33f4a97e784ce1fb330af013ddcad0a5) Thanks [@threepointone](https://github.com/threepointone)! - nitroparty: import { useNitroApp } from "#imports";
+
 ## 0.0.4
 
 ### Patch Changes
