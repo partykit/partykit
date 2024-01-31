@@ -572,6 +572,7 @@ type YPartyKitProviderOptions = Omit<
   connectionId?: string;
   party?: string;
   params?: ParamsProvider;
+  protocol?: "ws" | "wss";
 };
 
 export default class YPartyKitProvider extends WebsocketProvider {
@@ -596,7 +597,8 @@ export default class YPartyKitProvider extends WebsocketProvider {
     }
 
     const serverUrl = `${
-      host.startsWith("localhost:") ||
+      options.protocol ||
+      (host.startsWith("localhost:") ||
       host.startsWith("127.0.0.1:") ||
       host.startsWith("192.168.") ||
       host.startsWith("10.") ||
@@ -604,7 +606,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
         host.split(".")[1] >= "16" &&
         host.split(".")[1] <= "31")
         ? "ws"
-        : "wss"
+        : "wss")
     }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
 
     // use provided id, or generate a random one
