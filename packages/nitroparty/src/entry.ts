@@ -3,8 +3,9 @@
 import "#internal/nitro/virtual/polyfill";
 
 import type * as Party from "partykit/server";
+// @ts-expect-error importing an internal module
+import { useNitroApp } from "#imports";
 
-// @ts-expect-error polyfilled by nitro
 const nitroApp = useNitroApp();
 
 const METHOD_WITH_BODY_RE = /post|put|patch/i;
