@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.23
+
+### Patch Changes
+
+- [#769](https://github.com/partykit/partykit/pull/769) [`dc91b54`](https://github.com/partykit/partykit/commit/dc91b54bfb32b671449a411b69f59326406f0117) Thanks [@threepointone](https://github.com/threepointone)! - Update dependencies
+
 ## 0.0.22
 
 ### Patch Changes

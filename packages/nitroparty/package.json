@@ -1,6 +1,6 @@
 {
   "name": "nitroparty",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "partykit + nitro",
   "main": "./dist/nitro.config.js",
   "keywords": [],
