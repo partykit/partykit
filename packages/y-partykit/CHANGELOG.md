@@ -1,5 +1,13 @@
 # y-partykit
 
+## 0.0.22
+
+### Patch Changes
+
+- [#767](https://github.com/partykit/partykit/pull/767) [`fd87e26`](https://github.com/partykit/partykit/commit/fd87e26c001da22be264441f2305aaa124cddde5) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: let user force protocol
+
+  via https://github.com/partykit/partykit/issues/766
+
 ## 0.0.21
 
 ### Patch Changes
