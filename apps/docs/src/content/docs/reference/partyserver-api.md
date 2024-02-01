@@ -366,7 +366,7 @@ Internal ID assigned by the platform. Use `Room.id` instead.
 
 ### Room.env
 
-Environment variables defined for this party.
+Environment variables defined for this project.
 
 Related reading: [Managing environment variables with PartyKit](/guides/managing-environment-variables).
 
@@ -391,7 +391,7 @@ Related reading: [Persisting state into storage](/guides/persisting-state-into-s
 
 Additional information about other resources in the current project.
 
-##### Room.context.parties
+#### Room.context.parties
 
 Access other parties in this project.
 
@@ -403,6 +403,18 @@ const res = await req.json();
 ```
 
 Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
+
+#### Room.context.ai
+
+Access to the AI binding defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
+
+#### Room.context.vectorize
+
+Access to Vectorize Indexes defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
 
 ### Room.broadcast
 
@@ -505,9 +517,52 @@ See: [`Room.env`](#roomenv)
 
 See: [`Room.context.parties`](#roomcontextparties)
 
+### Party.Lobby.ai
+
+Access to the AI binding defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
+
+### Party.Lobby.vectorize
+
+Access to Vectorize Indexes defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
+
 ## Party.FetchLobby
 
 Provides access to a limited subset of project resources for the `onFetch` method:
+
+### FetchLobby.env
+
+Environment variables defined for this project.
+
+Related reading: [Managing environment variables with PartyKit](/guides/managing-environment-variables).
+
+### FetchLobby.parties
+
+Access other parties in this project.
+
+```ts
+const otherParty = lobby.parties.other;
+const otherPartyInstance = otherParty.other.get("room-id");
+const req = await otherRoom.fetch({ method: "GET" });
+const res = await req.json();
+```
+
+Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
+
+### FetchLobby.ai
+
+Access to the AI binding defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
+
+### FetchLobby.vectorize
+
+Access to Vectorize Indexes defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
 
 ## Party.FetchSocket
 
@@ -520,3 +575,34 @@ Describes a cron job that is about to be executed. You can use it to access the 
 ## Party.CronLobby
 
 Provides access to a limited subset of project resources for the `onCron` method:
+
+### CronLobby.env
+
+Environment variables defined for this project.
+
+Related reading: [Managing environment variables with PartyKit](/guides/managing-environment-variables).
+
+### CronLobby.parties
+
+Access other parties in this project.
+
+```ts
+const otherParty = lobby.parties.other;
+const otherPartyInstance = otherParty.other.get("room-id");
+const req = await otherRoom.fetch({ method: "GET" });
+const res = await req.json();
+```
+
+Read more: [Using multiple parties per project](/guides/using-multiple-parties-per-project)
+
+### CronLobby.ai
+
+Access to the AI binding defined in the project.
+
+Related reading: [CronLobby AI](/reference/partykit-ai/)
+
+### CronLobby.vectorize
+
+Access to Vectorize Indexes defined in the project.
+
+Related reading: [PartyKit AI](/reference/partykit-ai/)
