@@ -406,7 +406,7 @@ export async function init(options: {
 }
 
 // for when we call this via the main CLI
-const hideBanner = new Option("--hide-banner", "Persist local state");
+const hideBanner = new Option("--hide-banner", "Hide intro banner");
 hideBanner.hidden = true;
 
 program
