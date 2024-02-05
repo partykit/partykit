@@ -115,7 +115,14 @@ export const schema = z
           })
         ])
       )
-      .optional()
+      .optional(),
+    logpush: z.boolean().optional(),
+    tailConsumers: z.array(z.string()).optional()
+    // placement: z
+    //   .object({
+    //     mode: z.enum(["smart"])
+    //   })
+    //   .optional()
   })
   .strict();
 

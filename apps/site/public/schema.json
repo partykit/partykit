@@ -271,6 +271,15 @@
           }
         ]
       }
+    },
+    "logpush": {
+      "type": "boolean"
+    },
+    "tailConsumers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "additionalProperties": false,
