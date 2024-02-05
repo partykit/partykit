@@ -18,6 +18,15 @@ const supportedNodeBuiltins = [
 const plugin: Plugin = {
   name: "nodejs-compat",
   setup(build) {
+    // mark all cloudflare:* imports as external
+    build.onResolve({ filter: /^cloudflare:/ }, (args) => {
+      const cloudflareModuleName = args.path.split(":")[1];
+      return {
+        path: `partykit-exposed-cloudflare-${cloudflareModuleName}`,
+        external: true
+      };
+    });
+
     build.onResolve({ filter: /^node:/ }, (args) => {
       const name = args.path.replace(/^node:/, "");
       if (supportedNodeBuiltins.includes(name)) {
