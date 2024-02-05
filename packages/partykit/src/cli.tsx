@@ -705,6 +705,7 @@ export const ${name} = ${name}Party;
         // sourcefile: "./" + path.relative(process.cwd(), scriptPath),
       },
       ...esbuildOptions,
+      conditions: ["partykit", "workerd", "worker"],
       minify: options.minify,
       define: {
         PARTYKIT_HOST: `"${
@@ -861,6 +862,18 @@ export const ${name} = ${name}Party;
     form.set(
       uploadFileName,
       new File([buffer], uploadFileName, { type: "application/wasm" })
+    );
+  }
+
+  // initialise cloudflare specific modules
+  for (const cfModuleName of ["email", "sockets"]) {
+    form.set(
+      `upload/partykit-exposed-cloudflare-${cfModuleName}`,
+      new File(
+        [`export * from 'cloudflare:${cfModuleName}';`],
+        `upload/partykit-exposed-cloudflare-${cfModuleName}`,
+        { type: "application/javascript+module" }
+      )
     );
   }
 

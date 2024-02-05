@@ -752,6 +752,7 @@ Workers["${name}"] = ${name};
         },
         ...esbuildOptions,
         minify: config.minify,
+        conditions: ["partykit", "workerd", "worker"],
         format: "esm",
         sourcemap: true,
         external: ["__STATIC_ASSETS_MANIFEST__"],
@@ -910,6 +911,19 @@ Workers["${name}"] = ${name};
                           path: absoluteScriptPath,
                           contents: code
                         },
+
+                        // KEEP IN SYNC with deploy()
+                        {
+                          type: "ESModule",
+                          contents: `export * from 'cloudflare:sockets';`,
+                          path: `${path.dirname(absoluteScriptPath)}/partykit-exposed-cloudflare-sockets`
+                        },
+                        {
+                          type: "ESModule",
+                          contents: `export * from 'cloudflare:email';`,
+                          path: `${path.dirname(absoluteScriptPath)}/partykit-exposed-cloudflare-email`
+                        },
+                        // KEEP IN SYNC with deploy()
                         {
                           type: "ESModule",
                           path: path.join(
