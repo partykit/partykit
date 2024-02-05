@@ -857,7 +857,7 @@ export const ${name} = ${name}Party;
   }
 
   for (const [fileName, buffer] of Object.entries(wasmModules)) {
-    const uploadFileName = path.join("upload", fileName);
+    const uploadFileName = path.join("upload", fileName).replace(/\\/g, "/");
     form.set(
       uploadFileName,
       new File([buffer], uploadFileName, { type: "application/wasm" })
