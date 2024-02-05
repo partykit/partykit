@@ -1,5 +1,16 @@
 # partykit
 
+## 0.0.82
+
+### Patch Changes
+
+- [#775](https://github.com/partykit/partykit/pull/775) [`b5a4202`](https://github.com/partykit/partykit/commit/b5a4202d9845aad151c6b392fd0c79f95444cb07) Thanks [@threepointone](https://github.com/threepointone)! - node compat fixes
+
+  - pick up correct build from 'exports' condition defined in a dep's package.json
+  - correctly import `cloudflare:` dependencies
+
+- [#778](https://github.com/partykit/partykit/pull/778) [`9f58128`](https://github.com/partykit/partykit/commit/9f58128c3176c5028fdd83f821eff8dacd01c9e8) Thanks [@threepointone](https://github.com/threepointone)! - fix imports of wasm modules on windows
+
 ## 0.0.81
 
 ### Patch Changes
