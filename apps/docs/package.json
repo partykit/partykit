@@ -12,10 +12,10 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@astrojs/starlight": "0.17.0",
+    "@astrojs/starlight": "0.17.2",
     "@astrojs/tailwind": "^5.1.0",
-    "@astrojs/vercel": "^7.0.2",
-    "astro": "^4.2.6",
+    "@astrojs/vercel": "^7.1.1",
+    "astro": "^4.3.2",
     "clsx": "^2.1.0",
     "patch-package": "^8.0.0",
     "sharp": "0.33.2",

@@ -22,8 +22,8 @@
   "serve": {
     "path": "public",
     "build": "src/client.ts"
-  },
-  "crons": {
-    "every-minute": "*/1 * * * *"
   }
+  // "crons": {
+  //   "every-minute": "*/1 * * * *"
+  // }
 }

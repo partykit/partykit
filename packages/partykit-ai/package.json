@@ -34,9 +34,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@cloudflare/ai": "^1.0.47"
+    "@cloudflare/ai": "^1.0.49"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20240117.0"
+    "@cloudflare/workers-types": "4.20240129.0"
   }
 }
