@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.83
+
+### Patch Changes
+
+- [#779](https://github.com/partykit/partykit/pull/779) [`95cc02a`](https://github.com/partykit/partykit/commit/95cc02a3dcf0d274fa83c5295eadf69966326cc5) Thanks [@threepointone](https://github.com/threepointone)! - add cloudflare config: logpush, tail_consumers
+
 ## 0.0.82
 
 ### Patch Changes
