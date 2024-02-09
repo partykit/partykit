@@ -333,6 +333,7 @@ export type DevProps = {
   config?: string;
   persist?: boolean | string;
   vars?: Record<string, string>;
+  live?: boolean;
   withEnv?: boolean;
   verbose?: boolean;
   unstable_outdir?: string;
@@ -423,7 +424,10 @@ function* findAllFiles(
 
 function useAssetServer(
   options: Config["serve"],
-  defines: Record<string, string>
+  defines: Record<string, string>,
+  moreOptions?: {
+    live?: boolean;
+  }
 ) {
   const theOptions: Config["serve"] =
     typeof options === "string" ? { path: options } : options || {};
@@ -437,6 +441,13 @@ function useAssetServer(
     : typeof options === "string"
       ? options
       : options.path;
+
+  const isLiveMode =
+    (options &&
+      typeof options !== "string" &&
+      typeof options.build !== "string" &&
+      options?.build?.live) ||
+    moreOptions?.live;
 
   const assetsBuild = useMemo(
     () =>
@@ -461,6 +472,13 @@ function useAssetServer(
       format: assetsBuild?.format ?? "esm",
       sourcemap: assetsBuild?.sourcemap ?? true,
       external: assetsBuild?.external,
+      banner: {
+        js:
+          // if live reload is enabled, we inject a script that listens for changes
+          isLiveMode
+            ? `new EventSource('http://127.0.0.1:${portForAssetsServer}/esbuild').addEventListener('change', () => location.reload())`
+            : ""
+      },
       define: {
         ...defines,
         ...assetsBuild?.define
@@ -468,7 +486,7 @@ function useAssetServer(
       loader: assetsBuild?.loader,
       alias: assetsBuild?.alias
     }),
-    [assetsBuild, assetsPath, defines]
+    [assetsBuild, assetsPath, defines, portForAssetsServer, isLiveMode]
   );
 
   const unsupportedKeys = (["include", "exclude"] as const).filter(
@@ -543,6 +561,7 @@ function useAssetServer(
     async function startServer() {
       // run esbuild's dev server
       ctx = await esbuild.context(esbuildAssetOptions);
+      await ctx.watch();
 
       await ctx.serve({
         port: portForAssetsServer,
@@ -646,7 +665,9 @@ function useDev(options: DevProps): {
     }
   });
 
-  const { assetsMap } = useAssetServer(config.serve, assetDefines);
+  const { assetsMap } = useAssetServer(config.serve, assetDefines, {
+    live: options.live
+  });
 
   useEffect(() => {
     const currentUTCDate = new Date().toISOString().split("T", 1)[0];
