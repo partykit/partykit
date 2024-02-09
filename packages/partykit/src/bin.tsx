@@ -145,6 +145,7 @@ program
   .option("--compatibility-date <date>", "Set a compatibility date")
   .option("--compatibility-flags [flags...]", "Set compatibility flags")
   .option("--minify", "Minify the script")
+  .option("--live", "Enable live reload")
   .option("--with-env", "Define all variables in the deployment")
   .option("--verbose", "Verbose debugging output")
   .action(async (scriptPath, options) => {
@@ -162,6 +163,7 @@ program
           config={options.config}
           vars={getArrayKVOption(options.var)}
           define={getArrayKVOption(options.define)}
+          live={options.live}
           withEnv={options.withEnv}
           compatibilityDate={options.compatibilityDate}
           compatibilityFlags={options.compatibilityFlags}

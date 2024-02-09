@@ -91,6 +91,9 @@
                         "iife"
                       ]
                     },
+                    "live": {
+                      "type": "boolean"
+                    },
                     "sourcemap": {
                       "type": "boolean"
                     },

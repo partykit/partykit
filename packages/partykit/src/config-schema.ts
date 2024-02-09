@@ -59,6 +59,7 @@ export const schema = z
                 minify: z.boolean().optional(),
                 alias: z.record(z.string()).optional(),
                 format: z.enum(["esm", "cjs", "iife"]).optional(),
+                live: z.boolean().optional(),
                 sourcemap: z.boolean().optional(),
                 define: z.record(z.string()).optional(),
                 loader: z.record(z.enum(loaders)).optional()
