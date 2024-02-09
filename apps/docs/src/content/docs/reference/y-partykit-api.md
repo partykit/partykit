@@ -19,7 +19,7 @@ import { onConnect } from "y-partykit";
 export default class YjsServer implements Party.Server {
   constructor(public party: Party.Room) {}
   onConnect(conn: Party.Connection) {
-    return onConnect(conn, this.room, {
+    return onConnect(conn, this.party, {
       // ...options
     });
   }
@@ -95,7 +95,7 @@ import { onConnect } from "y-partykit";
 export default class YjsServer implements Party.Server {
   constructor(public room: Party.Room) {}
   onConnect(conn: Party.Connection) {
-    return onConnect(conn, this.room, {
+    return onConnect(conn, this.party, {
       // experimental: persists the document to partykit's room storage
       persist: { mode: "snapshot" },
 
@@ -200,7 +200,7 @@ This option is still supported for backwards compatibility reasons, but will be 
 You can use a combination of the `load` and `callback` options to synchronise the document to an external service:
 
 ```ts
-return onConnect(conn, this.room, {
+return onConnect(conn, this.party, {
   async load() {
     return await fetchDataFromExternalService();
   },
