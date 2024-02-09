@@ -19,8 +19,8 @@ declare module 'astro:content' {
 }
 
 declare module 'astro:content' {
-	export { z } from 'astro/zod';
-
+  export { z } from 'astro/zod';
+  
 	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
 
 	export type CollectionKey = keyof AnyEntryMap;
@@ -29,7 +29,7 @@ declare module 'astro:content' {
 	export type ContentCollectionKey = keyof ContentEntryMap;
 	export type DataCollectionKey = keyof DataEntryMap;
 
-	// This needs to be in sync with ImageMetadata
+  // This needs to be in sync with ImageMetadata
 	export type ImageFunction = () => import('astro/zod').ZodObject<{
 		src: import('astro/zod').ZodString;
 		width: import('astro/zod').ZodNumber;

@@ -44,10 +44,10 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20240129.0",
+    "@cloudflare/workers-types": "4.20240208.0",
     "clipboardy": "4.0.0",
     "esbuild": "0.20.0",
-    "miniflare": "3.20240129.0",
+    "miniflare": "3.20240129.1",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
@@ -59,14 +59,14 @@
     "@types/gradient-string": "^1.1.5",
     "@types/is-ci": "^3.0.4",
     "@types/mime": "^3.0.4",
-    "@types/node": "^20.11.16",
+    "@types/node": "^20.11.17",
     "@types/object-hash": "^3.0.6",
     "@types/polka": "^0.5.7",
     "@types/prompts": "^2.4.9",
     "@types/update-notifier": "^6.0.8",
     "@types/ws": "^8.5.10",
     "chalk": "^5.3.0",
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "commander": "^12.0.0",
     "detect-indent": "^7.0.1",
     "devtools-protocol": "^0.0.1255431",
@@ -92,7 +92,7 @@
     "react-error-boundary": "^4.0.12",
     "signal-exit": "^4.1.0",
     "source-map": "^0.7.4",
-    "undici": "^6.6.1",
+    "undici": "^6.6.2",
     "update-notifier": "^7.0.0",
     "which-pm-runs": "^1.1.0",
     "ws": "^8.16.0",
