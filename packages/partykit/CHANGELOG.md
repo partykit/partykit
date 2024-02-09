@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.85
+
+### Patch Changes
+
+- [#785](https://github.com/partykit/partykit/pull/785) [`6bca688`](https://github.com/partykit/partykit/commit/6bca6883303df4b7c85d4f2f06e72edabc039f9d) Thanks [@threepointone](https://github.com/threepointone)! - `--live` / `config.serve.build.live`: live reload for client builds
+
 ## 0.0.84
 
 ### Patch Changes
