@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.87
+
+### Patch Changes
+
+- [#788](https://github.com/partykit/partykit/pull/788) [`3ae1669`](https://github.com/partykit/partykit/commit/3ae16696705d12c3222cfcaa0e4011598c69bfe4) Thanks [@threepointone](https://github.com/threepointone)! - Simpler AI models listing
+
 ## 0.0.86
 
 ### Patch Changes
