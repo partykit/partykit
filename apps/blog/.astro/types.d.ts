@@ -65,7 +65,7 @@ declare module 'astro:content' {
 	export function defineCollection<S extends BaseSchema>(
 		input: CollectionConfig<S>
 	): CollectionConfig<S>;
-
+	
 	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
 	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
 		ContentEntryMap[C]
