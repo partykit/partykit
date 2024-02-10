@@ -4,6 +4,7 @@ import { createInterface } from "node:readline";
 
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import chalk from "chalk";
 import { Option, program /*, Option*/ } from "commander";
 import gradient from "gradient-string";
 import { Box, render, Text } from "ink";
@@ -22,7 +23,6 @@ import * as cli from "./cli";
 import Login from "./commands/login";
 import Logout from "./commands/logout";
 import { Dev } from "./dev";
-import InkTable from "./ink-table";
 import { ConfigurationError, logger } from "./logger";
 import * as vectorize from "./vectorize/client";
 
@@ -406,13 +406,12 @@ const aiCommand = program
     await printBanner();
     aiCommand.outputHelp();
   });
-
 aiCommand
   .command("models")
   .option("-c, --config <path>", "Path to config file")
   .option("--json", "Return output as clean JSON", false)
   .action(async (args) => {
-    logger.log(`📋 Listing available AI models...`);
+    logger.log(`📋 Listing available AI models...\n`);
     const models = await listModels({ config: args.config });
 
     if (args.json) {
@@ -420,14 +419,9 @@ aiCommand
       return;
     }
 
-    render(
-      <InkTable
-        data={models.map((row) => ({
-          name: row.name,
-          description: row.description
-        }))}
-      />
-    );
+    for (const { name, description } of models) {
+      logger.log(`${chalk.bold(name)}: ${description}\n`);
+    }
   });
 
 /**
