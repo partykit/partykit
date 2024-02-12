@@ -333,6 +333,9 @@ export type DevProps = {
   config?: string;
   persist?: boolean | string;
   vars?: Record<string, string>;
+  https?: boolean;
+  httpsKeyPath?: string;
+  httpsCertPath?: string;
   live?: boolean;
   withEnv?: boolean;
   verbose?: boolean;
@@ -363,7 +366,12 @@ function DevImpl(props: DevProps) {
       {props.enableInspector ?? true ? (
         <Inspector inspectorUrl={inspectorUrl} />
       ) : null}
-      {isRawModeSupported ? <HotKeys portForServer={portForServer} /> : null}
+      {isRawModeSupported ? (
+        <HotKeys
+          portForServer={portForServer}
+          localProtocol={props.https ? "https" : "http"}
+        />
+      ) : null}
     </>
   );
 }
@@ -859,6 +867,9 @@ Workers["${name}"] = ${name};
 
                   void server.onBundleUpdate(
                     {
+                      https: options.https,
+                      httpsKeyPath: options.httpsKeyPath,
+                      httpsCertPath: options.httpsCertPath,
                       host: "0.0.0.0",
                       log: new Log(5, { prefix: "pk" }),
                       verbose: options.verbose,
@@ -1067,7 +1078,10 @@ Workers["${name}"] = ${name};
     options.config,
     options.verbose,
     options.unstable_outdir,
-    userDetails
+    userDetails,
+    options.https,
+    options.httpsKeyPath,
+    options.httpsCertPath
   ]);
 
   const { onReady } = options;
@@ -1164,8 +1178,10 @@ Workers["${name}"] = ${name};
 }
 
 function HotKeys({
+  localProtocol,
   portForServer
 }: {
+  localProtocol: "http" | "https";
   portForServer: number;
   // inspectorPort: number;
   // inspect: boolean;
@@ -1173,7 +1189,7 @@ function HotKeys({
   useHotkeys({
     // inspectorPort: portForRuntimeInspector,
     // inspect: options.enableInspector,
-    localProtocol: "http",
+    localProtocol: localProtocol,
     // worker: undefined,
     host: `localhost`,
     port: portForServer
