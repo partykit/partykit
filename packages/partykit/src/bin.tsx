@@ -130,6 +130,9 @@ program
       "Output directory for builds"
     ).hideHelp()
   )
+  .option("--https", "enable https")
+  .option("--https-key-path <path>", "Path to https key file")
+  .option("--https-cert-path <path>", "Path to https cert file")
   .option("-c, --config <path>", "Path to config file")
   .addOption(
     new Option("--persist [path]", "Persist local state").default(true)
@@ -163,6 +166,9 @@ program
           config={options.config}
           vars={getArrayKVOption(options.var)}
           define={getArrayKVOption(options.define)}
+          https={options.https}
+          httpsKeyPath={options.httpsKeyPath}
+          httpsCertPath={options.httpsCertPath}
           live={options.live}
           withEnv={options.withEnv}
           compatibilityDate={options.compatibilityDate}
