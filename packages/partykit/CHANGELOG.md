@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.88
+
+### Patch Changes
+
+- [#790](https://github.com/partykit/partykit/pull/790) [`44c2e94`](https://github.com/partykit/partykit/commit/44c2e9420febaf8689dc5708064ca36de610ea2d) Thanks [@threepointone](https://github.com/threepointone)! - `dev --https --https-key-path <path> --https-cert-path <path>`
+
+  for folks who want to visit `https://localhost...` in dev
+
 ## 0.0.87
 
 ### Patch Changes
