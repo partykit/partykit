@@ -1,7 +1,7 @@
 import type { Plugin } from "esbuild";
 
 // via https://developers.cloudflare.com/workers/runtime-apis/nodejs/
-const supportedNodeBuiltins = [
+export const supportedNodeBuiltins = [
   "assert",
   "async_hooks",
   "buffer",
@@ -30,7 +30,7 @@ const plugin: Plugin = {
     build.onResolve({ filter: /^node:/ }, (args) => {
       const name = args.path.replace(/^node:/, "");
       if (supportedNodeBuiltins.includes(name)) {
-        return { path: args.path, external: true };
+        return { path: `partykit-exposed-node-${name}`, external: true };
       } else {
         throw new Error(`Unsupported node builtin: ${name}`);
       }
