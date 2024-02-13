@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.34
+
+### Patch Changes
+
+- [#795](https://github.com/partykit/partykit/pull/795) [`52448cb`](https://github.com/partykit/partykit/commit/52448cb8209d627cd13ed1ef0db7556c45609a19) Thanks [@threepointone](https://github.com/threepointone)! - create: allow paths to arbitrary templates
+
 ## 0.0.33
 
 ### Patch Changes
