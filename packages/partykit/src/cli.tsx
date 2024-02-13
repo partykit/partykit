@@ -29,7 +29,7 @@ import { Dev } from "./dev";
 import { fetchResult } from "./fetchResult";
 import InkTable from "./ink-table";
 import { ConfigurationError, logger } from "./logger";
-import nodejsCompatPlugin from "./nodejs-compat";
+import nodejsCompatPlugin, { supportedNodeBuiltins } from "./nodejs-compat";
 import { translateCLICommandToFilterMessage } from "./tail/filters";
 import { jsonPrintLogs, prettyPrintLogs } from "./tail/printing";
 
@@ -890,6 +890,18 @@ export const ${name} = ${name}Party;
     form.set(
       uploadFileName,
       new File([buffer], uploadFileName, { type: "application/wasm" })
+    );
+  }
+
+  // init node modules
+  for (const nodeModuleName of supportedNodeBuiltins) {
+    form.set(
+      `upload/partykit-exposed-node-${nodeModuleName}`,
+      new File(
+        [`export * from 'node:${nodeModuleName}';`],
+        `upload/partykit-exposed-node-${nodeModuleName}`,
+        { type: "application/javascript+module" }
+      )
     );
   }
 
