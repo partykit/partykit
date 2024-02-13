@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.89
+
+### Patch Changes
+
+- [#792](https://github.com/partykit/partykit/pull/792) [`367b5c8`](https://github.com/partykit/partykit/commit/367b5c83f3d5b8613b99a2a03611cfad0f9f1930) Thanks [@threepointone](https://github.com/threepointone)! - fix: allow dynamic imports of node:\* builtins
+
+- [#794](https://github.com/partykit/partykit/pull/794) [`91b48a6`](https://github.com/partykit/partykit/commit/91b48a62093bcb902b7359a09cd5dd2e4433c805) Thanks [@threepointone](https://github.com/threepointone)! - fix: allow dynamic imports of builtins
+
 ## 0.0.88
 
 ### Patch Changes
