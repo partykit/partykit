@@ -42,7 +42,7 @@ const plugin: Plugin = {
         // but it's too early to use, and my experiments with
         // it always log node:process (instead of any existing package)
         // So let's land this and revisit if folks want differently
-        return { path: `node:${args.path}`, external: true };
+        return { path: `partykit-exposed-node-${args.path}`, external: true };
       }
     );
   }
