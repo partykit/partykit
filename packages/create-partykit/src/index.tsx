@@ -4,7 +4,7 @@ import path from "path";
 import * as React from "react";
 import chalk from "chalk";
 import { Option, program } from "commander";
-import { execaCommand } from "execa";
+import { execaCommand, execaCommandSync } from "execa";
 import { findUpSync } from "find-up";
 import { downloadTemplate } from "giget";
 import gradient from "gradient-string";
@@ -257,7 +257,11 @@ export async function init(options: {
   if (!options.dryRun) {
     // copy template files to pathToProject
     await downloadTemplate(
-      `github:partykit/templates/templates/${templateChoice}`,
+      templateChoice.indexOf(":") >= 0
+        ? templateChoice
+        : templateChoice.indexOf("/") >= 0
+          ? `github:${templateChoice}`
+          : `github:partykit/templates/templates/${templateChoice}`,
       {
         dir: pathToProject
       }
@@ -298,6 +302,18 @@ export async function init(options: {
       packageJsonPath,
       JSON.stringify(packageJsonContents, null, 2) + "\n"
     );
+
+    // if there's a partykit.init.js file, run it
+    const partykitInitPath = path.join(pathToProject, "partykit.init.js");
+    if (fs.existsSync(partykitInitPath)) {
+      execaCommandSync("node partykit.init.js", {
+        shell: true,
+        // we keep these two as "inherit" so that
+        // logs are still visible.
+        stdout: "inherit",
+        stderr: "inherit"
+      });
+    }
 
     console.log(
       `‣ Created a new "${
@@ -419,7 +435,7 @@ program
   .addOption(
     new Option(
       "-t, --template [template]",
-      "Template to use (typescript, javascript, or react)"
+      `Template to use (${Object.keys(templateChoices).join(", ")})`
     )
   )
   .option("-y, --yes", "Skip prompts")
