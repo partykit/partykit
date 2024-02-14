@@ -59,8 +59,6 @@ function getRoomAndPartyFromPathname(pathname: string): {
   return null;
 }
 
-let didWarnAboutMissingConnectionId = false;
-
 // The worker script can either be an object with handlers, or a class with same handlers
 function isClassWorker(worker: unknown): worker is Party.Worker {
   return (
@@ -452,12 +450,6 @@ function createDurable(
 
         let connectionId = url.searchParams.get("_pk");
         if (!connectionId) {
-          if (!didWarnAboutMissingConnectionId) {
-            didWarnAboutMissingConnectionId = true;
-            console.warn(
-              "No connection id found in request url, generating one"
-            );
-          }
           connectionId = crypto.randomUUID();
         }
 
@@ -720,12 +712,6 @@ export default {
         if (request.headers.get("upgrade")?.toLowerCase() === "websocket") {
           let connectionId = url.searchParams.get("_pk");
           if (!connectionId) {
-            if (!didWarnAboutMissingConnectionId) {
-              didWarnAboutMissingConnectionId = true;
-              console.warn(
-                "No connection id found in request url, generating one"
-              );
-            }
             connectionId = crypto.randomUUID();
           }
 
