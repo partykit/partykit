@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.90
+
+### Patch Changes
+
+- [#798](https://github.com/partykit/partykit/pull/798) [`182c00d`](https://github.com/partykit/partykit/commit/182c00da09749dcf00363d5ce762e83183ff9710) Thanks [@threepointone](https://github.com/threepointone)! - Remove warning about missing connection id
+
 ## 0.0.89
 
 ### Patch Changes
