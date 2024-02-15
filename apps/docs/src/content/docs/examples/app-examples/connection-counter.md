@@ -12,4 +12,4 @@ This example shows how many people are currently viewing any of the pages linked
 Explore this example:
 
 - [GitHub repository](https://github.com/partykit/example-link-counter)
-- [live demo](https://connection-counter.jevakallio.partykit.dev/pages/a)
+- [live demo](https://connection-counter.labs.partykit.dev/pages/a)

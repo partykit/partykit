@@ -16,5 +16,5 @@ This example contains a barebone HTML page and an SSR version built with Next.js
 Explore this example:
 
 - [GitHub repository](https://github.com/partykit/example-reactions)
-- [live demo](https://example-reactions.jevakallio.partykit.dev/)
+- [live demo](https://example-reactions.labs.partykit.dev)
 - [blog post](https://blog.partykit.io/posts/partykit-at-viteconf)
