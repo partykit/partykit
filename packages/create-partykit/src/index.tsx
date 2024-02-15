@@ -108,12 +108,13 @@ async function initGit({ cwd }: { cwd: string }) {
 const templateChoices = {
   typescript: "TypeScript starter",
   javascript: "JavaScript starter",
-  react: "React starter"
+  react: "React starter",
+  "chat-room": "Chat room starter with AI"
+
   // game: "A simple multiplayer game",
   // "text-editor": "A shared text editor",
   // "video-chat": "A video chat app",
   // whiteboard: "A collaborative whiteboard",
-  // "chat-room": "A chat room",
   // pubsub: "A simple pubsub server",
   // remix: "A simple remix starter"
   // remix-spa: "A simple remix + vite starter"
