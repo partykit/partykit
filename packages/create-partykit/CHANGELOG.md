@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.35
+
+### Patch Changes
+
+- [#800](https://github.com/partykit/partykit/pull/800) [`fcea256`](https://github.com/partykit/partykit/commit/fcea256e5e256424f5bbb60184168e4633acbdac) Thanks [@threepointone](https://github.com/threepointone)! - create: Add chat room option
+
 ## 0.0.34
 
 ### Patch Changes
