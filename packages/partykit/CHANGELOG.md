@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.91
+
+### Patch Changes
+
+- [#806](https://github.com/partykit/partykit/pull/806) [`34ed7be`](https://github.com/partykit/partykit/commit/34ed7be8e2dbdc284b0e5f828eb1e89afe414ab6) Thanks [@threepointone](https://github.com/threepointone)! - feat: add support for custom analytics
+
 ## 0.0.90
 
 ### Patch Changes
