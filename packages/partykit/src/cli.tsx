@@ -877,6 +877,18 @@ export const ${name} = ${name}Party;
     form.set("tailConsumers", JSON.stringify(config.tailConsumers));
   }
 
+  if (config.analytics) {
+    // make sure we're deploying to self hosted
+    if (
+      !(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN)
+    ) {
+      throw new Error(
+        "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the analytics option"
+      );
+    }
+    form.set("analytics", config.analytics);
+  }
+
   // if (config.placement) {
   //   form.set("placement", JSON.stringify(config.placement));
   // }

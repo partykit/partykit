@@ -1,4 +1,5 @@
 import type {
+  AnalyticsEngineDataset,
   ExecutionContext as CFExecutionContext,
   Request as CFRequest,
   DurableObjectState,
@@ -82,6 +83,7 @@ export type FetchLobby = {
   ai: AI;
   parties: Context["parties"];
   vectorize: Context["vectorize"];
+  analytics: AnalyticsEngineDataset;
 };
 
 export type CronLobby = {
@@ -89,6 +91,7 @@ export type CronLobby = {
   ai: AI;
   parties: Context["parties"];
   vectorize: Context["vectorize"];
+  analytics: AnalyticsEngineDataset;
 };
 
 export type Lobby = {
@@ -96,6 +99,7 @@ export type Lobby = {
   env: Record<string, unknown>;
   parties: Context["parties"];
   vectorize: Context["vectorize"];
+  analytics: AnalyticsEngineDataset;
 };
 
 export type ExecutionContext = CFExecutionContext;
@@ -193,6 +197,11 @@ export type Room = {
    * Use `Party.Server#getConnectionTags` to tag the connection on connect.
    */
   getConnections<TState = unknown>(tag?: string): Iterable<Connection<TState>>;
+
+  /**
+   * Cloudflare Analytics Engine dataset. Use this to log custom events and metrics.
+   */
+  analytics: AnalyticsEngineDataset;
 };
 
 /** @deprecated Use `Party.Room` instead */
@@ -394,6 +403,7 @@ export type PartyKitServer = {
       ai: AI;
       parties: Context["parties"];
       vectorize: Context["vectorize"];
+      analytics: AnalyticsEngineDataset;
     },
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
@@ -419,6 +429,7 @@ export type PartyKitServer = {
       ai: AI;
       parties: Context["parties"];
       vectorize: Context["vectorize"];
+      analytics: AnalyticsEngineDataset;
     },
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;

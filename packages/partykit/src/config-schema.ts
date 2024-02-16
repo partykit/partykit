@@ -118,7 +118,8 @@ export const schema = z
       )
       .optional(),
     logpush: z.boolean().optional(),
-    tailConsumers: z.array(z.string()).optional()
+    tailConsumers: z.array(z.string()).optional(),
+    analytics: z.string().optional()
     // placement: z
     //   .object({
     //     mode: z.enum(["smart"])
