@@ -36,6 +36,18 @@ function assert(condition: unknown, msg?: string): asserts condition {
   }
 }
 
+let didWarnAboutDevAnalytics = false;
+const MockAnalyticsDataset: AnalyticsEngineDataset = {
+  writeDataPoint: (_data: AnalyticsEngineDataPoint) => {
+    if (!didWarnAboutDevAnalytics) {
+      console.log(
+        "⚠️  analytics.writeDataPoint is not implemented in local development."
+      );
+      didWarnAboutDevAnalytics = true;
+    }
+  }
+};
+
 // The roomId is /party/[roomId] or /parties/[partyName]/[roomId]
 function getRoomAndPartyFromPathname(pathname: string): {
   room: string;
@@ -360,6 +372,8 @@ function createDurable(
           );
           return [].values();
         },
+
+        analytics: MockAnalyticsDataset,
 
         /// @deprecated, supported for backwards compatibility only
         get connections() {
@@ -731,7 +745,8 @@ export default {
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
-                    vectorize: vectorizeBindings
+                    vectorize: vectorizeBindings,
+                    analytics: MockAnalyticsDataset
                   },
                   ctx
                 );
@@ -775,7 +790,8 @@ export default {
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
-                    vectorize: vectorizeBindings
+                    vectorize: vectorizeBindings,
+                    analytics: MockAnalyticsDataset
                   },
                   ctx
                 );
@@ -823,7 +839,8 @@ export default {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings
+              vectorize: vectorizeBindings,
+              analytics: MockAnalyticsDataset
             },
             ctx
           );
@@ -861,7 +878,8 @@ export default {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings
+              vectorize: vectorizeBindings,
+              analytics: MockAnalyticsDataset
             },
             ctx
           );
@@ -877,7 +895,8 @@ export default {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
-              vectorize: vectorizeBindings
+              vectorize: vectorizeBindings,
+              analytics: MockAnalyticsDataset
             },
             ctx
           );
@@ -942,7 +961,8 @@ export default {
           env: extractVars(env),
           ai: PARTYKIT_AI,
           parties,
-          vectorize: vectorizeBindings
+          vectorize: vectorizeBindings,
+          analytics: MockAnalyticsDataset
         },
         ctx
       );

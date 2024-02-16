@@ -283,6 +283,9 @@
       "items": {
         "type": "string"
       }
+    },
+    "analytics": {
+      "type": "string"
     }
   },
   "additionalProperties": false,
