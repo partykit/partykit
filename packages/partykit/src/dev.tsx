@@ -340,6 +340,7 @@ export type DevProps = {
   withEnv?: boolean;
   verbose?: boolean;
   unstable_outdir?: string;
+  disableRequestCfFetch?: boolean;
   define?: Record<string, string>;
   onReady?: (host: string, port: number) => void;
   compatibilityDate?: string;
@@ -867,6 +868,7 @@ Workers["${name}"] = ${name};
 
                   void server.onBundleUpdate(
                     {
+                      cf: !options.disableRequestCfFetch,
                       https: options.https,
                       httpsKeyPath: options.httpsKeyPath,
                       httpsCertPath: options.httpsCertPath,
@@ -1086,7 +1088,8 @@ Workers["${name}"] = ${name};
     userDetails,
     options.https,
     options.httpsKeyPath,
-    options.httpsCertPath
+    options.httpsCertPath,
+    options.disableRequestCfFetch
   ]);
 
   const { onReady } = options;
