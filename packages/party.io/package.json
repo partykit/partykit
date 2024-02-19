@@ -30,5 +30,8 @@
   "devDependencies": {
     "@cloudflare/workers-types": "4.20240208.0",
     "esbuild": "0.20.0"
+  },
+  "dependencies": {
+    "partykit": "workspace:^"
   }
 }

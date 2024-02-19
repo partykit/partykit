@@ -32,6 +32,9 @@ importers:
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
+      esbuild:
+        specifier: 0.20.0
+        version: 0.20.0
       esbuild-register:
         specifier: ^3.5.0
         version: 3.5.0(esbuild@0.20.0)
@@ -53,9 +56,6 @@ importers:
       prettier:
         specifier: ^3.2.5
         version: 3.2.5
-      sherif:
-        specifier: ^0.8.1
-        version: 0.8.1
       shx:
         specifier: ^0.3.4
         version: 0.3.4
@@ -462,12 +462,20 @@ importers:
         version: 1.1.0
 
   packages/nitroparty:
+    dependencies:
+      partykit:
+        specifier: workspace:^
+        version: link:../partykit
     devDependencies:
       nitropack:
         specifier: ^2.8.1
         version: 2.8.1
 
   packages/party.io:
+    dependencies:
+      partykit:
+        specifier: workspace:^
+        version: link:../partykit
     devDependencies:
       '@cloudflare/workers-types':
         specifier: 4.20240208.0
@@ -5719,7 +5727,7 @@ packages:
       '@babel/plugin-syntax-typescript': 7.23.3(@babel/core@7.23.9)
       '@vanilla-extract/babel-plugin-debug-ids': 1.0.4
       '@vanilla-extract/css': 1.14.1
-      esbuild: 0.17.6
+      esbuild: 0.19.12
       eval: 0.1.8
       find-up: 5.0.0
       javascript-stringify: 2.1.0
@@ -15843,66 +15851,6 @@ packages:
       glob: 7.2.3
       interpret: 1.4.0
       rechoir: 0.6.2
-    dev: true
-
-  /sherif-darwin-arm64@0.8.1:
-    resolution: {integrity: sha512-CEpYv6Mg35wWe23hodA+SH6/G3Xq5sox2s8cHMH3rF1YwHBtrZZZ1+0r17jdwGMLMGzyxdV2CoAFH6lRd4PQag==}
-    cpu: [arm64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif-darwin-x64@0.8.1:
-    resolution: {integrity: sha512-u0mBU15wPSKXWYGC1DvNfC/ZKD1v7fQQjhP5u5gek7eGY+NCQRKWX6Y6nsyOLvZPSCxhPoiGv79/LRIEi5Z5wQ==}
-    cpu: [x64]
-    os: [darwin]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif-linux-arm64@0.8.1:
-    resolution: {integrity: sha512-/oClgMG35zra4CbSI6KTN2fM8Ix7RTF6G+F7I4caVGfhmXJZk+sIgnQJ09RB+lwuii1nYn5EFWqDD2Y6AWvoOQ==}
-    cpu: [arm64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif-linux-x64@0.8.1:
-    resolution: {integrity: sha512-7xzh9xx/Sc8/XSPT75iOPzqli3vWe3yhaPgODcRi5gNrS38rwiqP0SXA9uZN/tXinR4xnDNCtZ5QmKnrBlWiRw==}
-    cpu: [x64]
-    os: [linux]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif-windows-arm64@0.8.1:
-    resolution: {integrity: sha512-DFYnClmaUw5MVAvUWr8masgf/HKFOjiHAOOegCLvs6mZHdIcz4D1/noQoGZTEhCNdBGr557WScK4IReUWrfYPQ==}
-    cpu: [arm64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif-windows-x64@0.8.1:
-    resolution: {integrity: sha512-BCgAKEPYG3jZ+AuvjLqP4UWnhTbSQpQoGYIZHGV8SRkdh9K/odvgv5Agvjq2SLHkM+jS2YERMxo8ZAOvtvL3WQ==}
-    cpu: [x64]
-    os: [win32]
-    requiresBuild: true
-    dev: true
-    optional: true
-
-  /sherif@0.8.1:
-    resolution: {integrity: sha512-pT1vcHW5fZWZERobCvEaz2gxgOHcDTa2UF7KRsxZ4eunMWyL93smoVd55wWCBOOGMwhO7wnI+l07SYtiB9meMA==}
-    hasBin: true
-    optionalDependencies:
-      sherif-darwin-arm64: 0.8.1
-      sherif-darwin-x64: 0.8.1
-      sherif-linux-arm64: 0.8.1
-      sherif-linux-x64: 0.8.1
-      sherif-windows-arm64: 0.8.1
-      sherif-windows-x64: 0.8.1
     dev: true
 
   /shikiji-core@0.9.19:

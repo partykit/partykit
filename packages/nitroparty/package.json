@@ -20,5 +20,8 @@
     "CHANGELOG.md",
     "src",
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "partykit": "workspace:^"
+  }
 }
