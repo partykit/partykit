@@ -15,7 +15,7 @@
     "check": "concurrently \"npm run repocheck\" \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
-    "repocheck": "npx sherif@latest",
+    "repocheck": "sherif",
     "typecheck": "npm exec tsc --workspaces",
     "postinstall": "patch-package"
   },
@@ -41,7 +41,8 @@
     "shx": "^0.3.4",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "vitest": "^1.2.2",
+    "sherif": "^0.8.1"
   },
   "trustedDependencies": [
     "sharp"
