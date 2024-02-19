@@ -3,29 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "description": "The monorepo for Partykit",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "examples/*"
-  ],
+  "packageManager": "pnpm@8.15.1",
   "scripts": {
-    "start": "npm start -w partykit",
-    "build": "npm run build -w partykit && concurrently \"npm run build -w y-partykit\" \"npm run build -w partysocket\" \"npm run build -w create-partykit\" \"npm run build -w partymix\" \"npm run build -w party.io\" \"npm run build -w partykit-ai\" \"npm run build -w nitroparty\" --kill-others-on-fail",
+    "start": "pnpm --filter ./packages/partykit run start",
+    "build": "pnpm --filter \"./packages/**\" run build",
     "check": "concurrently \"npm run repocheck\" \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
-    "repocheck": "manypkg check",
+    "repocheck": "pnpm dlx sherif@latest",
     "typecheck": "npm exec tsc --workspaces",
-    "postinstall": "patch-package"
+    "postinstall": "pnpm repocheck"
   },
   "keywords": [],
   "author": "PartyKit, Inc. <team@partykit.io>",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "@manypkg/cli": "^0.21.2",
     "@microsoft/api-extractor": "^7.40.1",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
@@ -41,9 +36,16 @@
     "shx": "^0.3.4",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.2.2"
+    "vitest": "^1.2.2",
+    "esbuild": "0.20.0"
   },
   "trustedDependencies": [
     "sharp"
-  ]
+  ],
+  "pnpm": {
+    "patchedDependencies": {
+      "@cloudflare/ai@1.0.50": "patches/@cloudflare+ai+1.0.50.patch",
+      "@astrojs/starlight@0.17.4": "patches/@astrojs+starlight+0.17.4.patch"
+    }
+  }
 }
