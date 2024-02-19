@@ -14,7 +14,7 @@
     "check": "concurrently \"npm run repocheck\" \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
-    "repocheck": "manypkg check",
+    "repocheck": "npx sherif@latest",
     "typecheck": "npm exec tsc --workspaces",
     "postinstall": "patch-package"
   },
@@ -25,7 +25,6 @@
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "@manypkg/cli": "^0.21.2",
     "@microsoft/api-extractor": "^7.40.1",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
