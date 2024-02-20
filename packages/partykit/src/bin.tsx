@@ -150,6 +150,7 @@ program
   .option("--minify", "Minify the script")
   .option("--live", "Enable live reload")
   .option("--with-env", "Define all variables in the deployment")
+  .option("--disable-request-cf-fetch", "Disable populating request.cf")
   .option("--verbose", "Verbose debugging output")
   .action(async (scriptPath, options) => {
     await printBanner();
@@ -160,6 +161,7 @@ program
       >
         <Dev
           main={scriptPath}
+          disableRequestCfFetch={options.disableRequestCfFetch}
           unstable_outdir={options.unstable_outdir}
           port={options.port ? parseInt(options.port) : undefined}
           persist={options.persist}
