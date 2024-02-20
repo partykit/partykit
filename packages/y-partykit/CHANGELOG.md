@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.24
+
+### Patch Changes
+
+- [#812](https://github.com/partykit/partykit/pull/812) [`fda7510`](https://github.com/partykit/partykit/commit/fda751078c26ce39ff7c84f09d20b2951b4ced73) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: don't swallow errors when saving
+
 ## 0.0.23
 
 ### Patch Changes
