@@ -267,48 +267,61 @@ async function getYDoc(
     doc.on(
       "update",
       debounce(
-        (update: Uint8Array, origin: Party.Connection, doc: WSSharedDoc) => {
-          const dataToSend = {
-            room: doc.name,
-            data: {}
-          };
-
-          const callbackObjects: Record<string, string> =
-            callback.objects || CALLBACK_DEFAULTS.objects;
-
-          const sharedObjectList = Object.keys(callbackObjects);
-          sharedObjectList.forEach((sharedObjectName) => {
-            const sharedObjectType = callbackObjects[sharedObjectName];
-            // @ts-expect-error - TODO: fix this
-            dataToSend.data[sharedObjectName] = {
-              type: sharedObjectType,
-              content: getContent(
-                sharedObjectName,
-                sharedObjectType,
-                doc
-              ).toJSON()
-            };
-          });
-
+        async (
+          update: Uint8Array,
+          origin: Party.Connection,
+          doc: WSSharedDoc
+        ) => {
           if (callback.url) {
-            // POST to the callback URL
-            fetch(callback.url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                ...(callback.headers && Object.fromEntries(callback.headers))
-              },
-              body: JSON.stringify(dataToSend),
-              signal: AbortSignal.timeout(
-                callback.timeout || CALLBACK_DEFAULTS.timeout
-              )
-            }).catch((err) => {
-              console.error("failed to persist", err);
+            const dataToSend = {
+              room: doc.name,
+              data: {}
+            };
+
+            const callbackObjects: Record<string, string> =
+              callback.objects || CALLBACK_DEFAULTS.objects;
+
+            const sharedObjectList = Object.keys(callbackObjects);
+            sharedObjectList.forEach((sharedObjectName) => {
+              const sharedObjectType = callbackObjects[sharedObjectName];
+              // @ts-expect-error - TODO: fix this
+              dataToSend.data[sharedObjectName] = {
+                type: sharedObjectType,
+                content: getContent(
+                  sharedObjectName,
+                  sharedObjectType,
+                  doc
+                ).toJSON()
+              };
             });
+
+            // POST to the callback URL
+            try {
+              const res = await fetch(callback.url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...(callback.headers && Object.fromEntries(callback.headers))
+                },
+                body: JSON.stringify(dataToSend),
+                signal: AbortSignal.timeout(
+                  callback.timeout || CALLBACK_DEFAULTS.timeout
+                )
+              });
+              if (!res.ok) {
+                console.error("failed to persist:", await res.text());
+              }
+            } catch (err) {
+              console.error("failed to persist:", err);
+            }
           }
 
           if (callback.handler) {
-            callback.handler(doc);
+            try {
+              await callback.handler(doc);
+            } catch (err) {
+              console.error("failed to persist:", err);
+            }
           }
         },
         callback.debounceWait || CALLBACK_DEFAULTS.debounceWait,
@@ -447,7 +460,7 @@ interface CallbackOptions {
 // TODO: Add a runtime check for this
 
 interface HandlerCallbackOptions extends CallbackOptions {
-  handler: (doc: YDoc) => void;
+  handler: (doc: YDoc) => void | Promise<void>;
   url?: never;
 }
 
