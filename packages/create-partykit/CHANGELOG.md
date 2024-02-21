@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.36
+
+### Patch Changes
+
+- [#815](https://github.com/partykit/partykit/pull/815) [`b2d06df`](https://github.com/partykit/partykit/commit/b2d06df5c3efd9315b33cefe98cfa847face372e) Thanks [@threepointone](https://github.com/threepointone)! - Add a text-editor template
+
 ## 0.0.35
 
 ### Patch Changes
