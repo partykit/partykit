@@ -16,7 +16,7 @@ ogImage: "/content-images/introducing-starter-kits/social.png"
 description: "`npm create partykit@latest` is now the best way to get started with PartyKit. Choose from five templates."
 ---
 
-We’re on a mission to make it even easier to get starter with PartyKit.
+We’re on a mission to make it even easier to get started with PartyKit.
 
 Now when you type:
 
