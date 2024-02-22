@@ -4,7 +4,7 @@ pubDatetime: 2024-02-22T13:26:00Z
 title: Introducing PartyKit starter kits, minimal and full fat
 postSlug: introducing-starter-kits
 featured: false
-draft: true
+draft: false
 tags:
   - starter-kits
 ogImage: "/content-images/introducing-starter-kits/social.png"
@@ -30,9 +30,9 @@ Which template would you like to use?
   Text editor starter using Yjs
 ```
 
-Let’s go through what’s there.
+Let’s dive into all five!
 
-## ⚠️ These starters are for new projects
+## 🗣️ These starters are for new projects
 
 These starters are for new PartyKit projects, and for example code. If you already have a project, see the docs for [how to add PartyKit to an existing project](https://docs.partykit.io/add-to-existing-project/).
 
@@ -67,6 +67,18 @@ When you run the app with `npm run dev`, you’ll find a traditional _‘Increme
 ![Two browser windows showing a shared 'Increment Me' button](/content-images/introducing-starter-kits/react-starter.png)
 
 It’s a great starting point. [See the README to get oriented.](https://github.com/partykit/templates/blob/main/templates/react/README.md)
+
+### Bonus starter: Remix
+
+[Remix](https://remix.run) is a full-stack framework for React with a server-side framework, routing and more. We’ve made a PartyKit starter for Remix, too, which includes hosting the entire Remix application on the PartyKit platform.
+
+It’s a little different than the other templates. To get started, run:
+
+```bash
+npx create-remix@latest --template partykit/remix-starter
+```
+
+See the [remix-starter repo on GitHub](https://github.com/partykit/remix-starter) for more details.
 
 ## Full-fat starters
 
@@ -122,4 +134,4 @@ We plan to add more starters over time.
 
 We’d love to hear your feedback on these initial starters, and suggestions on what to add next.
 
-Join us on our [Discord](https://discord.gg/GJwKKTcQ7W) or say hi on [X](https://twitter.com/partykit_io).
+Join us on our [Discord](https://discord.gg/GJwKKTcQ7W) or say hi on [Twitter](https://twitter.com/partykit_io).
