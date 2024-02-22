@@ -1,12 +1,17 @@
 ---
 author: Matt Webb
-pubDatetime: 2024-02-22T13:26:00Z
+pubDatetime: 2024-02-22T14:43:00Z
 title: Introducing PartyKit starter kits, minimal and full fat
 postSlug: introducing-starter-kits
 featured: false
 draft: false
 tags:
   - starter-kits
+  - docs
+  - announcements
+  - ai
+  - collaboration
+  - react
 ogImage: "/content-images/introducing-starter-kits/social.png"
 description: "`npm create partykit@latest` is now the best way to get started with PartyKit. Choose from five templates."
 ---
