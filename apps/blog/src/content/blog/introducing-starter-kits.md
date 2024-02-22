@@ -7,11 +7,11 @@ featured: false
 draft: true
 tags:
   - starter-kits
-ogImage: "TK"
+ogImage: "/content-images/introducing-starter-kits/social.png"
 description: "`npm create partykit@latest` is now the best way to get started with PartyKit. Choose from five templates."
 ---
 
-We’re on a mission to make it even easier to get going with PartyKit.
+We’re on a mission to make it even easier to get starter with PartyKit.
 
 Now when you type:
 
@@ -62,9 +62,9 @@ Get started with:
 npm create partykit@latest my-react-project --template react
 ```
 
-When you run the app with `npm run dev`, you’ll find a traditional _”Increment Me”_ button to demonstrate client state. Only this button is multiplayer.
+When you run the app with `npm run dev`, you’ll find a traditional _‘Increment Me’_ button to demonstrate client state. Only _this_ button is multiplayer.
 
-(SCREENSHOT)
+![Two browser windows showing a shared 'Increment Me' button](/content-images/introducing-starter-kits/react-starter.png)
 
 It’s a great starting point. [See the README to get oriented.](https://github.com/partykit/templates/blob/main/templates/react/README.md)
 
@@ -82,9 +82,9 @@ Select this starter to see:
 - Using [PartyKit AI](https://docs.partykit.io/reference/partykit-ai/) to call large language models like Llama and Mistral right from the PartyKit server
 - Also how to call external OpenAI models, with streaming responses.
 
-(SCREENSHOT)
+![Multiple participants in a chat room, including an AI user](/content-images/introducing-starter-kits/ai-joke.gif)
 
-**Bonus feature:** the `shouldReply` function on the server shows how to escalate from a cheaper model that discriminates when to jump in, to a more expensive model that generates the response.
+**Bonus feature:** the `shouldReply` function on the server shows how to escalate from a cheaper model that discriminates when to jump in, to a more expensive model that generates the response. It feels more natural than an AI partipant that responses to every message.
 
 PartyKit is a great fit for stateful, real-time AI experiences, so we love digging into real interactions.
 
@@ -100,7 +100,7 @@ This starter shows:
 - Yjs on the client and server, implementing using the drop-in [Y-PartyKit](https://docs.partykit.io/reference/y-partykit-api/) library
 - Multiple rooms with live occupancy counts.
 
-(SCREENSHOT)
+![A text editor showing text highlighted by a remote user and a rooms navigator](/content-images/introducing-starter-kits/yjs-editor.png)
 
 Yjs is a battle-tested and popular sync framework, and PartyKit has first-class support. This starter is your reference implementation if you’re building your own Yjs app.
 
@@ -112,7 +112,7 @@ Again, **the README is a detailed breakdown of how to build this Yjs editor app.
 
 ## What’s next
 
-It’s the **best way to get started with PartyKit:**
+**It’s the best way to get started with PartyKit:**
 
 ```bash
 npm create partykit@latest
