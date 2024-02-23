@@ -110,7 +110,7 @@ const templateChoices = {
   javascript: "JavaScript starter",
   react: "React starter",
   "chat-room": "Chat room starter with AI",
-  "text-editor": "A collaborative text editor"
+  "text-editor": "Text editor starter using Yjs"
 
   // game: "A simple multiplayer game",
   // "text-editor": "A shared text editor",
