@@ -1,5 +1,11 @@
 # party.io
 
+## 0.0.12
+
+### Patch Changes
+
+- [#819](https://github.com/partykit/partykit/pull/819) [`f448798`](https://github.com/partykit/partykit/commit/f448798c0059cdf5c3a7fce4789d4c0640a310b7) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
 ## 0.0.11
 
 ### Patch Changes
