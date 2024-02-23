@@ -44,10 +44,10 @@
     "./src/cli": "./src/cli.ts"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20240208.0",
+    "@cloudflare/workers-types": "4.20240222.0",
     "clipboardy": "4.0.0",
-    "esbuild": "0.20.0",
-    "miniflare": "3.20240129.1",
+    "esbuild": "0.20.1",
+    "miniflare": "3.20240208.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
@@ -59,7 +59,7 @@
     "@types/gradient-string": "^1.1.5",
     "@types/is-ci": "^3.0.4",
     "@types/mime": "^3.0.4",
-    "@types/node": "^20.11.17",
+    "@types/node": "^20.11.20",
     "@types/object-hash": "^3.0.6",
     "@types/polka": "^0.5.7",
     "@types/prompts": "^2.4.9",
@@ -69,8 +69,8 @@
     "chokidar": "^3.6.0",
     "commander": "^12.0.0",
     "detect-indent": "^7.0.1",
-    "devtools-protocol": "^0.0.1255431",
-    "dotenv": "^16.4.1",
+    "devtools-protocol": "^0.0.1263784",
+    "dotenv": "^16.4.5",
     "dotenv-cli": "^7.3.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "execa": "^8.0.1",
@@ -99,7 +99,7 @@
     "xdg-app-paths": "^8.3.0",
     "zod": "^3.22.4",
     "zod-to-json-schema": "^3.22.4",
-    "zod-validation-error": "^3.0.0"
+    "zod-validation-error": "^3.0.2"
   },
   "files": [
     "dist",
