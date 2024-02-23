@@ -1,5 +1,11 @@
 # create-partykit
 
+## 0.0.37
+
+### Patch Changes
+
+- [#817](https://github.com/partykit/partykit/pull/817) [`d38bd27`](https://github.com/partykit/partykit/commit/d38bd27b9967fea7e74dee93c50cba52c124038a) Thanks [@threepointone](https://github.com/threepointone)! - tweak copy for text editor option in cli
+
 ## 0.0.36
 
 ### Patch Changes
