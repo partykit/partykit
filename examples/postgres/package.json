@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "drizzle-orm": "^0.29.3",
+    "drizzle-orm": "^0.29.4",
     "postgres": "^3.4.3"
   }
 }
