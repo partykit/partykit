@@ -10,16 +10,16 @@
     "check": "tsc"
   },
   "dependencies": {
-    "@remix-run/css-bundle": "^2.6.0",
-    "@remix-run/react": "^2.6.0",
-    "isbot": "^4.4.0",
+    "@remix-run/css-bundle": "^2.7.2",
+    "@remix-run/react": "^2.7.2",
+    "isbot": "^5.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@remix-run/dev": "^2.6.0",
-    "@remix-run/eslint-config": "^2.6.0",
-    "@types/react": "^18.2.55",
+    "@remix-run/dev": "^2.7.2",
+    "@remix-run/eslint-config": "^2.7.2",
+    "@types/react": "^18.2.58",
     "@types/react-dom": "^18.2.19"
   },
   "engines": {

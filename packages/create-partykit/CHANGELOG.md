@@ -1,5 +1,23 @@
 # create-partykit
 
+## 0.0.38
+
+### Patch Changes
+
+- [#819](https://github.com/partykit/partykit/pull/819) [`f448798`](https://github.com/partykit/partykit/commit/f448798c0059cdf5c3a7fce4789d4c0640a310b7) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+## 0.0.37
+
+### Patch Changes
+
+- [#817](https://github.com/partykit/partykit/pull/817) [`d38bd27`](https://github.com/partykit/partykit/commit/d38bd27b9967fea7e74dee93c50cba52c124038a) Thanks [@threepointone](https://github.com/threepointone)! - tweak copy for text editor option in cli
+
+## 0.0.36
+
+### Patch Changes
+
+- [#815](https://github.com/partykit/partykit/pull/815) [`b2d06df`](https://github.com/partykit/partykit/commit/b2d06df5c3efd9315b33cefe98cfa847face372e) Thanks [@threepointone](https://github.com/threepointone)! - Add a text-editor template
+
 ## 0.0.35
 
 ### Patch Changes

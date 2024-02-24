@@ -1,5 +1,19 @@
 # partykit
 
+## 0.0.93
+
+### Patch Changes
+
+- [#819](https://github.com/partykit/partykit/pull/819) [`f448798`](https://github.com/partykit/partykit/commit/f448798c0059cdf5c3a7fce4789d4c0640a310b7) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
+## 0.0.92
+
+### Patch Changes
+
+- [#814](https://github.com/partykit/partykit/pull/814) [`4b85c68`](https://github.com/partykit/partykit/commit/4b85c688661b3a356716fe05c0aafd62cfdc2555) Thanks [@threepointone](https://github.com/threepointone)! - dev: add a flag `--disable-request-cf-fetch`
+
+  when miniflare starts, it makes a request to get data to populate request.cf. This might not be desirable in some secure environments. This PR adds a flag to disable that behaviour.
+
 ## 0.0.91
 
 ### Patch Changes

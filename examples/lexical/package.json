@@ -14,8 +14,10 @@
   "dependencies": {
     "@lexical/react": "^0.13.1",
     "react-dom": "^18.2.0",
-    "react": "^18.2.0",
-    "lexical": "^0.13.1"
+    "@types/react": "^18.2.58",
+    "@types/react-dom": "^18.2.19",
+    "lexical": "^0.13.1",
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

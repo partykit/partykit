@@ -9,5 +9,8 @@ export default {
   serverPlatform: "neutral",
   assetsBuildDirectory: "public/dist",
   serverBuildPath: "dist/index.js",
-  publicPath: "/dist/"
+  publicPath: "/dist/",
+  dev: {
+    port: 8002
+  }
 };

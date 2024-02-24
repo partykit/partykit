@@ -1,6 +1,6 @@
 {
   "name": "partykit-ai",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "partykit + ai",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -37,6 +37,6 @@
     "@cloudflare/ai": "^1.0.50"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20240208.0"
+    "@cloudflare/workers-types": "4.20240222.0"
   }
 }
