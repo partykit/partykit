@@ -452,6 +452,7 @@ export async function deploy(options: {
   withVars: boolean | undefined;
   compatibilityDate: string | undefined;
   compatibilityFlags: string[] | undefined;
+  tailConsumers: string[] | undefined;
   minify: boolean | undefined;
   domain: string | undefined;
 }): Promise<void> {
@@ -865,7 +866,10 @@ export const ${name} = ${name}Party;
     form.set("logpush", JSON.stringify(config.logpush));
   }
 
-  if (config.tailConsumers) {
+  if (
+    config.tailConsumers ||
+    (options.tailConsumers && options.tailConsumers.length > 0)
+  ) {
     // make sure we're deploying to self hosted
     if (
       !(process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN)
@@ -874,7 +878,10 @@ export const ${name} = ${name}Party;
         "You must set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN to use the tailConsumers option"
       );
     }
-    form.set("tailConsumers", JSON.stringify(config.tailConsumers));
+    form.set(
+      "tailConsumers",
+      JSON.stringify(options.tailConsumers || config.tailConsumers)
+    );
   }
 
   if (config.analytics) {
