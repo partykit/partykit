@@ -80,6 +80,7 @@ describe("deploy", () => {
     await deploy({
       main: fixture,
       name: "test-script",
+      tailConsumers: undefined,
       config: undefined,
       vars: undefined,
       define: undefined,
@@ -134,6 +135,7 @@ describe("deploy", () => {
         c: "d"
       },
       define: undefined,
+      tailConsumers: undefined,
       preview: undefined,
       withVars: undefined,
       serve: undefined,
@@ -187,6 +189,7 @@ describe("deploy", () => {
         c: "d"
       },
       define: undefined,
+      tailConsumers: undefined,
       preview: undefined,
       withVars: true,
       serve: undefined,
@@ -216,6 +219,7 @@ describe("deploy", () => {
         define: undefined,
         preview: undefined,
         withVars: undefined,
+        tailConsumers: undefined,
         serve: undefined,
         compatibilityDate: undefined,
         compatibilityFlags: undefined,
@@ -307,6 +311,7 @@ describe("deploy", () => {
       define: undefined,
       preview: undefined,
       withVars: undefined,
+      tailConsumers: undefined,
       serve: undefined,
       compatibilityDate: undefined,
       compatibilityFlags: undefined,
