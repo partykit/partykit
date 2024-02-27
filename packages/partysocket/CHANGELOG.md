@@ -1,5 +1,13 @@
 # partysocket
 
+## 1.0.0
+
+### Major Changes
+
+- [#822](https://github.com/partykit/partykit/pull/822) [`b799677`](https://github.com/partykit/partykit/commit/b7996770f23c84b60ef0b07c3bcb4e7aad330cc3) Thanks [@threepointone](https://github.com/threepointone)! - PartySocket v1
+
+  PartySocket's been pretty stable, so it's time to cut a v1. We have plans for future features, but it's pretty good right now, so let's ship it.
+
 ## 0.0.25
 
 ### Patch Changes

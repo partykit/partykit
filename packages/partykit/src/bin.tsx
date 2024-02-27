@@ -138,15 +138,15 @@ program
     new Option("--persist [path]", "Persist local state").default(true)
   )
   .option(
-    "-v, --var [vars...]",
+    "-v, --var <vars...>",
     "A key-value pair to be injected into the script as a variable"
   )
   .option(
-    "-d, --define [defines...]",
+    "-d, --define <defines...>",
     "A key-value pair to be substituted in the project"
   )
   .option("--compatibility-date <date>", "Set a compatibility date")
-  .option("--compatibility-flags [flags...]", "Set compatibility flags")
+  .option("--compatibility-flags <flags...>", "Set compatibility flags")
   .option("--minify", "Minify the script")
   .option("--live", "Enable live reload")
   .option("--with-env", "Define all variables in the deployment")
@@ -191,21 +191,25 @@ program
   .option("--serve <path>", "Serve this directory of static assets")
   .option("-c, --config <path>", "Path to config file")
   .option(
-    "-v, --var [vars...]",
+    "-v, --var <vars...>",
     "A key-value pair to be injected into the project as a variable"
   )
   .option(
-    "-d, --define [defines...]",
+    "-d, --define <defines...>",
     "A key-value pair to be substituted in the project"
   )
   .option("--compatibility-date <date>", "Set a compatibility date")
-  .option("--compatibility-flags [flags...]", "Set compatibility flags")
+  .option("--compatibility-flags <flags...>", "Set compatibility flags")
   .option("--minify", "Minify the script")
   .option("--with-vars", "Include all variables in the deployment")
   .option("--with-env", "Define all variables in the deployment")
   .option("-n, --name <name>", "Name of the project")
-  .option("--preview [name]", "Deploy to preview environment")
-  .option("--domain [domain]", "Custom domain for the project")
+  .option("--preview <name>", "Deploy to preview environment")
+  .option("--domain <domain>", "Custom domain for the project")
+  .option(
+    "--tail-consumer <worker...>",
+    "Send logs to another worker (cloud-prem only)"
+  )
   .action(async (scriptPath, options) => {
     await printBanner();
     await cli.deploy({
@@ -219,6 +223,7 @@ program
       serve: options.serve,
       compatibilityDate: options.compatibilityDate,
       compatibilityFlags: options.compatibilityFlags,
+      tailConsumers: options.tailConsumer,
       minify: options.minify,
       withEnv: options.withEnv,
       domain: options.domain
@@ -247,7 +252,7 @@ program
   .option("-n, --name <name>", "Name of the project")
   .option("-f, --force", "Force delete without confirmation")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Delete preview")
+  .option("--preview <name>", "Delete preview")
   .action(async (options) => {
     await printBanner();
     await cli._delete(options);
@@ -258,7 +263,7 @@ program
   .description("Get information about a deployed project")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Get info about preview")
+  .option("--preview <name>", "Get info about preview")
   .action(async (options) => {
     await printBanner();
     await cli.info(options);
@@ -385,7 +390,7 @@ envCommand
   .argument("<key>", "Name of the environment variable")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Add to preview")
+  .option("--preview <name>", "Add to preview")
   .action(async (key, options) => {
     await printBanner();
     await cli.env.add(key, options);
@@ -397,7 +402,7 @@ envCommand
   .argument("[key]", "Name of the environment variable")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Remove from preview")
+  .option("--preview <name>", "Remove from preview")
   .action(async (key, options) => {
     await printBanner();
     await cli.env.remove(key, options);

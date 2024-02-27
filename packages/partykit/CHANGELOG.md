@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.94
+
+### Patch Changes
+
+- [#824](https://github.com/partykit/partykit/pull/824) [`e135cc6`](https://github.com/partykit/partykit/commit/e135cc661a0dfdc2579dbc263377425658d6763c) Thanks [@threepointone](https://github.com/threepointone)! - pass --tail-consumers <workers...>
+
 ## 0.0.93
 
 ### Patch Changes
