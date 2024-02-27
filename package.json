@@ -14,18 +14,17 @@
     "check": "concurrently \"npm run repocheck\" \"npm run lint\" \"npm run typecheck\" \"npx vitest --watch=false\" --kill-others-on-fail",
     "lint": "npx eslint \"**/*.[tj]s?(x)\" --max-warnings=0 --report-unused-disable-directives",
     "test": "vitest",
-    "repocheck": "manypkg check",
+    "repocheck": "sherif -r root-package-manager-field",
     "typecheck": "npm exec tsc --workspaces",
     "postinstall": "patch-package"
   },
   "keywords": [],
   "author": "PartyKit, Inc. <team@partykit.io>",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "@manypkg/cli": "^0.21.2",
     "@microsoft/api-extractor": "^7.40.6",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
@@ -41,7 +40,8 @@
     "shx": "^0.3.4",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3",
-    "vitest": "^1.3.1"
+    "vitest": "^1.2.2",
+    "sherif": "^0.8.1"
   },
   "trustedDependencies": [
     "sharp"
