@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.96
+
+### Patch Changes
+
+- [#828](https://github.com/partykit/partykit/pull/828) [`6c2256f`](https://github.com/partykit/partykit/commit/6c2256f9c843b17ab32e8ba40fd41525a460e34b) Thanks [@threepointone](https://github.com/threepointone)! - feat: asset fetcher
+
 ## 0.0.95
 
 ### Patch Changes
