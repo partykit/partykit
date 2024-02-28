@@ -25,6 +25,10 @@ export type StaticAssetsManifestType = {
   >;
 };
 
+type AssetFetcher = {
+  fetch(path: string): Promise<Response | null>;
+};
+
 type StandardRequest = globalThis.Request;
 
 // Types with PartyKit* prefix are used in module workers, i.e.
@@ -74,6 +78,11 @@ export type Context = {
    * A binding to the Cloudflare Vectorize service.
    */
   vectorize: Record<string, VectorizeIndex>;
+
+  /**
+   * A binding to fetch static assets
+   */
+  assets: AssetFetcher;
 };
 
 export type AI = Record<string, never>;
@@ -84,6 +93,7 @@ export type FetchLobby = {
   parties: Context["parties"];
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
+  assets: AssetFetcher;
 };
 
 export type CronLobby = {
@@ -92,14 +102,17 @@ export type CronLobby = {
   parties: Context["parties"];
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
+  assets: AssetFetcher;
 };
 
 export type Lobby = {
   id: string;
   env: Record<string, unknown>;
+  ai: AI;
   parties: Context["parties"];
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
+  assets: AssetFetcher;
 };
 
 export type ExecutionContext = CFExecutionContext;
@@ -321,7 +334,7 @@ export type Worker = ServerConstructor & {
     req: Request,
     lobby: FetchLobby,
     ctx: ExecutionContext
-  ): Response | Promise<Response>;
+  ): Response | undefined | null | Promise<Response | null | undefined>;
 
   /**
    * Runs on any WebSocket connection that does not match a Party URL or a static asset.
@@ -384,12 +397,12 @@ export type PartyKitServer = {
     req: Request,
     lobby: FetchLobby,
     ctx: ExecutionContext
-  ) => Response | Promise<Response>;
+  ) => Response | null | undefined | Promise<Response | null | undefined>;
   onFetch?: (
     req: Request,
     lobby: FetchLobby,
     ctx: ExecutionContext
-  ) => Response | Promise<Response>;
+  ) => Response | null | undefined | Promise<Response | null | undefined>;
   onSocket?(
     socket: FetchSocket,
     lobby: FetchLobby,
@@ -397,14 +410,7 @@ export type PartyKitServer = {
   ): void | Promise<void>;
   onBeforeRequest?: (
     req: Request,
-    lobby: {
-      id: string;
-      env: Record<string, unknown>;
-      ai: AI;
-      parties: Context["parties"];
-      vectorize: Context["vectorize"];
-      analytics: AnalyticsEngineDataset;
-    },
+    lobby: Lobby,
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 
@@ -423,14 +429,7 @@ export type PartyKitServer = {
   ) => void | Promise<void>;
   onBeforeConnect?: (
     req: Request,
-    lobby: {
-      id: string;
-      env: Record<string, unknown>;
-      ai: AI;
-      parties: Context["parties"];
-      vectorize: Context["vectorize"];
-      analytics: AnalyticsEngineDataset;
-    },
+    lobby: Lobby,
     ctx: ExecutionContext
   ) => ReturnRequest | Response | Promise<ReturnRequest | Response>;
 

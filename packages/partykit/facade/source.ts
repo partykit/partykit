@@ -223,6 +223,17 @@ function createMultiParties(
   return parties;
 }
 
+async function assetsFetch(
+  path: string,
+  env: Env,
+  ctx: ExecutionContext
+): Promise<Response | null> {
+  if (!path.startsWith("/")) {
+    throw new Error("Path must start with /");
+  }
+  return fetchStaticAsset(new Request(`http://dummy.com${path}`), env, ctx);
+}
+
 function createDurable(
   Worker: Party.PartyKitServer,
   options: {
@@ -349,7 +360,19 @@ function createDurable(
             );
           },
           vectorize: this.vectorize,
-          ai: PARTYKIT_AI
+          ai: PARTYKIT_AI,
+          assets: {
+            fetch(path: string) {
+              return assetsFetch(path, env, {
+                passThroughOnException() {
+                  // no op
+                },
+                waitUntil(_promise: Promise<unknown>) {
+                  // no op
+                }
+              });
+            }
+          }
         },
         getConnection(id: string) {
           if (self.connectionManager) {
@@ -744,6 +767,11 @@ export default {
                     id: roomId,
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
+                    assets: {
+                      fetch(path: string) {
+                        return assetsFetch(path, env, ctx);
+                      }
+                    },
                     parties,
                     vectorize: vectorizeBindings,
                     analytics: MockAnalyticsDataset
@@ -790,6 +818,11 @@ export default {
                     env: extractVars(env),
                     ai: PARTYKIT_AI,
                     parties,
+                    assets: {
+                      fetch(path: string) {
+                        return assetsFetch(path, env, ctx);
+                      }
+                    },
                     vectorize: vectorizeBindings,
                     analytics: MockAnalyticsDataset
                   },
@@ -840,7 +873,12 @@ export default {
               ai: PARTYKIT_AI,
               parties,
               vectorize: vectorizeBindings,
-              analytics: MockAnalyticsDataset
+              analytics: MockAnalyticsDataset,
+              assets: {
+                fetch(path: string) {
+                  return assetsFetch(path, env, ctx);
+                }
+              }
             },
             ctx
           );
@@ -879,7 +917,12 @@ export default {
               ai: PARTYKIT_AI,
               parties,
               vectorize: vectorizeBindings,
-              analytics: MockAnalyticsDataset
+              analytics: MockAnalyticsDataset,
+              assets: {
+                fetch(path: string) {
+                  return assetsFetch(path, env, ctx);
+                }
+              }
             },
             ctx
           );
@@ -889,17 +932,38 @@ export default {
         if (staticAssetsResponse) {
           return staticAssetsResponse;
         } else if (typeof onFetch === "function") {
-          return await onFetch(
+          const fetchResponse = await onFetch(
             request,
             {
               env: extractVars(env),
               ai: PARTYKIT_AI,
               parties,
               vectorize: vectorizeBindings,
-              analytics: MockAnalyticsDataset
+              analytics: MockAnalyticsDataset,
+              assets: {
+                fetch(path: string) {
+                  return assetsFetch(path, env, ctx);
+                }
+              }
             },
             ctx
           );
+          if (fetchResponse) {
+            return fetchResponse;
+          }
+        }
+
+        // let's try to get 404.html from static assets
+        const notFoundResponse = await assetsFetch("/404.html", env, ctx);
+
+        if (notFoundResponse) {
+          // modify status to 404
+
+          return new Response(notFoundResponse.body, {
+            status: 404,
+            statusText: "Not Found",
+            headers: notFoundResponse.headers
+          });
         }
 
         return new Response("Not found", {
@@ -962,7 +1026,12 @@ export default {
           ai: PARTYKIT_AI,
           parties,
           vectorize: vectorizeBindings,
-          analytics: MockAnalyticsDataset
+          analytics: MockAnalyticsDataset,
+          assets: {
+            fetch(path: string) {
+              return assetsFetch(path, env, ctx);
+            }
+          }
         },
         ctx
       );
