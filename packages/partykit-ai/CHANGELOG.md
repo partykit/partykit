@@ -1,5 +1,13 @@
 # partykit-ai
 
+## 0.0.14
+
+### Patch Changes
+
+- [#830](https://github.com/partykit/partykit/pull/830) [`9b4a1ed`](https://github.com/partykit/partykit/commit/9b4a1ed33ea2cf633a8dd4142e4603f8e4efe47f) Thanks [@threepointone](https://github.com/threepointone)! - partykit-ai: new models!
+
+  https://blog.cloudflare.com/february-28-2024-workersai-catalog-update
+
 ## 0.0.13
 
 ### Patch Changes
