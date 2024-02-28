@@ -23,6 +23,12 @@ function sleep(ms: number) {
 }
 
 export default {
+  async onFetch(req, lobby, _ctx) {
+    const url = new URL(req.url);
+    if (url.pathname === "/another") {
+      return lobby.assets.fetch("/another.html");
+    }
+  },
   async onSocket(
     socket: FetchSocket,
     _env: FetchLobby,
