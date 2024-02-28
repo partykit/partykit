@@ -1,8 +1,8 @@
 diff --git a/node_modules/@cloudflare/ai/dist/index.js b/node_modules/@cloudflare/ai/dist/index.js
-index dd442fd..cea8706 100644
+index ca54233..27e3bd1 100644
 --- a/node_modules/@cloudflare/ai/dist/index.js
 +++ b/node_modules/@cloudflare/ai/dist/index.js
-@@ -2772,10 +2772,12 @@ var Ai = class {
+@@ -3117,10 +3117,12 @@ var Ai = class {
                "content-type": "application/json"
              }
            };
