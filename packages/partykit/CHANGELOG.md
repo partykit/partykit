@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.97
+
+### Patch Changes
+
+- [#832](https://github.com/partykit/partykit/pull/832) [`1905f70`](https://github.com/partykit/partykit/commit/1905f707dfe021e6bdda43efcf545e9ee34124d6) Thanks [@threepointone](https://github.com/threepointone)! - feat: support for .bin binary modules
+
 ## 0.0.96
 
 ### Patch Changes
