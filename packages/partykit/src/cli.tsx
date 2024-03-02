@@ -684,6 +684,7 @@ export async function deploy(options: {
   // before starting upload, let's build the source files (fail fast)
 
   const wasmModules: Record<string, Buffer> = {};
+  const binModules: Record<string, Buffer> = {};
 
   const code = (
     await esbuild.build({
@@ -746,6 +747,33 @@ export const ${name} = ${name}Party;
                 path: fileName, // change the reference to the changed module
                 external: true, // mark it as external in the bundle
                 namespace: "partykit-module-wasm-publish" // just a tag, this isn't strictly necessary
+              };
+            });
+          }
+        },
+        {
+          name: "partykit-bin-publish",
+          setup(build) {
+            build.onResolve({ filter: /\.bin$/ }, (args) => {
+              const filePath = path.join(
+                args.resolveDir,
+                args.path.replace(/\?module$/, "")
+              );
+              const fileContent = fs.readFileSync(filePath);
+              const fileHash = crypto
+                .createHash("sha1")
+                .update(fileContent)
+                .digest("hex");
+              const fileName = `./${fileHash}-${path
+                .basename(args.path)
+                .replace(/\?module$/, "")}`;
+
+              binModules[fileName] = fs.readFileSync(filePath);
+
+              return {
+                path: fileName, // change the reference to the changed module
+                external: true, // mark it as external in the bundle
+                namespace: "partykit-module-bin-publish" // just a tag, this isn't strictly necessary
               };
             });
           }
@@ -909,6 +937,14 @@ export const ${name} = ${name}Party;
     form.set(
       uploadFileName,
       new File([buffer], uploadFileName, { type: "application/wasm" })
+    );
+  }
+
+  for (const [fileName, buffer] of Object.entries(binModules)) {
+    const uploadFileName = path.join("upload", fileName).replace(/\\/g, "/");
+    form.set(
+      uploadFileName,
+      new File([buffer], uploadFileName, { type: "application/octet-stream" })
     );
   }
 

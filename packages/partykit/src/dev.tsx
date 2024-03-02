@@ -746,6 +746,7 @@ function useDev(options: DevProps): {
       let isFirstBuild = true;
 
       let wasmModules: Record<string, string> = {};
+      let binModules: Record<string, string> = {};
 
       const workerFacade = fs.readFileSync(
         fileURLToPath(
@@ -980,6 +981,14 @@ Workers["${name}"] = ${name};
                             name
                           ),
                           contents: fs.readFileSync(p)
+                        })),
+                        ...Object.entries(binModules).map(([name, p]) => ({
+                          type: "Data",
+                          path: path.join(
+                            path.dirname(absoluteScriptPath),
+                            name
+                          ),
+                          contents: fs.readFileSync(p)
                         }))
                       ],
                       modulesRoot: process.cwd(),
@@ -1018,6 +1027,38 @@ Workers["${name}"] = ${name};
                   path: fileName, // change the reference to the changed module
                   external: true, // not an external in dev, we swap it with an identifier
                   namespace: `partykit-module-wasm-dev`, // just a tag, this isn't strictly necessary
+                  watchFiles: [filePath] // we also add the file to esbuild's watch list
+                };
+              });
+            }
+          },
+          {
+            name: "partykit-bin-dev",
+            setup(build) {
+              build.onStart(() => {
+                binModules = {};
+              });
+
+              build.onResolve({ filter: /\.bin$/ }, (args) => {
+                const filePath = path.join(
+                  args.resolveDir,
+                  args.path.replace(/\?module$/, "")
+                );
+                const fileContent = fs.readFileSync(filePath);
+                const fileHash = crypto
+                  .createHash("sha1")
+                  .update(fileContent)
+                  .digest("hex");
+                const fileName = `./${fileHash}-${path
+                  .basename(args.path)
+                  .replace(/\?module$/, "")}`;
+
+                binModules[fileName] = filePath;
+
+                return {
+                  path: fileName, // change the reference to the changed module
+                  external: true, // not an external in dev, we swap it with an identifier
+                  namespace: `partykit-module-bin-dev`, // just a tag, this isn't strictly necessary
                   watchFiles: [filePath] // we also add the file to esbuild's watch list
                 };
               });
