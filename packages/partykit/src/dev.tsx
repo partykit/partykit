@@ -948,7 +948,7 @@ Workers["${name}"] = ${name};
                         },
                         ...supportedNodeBuiltins.map((name) => ({
                           type: "ESModule",
-                          contents: `export * from 'node:${name}';`,
+                          contents: `export * from 'node:${name}'; export { default } from 'node:${name}';`,
                           path: `${path.dirname(absoluteScriptPath)}/partykit-exposed-node-${name}`
                         })),
 
