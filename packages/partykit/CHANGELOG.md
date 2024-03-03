@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.98
+
+### Patch Changes
+
+- [#834](https://github.com/partykit/partykit/pull/834) [`f15d9e2`](https://github.com/partykit/partykit/commit/f15d9e20e9f4ebd5bccaf5a9d2deb7819a3095ba) Thanks [@threepointone](https://github.com/threepointone)! - fix: default import from node: builtins should work
+
 ## 0.0.97
 
 ### Patch Changes
