@@ -1,5 +1,11 @@
 # partysocket
 
+## 1.0.1
+
+### Patch Changes
+
+- [#837](https://github.com/partykit/partykit/pull/837) [`32f881b`](https://github.com/partykit/partykit/commit/32f881b4cdace2d4112953618ba8a93834de7274) Thanks [@threepointone](https://github.com/threepointone)! - export named PartySocket
+
 ## 1.0.0
 
 ### Major Changes
