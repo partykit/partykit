@@ -214,6 +214,8 @@ export default class PartySocket extends ReconnectingWebSocket {
   }
 }
 
+export { PartySocket };
+
 export { ReconnectingWebSocket as WebSocket };
 
 function getWSOptions(partySocketOptions: PartySocketOptions) {
