@@ -1,10 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import YPartyKitProvider from "y-partykit/provider";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import { BlockNoteView, useCreateBlockNote } from "@blocknote/react";
 import * as Y from "yjs";
 
-import "@blocknote/core/style.css";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/react/style.css";
 
 import { getRandomUser } from "./randomUser";
 
@@ -14,7 +15,7 @@ const doc = new Y.Doc();
 const provider = new YPartyKitProvider(PARTYKIT_HOST, "my-document-id", doc);
 
 function Editor() {
-  const editor = useBlockNote({
+  const editor = useCreateBlockNote({
     collaboration: {
       // The Yjs Provider responsible for transporting updates:
       provider,
