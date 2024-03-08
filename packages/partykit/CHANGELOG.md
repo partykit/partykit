@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.99
+
+### Patch Changes
+
+- [#840](https://github.com/partykit/partykit/pull/840) [`5b70636`](https://github.com/partykit/partykit/commit/5b70636585568cde68bc4d44dc5e8b26b6eba3ef) Thanks [@threepointone](https://github.com/threepointone)! - fix: ensure imports from builtins work correctly on deploy
+
 ## 0.0.98
 
 ### Patch Changes
