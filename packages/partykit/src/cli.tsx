@@ -953,7 +953,9 @@ export const ${name} = ${name}Party;
     form.set(
       `upload/partykit-exposed-node-${nodeModuleName}`,
       new File(
-        [`export * from 'node:${nodeModuleName}';`],
+        [
+          `export * from 'node:${nodeModuleName}';export { default } from 'node:${nodeModuleName}';`
+        ],
         `upload/partykit-exposed-node-${nodeModuleName}`,
         { type: "application/javascript+module" }
       )
