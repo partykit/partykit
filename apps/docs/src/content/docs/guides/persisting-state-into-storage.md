@@ -162,7 +162,7 @@ export default class Main implements Party.Server {
   constructor(public room: Party.Room) {};
 
   async readMessages() {
-    return this.room.storage.get<string[]>("messages")) ?? [];
+    return this.room.storage.get<string[]>("messages") ?? [];
   };
 
   async onConnect(connection: Party.Connection) {
