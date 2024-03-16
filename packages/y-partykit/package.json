@@ -1,6 +1,6 @@
 {
   "name": "y-partykit",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "y.js on partykit!",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

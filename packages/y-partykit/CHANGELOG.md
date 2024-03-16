@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.26
+
+### Patch Changes
+
+- [#844](https://github.com/partykit/partykit/pull/844) [`19c27dc`](https://github.com/partykit/partykit/commit/19c27dc0cdd8c3858a96a2e9410a11b21281a727) Thanks [@OCA99](https://github.com/OCA99)! - y-partykit provider can generate IDs even if 'crypto' is not defined
+
 ## 0.0.25
 
 ### Patch Changes
