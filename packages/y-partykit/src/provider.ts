@@ -529,7 +529,7 @@ export class WebsocketProvider extends Observable<string> {
 
 function generateUUID(): string {
   // Public Domain/MIT
-  if (crypto.randomUUID) {
+  if (crypto && crypto.randomUUID) {
     return crypto.randomUUID();
   }
   let d = new Date().getTime(); //Timestamp
