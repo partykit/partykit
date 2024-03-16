@@ -7,6 +7,6 @@
     "deploy": "partykit deploy"
   },
   "devDependencies": {
-    "nitropack": "^2.8.1"
+    "nitropack": "^2.9.4"
   }
 }

@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@blocknote/react": "^0.12.0",
-    "@types/react": "^18.2.58",
-    "@types/react-dom": "^18.2.19",
+    "@blocknote/react": "^0.12.2",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

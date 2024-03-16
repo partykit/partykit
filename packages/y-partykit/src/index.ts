@@ -155,6 +155,7 @@ class WSSharedDoc extends YDoc {
       });
     };
     this.awareness.on("update", awarenessChangeHandler);
+    // @ts-expect-error - TODO: fix this
     this.on("update", updateHandler);
   }
 
@@ -199,7 +200,7 @@ const CALLBACK_DEFAULTS = {
   objects: {}
 };
 
-function getContent(objName: string, objType: string, doc: WSSharedDoc) {
+function getContent(objName: string, objType: string, doc: YDoc) {
   switch (objType) {
     case "Array":
       return doc.getArray(objName);
@@ -269,13 +270,10 @@ async function getYDoc(
     doc.on(
       "update",
       debounce(
-        async (
-          update: Uint8Array,
-          origin: Party.Connection,
-          doc: WSSharedDoc
-        ) => {
+        async (update: Uint8Array, origin: Party.Connection, doc: YDoc) => {
           if (callback.url) {
             const dataToSend = {
+              // @ts-expect-error - TODO: fix this
               room: doc.name,
               data: {}
             };
@@ -402,6 +400,7 @@ function messageListener(
     }
   } catch (err) {
     console.error(err);
+    // @ts-expect-error - TODO: fix this
     doc.emit("error", [err]);
   }
 }
@@ -422,6 +421,7 @@ function closeConn(doc: WSSharedDoc, conn: Party.Connection): void {
           doc.destroy();
         },
         (err) => {
+          // @ts-expect-error - TODO: fix this
           doc.emit("error", [err]);
         }
       );
