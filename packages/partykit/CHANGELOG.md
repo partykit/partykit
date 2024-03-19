@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.101
+
+### Patch Changes
+
+- [#848](https://github.com/partykit/partykit/pull/848) [`16045ba`](https://github.com/partykit/partykit/commit/16045bab67b257f818f251c3e16646debc61702c) Thanks [@threepointone](https://github.com/threepointone)! - update miniflare
+
 ## 0.0.100
 
 ### Patch Changes
