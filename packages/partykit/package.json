@@ -47,7 +47,7 @@
     "@cloudflare/workers-types": "4.20240314.0",
     "clipboardy": "4.0.0",
     "esbuild": "0.20.2",
-    "miniflare": "3.20240304.2",
+    "miniflare": "3.20240314.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
@@ -59,7 +59,7 @@
     "@types/gradient-string": "^1.1.5",
     "@types/is-ci": "^3.0.4",
     "@types/mime": "^3.0.4",
-    "@types/node": "^20.11.28",
+    "@types/node": "^20.11.30",
     "@types/object-hash": "^3.0.6",
     "@types/polka": "^0.5.7",
     "@types/prompts": "^2.4.9",
