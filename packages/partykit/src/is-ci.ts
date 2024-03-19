@@ -9,6 +9,6 @@ import isCI from "is-ci";
 export const CI = {
   /** Is PartyKit currently running in a CI? */
   isCI() {
-    return isCI as boolean;
+    return isCI;
   }
 };
