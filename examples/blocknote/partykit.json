@@ -1,9 +1,17 @@
 {
+  "$schema": "https://www.partykit.io/schema.json",
   "name": "blocknote-demo",
   "main": "src/server.ts",
   "compatibilityDate": "2023-09-28",
+
   "serve": {
     "path": "public",
-    "build": "src/client.tsx"
+    "build": {
+      "entry": "src/client.tsx",
+      "loader": {
+        ".woff": "file",
+        ".woff2": "file"
+      }
+    }
   }
 }
