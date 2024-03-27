@@ -23,22 +23,22 @@
   },
   "devDependencies": {
     "@types/random-words": "^1.1.4",
-    "@types/react": "^18.2.66",
+    "@types/react": "^18.2.72",
     "@types/which-pm-runs": "^1.0.2",
     "chalk": "^5.3.0",
     "commander": "^12.0.0",
     "esbuild": "0.20.2",
     "execa": "^8.0.1",
     "find-up": "^7.0.0",
-    "giget": "^1.2.1",
+    "giget": "^1.2.3",
     "gradient-string": "^2.0.2",
     "ink": "4.4.1",
     "ink-select-input": "^5.0.0",
     "ink-text-input": "^5.0.1",
     "random-words": "^2.0.1",
     "react": "^18.2.0",
-    "typescript": "^5.4.2",
-    "undici": "^6.9.0",
+    "typescript": "^5.4.3",
+    "undici": "^6.10.2",
     "which-pm-runs": "^1.1.0"
   }
 }
