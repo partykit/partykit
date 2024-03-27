@@ -37,6 +37,6 @@
     "@cloudflare/ai": "^1.0.53"
   },
   "dependencies": {
-    "@cloudflare/workers-types": "4.20240314.0"
+    "@cloudflare/workers-types": "4.20240320.1"
   }
 }

@@ -27,8 +27,8 @@
     "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
     "@manypkg/cli": "^0.21.3",
     "@microsoft/api-extractor": "^7.43.0",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "esbuild-register": "^3.5.0",
@@ -40,7 +40,7 @@
     "prettier": "^3.2.5",
     "shx": "^0.3.4",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },
   "trustedDependencies": [
