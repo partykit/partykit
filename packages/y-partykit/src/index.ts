@@ -221,6 +221,8 @@ function getContent(objName: string, objType: string, doc: YDoc) {
   }
 }
 
+const getYDocPromises = new Map<string, Promise<WSSharedDoc>>();
+
 /**
  * Gets a Y.Doc by name, whether in memory or on disk
  */
@@ -536,7 +538,13 @@ export async function onConnect(
   const options = { ...opts };
 
   // get doc, initialize if it does not exist yet
-  const doc = await getYDoc(room, options);
+  if (!getYDocPromises.has(room.id)) {
+    getYDocPromises.set(room.id, getYDoc(room, options));
+  }
+  const doc = await getYDocPromises.get(room.id)!;
+
+  getYDocPromises.delete(room.id);
+
   doc.conns.set(conn, new Set());
   // listen and reply to events
   conn.addEventListener(
