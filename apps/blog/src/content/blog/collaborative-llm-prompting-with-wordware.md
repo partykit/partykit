@@ -1,7 +1,7 @@
 ---
 author: Robert Chandler
 pubDatetime: 2024-04-04T14:00:00Z
-title: "Prompting is better with expert friends — Wordware ⨉ PartyKit 🎈"
+title: "Prompt engineering is better with expert friends — Wordware ⨉ PartyKit 🎈"
 postSlug: collaborative-llm-prompting-with-wordware
 featured: false
 tags:
