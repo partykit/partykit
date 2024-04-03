@@ -1,6 +1,6 @@
 {
   "name": "partykit-ai",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "partykit + ai",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

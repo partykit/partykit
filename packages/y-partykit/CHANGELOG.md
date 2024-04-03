@@ -1,5 +1,13 @@
 # y-partykit
 
+## 0.0.28
+
+### Patch Changes
+
+- [#858](https://github.com/partykit/partykit/pull/858) [`085bb8f`](https://github.com/partykit/partykit/commit/085bb8ff9c6dc508d5fac8c9ed95ae26039414ee) Thanks [@jslauthor](https://github.com/jslauthor)! - Add null check to load() in y-partykit
+
+- [#851](https://github.com/partykit/partykit/pull/851) [`7275433`](https://github.com/partykit/partykit/commit/727543377096604bb3efa9da2bad093220b66d37) Thanks [@threepointone](https://github.com/threepointone)! - y-partykit: don't load document multiple times on start
+
 ## 0.0.27
 
 ### Patch Changes
