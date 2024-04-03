@@ -262,8 +262,10 @@ async function getYDoc(
   // allow caller to provide initial document state
   if (load) {
     const src = await load();
-    const state = encodeStateAsUpdate(src);
-    applyUpdate(doc, state);
+    if (src != null) {
+      const state = encodeStateAsUpdate(src);
+      applyUpdate(doc, state);
+    }
   }
 
   if (callback !== undefined) {
@@ -516,7 +518,7 @@ export type YPartyKitOptions = {
    */
   persist?: YPartyKitPersistenceStrategy | boolean;
   callback?: YPartyKitCallbackOptions;
-  load?: () => Promise<YDoc>;
+  load?: () => Promise<YDoc | null>;
   readOnly?: boolean;
 };
 
