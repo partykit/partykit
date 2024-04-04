@@ -38,7 +38,7 @@
     "random-words": "^2.0.1",
     "react": "^18.2.0",
     "typescript": "^5.4.3",
-    "undici": "^6.10.2",
+    "undici": "^6.11.1",
     "which-pm-runs": "^1.1.0"
   }
 }
