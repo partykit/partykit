@@ -216,6 +216,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"collaborative-llm-prompting-with-wordware.md": {
+	id: "collaborative-llm-prompting-with-wordware.md";
+  slug: "collaborative-llm-prompting-with-wordware";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "cursor-party.md": {
 	id: "cursor-party.md";
   slug: "cursor-party";
