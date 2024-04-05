@@ -349,6 +349,7 @@ envCommand
   .description("List all environment variables")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
+  .option("--preview [name]", "List from preview")
   .addOption(
     new Option("-f, --format <format>")
       .choices(["json", "pretty"])
@@ -367,7 +368,7 @@ envCommand
   .argument("[file]", "File to save environment variables to")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Pull from preview")
+  .option("--preview <name>", "Pull from preview")
   .action(async (fileName, options) => {
     await printBanner();
     await cli.env.pull(fileName, options);
@@ -378,7 +379,7 @@ envCommand
   .description("Push environment variables from config file(s)")
   .option("-n, --name <name>", "Name of the project")
   .option("-c, --config <path>", "Path to config file")
-  .option("--preview [name]", "Push to preview")
+  .option("--preview <name>", "Push to preview")
   .action(async (options) => {
     await printBanner();
     await cli.env.push(options);
