@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.103
+
+### Patch Changes
+
+- [#862](https://github.com/partykit/partykit/pull/862) [`1b06f14`](https://github.com/partykit/partykit/commit/1b06f14c4288fd8f46bbc740223956ec62f0e861) Thanks [@threepointone](https://github.com/threepointone)! - pass --preview to `env list`
+
 ## 0.0.102
 
 ### Patch Changes
