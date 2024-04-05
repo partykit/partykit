@@ -92,7 +92,7 @@
     "react-error-boundary": "^4.0.13",
     "signal-exit": "^4.1.0",
     "source-map": "^0.7.4",
-    "undici": "^6.10.2",
+    "undici": "^6.11.1",
     "update-notifier": "^7.0.0",
     "which-pm-runs": "^1.1.0",
     "ws": "^8.16.0",
