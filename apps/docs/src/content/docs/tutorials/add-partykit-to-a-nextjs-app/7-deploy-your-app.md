@@ -14,7 +14,7 @@ While you don't need separate repositories for the client and the PartyKit serve
 To deploy your PartyKit server run the following command in your project directory:
 
 ```bash
-npm partykit deploy
+npx partykit deploy
 ```
 
 When the deployment completes, you will get your app's PartyKit URL. You will need this URL when deploying your Next.js app. The URL will follow the pattern of `[your project's name].[your GitHub username].partykit.dev`.
