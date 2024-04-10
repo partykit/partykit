@@ -30,6 +30,9 @@ declare const Worker: Party.PartyKitServer;
 
 declare const PARTYKIT_HOST: string;
 
+declare const __R2_BINDINGS__: string[];
+declare const __KV_BINDINGS__: string[];
+
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
     throw new Error(msg);
@@ -78,6 +81,31 @@ function isClassWorker(worker: unknown): worker is Party.Worker {
     "prototype" in worker &&
     worker.prototype instanceof Object
   );
+}
+
+function getBindings(env: Env): {
+  r2: Record<string, R2Bucket>;
+  kv: Record<string, KVNamespace>;
+} {
+  const r2Bindings = __R2_BINDINGS__;
+  const kvBindings = __KV_BINDINGS__;
+
+  return {
+    r2: r2Bindings.reduce(
+      (acc, name) => {
+        acc[name] = env[name] as unknown as R2Bucket;
+        return acc;
+      },
+      {} as Record<string, R2Bucket>
+    ),
+    kv: kvBindings.reduce(
+      (acc, name) => {
+        acc[name] = env[name] as unknown as KVNamespace;
+        return acc;
+      },
+      {} as Record<string, KVNamespace>
+    )
+  };
 }
 
 class PartyDurable {}
@@ -372,7 +400,8 @@ function createDurable(
                 }
               });
             }
-          }
+          },
+          bindings: getBindings(env)
         },
         getConnection(id: string) {
           if (self.connectionManager) {
@@ -774,7 +803,8 @@ export default {
                     },
                     parties,
                     vectorize: vectorizeBindings,
-                    analytics: MockAnalyticsDataset
+                    analytics: MockAnalyticsDataset,
+                    bindings: getBindings(env)
                   },
                   ctx
                 );
@@ -824,7 +854,8 @@ export default {
                       }
                     },
                     vectorize: vectorizeBindings,
-                    analytics: MockAnalyticsDataset
+                    analytics: MockAnalyticsDataset,
+                    bindings: getBindings(env)
                   },
                   ctx
                 );
@@ -878,7 +909,8 @@ export default {
                 fetch(path: string) {
                   return assetsFetch(path, env, ctx);
                 }
-              }
+              },
+              bindings: getBindings(env)
             },
             ctx
           );
@@ -922,7 +954,8 @@ export default {
                 fetch(path: string) {
                   return assetsFetch(path, env, ctx);
                 }
-              }
+              },
+              bindings: getBindings(env)
             },
             ctx
           );
@@ -944,7 +977,8 @@ export default {
                 fetch(path: string) {
                   return assetsFetch(path, env, ctx);
                 }
-              }
+              },
+              bindings: getBindings(env)
             },
             ctx
           );
@@ -1031,7 +1065,8 @@ export default {
             fetch(path: string) {
               return assetsFetch(path, env, ctx);
             }
-          }
+          },
+          bindings: getBindings(env)
         },
         ctx
       );

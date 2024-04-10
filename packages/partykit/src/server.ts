@@ -4,6 +4,8 @@ import type {
   Request as CFRequest,
   DurableObjectState,
   DurableObjectStorage,
+  KVNamespace,
+  R2Bucket,
   ScheduledController,
   VectorizeIndex,
   WebSocket
@@ -83,6 +85,11 @@ export type Context = {
    * A binding to fetch static assets
    */
   assets: AssetFetcher;
+
+  /**
+   * Custom bindings
+   */
+  bindings: CustomBindings;
 };
 
 export type AI = Record<string, never>;
@@ -94,6 +101,7 @@ export type FetchLobby = {
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
   assets: AssetFetcher;
+  bindings: CustomBindings;
 };
 
 export type CronLobby = {
@@ -103,6 +111,7 @@ export type CronLobby = {
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
   assets: AssetFetcher;
+  bindings: CustomBindings;
 };
 
 export type Lobby = {
@@ -113,6 +122,7 @@ export type Lobby = {
   vectorize: Context["vectorize"];
   analytics: AnalyticsEngineDataset;
   assets: AssetFetcher;
+  bindings: CustomBindings;
 };
 
 export type ExecutionContext = CFExecutionContext;
@@ -165,6 +175,11 @@ export type Connection<TState = unknown> = WebSocket & {
 
   /** @deprecated use Connection.state instead */
   deserializeAttachment<T = unknown>(): T | null;
+};
+
+type CustomBindings = {
+  r2: Record<string, R2Bucket>;
+  kv: Record<string, KVNamespace>;
 };
 
 /** Room represents a single, self-contained, long-lived session. */

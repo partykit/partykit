@@ -924,6 +924,10 @@ export const ${name} = ${name}Party;
     form.set("analytics", config.analytics);
   }
 
+  if (config.bindings) {
+    form.set("bindings", JSON.stringify(config.bindings));
+  }
+
   // if (config.placement) {
   //   form.set("placement", JSON.stringify(config.placement));
   // }
