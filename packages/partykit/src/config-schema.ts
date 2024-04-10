@@ -119,7 +119,13 @@ export const schema = z
       .optional(),
     logpush: z.boolean().optional(),
     tailConsumers: z.array(z.string()).optional(),
-    analytics: z.string().optional()
+    analytics: z.string().optional(),
+    bindings: z
+      .object({
+        r2: z.record(z.string()).optional(),
+        kv: z.record(z.string()).optional()
+      })
+      .optional()
     // placement: z
     //   .object({
     //     mode: z.enum(["smart"])

@@ -286,6 +286,24 @@
     },
     "analytics": {
       "type": "string"
+    },
+    "bindings": {
+      "type": "object",
+      "properties": {
+        "r2": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "kv": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,

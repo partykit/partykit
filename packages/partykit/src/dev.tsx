@@ -765,6 +765,14 @@ function useDev(options: DevProps): {
           contents: workerFacade
             .replace("__WORKER__", absoluteScriptPath)
             .replace(
+              "__R2_BINDINGS__",
+              JSON.stringify(Object.keys(config.bindings?.r2 || []))
+            )
+            .replace(
+              "__KV_BINDINGS__",
+              JSON.stringify(Object.keys(config.bindings?.kv || []))
+            )
+            .replace(
               "__PARTIES__",
               Object.entries(config.parties || {})
                 .map(
@@ -939,6 +947,12 @@ Workers["${name}"] = ${name};
                         r2Persist: path.join(persistencePath, "r2"),
                         d1Persist: path.join(persistencePath, "d1")
                       }),
+                      ...(config.bindings?.r2
+                        ? { r2Buckets: Object.keys(config.bindings.r2) }
+                        : {}),
+                      ...(config.bindings?.kv
+                        ? { kvNamespaces: Object.keys(config.bindings.kv) }
+                        : {}),
                       // @ts-expect-error miniflare's types are wrong
                       modules: [
                         {
