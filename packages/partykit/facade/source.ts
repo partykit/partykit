@@ -1005,7 +1005,7 @@ export default {
         });
       }
     } catch (e) {
-      console.error("fetch error", e);
+      console.warn("fetch error", e);
       return new Response(e instanceof Error ? e.message : `${e}`, {
         status: 500
       });
