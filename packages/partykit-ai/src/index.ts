@@ -9,7 +9,7 @@ export class Ai extends CFAi {
       throw new Error("You should pass room.context.ai as the first argument");
     }
     const { binding, ...rest } = options;
-    super(binding, {
+    super(binding || {}, {
       ...rest
     });
   }
