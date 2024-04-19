@@ -1,5 +1,11 @@
 # partykit-ai
 
+## 0.0.17
+
+### Patch Changes
+
+- [#873](https://github.com/partykit/partykit/pull/873) [`2f7a2e6`](https://github.com/partykit/partykit/commit/2f7a2e62485da62e15a59892e5816b73b72234c5) Thanks [@threepointone](https://github.com/threepointone)! - ai: fix missing binding error
+
 ## 0.0.16
 
 ### Patch Changes
