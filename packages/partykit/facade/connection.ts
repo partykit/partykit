@@ -117,7 +117,7 @@ export const createLazyConnection = (
     deserializeAttachment: {
       value: function deserializeAttachment<T = unknown>() {
         const attachment = attachments.get(ws);
-        return (attachment.__user ?? null) as T;
+        return (attachment?.__user ?? null) as T;
       }
     },
 
