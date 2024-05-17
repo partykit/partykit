@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.105
+
+### Patch Changes
+
+- [#877](https://github.com/partykit/partykit/pull/877) [`23b00b5`](https://github.com/partykit/partykit/commit/23b00b54396c0684c0c3f11b958b1e4a788e2da1) Thanks [@threepointone](https://github.com/threepointone)! - fix: attachment can be a null
+
 ## 0.0.104
 
 ### Patch Changes
