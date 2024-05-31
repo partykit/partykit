@@ -32,6 +32,7 @@ declare const PARTYKIT_HOST: string;
 
 declare const __R2_BINDINGS__: string[];
 declare const __KV_BINDINGS__: string[];
+declare const __BROWSER_BINDINGS__: string[];
 
 function assert(condition: unknown, msg?: string): asserts condition {
   if (!condition) {
@@ -86,9 +87,11 @@ function isClassWorker(worker: unknown): worker is Party.Worker {
 function getBindings(env: Env): {
   r2: Record<string, R2Bucket>;
   kv: Record<string, KVNamespace>;
+  browser: Record<string, any>;
 } {
   const r2Bindings = __R2_BINDINGS__;
   const kvBindings = __KV_BINDINGS__;
+  const browserBindings = __BROWSER_BINDINGS__;
 
   return {
     r2: r2Bindings.reduce(
@@ -104,6 +107,13 @@ function getBindings(env: Env): {
         return acc;
       },
       {} as Record<string, KVNamespace>
+    ),
+    browser: browserBindings.reduce(
+      (acc, name) => {
+        acc[name] = env[name] as unknown as any;
+        return acc;
+      },
+      {} as Record<string, any>
     )
   };
 }
