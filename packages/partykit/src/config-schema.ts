@@ -123,7 +123,8 @@ export const schema = z
     bindings: z
       .object({
         r2: z.record(z.string()).optional(),
-        kv: z.record(z.string()).optional()
+        kv: z.record(z.string()).optional(),
+        browser: z.record(z.string()).optional()
       })
       .optional()
     // placement: z

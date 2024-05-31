@@ -301,6 +301,12 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "browser": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

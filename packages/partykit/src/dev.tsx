@@ -717,7 +717,7 @@ function useDev(options: DevProps): {
     if (!config.compatibilityDate) {
       logger.warn(
         `No compatibilityDate specified in configuration, defaulting to ${currentUTCDate}
-    You can silence this warning by adding this to your partykit.json file: 
+    You can silence this warning by adding this to your partykit.json file:
       "compatibilityDate": "${currentUTCDate}"
     or by passing it in via the CLI
       --compatibility-date ${currentUTCDate}`
@@ -773,12 +773,16 @@ function useDev(options: DevProps): {
               JSON.stringify(Object.keys(config.bindings?.kv || []))
             )
             .replace(
+              "__BROWSER_BINDINGS__",
+              JSON.stringify(Object.keys(config.bindings?.browser || []))
+            )
+            .replace(
               "__PARTIES__",
               Object.entries(config.parties || {})
                 .map(
                   ([name, party]) =>
                     `
-import ${name} from '${party}'; 
+import ${name} from '${party}';
 export const ${name}DO = createDurable(${name}, { name: "${name}" });
 Workers["${name}"] = ${name};
 `
@@ -952,6 +956,9 @@ Workers["${name}"] = ${name};
                         : {}),
                       ...(config.bindings?.kv
                         ? { kvNamespaces: Object.keys(config.bindings.kv) }
+                        : {}),
+                      ...(config.bindings?.browser
+                        ? { browserBindings: Object.keys(config.bindings.browser) }
                         : {}),
                       // @ts-expect-error miniflare's types are wrong
                       modules: [

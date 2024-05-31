@@ -180,6 +180,7 @@ export type Connection<TState = unknown> = WebSocket & {
 type CustomBindings = {
   r2: Record<string, R2Bucket>;
   kv: Record<string, KVNamespace>;
+  browser: Record<string, any>;
 };
 
 /** Room represents a single, self-contained, long-lived session. */
