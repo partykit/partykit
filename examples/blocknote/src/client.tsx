@@ -1,11 +1,11 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import YPartyKitProvider from "y-partykit/provider";
-import { BlockNoteView, useCreateBlockNote } from "@blocknote/react";
-import * as Y from "yjs";
-
 import "@blocknote/core/fonts/inter.css";
-import "@blocknote/react/style.css";
+import { useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/mantine/style.css";
+import * as Y from "yjs";
 
 import { getRandomUser } from "./randomUser";
 
