@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.106
+
+### Patch Changes
+
+- [#887](https://github.com/partykit/partykit/pull/887) [`f730425`](https://github.com/partykit/partykit/commit/f7304258befac4e7a92dfb635b38f12eb72d74b3) Thanks [@sleexyz](https://github.com/sleexyz)! - Make `partykit list -f json` actual valid json
+
 ## 0.0.105
 
 ### Patch Changes
