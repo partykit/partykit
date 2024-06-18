@@ -1325,7 +1325,7 @@ export async function list(options: {
   );
 
   if (options.format === "json") {
-    console.log(res);
+    console.log(JSON.stringify(res, null, 2));
   } else {
     render(<InkTable data={res} />);
   }
