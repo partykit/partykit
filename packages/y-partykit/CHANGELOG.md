@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.29
+
+### Patch Changes
+
+- [#889](https://github.com/partykit/partykit/pull/889) [`3626116`](https://github.com/partykit/partykit/commit/3626116a3fa90e1fa251b7748f31f34741b52808) Thanks [@threepointone](https://github.com/threepointone)! - update dependencies
+
 ## 0.0.28
 
 ### Patch Changes
@@ -145,8 +151,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "snapshot",
-    },
+      mode: "snapshot"
+    }
   });
   ```
 
@@ -163,8 +169,8 @@
   ```ts
   onConnect(connection, party, {
     persist: {
-      mode: "history",
-    },
+      mode: "history"
+    }
   });
   ```
 
@@ -182,8 +188,8 @@
 
       // Maximum number of updates.
       // By default, there is no maximum, and history grows until maximum amount of bytes is reached.
-      maxUpdates: 10_000,
-    },
+      maxUpdates: 10_000
+    }
   });
   ```
 
