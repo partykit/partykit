@@ -11,6 +11,6 @@
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.29"
+    "@types/jquery": "^3.5.30"
   }
 }
