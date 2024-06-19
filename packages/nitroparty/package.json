@@ -7,7 +7,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nitropack": "^2.9.4"
+    "nitropack": "^2.9.6"
   },
   "peerDependencies": {
     "nitropack": "^2.8.1"

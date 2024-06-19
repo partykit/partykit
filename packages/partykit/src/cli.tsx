@@ -1518,7 +1518,7 @@ export const env = {
     const { value } = !process.stdin.isTTY
       ? // the value is being piped in
         await new Promise<{ value: string }>((resolve, reject) => {
-          const stdin = process.openStdin();
+          const stdin = process.stdin;
 
           let data = "";
 
