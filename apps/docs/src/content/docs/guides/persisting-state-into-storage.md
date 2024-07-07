@@ -118,7 +118,7 @@ A common pattern is to read the data from storage into memory when the server st
 
 This pattern is especially helpful when your app features **frequent reads and infrequent writes** or when you need to **join multiple data sets to create derived data** (for example, load data from a third-party API or database in addition to the room `storage`).
 
-You'll also need to keep in mind that for large data sets, you may reach either the 128KB per key storage limit, or the 128MB total RAM limit of the Room. For simplicity, below examples assume all your "messages" data fits in a single 128KB value.
+You'll also need to keep in mind that for large data sets, you may reach either the 2KB per key and/or 128KiB per value storage limit, or the 128MB total RAM limit of the Room. For simplicity, below examples assume all your "messages" data fits in a single 128KB value.
 
 ```ts
 export default class Main implements Party.Server {
