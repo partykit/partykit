@@ -9,7 +9,7 @@ sidebar:
 PartyKit AI is currently in Open Beta and is not recommended for production data and traffic, and limits + access are subject to change
 :::
 
-Build AI-powered real-time collaborative applications with PartyKit AI. Powered by [Cloudflare AI](https://ai.cloudflare.com/), PartyKit brings you models for a veriety of use cases, including: text and image generation, translation, text-to-speech, and more. It also includes a vector database (powered by [Cloudflare Vectorize](https://developers.cloudflare.com/vectorize/)) to build search engines and [RAG](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/) applications.
+Build AI-powered real-time collaborative applications with PartyKit AI. Powered by [Cloudflare AI](https://ai.cloudflare.com/), PartyKit brings you models for a variety of use cases, including: text and image generation, translation, text-to-speech, and more. It also includes a vector database (powered by [Cloudflare Vectorize](https://developers.cloudflare.com/vectorize/)) to build search engines and [RAG](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/) applications.
 
 :::tip[Learn more]
 Learn more about building a search engine for your content with [Matt Webb's Braggoscope](https://blog.partykit.io/posts/using-vectorize-to-build-search)
