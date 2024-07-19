@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "fetch-blog-entries": "node -r esbuild-register scripts/fetch-blog-entries.js",
+    "fetch-blog-entries": "tsx scripts/fetch-blog-entries.js",
     "build": "npm run fetch-blog-entries && astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
