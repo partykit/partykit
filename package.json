@@ -31,7 +31,6 @@
     "@typescript-eslint/parser": "^7.13.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
-    "esbuild-register": "^3.5.0",
     "eslint": "^8.57.0",
     "eslint-plugin-deprecation": "^3.0.0",
     "ink-testing-library": "^4.0.0",
@@ -40,6 +39,7 @@
     "prettier": "^3.3.2",
     "shx": "^0.3.4",
     "tsup": "^8.1.0",
+    "tsx": "^4.16.2",
     "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
