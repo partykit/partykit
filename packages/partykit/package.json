@@ -113,11 +113,11 @@
   "scripts": {
     "clean": "shx rm -rf dist dts *.d.ts *.d.ts.map && mkdir dts",
     "typecheck:dev": "tsc -p scripts/tsconfig.extract.json --watch",
-    "move-dts": "node -r esbuild-register --watch --watch-path=./dts scripts/copy-dts.ts",
-    "build:dev": "node -r esbuild-register --watch --watch-path=./src --watch-path=./facade scripts/build.ts",
+    "move-dts": "tsx --watch --watch-path=./dts scripts/copy-dts.ts",
+    "build:dev": "tsx --watch --watch-path=./src --watch-path=./facade scripts/build.ts",
     "dev:local": "npm run clean && concurrently \"dotenv -c development npm run build:dev\" \"npm run typecheck:dev\" \"npm run move-dts\" --kill-others-on-fail",
     "dev:remote": "npm run clean && concurrently \"dotenv -c production npm run build:dev\" \"npm run typecheck:dev\" \"npm run move-dts\" --kill-others-on-fail",
     "start": "npm run dev:local",
-    "build": "npm run clean && dotenv -c production node -- -r esbuild-register scripts/build.ts --production && tsc -p scripts/tsconfig.extract.json --incremental false && node -r esbuild-register scripts/copy-dts.ts"
+    "build": "npm run clean && dotenv -c production tsx -- scripts/build.ts --production && tsc -p scripts/tsconfig.extract.json --incremental false && tsx scripts/copy-dts.ts"
   }
 }

@@ -5,8 +5,8 @@
   "bin": "dist/index.mjs",
   "scripts": {
     "clean": "shx rm -rf dist",
-    "start": "npm run clean && node -r esbuild-register --watch --watch-path src scripts/build.ts",
-    "build": "npm run clean && node -r esbuild-register scripts/build.ts --production"
+    "start": "npm run clean && tsx --watch --watch-path src scripts/build.ts",
+    "build": "npm run clean && tsx scripts/build.ts --production"
   },
   "files": [
     "dist",
