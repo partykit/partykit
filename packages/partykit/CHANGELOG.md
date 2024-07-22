@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.108
+
+### Patch Changes
+
+- [#897](https://github.com/partykit/partykit/pull/897) [`41dd92a`](https://github.com/partykit/partykit/commit/41dd92a346689a09aec6827d457d1b941d8584b0) Thanks [@threepointone](https://github.com/threepointone)! - update miniflare/cf types
+
 ## 0.0.107
 
 ### Patch Changes
