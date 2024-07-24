@@ -289,6 +289,7 @@ export class WebsocketProvider extends Observable<string> {
       connect = true,
       awareness = new awarenessProtocol.Awareness(doc),
       params = {},
+      isPrefixedUrl = false,
       WebSocketPolyfill = DefaultWebSocket as typeof WebSocket, // Optionally provide a WebSocket polyfill
       resyncInterval = -1, // Request server state every `resyncInterval` milliseconds
       maxBackoffTime = 2500, // Maximum amount of time to wait before trying to reconnect (we try to reconnect using exponential backoff)
@@ -297,6 +298,7 @@ export class WebsocketProvider extends Observable<string> {
       connect?: boolean;
       awareness?: awarenessProtocol.Awareness;
       params?: { [s: string]: string };
+      isPrefixedUrl?: boolean;
       WebSocketPolyfill?: typeof WebSocket;
       resyncInterval?: number;
       maxBackoffTime?: number;
@@ -311,11 +313,12 @@ export class WebsocketProvider extends Observable<string> {
     const encodedParams = url.encodeQueryParams(params);
     this.maxBackoffTime = maxBackoffTime;
     this.bcChannel = serverUrl + "/" + roomname;
-    this.url =
-      serverUrl +
-      "/" +
-      roomname +
-      (encodedParams.length === 0 ? "" : "?" + encodedParams);
+    this.url = isPrefixedUrl
+      ? serverUrl
+      : serverUrl +
+        "/" +
+        roomname +
+        (encodedParams.length === 0 ? "" : "?" + encodedParams);
     this.roomname = roomname;
     this.doc = doc;
     this._WS = WebSocketPolyfill;
@@ -571,6 +574,7 @@ type YPartyKitProviderOptions = Omit<
 > & {
   connectionId?: string;
   party?: string;
+  prefix?: string;
   params?: ParamsProvider;
   protocol?: "ws" | "wss";
 };
@@ -607,7 +611,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
         host.split(".")[1] <= "31")
         ? "ws"
         : "wss")
-    }://${host}${options.party ? `/parties/${options.party}` : "/party"}`;
+    }://${host}${`/parties/${options.party || "main"}`}`;
 
     // use provided id, or generate a random one
     const id = options.connectionId ?? generateUUID();
@@ -618,6 +622,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
     // don't connect until we've updated the url parameters
     const baseOptions = {
       ...rest,
+      isPrefixedUrl: !!options.prefix,
       connect: false
     };
 
