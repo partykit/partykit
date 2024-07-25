@@ -611,7 +611,7 @@ export default class YPartyKitProvider extends WebsocketProvider {
         host.split(".")[1] <= "31")
         ? "ws"
         : "wss")
-    }://${host}${`/parties/${options.party || "main"}`}`;
+    }://${host}${options.prefix || `/parties/${options.party || "main"}`}`;
 
     // use provided id, or generate a random one
     const id = options.connectionId ?? generateUUID();
