@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.31
+
+### Patch Changes
+
+- [#901](https://github.com/partykit/partykit/pull/901) [`74657bf`](https://github.com/partykit/partykit/commit/74657bf62218e460f960682ff2454da7ea66ed31) Thanks [@threepointone](https://github.com/threepointone)! - fix: actually pass prefixed url to the provider
+
 ## 0.0.30
 
 ### Patch Changes
