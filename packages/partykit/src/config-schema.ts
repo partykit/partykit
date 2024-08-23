@@ -125,12 +125,12 @@ export const schema = z
         r2: z.record(z.string()).optional(),
         kv: z.record(z.string()).optional()
       })
+      .optional(),
+    placement: z
+      .object({
+        mode: z.enum(["smart"])
+      })
       .optional()
-    // placement: z
-    //   .object({
-    //     mode: z.enum(["smart"])
-    //   })
-    //   .optional()
   })
   .strict();
 
