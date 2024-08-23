@@ -928,9 +928,9 @@ export const ${name} = ${name}Party;
     form.set("bindings", JSON.stringify(config.bindings));
   }
 
-  // if (config.placement) {
-  //   form.set("placement", JSON.stringify(config.placement));
-  // }
+  if (config.placement) {
+    form.set("placement", JSON.stringify(config.placement));
+  }
 
   if (assetsPath) {
     form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));

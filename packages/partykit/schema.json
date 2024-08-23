@@ -304,6 +304,21 @@
         }
       },
       "additionalProperties": false
+    },
+    "placement": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "smart"
+          ]
+        }
+      },
+      "required": [
+        "mode"
+      ],
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,
