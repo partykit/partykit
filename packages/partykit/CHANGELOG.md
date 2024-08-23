@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.110
+
+### Patch Changes
+
+- [`0dc127a`](https://github.com/partykit/partykit/commit/0dc127a233303d516d5a86383b045c72b6662062) Thanks [@threepointone](https://github.com/threepointone)! - smart placement config schema update
+
 ## 0.0.109
 
 ### Patch Changes
