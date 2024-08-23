@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.109
+
+### Patch Changes
+
+- [#907](https://github.com/partykit/partykit/pull/907) [`96a8d83`](https://github.com/partykit/partykit/commit/96a8d8349eaf0974d4334c216a215702151f06a4) Thanks [@threepointone](https://github.com/threepointone)! - feat: add smart placement
+
 ## 0.0.108
 
 ### Patch Changes
