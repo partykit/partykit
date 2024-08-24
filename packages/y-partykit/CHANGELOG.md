@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.32
+
+### Patch Changes
+
+- [#906](https://github.com/partykit/partykit/pull/906) [`a25381e`](https://github.com/partykit/partykit/commit/a25381e71a207064cba231f94e6fb8185fa30ac5) Thanks [@alexdlm](https://github.com/alexdlm)! - Move y-partykit deps to peerDependencies
+
 ## 0.0.31
 
 ### Patch Changes
