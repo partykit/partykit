@@ -33,7 +33,7 @@ Running this command will deploy your project to your own Cloudflare account.
 
 #### Pricing
 
-The PartyKit platform fee is waived while the cloud-prem feature is in beta. If you’re using this for commercial purposes, please reach out to us on [Discord](https://discord.gg/GJwKKTcQ7W) to discuss pricing.
+The PartyKit platform fee is free for cloud-prem deployments.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
