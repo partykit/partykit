@@ -10,11 +10,12 @@ import Button from "../atoms/Button.astro";
     <div class="pricing-plan">
       <h3>Individual</h3>
 
-      <p class="pricing-price">Free</p>
+      <p class="pricing-price">Obviously, Free</p>
 
       <ul class="pricing-features">
         <li>Deploy to our global edge platform</li>
-        <li>Generous bundled usage</li>
+        <li>Great for small projects</li>        
+        <li class="warning">Storage gets cleared every 24 hours</li>
       </ul>
 
       <ul class="pricing-limitations">
@@ -29,54 +30,33 @@ import Button from "../atoms/Button.astro";
     <hr />
 
     <div class="pricing-plan">
-      <h3>Pro</h3>
+      <h3>Commercial</h3>
 
       <p class="pricing-price">
-        &dollar;10 <small>per developer / month</small>
+        Surprise, also Free*
       </p>
 
       <ul class="pricing-features">
-        <li>Everything from Individual</li>
-        <li>Team deployments</li>
-        <li>Bundled + usage-based pricing</li>
+        <li><a href="https://docs.partykit.io/guides/deploy-to-cloudflare/" style="text-decoration: underline;" target="_blank">* If you deploy to your own Cloudflare account</a></li>                
         <li>Custom domains</li>
+        <li>Unlimited projects</li>
+
       </ul>
 
       <ul class="pricing-limitations">
-        <li>Up to 100 live projects</li>
+        <li>Pay only your Cloudflare usage</li>
       </ul>
 
-      <Button
-        variant="pricingCTA"
-        url="https://cal.com/threepointone/welcome-to-the-party"
-      >
-        Schedule a call
+      
+
+      <Button variant="pricingCTA" url="https://docs.partykit.io/quickstart/">
+        Get started
       </Button>
     </div>
 
     <hr />
 
-    <div class="pricing-plan">
-      <h3>Enterprise</h3>
-
-      <p class="pricing-price">Call us</p>
-
-      <ul class="pricing-features">
-        <li>Everything from Pro</li>
-        <li>Custom infrastructure</li>
-      </ul>
-
-      <ul class="pricing-limitations">
-        <li>Unlimited projects</li>
-      </ul>
-
-      <Button
-        variant="pricingCTA"
-        url="https://cal.com/threepointone/welcome-to-the-party"
-      >
-        Schedule a call
-      </Button>
-    </div>
+    
   </div>
 </>
 
@@ -123,7 +103,7 @@ import Button from "../atoms/Button.astro";
 
   @media (min-width: 1100px) {
     #pricing {
-      grid-column: 2 / 10;
+      grid-column: 3 / 10;
     }
   }
 
