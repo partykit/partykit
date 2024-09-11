@@ -1,5 +1,5 @@
 ---
-title: Deploy to your own Cloudflare account (beta)
+title: Deploy to your own Cloudflare account
 description: Deploy to your own Cloudflare account
 ---
 
