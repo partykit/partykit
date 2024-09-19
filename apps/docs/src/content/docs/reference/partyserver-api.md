@@ -58,7 +58,7 @@ Whether the PartyKit platform should remove the server from memory between HTTP 
 
 ### Party.Server.onStart
 
-Called when the server is started, before first [`onConnect`](#partyserveronconnect) or [`onRequest`](#partyserveronrequest).
+Called when the server is started or after waking up from hibernation, before first [`onConnect`](#partyserveronconnect) or [`onRequest`](#partyserveronrequest).
 
 You can use this to load data from storage and perform other asynchronous initialization, such as retrieving data or configuration from other services or databases.
 
