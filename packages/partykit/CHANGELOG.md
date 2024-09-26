@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.111
+
+### Patch Changes
+
+- [#916](https://github.com/partykit/partykit/pull/916) [`66d07f5`](https://github.com/partykit/partykit/commit/66d07f5d06613dcc35f58c10078eaac1d54e977e) Thanks [@threepointone](https://github.com/threepointone)! - Add support for observability
+
 ## 0.0.110
 
 ### Patch Changes
