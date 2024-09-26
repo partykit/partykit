@@ -130,6 +130,12 @@ export const schema = z
       .object({
         mode: z.enum(["smart"])
       })
+      .optional(),
+    observability: z
+      .object({
+        enabled: z.boolean().optional(),
+        head_sampling_rate: z.number().optional()
+      })
       .optional()
   })
   .strict();
