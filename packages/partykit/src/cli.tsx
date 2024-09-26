@@ -932,6 +932,10 @@ export const ${name} = ${name}Party;
     form.set("placement", JSON.stringify(config.placement));
   }
 
+  if (config.observability) {
+    form.set("observability", JSON.stringify(config.observability));
+  }
+
   if (assetsPath) {
     form.set("staticAssetsManifest", JSON.stringify(newAssetsMap));
   }

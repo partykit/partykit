@@ -319,6 +319,18 @@
         "mode"
       ],
       "additionalProperties": false
+    },
+    "observability": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "head_sampling_rate": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false,
