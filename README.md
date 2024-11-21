@@ -14,7 +14,7 @@ Go to [docs.partykit.io](https://docs.partykit.io) for documentation, guides and
 
 ## Quick start
 
-Note: to run PartyKit, you need to have Node v. 17 or higher installed.
+Note: to run PartyKit, you need to have Node v. 18 or higher installed.
 
 You can create a PartyKit project by running:
 
