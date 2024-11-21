@@ -1,0 +1,24 @@
+{
+  "name": "@partykit/examples-plate",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "partykit dev",
+    "deploy": "partykit deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slate-yjs/core": "^1.0.2",
+    "@types/react": "^18.2.72",
+    "@types/react-dom": "^18.2.22",
+    "@udecode/plate-basic-elements": "^40.0.2",
+    "@udecode/plate-basic-marks": "^40.0.0",
+    "@udecode/plate-common": "^40.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
