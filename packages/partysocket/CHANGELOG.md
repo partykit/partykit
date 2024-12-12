@@ -1,5 +1,11 @@
 # partysocket
 
+## 1.0.3
+
+### Patch Changes
+
+- [#924](https://github.com/partykit/partykit/pull/924) [`51bba92`](https://github.com/partykit/partykit/commit/51bba9237d99ad55f47d5afc5ae1bd8adc042e72) Thanks [@sensslen](https://github.com/sensslen)! - update websocket implementation to handle connection failures gracefully
+
 ## 1.0.2
 
 ### Patch Changes
