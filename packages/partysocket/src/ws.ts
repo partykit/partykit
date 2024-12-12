@@ -518,7 +518,9 @@ const partysocket = new PartySocket({
     }
     this._removeListeners();
     try {
-      this._ws.close(code, reason);
+      if (this._ws.readyState === this.OPEN) {
+        this._ws.close(code, reason);
+      }
       this._handleClose(new Events.CloseEvent(code, reason, this));
     } catch (error) {
       // ignore
