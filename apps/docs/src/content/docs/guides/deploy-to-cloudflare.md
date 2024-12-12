@@ -29,7 +29,7 @@ Running this command will deploy your project to your own Cloudflare account:
 CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> npx partykit deploy --domain partykit.domain.com
 ```
 
-You can find your accound ID in the overview page of your domain. For more information, see [Cloudflare's documentation](https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids)
+You can find your account ID in the overview page of your domain. For more information, see [Cloudflare's documentation](https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids)
 
 You can make an API token https://dash.cloudflare.com/profile/api-tokens with the `Edit Cloudflare Workers` template.
 
