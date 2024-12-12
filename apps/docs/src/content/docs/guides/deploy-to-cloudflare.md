@@ -23,29 +23,27 @@ You can start with the default, managed platform and switch to cloud-prem at any
 
 ## How to deploy
 
-tl;dr:
+Running this command will deploy your project to your own Cloudflare account:
 
 ```bash
 CLOUDFLARE_ACCOUNT_ID=<your account id> CLOUDFLARE_API_TOKEN=<your api token> npx partykit deploy --domain partykit.domain.com
 ```
 
-Running this command will deploy your project to your own Cloudflare account.
+You can find your account ID in the overview page of your domain. For more information, see [Cloudflare's documentation](https://developers.cloudflare.com/fundamentals/setup/find-account-and-zone-ids)
 
-#### Pricing
-
-The PartyKit platform fee is free for cloud-prem deployments.
+You can make an API token https://dash.cloudflare.com/profile/api-tokens with the `Edit Cloudflare Workers` template.
 
 :::tip
 (You can also set `domain` under `partykit.json`)
 :::
 
 :::tip
-You can make an API token https://dash.cloudflare.com/profile/api-tokens with the `Edit Cloudflare Workers` template.
-:::
-
-:::tip
 You can also set the `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` environment variables in your shell.
 :::
+
+#### Pricing
+
+The PartyKit platform fee is free for cloud-prem deployments.
 
 ## Future development
 
