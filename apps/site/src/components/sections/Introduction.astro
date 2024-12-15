@@ -1,5 +1,6 @@
 ---
 import Hero from "../content/Hero-Voronoi.astro";
+import Features from "../content/Features.astro";
 import Terminal from "../content/Terminal.astro";
 import MadeWith from "../cards/MadeWith.astro";
 import Button from "../atoms/Button.astro";
@@ -9,6 +10,10 @@ import Grid from "../Grid.astro";
 
 <Grid>
   <Hero />
+
+  <Features />
+
+  <h2 id="quickstart-header">PartyKit in 60 seconds</h2>
 
   <Terminal />
 
@@ -99,6 +104,23 @@ import Grid from "../Grid.astro";
 
 <style lang="scss">
   @import "../../styles/shared.scss";
+
+  #quickstart-header {
+    grid-column: 1 / -1;
+    @include atom();
+  }
+
+  @media (min-width: 760px) {
+    #quickstart-header {
+      max-width: 100%;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    #quickstart-header {
+      grid-column: 2 / 10;
+    }
+  }
 
   .get-started {
     grid-column: 1 / 3;
