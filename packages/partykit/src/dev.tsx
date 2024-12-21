@@ -20,7 +20,7 @@ import { getConfig, getUser } from "./config";
 import { API_BASE } from "./fetchResult";
 import useInspector from "./inspect";
 import { logger } from "./logger";
-import nodejsCompatPlugin, { supportedNodeBuiltins } from "./nodejs-compat";
+import nodejsCompatPlugin from "./nodejs-compat";
 import { openInBrowser } from "./open-in-browser";
 
 import type { VectorizeClientOptions } from "../facade/vectorize";
@@ -960,11 +960,6 @@ Workers["${name}"] = ${name};
                           path: absoluteScriptPath,
                           contents: code
                         },
-                        ...supportedNodeBuiltins.map((name) => ({
-                          type: "ESModule",
-                          contents: `export * from 'node:${name}'; export { default } from 'node:${name}';`,
-                          path: `${path.dirname(absoluteScriptPath)}/partykit-exposed-node-${name}`
-                        })),
 
                         // KEEP IN SYNC with deploy()
                         {
