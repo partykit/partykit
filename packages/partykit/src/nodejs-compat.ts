@@ -192,7 +192,6 @@ function handleNodeJSGlobals(
   build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path }) => ({ path }));
 
   build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path }) => {
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
     const globalName = decodeFromLowerCase(path.match(UNENV_GLOBALS_RE)![1]);
     const { importStatement, exportName } = getGlobalInject(inject[globalName]);
 

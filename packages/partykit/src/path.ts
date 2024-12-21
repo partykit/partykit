@@ -19,6 +19,5 @@ declare const __RELATIVE_PACKAGE_PATH__: string;
  * @returns The base path of the Partykit package.
  */
 export function getBasePath(): string {
-  // eslint-disable-next-line no-restricted-globals
   return path.resolve(__dirname, __RELATIVE_PACKAGE_PATH__);
 }
