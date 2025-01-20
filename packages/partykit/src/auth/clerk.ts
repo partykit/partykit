@@ -5,12 +5,12 @@ import { logger } from "../logger";
 
 import type Clerk from "@clerk/clerk-js";
 
-declare const CLERK_PUBLISHABLE_KEY: string | undefined;
+declare const PARTYKIT_CLERK_PUBLISHABLE_KEY: string | undefined;
 const PUBLISHABLE_KEY =
-  process.env.CLERK_PUBLISHABLE_KEY || CLERK_PUBLISHABLE_KEY;
+  process.env.PARTYKIT_CLERK_PUBLISHABLE_KEY || PARTYKIT_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
-  throw new Error("CLERK_PUBLISHABLE_KEY not defined");
+  throw new Error("PARTYKIT_CLERK_PUBLISHABLE_KEY not defined");
 }
 
 global.window = global.window || {};
