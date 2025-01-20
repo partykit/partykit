@@ -27,7 +27,7 @@
     "@types/which-pm-runs": "^1.0.2",
     "chalk": "^5.3.0",
     "commander": "^12.1.0",
-    "esbuild": "0.21.5",
+    "esbuild": "0.24.0",
     "execa": "^9.2.0",
     "find-up": "^7.0.0",
     "giget": "^1.2.3",
