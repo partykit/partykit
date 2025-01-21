@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import path from "node:path";
 
 import * as esbuild from "esbuild";
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -31,6 +32,20 @@ esbuild.buildSync({
   external: ["__WORKER__", "__STATIC_ASSETS_MANIFEST__"]
 });
 
+const outdir = path.resolve("./dist");
+const packageDir = path.resolve(".");
+/**
+ * The relative path between the bundled code and the Wrangler package.
+ * This is used as a reliable way to compute paths relative to the Wrangler package
+ * in the source files, rather than relying upon `__dirname` which can change depending
+ * on whether the source files have been bundled and the location of the outdir.
+ *
+ * This is exposed in the source via the `getBasePath()` function, which should be used
+ * in place of `__dirname` and similar Node.js constants.
+ *
+ * @see https://github.com/cloudflare/workers-sdk/blob/main/packages/wrangler/scripts/bundle.ts#L26
+ */
+const __RELATIVE_PACKAGE_PATH__ = `"${path.relative(outdir, packageDir)}"`;
 // generate bin/index.js
 esbuild.buildSync({
   entryPoints: ["src/bin.tsx"],
@@ -55,6 +70,7 @@ esbuild.buildSync({
   sourcemap: true,
   minify,
   define: {
+    __RELATIVE_PACKAGE_PATH__,
     PARTYKIT_API_BASE: `"${process.env.PARTYKIT_API_BASE}"`,
     "process.env.NODE_ENV": `"${isProd ? "production" : "development"}"`,
     PARTYKIT_DASHBOARD_BASE: `"${process.env.PARTYKIT_DASHBOARD_BASE}"`,

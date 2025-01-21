@@ -5,7 +5,10 @@ export default defineConfig({
     reporters: ["verbose"],
     pool: "forks",
     testTimeout: 5000,
-    setupFiles: ["./vitest.setup.js"],
+    setupFiles: [
+      "./vitest.setup.js",
+      "./packages/partykit/src/tests/vitest.setup.ts"
+    ],
     exclude: ["./packages/party.io/**", "**/node_modules/**"],
     sequence: {
       concurrent: false

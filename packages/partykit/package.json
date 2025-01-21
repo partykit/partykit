@@ -48,6 +48,8 @@
     "clipboardy": "4.0.0",
     "esbuild": "0.21.5",
     "miniflare": "3.20240718.0",
+    "ts-dedent": "^2.2.0",
+    "unenv": "^1.10.0",
     "yoga-wasm-web": "0.3.3"
   },
   "optionalDependencies": {
