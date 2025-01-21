@@ -2,7 +2,7 @@ import { builtinModules } from "node:module";
 import nodePath from "node:path";
 
 import dedent from "ts-dedent";
-import { cloudflare, env, nodeless } from "unenv";
+import { env, nodeless } from "unenv";
 
 import { getBasePath } from "./path";
 
@@ -18,7 +18,7 @@ const REQUIRED_UNENV_ALIAS_NAMESPACE = "required-unenv-alias";
  * @returns The plugin.
  */
 export const createNodeHybridPlugin: () => Plugin = () => {
-  const { alias, inject, external } = env(nodeless, cloudflare);
+  const { alias, inject, external } = env(nodeless);
   return {
     name: "nodejs-compat",
     setup(build) {
