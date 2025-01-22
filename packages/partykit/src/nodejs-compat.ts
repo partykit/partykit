@@ -30,6 +30,7 @@ export const createNodeHybridPlugin: () => Plugin = () => {
       errorOnServiceWorkerFormat(build);
       handleRequireCallsToNodeJSBuiltins(build);
       handleBaseBuiltins(build);
+      handleCloudflarePackages(build);
       handleUnenvAliasedPackages(build, alias, external);
       handleNodeJSGlobals(build, inject);
     }
@@ -130,6 +131,18 @@ function handleBaseBuiltins(build: PluginBuild) {
   });
 }
 
+/**
+ * Handles Cloudflare package import paths, like `cloudflare:sockets`.
+ */
+function handleCloudflarePackages(build: PluginBuild) {
+  build.onResolve({ filter: /^cloudflare:/ }, (args) => {
+    const cloudflareModuleName = args.path.split(":")[1];
+    return {
+      path: `partykit-exposed-cloudflare-${cloudflareModuleName}`,
+      external: true
+    };
+  });
+}
 /**
  * Handle all import paths that match an unenv polyfill. This excludes all import paths covered by handleBaseBuiltins().
  */
