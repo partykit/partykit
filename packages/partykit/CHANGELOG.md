@@ -1,5 +1,13 @@
 # partykit
 
+## 0.0.112
+
+### Patch Changes
+
+- [#928](https://github.com/partykit/partykit/pull/928) [`d84c373`](https://github.com/partykit/partykit/commit/d84c373a42215da49485ce327d8999c0b1dfd309) Thanks [@maryam-khan-dev](https://github.com/maryam-khan-dev)! - Improve Node.js API compatibility in PartyKit
+
+- [#932](https://github.com/partykit/partykit/pull/932) [`175a977`](https://github.com/partykit/partykit/commit/175a9776e6470f0d76c1e671f4700beed594dfe7) Thanks [@threepointone](https://github.com/threepointone)! - rename CLERK_PUBLISHABLE_KEY to PARTYKIT_CLERK_PUBLISHABLE_KEY
+
 ## 0.0.111
 
 ### Patch Changes

@@ -1,5 +1,0 @@
----
-"partykit": patch
----
-
-rename CLERK_PUBLISHABLE_KEY to PARTYKIT_CLERK_PUBLISHABLE_KEY
