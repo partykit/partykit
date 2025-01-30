@@ -18,6 +18,7 @@ import detectPackageManager from "which-pm-runs";
 import WebSocket from "ws";
 
 import { version as packageVersion } from "../package.json";
+import { baseNodeBuiltins } from "./base-builtins";
 import {
   createClerkServiceTokenSession,
   getConfig,
@@ -953,6 +954,20 @@ export const ${name} = ${name}Party;
     form.set(
       uploadFileName,
       new File([buffer], uploadFileName, { type: "application/octet-stream" })
+    );
+  }
+
+  // init node modules
+  for (const nodeModuleName of baseNodeBuiltins) {
+    form.set(
+      `upload/partykit-exposed-node-${nodeModuleName}`,
+      new File(
+        [
+          `export * from 'node:${nodeModuleName}';export { default } from 'node:${nodeModuleName}';`
+        ],
+        `upload/partykit-exposed-node-${nodeModuleName}`,
+        { type: "application/javascript+module" }
+      )
     );
   }
 

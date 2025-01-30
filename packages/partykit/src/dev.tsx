@@ -16,6 +16,7 @@ import { onExit } from "signal-exit";
 import { fetch } from "undici";
 
 import asyncCache from "./async-cache";
+import { baseNodeBuiltins } from "./base-builtins";
 import { getConfig, getUser } from "./config";
 import { API_BASE } from "./fetchResult";
 import useInspector from "./inspect";
@@ -364,7 +365,7 @@ function DevImpl(props: DevProps) {
 
   return (
     <>
-      {props.enableInspector ?? true ? (
+      {(props.enableInspector ?? true) ? (
         <Inspector inspectorUrl={inspectorUrl} />
       ) : null}
       {isRawModeSupported ? (
@@ -960,7 +961,11 @@ Workers["${name}"] = ${name};
                           path: absoluteScriptPath,
                           contents: code
                         },
-
+                        ...baseNodeBuiltins.map((name) => ({
+                          type: "ESModule",
+                          contents: `export * from 'node:${name}'; export { default } from 'node:${name}';`,
+                          path: `${path.dirname(absoluteScriptPath)}/partykit-exposed-node-${name}`
+                        })),
                         // KEEP IN SYNC with deploy()
                         {
                           type: "ESModule",
