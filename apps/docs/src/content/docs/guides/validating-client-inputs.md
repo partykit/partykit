@@ -88,7 +88,7 @@ Define a schema in a shared file, for example in `schema.ts`:
 ```ts
 import z from "zod";
 
-export const ReplyMessage = z.object({ type: "join", id: z.string() });
+export const ReplyMessage = z.object({ type: z.literal("join"), id: z.string() });
 ```
 
 You can then validate incoming messages on the client:
