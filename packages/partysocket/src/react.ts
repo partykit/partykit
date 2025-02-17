@@ -39,6 +39,8 @@ export default function usePartySocket(options: UsePartySocketOptions) {
         options.path,
         options.protocol,
         options.protocols,
+        options.basePath,
+        options.prefix,
         ...getOptionsThatShouldCauseRestartWhenChanged(options)
       ])
   });

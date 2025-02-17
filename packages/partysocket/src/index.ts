@@ -14,6 +14,7 @@ export type PartySocketOptions = Omit<RWS.Options, "constructor"> & {
   host: string; // base url for the party
   room?: string; // the room to connect to
   party?: string; // the party to connect to (defaults to main)
+  basePath?: string; // the base path to use for the party
   prefix?: string; // the prefix to use for the party
   protocol?: "ws" | "wss";
   protocols?: string[];
@@ -26,6 +27,7 @@ export type PartyFetchOptions = {
   host: string; // base url for the party
   room: string; // the room to connect to
   party?: string; // the party to fetch from (defaults to main)
+  basePath?: string; // the base path to use for the party
   prefix?: string; // the prefix to use for the party
   path?: string; // the path to fetch from
   protocol?: "http" | "https";
@@ -70,6 +72,7 @@ function getPartyInfo(
     protocol: rawProtocol,
     room,
     party,
+    basePath,
     prefix,
     query
   } = partySocketOptions;
@@ -102,7 +105,7 @@ function getPartyInfo(
       : // https / wss
         defaultProtocol + "s");
 
-  const baseUrl = `${protocol}://${host}/${prefix || `parties/${name}/${room}`}${path}`;
+  const baseUrl = `${protocol}://${host}/${basePath || `${prefix || "parties"}/${name}/${room}`}${path}`;
 
   const makeUrl = (query: Params = {}) =>
     `${baseUrl}?${new URLSearchParams([
