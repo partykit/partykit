@@ -1,6 +1,6 @@
 {
   "name": "partysocket",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A better WebSocket that Just Works™",
   "homepage": "https://docs.partykit.io/reference/partysocket-api",
   "bugs": "https://github.com/partykit/partykit/issues",
