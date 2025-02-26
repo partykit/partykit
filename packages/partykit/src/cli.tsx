@@ -334,7 +334,7 @@ export async function init(options: {
                 "init",
                 "index.ts"
               )
-              .replace(/^.\\/, '') // remove .\\ prefix
+              .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
             )
           );
           console.log(`‣ Created ${chalk.bold("party/index.ts")}`);
@@ -348,7 +348,7 @@ export async function init(options: {
                 "init",
                 "index.js"
               )
-              .replace(/^.\\/, '') // remove .\\ prefix
+              .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
             )
           );
           console.log(`‣ Created ${chalk.bold("party/index.js")}`);
