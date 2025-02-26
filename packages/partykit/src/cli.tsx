@@ -721,7 +721,7 @@ export const ${name} = ${name}Party;
       inject: [
         fileURLToPath(
           path.join(path.dirname(import.meta.url), "../inject-process.js")
-          .replace(/^.\\/, '') // remove .\\ prefix from path for windows
+          .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
         )
       ],
       alias: config.build?.alias,
