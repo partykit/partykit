@@ -334,6 +334,7 @@ export async function init(options: {
                 "init",
                 "index.ts"
               )
+              .replace(/^.\\/, '') // remove .\\ prefix
             )
           );
           console.log(`‣ Created ${chalk.bold("party/index.ts")}`);
@@ -347,6 +348,7 @@ export async function init(options: {
                 "init",
                 "index.js"
               )
+              .replace(/^.\\/, '') // remove .\\ prefix
             )
           );
           console.log(`‣ Created ${chalk.bold("party/index.js")}`);
@@ -719,6 +721,7 @@ export const ${name} = ${name}Party;
       inject: [
         fileURLToPath(
           path.join(path.dirname(import.meta.url), "../inject-process.js")
+          .replace(/^.\\/, '') // remove .\\ prefix from path for windows
         )
       ],
       alias: config.build?.alias,
