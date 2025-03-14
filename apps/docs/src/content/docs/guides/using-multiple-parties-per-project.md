@@ -73,7 +73,7 @@ const socket = await userRoom.socket();
 
 Let's now look at a more fleshed-out example.
 
-Let's say you want to track of all room instances, and see how many active connections there are to each room.
+Let's say you want to keep track of all room instances, and see how many active connections there are to each room.
 
 You can define a `connections` party that keeps track of the number of active connections when it receives an update via an HTTP `POST` request:
 
