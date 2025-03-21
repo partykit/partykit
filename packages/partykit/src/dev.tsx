@@ -751,6 +751,7 @@ function useDev(options: DevProps): {
       const workerFacade = fs.readFileSync(
         fileURLToPath(
           path.join(path.dirname(import.meta.url), "../dist/generated.js")
+          .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
         ),
         "utf8"
       );
@@ -799,6 +800,7 @@ Workers["${name}"] = ${name};
         inject: [
           fileURLToPath(
             path.join(path.dirname(import.meta.url), "../inject-process.js")
+            .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
           )
         ],
         define: {
