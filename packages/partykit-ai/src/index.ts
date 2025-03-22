@@ -1,3 +1,4 @@
+// @ts-expect-error boop
 import { Ai as CFAi } from "@cloudflare/ai";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

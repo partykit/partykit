@@ -3,7 +3,7 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": "never"
   },
-  "editor.formatOnSave": true,
+  // "editor.formatOnSave": true,
   "files.associations": {
     "partykit.json": "jsonc"
   },

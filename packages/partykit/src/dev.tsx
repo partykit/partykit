@@ -1031,7 +1031,7 @@ Workers["${name}"] = ${name};
                 const fileContent = fs.readFileSync(filePath);
                 const fileHash = crypto
                   .createHash("sha1")
-                  .update(fileContent)
+                  .update(fileContent as unknown as string)
                   .digest("hex");
                 const fileName = `./${fileHash}-${path
                   .basename(args.path)
@@ -1063,7 +1063,7 @@ Workers["${name}"] = ${name};
                 const fileContent = fs.readFileSync(filePath);
                 const fileHash = crypto
                   .createHash("sha1")
-                  .update(fileContent)
+                  .update(fileContent as unknown as string)
                   .digest("hex");
                 const fileName = `./${fileHash}-${path
                   .basename(args.path)

@@ -148,7 +148,10 @@ function setupWS(provider: WebsocketProvider) {
       provider.wsLastMessageReceived = time.getUnixTime();
       const encoder = readMessage(provider, new Uint8Array(event.data), true);
       if (encoding.length(encoder) > 1) {
-        sendChunked(encoding.toUint8Array(encoder), websocket);
+        sendChunked(
+          encoding.toUint8Array(encoder) as unknown as ArrayBuffer,
+          websocket
+        );
       }
     });
     websocket.addEventListener("error", (event) => {
@@ -202,7 +205,10 @@ function setupWS(provider: WebsocketProvider) {
       const encoder = encoding.createEncoder();
       encoding.writeVarUint(encoder, messageSync);
       syncProtocol.writeSyncStep1(encoder, provider.doc);
-      sendChunked(encoding.toUint8Array(encoder), websocket);
+      sendChunked(
+        encoding.toUint8Array(encoder) as unknown as ArrayBuffer,
+        websocket
+      );
       // broadcast local awareness state
       if (provider.awareness.getLocalState() !== null) {
         const encoderAwarenessState = encoding.createEncoder();
@@ -213,7 +219,12 @@ function setupWS(provider: WebsocketProvider) {
             provider.doc.clientID
           ])
         );
-        sendChunked(encoding.toUint8Array(encoderAwarenessState), websocket);
+        sendChunked(
+          encoding.toUint8Array(
+            encoderAwarenessState
+          ) as unknown as ArrayBuffer,
+          websocket
+        );
       }
     });
     provider.emit("status", [
@@ -345,11 +356,15 @@ export class WebsocketProvider extends Observable<string> {
           const encoder = encoding.createEncoder();
           encoding.writeVarUint(encoder, messageSync);
           syncProtocol.writeSyncStep1(encoder, doc);
-          sendChunked(encoding.toUint8Array(encoder), this.ws);
+          sendChunked(
+            encoding.toUint8Array(encoder) as unknown as ArrayBuffer,
+            this.ws
+          );
         }
       }, resyncInterval);
     }
 
+    // @ts-expect-error boop
     this._bcSubscriber = (data: ArrayBuffer, origin: unknown) => {
       if (origin !== this) {
         const encoder = readMessage(this, new Uint8Array(data), false);
@@ -366,7 +381,10 @@ export class WebsocketProvider extends Observable<string> {
         const encoder = encoding.createEncoder();
         encoding.writeVarUint(encoder, messageSync);
         syncProtocol.writeUpdate(encoder, update);
-        broadcastMessage(this, encoding.toUint8Array(encoder));
+        broadcastMessage(
+          this,
+          encoding.toUint8Array(encoder) as unknown as ArrayBuffer
+        );
       }
     };
     this.doc.on("update", this._updateHandler);
@@ -382,7 +400,10 @@ export class WebsocketProvider extends Observable<string> {
         encoder,
         awarenessProtocol.encodeAwarenessUpdate(awareness, changedClients)
       );
-      broadcastMessage(this, encoding.toUint8Array(encoder));
+      broadcastMessage(
+        this,
+        encoding.toUint8Array(encoder) as unknown as ArrayBuffer
+      );
     };
     this._unloadHandler = () => {
       awarenessProtocol.removeAwarenessStates(
@@ -506,7 +527,10 @@ export class WebsocketProvider extends Observable<string> {
         new Map()
       )
     );
-    broadcastMessage(this, encoding.toUint8Array(encoder));
+    broadcastMessage(
+      this,
+      encoding.toUint8Array(encoder) as unknown as ArrayBuffer
+    );
     if (this.bcconnected) {
       bc.unsubscribe(this.bcChannel, this._bcSubscriber);
       this.bcconnected = false;

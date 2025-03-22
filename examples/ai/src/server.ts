@@ -1,3 +1,4 @@
+// @ts-expect-error boop
 import { Ai } from "partykit-ai";
 import type * as Party from "partykit/server";
 

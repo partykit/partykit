@@ -92,7 +92,7 @@ export const clientMessageSchema = z.object({
 // parse incoming message (supports json and msgpack)
 export function decodeMessage(message: string | ArrayBufferLike) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return typeof message === "string" ? JSON.parse(message) : decode(message);
+  return typeof message === "string" ? JSON.parse(message) : decode(message as BufferSource);
 }
 
 // creates a msgpack message
