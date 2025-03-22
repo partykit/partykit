@@ -1,5 +1,11 @@
 # partysocket
 
+## 1.1.2
+
+### Patch Changes
+
+- [#944](https://github.com/partykit/partykit/pull/944) [`953d48c`](https://github.com/partykit/partykit/commit/953d48c2adf8a588097b9129525396393c6dae2d) Thanks [@threepointone](https://github.com/threepointone)! - Update README.md
+
 ## 1.1.1
 
 ### Patch Changes
