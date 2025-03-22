@@ -120,6 +120,7 @@ export default class PresenceServer implements Party.Server {
     });
   }
 
+  // @ts-expect-error boop
   onMessage(
     msg: string | ArrayBufferLike,
     connection: ConnectionWithUser,
@@ -233,4 +234,5 @@ export default class PresenceServer implements Party.Server {
   }
 }
 
+// @ts-expect-error boop
 PresenceServer satisfies Party.Worker;

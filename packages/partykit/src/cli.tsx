@@ -18,6 +18,7 @@ import detectPackageManager from "which-pm-runs";
 import WebSocket from "ws";
 
 import { version as packageVersion } from "../package.json";
+import { baseNodeBuiltins } from "./base-builtins";
 import {
   createClerkServiceTokenSession,
   getConfig,
@@ -335,7 +336,7 @@ export async function init(options: {
                 "index.ts"
               )
               .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
-            )
+            ) as unknown as string
           );
           console.log(`‣ Created ${chalk.bold("party/index.ts")}`);
         } else {
@@ -349,7 +350,7 @@ export async function init(options: {
                 "index.js"
               )
               .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
-            )
+            ) as unknown as string
           );
           console.log(`‣ Created ${chalk.bold("party/index.js")}`);
         }
@@ -634,7 +635,7 @@ export async function deploy(options: {
       const fileSize = fs.statSync(filePath).size;
       const fileHash = crypto
         .createHash("sha1")
-        .update(fs.readFileSync(filePath))
+        .update(fs.readFileSync(filePath) as unknown as string)
         .digest("hex");
 
       const sourceName = `${path.basename(
@@ -738,7 +739,7 @@ export const ${name} = ${name}Party;
               const fileContent = fs.readFileSync(filePath);
               const fileHash = crypto
                 .createHash("sha1")
-                .update(fileContent)
+                .update(fileContent as unknown as string)
                 .digest("hex");
               const fileName = `./${fileHash}-${path
                 .basename(args.path)
@@ -765,7 +766,7 @@ export const ${name} = ${name}Party;
               const fileContent = fs.readFileSync(filePath);
               const fileHash = crypto
                 .createHash("sha1")
-                .update(fileContent)
+                .update(fileContent as unknown as string)
                 .digest("hex");
               const fileName = `./${fileHash}-${path
                 .basename(args.path)
@@ -947,7 +948,9 @@ export const ${name} = ${name}Party;
     const uploadFileName = path.join("upload", fileName).replace(/\\/g, "/");
     form.set(
       uploadFileName,
-      new File([buffer], uploadFileName, { type: "application/wasm" })
+      new File([buffer as unknown as string], uploadFileName, {
+        type: "application/wasm"
+      })
     );
   }
 
@@ -955,7 +958,21 @@ export const ${name} = ${name}Party;
     const uploadFileName = path.join("upload", fileName).replace(/\\/g, "/");
     form.set(
       uploadFileName,
-      new File([buffer], uploadFileName, { type: "application/octet-stream" })
+      new File([buffer as unknown as string], uploadFileName, { type: "application/octet-stream" })
+    );
+  }
+
+  // init node modules
+  for (const nodeModuleName of baseNodeBuiltins) {
+    form.set(
+      `upload/partykit-exposed-node-${nodeModuleName}`,
+      new File(
+        [
+          `export * from 'node:${nodeModuleName}';export { default } from 'node:${nodeModuleName}';`
+        ],
+        `upload/partykit-exposed-node-${nodeModuleName}`,
+        { type: "application/javascript+module" }
+      )
     );
   }
 

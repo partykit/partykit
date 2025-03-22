@@ -125,7 +125,7 @@ export const handleChunked = (
             assertEquality(marker.count, batch.length, "received batch count");
             assertEquality(marker.size, bytesWritten, "client size");
 
-            receive(bytes);
+            receive(bytes as unknown as ArrayBuffer);
           } catch (e) {
             console.error(e);
             throw e;
@@ -136,9 +136,9 @@ export const handleChunked = (
         }
       }
     } else if (batch) {
-      batch.push(message.data);
+      batch.push(message.data as unknown as ArrayBuffer);
     } else {
-      receive(new Uint8Array(message.data));
+      receive(new Uint8Array(message.data) as unknown as ArrayBuffer);
     }
   };
 };

@@ -2,8 +2,13 @@ import { builtinModules } from "node:module";
 import nodePath from "node:path";
 
 import dedent from "ts-dedent";
-import { cloudflare, env, nodeless } from "unenv";
+import { env, nodeless } from "unenv";
 
+import {
+  baseNodePreset,
+  getBaseBuiltinPath,
+  isBaseBuiltin
+} from "./base-builtins";
 import { getBasePath } from "./path";
 
 import type { Plugin, PluginBuild } from "esbuild";
@@ -18,12 +23,14 @@ const REQUIRED_UNENV_ALIAS_NAMESPACE = "required-unenv-alias";
  * @returns The plugin.
  */
 export const createNodeHybridPlugin: () => Plugin = () => {
-  const { alias, inject, external } = env(nodeless, cloudflare);
+  const { alias, inject, external } = env(nodeless, baseNodePreset);
   return {
     name: "nodejs-compat",
     setup(build) {
       errorOnServiceWorkerFormat(build);
       handleRequireCallsToNodeJSBuiltins(build);
+      handleBaseBuiltins(build);
+      handleCloudflarePackages(build);
       handleUnenvAliasedPackages(build, alias, external);
       handleNodeJSGlobals(build, inject);
     }
@@ -83,9 +90,17 @@ function handleRequireCallsToNodeJSBuiltins(build: PluginBuild) {
       };
     }
   });
+
   build.onLoad(
     { filter: /.*/, namespace: REQUIRED_NODE_BUILT_IN_NAMESPACE },
     ({ path }) => {
+      // Re-route to base builtins if needed.
+      if (isBaseBuiltin(path)) {
+        return {
+          path: getBaseBuiltinPath(path),
+          external: true
+        };
+      }
       return {
         contents: dedent`
 					import libDefault from '${path}';
@@ -96,6 +111,41 @@ function handleRequireCallsToNodeJSBuiltins(build: PluginBuild) {
   );
 }
 
+/**
+ * Handles all import paths that match a base builtin.
+ *
+ * We support and prioritize the list of default supported built-in Node.js APIs in the Workerd environment, **except** process (which is substituted by the matching `unenv` polyfill).
+ * @see https://developers.cloudflare.com/workers/runtime-apis/nodejs/
+ *
+ * `unenv`'s `process` polyfill is preferred over the default, because it offers more functionality (like `process.cwd()`).
+ */
+function handleBaseBuiltins(build: PluginBuild) {
+  const EXPOSED_PRESET_ALIAS_RE = new RegExp(
+    `^(${Object.keys(baseNodePreset.alias!).join("|")})$`
+  );
+  build.onResolve({ filter: EXPOSED_PRESET_ALIAS_RE }, (args) => {
+    return {
+      path: getBaseBuiltinPath(args.path),
+      external: true
+    };
+  });
+}
+
+/**
+ * Handles Cloudflare package import paths, like `cloudflare:sockets`.
+ */
+function handleCloudflarePackages(build: PluginBuild) {
+  build.onResolve({ filter: /^cloudflare:/ }, (args) => {
+    const cloudflareModuleName = args.path.split(":")[1];
+    return {
+      path: `partykit-exposed-cloudflare-${cloudflareModuleName}`,
+      external: true
+    };
+  });
+}
+/**
+ * Handle all import paths that match an unenv polyfill. This excludes all import paths covered by handleBaseBuiltins().
+ */
 function handleUnenvAliasedPackages(
   build: PluginBuild,
   alias: Record<string, string>,
@@ -103,7 +153,9 @@ function handleUnenvAliasedPackages(
 ) {
   // esbuild expects alias paths to be absolute
   const aliasAbsolute: Record<string, string> = {};
+
   for (const [module, unresolvedAlias] of Object.entries(alias)) {
+    if (isBaseBuiltin(module)) continue;
     try {
       aliasAbsolute[module] = require
         .resolve(unresolvedAlias)
@@ -112,7 +164,6 @@ function handleUnenvAliasedPackages(
       // this is an alias for package that is not installed in the current app => ignore
     }
   }
-
   const UNENV_ALIAS_RE = new RegExp(
     `^(${Object.keys(aliasAbsolute).join("|")})$`
   );
@@ -121,6 +172,7 @@ function handleUnenvAliasedPackages(
     const unresolvedAlias = alias[args.path];
     // Convert `require()` calls for NPM packages to a virtual ES Module that can be imported avoiding the require calls.
     // Note: Does not apply to Node.js packages that are handled in `handleRequireCallsToNodeJSBuiltins`
+
     if (
       args.kind === "require-call" &&
       (unresolvedAlias.startsWith("unenv/runtime/npm/") ||
@@ -154,6 +206,7 @@ function handleUnenvAliasedPackages(
 		}
 		`;
 
+  // Called when an absolute alias matches /unenv/runtime/npm/ or /unenv/runtime/mock/
   build.onLoad(
     { filter: /.*/, namespace: REQUIRED_UNENV_ALIAS_NAMESPACE },
     ({ path }) => {
@@ -180,7 +233,6 @@ function handleNodeJSGlobals(
     getBasePath(),
     "_virtual_unenv_global_polyfill-"
   );
-
   build.initialOptions.inject = [
     ...(build.initialOptions.inject ?? []),
     //convert unenv's inject keys to absolute specifiers of custom virtual modules that will be provided via a custom onLoad
@@ -194,11 +246,10 @@ function handleNodeJSGlobals(
   build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path }) => {
     const globalName = decodeFromLowerCase(path.match(UNENV_GLOBALS_RE)![1]);
     const { importStatement, exportName } = getGlobalInject(inject[globalName]);
-
     return {
       contents: dedent`
-				${importStatement}
-				globalThis.${globalName} = ${exportName};
+        ${importStatement}
+        globalThis.${globalName} = ${exportName}
 			`
     };
   });
@@ -211,7 +262,7 @@ function getGlobalInject(globalInject: string | string[]) {
   if (typeof globalInject === "string") {
     // the mapping is a simple string, indicating a default export, so the string is just the module specifier.
     return {
-      importStatement: `import globalVar from "${globalInject}";`,
+      importStatement: `import * as globalVar from "${globalInject}";`,
       exportName: "globalVar"
     };
   }

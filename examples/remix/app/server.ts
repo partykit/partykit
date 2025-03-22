@@ -5,9 +5,11 @@ import type * as Party from "partykit/server";
 import * as build from "@remix-run/dev/server-build";
 
 if (process.env.NODE_ENV === "development") {
+  // @ts-expect-error boop
   logDevReady(build);
 }
 
+// @ts-expect-error boop
 const handleRequest = createRequestHandler({ build });
 
 export default class MyRemix implements Party.Server {
