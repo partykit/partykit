@@ -52,7 +52,7 @@ import PartySocket from "partysocket";
 const ws = new PartySocket({
   host: "project.name.partykit.dev", // or localhost:1999 in dev
   room: "my-room",
-  // add an optional id to identify the client,
+  // add an optional id to identify the client
   // if not provided, a random id will be generated
   id: "some-connection-id"
   // optional: if used from node.js, you need to pass the WebSocket polyfill imported from `ws`
