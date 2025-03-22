@@ -70,7 +70,7 @@ export default class Server implements Party.Server {
     { request }: Party.ConnectionContext
   ) {
     const userId = request.headers.get("X-User-ID");
-    return new Response(`Hello ${userId} from party!`);
+    connection.send(`Hello ${userId} from party!`);
   }
 }
 ```
