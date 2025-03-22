@@ -55,7 +55,7 @@ class Decoder {
       this._buffer = buffer;
       this._view = new DataView(this._buffer);
     } else if (ArrayBuffer.isView(buffer)) {
-      this._buffer = buffer.buffer;
+      this._buffer = buffer.buffer as ArrayBuffer;
       this._view = new DataView(
         this._buffer,
         buffer.byteOffset,

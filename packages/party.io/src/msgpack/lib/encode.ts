@@ -330,7 +330,8 @@ function _encode(
         throw new Error("Buffer too large");
       }
       defers.push({
-        _bin: value instanceof ArrayBuffer ? value : value.buffer,
+        _bin:
+          value instanceof ArrayBuffer ? value : (value.buffer as ArrayBuffer),
         _length: length,
         _offset: bytes.length
       });
