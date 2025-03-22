@@ -1,5 +1,15 @@
 # partysocket
 
+## 1.1.0
+
+### Minor Changes
+
+- [#938](https://github.com/partykit/partykit/pull/938) [`548c226`](https://github.com/partykit/partykit/commit/548c2268f4390fe5645eec54651e21bb352254f6) Thanks [@threepointone](https://github.com/threepointone)! - add basePath, prefix
+
+  renamed the previous prefix option to basePath, and added a new prefix option.
+
+  This is a breaking change, but since this was an undocumented feature, it's unlikely to affect anyone.
+
 ## 1.0.3
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # partykit-ai
 
+## 0.0.20
+
+### Patch Changes
+
+- [`21dd562`](https://github.com/partykit/partykit/commit/21dd562523dcddb55d9c5f83092d28043c574180) Thanks [@threepointone](https://github.com/threepointone)! - partykit-ai: lock `@cloudflare/ai` version
+
 ## 0.0.19
 
 ### Patch Changes
