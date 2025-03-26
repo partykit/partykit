@@ -348,6 +348,7 @@ export type DevProps = {
   compatibilityFlags?: string[] | undefined;
   minify?: boolean | undefined;
   enableInspector?: boolean | undefined;
+  hotkeys?: boolean | undefined;
 };
 
 export function Dev(props: DevProps) {
@@ -368,7 +369,7 @@ function DevImpl(props: DevProps) {
       {(props.enableInspector ?? true) ? (
         <Inspector inspectorUrl={inspectorUrl} />
       ) : null}
-      {isRawModeSupported ? (
+      {isRawModeSupported && props.hotkeys ? (
         <HotKeys
           portForServer={portForServer}
           localProtocol={props.https ? "https" : "http"}
@@ -751,8 +752,9 @@ function useDev(options: DevProps): {
 
       const workerFacade = fs.readFileSync(
         fileURLToPath(
-          path.join(path.dirname(import.meta.url), "../dist/generated.js")
-          .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
+          path
+            .join(path.dirname(import.meta.url), "../dist/generated.js")
+            .replace(/^.\\file:/, "file:") // fix .\\ prefix on windows
         ),
         "utf8"
       );
@@ -800,8 +802,9 @@ Workers["${name}"] = ${name};
         metafile: true,
         inject: [
           fileURLToPath(
-            path.join(path.dirname(import.meta.url), "../inject-process.js")
-            .replace(/^.\\file:/, 'file:') // fix .\\ prefix on windows
+            path
+              .join(path.dirname(import.meta.url), "../inject-process.js")
+              .replace(/^.\\file:/, "file:") // fix .\\ prefix on windows
           )
         ],
         define: {

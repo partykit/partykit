@@ -1,0 +1,5 @@
+---
+"partykit": patch
+---
+
+--no-hotkeys

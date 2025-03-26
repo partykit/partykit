@@ -152,7 +152,9 @@ program
   .option("--with-env", "Define all variables in the deployment")
   .option("--disable-request-cf-fetch", "Disable populating request.cf")
   .option("--verbose", "Verbose debugging output")
+  .option("--no-hotkeys", "Disable hot keys")
   .action(async (scriptPath, options) => {
+    console.log(options);
     await printBanner();
     render(
       <ErrorBoundary
@@ -172,6 +174,7 @@ program
           httpsKeyPath={options.httpsKeyPath}
           httpsCertPath={options.httpsCertPath}
           live={options.live}
+          hotkeys={options.hotkeys}
           withEnv={options.withEnv}
           compatibilityDate={options.compatibilityDate}
           compatibilityFlags={options.compatibilityFlags}
