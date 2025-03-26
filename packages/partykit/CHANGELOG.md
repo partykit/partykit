@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.113
+
+### Patch Changes
+
+- [`e9dd477`](https://github.com/partykit/partykit/commit/e9dd47747e90e0ee314c25d96cbb593004c6b367) Thanks [@threepointone](https://github.com/threepointone)! - --no-hotkeys
+
 ## 0.0.112
 
 ### Patch Changes
