@@ -10,7 +10,6 @@ try {
     for (const path of [
       "./packages/partykit/package.json",
       "./packages/y-partykit/package.json",
-      "./packages/partysocket/package.json",
       "./packages/create-partykit/package.json",
       "./packages/partymix/package.json",
       "./packages/party.io/package.json",

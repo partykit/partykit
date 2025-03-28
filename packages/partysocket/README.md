@@ -1,3 +1,5 @@
+NOTE: The source for this has been moved to the partyserver repository.
+
 # PartySocket
 
 _(Forked from the wonderful [reconnecting-websocket](https://github.com/joewalnes/reconnecting-websocket/) project, updated with pending PRs and bugfixes)_

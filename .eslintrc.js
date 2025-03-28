@@ -26,7 +26,6 @@ module.exports = {
     "apps/blog/dist",
     "packages/partykit/init/index.js",
     "packages/party.io/**/*.test.ts",
-    "packages/partysocket/event-target-polyfill.*",
     "packages/partykit-ai/src/index.ts"
   ],
   rules: {
