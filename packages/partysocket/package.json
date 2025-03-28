@@ -1,79 +1,12 @@
 {
-  "name": "partysocket",
+  "name": "@partykit/partysocket",
   "version": "1.1.2",
   "description": "A better WebSocket that Just Works™",
   "homepage": "https://docs.partykit.io/reference/partysocket-api",
   "bugs": "https://github.com/partykit/partykit/issues",
   "main": "./dist/index.js",
+  "private": true,
   "module": "./dist/index.mjs",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
-    "./ws": {
-      "types": "./ws.d.ts",
-      "import": "./dist/ws.mjs",
-      "require": "./dist/ws.js"
-    },
-    "./react": {
-      "types": "./react.d.ts",
-      "import": "./dist/react.mjs",
-      "require": "./dist/react.js"
-    },
-    "./use-ws": {
-      "types": "./use-ws.d.ts",
-      "import": "./dist/use-ws.mjs",
-      "require": "./dist/use-ws.js"
-    },
-    "./event-target-polyfill": {
-      "types": "./event-target-polyfill.d.ts",
-      "import": "./dist/event-target-polyfill.mjs",
-      "require": "./dist/event-target-polyfill.js"
-    }
-  },
-  "tsup": {
-    "entry": [
-      "src/index.ts",
-      "src/react.ts",
-      "src/ws.ts",
-      "src/use-ws.ts",
-      "src/event-target-polyfill.ts"
-    ],
-    "format": [
-      "esm",
-      "cjs"
-    ],
-    "dts": true
-  },
-  "scripts": {
-    "clean": "shx rm -rf dist *.d.ts *.d.mts event-target-polyfill.*",
-    "post-build": "shx mv dist/*.d.ts dist/*.d.mts* . && shx mv dist/event-target-polyfill.* .",
-    "build": "npm run clean && tsup --external react && npm run post-build",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "files": [
-    "dist",
-    "*.d.ts",
-    "event-target-polyfill.*"
-  ],
-  "keywords": [
-    "websocket",
-    "client",
-    "reconnecting",
-    "reconnection",
-    "reconnect",
-    "forever",
-    "persistent",
-    "forever",
-    "automatic"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/partykit/partykit.git",
-    "directory": "packages/partykit"
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {

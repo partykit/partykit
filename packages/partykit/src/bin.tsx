@@ -154,7 +154,6 @@ program
   .option("--verbose", "Verbose debugging output")
   .option("--no-hotkeys", "Disable hot keys")
   .action(async (scriptPath, options) => {
-    console.log(options);
     await printBanner();
     render(
       <ErrorBoundary
