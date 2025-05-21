@@ -507,14 +507,7 @@ export async function deploy(options: {
   );
 
   // get user details
-  const user = await getUser();
-
-  if (process.env.CLOUDFLARE_ACCOUNT_ID && process.env.CLOUDFLARE_API_TOKEN) {
-    // beta feature, might change in the future
-    logger.warn(
-      `Deploying to your own Cloudflare account is currently in beta. If you're using this for Commercial purposes, please reach out to us on the discord to discuss pricing https://discord.gg/GJwKKTcQ7W`
-    );
-  }
+  const user = await getUser();  
 
   if (
     config.domain &&
