@@ -1,5 +1,11 @@
 # partykit
 
+## 0.0.115
+
+### Patch Changes
+
+- [`9fcca93`](https://github.com/partykit/partykit/commit/9fcca935f4c9af6fbdb1228f13aca05bd60966c3) Thanks [@threepointone](https://github.com/threepointone)! - remove warnign when deploying to own domain
+
 ## 0.0.114
 
 ### Patch Changes
