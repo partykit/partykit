@@ -19,7 +19,7 @@
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@react-three/drei": "^9.97.3",
     "@react-three/fiber": "^8.15.16",
-    "@types/three": "^0.161.2",
+    "zustand": "^4.5.0",
     "@vitejs/plugin-react": "^4.2.1",
     "astro": "^4.3.5",
     "clsx": "^2.1.0",
@@ -28,13 +28,13 @@
     "react-text-loop-next-18": "^0.0.3",
     "sass": "^1.70.0",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5.4.5",
-    "zustand": "^4.5.0"
+    "typescript": "^5.4.5"
   },
   "devDependencies": {
     "@types/d3": "^7.4.3",
     "@types/xml2json": "^0.11.6",
     "prettier-plugin-astro": "^0.13.0",
-    "xml2json": "^0.12.0"
+    "xml2json": "^0.12.0",
+    "@types/three": "^0.161.2"
   }
 }
