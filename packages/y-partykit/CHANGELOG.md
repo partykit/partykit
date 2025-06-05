@@ -1,5 +1,11 @@
 # y-partykit
 
+## 0.0.33
+
+### Patch Changes
+
+- [`732dc3c`](https://github.com/partykit/partykit/commit/732dc3c70faaf3d73c61fd3ab6c77f1da29e9175) Thanks [@threepointone](https://github.com/threepointone)! - broader range of react as a peer dep
+
 ## 0.0.32
 
 ### Patch Changes
