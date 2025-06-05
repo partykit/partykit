@@ -60,7 +60,7 @@
     "lodash.debounce": "^4.0.8"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
+    "react": "*",
     "y-protocols": "^1.0.6",
     "yjs": "^13.6.16"
   },
