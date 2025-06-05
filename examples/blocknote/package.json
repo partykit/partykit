@@ -14,9 +14,11 @@
   "dependencies": {
     "@blocknote/mantine": "^0.14.1",
     "@blocknote/react": "^0.14.1",
+    "react-dom": "^18.2.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
     "@types/react": "^18.2.72",
-    "@types/react-dom": "^18.2.22",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@types/react-dom": "^18.2.22"
   }
 }
