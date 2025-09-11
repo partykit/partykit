@@ -8,6 +8,9 @@
 
 With PartyKit, you can focus on building multiplayer apps or adding real-time experiences to your existing projects with as little as one line of code. Meanwhile, PartyKit will handle operational complexity and real-time infrastructure scaling.
 
+> [!NOTE]  
+> Current development of this project is in [cloudflare/partykit](https://github.com/cloudflare/partykit).
+
 ## Documentation
 
 Go to [docs.partykit.io](https://docs.partykit.io) for documentation, guides and examples.
