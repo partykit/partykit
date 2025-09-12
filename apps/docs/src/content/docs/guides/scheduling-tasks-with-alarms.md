@@ -34,7 +34,7 @@ onAlarm() {
 
 ## Waking up rooms
 
-If the room is currently "awake" (meaning that someone is connected to it, or, in [Hibernation mode](./scaling-partykit-servers-with-hibernation/), it has recently processed messages), the `onAlarm` callback is executed in the current room process.
+If the room is currently "awake" (meaning that someone is connected to it, or, in [Hibernation mode](/guides/scaling-partykit-servers-with-hibernation/), it has recently processed messages), the `onAlarm` callback is executed in the current room process.
 
 If the room is currently "asleep" (it's not actively handling connections or messages), the PartyKit runtime will load the room into memory, as if it just received a connection or a message. This means that PartyKit will first run the room's constructor and the `onStart` method, and only then call `onAlarm`.
 
@@ -54,7 +54,7 @@ if (previousAlarm === null || nextAlarm < previousAlarm) {
 }
 ```
 
-If you need multiple concurrent alarms, you can implement this yourself by storing the alarm times in [room storage](./persisting-state-into-storage/), and when the first alarm goes off, scheduling the next soonest alarm in the `onAlarm` callback.
+If you need multiple concurrent alarms, you can implement this yourself by storing the alarm times in [room storage](/guides/persisting-state-into-storage/), and when the first alarm goes off, scheduling the next soonest alarm in the `onAlarm` callback.
 
 ### Accessing `Party.id`
 
@@ -66,7 +66,7 @@ onAlarm() {
 }
 ```
 
-You can work around this limitation by storing the room `id` in [room storage](./persisting-state-into-storage/), and reading it from there:
+You can work around this limitation by storing the room `id` in [room storage](/guides/persisting-state-into-storage/), and reading it from there:
 
 ```ts
 onStart() {
@@ -115,7 +115,7 @@ This is a temporary limitation, and will be lifted in a future version of PartyK
 
 ### Expiring unused room storage
 
-Sometimes, you may want to persist [room storage](./persisting-state-into-storage/) for a limited period, and clean it up when it is no longer being used.
+Sometimes, you may want to persist [room storage](/guides/persisting-state-into-storage/) for a limited period, and clean it up when it is no longer being used.
 
 A handy pattern is to keep updating an alarm every time you save data to storage. If the alarm ever rings, you know that the room has not been accessed for that time, and you can safely remove unused storage:
 
