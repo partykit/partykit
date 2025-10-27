@@ -211,6 +211,9 @@ export async function init(options: {
   }
 
   const projectName = path.basename(pathToProject);
+  // path.relative() returns empty string when both paths are identical (e.g., user specified ".")
+  // In this case, we want to display "." to indicate current directory
+  const relativeProjectPath = path.relative(originalCwd, pathToProject) || ".";
 
   // look for a package.json (that doesn't have workspaces defined)
   let packageInstallPath = pathToProject;
@@ -320,15 +323,13 @@ export async function init(options: {
     console.log(
       `‣ Created a new "${
         templateChoices[templateChoice] || `partykit/${templateChoice}`
-      }" project at ${chalk.bold(path.relative(originalCwd, pathToProject))}`
+      }" project at ${chalk.bold(relativeProjectPath)}`
     );
   } else {
     console.log(
       `⤬ Dry run: skipping copying "${
         templateChoices[templateChoice] || `partykit/${templateChoice}`
-      }" template files to ${chalk.bold(
-        path.relative(originalCwd, pathToProject)
-      )}`
+      }" template files to ${chalk.bold(relativeProjectPath)}`
     );
   }
 
@@ -397,16 +398,18 @@ export async function init(options: {
 
   console.log(
     `\n🎈 Yay! Your project is created at ${chalk.bold(
-      path.relative(originalCwd, pathToProject)
+      relativeProjectPath
     )}!`
   );
 
   console.log("\nNext steps:");
-  console.log(
-    `‣ Enter your project directory with ${chalk.bold(
-      `cd ${path.relative(originalCwd, pathToProject)}`
-    )}`
-  );
+  if (relativeProjectPath !== ".") {
+    console.log(
+      `‣ Enter your project directory with ${chalk.bold(
+        `cd ${relativeProjectPath}`
+      )}`
+    );
+  }
 
   console.log(
     `‣ To start your dev server, run: ${chalk.bold(
