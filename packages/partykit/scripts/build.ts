@@ -59,7 +59,6 @@ esbuild.buildSync({
     "esbuild",
     "fsevents",
     "miniflare",
-    "clipboardy",
     "unenv"
   ],
   banner: isProd
