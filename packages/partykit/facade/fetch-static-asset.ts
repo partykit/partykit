@@ -1,10 +1,7 @@
 // @ts-expect-error We'll be replacing __STATIC_ASSET_MANIFEST__ with
 // details about static assets
 import StaticAssetManifest from "__STATIC_ASSETS_MANIFEST__";
-// Full mime DB (not mime/lite): lite drops all vnd.* types, so `.ico` —
-// IANA `image/vnd.microsoft.icon` — resolves to null and the asset CDN
-// falls back to `text/plain; charset=utf-8`. With nosniff, browsers and
-// Google Search refuse to show the favicon.
+// Full mime: lite omits vnd.* so `.ico` → null and assets get text/plain.
 import mime from "mime";
 
 import type * as Party from "../src/server";
@@ -34,11 +31,6 @@ function getRoomAndPartyFromPathname(pathname: string): {
   return null;
 }
 
-/**
- * Ensure the response Content-Type matches the file extension.
- * The PartyKit asset CDN defaults unknown types (including `.ico` under
- * mime/lite) to text/plain.
- */
 function withAssetContentType(response: Response, filePath: string): Response {
   const type = mime.getType(filePath);
   if (!type) return response;
@@ -71,7 +63,7 @@ export default async function fetchStaticAsset<Env>(
 
   const url = new URL(request.url);
   let response: Response | null = null;
-  // Path of the asset actually being served (may differ under SPA fallback).
+  // May differ from the request path under SPA fallback.
   let servedPath: string | null = null;
 
   let filePath = decodeURIComponent(url.pathname);
