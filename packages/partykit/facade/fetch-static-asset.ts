@@ -1,7 +1,11 @@
 // @ts-expect-error We'll be replacing __STATIC_ASSET_MANIFEST__ with
 // details about static assets
 import StaticAssetManifest from "__STATIC_ASSETS_MANIFEST__";
-import mime from "mime/lite";
+// Full mime DB (not mime/lite): lite drops all vnd.* types, so `.ico` —
+// IANA `image/vnd.microsoft.icon` — resolves to null and the asset CDN
+// falls back to `text/plain; charset=utf-8`. With nosniff, browsers and
+// Google Search refuse to show the favicon.
+import mime from "mime";
 
 import type * as Party from "../src/server";
 
@@ -30,6 +34,31 @@ function getRoomAndPartyFromPathname(pathname: string): {
   return null;
 }
 
+/**
+ * Ensure the response Content-Type matches the file extension.
+ * The PartyKit asset CDN defaults unknown types (including `.ico` under
+ * mime/lite) to text/plain.
+ */
+function withAssetContentType(response: Response, filePath: string): Response {
+  const type = mime.getType(filePath);
+  if (!type) return response;
+
+  const headers = new Headers(response.headers);
+  const contentType =
+    type.startsWith("text/") ||
+    type === "application/javascript" ||
+    type === "application/json"
+      ? `${type}; charset=utf-8`
+      : type;
+  headers.set("Content-Type", contentType);
+
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
 export default async function fetchStaticAsset<Env>(
   request: Party.Request,
   _env: Env,
@@ -42,6 +71,8 @@ export default async function fetchStaticAsset<Env>(
 
   const url = new URL(request.url);
   let response: Response | null = null;
+  // Path of the asset actually being served (may differ under SPA fallback).
+  let servedPath: string | null = null;
 
   let filePath = decodeURIComponent(url.pathname);
 
@@ -57,6 +88,7 @@ export default async function fetchStaticAsset<Env>(
     response = await fetch(
       `${StaticAssetManifest.devServer}/${StaticAssetManifest.assets[filePath]}`
     );
+    servedPath = filePath;
   }
 
   if (
@@ -71,16 +103,23 @@ export default async function fetchStaticAsset<Env>(
       response = await fetch(
         `${StaticAssetManifest.devServer}/${StaticAssetManifest.assets["index.html"]}`
       );
+      servedPath = "index.html";
     } else if (filePath.endsWith(".html")) {
       response = await fetch(
         `${StaticAssetManifest.devServer}/${StaticAssetManifest.assets["index.html"]}`
       );
+      servedPath = "index.html";
     } else if (!mime.getType(filePath)) {
       response = await fetch(
         `${StaticAssetManifest.devServer}/${StaticAssetManifest.assets["index.html"]}`
       );
+      servedPath = "index.html";
     }
     // at this point we can give up
+  }
+
+  if (response && servedPath) {
+    return withAssetContentType(response, servedPath);
   }
 
   return response;
