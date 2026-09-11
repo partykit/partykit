@@ -19,7 +19,7 @@ afterEach(() => {
   const tmpDir = process.cwd();
   process.chdir(currDir);
   // remove the tmp dir
-  fs.rmdirSync(tmpDir, { recursive: true });
+  fs.rmSync(tmpDir, { recursive: true });
 });
 
 describe("config", () => {
@@ -41,12 +41,49 @@ describe("config", () => {
     });
     expect(config).toMatchInlineSnapshot(`
       {
-        "define": {},
+        "define": {
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test\\"}"",
+        },
         "vars": {
           "test": "test",
         },
       }
     `);
+  });
+
+  it("should include --var overrides in PARTYKIT_PROCESS_ENV", () => {
+    const config = getConfig(undefined, {
+      vars: {
+        HELLO: "WORLD"
+      }
+    });
+    expect(config.define.PARTYKIT_PROCESS_ENV).toBe(
+      JSON.stringify(JSON.stringify({ HELLO: "WORLD" }))
+    );
+    expect(config.vars).toEqual({ HELLO: "WORLD" });
+  });
+
+  it("should include --var overrides in PARTYKIT_PROCESS_ENV when a config file is present", () => {
+    fs.writeFileSync(
+      "partykit.json",
+      JSON.stringify({
+        vars: {
+          FROM_CONFIG: "config"
+        }
+      })
+    );
+    const config = getConfig(undefined, {
+      vars: {
+        HELLO: "WORLD"
+      }
+    });
+    expect(config.define.PARTYKIT_PROCESS_ENV).toBe(
+      JSON.stringify(JSON.stringify({ HELLO: "WORLD" }))
+    );
+    expect(config.vars).toEqual({
+      FROM_CONFIG: "config",
+      HELLO: "WORLD"
+    });
   });
 
   it("should read values from a .env file", () => {
@@ -74,7 +111,7 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {
-          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test\\"}"",
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test2\\"}"",
         },
         "vars": {
           "test": "test2",
@@ -98,7 +135,7 @@ describe("config", () => {
     expect(config).toMatchInlineSnapshot(`
       {
         "define": {
-          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test3\\",\\"test2\\":\\"test2\\"}"",
+          "PARTYKIT_PROCESS_ENV": ""{\\"test\\":\\"test3\\",\\"test2\\":\\"test2\\",\\"test4\\":\\"test4\\"}"",
         },
         "vars": {
           "test": "test3",

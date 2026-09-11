@@ -348,7 +348,12 @@ export function getConfig(
     };
   }
 
-  const hasEnvVars = Object.keys(envVars).length > 0;
+  // Include CLI --var in process.env; --var wins over .env, matching vars.
+  const processEnvVars = {
+    ...envVars,
+    ...removeUndefinedKeys(overrides.vars)
+  };
+  const hasEnvVars = Object.keys(processEnvVars).length > 0;
 
   configPath ||= getConfigPath();
 
@@ -386,7 +391,7 @@ export function getConfig(
       },
       define: {
         ...(hasEnvVars
-          ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(envVars)) }
+          ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(processEnvVars)) }
           : {}),
         ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
         ...removeUndefinedKeys(packageJsonConfig.define),
@@ -435,7 +440,7 @@ export function getConfig(
     },
     define: {
       ...(hasEnvVars
-        ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(envVars)) }
+        ? { PARTYKIT_PROCESS_ENV: JSON.stringify(JSON.stringify(processEnvVars)) }
         : {}),
       ...(options?.withEnv ? { ...wrapValuesWithQuotes(envVars) } : {}),
       ...removeUndefinedKeys(parsedConfig.define),
