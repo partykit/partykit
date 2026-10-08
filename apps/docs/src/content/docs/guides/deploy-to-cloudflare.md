@@ -3,6 +3,12 @@ title: Deploy to your own Cloudflare account
 description: Deploy to your own Cloudflare account
 ---
 
+:::caution[partykit deploy is being retired]
+The hosted PartyKit platform is shutting down, and deploying to your own Cloudflare account with `npx partykit deploy` will stop working too, because it goes through the PartyKit API. Workers you've already deployed this way live in your account and **keep running**; you just won't be able to update them with the PartyKit CLI.
+
+For new projects, use [PartyServer](https://github.com/cloudflare/partykit/tree/main/packages/partyserver) and deploy with `wrangler`. For existing cloud-prem projects, see [Migrate to PartyServer](/guides/migrate-to-partyserver/#already-deploying-to-your-own-cloudflare-account), which covers moving to wrangler while keeping your existing rooms and their data.
+:::
+
 The PartyKit platform is powered by Cloudflare Workers, a worldwide network of servers that run projects with low latency and high performance.
 
 By default we manage the platform for your projects.
