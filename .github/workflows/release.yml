@@ -1,5 +1,8 @@
 name: Release
 
+# Both jobs live in this file because npm trusted publishing is configured
+# per workflow file (release.yml) for each package.
+
 on:
   push:
     branches:
@@ -9,10 +12,12 @@ jobs:
   release:
     permissions:
       contents: write
+      pull-requests: write
+      id-token: write # npm trusted publishing
 
     if: ${{ github.repository_owner == 'partykit' }}
-    timeout-minutes: 5
-    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -21,8 +26,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 24
           cache: "npm"
+
+      # trusted publishing needs npm >= 11.5.1
+      - run: npm install -g npm@latest
 
       - run: npm ci
 
@@ -35,5 +43,51 @@ jobs:
           publish: npx changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.PARTYKIT_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+  prerelease:
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing
+
+    if: ${{ github.repository_owner == 'partykit' }}
+    timeout-minutes: 10
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+
+      # trusted publishing needs npm >= 11.5.1
+      - run: npm install -g npm@latest
+
+      - run: npm ci
+
+      - name: Modify package.json version
+        run: node .github/version-script.js
+
+      - run: npm run build
+        env:
+          PARTYKIT_API_BASE: https://beta-api.partykit.dev
+
+      - run: npm run check
+
+      - run: npm publish --tag beta
+        working-directory: packages/partykit
+
+      - run: npm publish --tag beta
+        working-directory: packages/y-partykit
+
+      - run: npm publish --tag beta
+        working-directory: packages/partymix
+
+      - run: npm publish --tag beta
+        working-directory: packages/create-partykit
+
+      - run: npm publish --tag beta
+        working-directory: packages/party.io

@@ -2,6 +2,11 @@
   "name": "partymix",
   "version": "0.0.16",
   "description": "PartyKit + Remix = PartyMix",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/partykit/partykit.git",
+    "directory": "packages/partymix"
+  },
   "author": "PartyKit, Inc. <team@partykit.io>",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

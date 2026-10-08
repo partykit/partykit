@@ -2,6 +2,11 @@
   "name": "y-partykit",
   "version": "0.0.33",
   "description": "y.js on partykit!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/partykit/partykit.git",
+    "directory": "packages/y-partykit"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "exports": {
