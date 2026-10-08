@@ -9,15 +9,15 @@ The PartyKit managed platform (`*.partykit.dev` and `npx partykit deploy`) is be
 
 ## Timeline
 
-| Date                 | What happens                                                                                                      |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| **9 October 2026**   | No new projects or preview environments. Existing projects can still be redeployed.                               |
-| **16 October 2026**  | Projects with no activity in the last 3 months are removed.                                                       |
-| **23 October 2026**  | Deploys are turned off. **Deadline to export your data, or to ask us for help.**                                  |
-| **6 November 2026**  | The hosted platform shuts down. Remaining projects and their room data are deleted.                               |
-| **20 November 2026** | `npx partykit deploy` to your own Cloudflare account stops working. Workers already in your account keep running. |
+| Date                | What happens                                                                                                      |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **9 October 2026**  | No new projects or preview environments. Existing projects can still be redeployed.                               |
+| **12 October 2026** | Projects with no activity in the last 3 months are removed.                                                       |
+| **16 October 2026** | Deploys are turned off. **Deadline to export your data, or to ask us for help.**                                  |
+| **23 October 2026** | The hosted platform shuts down. Remaining projects and their room data are deleted.                               |
+| **23 October 2026** | `npx partykit deploy` to your own Cloudflare account stops working. Workers already in your account keep running. |
 
-Running something people depend on, or can't make these dates? Tell us on [Discord](https://discord.gg/KDZb7J4uxJ) before 23 October and we'll keep your project running while we help you move it.
+Running something people depend on, or can't make these dates? Tell us on [Discord](https://discord.gg/KDZb7J4uxJ) before 16 October and we'll keep your project running while we help you move it.
 
 PartyServer is the successor to PartyKit. It keeps the same model (rooms, connections, `onConnect` / `onMessage`, hibernation, broadcasting) but runs as a plain Cloudflare Worker with Durable Objects in **your own Cloudflare account**. Nothing sits in between you and Cloudflare: you deploy with `wrangler`, configure with `wrangler.jsonc`, and pay Cloudflare directly. The Workers free plan includes SQLite-backed Durable Objects.
 
