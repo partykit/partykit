@@ -7,36 +7,48 @@ description: Move a PartyKit project to PartyServer and deploy it to your own Cl
 The PartyKit managed platform (`*.partykit.dev` and `npx partykit deploy`) is being shut down. New projects should use [PartyServer](https://github.com/cloudflare/partykit/tree/main/packages/partyserver) and deploy straight to Cloudflare with `wrangler`. This guide shows how to move an existing project.
 :::
 
+## Timeline
+
+| Date                 | What happens                                                                                                      |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| **9 October 2026**   | No new projects or preview environments. Existing projects can still be redeployed.                               |
+| **16 October 2026**  | Projects with no activity in the last 3 months are removed.                                                       |
+| **23 October 2026**  | Deploys are turned off. **Deadline to export your data, or to ask us for help.**                                  |
+| **6 November 2026**  | The hosted platform shuts down. Remaining projects and their room data are deleted.                               |
+| **20 November 2026** | `npx partykit deploy` to your own Cloudflare account stops working. Workers already in your account keep running. |
+
+Running something people depend on, or can't make these dates? Tell us on [Discord](https://discord.gg/KDZb7J4uxJ) before 23 October and we'll keep your project running while we help you move it.
+
 PartyServer is the successor to PartyKit. It keeps the same model (rooms, connections, `onConnect` / `onMessage`, hibernation, broadcasting) but runs as a plain Cloudflare Worker with Durable Objects in **your own Cloudflare account**. Nothing sits in between you and Cloudflare: you deploy with `wrangler`, configure with `wrangler.jsonc`, and pay Cloudflare directly. The Workers free plan includes SQLite-backed Durable Objects.
 
 Your clients keep working mostly unchanged: [`partysocket`](https://www.npmjs.com/package/partysocket) talks to PartyServer too.
 
 ## What changes
 
-| PartyKit | PartyServer |
-|---|---|
-| `partykit.json` | `wrangler.jsonc` |
-| `npx partykit dev` / `deploy` | `npx wrangler dev` / `deploy` |
-| `class Server implements Party.Server` | `class MyServer extends Server` (from `partyserver`) |
-| `constructor(readonly room: Party.Room)` | no constructor needed, use `this` |
-| `this.room.id` | `this.name` |
-| `this.room.storage` | `this.ctx.storage` |
-| `this.room.env` | `this.env` |
-| `this.room.broadcast(msg, without)` | `this.broadcast(msg, without)` |
-| `this.room.getConnection(id)` / `getConnections(tag)` | `this.getConnection(id)` / `this.getConnections(tag)` |
-| `onMessage(message, sender)` | `onMessage(connection, message)` (**arguments are swapped**) |
-| `onConnect(connection, ctx)`, `onClose`, `onError`, `onRequest`, `onAlarm`, `onStart`, `getConnectionTags` | same names |
-| `static options = { hibernate: true }` | same |
-| `static onBeforeConnect` / `onBeforeRequest` | options to `routePartykitRequest()` |
-| `static onFetch` | your Worker's `fetch` handler |
-| `static onCron` + `crons` in `partykit.json` | `triggers.crons` in `wrangler.jsonc` + a `scheduled` handler |
-| `parties` in `partykit.json` | one Durable Object binding per server class |
-| `this.room.context.parties.other.get(id)` | `getServerByName(this.env.Other, id)` |
-| `serve` (static assets) | [`assets`](https://developers.cloudflare.com/workers/static-assets/) in `wrangler.jsonc` |
-| `vars` / `npx partykit env` | `vars` in `wrangler.jsonc` / `npx wrangler secret put` |
-| `room.context.ai`, `vectorize`, `bindings` | regular [Workers bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) |
-| `y-partykit` | [`y-partyserver`](https://www.npmjs.com/package/y-partyserver) |
-| `https://<project>.<user>.partykit.dev` | `https://<name>.<subdomain>.workers.dev` or your own domain |
+| PartyKit                                                                                                   | PartyServer                                                                                  |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `partykit.json`                                                                                            | `wrangler.jsonc`                                                                             |
+| `npx partykit dev` / `deploy`                                                                              | `npx wrangler dev` / `deploy`                                                                |
+| `class Server implements Party.Server`                                                                     | `class MyServer extends Server` (from `partyserver`)                                         |
+| `constructor(readonly room: Party.Room)`                                                                   | no constructor needed, use `this`                                                            |
+| `this.room.id`                                                                                             | `this.name`                                                                                  |
+| `this.room.storage`                                                                                        | `this.ctx.storage`                                                                           |
+| `this.room.env`                                                                                            | `this.env`                                                                                   |
+| `this.room.broadcast(msg, without)`                                                                        | `this.broadcast(msg, without)`                                                               |
+| `this.room.getConnection(id)` / `getConnections(tag)`                                                      | `this.getConnection(id)` / `this.getConnections(tag)`                                        |
+| `onMessage(message, sender)`                                                                               | `onMessage(connection, message)` (**arguments are swapped**)                                 |
+| `onConnect(connection, ctx)`, `onClose`, `onError`, `onRequest`, `onAlarm`, `onStart`, `getConnectionTags` | same names                                                                                   |
+| `static options = { hibernate: true }`                                                                     | same                                                                                         |
+| `static onBeforeConnect` / `onBeforeRequest`                                                               | options to `routePartykitRequest()`                                                          |
+| `static onFetch`                                                                                           | your Worker's `fetch` handler                                                                |
+| `static onCron` + `crons` in `partykit.json`                                                               | `triggers.crons` in `wrangler.jsonc` + a `scheduled` handler                                 |
+| `parties` in `partykit.json`                                                                               | one Durable Object binding per server class                                                  |
+| `this.room.context.parties.other.get(id)`                                                                  | `getServerByName(this.env.Other, id)`                                                        |
+| `serve` (static assets)                                                                                    | [`assets`](https://developers.cloudflare.com/workers/static-assets/) in `wrangler.jsonc`     |
+| `vars` / `npx partykit env`                                                                                | `vars` in `wrangler.jsonc` / `npx wrangler secret put`                                       |
+| `room.context.ai`, `vectorize`, `bindings`                                                                 | regular [Workers bindings](https://developers.cloudflare.com/workers/runtime-apis/bindings/) |
+| `y-partykit`                                                                                               | [`y-partyserver`](https://www.npmjs.com/package/y-partyserver)                               |
+| `https://<project>.<user>.partykit.dev`                                                                    | `https://<name>.<subdomain>.workers.dev` or your own domain                                  |
 
 ## Step by step
 
@@ -75,7 +87,8 @@ export default class Chat implements Party.Server {
 After (PartyServer):
 
 ```ts
-import { routePartykitRequest, Server, type Connection } from "partyserver";
+import { routePartykitRequest, Server } from "partyserver";
+import type { Connection } from "partyserver";
 
 type Env = { Main: DurableObjectNamespace<Chat> };
 
@@ -238,29 +251,44 @@ const { OLD_HOST, NEW_HOST, EXPORT_SECRET, IMPORT_SECRET } = process.env;
 const PARTY = process.env.PARTY ?? "main";
 const roomsFile = process.argv[2];
 if (!OLD_HOST || !EXPORT_SECRET || !roomsFile) {
-  console.error("Usage: OLD_HOST=... EXPORT_SECRET=... [NEW_HOST=... IMPORT_SECRET=...] node migrate-rooms.mjs rooms.txt");
+  console.error(
+    "Usage: OLD_HOST=... EXPORT_SECRET=... [NEW_HOST=... IMPORT_SECRET=...] node migrate-rooms.mjs rooms.txt"
+  );
   process.exit(1);
 }
 const scheme = (host) => (/^(localhost|127\.)/.test(host) ? "http" : "https");
-const rooms = fs.readFileSync(roomsFile, "utf8").split("\n").map((l) => l.trim()).filter(Boolean);
+const rooms = fs
+  .readFileSync(roomsFile, "utf8")
+  .split("\n")
+  .map((l) => l.trim())
+  .filter(Boolean);
 fs.mkdirSync("export", { recursive: true });
 
 let ok = 0;
 for (const room of rooms) {
   try {
-    const res = await fetch(`${scheme(OLD_HOST)}://${OLD_HOST}/parties/${PARTY}/${encodeURIComponent(room)}`, {
-      headers: { Authorization: `Bearer ${EXPORT_SECRET}` }
-    });
+    const res = await fetch(
+      `${scheme(OLD_HOST)}://${OLD_HOST}/parties/${PARTY}/${encodeURIComponent(room)}`,
+      {
+        headers: { Authorization: `Bearer ${EXPORT_SECRET}` }
+      }
+    );
     if (!res.ok) throw new Error(`export: ${res.status} ${await res.text()}`);
     const data = await res.text();
     fs.writeFileSync(`export/${encodeURIComponent(room)}.json`, data);
 
     if (NEW_HOST) {
-      const imp = await fetch(`${scheme(NEW_HOST)}://${NEW_HOST}/parties/${PARTY}/${encodeURIComponent(room)}/import`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${IMPORT_SECRET}`, "Content-Type": "application/json" },
-        body: data
-      });
+      const imp = await fetch(
+        `${scheme(NEW_HOST)}://${NEW_HOST}/parties/${PARTY}/${encodeURIComponent(room)}/import`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${IMPORT_SECRET}`,
+            "Content-Type": "application/json"
+          },
+          body: data
+        }
+      );
       if (!imp.ok) throw new Error(`import: ${imp.status} ${await imp.text()}`);
     }
     ok++;
@@ -269,7 +297,9 @@ for (const room of rooms) {
     console.error(`✗ ${room}: ${e.message}`);
   }
 }
-console.log(`${ok}/${rooms.length} rooms ${NEW_HOST ? "migrated" : "exported"}`);
+console.log(
+  `${ok}/${rooms.length} rooms ${NEW_HOST ? "migrated" : "exported"}`
+);
 ```
 
 ```sh

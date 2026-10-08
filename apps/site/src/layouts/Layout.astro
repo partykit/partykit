@@ -18,6 +18,13 @@ const { title } = Astro.props;
     <link rel="icon" href="/favicon.ico" />
   </head>
   <body style="position: relative;">
+    <div class="shutdown-banner">
+      The hosted PartyKit platform is shutting down. Deploys stop on 23 October
+      2026 and the platform shuts down on 6 November 2026.
+      <a href="https://docs.partykit.io/guides/migrate-to-partyserver/"
+        >Read the migration guide</a
+      >
+    </div>
     <slot />
   </body>
 </html>
@@ -37,6 +44,25 @@ const { title } = Astro.props;
       var(--color-page) 51%
     );
     @include font-core();
+  }
+
+  .shutdown-banner {
+    position: relative;
+    z-index: 1001;
+    padding: 0.6rem 1rem;
+    background: var(--color-text);
+    color: var(--color-page);
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.4;
+
+    a {
+      color: inherit;
+      font-weight: bold;
+      text-decoration: underline;
+      white-space: nowrap;
+      margin-left: 0.25rem;
+    }
   }
 
   @media (max-width: 759px) {
