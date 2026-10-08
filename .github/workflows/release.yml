@@ -29,8 +29,9 @@ jobs:
           node-version: 24
           cache: "npm"
 
-      # trusted publishing needs npm >= 11.5.1
-      - run: npm install -g npm@latest
+      # trusted publishing needs npm >= 11.5.1. Not 12: its `npm info --json`
+      # returns an array, which makes changesets think nothing is published.
+      - run: npm install -g npm@11
 
       - run: npm ci
 
@@ -63,8 +64,9 @@ jobs:
           node-version: 24
           cache: "npm"
 
-      # trusted publishing needs npm >= 11.5.1
-      - run: npm install -g npm@latest
+      # trusted publishing needs npm >= 11.5.1. Not 12: its `npm info --json`
+      # returns an array, which makes changesets think nothing is published.
+      - run: npm install -g npm@11
 
       - run: npm ci
 
