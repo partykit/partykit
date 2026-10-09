@@ -13,13 +13,11 @@ const isMigrationGuide = Astro.url.pathname.startsWith("/guides/migrate-to-party
   ) : (
     <div class="sl-banner">
       <strong>The hosted PartyKit platform is shutting down.</strong>{" "}
+      Deploys stop on 16 October and the platform shuts down on 23 October 2026.{" "}
       {isMigrationGuide ? (
-        <span>Use PartyServer to deploy to your own Cloudflare account.</span>
+        <a href="https://blog.partykit.io/posts/hosted-platform-shutdown/">Read the announcement →</a>
       ) : (
-        <span>
-          New projects should use PartyServer.{" "}
-          <a href="/guides/migrate-to-partyserver/">Read the migration guide →</a>
-        </span>
+        <a href="/guides/migrate-to-partyserver/">Read the migration guide →</a>
       )}
     </div>
   )
