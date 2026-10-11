@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import open from "open";
+import * as clipboard from "tinyclip";
 import { fetch } from "undici";
 
 import { version as packageVersion } from "../../package.json";
@@ -40,24 +41,22 @@ export async function signInWithGitHub(): Promise<UserConfig> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (await res.json()) as any;
 
+  const copied = await clipboard
+    .writeText(user_code)
+    .then(() => true)
+    .catch(() => false);
+
   console.log(
     `We will now open your browser to ${chalk.bold(
       verification_uri
     )}\nPlease paste the code ${chalk.bold(
       user_code
-    )} (copied to your clipboard) and authorize the app.`
+    )}${copied ? " (copied to your clipboard)" : ""} and authorize the app.`
   );
 
   await countdown("Opening browser", 5);
 
   console.log(`Waiting for you to authorize...`);
-
-  // we do this because for some reason the clipboardy package doesn't work
-  // with a direct import up top
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore kill me, bring me sweet release of death please
-  const { default: clipboardy } = await import("clipboardy");
-  clipboardy.writeSync(user_code);
 
   open(verification_uri).catch(() => {
     console.error(
