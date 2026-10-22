@@ -180,16 +180,9 @@ function setupWS(provider: WebsocketProvider) {
       } else {
         provider.wsUnsuccessfulReconnects++;
       }
-      // Start with no reconnect timeout and increase timeout by
-      // using exponential backoff starting with 100ms
-      setTimeout(
-        setupWS,
-        math.min(
-          math.pow(2, provider.wsUnsuccessfulReconnects) * 100,
-          provider.maxBackoffTime
-        ),
-        provider
-      );
+      // Removed exponential reconnect logic to prevent repeated automatic connections.
+      // Reconnection is now fully controlled by the UI or calling code.
+      
     });
     websocket.addEventListener("open", () => {
       provider.wsLastMessageReceived = time.getUnixTime();
